@@ -26,3 +26,4 @@ hs_err_pid*
 target
 .columbus_java
 *.prefs
+.apt_generated_tests
