@@ -28,9 +28,9 @@ import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 import api.StardogConnectionAPI;
 import api.exceptions.NoConnectionToStardogServerException;
 
-class StardogConnectionAPIImpl implements StardogConnectionAPI {
+public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 
-	private String url;
+	private String server;
 	private String userName;
 	private String password;
 	private String databaseName;
@@ -57,7 +57,7 @@ class StardogConnectionAPIImpl implements StardogConnectionAPI {
 	@Override
 	public void addDataByRDFFileAsNamedGraph(String pathToData, String namedGraph) throws FileNotFoundException, NoConnectionToStardogServerException {
 
-		if (connection == null) {
+		if (connection == null) { 
 			throw new NoConnectionToStardogServerException();
 		}
 		
@@ -86,10 +86,10 @@ class StardogConnectionAPIImpl implements StardogConnectionAPI {
 		this.userName = userName;
 		this.password = password;
 		this.databaseName = database;
-		this.url = stardogServerURL;
+		this.server = stardogServerURL;
 
 		if (connectionPool == null && connection == null) {
-			try (final AdminConnection aConn = AdminConnectionConfiguration.toServer(url).credentials(userName, password)
+			try (final AdminConnection aConn = AdminConnectionConfiguration.toServer(server).credentials(userName, password)
 					.connect()) {
 
 				if (!aConn.list().contains(this.databaseName)) {
@@ -99,6 +99,33 @@ class StardogConnectionAPIImpl implements StardogConnectionAPI {
 
 			ConnectionConfiguration connectionConfig = ConnectionConfiguration.to(this.databaseName)
 					.server(stardogServerURL).reasoning(false).credentials(userName, password);
+
+			ConnectionPoolConfig poolConfig = ConnectionPoolConfig.using(connectionConfig);
+
+			connectionPool = poolConfig.create();
+			connection = connectionPool.obtain();
+
+		}
+	}
+	
+	@Override
+	public void createConnectionToDatabase(StardogDatabase db) {
+		this.userName = db.getUserName();
+		this.password = db.getPassword();
+		this.databaseName = db.getDatabaseName();
+		this.server = db.getServer();
+
+		if (connectionPool == null && connection == null) {
+			try (final AdminConnection aConn = AdminConnectionConfiguration.toServer(server).credentials(userName, password)
+					.connect()) {
+
+				if (!aConn.list().contains(this.databaseName)) {
+					aConn.disk(this.databaseName).create();
+				}
+			}
+
+			ConnectionConfiguration connectionConfig = ConnectionConfiguration.to(this.databaseName)
+					.server(this.server).reasoning(false).credentials(userName, password);
 
 			ConnectionPoolConfig poolConfig = ConnectionPoolConfig.using(connectionConfig);
 
@@ -172,5 +199,7 @@ class StardogConnectionAPIImpl implements StardogConnectionAPI {
 		model.read("./tmp.owl");
 		return model;
 	}
+
+	
 
 }
