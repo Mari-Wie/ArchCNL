@@ -1,4 +1,4 @@
-package impl;
+package asciidocparser;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.architecture.cnl.ide.CNL2OWLGenerator;
-import org.architecture.cnl.mapping.ide.MappingDSL2OWLGenerator;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.AbstractBlock;
 import org.asciidoctor.ast.Block;
@@ -21,10 +20,20 @@ import datatypes.ArchitectureRules;
 public class AsciiDocArc42Parser {
 
 	private final String TMP_ARCHITECTURE_FILE_NAME = "./tmp.architecture";
-	private final static String TMP_MAPPING_FILE_NAME = "./tmp.mapping";
+	private final static String TMP_MAPPING_FILE_NAME = "./mapping.txt";
 	private final static String EXTENSION = ".architecture";
 	private final static String OWL_EXTENSION = ".owl";
 	private final static String PREFIX = "tmp";
+
+	private final static String javaOntologyNamespace = "@prefix code: <http://arch-ont.org/ontologies/javacodeontology.owl#>\n";
+	private final static String mavenOntologyNamespace = "@prefix maven: <http://arch-ont.org/ontologies/maven.owl#>\n";
+	private final static String mainOntologyNamespace = "@prefix main: <http://arch-ont.org/ontologies/main.owl#>\n";
+	private final static String osgiOntologyNamespace = "@prefix osgi: <http://arch-ont.org/ontologies/osgi.owl#>\n";
+	private final static String historyOntologyNamespace = "@prefix git: <http://www.arch-ont.org/ontologies/git.owl#>\n";
+	private final static String architectureOntologyNamespace = "@prefix architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>\n\n";
+
+	private final static String ONTOLOGY_PREFIXES_FOR_MAPPING = javaOntologyNamespace + mavenOntologyNamespace
+			+ mainOntologyNamespace + osgiOntologyNamespace + historyOntologyNamespace + architectureOntologyNamespace;
 
 	private static int id = 0;
 
@@ -35,8 +44,7 @@ public class AsciiDocArc42Parser {
 
 		Document doc = ascii.loadFile(new File(path), new HashMap<String, Object>());
 		Map<Object, Object> selector = new HashMap<Object, Object>();
-		selector.put("role", ":rule");
-
+		selector.put("role", "rule");
 		List<AbstractBlock> result = doc.findBy(selector);
 		int id_for_file = 0;
 		for (AbstractBlock abstractBlock : result) {
@@ -68,36 +76,43 @@ public class AsciiDocArc42Parser {
 		}
 	}
 
+	// TODO parse JENA Rules
 	public static void parseMappingRulesFromDocumentation(String path) {
 		Asciidoctor ascii = Asciidoctor.Factory.create();
-		MappingDSL2OWLGenerator generator = new MappingDSL2OWLGenerator();
 		Document doc = ascii.loadFile(new File(path), new HashMap<String, Object>());
 		Map<Object, Object> selector = new HashMap<Object, Object>();
-		selector.put("role", ":mapping");
+		selector.put("role", "mapping");
 
 		List<AbstractBlock> result = doc.findBy(selector);
 		File f = new File(TMP_MAPPING_FILE_NAME);
+		String allMappingRules = "";
 		for (AbstractBlock abstractBlock : result) {
-			
+
+			String tmp = "";
 			Block b = (Block) abstractBlock;
 			List<String> lines = b.lines();
 			for (String line : lines) {
-				try {
-					FileUtils.writeStringToFile(f, line+"\n",(Charset)null, true);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+				tmp += line;
+
+				// TODO forward to JENA reasoner
+
 			}
+			System.out.println("[" + tmp + "]");
+			allMappingRules += "[" + tmp + "]" + "\n";
+
 		}
-		generator.transformMapping(TMP_MAPPING_FILE_NAME);
-		f.delete();
+		try {
+			FileUtils.writeStringToFile(f, ONTOLOGY_PREFIXES_FOR_MAPPING + allMappingRules, (Charset) null, true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// f.delete();
 
 	}
 
 	public static void main(String[] args) {
-		String path = "C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl\\conformance-checking\\arc42-building-block-view.adoc";
+		String path = "C:\\Users\\sandr\\Documents\\repositories\\cnl-github\\cnl-toolchain\\arc42-building-block-view.adoc";
 		parseRulesFromDocumentation(path);
 		parseMappingRulesFromDocumentation(path);
 	}
