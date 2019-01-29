@@ -8,13 +8,14 @@ import java.util.Map;
 import org.apache.jena.ontology.Individual;
 import org.eclipse.jgit.lib.Repository;
 
+import core.OwlifyComponent;
 import model.GitBranch;
 import model.GitChange;
 import model.GitCommit;
 import model.GitTag;
 import ontology.GitOntClassesAndProperties;
 
-public class GitOntologyTransformer {
+public class GitOntologyTransformer implements OwlifyComponent {
 
 	private GitRepositoryScanner scanner;
 	private GitOntClassesAndProperties ontClassesAndProperties;
@@ -34,16 +35,21 @@ public class GitOntologyTransformer {
 	private Map<String, Individual> gitAuthors;
 	private static int tagId;
 
-	public GitOntologyTransformer(String path, String outputPath) {
-		this.outputPath = outputPath;
-		scanner = new GitRepositoryScanner(path);
+	public GitOntologyTransformer() {
+		this.outputPath = "./git.owl";
 		ontClassesAndProperties = new GitOntClassesAndProperties();
 		gitFiles = new HashMap<>();
 		gitCommits = new HashMap<>();
 		gitAuthors = new HashMap<>();
 	}
+	
+	@Override
+	public void setSource(String path) {
+		scanner = new GitRepositoryScanner(path);
+	}
 
-	public void transformDataToOntology() {
+	@Override
+	public void transform() {
 		addRepository();
 		addCommitsToRepository(scanner.findCommits());
 		try {
@@ -242,9 +248,11 @@ public class GitOntologyTransformer {
 	}
 
 	public static void main(String[] args) {
-		GitOntologyTransformer transformer = new GitOntologyTransformer(
-				"C:\\Users\\sandr\\Documents\\test\\ArchitectureCNL", "./git.owl");
-		transformer.transformDataToOntology();
+		GitOntologyTransformer transformer = new GitOntologyTransformer();
+		transformer.setSource("");
+		transformer.transform();
 	}
+
+	
 
 }

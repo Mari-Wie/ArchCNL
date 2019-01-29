@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,7 +16,9 @@ import org.apache.maven.model.Parent;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-public class MavenPOMFileParser {
+import core.OwlifyComponent;
+
+public class MavenPOMFileParser implements OwlifyComponent {
 
 	private String outputPath;
 	private String pathToOntology;
@@ -26,76 +29,89 @@ public class MavenPOMFileParser {
 	private static int projectID = 0;
 	private static int artifactID = 0;
 
-	public MavenPOMFileParser(String pathToPOM, String outputPath, String pathToOntology) {
+	public MavenPOMFileParser() {
 
-		this.pathToPOM = pathToPOM;
-		this.outputPath = outputPath;
-		this.pathToOntology = pathToOntology;
+		this.outputPath = "./maven_output.owl";
+		this.pathToOntology = "./ontology/maven.owl";
 		this.ontClasses = new MavenOntClasses();
 
 	}
 
-	public void parse() throws IOException, XmlPullParserException {
+	public void setSource(String pathToPOM) {
+		this.pathToPOM = pathToPOM;
+	}
+
+	public void transform() {
 		ontClasses.getOntoModel().read(pathToOntology);
-		ontClasses.getOntoModel()
-				.read("C:\\Users\\sandr\\Documents\\repositories\\ArchitectureCNL\\ontologies\\main.owl");
+		ontClasses.getOntoModel().read("./ontology/main.owl");
 
-		Reader reader = new FileReader(new File(pathToPOM));
+		Reader reader;
+		try {
+			reader = new FileReader(new File(pathToPOM));
+			MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
+			Model model = xpp3Reader.read(reader);
 
-		MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
-		Model model = xpp3Reader.read(reader);
+			// Pom File Individual
+			Individual pomFile = ontClasses.createIndividual(ontClasses.getOntologyNamespace() + "POMFile",
+					ontClasses.pomFileClass());
+			pomFile.addLiteral(ontClasses.pomFilePathProperty(), pathToPOM);
 
-		// Pom File Individual
-		Individual pomFile = ontClasses.createIndividual(ontClasses.getOntologyNamespace() + "POMFile",
-				ontClasses.pomFileClass());
-		pomFile.addLiteral(ontClasses.pomFilePathProperty(), pathToPOM);
+			Individual mavenProject = ontClasses.createIndividual(
+					ontClasses.getOntologyNamespace() + "MavenProject_" + projectID, ontClasses.mavenProjectClass());
+			projectID++;
+			// has name
+			if (model.getName() != null) {
+				mavenProject.addLiteral(ontClasses.hasNameProperty(), model.getName());
+			}
+			// contains POM File
+			mavenProject.addProperty(ontClasses.projectContainsPOMFileProperty(), pomFile);
 
-		Individual mavenProject = ontClasses.createIndividual(
-				ontClasses.getOntologyNamespace() + "MavenProject_" + projectID, ontClasses.mavenProjectClass());
-		projectID++;
-		// has name
-		if (model.getName() != null) {
-			mavenProject.addLiteral(ontClasses.hasNameProperty(), model.getName());
+			if (model.getProjectDirectory() != null) {
+				System.out.println(model.getProjectDirectory());
+			}
+
+			model.getDistributionManagement();
+
+			// Maven Artifact
+			Individual artifact = ontClasses.createIndividual(
+					ontClasses.getOntologyNamespace() + "MavenArtifact_" + artifactID, ontClasses.mavenArtifactClass());
+			artifactID++;
+			mavenProject.addProperty(ontClasses.projectCreatesArtifact(), artifact);
+
+			if (model.getParent() != null) {
+				// parent data
+				Individual resolvedArtifact = resolveParentArtifact(model.getParent());
+				artifact.addProperty(ontClasses.hasParentProperty(), resolvedArtifact);
+				artifact.addLiteral(ontClasses.hasVersionProperty(), model.getParent().getVersion());
+				artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getParent().getGroupId());
+			} else {
+				artifact.addLiteral(ontClasses.hasVersionProperty(), model.getVersion());
+				artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getGroupId());
+				artifact.addLiteral(ontClasses.hasArtifactIDProperty(), model.getArtifactId());
+				artifact.addLiteral(ontClasses.hasPackagingProperty(), model.getPackaging());
+				artifact.addLiteral(ontClasses.hasIDProperty(), model.getId());
+//				artifact.addLiteral(ontClasses.hasClassifierProperty(), model.get)
+			}
+
+			addDependencies(artifact, model.getDependencies());
+			addModules(artifact, model.getModules());
+
+			DependencyManagement dependencyManagement = model.getDependencyManagement();
+			if (dependencyManagement != null) {
+				addDependencies(artifact, dependencyManagement.getDependencies());
+			}
+
+			ontClasses.getOntoModel().write(new FileOutputStream(new File(outputPath)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		// contains POM File
-		mavenProject.addProperty(ontClasses.projectContainsPOMFileProperty(), pomFile);
-
-		if (model.getProjectDirectory() != null) {
-			System.out.println(model.getProjectDirectory());
-		}
-
-		model.getDistributionManagement();
-
-		// Maven Artifact
-		Individual artifact = ontClasses.createIndividual(
-				ontClasses.getOntologyNamespace() + "MavenArtifact_" + artifactID, ontClasses.mavenArtifactClass());
-		artifactID++;
-		mavenProject.addProperty(ontClasses.projectCreatesArtifact(), artifact);
-
-		if (model.getParent() != null) {
-			// parent data
-			Individual resolvedArtifact = resolveParentArtifact(model.getParent());
-			artifact.addProperty(ontClasses.hasParentProperty(), resolvedArtifact);
-			artifact.addLiteral(ontClasses.hasVersionProperty(), model.getParent().getVersion());
-			artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getParent().getGroupId());
-		} else {
-			artifact.addLiteral(ontClasses.hasVersionProperty(), model.getVersion());
-			artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getGroupId());
-			artifact.addLiteral(ontClasses.hasArtifactIDProperty(), model.getArtifactId());
-			artifact.addLiteral(ontClasses.hasPackagingProperty(), model.getPackaging());
-			artifact.addLiteral(ontClasses.hasIDProperty(), model.getId());
-//			artifact.addLiteral(ontClasses.hasClassifierProperty(), model.get)
-		}
-
-		addDependencies(artifact, model.getDependencies());
-		addModules(artifact, model.getModules());
-
-		DependencyManagement dependencyManagement = model.getDependencyManagement();
-		if (dependencyManagement != null) {
-			addDependencies(artifact,dependencyManagement.getDependencies());
-		}
-		
-		ontClasses.getOntoModel().write(new FileOutputStream(new File(outputPath)));
 
 	}
 
@@ -152,19 +168,8 @@ public class MavenPOMFileParser {
 	}
 
 	public static void main(String[] args) {
-		MavenPOMFileParser parser = new MavenPOMFileParser(
-				"C:\\Users\\sandr\\Documents\\repositories\\ArchitectureCNL\\org.architecture.cnl.parent\\org.architecture.cnl\\pom.xml",
-				"./maven_test.owl",
-				"C:\\Users\\sandr\\Documents\\repositories\\ArchitectureCNL\\ontologies\\maven.owl");
-		try {
-			parser.parse();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		MavenPOMFileParser parser = new MavenPOMFileParser();
+		parser.transform();
 	}
 
 }

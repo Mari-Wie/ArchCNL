@@ -26,9 +26,9 @@ public class GitOntClassesAndProperties {
 		ontologyMainNamespace = "http://arch-ont.org/ontologies/main.owl#";
 		ontologyHistoryNamespace = "http://arch-ont.org/ontologies/history.owl#";
 		ontoModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		ontoModel.read("C:\\Users\\sandr\\Documents\\repositories\\ArchitectureCNL\\ontologies\\main.owl");
-		ontoModel.read("C:\\Users\\sandr\\Documents\\repositories\\ArchitectureCNL\\ontologies\\history.owl");
-		ontoModel.read("C:\\Users\\sandr\\Documents\\repositories\\ArchitectureCNL\\ontologies\\git.owl");
+		ontoModel.read("./ontology/main.owl");
+		ontoModel.read("./ontology/history.owl");
+		ontoModel.read("./ontology/git.owl");
 	}
 
 	public String getOntologyNamespace() {
