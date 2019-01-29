@@ -27,7 +27,7 @@ public class Startup {
 					.databaseName("test-database").userName("admin").password("admin").createStardogDatabase();
 			db.connect();
 			String context = "http://graphs.org/test-database/v1.0";
-			IConformanceCheck check = new ConformanceCheckImpl(icvAPI, "./my_project/");
+			IConformanceCheck check = new ConformanceCheckImpl(icvAPI);
 
 			/* Test rule */
 			ArchitectureRule rule = new ArchitectureRule();
@@ -53,7 +53,6 @@ public class Startup {
 				e.printStackTrace();
 			}
 
-			// connectionAPI.createConnectionToDatabase(db);
 		} catch (
 
 		MissingBuilderArgumentException e1) {

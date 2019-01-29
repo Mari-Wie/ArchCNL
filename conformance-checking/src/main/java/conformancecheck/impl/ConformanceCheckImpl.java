@@ -29,10 +29,10 @@ public class ConformanceCheckImpl implements IConformanceCheck {
 	private StardogConstraintViolationsResultSet result;
 
 	@Inject
-	public ConformanceCheckImpl(StardogICVAPI icvAPI, String projectPath) {
+	public ConformanceCheckImpl(StardogICVAPI icvAPI) {
 		this.icvAPI = icvAPI;
 
-		String dir = projectPath + "/" + "conformance_checks/";
+		String dir = "./conformance_checks/";
 		new File(dir).mkdirs();
 		this.resultPath = dir + "check.owl";
 	}
@@ -53,7 +53,6 @@ public class ConformanceCheckImpl implements IConformanceCheck {
 		String constraint;
 		try {
 			constraint = icvAPI.addIntegrityConstraint(rule.getId(), path, db.getServer(), db.getDatabaseName());
-			// icvAPI.explainViolationsForContext(server, database, context);
 			icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);
 			rule.setStardogConstraint(constraint);
 			this.result = icvAPI.getResult();
@@ -79,18 +78,25 @@ public class ConformanceCheckImpl implements IConformanceCheck {
 		for (StardogConstraintViolation violation : violations) {
 			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
 		}
+		
+		try {
+			saveResultsToDatabase(db, context);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoConnectionToStardogServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule);
+		try {
+			icvAPI.removeIntegrityConstraints(path, db.getServer(), db.getDatabaseName());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
-
-//	public void saveResultsToDatabase() throws FileNotFoundException, NoConnectionToStardogServerException {
-//		Model codemodel = connectionAPI.getModelFromContext(context);
-//		System.out.println("add model to code model");
-//		codemodel.add(ontology.getModel());
-//		File file = new File(this.resultPath);
-//		System.out.println("write to code model");
-//		codemodel.write(new FileOutputStream(file));
-//		System.out.println("add data to database");
-//		connectionAPI.addDataByRDFFileAsNamedGraph(this.resultPath, context);
-//	}
 
 	public void saveResultsToDatabase(StardogDatabase db, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException {
