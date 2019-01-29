@@ -6,5 +6,6 @@ public interface ExecuteMappingAPI {
 
 	public void setReasoningConfiguration(ReasoningConfiguration config);
 	public void executeMapping() throws FileNotFoundException;
+	public String getReasoningResultPath();
 	
 }

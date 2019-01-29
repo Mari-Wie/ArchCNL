@@ -16,9 +16,11 @@ import org.apache.jena.reasoner.rulesys.Rule;
 class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	
 	private ReasoningConfiguration config;
+	private String reasoningResultPath;
 
 	public void setReasoningConfiguration(ReasoningConfiguration config) {
 		this.config = config;
+		this.reasoningResultPath = "./mapped.owl";
 	}
 
 	public void executeMapping() throws FileNotFoundException {
@@ -36,17 +38,20 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 			}
 		}
 
-		System.out.println(ontModel.listStatements().toList().size());
+//		System.out.println(ontModel.listStatements().toList().size());
 
 		System.out.println("reasoner");
 		Reasoner reasoner = new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));
 		System.out.println("infmodel");
 		InfModel infmodel = ModelFactory.createInfModel(reasoner, ontModel);
-		System.out.println("writing to: " + config.getResultPath());
-		infmodel.write(new FileOutputStream(new File(config.getResultPath())));
+		System.out.println("writing to: " + this.reasoningResultPath);
+		infmodel.write(new FileOutputStream(new File(this.reasoningResultPath)));
 
 		StmtIterator statements = infmodel.listStatements();
 		System.out.println(statements.toList().size());
 	}
 
+	public String getReasoningResultPath() {
+		return reasoningResultPath;
+	}
 }
