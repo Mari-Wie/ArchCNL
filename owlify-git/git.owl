@@ -1,0 +1,2282 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.arch-ont.org/ontologies/git.owl#"
+    xmlns:j.0="http://arch-ont.org/ontologies/history.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:j.1="http://arch-ont.org/ontologies/main.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <owl:Ontology rdf:about="http://arch-ont.org/ontologies/main.owl"/>
+  <owl:Ontology rdf:about="http://www.arch-ont.org/ontologies/git.owl">
+    <owl:imports>
+      <owl:Ontology rdf:about="http://arch-ont.org/ontologies/history.owl"/>
+    </owl:imports>
+  </owl:Ontology>
+  <owl:Ontology rdf:about="http://arch-ont.org/ontologies/history.owl">
+    <owl:imports rdf:resource="http://arch-ont.org/ontologies/main.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/history.owl#ChangeSet">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/history.owl#Commit">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Activity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitChange">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitModificationKind">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Project">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Artifact"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitCommit">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/history.owl#Commit"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitTag">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/history.owl#Branch">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Activity">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitBranch">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/history.owl#Branch"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Directory">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#File"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitRepository">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#File">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Artifact"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitAuthor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Developer"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/history.owl#Version">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Developer">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#Artifact">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArchOntThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/history.owl#Committer">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#Developer"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasHead">
+    <rdfs:range rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitBranch"/>
+    <rdfs:domain rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitRepository"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#createsFile">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#performedBy"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isCommittedIn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#copiesFile">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasCommit">
+    <rdfs:range rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitCommit"/>
+    <rdfs:domain rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitRepository"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isNewCopyOf">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#containsVersion">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#deletesFile">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#performsCommit">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#followsVersion">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasAuthor"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasParent"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isVersionOf">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#modifiesFile">
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/main.owl#File"/>
+    <rdfs:domain rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitChange"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#precedesVersion">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#constitutesVersion">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isOnBranch">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasBranch">
+    <rdfs:range rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitBranch"/>
+    <rdfs:domain rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitRepository"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isRenamedTo">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#updatesFile">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#isAuthorOf"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#commitsVersion">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasModificationKind">
+    <rdfs:range rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitModificationKind"/>
+    <rdfs:domain rdf:resource="http://www.arch-ont.org/ontologies/git.owl#GitChange"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasTag"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#dependsOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#renamesFile">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#performsActivity"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isCommittedBy">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#tagAtCommit"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#commitsChangeSet">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/history.owl#hasVersion">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasPath">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasDescription">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isCopiedOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasLabel"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#linesAdded">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isCreatedOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isDeletedOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#isRenamedOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#lastModifiedOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasMessage"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#linesDeleted">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#hasCommitMessage">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#committedOn">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasCreationDate"/>
+    </rdfs:subPropertyOf>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#hasCommitIdentifier">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasIdentifier"/>
+    </rdfs:subPropertyOf>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasShortMessage"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/history.owl#hasTag">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasIdentifier">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasCreationDate">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasName">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasRelativePath"/>
+  <owl:DatatypeProperty rdf:about="http://www.arch-ont.org/ontologies/git.owl#hasSHAIdentifier">
+    <rdfs:subPropertyOf rdf:resource="http://arch-ont.org/ontologies/history.owl#hasCommitIdentifier"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasEmailAdress"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasModificationDate">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_11">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_11">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/META-INF/services/org.eclipse.xtext.ISetup</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_11"/>
+    <hasModificationKind>
+      <GitModificationKind rdf:about="http://www.arch-ont.org/ontologies/git.owl#Add">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </GitModificationKind>
+    </hasModificationKind>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_47">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_46">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ConceptExpression.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_46"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_59">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_58">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ObjectPropertyAssertion.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_58"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_23">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_22">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/target/classes/META-INF/services/org.eclipse.xtext.ISetup</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_22"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_35">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_34">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/pom.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_34"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_10">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_10">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/pom.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_10"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_22">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_0">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.0:isDeletedOn>Mon Aug 06 15:55:10 CEST 2018</j.0:isDeletedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/target/classes/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_0"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_58">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_57">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ObjectConceptExpression.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_57"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_34">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_33">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/model/generated/ArchitectureCNL.genmodel</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_33"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_46">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_45">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ConceptAssertion.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_45"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_108">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_107">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/parser/antlr/internal/InternalArchitectureCNL.tokens</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_107"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_21">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_21">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src/org/architecture/cnl/ide/Startup.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_21"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_33">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_32">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/model/generated/ArchitectureCNL.ecore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_32"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_45">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_44">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Concept.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_44"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_57">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_56">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Object.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_56"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_69">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_68">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Variable.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_68"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_109">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_108">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/parser/antlr/internal/InternalArchitectureCNLLexer.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_108"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_32">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_31">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/jar-with-ecore-model.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_31"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_44">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_43">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/CardinalityRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_43"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_20">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_20">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src/org/architecture/cnl/ide/ArchitectureCNLIdeSetup.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_20"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_68">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_67">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ThatExpression.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_67"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_56">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_55">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Nothing.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_55"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_118">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_117">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/ArchitectureCNLRuntimeModule.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_117"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_9">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_9">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/catalog-v001.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_9"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_106">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_105">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/parser/antlr/ArchitectureCNLParser.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_105"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_43">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_42">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/CanOnlyRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_42"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_55">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_54">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/NegationRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_54"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_31">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_30">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/.settings/org.eclipse.jdt.core.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_30"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_79">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_78">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ConceptImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_78"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_67">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_66">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/SubConceptRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_66"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitModificationKind rdf:about="http://www.arch-ont.org/ontologies/git.owl#Copy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </GitModificationKind>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_119">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_118">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/ArchitectureCNLStandaloneSetup.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_118"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_107">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_106">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/parser/antlr/internal/InternalArchitectureCNL.g</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_106"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_54">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_53">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/MustRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_53"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_30">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_29">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/.settings/org.eclipse.core.resources.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_29"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_66">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_65">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/StatementList.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_65"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_42">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_41">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ArchitectureCNLPackage.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_41"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_78">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_77">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ConceptExpressionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_77"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_7">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_7">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/.settings/org.eclipse.jdt.core.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_7"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_128">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_127">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/xtend-gen/org/architecture/cnl/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_127"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_116">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_115">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/validation/ArchitectureCNLConfigurableIssueCodesProvider.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_115"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_104">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_103">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/util/ArchitectureCNLSwitch.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_103"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_41">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_40">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ArchitectureCNLFactory.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_40"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_77">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_76">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ConceptAssertionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_76"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_53">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_52">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Model.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_52"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_65">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_64">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Sentence.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_64"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_89">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_88">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ObjectConceptExpressionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_88"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_40">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_39">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Anything.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_39"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_8">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_8">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/architecture.owl</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_8"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_129">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_128">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/xtend-gen/org/architecture/cnl/generator/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_128"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_117">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_116">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/ArchitectureCNL.xtext</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_116"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_105">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_104">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/parser/antlr/ArchitectureCNLAntlrTokenFileProvider.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_104"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_64">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_63">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/RoleAssertion.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_63"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_52">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_51">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/FactStatement.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_51"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_88">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_87">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/NothingImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_87"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_76">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_75">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/CardinalityRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_75"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_51">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_50">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/DatatypeRelation.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_50"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_5">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_5">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/.project</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_5"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_75">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_74">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/CanOnlyRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_74"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_63">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_62">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/Relation.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_62"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_99">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_98">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/SubConceptRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_98"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_87">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_86">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/NegationRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_86"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_182">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_181">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/SubConceptAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_181"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_170">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_169">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/OntologyAPI.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_169"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_50">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_49">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/DatatypePropertyAssertion.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_49"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_62">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_61">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/OrObjectConceptExpression.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_61"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_6">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_6">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/.settings/org.eclipse.core.resources.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_6"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_86">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_85">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/MustRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_85"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_74">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_73">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ArchitectureCNLPackageImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_73"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_98">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_97">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/StatementListImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_97"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_183">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_182">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/UniversalAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_182"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_171">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_170">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/OntologyModelWrapper.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_170"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_73">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_72">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ArchitectureCNLFactoryImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_72"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_61">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_60">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/OnlyCanRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_60"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_97">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_96">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/SentenceImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_96"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_85">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_84">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ModelImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_84"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_180">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_179">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/NegationAxiomWithUnion.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_179"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_60">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_59">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ObjectRelation.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_59"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_84">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_83">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/FactStatementImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_83"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_72">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_71">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/AnythingImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_71"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_3">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_3">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/.settings/org.eclipse.core.resources.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_3"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_96">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_95">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/RoleAssertionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_95"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_181">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_180">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/RangeAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_180"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_71">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_70">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/AndObjectConceptExpressionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_70"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_95">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_94">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/RelationImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_94"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_83">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_82">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/DatatypeRelationImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_82"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_4">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_4">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/.classpath</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_4"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_190">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_189">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/test-classes/readme.md</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_189"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_82">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_81">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/DatatypePropertyAssertionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_81"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_70">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_69">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/VariableStatement.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_69"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_94">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_93">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/OrObjectConceptExpressionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_93"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitModificationKind rdf:about="http://www.arch-ont.org/ontologies/git.owl#Update">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </GitModificationKind>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_1">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_1">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:46 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_1"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_191">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_190">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/test.owl</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_190"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_93">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_92">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/OnlyCanRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_92"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_81">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_80">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/DataStatementImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_80"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_2">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_2">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/.project</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_2"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_80">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_79">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ConditionalRuleTypeImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_79"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_92">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_91">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ObjectRelationImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_91"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_91">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_90">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ObjectPropertyAssertionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_90"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_0">
+    <modifiesFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_0"/>
+    <j.0:deletesFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_0"/>
+    <hasModificationKind>
+      <GitModificationKind rdf:about="http://www.arch-ont.org/ontologies/git.owl#Delete">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </GitModificationKind>
+    </hasModificationKind>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_90">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_89">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ObjectImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_89"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_178">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_177">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/MaxCardinalityRestrictionAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_177"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_166">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_165">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/test/java/api/OWLApiTest.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_165"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_154">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_153">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/ExistentialAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_153"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_142">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_141">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/.settings/org.eclipse.jdt.core.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_141"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_130">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_129">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/xtend-gen/org/architecture/cnl/scoping/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_129"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_179">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_178">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/MinCardinalityRestrictionAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_178"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_167">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_166">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/test/resources/readme.md</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_166"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_155">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_154">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/MaxCardinalityRestrictionAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_154"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_143">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_142">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/.settings/org.eclipse.m2e.core.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_142"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_131">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_130">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/xtend-gen/org/architecture/cnl/validation/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_130"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_188">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_187">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/test-classes/api/JenaWrapperTest.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_187"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_176">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_175">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/ExactCardinalityAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_175"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_164">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_163">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/resources/readme.md</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_163"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_152">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_151">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/DomainAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_151"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_140">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_139">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/.classpath</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_139"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_189">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_188">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/test-classes/api/OWLApiTest.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_188"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_177">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_176">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/ExistentialAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_176"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_165">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_164">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/test/java/api/JenaWrapperTest.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_164"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_153">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_152">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/ExactCardinalityAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_152"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_141">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_140">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/.project</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_140"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_150">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_149">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/ConditionalAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_149"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_186">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_185">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/stemmer/Stemmer.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_185"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitModificationKind rdf:about="http://www.arch-ont.org/ontologies/git.owl#Rename">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </GitModificationKind>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_174">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_173">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/CustomAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_173"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_162">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_161">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/stemmer/Stemmer.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_161"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_187">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_186">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/stemmer/StemmerTest.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_186"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_175">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_174">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/DomainAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_174"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_163">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_162">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/stemmer/StemmerTest.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_162"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_151">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_150">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/CustomAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_150"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_172">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_171">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/OwlAPIImpl.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_171"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_160">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_159">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/UniversalAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_159"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_184">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_183">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/readme.md</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_183"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_161">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_160">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/stemmer/StanfordLemmatizer.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_160"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_185">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_184">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/stemmer/StanfordLemmatizer.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_184"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_173">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_172">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/axioms/ConditionalAxiom.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_172"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_19">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_19">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src/org/architecture/cnl/ide/ArchitectureCNLIdeModule.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_19"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_138">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_137">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/src/main/java/datatypes/RuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_137"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_126">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_125">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/validation/ArchitectureCNLValidator.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_125"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_114">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_113">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/services/ArchitectureCNLGrammarAccess.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_113"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_102">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_101">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/VariableStatementImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_101"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_18">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_18">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/contentassist/antlr/internal/InternalArchitectureCNLParser.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_18"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_139">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_138">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/target/classes/datatypes/RuleType.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_138"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_127">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_126">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/target/classes/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_126"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_115">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_114">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/validation/AbstractArchitectureCNLValidator.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_114"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_103">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_102">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/util/ArchitectureCNLAdapterFactory.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_102"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_29">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_28">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/.project</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_28"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_17">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_17">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/contentassist/antlr/internal/InternalArchitectureCNLLexer.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_17"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_148">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_147">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/OntologyModelWrapper.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_147"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_136">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_135">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/.settings/org.eclipse.m2e.core.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_135"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_124">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_123">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/generator/RuleTypeProcessor.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_123"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_112">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_111">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/serializer/ArchitectureCNLSemanticSequencer.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_111"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_100">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_99">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/ThatExpressionImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_99"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_16">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_16">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/contentassist/antlr/internal/InternalArchitectureCNL.tokens</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_16"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_28">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_27">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/.launch/Generate ArchitectureCNL (architecture) Language Infrastructure.launch</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_27"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_149">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_148">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/OwlAPIImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_148"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_137">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_136">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/pom.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_136"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_125">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_124">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/scoping/ArchitectureCNLScopeProvider.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_124"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_113">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_112">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/serializer/ArchitectureCNLSyntacticSequencer.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_112"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_101">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_100">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/impl/VariableImpl.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_100"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_27">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_26">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/.classpath</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_26"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_39">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_38">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/AndObjectConceptExpression.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_38"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_15">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_15">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/contentassist/antlr/internal/InternalArchitectureCNL.g</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_15"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_158">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_157">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/RangeAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_157"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_146">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_145">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/OWLAPI.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_145"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_134">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_133">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/.project</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_133"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_122">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_121">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/generator/CanOnlyProcessor.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_121"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_110">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_109">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/parser/antlr/internal/InternalArchitectureCNLParser.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_109"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_38">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_37">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/ArchitectureCNLStandaloneSetupGenerated.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_37"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitRepository rdf:about="http://www.arch-ont.org/ontologies/git.owl#GitRepository_">
+    <hasCommit>
+      <GitCommit rdf:about="http://www.arch-ont.org/ontologies/git.owl#Commit_0">
+        <j.1:hasParent>
+          <GitCommit rdf:about="http://www.arch-ont.org/ontologies/git.owl#Commit_1">
+            <j.1:hasParent>
+              <GitCommit rdf:about="http://www.arch-ont.org/ontologies/git.owl#Commit_2">
+                <j.1:hasParent>
+                  <GitCommit rdf:about="http://www.arch-ont.org/ontologies/git.owl#Commit_3">
+                    <j.1:hasParent>
+                      <GitCommit rdf:about="http://www.arch-ont.org/ontologies/git.owl#Commit_4">
+                        <j.1:hasParent>
+                          <GitCommit rdf:about="http://www.arch-ont.org/ontologies/git.owl#Commit_5">
+                            <j.0:committedOn>Sat Aug 04 16:06:44 CEST 2018</j.0:committedOn>
+                            <hasShortMessage>Initial commit</hasShortMessage>
+                            <hasMessage>Initial commit</hasMessage>
+                            <hasSHAIdentifier>6c5858e852351a5cf3a0f15bc6946d6e2facc4e5</hasSHAIdentifier>
+                            <j.0:isCommittedBy>
+                              <j.0:Committer rdf:about="http://www.arch-ont.org/ontologies/git.owl#Committer_5">
+                                <j.1:hasName>schroeder &lt;schroeder@exchange.informatik.uni-hamburg.de&gt;</j.1:hasName>
+                              </j.0:Committer>
+                            </j.0:isCommittedBy>
+                            <j.1:hasAuthor>
+                              <GitAuthor rdf:about="http://www.arch-ont.org/ontologies/git.owl#Author_1">
+                                <j.0:performsCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_5"/>
+                                <j.1:hasEmailAdress>schroeder@exchange.informatik.uni-hamburg.de</j.1:hasEmailAdress>
+                                <j.1:hasName>schroeder</j.1:hasName>
+                              </GitAuthor>
+                            </j.1:hasAuthor>
+                          </GitCommit>
+                        </j.1:hasParent>
+                        <j.0:committedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:committedOn>
+                        <hasShortMessage>ontology api</hasShortMessage>
+                        <hasMessage>ontology api
+</hasMessage>           <hasSHAIdentifier>eb10a3c6ff46e327d3b88713d4414f6a8b7a0a53</hasSHAIdentifier>
+                        <j.0:isCommittedBy>
+                          <j.0:Committer rdf:about="http://www.arch-ont.org/ontologies/git.owl#Committer_4">
+                            <j.1:hasName>Sandra Schröder &lt;schroeder@informatik.uni-hamburg.de&gt;</j.1:hasName>
+                          </j.0:Committer>
+                        </j.0:isCommittedBy>
+                      </GitCommit>
+                    </j.1:hasParent>
+                    <j.0:committedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:committedOn>
+                    <hasShortMessage>common project</hasShortMessage>
+                    <hasMessage>common project
+</hasMessage>       <hasSHAIdentifier>504c883060307c77f57f30b4f8b36fdbba50bacc</hasSHAIdentifier>
+                    <j.0:isCommittedBy>
+                      <j.0:Committer rdf:about="http://www.arch-ont.org/ontologies/git.owl#Committer_3">
+                        <j.1:hasName>Sandra Schröder &lt;schroeder@informatik.uni-hamburg.de&gt;</j.1:hasName>
+                      </j.0:Committer>
+                    </j.0:isCommittedBy>
+                  </GitCommit>
+                </j.1:hasParent>
+                <j.0:committedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:committedOn>
+                <hasShortMessage>architecture cnl</hasShortMessage>
+                <hasMessage>architecture cnl
+</hasMessage>   <hasSHAIdentifier>50c8d075619cfda6a363e9ab8a1f0eef6c47f3da</hasSHAIdentifier>
+                <j.0:isCommittedBy>
+                  <j.0:Committer rdf:about="http://www.arch-ont.org/ontologies/git.owl#Committer_2">
+                    <j.1:hasName>Sandra Schröder &lt;schroeder@informatik.uni-hamburg.de&gt;</j.1:hasName>
+                  </j.0:Committer>
+                </j.0:isCommittedBy>
+              </GitCommit>
+            </j.1:hasParent>
+            <j.0:committedOn>Sat Aug 04 16:12:46 CEST 2018</j.0:committedOn>
+            <hasShortMessage>gitignore</hasShortMessage>
+            <hasMessage>gitignore
+</hasMessage>
+            <hasSHAIdentifier>84768b71f33ac28225c8e7c07287baeb1afde19d</hasSHAIdentifier>
+            <j.0:isCommittedBy>
+              <j.0:Committer rdf:about="http://www.arch-ont.org/ontologies/git.owl#Committer_1">
+                <j.1:hasName>Sandra Schröder &lt;schroeder@informatik.uni-hamburg.de&gt;</j.1:hasName>
+              </j.0:Committer>
+            </j.0:isCommittedBy>
+          </GitCommit>
+        </j.1:hasParent>
+        <j.0:committedOn>Mon Aug 06 15:55:10 CEST 2018</j.0:committedOn>
+        <hasShortMessage>gitignore</hasShortMessage>
+        <hasMessage>gitignore
+</hasMessage>
+        <hasSHAIdentifier>c53e8dae7e97024f42e29e8781a210aa0935729c</hasSHAIdentifier>
+        <j.0:isCommittedBy>
+          <j.0:Committer rdf:about="http://www.arch-ont.org/ontologies/git.owl#Committer_0">
+            <j.1:hasName>Sandra Schröder &lt;schroeder@informatik.uni-hamburg.de&gt;</j.1:hasName>
+          </j.0:Committer>
+        </j.0:isCommittedBy>
+        <j.1:hasAuthor>
+          <GitAuthor rdf:about="http://www.arch-ont.org/ontologies/git.owl#Author_0">
+            <j.0:performsCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_0"/>
+            <j.1:hasEmailAdress>schroeder@informatik.uni-hamburg.de</j.1:hasEmailAdress>
+            <j.1:hasName>Sandra Schröder</j.1:hasName>
+          </GitAuthor>
+        </j.1:hasAuthor>
+      </GitCommit>
+    </hasCommit>
+    <hasCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_5"/>
+    <hasHead>
+      <GitBranch rdf:about="http://www.arch-ont.org/ontologies/git.owl#HEAD">
+        <hasSHAIdentifier>c53e8dae7e97024f42e29e8781a210aa0935729c</hasSHAIdentifier>
+        <j.1:hasName>HEAD</j.1:hasName>
+      </GitBranch>
+    </hasHead>
+    <hasBranch>
+      <GitBranch rdf:about="http://www.arch-ont.org/ontologies/git.owl#Branch_0">
+        <hasHead rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_0"/>
+        <j.1:hasName>heads/master</j.1:hasName>
+      </GitBranch>
+    </hasBranch>
+    <hasCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_3"/>
+    <j.1:hasAuthor rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Author_1"/>
+    <hasCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_1"/>
+    <j.1:hasAuthor rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Author_0"/>
+    <hasCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_4"/>
+    <hasCommit rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Commit_2"/>
+  </GitRepository>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_159">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_158">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/SubConceptAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_158"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_14">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_14">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/contentassist/antlr/PartialArchitectureCNLContentAssistParser.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_14"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_26">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_25">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/.antlr-generator-3.2.0-patch.jar</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_25"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_147">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_146">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/OntologyAPI.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_146"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_135">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_134">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/.settings/org.eclipse.jdt.core.prefs</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_134"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_123">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_122">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/generator/MustRuleTypeProcessor.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_122"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_111">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_110">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/scoping/AbstractArchitectureCNLScopeProvider.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_110"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_49">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_48">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/DataStatement.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_48"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_25">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_24">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/xtend-gen/org/architecture/cnl/ide/.gitignore</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_24"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_37">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_36">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/ArchitectureCNL.xtextbin</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_36"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_13">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_13">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/contentassist/antlr/ArchitectureCNLParser.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_13"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_168">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_167">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/APIFactory.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_167"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_156">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_155">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/MinCardinalityRestrictionAxiom.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_155"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_144">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_143">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/pom.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_143"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_132">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_131">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/pom.xml</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_131"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_120">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_119">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/GenerateArchitectureCNL.mwe2</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_119"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_36">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_35">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/AbstractArchitectureCNLRuntimeModule.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_35"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_48">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_47">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src-gen/org/architecture/cnl/architectureCNL/ConditionalRuleType.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_47"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_12">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_12">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/src-gen/org/architecture/cnl/ide/AbstractArchitectureCNLIdeModule.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_12"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_24">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_23">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl.ide/test.architecture</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_23"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_169">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_168">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/target/classes/api/OWLAPI.class</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_168"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_157">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_156">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/axioms/NegationAxiomWithUnion.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_156"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_145">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_144">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:25 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>api/src/main/java/api/APIFactory.java</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_144"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_133">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_132">
+        <j.0:isCreatedOn>Sat Aug 04 16:11:53 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>conformancechecking-common/.classpath</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_132"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+  <GitChange rdf:about="http://www.arch-ont.org/ontologies/git.owl#Change_121">
+    <modifiesFile>
+      <j.1:File rdf:about="http://www.arch-ont.org/ontologies/git.owl#File_120">
+        <j.0:isCreatedOn>Sat Aug 04 16:12:24 CEST 2018</j.0:isCreatedOn>
+        <j.1:hasRelativePath>org.architecture.cnl.parent/org.architecture.cnl/src/org/architecture/cnl/generator/ArchitectureCNLGenerator.xtend</j.1:hasRelativePath>
+      </j.1:File>
+    </modifiesFile>
+    <j.0:createsFile rdf:resource="http://www.arch-ont.org/ontologies/git.owl#File_120"/>
+    <hasModificationKind rdf:resource="http://www.arch-ont.org/ontologies/git.owl#Add"/>
+  </GitChange>
+</rdf:RDF>
