@@ -3,6 +3,7 @@ package asciidocparser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,12 @@ import datatypes.ArchitectureRules;
 
 public class AsciiDocArc42Parser {
 
-	private final String TMP_ARCHITECTURE_FILE_NAME = "./tmp.architecture";
 	private final static String TMP_MAPPING_FILE_NAME = "./mapping.txt";
 	private final static String EXTENSION = ".architecture";
 	private final static String OWL_EXTENSION = ".owl";
 	private final static String PREFIX = "tmp";
 
-	private final static String javaOntologyNamespace = "@prefix code: <http://arch-ont.org/ontologies/javacodeontology.owl#>\n";
+	private final static String javaOntologyNamespace = "@prefix java: <http://arch-ont.org/ontologies/javacodeontology.owl#>\n";
 	private final static String mavenOntologyNamespace = "@prefix maven: <http://arch-ont.org/ontologies/maven.owl#>\n";
 	private final static String mainOntologyNamespace = "@prefix main: <http://arch-ont.org/ontologies/main.owl#>\n";
 	private final static String osgiOntologyNamespace = "@prefix osgi: <http://arch-ont.org/ontologies/osgi.owl#>\n";
@@ -36,8 +36,14 @@ public class AsciiDocArc42Parser {
 			+ mainOntologyNamespace + osgiOntologyNamespace + historyOntologyNamespace + architectureOntologyNamespace;
 
 	private static int id = 0;
+	
+	private List<String> ontologyPaths;
+	
+	public AsciiDocArc42Parser() {
+		ontologyPaths = new ArrayList<String>();
+	}
 
-	public static void parseRulesFromDocumentation(String path) {
+	public void parseRulesFromDocumentation(String path) {
 
 		Asciidoctor ascii = Asciidoctor.Factory.create();
 		CNL2OWLGenerator generator = new CNL2OWLGenerator();
@@ -47,6 +53,7 @@ public class AsciiDocArc42Parser {
 		selector.put("role", "rule");
 		List<AbstractBlock> result = doc.findBy(selector);
 		int id_for_file = 0;
+		String ontologyPath = "";
 		for (AbstractBlock abstractBlock : result) {
 			Block b = (Block) abstractBlock;
 			List<String> lines = b.lines();
@@ -60,6 +67,8 @@ public class AsciiDocArc42Parser {
 				rules.addRule(rule, id);
 				id++;
 				try {
+					ontologyPath = "./architecture" + id_for_file + OWL_EXTENSION;
+					ontologyPaths.add(ontologyPath);
 					FileUtils.writeStringToFile(f, line + "\n", (Charset) null, true);
 					rules.addRuleWithPathToConstraint(rule, id_for_file,
 							"./architecture" + id_for_file + OWL_EXTENSION);
@@ -74,10 +83,10 @@ public class AsciiDocArc42Parser {
 			}
 			id_for_file++;
 		}
+		
 	}
 
-	// TODO parse JENA Rules
-	public static void parseMappingRulesFromDocumentation(String path) {
+	public void parseMappingRulesFromDocumentation(String path) {
 		Asciidoctor ascii = Asciidoctor.Factory.create();
 		Document doc = ascii.loadFile(new File(path), new HashMap<String, Object>());
 		Map<Object, Object> selector = new HashMap<Object, Object>();
@@ -110,11 +119,13 @@ public class AsciiDocArc42Parser {
 		// f.delete();
 
 	}
-
-	public static void main(String[] args) {
-		String path = "C:\\Users\\sandr\\Documents\\repositories\\cnl-github\\cnl-toolchain\\arc42-building-block-view.adoc";
-		parseRulesFromDocumentation(path);
-		parseMappingRulesFromDocumentation(path);
+	
+	public List<String> getOntologyPaths() {
+		return ontologyPaths;
+	}
+	
+	public String getMappingFilePath() {
+		return TMP_MAPPING_FILE_NAME;
 	}
 
 }
