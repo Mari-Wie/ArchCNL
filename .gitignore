@@ -27,3 +27,4 @@ target
 .columbus_java
 *.prefs
 .apt_generated_tests
+catalog-v001.xml
