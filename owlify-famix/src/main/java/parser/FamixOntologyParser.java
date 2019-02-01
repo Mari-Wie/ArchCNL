@@ -59,7 +59,6 @@ public class FamixOntologyParser {
 			unit.accept(new MethodDeclarationVisitor(ontology, currentUnitIndividual), null);
 			unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual), null);
 		}
-
 		ontology.save("./result.owl");
 
 	}
