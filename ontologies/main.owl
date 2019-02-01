@@ -65,6 +65,14 @@
     
 
 
+    <!-- http://arch-ont.org/ontologies/famix.owl#hasName -->
+
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasName">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://arch-ont.org/ontologies/main.owl#hasCreationDate -->
 
     <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasCreationDate">
@@ -92,14 +100,6 @@
     <!-- http://arch-ont.org/ontologies/main.owl#hasModificationDate -->
 
     <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasModificationDate">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://arch-ont.org/ontologies/main.owl#hasName -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasName">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
     </owl:DatatypeProperty>
     

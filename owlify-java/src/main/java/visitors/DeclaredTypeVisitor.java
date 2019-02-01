@@ -5,6 +5,7 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
 import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -59,6 +60,7 @@ public class DeclaredTypeVisitor extends VoidVisitorAdapter<Void> {
 		
 		return i;
 	}
+	
 
 	@Override
 	public void visit(PrimitiveType n, Void arg) {
