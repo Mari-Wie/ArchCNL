@@ -130,6 +130,15 @@
     
 
 
+    <!-- http://arch-ont.org/ontologies/famix.owl#namespaceContains -->
+
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#namespaceContains">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Namespace"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://arch-ont.org/ontologies/famix.owl#throwsException -->
 
     <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#throwsException">

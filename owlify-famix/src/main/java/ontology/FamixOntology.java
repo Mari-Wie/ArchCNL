@@ -24,20 +24,23 @@ public class FamixOntology {
 	 * individual of the ontology.
 	 */
 	private Map<String, Individual> famixTypeIndividualCache;
+	private Map<String, Individual> namespaceIndividualCache;
 	private Map<String, String> individualToConcreteOntClass;
 
 	private long typeID;
 	private long inheritanceID;
 	private long annotationInstanceID;
 	private long attributeID;
-	private int methodID;
-	private int parameterID;
-	private int exceptionId;
-	private int localVariableId;
+	private long methodID;
+	private long parameterID;
+	private long exceptionId;
+	private long localVariableId;
+	private long namespaceId;
 
 	public FamixOntology(String famixOntologyPath) {
 		famixTypeIndividualCache = new HashMap<String, Individual>();
 		individualToConcreteOntClass = new HashMap<String, String>();
+		namespaceIndividualCache = new HashMap<String, Individual>();
 		classesAndProperties = new FamixOntClassesAndProperties();
 		loadFamixModel(famixOntologyPath);
 	}
@@ -45,6 +48,14 @@ public class FamixOntology {
 	private void loadFamixModel(String famixOntologyPath) {
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		model.read(famixOntologyPath);
+	}
+	
+	public Individual getNamespaceIndividualWithName(String namespaceName) {
+		if(!namespaceIndividualCache.containsKey(namespaceName)) {
+			Individual individual = classesAndProperties.createNamespaceIndividual(model,namespaceId++);
+			namespaceIndividualCache.put(namespaceName, individual);
+		}
+		return namespaceIndividualCache.get(namespaceName);
 	}
 	
 	public Individual getFamixClassWithName(String className) {
@@ -263,5 +274,12 @@ public class FamixOntology {
 		DatatypeProperty isConstructorProperty = classesAndProperties.getIsConstructorProperty(model);
 		methodIndividual.addLiteral(isConstructorProperty, isConstructor);
 	}
+
+	public void setNamespaceContainsProperty(Individual parentNamespace, Individual namespaceIndividual) {
+		ObjectProperty namespaceContainsProperty = classesAndProperties.getNamespaceContainsProperty(model);
+		parentNamespace.addProperty(namespaceContainsProperty, namespaceIndividual);
+	}
+
+	
 
 }

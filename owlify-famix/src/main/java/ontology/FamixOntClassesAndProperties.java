@@ -9,6 +9,11 @@ import org.apache.jena.ontology.OntModel;
 public class FamixOntClassesAndProperties {
 	private final String famixOntologyNamespace = "http://arch-ont.org/ontologies/famix.owl#";
 	
+	public Individual createNamespaceIndividual(OntModel model, long namespaceId) {
+		OntClass namespaceClass = model.getOntClass(famixOntologyNamespace + "Namespace");
+		return model.createIndividual(this.famixOntologyNamespace + "Namespace" + namespaceId, namespaceClass);
+	}
+	
 	public Individual getFamixClassIndividual(OntModel model, String name, long classID) {
 		OntClass famixClass = model.getOntClass(famixOntologyNamespace + "FamixClass");
 		return model.createIndividual(this.famixOntologyNamespace + name + classID, famixClass);
@@ -113,7 +118,7 @@ public class FamixOntClassesAndProperties {
 		return model.getOntClass(famixOntologyNamespace+"DeclaredException");
 	}
 	
-	public Individual getDeclaredExceptionIndividual(OntModel model, int declaredId) {
+	public Individual getDeclaredExceptionIndividual(OntModel model, long declaredId) {
 		OntClass declared = model.getOntClass(famixOntologyNamespace+"DeclaredException");
 		return model.createIndividual(famixOntologyNamespace+"DeclaredException"+declaredId, declared);
 	}
@@ -150,5 +155,11 @@ public class FamixOntClassesAndProperties {
 	public DatatypeProperty getIsConstructorProperty(OntModel model) {
 		return model.getDatatypeProperty(famixOntologyNamespace + "isConstructor");
 	}
+
+	public ObjectProperty getNamespaceContainsProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "namespaceContains");
+	}
+
+	
 
 }

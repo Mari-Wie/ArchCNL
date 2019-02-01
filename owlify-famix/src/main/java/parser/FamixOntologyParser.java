@@ -10,7 +10,6 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.jena.ontology.Individual;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 
 import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntology;
@@ -18,8 +17,8 @@ import visitors.ClassVisitor;
 import visitors.ConstructorDeclarationVisitor;
 import visitors.FieldVisitor;
 import visitors.InheritanceVisitor;
-import visitors.MarkerAnnotationExpressionVisitor;
 import visitors.MethodDeclarationVisitor;
+import visitors.NamespaceVisitor;
 
 public class FamixOntologyParser {
 
@@ -58,6 +57,7 @@ public class FamixOntologyParser {
 			unit.accept(new FieldVisitor(ontology, currentUnitIndividual), null);
 			unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnitIndividual), null);
 			unit.accept(new MethodDeclarationVisitor(ontology, currentUnitIndividual), null);
+			unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual), null);
 		}
 
 		ontology.save("./result.owl");
