@@ -11,16 +11,19 @@ import api.exceptions.NoConnectionToStardogServerException;
 import asciidocparser.AsciiDocArc42Parser;
 import conformancecheck.api.IConformanceCheck;
 import conformancecheck.impl.ConformanceCheckImpl;
+import core.OwlifyComponent;
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
 import impl.StardogAPIFactory;
 import impl.StardogDatabase;
 import impl.StardogDatabase.StardogDatabaseBuilder;
+import parser.FamixOntologyParser;
 
 public class CNLToolchain {
 
 	private List<String> ontologyPaths;
-	private JavaCodeOntologyAPIImpl javaOWLTransformer;
+	//private OwlifyComponent javaOWLTransformer;
+	private OwlifyComponent famixTransformer;
 	private ExecuteMappingAPI mappingAPI;
 	private StardogICVAPI icvAPI;
 	
@@ -31,6 +34,7 @@ public class CNLToolchain {
 		this.databaseName = databaseName;
 		this.server = server;
 		this.icvAPI = StardogAPIFactory.getICVAPI();
+		this.famixTransformer = new FamixOntologyParser();
 	}
 	
 	public void execute(String docPath, String sourceCodePath, String context)
@@ -42,14 +46,16 @@ public class CNLToolchain {
 		
 
 		// Source Code Transformation
-		javaOWLTransformer = new JavaCodeOntologyAPIImpl();
-		javaOWLTransformer.setSource(sourceCodePath);
-		javaOWLTransformer.transform();
+		famixTransformer.setSource(sourceCodePath);
+		famixTransformer.transform();
+		//javaOWLTransformer = new JavaCodeOntologyAPIImpl();
+		//javaOWLTransformer.setSource(sourceCodePath);
+		//javaOWLTransformer.transform();
 
 		// Mapping
 		mappingAPI = ExecuteMappingAPIFactory.get();
 		ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build().addPathsToConcepts(ontologyPaths)
-				.withMappingRules(parser.getMappingFilePath()).withData(javaOWLTransformer.getResultFile());
+				.withMappingRules(parser.getMappingFilePath()).withData(famixTransformer.getResultPath());
 		mappingAPI.setReasoningConfiguration(reasoningConfig);
 		mappingAPI.executeMapping();
 
@@ -71,7 +77,7 @@ public class CNLToolchain {
 	
 	public static void main(String[] args) {
 		String database = "test";
-		String context = "http://graphs.org/" + database + "/v2.0";
+		String context = "http://graphs.org/" + database + "/v3.0";
 		CNLToolchain tool = new CNLToolchain("test", "http://localhost:5820");
 		try {
 			tool.execute("./arc42-building-block-view.adoc", "C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\TestProject", context);
