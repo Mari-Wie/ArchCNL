@@ -16,31 +16,29 @@ public class ImportDeclarationVisitor extends VoidVisitorAdapter<Void> {
 	private OntModel ontoModel;
 	private String ontologyNamespace;
 	private ObjectProperty dependsOnProperty;
-	
+
 	public ImportDeclarationVisitor(String codeOntologyNamespace, OntModel ontoModel, Individual javaClassIndividual) {
 
 		this.ontoModel = ontoModel;
 		this.ontologyNamespace = codeOntologyNamespace;
 		this.javaClassIndividual = javaClassIndividual;
-		this.dependsOnProperty = ontoModel.getObjectProperty(ontologyNamespace+"dependsOn");
-	
+		this.dependsOnProperty = ontoModel.getObjectProperty(ontologyNamespace + "dependsOn");
+
 	}
 
 	@Override
 	public void visit(ImportDeclaration n, Void arg) {
-		
+
 		String[] split = n.getName().toString().split("\\.");
-		String type = split[split.length-1];
+		String type = split[split.length - 1];
 		Individual typeIndividual = IndividualCache.getInstance().getTypeIndividual(type);
-		
-		if(typeIndividual != null) {
-			this.javaClassIndividual.addProperty(dependsOnProperty, typeIndividual);			
-		}
-		else {
+
+		if (typeIndividual != null) {
+			this.javaClassIndividual.addProperty(dependsOnProperty, typeIndividual);
+		} else {
 			System.out.println("type: " + type);
 		}
-				
-	
+
 	}
 
 }
