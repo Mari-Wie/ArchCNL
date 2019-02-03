@@ -35,7 +35,7 @@ public class JavaCodeOntologyAPIImpl implements OwlifyComponent {
 				.withCodeOntologyURI("http://arch-ont.org/ontologies/javacodeontology.owl#");
 	}
 
-	public String getResultFile() {
+	public String getResultPath() {
 		return PATH_TO_RESULT;
 	}
 
