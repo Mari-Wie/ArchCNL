@@ -16,7 +16,8 @@ public class CodeModel {
 		
 		this.context = context;
 		this.codeModel = codeModel;
-		this.codeOntologyURI = "http://arch-ont.org/ontologies/javacodeontology.owl#";
+		//this.codeOntologyURI = "http://arch-ont.org/ontologies/javacodeontology.owl#";
+		this.codeOntologyURI = "http://arch-ont.org/ontologies/famix.owl#";
 	}
 
 	public String getNameOfResource(String resourceAsString) {
