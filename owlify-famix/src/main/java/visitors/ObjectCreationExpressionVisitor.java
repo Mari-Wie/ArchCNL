@@ -18,7 +18,7 @@ public class ObjectCreationExpressionVisitor extends VoidVisitorAdapter<Void> {
 	
 	@Override
 	public void visit(ObjectCreationExpr n, Void arg) {
-		DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 		n.accept(visitor, null);
 		typeOfCreatedObject = visitor.getDeclaredType();
 		

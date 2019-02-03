@@ -23,7 +23,7 @@ public class InheritanceVisitor extends VoidVisitorAdapter<Void>{
 	@Override
 	public void visit(ClassOrInterfaceDeclaration n, Void arg) {
 
-		DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 		NodeList<ClassOrInterfaceType> extendedTypes = n.getExtendedTypes();
 		for (ClassOrInterfaceType classOrInterfaceType : extendedTypes) {
 			classOrInterfaceType.accept(visitor, null);

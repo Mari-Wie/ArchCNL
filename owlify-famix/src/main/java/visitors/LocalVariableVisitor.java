@@ -25,7 +25,7 @@ public class LocalVariableVisitor extends VoidVisitorAdapter<Void> {
 			Individual localVariableIndividual = ontology.getLocalVariableIndividual();
 			ontology.setHasNamePropertyForNamedEntity(variableDeclarator.getName().asString(), localVariableIndividual);
 			
-			DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+			DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 			variableDeclarator.accept(visitor, null);
 			Individual declaredTypeOfVariable = visitor.getDeclaredType();
 			ontology.setDeclaredTypeForBehavioralOrStructuralEntity(localVariableIndividual, declaredTypeOfVariable);

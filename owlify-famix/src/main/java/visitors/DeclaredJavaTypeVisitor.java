@@ -9,13 +9,13 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import ontology.FamixOntology;
 
-public class DeclaredTypeVisitor extends VoidVisitorAdapter<Void> {
+public class DeclaredJavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
 	private Individual declaredType;
 
 	private FamixOntology ontology;
 
-	public DeclaredTypeVisitor(FamixOntology ontology) {
+	public DeclaredJavaTypeVisitor(FamixOntology ontology) {
 		this.ontology = ontology;
 	}
 

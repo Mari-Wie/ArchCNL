@@ -23,7 +23,7 @@ public class TryCatchVisitor extends VoidVisitorAdapter<Void> {
 	public void visit(TryStmt n, Void arg) {
 
 		for (CatchClause catchClause : n.getCatchClauses()) {
-			DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+			DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 			catchClause.getParameter().getType().accept(visitor, null);
 			Individual declaredTypeOfCatchClause = visitor.getDeclaredType();
 			Individual caughtExceptionIndividual = ontology.getCaughtExceptionIndividual();

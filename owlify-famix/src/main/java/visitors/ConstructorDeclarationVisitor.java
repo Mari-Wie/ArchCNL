@@ -52,7 +52,7 @@ public class ConstructorDeclarationVisitor extends VoidVisitorAdapter<Void> {
 		for (Parameter parameter : n.getParameters()) {
 			parameter.accept(new ParameterVisitor(ontology, methodIndividual), null);
 		}
-		DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 
 		for (ReferenceType referenceType : n.getThrownExceptions()) {
 			referenceType.accept(visitor, null);

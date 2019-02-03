@@ -6,14 +6,14 @@ import com.github.javaparser.ast.CompilationUnit;
 import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntology;
 import parser.JavaParserDelegator;
-import visitors.ClassVisitor;
-import visitors.FieldVisitor;
+import visitors.JavaTypeVisitor;
+import visitors.JavaFieldVisitor;
 
 public class FieldVisitorTest {
 
 	private String pathToJavaClass = "./src/test/java/examples/TestClassA.java";
 	
-	private FieldVisitor visitor;
+	private JavaFieldVisitor visitor;
 
 	private JavaParserDelegator delegator;
 
@@ -28,8 +28,8 @@ public class FieldVisitorTest {
 	public void testVisitsField() throws FileIsNotAJavaClassException {
 		unit = delegator.getCompilationUnitFromFilePath(pathToJavaClass);
 		FamixOntology ontology = new FamixOntology("./ontology/famix.owl");
-		ClassVisitor classVisitor = new ClassVisitor(ontology);
-		visitor = new FieldVisitor(ontology, classVisitor.getFamixTypeIndividual());
+		JavaTypeVisitor classVisitor = new JavaTypeVisitor(ontology);
+		visitor = new JavaFieldVisitor(ontology, classVisitor.getFamixTypeIndividual());
 		unit.accept(visitor, null);
 	}
 

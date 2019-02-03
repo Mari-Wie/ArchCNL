@@ -5,25 +5,23 @@ import java.util.EnumSet;
 import org.apache.jena.ontology.Individual;
 
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import ontology.FamixOntology;
 
-public class ClassVisitor extends VoidVisitorAdapter<Void> {
+public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
 	private Individual famixTypeIndividual;
 	private FamixOntology ontology;
 
-	public ClassVisitor(String famixOntology) {
+	public JavaTypeVisitor(String famixOntology) {
 		ontology = new FamixOntology(famixOntology);
 	}
 
-	public ClassVisitor(FamixOntology ontology) {
+	public JavaTypeVisitor(FamixOntology ontology) {
 		 this.ontology = ontology;
 	}
 

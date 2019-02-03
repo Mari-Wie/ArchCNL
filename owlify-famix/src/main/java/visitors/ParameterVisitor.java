@@ -22,7 +22,7 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
 	@Override
 	public void visit(Parameter n, Void arg) {
 		
-		DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 		n.accept(visitor, null);
 		
 		Individual parameterIndividual = ontology.getParameterIndividual();

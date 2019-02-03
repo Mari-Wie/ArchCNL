@@ -10,19 +10,19 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import ontology.FamixOntology;
 
-public class FieldVisitor extends VoidVisitorAdapter<Void> {
+public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 
 	private FamixOntology ontology;
 	private Individual parent;
 
-	public FieldVisitor(FamixOntology ontology, Individual parent) {
+	public JavaFieldVisitor(FamixOntology ontology, Individual parent) {
 		this.ontology = ontology;
 		this.parent = parent;
 	}
 
 	@Override
 	public void visit(FieldDeclaration n, Void arg) {
-		DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 
 		for (VariableDeclarator variableDeclarator : n.getVariables()) {
 			variableDeclarator.accept(visitor, null);

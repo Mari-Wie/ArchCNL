@@ -6,8 +6,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntology;
 import parser.JavaParserDelegator;
-import visitors.ClassVisitor;
-import visitors.FieldVisitor;
+import visitors.JavaTypeVisitor;
+import visitors.JavaFieldVisitor;
 import visitors.MarkerAnnotationExpressionVisitor;
 import visitors.NormalAnnotationExpressionVisitor;
 import visitors.SingleMemberAnnotationExpressionVisitor;
@@ -37,7 +37,7 @@ public class AnnotationExpressionVisitorTest {
 
 	@Test
 	public void testMarkerAnnotationExpression() throws FileIsNotAJavaClassException {
-		ClassVisitor visitor = new ClassVisitor(ontology);
+		JavaTypeVisitor visitor = new JavaTypeVisitor(ontology);
 		unit = delegator.getCompilationUnitFromFilePath(pathToJavaClass);
 		unit.accept(visitor, null);
 		markerVisitor = new MarkerAnnotationExpressionVisitor(ontology, visitor.getFamixTypeIndividual());

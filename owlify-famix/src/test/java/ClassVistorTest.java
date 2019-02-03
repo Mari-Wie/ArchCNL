@@ -11,11 +11,11 @@ import com.github.javaparser.ast.CompilationUnit;
 import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntClassesAndProperties;
 import parser.JavaParserDelegator;
-import visitors.ClassVisitor;
+import visitors.JavaTypeVisitor;
 
 public class ClassVistorTest {
 
-	private ClassVisitor classVisitor;
+	private JavaTypeVisitor classVisitor;
 	private JavaParserDelegator delegator;
 	private CompilationUnit unit;
 
@@ -27,7 +27,7 @@ public class ClassVistorTest {
 	@Before
 	public void intializeVisitor() {
 
-		classVisitor = new ClassVisitor("./ontology/famix.owl");
+		classVisitor = new JavaTypeVisitor("./ontology/famix.owl");
 		delegator = new JavaParserDelegator();
 	}
 

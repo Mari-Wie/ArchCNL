@@ -33,7 +33,7 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Void> {
 		Individual methodIndividual = ontology.getMethodIndividual();
 		ontology.setHasNamePropertyForNamedEntity(n.getName().asString(), methodIndividual);
 
-		DeclaredTypeVisitor visitor = new DeclaredTypeVisitor(ontology);
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
 		n.accept(visitor, null);
 		ontology.setDeclaredTypeForBehavioralOrStructuralEntity(methodIndividual, visitor.getDeclaredType());
 
