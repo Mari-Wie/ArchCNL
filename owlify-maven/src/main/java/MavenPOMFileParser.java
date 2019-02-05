@@ -2,13 +2,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
@@ -16,101 +17,106 @@ import org.apache.maven.model.Parent;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import core.OwlifyComponent;
+import core.AbstractOwlifyComponent;
 
-public class MavenPOMFileParser implements OwlifyComponent {
+public class MavenPOMFileParser extends AbstractOwlifyComponent {
 
-	private String outputPath;
 	private String pathToOntology;
 	private MavenOntClasses ontClasses;
-	private String pathToPOM;
+	private int pomFileId;
 	private static int moduleID = 0;
 	private static int dependencyID = 0;
 	private static int projectID = 0;
 	private static int artifactID = 0;
 
 	public MavenPOMFileParser() {
-
-		this.outputPath = "./maven_output.owl";
+		super("./maven_output.owl");
 		this.pathToOntology = "./ontology/maven.owl";
 		this.ontClasses = new MavenOntClasses();
 
-	}
-
-	public void setSource(String pathToPOM) {
-		this.pathToPOM = pathToPOM;
 	}
 
 	public void transform() {
 		ontClasses.getOntoModel().read(pathToOntology);
 		ontClasses.getOntoModel().read("./ontology/main.owl");
 
-		Reader reader;
-		try {
-			reader = new FileReader(new File(pathToPOM));
-			MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
-			Model model = xpp3Reader.read(reader);
+		File f = new File(super.getSourcePath());
+		String[] ext = { "xml" };
+		Collection<File> matchingFiles = FileUtils.listFiles(f, ext, true);
 
-			// Pom File Individual
-			Individual pomFile = ontClasses.createIndividual(ontClasses.getOntologyNamespace() + "POMFile",
-					ontClasses.pomFileClass());
-			pomFile.addLiteral(ontClasses.pomFilePathProperty(), pathToPOM);
+		for (File file : matchingFiles) {
+			if (file.getName().startsWith("pom")) {
+				Reader reader;
+				try {
+					reader = new FileReader(file);
+					MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
+					Model model = xpp3Reader.read(reader);
 
-			Individual mavenProject = ontClasses.createIndividual(
-					ontClasses.getOntologyNamespace() + "MavenProject_" + projectID, ontClasses.mavenProjectClass());
-			projectID++;
-			// has name
-			if (model.getName() != null) {
-				mavenProject.addLiteral(ontClasses.hasNameProperty(), model.getName());
+					// Pom File Individual
+					Individual pomFile = ontClasses.createIndividual(
+							ontClasses.getOntologyNamespace() + "POMFile" + pomFileId++, ontClasses.pomFileClass());
+					pomFile.addLiteral(ontClasses.pomFilePathProperty(), file.getAbsolutePath());
+
+					Individual mavenProject = ontClasses.createIndividual(
+							ontClasses.getOntologyNamespace() + "MavenProject_" + projectID,
+							ontClasses.mavenProjectClass());
+					projectID++;
+					// has name
+					if (model.getName() != null) {
+						mavenProject.addLiteral(ontClasses.hasNameProperty(), model.getName());
+					}
+					// contains POM File
+					mavenProject.addProperty(ontClasses.projectContainsPOMFileProperty(), pomFile);
+
+					if (model.getProjectDirectory() != null) {
+						System.out.println(model.getProjectDirectory());
+					}
+
+					model.getDistributionManagement();
+
+					// Maven Artifact
+					Individual artifact = ontClasses.createIndividual(
+							ontClasses.getOntologyNamespace() + "MavenArtifact_" + artifactID,
+							ontClasses.mavenArtifactClass());
+					artifactID++;
+					mavenProject.addProperty(ontClasses.projectCreatesArtifact(), artifact);
+
+					if (model.getParent() != null) {
+						// parent data
+						Individual resolvedArtifact = resolveParentArtifact(model.getParent());
+						artifact.addProperty(ontClasses.hasParentProperty(), resolvedArtifact);
+						artifact.addLiteral(ontClasses.hasVersionProperty(), model.getParent().getVersion());
+						artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getParent().getGroupId());
+					} else {
+						artifact.addLiteral(ontClasses.hasVersionProperty(), model.getVersion());
+						artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getGroupId());
+						artifact.addLiteral(ontClasses.hasArtifactIDProperty(), model.getArtifactId());
+						artifact.addLiteral(ontClasses.hasPackagingProperty(), model.getPackaging());
+						artifact.addLiteral(ontClasses.hasIDProperty(), model.getId());
+//						artifact.addLiteral(ontClasses.hasClassifierProperty(), model.get)
+					}
+
+					addDependencies(artifact, model.getDependencies());
+					addModules(artifact, model.getModules());
+
+					DependencyManagement dependencyManagement = model.getDependencyManagement();
+					if (dependencyManagement != null) {
+						addDependencies(artifact, dependencyManagement.getDependencies());
+					}
+
+					ontClasses.getOntoModel().write(new FileOutputStream(new File(super.getResultPath())));
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (XmlPullParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
-			// contains POM File
-			mavenProject.addProperty(ontClasses.projectContainsPOMFileProperty(), pomFile);
-
-			if (model.getProjectDirectory() != null) {
-				System.out.println(model.getProjectDirectory());
-			}
-
-			model.getDistributionManagement();
-
-			// Maven Artifact
-			Individual artifact = ontClasses.createIndividual(
-					ontClasses.getOntologyNamespace() + "MavenArtifact_" + artifactID, ontClasses.mavenArtifactClass());
-			artifactID++;
-			mavenProject.addProperty(ontClasses.projectCreatesArtifact(), artifact);
-
-			if (model.getParent() != null) {
-				// parent data
-				Individual resolvedArtifact = resolveParentArtifact(model.getParent());
-				artifact.addProperty(ontClasses.hasParentProperty(), resolvedArtifact);
-				artifact.addLiteral(ontClasses.hasVersionProperty(), model.getParent().getVersion());
-				artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getParent().getGroupId());
-			} else {
-				artifact.addLiteral(ontClasses.hasVersionProperty(), model.getVersion());
-				artifact.addLiteral(ontClasses.hasGroupIDProperty(), model.getGroupId());
-				artifact.addLiteral(ontClasses.hasArtifactIDProperty(), model.getArtifactId());
-				artifact.addLiteral(ontClasses.hasPackagingProperty(), model.getPackaging());
-				artifact.addLiteral(ontClasses.hasIDProperty(), model.getId());
-//				artifact.addLiteral(ontClasses.hasClassifierProperty(), model.get)
-			}
-
-			addDependencies(artifact, model.getDependencies());
-			addModules(artifact, model.getModules());
-
-			DependencyManagement dependencyManagement = model.getDependencyManagement();
-			if (dependencyManagement != null) {
-				addDependencies(artifact, dependencyManagement.getDependencies());
-			}
-
-			ontClasses.getOntoModel().write(new FileOutputStream(new File(outputPath)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}
@@ -168,8 +174,16 @@ public class MavenPOMFileParser implements OwlifyComponent {
 	}
 
 	public static void main(String[] args) {
-		MavenPOMFileParser parser = new MavenPOMFileParser();
-		parser.transform();
+
+		File f = new File("C:\\Users\\sandr\\Documents\\repositories\\cnl-github\\owlify\\owlify-main");
+		String[] ext = { "xml" };
+		Collection<File> matchingFiles = FileUtils.listFiles(f, ext, true);
+
+		for (File file : matchingFiles) {
+			if (file.getName().startsWith("pom")) {
+				System.out.println(file.getName());
+			}
+		}
 	}
 
 }
