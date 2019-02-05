@@ -17,7 +17,7 @@ import datatypes.ArchitectureRules;
 import impl.StardogAPIFactory;
 import impl.StardogDatabase;
 import impl.StardogDatabase.StardogDatabaseBuilder;
-import parser.FamixOntologyParser;
+import parser.FamixOntologyTransformer;
 
 public class CNLToolchain {
 
@@ -34,7 +34,7 @@ public class CNLToolchain {
 		this.databaseName = databaseName;
 		this.server = server;
 		this.icvAPI = StardogAPIFactory.getICVAPI();
-		this.famixTransformer = new FamixOntologyParser();
+		this.famixTransformer = new FamixOntologyTransformer();
 	}
 	
 	public void execute(String docPath, String sourceCodePath, String context)
