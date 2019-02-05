@@ -4,4 +4,5 @@ public interface OwlifyComponent {
 	public void setSource(String path);
 	public void transform();
 	public String getResultPath();
+	public String getSourcePath();
 }
