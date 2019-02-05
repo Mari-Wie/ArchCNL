@@ -11,27 +11,29 @@ import org.apache.jena.ontology.Individual;
 
 import com.github.javaparser.ast.CompilationUnit;
 
-import core.OwlifyComponent;
+import core.AbstractOwlifyComponent;
+import core.GeneralSoftwareArtifactOntology;
 import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntology;
-import visitors.JavaTypeVisitor;
 import visitors.ConstructorDeclarationVisitor;
-import visitors.JavaFieldVisitor;
 import visitors.InheritanceVisitor;
+import visitors.JavaFieldVisitor;
+import visitors.JavaTypeVisitor;
 import visitors.MethodDeclarationVisitor;
 import visitors.NamespaceVisitor;
 
-public class FamixOntologyParser implements OwlifyComponent {
+public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 
 	private JavaTypeVisitor visitor;
 	private JavaParserDelegator delegator;
 	private FamixOntology ontology;
 	private Map<CompilationUnit, Individual> unitToIndividualMap;
+	private GeneralSoftwareArtifactOntology mainOntology;
 
-	private String sourcePath;
-
-	public FamixOntologyParser() {
+	public FamixOntologyTransformer() {
+		super("./result.owl");
 		ontology = new FamixOntology("./ontology/famix.owl");
+		mainOntology = new GeneralSoftwareArtifactOntology("./ontology/main.owl");
 		visitor = new JavaTypeVisitor(ontology);
 		delegator = new JavaParserDelegator();
 
@@ -40,19 +42,15 @@ public class FamixOntologyParser implements OwlifyComponent {
 	}
 
 	public static void main(String[] args) throws FileIsNotAJavaClassException {
-		FamixOntologyParser parser = new FamixOntologyParser();
+		FamixOntologyTransformer parser = new FamixOntologyTransformer();
 		parser.setSource("C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\TestProject");
 		parser.transform();
-	}
-
-	public void setSource(String path) {
-		this.sourcePath = path;
 	}
 
 	public void transform() {
 
 		// 1. step: resolve all types
-		for (File file : FileUtils.listFiles(new File(this.sourcePath),
+		for (File file : FileUtils.listFiles(new File(super.getSourcePath()),
 				new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 				TrueFileFilter.INSTANCE)) {
 			CompilationUnit unit;
@@ -60,6 +58,9 @@ public class FamixOntologyParser implements OwlifyComponent {
 				unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
 				unit.accept(visitor, null);
 				unitToIndividualMap.put(unit, visitor.getFamixTypeIndividual());
+				Individual softwareArtifactFileIndividual = mainOntology.getSoftwareArtifactFileIndividual();
+				mainOntology.setHasFilePath(softwareArtifactFileIndividual, file.getAbsolutePath());
+				mainOntology.setSoftwareArtifactFileContainsSoftwareArtifact(softwareArtifactFileIndividual, visitor.getFamixTypeIndividual());
 			} catch (FileIsNotAJavaClassException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -67,7 +68,7 @@ public class FamixOntologyParser implements OwlifyComponent {
 		}
 
 		// 2. step parse the other elements
-		for (File file : FileUtils.listFiles(new File(this.sourcePath),
+		for (File file : FileUtils.listFiles(new File(super.getSourcePath()),
 				new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 				TrueFileFilter.INSTANCE)) {
 			CompilationUnit unit;
@@ -84,12 +85,10 @@ public class FamixOntologyParser implements OwlifyComponent {
 				e.printStackTrace();
 			}
 		}
-		ontology.save("./result.owl");
+		ontology.add(mainOntology.getOntology());
+		ontology.save(super.getResultPath());
 
 	}
 
-	public String getResultPath() {
-		return "./result.owl";
-	}
 
 }
