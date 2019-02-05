@@ -14,6 +14,8 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
 
+import core.GeneralSoftwareArtifactOntology;
+
 public class FamixOntology {
 
 	private FamixOntClassesAndProperties classesAndProperties;
@@ -280,6 +282,9 @@ public class FamixOntology {
 		parentNamespace.addProperty(namespaceContainsProperty, namespaceIndividual);
 	}
 
-	
+	public void add(OntModel ontology) {
+		model.add(ontology);
+	}
+
 
 }
