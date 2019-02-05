@@ -67,10 +67,13 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Void> {
 		}
 
 		Optional<BlockStmt> body = n.getBody();
-		for (Statement statement : body.get().getStatements()) {
-			statement.accept(new TryCatchVisitor(ontology, methodIndividual), null);
-			statement.accept(new ThrowStatementVisitor(ontology, methodIndividual), null);
-			statement.accept(new LocalVariableVisitor(ontology, methodIndividual), null);
+		if(body.isPresent()) {
+			
+			for (Statement statement : body.get().getStatements()) {
+				statement.accept(new TryCatchVisitor(ontology, methodIndividual), null);
+				statement.accept(new ThrowStatementVisitor(ontology, methodIndividual), null);
+				statement.accept(new LocalVariableVisitor(ontology, methodIndividual), null);
+			}
 		}
 
 		// TODO
