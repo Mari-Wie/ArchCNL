@@ -17,12 +17,12 @@ import org.apache.jena.rdf.model.Resource;
 public class GitOntClassesAndProperties {
 
 	private OntModel ontoModel;
-	private String ontologyNamespace;
+	private String gitOntologyNamespace;
 	private String ontologyMainNamespace;
 	private String ontologyHistoryNamespace;
 
 	public GitOntClassesAndProperties() {
-		ontologyNamespace = "http://www.arch-ont.org/ontologies/git.owl#";
+		gitOntologyNamespace = "http://www.arch-ont.org/ontologies/git.owl#";
 		ontologyMainNamespace = "http://arch-ont.org/ontologies/main.owl#";
 		ontologyHistoryNamespace = "http://arch-ont.org/ontologies/history.owl#";
 		ontoModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
@@ -32,7 +32,7 @@ public class GitOntClassesAndProperties {
 	}
 
 	public String getOntologyNamespace() {
-		return ontologyNamespace;
+		return gitOntologyNamespace;
 	}
 
 	public Individual createIndividual(String uri, Resource resource) {
@@ -44,27 +44,27 @@ public class GitOntClassesAndProperties {
 	}
 
 	public OntClass gitRepositoryClass() {
-		return this.ontoModel.getOntClass(ontologyNamespace + "GitRepository");
+		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitRepository");
 	}
 
 	public OntClass gitCommitClass() {
-		return this.ontoModel.getOntClass(ontologyNamespace + "GitCommit");
+		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitCommit");
 	}
 
 	public OntClass gitBranchClass() {
-		return this.ontoModel.getOntClass(ontologyNamespace + "GitBranch");
+		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitBranch");
 	}
 
 	public OntClass gitTagClass() {
-		return this.ontoModel.getOntClass(ontologyNamespace + "GitTag");
+		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitTag");
 	}
 
 	public OntClass gitChangeClass() {
-		return this.ontoModel.getOntClass(ontologyNamespace + "GitChange");
+		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitChange");
 	}
 
 	public OntClass gitAuthor() {
-		return this.ontoModel.getOntClass(ontologyNamespace + "GitAuthor");
+		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitAuthor");
 	}
 
 	public OntClass gitCommitter() {
@@ -72,7 +72,7 @@ public class GitOntClassesAndProperties {
 	}
 	
 	public Resource fileClass() {
-		return this.ontoModel.getOntClass(ontologyMainNamespace + "File");
+		return this.ontoModel.getOntClass(ontologyMainNamespace + "SoftwareArtifactFile");
 	}
 
 	// Data Properties
@@ -81,16 +81,16 @@ public class GitOntClassesAndProperties {
 	}
 
 	public DatatypeProperty hasSHAProperty() {
-		return ontoModel.getDatatypeProperty(ontologyNamespace + "hasSHAIdentifier");
+		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasSHAIdentifier");
 	}
 
 	public DatatypeProperty hasMessageProperty() {
-		return ontoModel.getDatatypeProperty(ontologyNamespace + "hasMessage");
+		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasMessage");
 	}
 
 	public DatatypeProperty hasShortMessageProperty() {
 		// TODO Auto-generated method stub
-		return ontoModel.getDatatypeProperty(ontologyNamespace + "hasShortMessage");
+		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasShortMessage");
 	}
 	
 	public DatatypeProperty hasCommitDateProperty() {
@@ -122,29 +122,29 @@ public class GitOntClassesAndProperties {
 	}
 	
 	public DatatypeProperty hasLabelProperty() {
-		return ontoModel.getDatatypeProperty(ontologyNamespace + "hasLabel");
+		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasLabel");
 	}
 	
 	public DatatypeProperty hasEmailAdressProperty() {
-		return ontoModel.getDatatypeProperty(ontologyMainNamespace + "hasEmailAdress");
+		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasEmailAddress");
 	}
 
 	// Object Properties
 	public ObjectProperty hasHeadProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "hasHead");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasHead");
 	}
 
 	public ObjectProperty hasBranchProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "hasBranch");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasBranch");
 	}
 
 	public ObjectProperty hasCommitProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "hasCommit");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasCommit");
 	}
 
 	public ObjectProperty hasAuthorProperty() {
 
-		return ontoModel.getObjectProperty(ontologyMainNamespace + "hasAuthor");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasAuthor");
 	}
 	
 	public ObjectProperty performsCommitProperty() {
@@ -157,11 +157,11 @@ public class GitOntClassesAndProperties {
 	}
 	
 	public ObjectProperty modifiesFileProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "modifiesFile");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "modifiesFile");
 	}
 	
 	public ObjectProperty hasModificationKindProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "hasModificationKind");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasModificationKind");
 	}
 	
 	public ObjectProperty createsFileProperty() {
@@ -172,19 +172,19 @@ public class GitOntClassesAndProperties {
 	
 	public Individual getModificationKindIndividual(String modificationKind) {
 		if(modificationKind.equals("A")) {
-			return ontoModel.getIndividual(ontologyNamespace + "Add");
+			return ontoModel.getIndividual(gitOntologyNamespace + "Add");
 		}
 		else if(modificationKind.equals("D")) {
-			return ontoModel.getIndividual(ontologyNamespace + "Delete");
+			return ontoModel.getIndividual(gitOntologyNamespace + "Delete");
 		}
 		else if(modificationKind.equals("C")) {
-			return ontoModel.getIndividual(ontologyNamespace + "Copy");
+			return ontoModel.getIndividual(gitOntologyNamespace + "Copy");
 		}
 		else if(modificationKind.equals("R")) {
-			return ontoModel.getIndividual(ontologyNamespace + "Rename");
+			return ontoModel.getIndividual(gitOntologyNamespace + "Rename");
 		}
 		else {
-			return ontoModel.getIndividual(ontologyNamespace + "Update");
+			return ontoModel.getIndividual(gitOntologyNamespace + "Update");
 		}
 	}
 	
@@ -229,11 +229,11 @@ public class GitOntClassesAndProperties {
 	}
 
 	public ObjectProperty atCommitProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "tagAtCommit");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "tagAtCommit");
 	}
 
 	public ObjectProperty hasTagProperty() {
-		return ontoModel.getObjectProperty(ontologyNamespace + "hasTag");
+		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasTag");
 	}
 
 	
