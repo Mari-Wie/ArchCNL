@@ -5,6 +5,7 @@ import org.apache.jena.ontology.Individual;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import ontology.FamixOntology;
@@ -49,6 +50,11 @@ public class DeclaredJavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
 	@Override
 	public void visit(PrimitiveType n, Void arg) {
+		declaredType = ontology.getPrimitiveTypeIndividual(n.asString());
+	}
+	
+	@Override
+	public void visit(VoidType n, Void arg) {
 		declaredType = ontology.getPrimitiveTypeIndividual(n.asString());
 	}
 
