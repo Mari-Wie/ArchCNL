@@ -8,6 +8,7 @@ public class ArchitectureRule {
 	private String secondOWLAxiom; //for domain range constraint
 	private RuleType type; 
 	private int count; //for cardinality constraints
+	private String stardogConstraint;
 	
 	public Integer getId() {
 		return id;
@@ -88,5 +89,9 @@ public class ArchitectureRule {
 
 	public void setType(RuleType type) {
 		this.type = type;
+	}
+
+	public void setStardogConstraint(String constraint) {
+		this.stardogConstraint = constraint;
 	}
 }
