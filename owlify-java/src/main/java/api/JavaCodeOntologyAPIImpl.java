@@ -1,13 +1,17 @@
 package api;
 
+import core.AbstractOwlifyComponent;
 import core.OwlifyComponent;
 import parser.OntologyJavaParser;
 import startup.OntologyExtractionConfiguration;
 
-public class JavaCodeOntologyAPIImpl implements OwlifyComponent {
+public class JavaCodeOntologyAPIImpl extends AbstractOwlifyComponent {
 	
 	private OntologyExtractionConfiguration config;
-	private final String PATH_TO_RESULT = "./java_result.owl";
+	
+	public JavaCodeOntologyAPIImpl() {
+		super("./java_result.owl");
+	}
 
 	public void setConfiguration(OntologyExtractionConfiguration config) {
 		this.config = config;
@@ -30,13 +34,10 @@ public class JavaCodeOntologyAPIImpl implements OwlifyComponent {
 		String ontologyPath = "./ontology/javacodeontology.owl";
 
 		this.config = OntologyExtractionConfiguration.newOntologyExtractionConfiguration()
-				.withCodeOntology(ontologyPath).withOutput("./java_result.owl")
+				.withCodeOntology(ontologyPath).withOutput(super.getResultPath())
 				.withSourceCode(path)
 				.withCodeOntologyURI("http://arch-ont.org/ontologies/javacodeontology.owl#");
 	}
 
-	public String getResultPath() {
-		return PATH_TO_RESULT;
-	}
 
 }
