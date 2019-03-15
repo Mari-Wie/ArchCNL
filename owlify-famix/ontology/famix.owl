@@ -58,11 +58,36 @@
     
 
 
+    <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationInstanceAttribute -->
+
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationInstanceAttribute">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationType -->
 
     <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationType">
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationTypeAttribute -->
+
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationTypeAttribute">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
+                    <rdf:Description rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationTypeAttribute"/>
     </owl:ObjectProperty>
     
 
@@ -159,6 +184,15 @@
     
 
 
+    <!-- http://arch-ont.org/ontologies/famix.owl#hasFullQualifiedName -->
+
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasFullQualifiedName">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://arch-ont.org/ontologies/famix.owl#hasModifier -->
 
     <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasModifier">
@@ -183,6 +217,15 @@
 
     <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasSignature">
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://arch-ont.org/ontologies/famix.owl#hasValue -->
+
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasValue">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
