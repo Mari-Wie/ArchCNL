@@ -19,8 +19,11 @@ import visitors.ConstructorDeclarationVisitor;
 import visitors.InheritanceVisitor;
 import visitors.JavaFieldVisitor;
 import visitors.JavaTypeVisitor;
+import visitors.MarkerAnnotationExpressionVisitor;
 import visitors.MethodDeclarationVisitor;
 import visitors.NamespaceVisitor;
+import visitors.NormalAnnotationExpressionVisitor;
+import visitors.SingleMemberAnnotationExpressionVisitor;
 
 public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 
@@ -28,6 +31,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 	private JavaParserDelegator delegator;
 	private FamixOntology ontology;
 	private Map<CompilationUnit, Individual> unitToIndividualMap;
+	private Map<Individual,String> individualToNameMap;
 	private GeneralSoftwareArtifactOntology mainOntology;
 
 	public FamixOntologyTransformer() {
@@ -38,6 +42,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 		delegator = new JavaParserDelegator();
 
 		unitToIndividualMap = new HashMap<CompilationUnit, Individual>();
+		individualToNameMap = new HashMap<Individual, String>();
 
 	}
 
@@ -61,6 +66,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 				Individual softwareArtifactFileIndividual = mainOntology.getSoftwareArtifactFileIndividual();
 				mainOntology.setHasFilePath(softwareArtifactFileIndividual, file.getAbsolutePath());
 				mainOntology.setSoftwareArtifactFileContainsSoftwareArtifact(softwareArtifactFileIndividual, visitor.getFamixTypeIndividual());
+				individualToNameMap.put(visitor.getFamixTypeIndividual(), visitor.getNameOfFamixType());
 			} catch (FileIsNotAJavaClassException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -79,7 +85,10 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 				unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
 				unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnitIndividual), null);
 				unit.accept(new MethodDeclarationVisitor(ontology, currentUnitIndividual), null);
-				unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual), null);
+				unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual, individualToNameMap.get(currentUnitIndividual)), null);
+				unit.accept(new NormalAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
+				unit.accept(new MarkerAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
+				unit.accept(new SingleMemberAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
 			} catch (FileIsNotAJavaClassException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

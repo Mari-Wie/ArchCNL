@@ -160,6 +160,33 @@ public class FamixOntClassesAndProperties {
 		return model.getObjectProperty(famixOntologyNamespace + "namespaceContains");
 	}
 
+	public Individual getAnnotationTypeAttributeIndividual(OntModel model, long id) {
+		OntClass typeAttribute = model.getOntClass(famixOntologyNamespace + "AnnotationTypeAttribute");
+		
+		return model.createIndividual(famixOntologyNamespace + "AnnotationTypeAttribute" + id, typeAttribute);
+	}
+
+	public ObjectProperty getHasAnnotationTypeAttributeProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationTypeAttribute");
+	}
+
+	public Individual getAnnotationInstanceAttributeIndividual(OntModel model, long id) {
+		OntClass instanceAttribute = model.getOntClass(famixOntologyNamespace + "AnnotationInstanceAttribute");
+		return model.createIndividual(famixOntologyNamespace+"AnnotationInstanceAttribute"+id, instanceAttribute);
+	}
+
+	public ObjectProperty getHasAnnotationInstanceAttribute(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationInstanceAttribute");
+	}
+
+	public DatatypeProperty getHasValueProperty(OntModel model) {
+		return model.getDatatypeProperty(famixOntologyNamespace + "hasValue");
+	}
+
+	public DatatypeProperty getHasFullQualifiedNameProperty(OntModel model) {
+		return model.getDatatypeProperty(famixOntologyNamespace + "hasFullQualifiedName");
+	}
+
 	
 
 }

@@ -6,6 +6,8 @@ import org.apache.jena.ontology.Individual;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -15,6 +17,7 @@ import ontology.FamixOntology;
 public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
 	private Individual famixTypeIndividual;
+	private String famixTypeName;
 	private FamixOntology ontology;
 
 	public JavaTypeVisitor(String famixOntology) {
@@ -32,8 +35,8 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 		// data type properties
 
 		// set name
-		String typeName = n.getName().asString();
-		ontology.setHasNamePropertyForNamedEntity(typeName, famixTypeIndividual);
+		famixTypeName = n.getName().asString();
+		ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
 
 		// set if interface
 		boolean isInterface = n.isInterface();
@@ -54,7 +57,6 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 		// n.getTypeParameters()
 
 
-		n.getConstructors();
 	}
 
 	@Override
@@ -62,8 +64,8 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 		famixTypeIndividual = ontology.getEnumTypeIndividualWithName(n.getName().asString());
 
 		// set name
-		String typeName = n.getName().asString();
-		ontology.setHasNamePropertyForNamedEntity(typeName, famixTypeIndividual);
+		famixTypeName = n.getName().asString();
+		ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
 
 		// Enum members
 		// n.getMembers()
@@ -74,14 +76,32 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 		famixTypeIndividual = ontology.getAnnotationTypeIndividualWithName(n.getName().asString());
 
 		// set name
-		String typeName = n.getName().asString();
-		ontology.setHasNamePropertyForNamedEntity(typeName, famixTypeIndividual);
+		famixTypeName = n.getName().asString();
+		ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
+		
+		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
+		for (BodyDeclaration<?> bodyDeclaration : n.getMembers()) {
+			if(bodyDeclaration instanceof AnnotationMemberDeclaration) {
+				AnnotationMemberDeclaration annotationMember = (AnnotationMemberDeclaration) bodyDeclaration;
+				//System.out.println(annotationMember.getType() + " " + annotationMember.getName());
+				Individual annotationTypeAttributeIndividual = ontology.createAnnotationTypeAttributeIndividual();
+				ontology.setHasNamePropertyForNamedEntity(annotationMember.getName().asString(), annotationTypeAttributeIndividual);
+				annotationMember.getType().accept(visitor, null);
+				Individual declaredType = visitor.getDeclaredType();
+				ontology.setDeclaredTypeForBehavioralOrStructuralEntity(annotationTypeAttributeIndividual, declaredType);
+				ontology.setHasAnnotationTypeAttributeForAnnotationType(famixTypeIndividual,annotationMember.getName().asString(),annotationTypeAttributeIndividual);
+			}
+		}
 		
 	}
 	
 
 	public Individual getFamixTypeIndividual() {
 		return famixTypeIndividual;
+	}
+	
+	public String getNameOfFamixType() {
+		return famixTypeName;
 	}
 
 }

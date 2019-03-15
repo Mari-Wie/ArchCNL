@@ -9,12 +9,9 @@ import java.util.Map;
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
-import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
-
-import core.GeneralSoftwareArtifactOntology;
 
 public class FamixOntology {
 
@@ -28,6 +25,7 @@ public class FamixOntology {
 	private Map<String, Individual> famixTypeIndividualCache;
 	private Map<String, Individual> namespaceIndividualCache;
 	private Map<String, String> individualToConcreteOntClass;
+	private Map<Individual, Map<String,Individual>> annotationTypeToAttribute;
 
 	private long typeID;
 	private long inheritanceID;
@@ -38,12 +36,15 @@ public class FamixOntology {
 	private long exceptionId;
 	private long localVariableId;
 	private long namespaceId;
+	private long annotationTypeAttributeId;
+	private long annotationInstanceAttributeId;
 
 	public FamixOntology(String famixOntologyPath) {
 		famixTypeIndividualCache = new HashMap<String, Individual>();
 		individualToConcreteOntClass = new HashMap<String, String>();
 		namespaceIndividualCache = new HashMap<String, Individual>();
 		classesAndProperties = new FamixOntClassesAndProperties();
+		annotationTypeToAttribute = new HashMap<Individual, Map<String,Individual>>();
 		loadFamixModel(famixOntologyPath);
 	}
 
@@ -90,6 +91,11 @@ public class FamixOntology {
 		}
 		individualToConcreteOntClass.put(enumTypeName, "Enum");
 		return famixTypeIndividualCache.get(enumTypeName);
+	}
+	
+	public Individual createAnnotationTypeAttributeIndividual() {
+		return classesAndProperties.getAnnotationTypeAttributeIndividual(model, annotationTypeAttributeId++);
+		
 	}
 
 	public void setHasNamePropertyForNamedEntity(String name, Individual namedEntity) {
@@ -285,6 +291,55 @@ public class FamixOntology {
 	public void add(OntModel ontology) {
 		model.add(ontology);
 	}
+
+	public void setHasAnnotationTypeAttributeForAnnotationType(Individual annotationTypeIndividual,
+			String nameOfAnnotationAttribute, Individual annotationTypeAttributeIndividual) {
+		ObjectProperty hasAnnotationTypeAttribute = classesAndProperties.getHasAnnotationTypeAttributeProperty(model);
+		annotationTypeIndividual.addProperty(hasAnnotationTypeAttribute, annotationTypeAttributeIndividual);
+		Map<String,Individual> annotationTypeAttributes = annotationTypeToAttribute.get(annotationTypeIndividual);
+		if(annotationTypeToAttribute.get(annotationTypeIndividual) == null) {
+			annotationTypeAttributes = new HashMap<String,Individual>();
+		}
+		annotationTypeAttributes.put(nameOfAnnotationAttribute, annotationTypeAttributeIndividual);
+		annotationTypeToAttribute.put(annotationTypeIndividual, annotationTypeAttributes);
+	}
+
+	public Individual getAnnotationTypeAttributeOfAnnotationTypeByName(String name, Individual annotationType) {
+		Map<String,Individual> annotationTypeAttributes = annotationTypeToAttribute.get(annotationType);
+		for (String annotationTypeAttributeName : annotationTypeAttributes.keySet()) {
+			if(annotationTypeAttributeName.equals(name)) {
+				return annotationTypeAttributes.get(name);
+			}
+		}
+		return null;
+	}
+
+	public Individual getAnnotationInstanceAttributeIndividual() {
+		return classesAndProperties.getAnnotationInstanceAttributeIndividual(model,annotationInstanceAttributeId++);
+	}
+
+	public void setHasAnnotationTypeAttributeForAnnotationInstanceAttribute(Individual annotationTypeAttribute,
+			Individual annotationInstanceAttribute) {
+		ObjectProperty property = classesAndProperties.getHasAnnotationTypeAttributeProperty(model);
+		annotationInstanceAttribute.addProperty(property, annotationTypeAttribute);
+	}
+
+	public void setHasAnnotationInstanceAttributeForAnnotationInstance(Individual annotationInstanceAttribute,
+			Individual annotationInstance) {
+		ObjectProperty property = classesAndProperties.getHasAnnotationInstanceAttribute(model);
+		annotationInstance.addProperty(property, annotationInstanceAttribute);
+	}
+
+	public void setHasValueForAnnotationInstanceAttribute(Individual annotationInstanceAttribute, String value) {
+		DatatypeProperty property = classesAndProperties.getHasValueProperty(model);
+		annotationInstanceAttribute.addLiteral(property, value);
+	}
+
+	public void setHasFullQualifiedNameForType(Individual currentUnitIndividual, String fullQualifiedName) {
+		DatatypeProperty property = classesAndProperties.getHasFullQualifiedNameProperty(model);
+		currentUnitIndividual.addLiteral(property, fullQualifiedName);
+	}
+	
 
 
 }
