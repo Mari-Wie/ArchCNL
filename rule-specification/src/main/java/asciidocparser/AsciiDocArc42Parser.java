@@ -26,13 +26,14 @@ public class AsciiDocArc42Parser {
 	private final static String PREFIX = "tmp";
 
 	private final static String javaOntologyNamespace = "@prefix java: <http://arch-ont.org/ontologies/javacodeontology.owl#>\n";
+	private final static String famixNamespace = "@prefix famix: <http://arch-ont.org/ontologies/famix.owl#>\n";
 	private final static String mavenOntologyNamespace = "@prefix maven: <http://arch-ont.org/ontologies/maven.owl#>\n";
 	private final static String mainOntologyNamespace = "@prefix main: <http://arch-ont.org/ontologies/main.owl#>\n";
 	private final static String osgiOntologyNamespace = "@prefix osgi: <http://arch-ont.org/ontologies/osgi.owl#>\n";
 	private final static String historyOntologyNamespace = "@prefix git: <http://www.arch-ont.org/ontologies/git.owl#>\n";
 	private final static String architectureOntologyNamespace = "@prefix architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>\n\n";
 
-	private final static String ONTOLOGY_PREFIXES_FOR_MAPPING = javaOntologyNamespace + mavenOntologyNamespace
+	private final static String ONTOLOGY_PREFIXES_FOR_MAPPING = famixNamespace + javaOntologyNamespace + mavenOntologyNamespace
 			+ mainOntologyNamespace + osgiOntologyNamespace + historyOntologyNamespace + architectureOntologyNamespace;
 
 	private static int id = 0;
