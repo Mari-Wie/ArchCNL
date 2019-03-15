@@ -80,7 +80,8 @@ public class CNLToolchain {
 		String context = "http://graphs.org/" + database + "/v3.0";
 		CNLToolchain tool = new CNLToolchain("test", "http://localhost:5820");
 		try {
-			tool.execute("./arc42-building-block-view.adoc", "C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\TestProject", context);
+			String projectPath = "C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\simple-example-project";
+			tool.execute(projectPath+"/architecture.adoc", projectPath, context);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
