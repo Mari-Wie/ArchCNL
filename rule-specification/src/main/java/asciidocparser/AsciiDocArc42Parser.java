@@ -52,6 +52,7 @@ public class AsciiDocArc42Parser {
 		Document doc = ascii.loadFile(new File(path), new HashMap<String, Object>());
 		Map<Object, Object> selector = new HashMap<Object, Object>();
 		selector.put("role", "rule");
+		selector.put("skip", "false");
 		List<AbstractBlock> result = doc.findBy(selector);
 		int id_for_file = 0;
 		String ontologyPath = "";
@@ -81,8 +82,8 @@ public class AsciiDocArc42Parser {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				id_for_file++;
 			}
-			id_for_file++;
 		}
 		
 	}
@@ -95,6 +96,14 @@ public class AsciiDocArc42Parser {
 
 		List<AbstractBlock> result = doc.findBy(selector);
 		File f = new File(TMP_MAPPING_FILE_NAME);
+		if(f.exists()) {
+			f.delete();
+			try {
+				f.createNewFile();
+			}catch(IOException e) {
+				System.out.println("Can't create file for mapping.");
+			}
+		}
 		String allMappingRules = "";
 		for (AbstractBlock abstractBlock : result) {
 
