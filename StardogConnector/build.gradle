@@ -10,6 +10,7 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     // Core Dependencies
     compile ('com.complexible.stardog:client-http:5.2.3')
@@ -17,6 +18,14 @@ dependencies {
     compile ('com.complexible.stardog.gremlin:stardog-gremlin:5.2.3')
 
     
+}
+
+jar {
+	baseName = 'stardog-wrapper'
+    version =  '0.1.0'
+    manifest {
+        attributes 'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+    }
 }
 
 mainClassName  = "com.stardog.examples.StardogClient"

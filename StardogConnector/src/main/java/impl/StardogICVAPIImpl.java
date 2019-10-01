@@ -151,7 +151,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			Set<Constraint> constraints = aValidator.getConstraints();
 
 			for (Constraint constraint : constraints) {
-				Iterable<Proof> proofs = aValidator.explain(constraint).countLimit(50).proofs();
+				Iterable<Proof> proofs = aValidator.explain(constraint).countLimit(600).proofs();
 				// explanations.put(constraint, proofs);
 			}
 
@@ -173,7 +173,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			for (Constraint constraint : constraints) {
 				// System.out.println(constraint);
 //				StardogConstraint cons = new StardogConstraint(id, constraint);
-				Iterable<Proof> proofs = aValidator.explain(constraint).activeGraphs(selectedContext).countLimit(50)
+				Iterable<Proof> proofs = aValidator.explain(constraint).activeGraphs(selectedContext).countLimit(600)
 						.proofs();
 				storeViolations(id, constraint, proofs);
 //				explanations.put(cons, proofs);
@@ -208,6 +208,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 						statement.getObject().stringValue());
 			}
 			violation.addProof(proof.toString());
+			System.out.println(proof.toString());
 //			System.out.println(proof);
 			result.addViolation(violation);
 		}
@@ -223,7 +224,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			if (proofs != null) {
 				for (Proof proof : proofs) {
 					violation = new StardogConstraintViolation();
-//					System.out.println(ProofWriter.toString(proof));
+					//System.out.println(ProofWriter.toString(proof));
 					Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
 					for (Statement statement : asserted) {
 						violation.setViolation(statement.getSubject().stringValue(),
