@@ -37,7 +37,7 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
 		}
 		
 		for (Modifier modifier : n.getModifiers()) {
-			ontology.setHasModifierForNamedEntity(modifier.asString(), parameterIndividual);
+			ontology.setHasModifierForNamedEntity(modifier.toString(), parameterIndividual);
 		}
 		
 		ontology.setDefinesParameterPropertyForBehavioralEntity(parent,parameterIndividual);

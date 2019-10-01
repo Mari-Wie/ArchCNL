@@ -7,10 +7,10 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
     <owl:Ontology rdf:about="http://arch-ont.org/ontologies/famix.owl"/>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Object Properties
@@ -18,7 +18,27 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+     <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#invokes">
+         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+     </owl:ObjectProperty>
+
+     <!-- http://arch-ont.org/ontologies/famix.owl#hasReceiver -->
+
+     <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasReceiver">
+         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
+         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+     </owl:ObjectProperty>
+
+     <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasSender">
+         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
+         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+     </owl:ObjectProperty>
+
+     <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#imports">
+         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+     </owl:ObjectProperty>
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#definesAttribute -->
@@ -27,7 +47,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Attribute"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#definesMethod -->
@@ -36,7 +56,14 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
     </owl:ObjectProperty>
-    
+
+    <!-- http://arch-ont.org/ontologies/famix.owl#definesVariable -->
+
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#definesVariable">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#LocalVariable"/>
+    </owl:ObjectProperty>
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#definesParameter -->
@@ -45,7 +72,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Parameter"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationInstance -->
@@ -55,7 +82,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationInstanceAttribute -->
@@ -64,7 +91,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationType -->
@@ -73,7 +100,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasAnnotationTypeAttribute -->
@@ -89,7 +116,7 @@
         </rdfs:domain>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationTypeAttribute"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasCaughtException -->
@@ -99,7 +126,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#CaughtException"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasDeclaredException -->
@@ -108,7 +135,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#DeclaredException"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasDeclaredType -->
@@ -123,7 +150,7 @@
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasDefiningClass -->
@@ -133,7 +160,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasSubClass -->
@@ -142,7 +169,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasSuperClass -->
@@ -152,7 +179,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#namespaceContains -->
@@ -161,7 +188,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Namespace"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#throwsException -->
@@ -170,10 +197,10 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#ThrownException"/>
     </owl:ObjectProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -181,7 +208,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasFullQualifiedName -->
@@ -190,7 +217,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasModifier -->
@@ -200,7 +227,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasName -->
@@ -210,7 +237,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasSignature -->
@@ -219,7 +246,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#hasValue -->
@@ -228,7 +255,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#isConstructor -->
@@ -238,7 +265,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#isExternal -->
@@ -247,7 +274,7 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#isInterface -->
@@ -257,10 +284,10 @@
         <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Classes
@@ -268,7 +295,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Access -->
@@ -276,7 +303,11 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Access">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
     </owl:Class>
-    
+
+
+    <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Import">
+        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
+    </owl:Class>
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#AnnotationInstance -->
@@ -284,7 +315,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute -->
@@ -292,7 +323,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#AnnotationType -->
@@ -300,7 +331,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#AnnotationTypeAttribute -->
@@ -308,7 +339,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationTypeAttribute">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Attribute"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Association -->
@@ -316,7 +347,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Attribute -->
@@ -324,7 +355,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Attribute">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity -->
@@ -332,7 +363,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ContainerEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#CSourceLanguage -->
@@ -340,7 +371,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CSourceLanguage">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#CaughtException -->
@@ -348,7 +379,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CaughtException">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Comment -->
@@ -356,7 +387,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Comment">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ContainerEntity -->
@@ -365,7 +396,7 @@
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
         <owl:disjointWith rdf:resource="http://arch-ont.org/ontologies/famix.owl#LeafEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#CustomSourceLanguage -->
@@ -373,7 +404,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CustomSourceLanguage">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#DeclaredException -->
@@ -381,13 +412,13 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#DeclaredException">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Entity -->
 
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Entity"/>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Enum -->
@@ -395,7 +426,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Enum">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#EnumValue -->
@@ -403,7 +434,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#EnumValue">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Exception -->
@@ -411,7 +442,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Exception">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#FamixClass -->
@@ -419,7 +450,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixClass">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#FamixType -->
@@ -427,7 +458,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ContainerEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#FileAnchor -->
@@ -436,7 +467,7 @@
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceAnchor"/>
         <owl:disjointWith rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceTextAnchor"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Function -->
@@ -445,7 +476,7 @@
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
         <owl:disjointWith rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#GlobalVariable -->
@@ -453,7 +484,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#GlobalVariable">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ImplicitVariable -->
@@ -461,7 +492,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ImplicitVariable">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Inheritance -->
@@ -469,7 +500,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Inheritance">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Invocation -->
@@ -477,7 +508,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Invocation">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#JavaSourceLanguage -->
@@ -485,7 +516,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#JavaSourceLanguage">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#LeafEntity -->
@@ -493,7 +524,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#LeafEntity">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#LocalVariable -->
@@ -501,7 +532,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#LocalVariable">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Method -->
@@ -509,7 +540,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Method">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Module -->
@@ -517,7 +548,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Module">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#NamedEntity -->
@@ -525,7 +556,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#NamedEntity">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Namespace -->
@@ -533,7 +564,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Package -->
@@ -541,7 +572,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Package">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Parameter -->
@@ -549,7 +580,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Parameter">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ParameterType -->
@@ -557,7 +588,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterType">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ParameterizableClass -->
@@ -565,7 +596,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizableClass">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ParameterizedType -->
@@ -573,7 +604,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizedType">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#PrimitiveType -->
@@ -581,7 +612,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#PrimitiveType">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#Reference -->
@@ -589,7 +620,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Reference">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ScopingEntity -->
@@ -597,7 +628,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ScopingEntity">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ContainerEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#SmalltalkLanguage -->
@@ -605,7 +636,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SmalltalkLanguage">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#SourceAnchor -->
@@ -620,7 +651,7 @@
             </owl:Class>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#SourceLanguage -->
@@ -628,7 +659,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceLanguage">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#SourceTextAnchor -->
@@ -636,7 +667,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceTextAnchor">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceAnchor"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#SourcedEntity -->
@@ -644,7 +675,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourcedEntity">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#StructuralEntity -->
@@ -652,7 +683,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#StructuralEntity">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#LeafEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#ThrownException -->
@@ -660,7 +691,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ThrownException">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#TypeAlias -->
@@ -668,7 +699,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#TypeAlias">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#UnknownVariable -->
@@ -676,7 +707,7 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnknownVariable">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#UnkownSourceLanguage -->
@@ -684,16 +715,16 @@
     <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnkownSourceLanguage">
         <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
     </owl:Class>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile -->
 
     <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile"/>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Individuals
@@ -701,7 +732,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#String -->
@@ -709,7 +740,7 @@
     <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#String">
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#int -->
@@ -718,7 +749,12 @@
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
         <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">int</hasName>
     </owl:NamedIndividual>
-    
+
+
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#Integer">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Integer</hasName>
+    </owl:NamedIndividual>
 
 
     <!-- http://arch-ont.org/ontologies/famix.owl#long -->
@@ -727,8 +763,26 @@
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
         <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">long</hasName>
     </owl:NamedIndividual>
-    
 
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#boolean">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">boolean</hasName>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#double">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">double</hasName>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#char">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">char</hasName>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#byte">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">byte</hasName>
+    </owl:NamedIndividual>
 
     <!-- http://arch-ont.org/ontologies/famix.owl#void -->
 
@@ -736,10 +790,10 @@
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
         <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">void</hasName>
     </owl:NamedIndividual>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // General axioms
@@ -838,4 +892,3 @@
 
 
 <!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
-

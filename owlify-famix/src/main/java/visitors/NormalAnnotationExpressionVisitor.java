@@ -29,11 +29,15 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
 
 		Individual annotationType = ontology.getAnnotationTypeIndividualWithName(n.getName().asString());
 		ontology.setHasAnnotationTypeProperty(annotationInstanceIndividual, annotationType);
-
+		Individual annotationTypeAttributeIndividual = null;
 		for (MemberValuePair memberValuePair : n.getPairs()) {
 			Expression value = memberValuePair.getValue();
 			Individual annotationTypeAttribute = ontology.getAnnotationTypeAttributeOfAnnotationTypeByName(
 					memberValuePair.getName().asString(), annotationType);
+			if(annotationTypeAttribute == null) {
+				annotationTypeAttribute = ontology.createAnnotationTypeAttributeIndividual();
+				 ontology.setHasNamePropertyForNamedEntity(memberValuePair.getName().asString(),annotationTypeAttribute);				
+			}
 			Individual annotationInstanceAttribute = ontology.getAnnotationInstanceAttributeIndividual();
 			ontology.setHasAnnotationTypeAttributeForAnnotationInstanceAttribute(annotationTypeAttribute,
 					annotationInstanceAttribute);

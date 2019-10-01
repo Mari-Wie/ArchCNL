@@ -187,6 +187,38 @@ public class FamixOntClassesAndProperties {
 		return model.getDatatypeProperty(famixOntologyNamespace + "hasFullQualifiedName");
 	}
 
+	public ObjectProperty getDefinesVariableProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "definesVariable");
+	}
+
+	public Individual getInvocationIndividual(OntModel model, long invocationId) {
+		OntClass invocation = model.getOntClass(famixOntologyNamespace + "Invocation");
+		return model.createIndividual(famixOntologyNamespace + "Invocation"+invocationId, invocation);
+	}
+
+	public ObjectProperty getHasReceiverProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "hasReceiver");
+	}
+
+	public ObjectProperty getHasSenderProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace+"hasSender");
+	}
+
+	public Individual getImportAssociationIndividual(OntModel model, long importId) {
+		OntClass importAssociation = model.getOntClass(famixOntologyNamespace + "Import");
+		return model.createIndividual(famixOntologyNamespace + "Import" + importId, importAssociation);
+	}
+
+	public ObjectProperty getImportsProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "imports");
+	}
+
+	public ObjectProperty getInvokesProperty(OntModel model) {
+		return model.getObjectProperty(famixOntologyNamespace + "invokes");
+	}
+
+
+
 	
 
 }

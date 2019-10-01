@@ -38,6 +38,8 @@ public class FamixOntology {
 	private long namespaceId;
 	private long annotationTypeAttributeId;
 	private long annotationInstanceAttributeId;
+	private long invocationId;
+	private long importId;
 
 	public FamixOntology(String famixOntologyPath) {
 		famixTypeIndividualCache = new HashMap<String, Individual>();
@@ -75,6 +77,7 @@ public class FamixOntology {
 	public Individual getAnnotationTypeIndividualWithName(String annotationTypeName) {
 		if (!famixTypeIndividualCache.containsKey(annotationTypeName)) {
 			Individual individual = classesAndProperties.getAnnotationTypeIndividual(model, annotationTypeName, typeID);
+			setHasNamePropertyForNamedEntity(annotationTypeName, individual);
 			famixTypeIndividualCache.put(annotationTypeName, individual);
 			typeID++;
 		}
@@ -306,6 +309,11 @@ public class FamixOntology {
 
 	public Individual getAnnotationTypeAttributeOfAnnotationTypeByName(String name, Individual annotationType) {
 		Map<String,Individual> annotationTypeAttributes = annotationTypeToAttribute.get(annotationType);
+		
+		if(annotationTypeAttributes == null) {
+			return null;
+		}
+		
 		for (String annotationTypeAttributeName : annotationTypeAttributes.keySet()) {
 			if(annotationTypeAttributeName.equals(name)) {
 				return annotationTypeAttributes.get(name);
@@ -339,7 +347,42 @@ public class FamixOntology {
 		DatatypeProperty property = classesAndProperties.getHasFullQualifiedNameProperty(model);
 		currentUnitIndividual.addLiteral(property, fullQualifiedName);
 	}
-	
+
+	public void setDefinesLocalVariableProperty(Individual parent, Individual localVariableIndividual) {
+		
+		ObjectProperty property = classesAndProperties.getDefinesVariableProperty(model);
+		parent.addProperty(property, localVariableIndividual);
+		
+	}
+
+	public Individual getInvocationIndividual() {
+		return classesAndProperties.getInvocationIndividual(model,invocationId++);
+	}
+
+	public void setHasReceiverProperty(Individual invocation, Individual receiver) {
+		ObjectProperty property = classesAndProperties.getHasReceiverProperty(model);
+		invocation.addProperty(property, receiver);
+	}
+
+	public void setHasSender(Individual invocation, Individual sender) {
+		ObjectProperty property = classesAndProperties.getHasSenderProperty(model);
+		invocation.addProperty(property, sender);
+		
+	}
+
+	public Individual getImportAssociationIndividual() {
+		return classesAndProperties.getImportAssociationIndividual(model,importId++);
+	}
+
+	public void setImports(Individual accessingUnit, Individual importedType) {
+		ObjectProperty property = classesAndProperties.getImportsProperty(model);
+		accessingUnit.addProperty(property, importedType);
+	}
+
+	public void setInvokes(Individual accessingUnit, Individual receiver) {
+		ObjectProperty property = classesAndProperties.getInvokesProperty(model);
+		accessingUnit.addProperty(property, receiver);
+	}
 
 
 }

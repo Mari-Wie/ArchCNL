@@ -32,7 +32,7 @@ public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 			ontology.setDeclaredTypeForBehavioralOrStructuralEntity(fieldIndividual, visitor.getDeclaredType());
 
 			for (Modifier modifier : n.getModifiers()) {
-				ontology.setHasModifierForNamedEntity(modifier.asString(), fieldIndividual);
+				ontology.setHasModifierForNamedEntity(modifier.toString(), fieldIndividual);
 			}
 
 			for (AnnotationExpr annotationExpr : n.getAnnotations()) {

@@ -38,7 +38,7 @@ public class ConstructorDeclarationVisitor extends VoidVisitorAdapter<Void> {
 		ontology.setSignatureOfBehavioralEntity(n.getSignature().asString(), methodIndividual);
 
 		for (Modifier modifier : n.getModifiers()) {
-			ontology.setHasModifierForNamedEntity(modifier.asString(), methodIndividual);
+			ontology.setHasModifierForNamedEntity(modifier.toString(), methodIndividual);
 		}
 
 		for (AnnotationExpr annotationExpr : n.getAnnotations()) {

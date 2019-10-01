@@ -25,7 +25,9 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
 		Individual typeOfThrownException = typeOfCreatedObjectVisitor.getTypeOfCreatedObject();
 		
 		Individual thrownExceptionIndividual = ontology.getThrownExceptionIndividual();
-		ontology.setExceptionHasDefiningClass(thrownExceptionIndividual, typeOfThrownException);
+		if(typeOfThrownException != null) { //TODO: throw <variable> instead of throw new ... breaks the transformation
+			ontology.setExceptionHasDefiningClass(thrownExceptionIndividual, typeOfThrownException);			
+		}
 		ontology.setThrowsExceptionProperty(thrownExceptionIndividual,parent);
 	}
 	

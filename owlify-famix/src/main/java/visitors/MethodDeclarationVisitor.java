@@ -34,13 +34,14 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Void> {
 		ontology.setHasNamePropertyForNamedEntity(n.getName().asString(), methodIndividual);
 
 		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
-		n.accept(visitor, null);
+//		System.out.println(n.getName().asString() + " " + n.getType());
+		n.getType().accept(visitor, null);
 		ontology.setDeclaredTypeForBehavioralOrStructuralEntity(methodIndividual, visitor.getDeclaredType());
 
 		ontology.setSignatureOfBehavioralEntity(n.getSignature().asString(), methodIndividual);
 
 		for (Modifier modifier : n.getModifiers()) {
-			ontology.setHasModifierForNamedEntity(modifier.asString(), methodIndividual);
+			ontology.setHasModifierForNamedEntity(modifier.toString(), methodIndividual);
 		}
 
 		for (AnnotationExpr annotationExpr : n.getAnnotations()) {

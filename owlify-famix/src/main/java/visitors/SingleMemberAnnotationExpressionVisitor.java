@@ -19,7 +19,6 @@ public class SingleMemberAnnotationExpressionVisitor extends VoidVisitorAdapter<
 
 	@Override
 	public void visit(SingleMemberAnnotationExpr n, Void arg) {
-		System.out.println("single member");
 		n.getMemberValue();
 		
 		Individual annotationIndividual = ontology

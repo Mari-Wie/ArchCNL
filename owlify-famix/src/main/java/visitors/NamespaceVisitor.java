@@ -26,7 +26,7 @@ public class NamespaceVisitor extends VoidVisitorAdapter<Void> {
 	public void visit(PackageDeclaration n, Void arg) {
 		createPackageBasedOnQualifiedName(n.getName().asString());
 		Individual namespaceIndividual = ontology.getNamespaceIndividualWithName(n.getName().asString());
-		ontology.setHasFullQualifiedNameForType(currentUnitIndividual, n.getName().asString()+"."+nameOfCurrentUnit);
+		//ontology.setHasFullQualifiedNameForType(currentUnitIndividual, n.getName().asString()+"."+nameOfCurrentUnit);
 		ontology.setNamespaceContainsProperty(namespaceIndividual, currentUnitIndividual);
 	}
 

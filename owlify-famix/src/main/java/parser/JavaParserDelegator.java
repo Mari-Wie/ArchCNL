@@ -3,8 +3,12 @@ package parser;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import exceptions.FileIsNotAJavaClassException;
 
@@ -17,16 +21,16 @@ public class JavaParserDelegator {
 	 * @throws FileIsNotAJavaClassException 
 	 */
 	public CompilationUnit getCompilationUnitFromFilePath(String path) throws FileIsNotAJavaClassException {
-		FileInputStream in;
-		CompilationUnit unit = null;
 		
+			
+		CompilationUnit unit = null;
 		if(!path.endsWith(".java")) {
 			throw new FileIsNotAJavaClassException(path);
 		}
 		
 		try {
-			in = new FileInputStream(path);
-			unit = JavaParser.parse(in);
+//			in = new FileInputStream(path);
+			unit = StaticJavaParser.parse(new FileInputStream(path));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

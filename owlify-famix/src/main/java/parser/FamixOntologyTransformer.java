@@ -2,6 +2,7 @@ package parser;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -9,15 +10,19 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.jena.ontology.Individual;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import core.AbstractOwlifyComponent;
 import core.GeneralSoftwareArtifactOntology;
 import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntology;
-import visitors.ConstructorDeclarationVisitor;
+import visitors.ImportDeclarationVisitor;
 import visitors.InheritanceVisitor;
-import visitors.JavaFieldVisitor;
 import visitors.JavaTypeVisitor;
 import visitors.MarkerAnnotationExpressionVisitor;
 import visitors.MethodDeclarationVisitor;
@@ -31,7 +36,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 	private JavaParserDelegator delegator;
 	private FamixOntology ontology;
 	private Map<CompilationUnit, Individual> unitToIndividualMap;
-	private Map<Individual,String> individualToNameMap;
+	private Map<Individual, String> individualToNameMap;
 	private GeneralSoftwareArtifactOntology mainOntology;
 
 	public FamixOntologyTransformer() {
@@ -46,58 +51,93 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 
 	}
 
-	public static void main(String[] args) throws FileIsNotAJavaClassException {
-		FamixOntologyTransformer parser = new FamixOntologyTransformer();
-		parser.setSource("C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\TestProject");
-		parser.transform();
-	}
+//	public static void main(String[] args) throws FileIsNotAJavaClassException {
+//		FamixOntologyTransformer parser = new FamixOntologyTransformer();
+//		parser.setSource("C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\TestProject\\src");
+//		parser.transform();
+//	}
 
 	public void transform() {
 
+//		System.out.println(super.getSourcePath());
+		CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+		combinedTypeSolver.add(new ReflectionTypeSolver());
+		List<String> sourcePaths = super.getSourcePaths();
+		for(String path: sourcePaths) {
+			System.out.println(path);
+			combinedTypeSolver.add(new JavaParserTypeSolver(path));			
+		}
+//		combinedTypeSolver.add(new JavaParserTypeSolver(super.getSourcePath()+"/main/"));
+//		combinedTypeSolver.add(new JavaParserTypeSolver(super.getSourcePath()+"/test/"));
+//		combinedTypeSolver.add(new JavaParserTypeSolver(super.getSourcePath()+"/client/"));
+
+		JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedTypeSolver);
+		StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+
 		// 1. step: resolve all types
-		for (File file : FileUtils.listFiles(new File(super.getSourcePath()),
+		for(String path: sourcePaths) {
+		for (File file : FileUtils.listFiles(new File(path),
 				new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 				TrueFileFilter.INSTANCE)) {
 			CompilationUnit unit;
 			try {
+				
 				unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
 				unit.accept(visitor, null);
-				unitToIndividualMap.put(unit, visitor.getFamixTypeIndividual());
-				Individual softwareArtifactFileIndividual = mainOntology.getSoftwareArtifactFileIndividual();
-				mainOntology.setHasFilePath(softwareArtifactFileIndividual, file.getAbsolutePath());
-				mainOntology.setSoftwareArtifactFileContainsSoftwareArtifact(softwareArtifactFileIndividual, visitor.getFamixTypeIndividual());
-				individualToNameMap.put(visitor.getFamixTypeIndividual(), visitor.getNameOfFamixType());
+				if(visitor.getFamixTypeIndividual() != null) {
+					unitToIndividualMap.put(unit, visitor.getFamixTypeIndividual());
+					Individual softwareArtifactFileIndividual = mainOntology.getSoftwareArtifactFileIndividual();
+					mainOntology.setHasFilePath(softwareArtifactFileIndividual, file.getAbsolutePath());
+					mainOntology.setSoftwareArtifactFileContainsSoftwareArtifact(softwareArtifactFileIndividual,
+							visitor.getFamixTypeIndividual());
+					individualToNameMap.put(visitor.getFamixTypeIndividual(), visitor.getNameOfFamixType());
+				}
+				else {
+					System.out.println(file.getAbsolutePath());					
+				}
+				
 			} catch (FileIsNotAJavaClassException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		}
 
 		// 2. step parse the other elements
-		for (File file : FileUtils.listFiles(new File(super.getSourcePath()),
+		for(String path: sourcePaths) {
+		for (File file : FileUtils.listFiles(new File(path),
 				new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 				TrueFileFilter.INSTANCE)) {
 			CompilationUnit unit;
 			try {
 				unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
 				Individual currentUnitIndividual = unitToIndividualMap.get(unit);
+				if(currentUnitIndividual != null) {
+					
 				unit.accept(new InheritanceVisitor(ontology, currentUnitIndividual), null);
-				unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
-				unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnitIndividual), null);
+//				unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
+//				unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnitIndividual), null);
 				unit.accept(new MethodDeclarationVisitor(ontology, currentUnitIndividual), null);
-				unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual, individualToNameMap.get(currentUnitIndividual)), null);
+					unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual,
+							individualToNameMap.get(currentUnitIndividual)), null);
 				unit.accept(new NormalAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
 				unit.accept(new MarkerAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
 				unit.accept(new SingleMemberAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
+//				unit.accept(new AccessVisitor(ontology,currentUnitIndividual), null);
+					unit.accept(new ImportDeclarationVisitor(ontology, currentUnitIndividual), null);
+				}
+				else { //type is a package-info.java
+					System.out.println(file.getAbsolutePath());
+				}
 			} catch (FileIsNotAJavaClassException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		}
 		ontology.add(mainOntology.getOntology());
 		ontology.save(super.getResultPath());
 
 	}
-
 
 }

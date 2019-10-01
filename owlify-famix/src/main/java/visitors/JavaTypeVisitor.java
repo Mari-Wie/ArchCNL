@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import org.apache.jena.ontology.Individual;
 
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -30,12 +31,14 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
 	@Override
 	public void visit(ClassOrInterfaceDeclaration n, Void arg) {
-		famixTypeIndividual = ontology.getFamixClassWithName(n.getName().asString());
+//		famixTypeIndividual = ontology.getFamixClassWithName(n.getName().asString());
+		famixTypeIndividual = ontology.getFamixClassWithName(n.resolve().getQualifiedName());
 
 		// data type properties
 
 		// set name
-		famixTypeName = n.getName().asString();
+		//famixTypeName = n.getName().asString();
+		famixTypeName = n.resolve().getQualifiedName();
 		ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
 
 		// set if interface
@@ -46,12 +49,12 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 //		System.out.println(n);
 
 		// set modifiers
-		EnumSet<Modifier> modifiers = n.getModifiers();
+		NodeList<Modifier> modifiers = n.getModifiers();
 		for (Modifier modifier : modifiers) {
 			ontology.setHasModifierForNamedEntity(modifier.toString(), famixTypeIndividual);
 		}
 		
-		
+		super.visit(n, null);
 
 		// parameterized type
 		// n.getTypeParameters()
@@ -61,22 +64,26 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
 	@Override
 	public void visit(EnumDeclaration n, Void arg) {
-		famixTypeIndividual = ontology.getEnumTypeIndividualWithName(n.getName().asString());
+		System.out.println("Enum: " + n.resolve().getQualifiedName());
+		famixTypeIndividual = ontology.getEnumTypeIndividualWithName(n.resolve().getQualifiedName());
 
 		// set name
-		famixTypeName = n.getName().asString();
+		famixTypeName = n.resolve().getQualifiedName();
 		ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
 
 		// Enum members
 		// n.getMembers()
+		
+		super.visit(n, null);
 	}
 
 	@Override
 	public void visit(AnnotationDeclaration n, Void arg) {
-		famixTypeIndividual = ontology.getAnnotationTypeIndividualWithName(n.getName().asString());
+		System.out.println("Annotation: " + n.resolve().getQualifiedName());
+		famixTypeIndividual = ontology.getAnnotationTypeIndividualWithName(n.resolve().getQualifiedName());
 
 		// set name
-		famixTypeName = n.getName().asString();
+		famixTypeName = n.resolve().getQualifiedName();
 		ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
 		
 		DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
@@ -92,6 +99,8 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 				ontology.setHasAnnotationTypeAttributeForAnnotationType(famixTypeIndividual,annotationMember.getName().asString(),annotationTypeAttributeIndividual);
 			}
 		}
+		
+		super.visit(n, null);
 		
 	}
 	
