@@ -40,7 +40,7 @@ public class MavenPOMFileParser extends AbstractOwlifyComponent {
 		ontClasses.getOntoModel().read(pathToOntology);
 		ontClasses.getOntoModel().read("./ontology/main.owl");
 
-		File f = new File(super.getSourcePath());
+		File f = new File(super.getSourcePaths().get(0));
 		String[] ext = { "xml" };
 		Collection<File> matchingFiles = FileUtils.listFiles(f, ext, true);
 

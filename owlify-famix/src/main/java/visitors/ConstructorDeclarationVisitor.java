@@ -1,9 +1,7 @@
 package visitors;
 
-import java.util.Optional;
 
 import org.apache.jena.ontology.Individual;
-import org.omg.CORBA.portable.IndirectionException;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;

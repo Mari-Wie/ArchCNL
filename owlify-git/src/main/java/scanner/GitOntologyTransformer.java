@@ -44,7 +44,7 @@ public class GitOntologyTransformer extends AbstractOwlifyComponent {
 	}
 	
 	@Override
-	public void setSource(String path) {
+	public void addSourcePath(String path) {
 		scanner = new GitRepositoryScanner(path);
 	}
 
@@ -249,7 +249,7 @@ public class GitOntologyTransformer extends AbstractOwlifyComponent {
 
 	public static void main(String[] args) {
 		GitOntologyTransformer transformer = new GitOntologyTransformer();
-		transformer.setSource("C:\\Users\\sandr\\Desktop\\test_repos\\cnl-toolchain\\.git");
+		transformer.addSourcePath("C:\\Users\\sandr\\Desktop\\test_repos\\cnl-toolchain\\.git");
 		transformer.transform();
 	}
 
