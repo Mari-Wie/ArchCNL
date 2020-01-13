@@ -175,6 +175,9 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 //				StardogConstraint cons = new StardogConstraint(id, constraint);
 				Iterable<Proof> proofs = aValidator.explain(constraint).activeGraphs(selectedContext).countLimit(600)
 						.proofs();
+				for(Proof p: proofs) {
+					System.out.println(ProofWriter.toString(p));
+				}
 				storeViolations(id, constraint, proofs);
 //				explanations.put(cons, proofs);
 				id++;
