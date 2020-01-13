@@ -3,7 +3,6 @@ import java.util.List;
 
 import api.ExecuteMappingAPI;
 import api.ExecuteMappingAPIFactory;
-import api.JavaCodeOntologyAPIImpl;
 import api.ReasoningConfiguration;
 import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
@@ -46,7 +45,7 @@ public class CNLToolchain {
 		
 
 		// Source Code Transformation
-		famixTransformer.setSource(sourceCodePath);
+		famixTransformer.addSourcePath(sourceCodePath);
 		famixTransformer.transform();
 		//javaOWLTransformer = new JavaCodeOntologyAPIImpl();
 		//javaOWLTransformer.setSource(sourceCodePath);
@@ -77,11 +76,11 @@ public class CNLToolchain {
 	
 	public static void main(String[] args) {
 		String database = "test";
-		String context = "http://graphs.org/" + database + "/v3.0";
+		String context = "http://graphs.org/" + database + "/1.0";
 		CNLToolchain tool = new CNLToolchain("test", "http://localhost:5820");
 		try {
-			String projectPath = "C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\simple-example-project";
-			tool.execute(projectPath+"/architecture.adoc", projectPath, context);
+			String projectPath = "C:\\Users\\wiese8\\Uni\\Work\\OnionArchitectureDemo_version1\\";
+			tool.execute(projectPath+"architecture-documentation-onion.adoc", projectPath, context);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
