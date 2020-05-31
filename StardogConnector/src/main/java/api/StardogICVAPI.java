@@ -2,10 +2,8 @@ package api;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
-
-import org.apache.jena.rdf.model.Model;
-
-import com.complexible.stardog.StardogException;
+//import org.apache.jena.rdf.model.Model;
+//import com.complexible.stardog.StardogException;
 
 import api.exceptions.ConstraintsNotAddedException;
 import api.exceptions.StardogDatabaseDoesNotExist;

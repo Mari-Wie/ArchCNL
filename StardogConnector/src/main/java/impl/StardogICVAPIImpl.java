@@ -6,22 +6,22 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jena.rdf.model.Model;
+//import org.apache.jena.rdf.model.Model;
 import org.openrdf.model.IRI;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;
 
 import com.complexible.common.rdf.model.Values;
-import com.complexible.stardog.StardogException;
+//import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.icv.Constraint;
 import com.complexible.stardog.icv.api.ICVConnection;
-import com.complexible.stardog.jena.SDJenaFactory;
+//import com.complexible.stardog.jena.SDJenaFactory;
 import com.complexible.stardog.reasoning.Proof;
 import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
