@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.ontology.Individual;
-import org.eclipse.jgit.lib.Repository;
+//import org.eclipse.jgit.lib.Repository;
 
 import core.AbstractOwlifyComponent;
-import core.OwlifyComponent;
+//import core.OwlifyComponent;
 import model.GitBranch;
 import model.GitChange;
 import model.GitCommit;

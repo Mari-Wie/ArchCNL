@@ -1,6 +1,6 @@
 package visitors;
 
-import java.util.EnumSet;
+//import java.util.EnumSet;
 
 import org.apache.jena.ontology.Individual;
 

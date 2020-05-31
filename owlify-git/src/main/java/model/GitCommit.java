@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jgit.api.LogCommand;
+//import org.eclipse.jgit.api.LogCommand;
 
 public class GitCommit {
 	

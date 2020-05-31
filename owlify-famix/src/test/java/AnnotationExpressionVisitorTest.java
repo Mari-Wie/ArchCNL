@@ -7,18 +7,18 @@ import exceptions.FileIsNotAJavaClassException;
 import ontology.FamixOntology;
 import parser.JavaParserDelegator;
 import visitors.JavaTypeVisitor;
-import visitors.JavaFieldVisitor;
+//import visitors.JavaFieldVisitor;
 import visitors.MarkerAnnotationExpressionVisitor;
-import visitors.NormalAnnotationExpressionVisitor;
-import visitors.SingleMemberAnnotationExpressionVisitor;
+//import visitors.NormalAnnotationExpressionVisitor;
+//import visitors.SingleMemberAnnotationExpressionVisitor;
 
 public class AnnotationExpressionVisitorTest {
 
 	private String pathToJavaClass = "./src/test/java/examples/TestClassA.java";
 
 	private MarkerAnnotationExpressionVisitor markerVisitor;
-	private NormalAnnotationExpressionVisitor normalVisitor;
-	private SingleMemberAnnotationExpressionVisitor singleVisitor;
+	//private NormalAnnotationExpressionVisitor normalVisitor;
+	//private SingleMemberAnnotationExpressionVisitor singleVisitor;
 
 	private JavaParserDelegator delegator;
 

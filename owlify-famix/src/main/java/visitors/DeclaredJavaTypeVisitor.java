@@ -2,7 +2,7 @@ package visitors;
 
 import org.apache.jena.ontology.Individual;
 
-import com.github.javaparser.ast.expr.NameExpr;
+//import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VoidType;

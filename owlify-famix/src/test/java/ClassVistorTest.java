@@ -1,15 +1,15 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
+//import org.apache.jena.ontology.Individual;
+//import org.apache.jena.rdf.model.Property;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.github.javaparser.ast.CompilationUnit;
 
 import exceptions.FileIsNotAJavaClassException;
-import ontology.FamixOntClassesAndProperties;
+//import ontology.FamixOntClassesAndProperties;
 import parser.JavaParserDelegator;
 import visitors.JavaTypeVisitor;
 
