@@ -88,12 +88,12 @@ public class ConformanceCheckOntology {
 		// violation.getNotInferredObjectName();
 
 		List<StatementTriple> violations = violation.getAsserted();
-		String text = "";
+		//String text = "";
 		for (StatementTriple triple : violations) {
 			// if (!triple.getPredicate().contains("type")) {
-			String subjectName = codeModel.getNameOfResource(triple.getSubject());
-			String objectName = codeModel.getNameOfResource(triple.getObject());
-			text = subjectName + "  " + triple.getPredicate().split("#")[1] + "  " + objectName;
+			//String subjectName = codeModel.getNameOfResource(triple.getSubject());
+			//String objectName = codeModel.getNameOfResource(triple.getObject());
+			//text = subjectName + "  " + triple.getPredicate().split("#")[1] + "  " + objectName;
 
 			Resource subjectResource = codeModel.getResource(triple.getSubject());
 			Resource objectResource = codeModel.getResource(triple.getObject());

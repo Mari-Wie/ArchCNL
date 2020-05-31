@@ -2,19 +2,19 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import api.StardogConnectionAPI;
-import api.StardogICVAPI;
-import conformancecheck.api.IConformanceCheck;
-import conformancecheck.impl.ConformanceCheckImpl;
-import conformancecheck.impl.ConformanceCheckOntology;
+//import api.StardogConnectionAPI;
+//import api.StardogICVAPI;
+//import conformancecheck.api.IConformanceCheck;
+//import conformancecheck.impl.ConformanceCheckImpl;
+//import conformancecheck.impl.ConformanceCheckOntology;
 import datatypes.ArchitectureRule;
 
 public class ConformanceCheckImplTest {
 	
-	private StardogConnectionAPI connectionAPI;
-	private StardogICVAPI icvAPI;
-	private IConformanceCheck check;
-	private ConformanceCheckOntology ontology;
+	//	private StardogConnectionAPI connectionAPI;
+	//private StardogICVAPI icvAPI;
+	//private IConformanceCheck check;
+	//private ConformanceCheckOntology ontology;
 	
 	@Test
 	public void testCreateNewConformanceCheckOntology() {

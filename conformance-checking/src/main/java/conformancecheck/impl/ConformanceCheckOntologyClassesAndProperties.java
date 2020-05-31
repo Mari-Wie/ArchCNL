@@ -5,7 +5,7 @@ import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Property;
+//import org.apache.jena.rdf.model.Property;
 
 public class ConformanceCheckOntologyClassesAndProperties {
 

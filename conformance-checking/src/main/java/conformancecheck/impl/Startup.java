@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import api.StardogConnectionAPI;
+//import api.StardogConnectionAPI;
 import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
