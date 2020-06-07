@@ -433,8 +433,7 @@
   </owl:DatatypeProperty>
   <j.0:SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile1">
     <j.0:containsArtifact>
-      <Aggregate rdf:about="http://arch-ont.org/ontologies/famix.owl#api.ValidationAggregate1">
-        <rdf:type rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#ApplicationService"/>
+      <ApplicationService rdf:about="http://arch-ont.org/ontologies/famix.owl#api.ValidationAggregate1">
         <residein>
           <j.1:Namespace rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace1">
             <j.1:hasName>api</j.1:hasName>
@@ -452,31 +451,41 @@
             <j.1:namespaceContains rdf:resource="http://arch-ont.org/ontologies/famix.owl#api.ValidationAggregate1"/>
           </j.1:Namespace>
         </residein>
+        <rdf:type rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#Aggregate"/>
         <j.1:hasName>api.ValidationAggregate</j.1:hasName>
         <j.1:isInterface rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</j.1:isInterface>
         <j.1:hasModifier>public </j.1:hasModifier>
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
-      </Aggregate>
+      </ApplicationService>
     </j.0:containsArtifact>
-    <j.0:hasPath>C:\WORK\Kopie_G+J\Uni\Work\OnionArchitectureDemo_version1\src\api\ValidationAggregate.java</j.0:hasPath>
+    <j.0:hasPath>C:\WORK\GitHub\Mari-Wie\ArchCNL_Testprojekt\OnionArchitectureDemo_version1\src\api\ValidationAggregate.java</j.0:hasPath>
   </j.0:SoftwareArtifactFile>
   <owl:AllDisjointClasses>
     <owl:members rdf:parseType="Collection">
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Comment"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Access"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Reference"/>
     </owl:members>
   </owl:AllDisjointClasses>
   <j.0:SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile0">
     <j.0:containsArtifact rdf:resource="http://arch-ont.org/ontologies/famix.owl#api.UserService0"/>
-    <j.0:hasPath>C:\WORK\Kopie_G+J\Uni\Work\OnionArchitectureDemo_version1\src\api\UserService.java</j.0:hasPath>
+    <j.0:hasPath>C:\WORK\GitHub\Mari-Wie\ArchCNL_Testprojekt\OnionArchitectureDemo_version1\src\api\UserService.java</j.0:hasPath>
   </j.0:SoftwareArtifactFile>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#long">
+    <j.1:hasName>long</j.1:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#int">
+    <j.1:hasName>int</j.1:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
   <owl:AllDisjointClasses>
     <owl:members rdf:parseType="Collection">
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Module"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Package"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CaughtException"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#DeclaredException"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ThrownException"/>
     </owl:members>
   </owl:AllDisjointClasses>
   <owl:AllDisjointClasses>
@@ -490,37 +499,20 @@
       <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnknownVariable"/>
     </owl:members>
   </owl:AllDisjointClasses>
-  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#long">
-    <j.1:hasName>long</j.1:hasName>
-    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#int">
-    <j.1:hasName>int</j.1:hasName>
-    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
-  </owl:NamedIndividual>
   <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#char">
     <j.1:hasName>char</j.1:hasName>
     <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
   </owl:NamedIndividual>
-  <owl:AllDisjointClasses>
-    <owl:members rdf:parseType="Collection">
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Enum"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterType"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizedType"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#TypeAlias"/>
-    </owl:members>
-  </owl:AllDisjointClasses>
   <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#String">
     <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
   </owl:NamedIndividual>
   <owl:AllDisjointClasses>
     <owl:members rdf:parseType="Collection">
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CaughtException"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#DeclaredException"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ThrownException"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CustomSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#JavaSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SmalltalkLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnkownSourceLanguage"/>
     </owl:members>
   </owl:AllDisjointClasses>
   <j.1:Namespace rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace0">
@@ -570,28 +562,11 @@
   </j.1:Namespace>
   <owl:AllDisjointClasses>
     <owl:members rdf:parseType="Collection">
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Access"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Reference"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Module"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Package"/>
     </owl:members>
   </owl:AllDisjointClasses>
-  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#double">
-    <j.1:hasName>double</j.1:hasName>
-    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#byte">
-    <j.1:hasName>byte</j.1:hasName>
-    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#boolean">
-    <j.1:hasName>boolean</j.1:hasName>
-    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
-  </owl:NamedIndividual>
-  <j.0:SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile3">
-    <j.0:containsArtifact rdf:resource="http://arch-ont.org/ontologies/famix.owl#domain.UserAggregate3"/>
-    <j.0:hasPath>C:\WORK\Kopie_G+J\Uni\Work\OnionArchitectureDemo_version1\src\domain\UserAggregate.java</j.0:hasPath>
-  </j.0:SoftwareArtifactFile>
   <owl:AllDisjointClasses>
     <owl:members rdf:parseType="Collection">
       <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
@@ -602,13 +577,38 @@
       <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
     </owl:members>
   </owl:AllDisjointClasses>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#double">
+    <j.1:hasName>double</j.1:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#byte">
+    <j.1:hasName>byte</j.1:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
   <owl:AllDisjointClasses>
     <owl:members rdf:parseType="Collection">
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CSourceLanguage"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CustomSourceLanguage"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#JavaSourceLanguage"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SmalltalkLanguage"/>
-      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnkownSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Comment"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#boolean">
+    <j.1:hasName>boolean</j.1:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <j.0:SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile3">
+    <j.0:containsArtifact rdf:resource="http://arch-ont.org/ontologies/famix.owl#domain.UserAggregate3"/>
+    <j.0:hasPath>C:\WORK\GitHub\Mari-Wie\ArchCNL_Testprojekt\OnionArchitectureDemo_version1\src\domain\UserAggregate.java</j.0:hasPath>
+  </j.0:SoftwareArtifactFile>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Enum"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizedType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#TypeAlias"/>
     </owl:members>
   </owl:AllDisjointClasses>
   <owl:AllDisjointClasses>
@@ -620,7 +620,7 @@
   </owl:AllDisjointClasses>
   <j.0:SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile2">
     <j.0:containsArtifact rdf:resource="http://arch-ont.org/ontologies/famix.owl#domain.User2"/>
-    <j.0:hasPath>C:\WORK\Kopie_G+J\Uni\Work\OnionArchitectureDemo_version1\src\domain\User.java</j.0:hasPath>
+    <j.0:hasPath>C:\WORK\GitHub\Mari-Wie\ArchCNL_Testprojekt\OnionArchitectureDemo_version1\src\domain\User.java</j.0:hasPath>
   </j.0:SoftwareArtifactFile>
   <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#void">
     <j.1:hasName>void</j.1:hasName>

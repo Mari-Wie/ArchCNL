@@ -89,13 +89,14 @@ public class CNLToolchain
 
     public static void main(String[] args)
     {
-        String database = "MWTest";
+        String database = "MWTest3";
         String context = "http://graphs.org/" + database + "/1.0";
         System.out.println("Initializing ...");
         CNLToolchain tool = new CNLToolchain(database, "http://localhost:5820");
         try
         {
-            String projectPath = "C:\\WORK\\Kopie_G+J\\Uni\\Work\\OnionArchitectureDemo_version1\\";
+            String projectPath = "C:\\WORK\\GitHub\\Mari-Wie\\ArchCNL_Testprojekt\\OnionArchitectureDemo_version1\\";
+            System.out.println("Project Path: "+projectPath);
             tool.execute(projectPath + "architecture-documentation-onion.adoc",
                     projectPath, context);
             System.out.println("Finished!");
