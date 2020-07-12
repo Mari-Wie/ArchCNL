@@ -1,0 +1,201 @@
+ cnl-toolchain
+=============
+Kombiniert Komponenten bzw. baut alle/folgende Komponenten zusammen:
+* Transform CNL2OWL
+* Mapping Code2Architecture
+* Transform Code2OWL
+* Prüfung der Regeln
+
+
+CNLToolchainCLI (Command Line Interface) = Wrapper um Hauptklasse - Entgegennehmen der Benutzerparameter
+ruft CNLToolchain = Hauptklasse - erstellt Klassen für die o.g. Komponenten und verknüpft diese folgendermaßen:
+
+CNLToolchain:
+-------------
+1) Ruft den AsciiDoc-Parser zweimal (AsciiDocArc42Parser.java) für ein AsciiDoc-Dokument auf
+- Regeln: 
+-- schreibt "intern" mehrere tmp{id}.architecture-Dateien (je Regel eine Datei) 
+-- speichert die Regeln in einer internen Datenstruktur (ArchitectureRules(Klasse) = mehrere ArchitectureRule(Klasse))
+- Mapping: schreibt "intern" eine Mapping.txt (SWRL-Regeln)
+
+2) übergibt die Regel-Dateien an Generator (ArchitectureCNLGenerator.xtend) 
+- erstellt OWL-Dateien (architecture{id}.owl) für Architektur-Regeln
+
+3) Aufruf des FamixOntologyTransformer = Transformer Java (Sourcecode) zu Famix 
+- mit Sourcecode-Pfad des Projektes, das untersucht werden soll
+- erstellt Datei result.owl = Sourcecode als Ontology
+
+4) Aufruf von ExecuteMappingAPI (->ExecuteMappingAPIImpl)
+- zum Mapping von QuellCode und ArchitectureOntology 
+- nutzt dabei die Dateien:
+-- Mapping.txt enthält Mapping-Regeln
+-- architecture{id}.owl enthalten Architecture-Ontology
+-- result.owl enthält Sourcecode-Ontology
+- erstellt Ergbnis-Datei implementedArchitecture.owl 
+
+5) StardogDatabase: (leere) Datenbank erstellen, verbinden und befüllen
+- Hinzufügen der implementierten Architektur (implementedArchitecture.owl) zur DB, inkl.
+-- Code-Ontology, Architecture-Ontology und Verknüpfung von Architektur und Code über Mapping Regeln
+
+6) Aufruf ConformanceCheck - Conformitätsprüfung
+- Jede Regel aus ArchitectureRules wird durchlaufen
+- Validieren der Regel: ConformanceCheckImpl.validateRule()
+- Speichern der Ergebnisse in Datei und DB: ConformanceCheckImpl.storeConformanceCheckingResultInDatabaseForRule()
+
+
+cnl-documentation
+=================
+- im Projekt conformancechecking-documentation (=> ToDo: umbenennen)
+AsciiDocArc42Parser.java:
+- AsciiDoc-Parser sucht die Regeln bzw. Mappings in einem AsciiDoc-Dokument 
+- AsciiDoc-Meta-Infos werden interpretiert 
+-- Meta-Tag für Regeln: [role="rule"]
+-- Meta-Tag für Mapping: [role="mapping"]
+- schreibt "intern" tmp{id}.architecture-Datei für JEDE(!) Regeln 
+- schreibt "intern" eine Mapping.txt für Mappings
+
+architecture-cnl
+================
+Archcnl.xtext: 
+- Definiert die Grammatik der CNL in xtext-Datei
+
+ArchCNLGenerator.xtend: 
+- Kennt bzw. nutzt o.g. Grammatik
+- Iteriert über alle tmp{id}.architecture-Dateien 
+- Interpretiert den Regeltyp
+- nutzt das package api in jena-api
+- und generiert damit jeweils eine entsprechende OWL-Ontologie architecture{id}.owl:
+  -- Konzepte
+  -- Relationen
+  -- Axiome
+
+XTEND 
+ist eine eigene java-ähnliche Programmiersprache, die über einen Code-Generator Java-Code generiert
+XTEXT 
+ist eine Mögichkeit eine Grammatik für eine Domain Specific Language zu definieren und für diese dann per Code-Generator XTEND Code generieren zu lassen, der ein Programmieren in dieser Sprache ermöglich (mit IDE, Parser, Validierung, etc.)
+
+XTEND erzeugt drei Projekte:
+----------------------------
+ org.architecture.cnl 
+  => enthält alle wichtigen Dateien
+  => Packages:
+  * src 
+    -> enthält XTEND-Dateien und XTEXT Definition
+    -> Archcenl.xtext
+    -> ArchcnlGenerator.xtend
+  * xtend-gen 
+    -> enthält die "src" Dateien als Java-Code 
+    -> ArchcnlGenerator.java
+  * src-gen
+    -> enthält den auf Basis der XTEXT-Vorgabe generierten Code
+    -> org.architecture.cnl.archcnl für die Interfaces
+    -> org.architecture.cnl.archcnl.impl für die Implementierungen
+ org.architecture.cnl.ide  
+  => Um in Eclipse Code in der eigenen Grammatik zu schreiben, kann man diese IDE benutzen und z.B. um Prüfreglen bei der Eingabe erweitern 
+  => wird nicht genutzt
+ org.architecture.cnl.parent
+  => Verknüpft die Unterpackages von XTEND miteinander
+  => wird nicht aktiv genutzt / wird aber von XTEND benötigt
+
+architecture-to-code-mapper
+===========================
+ExecuteMappingAPIImpl.java: 
+- Projekt: architecture-reasoning
+- Mapping QuellCode<->ArchitectureOntology
+- nutzt / bekommt übergeben:
+-- Mapping.txt enthält Mapping-Regeln
+-- architecture{id}.owl enthalten Architecture-Ontology
+-- result.owl enthält Sourcecode-Ontology
+- nutzt den Reasoner "Apache Jena" (-> "hier passiert ein Wunder") 
+-- zum Interpretieren der SWRL-Regeln in Mapping.txt,
+-- Verknüpfen dieser mit IntendedArchitecture und Sourcecode
+-- und speichert das Ergebnis in implementedArchitecture.owl => implementierte Architektur
+
+owlify
+=======
+- Enthält alle SourceCode-Ontologien als OWL-File
+- Enthält alle Transformatoren, um SourceCode-Artefakte in OWL zu übersetzen
+
+FamixOntologyTransformer.java:
+- Projekt: famix-parser 
+- Transformer Java (Sourcecode) zu Famix-Ontologie (OWL)
+- erstellt Datei result.owl = Sourcecode als Ontology
+
+GitOntologyTransformer.java:
+- Projekt: history-parser
+- Transformer Git zu OWL
+- erstellt Datei git_result.owl = Git als Ontology
+
+MavenPomFileOntologyTransformer.java:
+- Projekt: maven-parser
+- Transformer Maven zu OWL
+- erstellt Datei maven_result.owl = Maven als Ontology
+
+stardog-connector
+==================
+- Erstellen und Verbinden mit der DB
+- CNL-Architektur-Regel ist in Stardog ein "Constraint" 
+-- wird konvertiert, indem Stardog die architecture{id}.owl-Datei einliest und den Constraint zurückgibt.
+
+StardogICVAPIImpl:
+- API zum conformanceCheck (integrity constraint validation)
+
+StardogICVAPIImpl.explainViolationForContext():
+- für jeden Constraint wird die Datenbasis geprüft 
+- der Proof-Tree (proofs) wird zurückgegeben
+- ruft am Ende storeViolations() auf
+
+StardogICVAPIImpl.storeViolations(constraint,proofs):
+- je Proof:
+-- Speichert Violations in StardogConstraintViolation (Klasse)
+-- StardogConstraintViolation wird einem StardogConstraintViolationResultSet hinzugefügt 
+
+
+cnl-verify
+==========
+ConformanceCheckImpl.java (IConformanceCheck)
+- Projekt: conformance-checking
+
+ConformanceCheckImpl.validateRule()
+-führt die Validierung einer Architektur-Regel bezogen auf den gesamten Quellcode durch
+- Füllt: List<StardogConstraintViolation>
+
+ConformanceCheckImpl.storeConformanceCheckingResultInDatabaseForRule()
+- Holt sich List<StardogConstraintViolation>
+- verbindet Codemodell mit ConformanceCheck Ergebnissen (=List<StardogConstraintViolation>)
+- => schreibt Validierungs-Ergebnisse in Ordner "ConformanceChecks" Datei "check.owl"
+- => speichert Validierungs-Ergebnisse in DB  
+
+cnl-common
+==========
+Datenstrukturen, die Projekt gemeinsam nutzen, z.B.
+* ArchitectureRule
+* ArchitectureRules
+
+cnl-main-repository
+===================
+nur Read.me 
+- Liste und Beschreibung der Repositories
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
