@@ -30,7 +30,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="stanford-english-corenlp-2018-02-27-models.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.architecture.cnl"/>
+=======
+	<classpathentry combineaccessrules="false" kind="src" path="/org.architecture.cnl.ide"/>
+	<classpathentry kind="lib" path="stanford-english-corenlp-2018-02-27-models.jar"/>
+>>>>>>> 4a902a153bc7b8aac137e685b16e155254263f72
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

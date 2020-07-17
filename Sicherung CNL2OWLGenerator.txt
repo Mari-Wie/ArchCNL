@@ -22,7 +22,11 @@ public class CNL2OWLGenerator {
 
 		System.out.println("path: "+path);
 		
+<<<<<<< HEAD
 		ArchcnlStandaloneSetup setup = new ArchcnlStandaloneSetup();
+=======
+		ArchCnlStandaloneSetup setup = new ArchCnlStandaloneSetup();
+>>>>>>> 4a902a153bc7b8aac137e685b16e155254263f72
 
 		Injector injector = setup.createInjectorAndDoEMFRegistration();
 
