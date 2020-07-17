@@ -3,8 +3,12 @@ package datatypes;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ArchitectureRules {
- 
+
+	private static final Logger LOG = LogManager.getLogger(ArchitectureRules.class);
 	private static ArchitectureRules instance;
 	private Map<ArchitectureRule, Integer> rules;
 	private Map<ArchitectureRule, String> pathToConvertedConstraint;
@@ -24,6 +28,7 @@ public class ArchitectureRules {
 	}
 
 	public void addRule(ArchitectureRule r, int id) {
+        LOG.trace("\n -- AddRule --------------------- \n"+r.toString());
 		rules.put(r, id);
 	}
 	
@@ -85,12 +90,7 @@ public class ArchitectureRules {
 
 	public void print() {
 		for (ArchitectureRule rule : rules.keySet()) {
-			System.out.println("id: " + rules.get(rule));
-			System.out.println(rule.getCnlSentence());
-//			System.out.println(rule.getOwlAxiom());
-//			if(rule.getSecondOWLAxiom()!=null) {
-//				System.out.println(rule.getSecondOWLAxiom());
-//			}
+			System.out.println("id: " + rules.get(rule).toString());
 		}
 	}
 

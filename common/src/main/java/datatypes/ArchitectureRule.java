@@ -6,8 +6,14 @@ public class ArchitectureRule {
 	private String cnlSentence;
 	private String owlAxiom;
 	private String secondOWLAxiom; //for domain range constraint
-	private RuleType type; 
 	private int count; //for cardinality constraints
+	
+    // Ruletype war immer NULL und wird im Code nicht gesetzt (nur in 
+	// conformancecheck.StartUp.main(), die nicht aufgerufen wird, 
+	// daher RuleType hier auf Default = Existential gesetzt.
+	private RuleType type = RuleType.EXISTENTIAL; 
+	
+	@SuppressWarnings("unused")
 	private String stardogConstraint;
 	
 	public Integer getId() {
@@ -54,6 +60,14 @@ public class ArchitectureRule {
 		return type;
 	}
 
+	public void setType(RuleType type) {
+		this.type = type;
+	}
+
+	public void setStardogConstraint(String constraint) {
+		this.stardogConstraint = constraint;
+	}
+
 	
 
 	@Override
@@ -87,11 +101,23 @@ public class ArchitectureRule {
 		return true;
 	}
 
-	public void setType(RuleType type) {
-		this.type = type;
+	
+	public String toString() {
+		String result = "";
+			result += "Id         :" + id  + "\n";
+			result += "Cnl        : " + cnlSentence + "\n";
+//			result += "OwlAxiom   : " + owlAxiom + "\n";
+//			result += "Count      :" + count + "\n";
+//			if(secondOWLAxiom!=null) 
+//			{
+//				result += "2. OwlAxiom: " + secondOWLAxiom) + "\n"
+//			};
+			if(type!=null) 
+			{
+				result += "Type       : " + type.toString() + "\n";
+			}
+		return result;
 	}
+	
 
-	public void setStardogConstraint(String constraint) {
-		this.stardogConstraint = constraint;
-	}
 }
