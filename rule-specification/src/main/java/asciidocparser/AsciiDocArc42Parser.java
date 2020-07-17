@@ -9,18 +9,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.architecture.cnl.ide.CNL2OWLGenerator;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
 
+import org.architecture.cnl.ide.CNL2OWLGenerator;
+
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+ 
 public class AsciiDocArc42Parser
 {
-
+	private static final Logger LOG = LogManager.getLogger(AsciiDocArc42Parser.class);
+	
     private final static String TMP_MAPPING_FILE_NAME = "./mapping.txt";
     private final static String EXTENSION = ".architecture";
     private final static String OWL_EXTENSION = ".owl";
@@ -48,47 +54,72 @@ public class AsciiDocArc42Parser
         ontologyPaths = new ArrayList<String>();
     }
 
+    /**
+     * Search .adoc-file for keywords "rule" and "mapping"
+     * Split to single lines = single rules
+     * 
+     * For every rule (=line):
+     * - Create one RuleFile (tmp_{id}.architecture)
+     * - Add Rule to common.ArchitectureRules
+     * - Transform RuleFile to OntologyFile (./architecture{id}.owl)
+     * - Delete RuleFile
+     * 
+     * @param path - Path of Rule-File (.adoc-File)
+     */
     public void parseRulesFromDocumentation(String path)
     {
-
+        LOG.info("Start parseRulesFromDocumentation...");
+        
         Asciidoctor ascii = Asciidoctor.Factory.create();
         CNL2OWLGenerator generator = new CNL2OWLGenerator();
-
+        
         File file = new File(path);
         HashMap<String, Object> hashmap = new HashMap<String, Object>();
         Document doc = ascii.loadFile(file, hashmap);
         Map<Object, Object> selector = new HashMap<Object, Object>();
         selector.put("role", "rule");
-        //		selector.put("skip", "false");
         List<StructuralNode> result = doc.findBy(selector);
+        
         int id_for_file = 0;
         String ontologyPath = "";
+        String rulePath = "";
         for (StructuralNode structuralNode : result)
         {
             Block b = (Block) structuralNode;
-            List<String> lines = b.lines();
+            List<String> lines = b.getLines();
+
             for (String line : lines)
             {
-                File f = new File(PREFIX + "_" + id_for_file + EXTENSION);
-
+                rulePath = PREFIX + "_" + id_for_file + EXTENSION;
+                ontologyPath = "./architecture" + id_for_file + OWL_EXTENSION;
+                LOG.info("Rule Id      : " + id);
+                LOG.info("Rule         : " + line);
+                LOG.info("File Id      : " + id_for_file);
+                LOG.info("RulePath     : " + rulePath);
+                LOG.info("OntologyPath : " + ontologyPath);
+                
                 ArchitectureRule rule = new ArchitectureRule();
                 rule.setId(id);
                 rule.setCnlSentence(line);
                 ArchitectureRules rules = ArchitectureRules.getInstance();
                 rules.addRule(rule, id);
                 id++;
+                LOG.debug("Rule added");
+
+                
                 try
                 {
-                    ontologyPath = "./architecture" + id_for_file
-                            + OWL_EXTENSION;
                     ontologyPaths.add(ontologyPath);
+                    
+                    File f = new File(rulePath);
                     FileUtils.writeStringToFile(f, line + "\n", (Charset) null,
                             true);
-                    rules.addRuleWithPathToConstraint(rule, id_for_file,
-                            "./architecture" + id_for_file + OWL_EXTENSION);
-                    generator.transformCNLFile(
-                            PREFIX + "_" + id_for_file + EXTENSION);
-                    System.out.println("transformed");
+                    
+                    rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath);
+                    LOG.debug("Ended addRuleWithPathToConstraint");
+                    
+                    generator.transformCNLFile(rulePath);
+                    LOG.debug("Rule transformed to OWL: "+rulePath);
 
                     f.delete();
                 }
@@ -96,6 +127,7 @@ public class AsciiDocArc42Parser
                 {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                    LOG.error("IOException: "+e.toString());
                 }
                 id_for_file++;
             }
@@ -131,7 +163,7 @@ public class AsciiDocArc42Parser
 
             String tmp = "";
             Block b = (Block) structuralNode;
-            List<String> lines = b.lines();
+            List<String> lines = b.getLines();
             for (String line : lines)
             {
                 tmp += line;
