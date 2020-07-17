@@ -17,8 +17,14 @@ import api.StardogConstraintViolation;
 import api.StatementTriple;
 import datatypes.ArchitectureRule;
 
-public class ConformanceCheckOntology {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+ 
+public class ConformanceCheckOntology 
+{
 
+	private static final Logger LOG = LogManager.getLogger(ConformanceCheckImpl.class);
+	
 	/* Result */
 	private OntModel model;
 
@@ -27,20 +33,26 @@ public class ConformanceCheckOntology {
 	private Individual architectureRuleIndividual;
 	private Individual architectureViolationIndividual;
 
-	public ConformanceCheckOntology() {
+	public ConformanceCheckOntology() 
+	{
+		LOG.info("Start ConformanceCheckOntology ...");
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		model.read("./architectureconformance.owl");
 		architectureRuleIndividualCache = new HashMap<Integer, Individual>();
 	}
 
-	public void newConformanceCheck() {
+	public void newConformanceCheck() 
+	{
+		LOG.info("Start newConformanceCheck ...");
 		conformanceCheckIndividual = ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(model);
 		DatatypeProperty dateProperty = ConformanceCheckOntologyClassesAndProperties.getDateProperty(model);
 		conformanceCheckIndividual.addLiteral(dateProperty, Calendar.getInstance().getTime().toString());
 
 	}
 
-	public void storeArchitectureRule(ArchitectureRule rule) {
+	public void storeArchitectureRule(ArchitectureRule rule) 
+	{
+		LOG.info("Start storeArchitectureRule ...");
 		architectureRuleIndividual = ConformanceCheckOntologyClassesAndProperties.getArchitectureRuleIndividual(model,
 				rule.getId());
 
@@ -59,19 +71,26 @@ public class ConformanceCheckOntology {
 	}
 
 	public void storeConformanceCheckingResultForRule(CodeModel codemodel, ArchitectureRule rule,
-			StardogConstraintViolation violation) {
+			StardogConstraintViolation violation) 
+	{
+		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
+		
 		architectureViolationIndividual = ConformanceCheckOntologyClassesAndProperties
 				.getArchitectureViolationIndividual(model);
+		
 		conformanceCheckIndividual.addProperty(
 				ConformanceCheckOntologyClassesAndProperties.getHasDetectedViolationProperty(model),
 				architectureViolationIndividual);
+		
 		architectureRuleIndividual.addProperty(
 				ConformanceCheckOntologyClassesAndProperties.getHasViolationProperty(model),
 				architectureViolationIndividual);
+		
 		architectureViolationIndividual.addProperty(
 				ConformanceCheckOntologyClassesAndProperties.getViolatesProperty(model), architectureRuleIndividual);
 
 		Individual proofIndividual = ConformanceCheckOntologyClassesAndProperties.getProofIndividual(model);
+		
 		proofIndividual.addProperty(ConformanceCheckOntologyClassesAndProperties.getProofsProperty(model),
 				architectureViolationIndividual);
 
@@ -79,17 +98,23 @@ public class ConformanceCheckOntology {
 	}
 
 	private void connectCodeElementsWithViolations(CodeModel codeModel, ArchitectureRule rule,
-			StardogConstraintViolation violation) {
+			StardogConstraintViolation violation) 
+	{
+		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
 
-		architectureRuleIndividual.addLiteral(
-				ConformanceCheckOntologyClassesAndProperties.getHasRuleTypeProperty(model), rule.getType().toString());
+		String ruleType = rule.getType().toString();
+		DatatypeProperty datatypeProperty = ConformanceCheckOntologyClassesAndProperties.getHasRuleTypeProperty(model);
+		architectureRuleIndividual.addLiteral(datatypeProperty, ruleType);
 
+		LOG.info("architectureRuleIndividual hinzugefügt");
 		// violation.getNotInferredSubjectName();
 		// violation.getNotInferredObjectName();
 
 		List<StatementTriple> violations = violation.getAsserted();
 		//String text = "";
-		for (StatementTriple triple : violations) {
+		for (StatementTriple triple : violations) 
+		{
+			LOG.info("StatementTriple: " + triple.getSubject() + " , " + triple.getPredicate() + " , " + triple.getObject());
 			// if (!triple.getPredicate().contains("type")) {
 			//String subjectName = codeModel.getNameOfResource(triple.getSubject());
 			//String objectName = codeModel.getNameOfResource(triple.getObject());
@@ -97,6 +122,8 @@ public class ConformanceCheckOntology {
 
 			Resource subjectResource = codeModel.getResource(triple.getSubject());
 			Resource objectResource = codeModel.getResource(triple.getObject());
+			LOG.info("Subject und Objet Ressource erstellt");
+			
 			model.add(subjectResource,
 					ConformanceCheckOntologyClassesAndProperties.getCodeElementIsPartOfViolationSubject(model),
 					architectureViolationIndividual);
@@ -107,7 +134,8 @@ public class ConformanceCheckOntology {
 
 	}
 
-	public OntModel getModel() {
+	public OntModel getModel() 
+	{
 		return model;
 	}
 

@@ -18,8 +18,14 @@ import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
 import impl.StardogDatabase;
 
-public class ConformanceCheckImpl implements IConformanceCheck {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+ 
 
+public class ConformanceCheckImpl implements IConformanceCheck 
+{
+	private static final Logger LOG = LogManager.getLogger(ConformanceCheckImpl.class);
+	
 	private StardogICVAPI icvAPI;
 
 	private ConformanceCheckOntology ontology;
@@ -29,7 +35,8 @@ public class ConformanceCheckImpl implements IConformanceCheck {
 	private StardogConstraintViolationsResultSet result;
 
 	@Inject
-	public ConformanceCheckImpl(StardogICVAPI icvAPI) {
+	public ConformanceCheckImpl(StardogICVAPI icvAPI) 
+	{
 		this.icvAPI = icvAPI;
 
 		String dir = "./conformance_checks/";
@@ -37,76 +44,103 @@ public class ConformanceCheckImpl implements IConformanceCheck {
 		this.resultPath = dir + "check.owl";
 	}
 
-	public void createNewConformanceCheck() {
+	public void createNewConformanceCheck() 
+	{
+    	LOG.info("Starting createNewConformanceCheck ...");
 		ontology = new ConformanceCheckOntology();
 		ontology.newConformanceCheck();
 
 	}
 
-	public void storeArchitectureRule(ArchitectureRule rule) {
+	public void storeArchitectureRule(ArchitectureRule rule) 
+	{
+    	LOG.info("Starting storeArchitectureRule ...");
 		ontology.storeArchitectureRule(rule);
 	}
 
-	public void validateRule(ArchitectureRule rule, StardogDatabase db, String context) {
-
+	public void validateRule(ArchitectureRule rule, StardogDatabase db, String context) 
+	{
+    	LOG.info("Starting validateRule ...");
 		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule);
 		String constraint;
-		try {
+		try 
+		{
 			constraint = icvAPI.addIntegrityConstraint(rule.getId(), path, db.getServer(), db.getDatabaseName());
 			icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);
 			rule.setStardogConstraint(constraint);
 			this.result = icvAPI.getResult();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Path to constraint not found: " + path);
+		}
+		catch (FileNotFoundException e) 
+		{
+			LOG.error(e.getMessage()+ " : " + path);
 		}
 
 	}
 
-	public StardogConstraintViolationsResultSet getResult() {
+	public StardogConstraintViolationsResultSet getResult() 
+	{
 		return result;
 	}
 
 	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabase db,
-			String context) {
+			String context) 
+	{
+    	LOG.info("Starting storeConformanceCheckingResultInDatabaseForRule: " + rule.getCnlSentence());
 		List<StardogConstraintViolation> violations = result.getViolations();
+		
 		// TODO connects the code model with conformance check instances
 		// Model model = connectionAPI.getModelFromContext(context);
 		Model model = db.getModelFromContext(context);
 		CodeModel codeModel = new CodeModel(context, model);
 
-		for (StardogConstraintViolation violation : violations) {
+		for (StardogConstraintViolation violation : violations) 
+		{
 			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
 		}
 		
-		try {
+		try 
+		{
 			saveResultsToDatabase(db, context);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (FileNotFoundException e) 
+		{
+			LOG.error(e.getMessage());
 			e.printStackTrace();
-		} catch (NoConnectionToStardogServerException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (NoConnectionToStardogServerException e) 
+		{
+			LOG.error(e.getMessage());
 			e.printStackTrace();
 		}
+
 		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule);
-		try {
+		
+		try 
+		{
 			icvAPI.removeIntegrityConstraints(path, db.getServer(), db.getDatabaseName());
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (FileNotFoundException e) 
+		{
+			LOG.error(e.getMessage());
 			e.printStackTrace();
 		}
 		
 	}
 
 	public void saveResultsToDatabase(StardogDatabase db, String context)
-			throws FileNotFoundException, NoConnectionToStardogServerException {
+			throws FileNotFoundException, NoConnectionToStardogServerException 
+	{
+    	LOG.info("Starting saveResultsToDatabase ...");
 		Model codemodel = db.getModelFromContext(context);
-		System.out.println("add model to code model");
+    	
+    	LOG.info("add model to code model");
 		codemodel.add(ontology.getModel());
 		File file = new File(this.resultPath);
-		System.out.println("write to code model");
+		
+		LOG.info("write to code model");
 		codemodel.write(new FileOutputStream(file));
-		System.out.println("add data to database");
+		
+		LOG.info("add data to database");
 		db.addDataByRDFFileAsNamedGraph(this.resultPath, context);
 	}
 
