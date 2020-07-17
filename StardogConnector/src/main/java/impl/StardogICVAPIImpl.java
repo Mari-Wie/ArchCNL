@@ -10,12 +10,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-//import org.apache.jena.rdf.model.Model;
-import org.openrdf.model.IRI;
-import org.openrdf.model.Statement;
-import org.openrdf.rio.RDFFormat;
+import com.stardog.stark.Statement;
 
-import com.complexible.common.rdf.model.Values;
+//import org.apache.jena.rdf.model.Model;
+//import org.openrdf.model.IRI;
+//import org.openrdf.model.Statement;
+//import org.openrdf.rio.RDFFormat;
+
+//import com.complexible.common.rdf.model.Values;
+
+import com.stardog.stark.Values;
 //import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
@@ -25,6 +29,7 @@ import com.complexible.stardog.icv.api.ICVConnection;
 import com.complexible.stardog.reasoning.Proof;
 import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
+import com.stardog.stark.io.RDFFormats;
 
 import api.StardogConnectionAPI;
 import api.StardogConstraintViolation;
@@ -59,7 +64,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 		ICVConnection aValidator = api.getConnection().as(ICVConnection.class);
 
 		api.getConnection().begin();
-		aValidator.addConstraints().format(RDFFormat.RDFXML).stream(new FileInputStream(new File(pathToConstraints)));
+		aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(new File(pathToConstraints)));
 		api.getConnection().commit();
 
 		// System.out.println("The data " +
@@ -78,7 +83,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
 			aConn.begin();
-			aValidator.addConstraints().format(RDFFormat.RDFXML).stream(new FileInputStream(pathToConstraints));
+			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraints));
 			aConn.commit();
 
 		}
@@ -94,7 +99,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
 			aConn.begin();
-			aValidator.addConstraints().format(RDFFormat.RDFXML).stream(new FileInputStream(pathToConstraint));
+			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraint));
 			aConn.commit();
 
 //			String current = "";
@@ -136,7 +141,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
 			aConn.begin();
-			aValidator.addConstraints().format(RDFFormat.RDFXML).stream(new FileInputStream(pathToConstraints));
+			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraints));
 			aConn.commit();
 
 		}
@@ -168,7 +173,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 
 			Set<Constraint> constraints = aValidator.getConstraints();
 
-			Collection<IRI> selectedContext = new ArrayList<>();
+			Collection<com.stardog.stark.IRI> selectedContext = new ArrayList<>();
 			selectedContext.add(Values.iri(context));
 			for (Constraint constraint : constraints) {
 				// System.out.println(constraint);
@@ -202,13 +207,13 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
 			StardogConstraintViolation violation = new StardogConstraintViolation();
 			for (Statement statement : asserted) {
-				violation.setViolation(statement.getSubject().stringValue(), statement.getPredicate().stringValue(),
-						statement.getObject().stringValue());
+				violation.setViolation(statement.subject().toString(), statement.predicate().toString(),
+						statement.object().toString());
 			}
 			Iterable<Statement> notInferred = proof.getStatements(ProofType.NOT_INFERRED);
 			for (Statement statement : notInferred) {
-				violation.setNotInferred(statement.getSubject().stringValue(), statement.getPredicate().stringValue(),
-						statement.getObject().stringValue());
+				violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
+						statement.object().toString());
 			}
 			violation.addProof(proof.toString());
 			System.out.println(proof.toString());
@@ -230,13 +235,13 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 					//System.out.println(ProofWriter.toString(proof));
 					Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
 					for (Statement statement : asserted) {
-						violation.setViolation(statement.getSubject().stringValue(),
-								statement.getPredicate().stringValue(), statement.getObject().stringValue());
+						violation.setViolation(statement.subject().toString(), statement.predicate().toString(),
+								statement.object().toString());
 					}
 					Iterable<Statement> notInferred = proof.getStatements(ProofType.NOT_INFERRED);
 					for (Statement statement : notInferred) {
-						violation.setNotInferred(statement.getSubject().stringValue(),
-								statement.getPredicate().stringValue(), statement.getObject().stringValue());
+						violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
+								statement.object().toString());
 					}
 					System.out.println("NOT INFERRED: " + violation.getNotInferred().size());
 

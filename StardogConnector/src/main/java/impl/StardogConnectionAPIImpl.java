@@ -9,13 +9,15 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.openrdf.query.TupleQueryResult;
+
 import org.openrdf.model.Resource;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResult;
-import org.openrdf.rio.RDFFormat;
+//import org.openrdf.rio.RDFFormat;
+//import com.complexible.common.rdf.model.Values;
 
-import com.complexible.common.rdf.model.Values;
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
@@ -27,6 +29,14 @@ import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 
 import api.StardogConnectionAPI;
 import api.exceptions.NoConnectionToStardogServerException;
+
+import com.stardog.stark.IRI;
+import com.stardog.stark.Values;
+import com.stardog.stark.io.RDFFormats;
+import com.stardog.stark.query.SelectQueryResult;
+
+import com.complexible.common.openrdf.query.ForwardingTupleQueryResult;
+
 
 public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 
@@ -49,7 +59,7 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 
 		connection.begin();
 		// declare the transaction
-		connection.add().io().format(RDFFormat.RDFXML).stream(new FileInputStream(pathToData));
+		connection.add().io().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToData));
 		// and commit the change
 		connection.commit();
 	}
@@ -61,10 +71,10 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 			throw new NoConnectionToStardogServerException();
 		}
 		
-		Resource context = Values.iri(namedGraph);
+		IRI context = Values.iri(namedGraph);
 		connection.begin();
 		// declare the transaction
-		connection.add().io().context(context).format(RDFFormat.RDFXML).stream(new FileInputStream(pathToData));
+		connection.add().io().context(context).format(RDFFormats.RDFXML).stream(new FileInputStream(pathToData));
 		// and commit the change
 		connection.commit();
 	}
@@ -93,7 +103,7 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 					.connect()) {
 
 				if (!aConn.list().contains(this.databaseName)) {
-					aConn.disk(this.databaseName).create();
+					aConn.newDatabase(this.databaseName).create();
 				}
 			}
 
@@ -120,7 +130,7 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 					.connect()) {
 
 				if (!aConn.list().contains(this.databaseName)) {
-					aConn.disk(this.databaseName).create();
+					aConn.newDatabase(this.databaseName).create();
 				}
 			}
 
@@ -161,17 +171,20 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 
 		SelectQuery selectQuery = connection.select(query);
 		selectQuery.limit(SelectQuery.NO_LIMIT);
-		TupleQueryResult tupleQueryResult = selectQuery.execute();
+		TupleQueryResult tupleQueryResult = (TupleQueryResult) selectQuery.execute();
+		//SelectQueryResult selectQueryResult = selectQuery.execute();
 
 		QueryResultSet resultSet = new QueryResultSet();
 
 		while (tupleQueryResult.hasNext()) {
-			BindingSet next = tupleQueryResult.next();
+			org.openrdf.query.BindingSet next = tupleQueryResult.next();
 			QueryResult result = new QueryResult();
+			
 			for (String bindingName : tupleQueryResult.getBindingNames()) {
 				Binding binding = next.getBinding(bindingName);
 				result.addResultTuple(bindingName, binding.getValue().stringValue());
 			}
+			
 			resultSet.addResult(result);
 		}
 		
@@ -189,7 +202,7 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 	
 	public Model getModelFromContext(String context) {
 		try {
-			connection.export().context(Values.iri(context)).format(RDFFormat.RDFXML).to(new FileOutputStream(new File("./tmp.owl")));
+			connection.export().context(Values.iri(context)).format(RDFFormats.RDFXML).to(new FileOutputStream(new File("./tmp.owl")));
 		} catch (StardogException | FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

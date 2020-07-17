@@ -12,13 +12,14 @@ import org.openrdf.model.IRI;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.query.resultio.QueryResultIO;
-import org.openrdf.query.resultio.UnsupportedQueryResultFormatException;
+//import org.openrdf.query.resultio.QueryResultIO;
+//import org.openrdf.query.resultio.UnsupportedQueryResultFormatException;
 import org.openrdf.rio.RDFFormat;
 //import org.openrdf.rio.Rio;
 
 import com.complexible.common.openrdf.vocabulary.FOAF;
-import com.complexible.common.rdf.model.StardogValueFactory.RDF;
+//import com.complexible.common.rdf.model.StardogValueFactory.RDF;
+import org.openrdf.model.vocabulary.RDF;
 import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
@@ -29,8 +30,16 @@ import com.complexible.stardog.api.ConnectionPoolConfig;
 import com.complexible.stardog.api.SelectQuery;
 import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
+import com.complexible.stardog.reasoning.blackout.UnsupportedQueryException;
+import com.stardog.stark.Resource;
 
-import com.complexible.common.rdf.model.Values;
+//import com.complexible.common.rdf.model.Values;
+
+//import com.stardog.stark.IRI;
+import com.stardog.stark.Values;
+import com.stardog.stark.io.RDFFormats;
+import com.stardog.stark.query.SelectQueryResult;
+import com.stardog.stark.vocabs.RDFS;
 
 /**
  * Beispiel aus: https://github.com/stardog-union/stardog-examples/tree/develop/weblog/stardog-client
@@ -58,20 +67,20 @@ public class ConnectionExample {
 			System.err.println("Not able to add data");
 		}
 		
-		try {
-			queryData(connectionPool);
-		} catch (TupleQueryResultHandlerException | QueryEvaluationException | UnsupportedQueryResultFormatException
-				| IOException e) {
-			System.err.println("Not able to query data");
-		}
-		
-		try {
-			addDataProgrammatically(connectionPool);
-		} catch (TupleQueryResultHandlerException | QueryEvaluationException | UnsupportedQueryResultFormatException
-				| IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Not able to add data");
-		}
+//		try {
+//			queryData(connectionPool);
+//		} catch (TupleQueryResultHandlerException | QueryEvaluationException | UnsupportedQueryResultFormatException
+//				| IOException e) {
+//			System.err.println("Not able to query data");
+//		}
+//		
+//		try {
+//			addDataProgrammatically(connectionPool);
+//		} catch (TupleQueryResultHandlerException | QueryEvaluationException | UnsupportedQueryResultFormatException
+//				| IOException e) {
+//			// TODO Auto-generated catch block
+//			System.err.println("Not able to add data");
+//		}
 		
 		releaseConnection(connectionPool, connectionPool.obtain());
 		connectionPool.shutdown();
@@ -112,45 +121,45 @@ public class ConnectionExample {
 		Connection connection = connectionPool.obtain();
 		connection.begin();
 		// declare the transaction
-		connection.add().io().format(RDFFormat.N3).stream(new FileInputStream("src/main/resources/example_data.rdf"));
+		connection.add().io().format(RDFFormats.N3).stream(new FileInputStream("src/main/resources/example_data.rdf"));
 		// and commit the change
 		connection.commit();
 	}
 
-	public static void queryData(ConnectionPool connectionPool) throws TupleQueryResultHandlerException, QueryEvaluationException, UnsupportedQueryResultFormatException, IOException {
+	public static void queryData(ConnectionPool connectionPool) throws TupleQueryResultHandlerException, QueryEvaluationException, UnsupportedQueryException, IOException {
 		
 		Connection connection = connectionPool.obtain();
 		SelectQuery query = connection.select("PREFIX foaf:<http://xmlns.com/foaf/0.1/> select * { ?s rdf:type foaf:Person }");
-		TupleQueryResult tupleQueryResult = query.execute();
-		QueryResultIO.writeTuple(tupleQueryResult, TextTableQueryResultWriter.FORMAT, System.out);
+		TupleQueryResult tupleQueryResult = (TupleQueryResult) query.execute();
+	//	QueryResultIO.writeTuple(tupleQueryResult, TextTableQueryResultWriter.FORMAT, System.out);
 		
 	}
-	
-	public static void addDataProgrammatically(ConnectionPool connectionPool) throws TupleQueryResultHandlerException, QueryEvaluationException, UnsupportedQueryResultFormatException, IOException {
-		// first start a transaction - This will add
-		// Tony Stark A.K.A Iron Man to the database
-		Connection connection = connectionPool.obtain();
-		connection.begin();
-		// declare the transaction
-		
-		IRI ironMan = Values.iri(NS, "ironMan");
-		IRI batman = Values.iri(NS,"batman");
-		
-		connection.add()
-		        .statement(ironMan, RDF.TYPE, FOAF.ontology().Person)
-		        .statement(ironMan, FOAF.ontology().name, Values.literal("Anthony Edward Stark"))
-		        .statement(ironMan, FOAF.ontology().title, Values.literal("Iron Man"))
-		        .statement(ironMan, FOAF.ontology().givenName, Values.literal("Anthony"))
-		        .statement(ironMan, FOAF.ontology().familyName, Values.literal("Stark"))
-		        .statement(ironMan, FOAF.ontology().knows, batman);
-
-		// and commit the change
-		connection.commit();
-		
-		SelectQuery query = connection.select("PREFIX foaf:<http://xmlns.com/foaf/0.1/> select * { ?s rdf:type foaf:Person }");
-		TupleQueryResult tupleQueryResult = query.execute();
-		QueryResultIO.writeTuple(tupleQueryResult, TextTableQueryResultWriter.FORMAT, System.out);
-	}
+//	
+//	public static void addDataProgrammatically(ConnectionPool connectionPool) throws TupleQueryResultHandlerException, QueryEvaluationException, UnsupportedQueryResultFormatException, IOException {
+//		// first start a transaction - This will add
+//		// Tony Stark A.K.A Iron Man to the database
+//		Connection connection = connectionPool.obtain();
+//		connection.begin();
+//		// declare the transaction
+//		
+//		Resource ironMan = Values.iri(NS, "ironMan");
+//		Resource batman = Values.iri(NS,"batman");
+//		
+//		connection.add()
+//		        .statement(ironMan, RDF.TYPE, FOAF.ontology().Person.)
+//		        .statement(ironMan, FOAF.ontology().name, Values.literal("Anthony Edward Stark"))
+//		        .statement(ironMan, FOAF.ontology().title, Values.literal("Iron Man"))
+//		        .statement(ironMan, FOAF.ontology().givenName, Values.literal("Anthony"))
+//		        .statement(ironMan, FOAF.ontology().familyName, Values.literal("Stark"))
+//		        .statement(ironMan, FOAF.ontology().knows, batman);
+//
+//		// and commit the change
+//		connection.commit();
+//		
+//		SelectQuery query = connection.select("PREFIX foaf:<http://xmlns.com/foaf/0.1/> select * { ?s rdf:type foaf:Person }");
+//		TupleQueryResult tupleQueryResult = query.execute();
+//		QueryResultIO.writeTuple(tupleQueryResult, TextTableQueryResultWriter.FORMAT, System.out);
+//	}
 	
 	public static void releaseConnection(ConnectionPool connectionPool, Connection connection) {
         try {
