@@ -6,6 +6,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="test" value="true"/>
@@ -19,7 +24,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -30,12 +35,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
-<<<<<<< HEAD
-	<classpathentry kind="lib" path="stanford-english-corenlp-2018-02-27-models.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.architecture.cnl"/>
-=======
-	<classpathentry combineaccessrules="false" kind="src" path="/org.architecture.cnl.ide"/>
-	<classpathentry kind="lib" path="stanford-english-corenlp-2018-02-27-models.jar"/>
->>>>>>> 4a902a153bc7b8aac137e685b16e155254263f72
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -15,11 +15,7 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
 
-<<<<<<< HEAD
 import org.architecture.cnl.CNL2OWLGenerator;
-=======
-import org.architecture.cnl.ide.CNL2OWLGenerator;
->>>>>>> 4a902a153bc7b8aac137e685b16e155254263f72
 
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
