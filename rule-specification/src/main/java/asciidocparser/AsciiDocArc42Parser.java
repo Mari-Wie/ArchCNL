@@ -1,6 +1,8 @@
 package asciidocparser;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -103,32 +105,40 @@ public class AsciiDocArc42Parser
                 rule.setCnlSentence(line);
                 ArchitectureRules rules = ArchitectureRules.getInstance();
                 rules.addRule(rule, id);
+                LOG.info("Rule added");
                 id++;
-                LOG.debug("Rule added");
 
-                
-                try
+                File f = new File(rulePath);
+                try 
                 {
                     ontologyPaths.add(ontologyPath);
                     
-                    File f = new File(rulePath);
+                    //File f = new File(rulePath);
                     FileUtils.writeStringToFile(f, line + "\n", (Charset) null,
                             true);
-                    
                     rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath);
-                    LOG.debug("Ended addRuleWithPathToConstraint");
+                    LOG.info("Ended addRuleWithPathToConstraint");
                     
                     generator.transformCNLFile(rulePath);
-                    LOG.debug("Rule transformed to OWL: "+rulePath);
+                    LOG.info("Rule transformed to OWL: "+rulePath);
 
-                    f.delete();
+                    //f.delete();
                 }
                 catch (IOException e)
                 {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                    LOG.error("IOException: "+e.toString());
+                    LOG.error("IOException while processing tmp_"+id+".architecture: "+e.toString());
                 }
+                finally
+                {	// Relicts of tmp_{id}.architecture create ExecutionErrors due to  
+                    // NullPointerExceptions in transform CNLFile.
+                	if (f.exists()) 
+                	{
+                		f.delete();
+                	}
+                }
+                
                 id_for_file++;
             }
         }
