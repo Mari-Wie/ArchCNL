@@ -11,7 +11,7 @@ public class ArchitectureRule {
     // Ruletype war immer NULL und wird im Code nicht gesetzt (nur in 
 	// conformancecheck.StartUp.main(), die nicht aufgerufen wird, 
 	// daher RuleType hier auf Default = Existential gesetzt.
-	private RuleType type = RuleType.EXISTENTIAL; 
+	private RuleType type; //=RuleType.EXISTENTIAL; 
 	
 	@SuppressWarnings("unused")
 	private String stardogConstraint;

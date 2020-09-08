@@ -28,7 +28,7 @@ public class ArchitectureRules {
 	}
 
 	public void addRule(ArchitectureRule r, int id) {
-        LOG.trace("\n -- AddRule --------------------- \n"+r.toString());
+        LOG.info("\n -- AddRule --------------------- \n"+r.toString());
 		rules.put(r, id);
 	}
 	
