@@ -1,5 +1,9 @@
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;   
 
 import api.ExecuteMappingAPI;
 import api.ExecuteMappingAPIFactory;
@@ -36,7 +40,7 @@ public class CNLToolchain
     private String server;
     
     /**
-     * Konstruktur für CNLToolchain
+     * Konstruktur fï¿½r CNLToolchain
      * 
      * Zugriffe auf 
      * - Stardog-API
@@ -57,27 +61,27 @@ public class CNLToolchain
     /**
      * Zentrale Methode zum Aufrufen des gesamten ConformanceChecking-Ablaufs
      * 
-     * Alle Parameter werden hier gesetzt (Bisher werden keine Parameter übergeben)
+     * Alle Parameter werden hier gesetzt (Bisher werden keine Parameter ï¿½bergeben)
      * Eine CNLToolchain-Insatz wird erstellt.
-     * Die execute()-Methode zur Durchfürhung des ConformanceChecks eird aufgerufen
+     * Die execute()-Methode zur Durchfï¿½rhung des ConformanceChecks eird aufgerufen
      * 
      * Diese Parameter sind:
      * - database 		Name der Stardog-DB
-     * - server 		localhost und Port für den Zugriff auf die DB-Instanz
-     * - context 		noch zu klären
-     * - projectPath	Projektpfad des zu überprüfenden Projekts
+     * - server 		localhost und Port fï¿½r den Zugriff auf die DB-Instanz
+     * - context 		noch zu klï¿½ren
+     * - projectPath	Projektpfad des zu ï¿½berprï¿½fenden Projekts
      * - rulesFile 		Name des Asciidoc-Files mit Regeln und Mappings
      * 
      * @param args
      */
     public static void main(String[] args)
     {    	 
-    	// TODO: Parameter von aussen übergeben (z.B. über Parameter-File)
+    	// TODO: Parameter von aussen uebergeben (z.B. ueber Parameter-File)
         LOG.info("Initializing ...");
-        String database = "MWTest11";
+        String database = "MWTest_"+createTimeSuffix();  
         String server =  "http://localhost:5820";
         String context = "http://graphs.org/" + database + "/1.0";
-        String projectPath = "C:\\WORK\\GitHub\\Mari-Wie\\ArchCNL_Testprojekt\\OnionArchitectureDemo_version1\\";
+        String projectPath = "C:\\WORK\\GitHub\\Mari-Wie\\ArchCNL\\OnionArchitectureDemo\\";
         String rulesFile = projectPath + "architecture-documentation-onion.adoc";
         LOG.info("Database     : "+database);
         LOG.info("Server       : "+server);
@@ -109,6 +113,13 @@ public class CNLToolchain
             e.printStackTrace();
         }
     }
+
+	private static String createTimeSuffix() {
+		Date date = Calendar.getInstance().getTime();  
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");  
+        String strDate = dateFormat.format(date);
+		return strDate;
+	}
     
     
     public void execute(String docPath, String sourceCodePath, String context)
@@ -165,7 +176,7 @@ public class CNLToolchain
             .keySet())
         {
         	LOG.info("conformance checking rule: " + rule.getCnlSentence());
-        	// TODO: rule hat offenbar keinen Type .... Recherche hier fortführen!
+        	// TODO: rule hat offenbar keinen Type .... Recherche hier fortfuehren!
         //	LOG.info("conformance checking rule: " + rule.getType().toString());
             check.storeArchitectureRule(rule);
             check.validateRule(rule, db, context);
