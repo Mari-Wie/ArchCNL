@@ -1,5 +1,5 @@
-# cnl-verify
-Verify your rules defined with the CNL against the source code.
+# conformance-checking
+Conformance-checking of your rules defined with the CNL against the source code.
 
 - all conformance checking results that have been performed are stored as ontologies
 - the evolution of architecture violations can be tracked
