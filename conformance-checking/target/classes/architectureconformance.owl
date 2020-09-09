@@ -6,11 +6,16 @@
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+  
+    <owl:Ontology rdf:about="http://arch-ont.org/ontologies/architectureconformance.owl"/>
+    
+<!-- This part of the native implemantation led to an error message without any impact 
+	 on the execution fo the programm. Commenting removed this error message.
+
     <owl:Ontology rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance">
         <owl:imports rdf:resource="http://www.arch-ont.org/ontologies/git.owl"/>
     </owl:Ontology>
-    
-
+ -->   
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
