@@ -5,3 +5,7 @@ Conformance-checking of your rules defined with the CNL against the source code.
 - the evolution of architecture violations can be tracked
 - using SPARQL former results can be queried
 - results of queries can be integrated into documentation for architecture reviews
+
+This Repository comprises:
+* conformance-checking
+* StardogConnector
