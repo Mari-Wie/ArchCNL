@@ -22,3 +22,6 @@ This Repository comprises:
 
 # architecture-to-code-mapper
 Maps the architecture concepts and relations to source code elements. Mapping rules are specified as SWRL rules. The mapping is performed using rule-based reasoning.
+
+# cnl-documentation
+Integrates CNL in well-known architecture documentation templates in an asciidoc format, e.g. arc42 and architecture decision records (ADR). 
