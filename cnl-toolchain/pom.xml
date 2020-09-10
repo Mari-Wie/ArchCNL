@@ -10,19 +10,9 @@
 	<properties>
 	   <maven.compiler.source>1.8</maven.compiler.source>
 	   <maven.compiler.target>1.8</maven.compiler.target>
-		<mvn_repo>C:\Users\Marion Wiese\.m2\repository</mvn_repo>
 	</properties>
 		
 	<dependencies>
-
-		<dependency>
-			<groupId>de.uni-hamburg.ArchCNL</groupId>
-			<artifactId>jena-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${mvn_repo}\jena-api-0.0.1-SNAPSHOT.jar</systemPath>
-		</dependency>
-		
 		<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
 		<dependency>
 			<groupId>com.google.inject</groupId>

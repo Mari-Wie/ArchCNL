@@ -63,9 +63,5 @@
 			<artifactId>org.eclipse.xtext.xbase.ide</artifactId>
 			<version>${xtextVersion}</version>
 		</dependency>
-		<dependency>
-			<groupId>de.uni-hamburg.ArchCNL</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
 	</dependencies>
 </project>

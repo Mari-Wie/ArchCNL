@@ -202,11 +202,5 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
         </dependency>
-        
-        
-		<dependency>
-			<groupId>de.uni-hamburg.ArchCNL</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
 	</dependencies>
 </project>

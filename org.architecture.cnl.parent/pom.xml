@@ -11,7 +11,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<mvn_repo>C:\Users\Marion Wiese\.m2\repository</mvn_repo>
 	</properties>
 	
 	<modules>
@@ -29,13 +28,6 @@
 				<scope>import</scope>
 			</dependency>	
 		
-			<dependency>
-				<groupId>de.uni-hamburg.ArchCNL</groupId>
-				<artifactId>common</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-				<scope>system</scope>
-				<systemPath>${mvn_repo}\common-0.0.1-SNAPSHOT.jar</systemPath>
-			</dependency>
 			<dependency>
 				<groupId>org.apache.jena</groupId>
 				<artifactId>apache-jena-libs</artifactId>
