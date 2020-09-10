@@ -1,0 +1,139 @@
+grammar org.architecture.cnl.Archcnl with org.eclipse.xtext.common.Terminals
+
+generate archcnl "http://www.architecture.org/cnl/Archcnl"
+
+Model:
+	sentence+=Sentence*;
+
+Sentence:
+	('Every' subject=ConceptExpression ruletype=(MustRuleType|CanOnlyRuleType|CardinalityRuleType|SubConceptRuleType) |
+	ruletype=(OnlyCanRuleType | ConditionalRuleType | NegationRuleType) |
+	facts+=FactStatement) 
+;
+
+
+NegationRuleType:
+	Nothing | ('No' subject=ConceptExpression 'can' object=Object) '.'
+;
+
+Anything:
+	relation=Relation 'anything'
+;
+
+Nothing:
+	'Nothing' 'can' object=Object '.'
+;
+
+ConditionalRuleType:
+	start='If' subject=ConceptExpression relation=Relation object=ConceptExpression ',' 'then' 'it' 'must' relation2=Relation 'this' object2=ConceptExpression '.'
+;
+
+OnlyCanRuleType:
+	start='Only' subject=ConceptExpression 'can' object=Object '.'
+;
+
+SubConceptRuleType:
+	modifier='must' 'be' object=ConceptExpression '.'
+;
+
+MustRuleType:
+	modifier='must' object=Object'.'
+;
+
+Object:
+	(anything=Anything) | (expression=ObjectConceptExpression (objectAndList+=AndObjectConceptExpression|objectOrList+=OrObjectConceptExpression)*)
+;
+
+CanOnlyRuleType:
+	modifier='can-only' object=Object '.'
+;
+
+//TODO: must anstatt can. Problem: Konflikt mit MustRuleType
+CardinalityRuleType:
+	modifer='can' object=Object '.'
+;
+
+ObjectConceptExpression:
+	(relation=Relation (cardinality=('at-most'|'at-least'|'exactly') number=INT)? concept=ConceptExpression) | (relation=DatatypeRelation data=DataStatement) 
+;
+
+AndObjectConceptExpression:
+	'and' expression=ObjectConceptExpression
+;
+
+OrObjectConceptExpression:
+	'or' expression=ObjectConceptExpression
+;
+
+
+Relation:
+	ObjectRelation | DatatypeRelation 
+;
+
+DatatypeRelation:
+	relationName=RELATION_NAME 'equal-to' 
+;
+
+ObjectRelation:
+	relationName=RELATION_NAME
+;
+
+ConceptExpression:
+	('a'|'an')? concept=Concept that+=ThatExpression* 
+;
+
+ThatExpression:
+	'that' '(' list+=StatementList+ ')'
+;
+
+StatementList:
+	('and')? (relation=Relation (expression=ConceptExpression | expression=DataStatement | expression=VariableStatement))
+;
+
+
+VariableStatement:
+	concept=Concept variable=Variable
+;
+
+DataStatement:
+	stringValue=STRING | intValue=INT
+;
+
+FactStatement:
+	(assertion=ConceptAssertion | assertion=RoleAssertion) '.'
+	
+;
+
+ConceptAssertion:
+	individual=NAME 'is' ('a'|'an') concept=Concept '.'
+;
+
+RoleAssertion:
+	ObjectPropertyAssertion | DatatypePropertyAssertion '.'
+	
+;
+
+DatatypePropertyAssertion:
+	individual=NAME relation=DatatypeRelation (string=STRING|int=INT)
+;
+
+ObjectPropertyAssertion:
+	individual=NAME relation=Relation ('a'|'an') concept=Concept 
+;
+
+terminal RELATION_NAME:
+	('a'..'z')(('A'..'Z')|('a'..'z'))+;
+
+terminal NAME:
+	('A'..'Z') (('A'..'Z') | ('a'..'z'))+;
+	
+Concept:
+	conceptName=NAME;
+	
+Variable:
+	name=VARIABLE_NAME;
+
+terminal VARIABLE_NAME:
+	('A'..'Z')
+;
+
