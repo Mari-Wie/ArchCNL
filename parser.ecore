@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="parser" nsURI="http:///parser.ecore" nsPrefix="parser">
+  <eClassifiers xsi:type="ecore:EClass" name="FamixOntologyTransformer" eSuperTypes="cnltoolchain.ecore#//core/AbstractOwlifyComponent">
+    <eAnnotations source="duplicates">
+      <contents xsi:type="ecore:EOperation" name="transform" ordered="false" lowerBound="1">
+        <eAnnotations source="redefines" references="cnltoolchain.ecore#//core/OwlifyComponent/transform cnltoolchain.ecore#//core/AbstractOwlifyComponent/%duplicates%/transform"/>
+      </contents>
+    </eAnnotations>
+    <eOperations name="_init" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <details key="originalName" value="&lt;init>"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaParserDelegator" eSuperTypes="cnltoolchain.ecore#//java/lang/Object">
+    <eOperations name="_init" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <details key="originalName" value="&lt;init>"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getCompilationUnitFromFilePath" ordered="false" lowerBound="1"
+        eType="ecore:EClass cnltoolchain.ecore#//com/github/javaparser/ast/CompilationUnit">
+      <eParameters name="path" ordered="false" lowerBound="1" eType="ecore:EClass cnltoolchain.ecore#//java/lang/String"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProgrammingLanguage" eSuperTypes="cnltoolchain.ecore#//java/lang/Enum">
+    <eOperations name="getFileExtensionWildCard" ordered="false" lowerBound="1" eType="ecore:EClass cnltoolchain.ecore#//java/lang/String">
+      <eParameters name="language" ordered="false" lowerBound="1" eType="#//ProgrammingLanguage"/>
+    </eOperations>
+    <eOperations name="values" ordered="false" lowerBound="1" eType="#//ProgrammingLanguage.1"/>
+    <eOperations name="valueOf" ordered="false" lowerBound="1" eType="#//ProgrammingLanguage">
+      <eParameters name="arg0" ordered="false" lowerBound="1" eType="ecore:EClass cnltoolchain.ecore#//java/lang/String"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="java" ordered="false" lowerBound="1"
+        eType="#//ProgrammingLanguage" changeable="false">
+      <eAnnotations source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <details key="originalName" value="JAVA"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProgrammingLanguage">
+    <eAnnotations source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <details key="originalName" value="ProgrammingLanguage[]"/>
+    </eAnnotations>
+    <eAnnotations source="Jar2UML">
+      <details key="inferred" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaParserDelegatorTest" eSuperTypes="cnltoolchain.ecore#//java/lang/Object">
+    <eOperations name="_init" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <details key="originalName" value="&lt;init>"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="initialize" ordered="false" lowerBound="1"/>
+    <eOperations name="testDelegatorReturnCompilationUnitThatIsNotNull" ordered="false"
+        lowerBound="1"/>
+    <eOperations name="testDelegatorThrowsExceptionForNonJavaFiles" ordered="false"
+        lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thrown" ordered="false"
+        lowerBound="1" eType="ecore:EClass cnltoolchain.ecore#//org/junit/rules/ExpectedException"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

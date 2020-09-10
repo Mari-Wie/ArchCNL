@@ -34,4 +34,8 @@ Comprises
 - jens-api packages, that use the NLPfunctionality of the stanford-nlp project (nd by this everything that has former been in repositoryjens-api).
 
 # cnl-common
-Repository with common datatypes for the cnl toolchain. 
+Repository with common datatypes for the cnl toolchain.
+
+# cnl-toolchain
+Combines all components that are necessary for performing conformance checking to a toolchain. 
+Toolchain will be started in this project.
