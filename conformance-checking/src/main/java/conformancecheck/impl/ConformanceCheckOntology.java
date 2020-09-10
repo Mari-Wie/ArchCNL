@@ -106,7 +106,7 @@ public class ConformanceCheckOntology
 		DatatypeProperty datatypeProperty = ConformanceCheckOntologyClassesAndProperties.getHasRuleTypeProperty(model);
 		architectureRuleIndividual.addLiteral(datatypeProperty, ruleType);
 
-		LOG.info("architectureRuleIndividual hinzugefügt");
+		LOG.info("architectureRuleIndividual hinzugefÃ¼gt");
 		// violation.getNotInferredSubjectName();
 		// violation.getNotInferredObjectName();
 

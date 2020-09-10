@@ -6,6 +6,12 @@
 	<artifactId>org.architecture.cnl.parent</artifactId>
 	<packaging>pom</packaging>
 
+	<parent>
+		<groupId>org.archcnl</groupId>
+		<artifactId>archcnl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
 	<properties>
 		<xtextVersion>2.22.0</xtextVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

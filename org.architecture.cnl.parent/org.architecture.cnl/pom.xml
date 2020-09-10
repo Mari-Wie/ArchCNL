@@ -202,5 +202,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>owl-wrapper</groupId>
+			<artifactId>jena-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

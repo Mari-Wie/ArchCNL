@@ -115,7 +115,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 					if (currentUnitIndividual != null) {
 						// Einige Aufrufe sind aufgrund von Effizienz-Steigerung auskommentiert. Wenn
 						// etwas auskommentiert ist, werden diese Informationen auch aus dem Code
-						// extrahiert und auf Basis dieser Codeinformationen können dann auch keine
+						// extrahiert und auf Basis dieser Codeinformationen kÃ¶nnen dann auch keine
 						// Verletzungen gefunden werden.
 						unit.accept(new InheritanceVisitor(ontology, currentUnitIndividual), null);
 						unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
