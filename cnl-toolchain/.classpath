@@ -26,7 +26,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/famix-parser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/owlify-main"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/StardogConnector"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/architecture-reasoning"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/conformance-checking"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/conformancechecking-documentation"/>
@@ -37,5 +36,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/stardog-wrapper"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
