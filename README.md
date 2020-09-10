@@ -19,3 +19,6 @@ Conformance-checking of your rules defined with the CNL against the source code.
 This Repository comprises:
 * conformance-checking
 * StardogConnector
+
+# architecture-to-code-mapper
+Maps the architecture concepts and relations to source code elements. Mapping rules are specified as SWRL rules. The mapping is performed using rule-based reasoning.
