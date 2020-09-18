@@ -1,0 +1,305 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:j.0="http://arch-ont.org/ontologies/javacodeontology.owl#"
+    xmlns="http://www.arch-ont.org/ontologies/architecture.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:j.1="http://www.w3.org/1999/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <owl:Ontology rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl">
+    <owl:imports rdf:resource="http://arch-ont.org/ontologies/main.owl"/>
+  </owl:Ontology>
+  <owl:Ontology rdf:about="http://www.arch-ont.org/ontologies/architecture.owl"/>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#EnumType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#DBType">
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:complementOf>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#LogicType"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#use"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:complementOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#AnnotationType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#PrimitiveType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaInterface">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#LocalVariable">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Constructor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClassDefinitionFile">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#VoidType">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#LogicType">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#DBType"/>
+        <owl:onProperty rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#use"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Parameter">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Method">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaPackage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Field">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#ParameterizedType">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#ParameterizableClass">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#hasParameter">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Method"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Parameter"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#declaresMethod">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Method"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isDependencyOf">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isDeclaredBy">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#definesField">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Field"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#definesLocalVariable">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Method"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#LocalVariable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#extends">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#throws">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#packageContains">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaPackage"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#AnnotationType"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#EnumType"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaPackage"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#ParameterizableClass"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isThrownBy"/>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#hasDeclaredType">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Field"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#LocalVariable"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Method"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Parameter"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#ParameterizedType"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#PrimitiveType"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#VoidType"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#dependsOn">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <owl:inverseOf rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#isDependencyOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#implements">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isAbstract"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#hasName">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaCodeEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#hasModifier">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Field"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#LocalVariable"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Method"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isAnnotatedWith">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isInterface">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#hasSourceCode"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#isExternal">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <j.1:xhtmlhtml>
+    <j.1:xhtmlhead>
+      <j.1:xhtmltitle/>
+    </j.1:xhtmlhead>
+  </j.1:xhtmlhtml>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#AnnotationType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#EnumType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaInterface"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#ParameterizedType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#PrimitiveType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#VoidType"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Constructor"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Field"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaPackage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#LocalVariable"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Method"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Parameter"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <j.0:JavaPackage rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#JavaPackage0">
+    <j.0:hasName></j.0:hasName>
+  </j.0:JavaPackage>
+  <j.0:JavaClass rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#AnyType0">
+    <j.0:hasSourceCode>public class AnyType {&#xD;
+}&#xD;
+</j.0:hasSourceCode>
+    <j.0:hasName>AnyType</j.0:hasName>
+    <j.0:hasModifier>public</j.0:hasModifier>
+    <j.0:isDependencyOf>
+      <LogicType rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#PersonLogic3">
+        <use rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#AnyType0"/>
+        <j.0:hasName>PersonLogic</j.0:hasName>
+        <j.0:isDependencyOf>
+          <DBType rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#PersonDB1">
+            <use rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#PersonLogic3"/>
+            <use>
+              <j.0:JavaClass rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Serializable2">
+                <j.0:hasName>Serializable</j.0:hasName>
+                <j.0:isExternal>true</j.0:isExternal>
+              </j.0:JavaClass>
+            </use>
+            <j.0:hasSourceCode>import java.io.Serializable;&#xD;
+&#xD;
+public class PersonDB implements Serializable {&#xD;
+&#xD;
+    private PersonLogic logic;&#xD;
+}&#xD;
+</j.0:hasSourceCode>
+            <j.0:hasName>PersonDB</j.0:hasName>
+            <j.0:hasModifier>public</j.0:hasModifier>
+            <j.0:implements rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Serializable2"/>
+            <j.0:dependsOn rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#PersonLogic3"/>
+            <j.0:definesField>
+              <j.0:Field rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Field1">
+                <j.0:hasDeclaredType rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#PersonLogic3"/>
+                <j.0:hasName>logic</j.0:hasName>
+                <j.0:hasSourceCode>private PersonLogic logic;</j.0:hasSourceCode>
+                <j.0:hasModifier>private</j.0:hasModifier>
+              </j.0:Field>
+            </j.0:definesField>
+            <j.0:dependsOn rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#Serializable2"/>
+            <rdf:type rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+          </DBType>
+        </j.0:isDependencyOf>
+        <j.0:hasModifier>public</j.0:hasModifier>
+        <j.0:dependsOn rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#AnyType0"/>
+        <j.0:definesField>
+          <j.0:Field rdf:about="http://arch-ont.org/ontologies/javacodeontology.owl#Field2">
+            <j.0:hasDeclaredType rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#AnyType0"/>
+            <j.0:hasName>type</j.0:hasName>
+            <j.0:hasSourceCode>// private PersonDB db2;&#xD;
+private AnyType type;</j.0:hasSourceCode>
+            <j.0:hasModifier>private</j.0:hasModifier>
+          </j.0:Field>
+        </j.0:definesField>
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/javacodeontology.owl#JavaClass"/>
+      </LogicType>
+    </j.0:isDependencyOf>
+    <j.0:isExternal>true</j.0:isExternal>
+  </j.0:JavaClass>
+</rdf:RDF>
