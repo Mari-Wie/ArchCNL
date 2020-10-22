@@ -1,32 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>architecture</groupId>
 	<artifactId>history-parser</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<properties>
-	   <maven.compiler.source>1.8</maven.compiler.source>
-	   <maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-	
-	<dependencies>
+	<parent>
+		<groupId>org.archcnl</groupId>
+		<artifactId>archcnl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
+	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit -->
 		<dependency>
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
 			<version>5.0.2.201807311906-r</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
 			<type>pom</type>
 			<version>3.2.0</version>
 		</dependency>
-
 	</dependencies>
-
 </project>
