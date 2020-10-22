@@ -19,11 +19,5 @@
 			<type>pom</type>
 			<version>${apachejenaVersion}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-core -->
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-core</artifactId>
-			<version>3.6.0</version>
-		</dependency>
 	</dependencies>
 </project>
