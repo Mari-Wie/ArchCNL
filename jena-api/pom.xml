@@ -12,11 +12,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<xtextVersion>2.22.0</xtextVersion>
-		<mwe2Version>2.11.3</mwe2Version>
-	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -51,25 +46,25 @@
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
-			<version>3.9.2</version>
+			<version>${stanfordnlpVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
-			<version>3.9.2</version>
+			<version>${stanfordnlpVersion}</version>
 			<classifier>models</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
 			<type>pom</type>
-			<version>3.4.0</version>
+			<version>${apachejenaVersion}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>owlapi-distribution</artifactId>
-			<version>5.1.0</version>
+			<version>${owlapiVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>

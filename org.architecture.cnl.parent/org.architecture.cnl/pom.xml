@@ -171,6 +171,7 @@
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>org.eclipse.emf.mwe2.launch</artifactId>
 			<optional>true</optional>
+			<version>${mwe2Version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
@@ -180,26 +181,31 @@
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
+			<version>${stanfordnlpVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
 			<classifier>models</classifier>
+			<version>${stanfordnlpVersion}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>owlapi-distribution</artifactId>
+			<version>${owlapiVersion}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+			<version>${log4jVersion}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
+			<version>${log4jVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>owl-wrapper</groupId>

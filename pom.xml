@@ -11,7 +11,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+		<mwe2Version>2.11.3</mwe2Version>
+		<xtextVersion>2.22.0</xtextVersion>
+        <log4jVersion>2.8.2</log4jVersion>
+        <stanfordnlpVersion>3.9.1</stanfordnlpVersion>
+        <commonsioVersion>2.6</commonsioVersion>
+        <apachejenaVersion>3.2.0</apachejenaVersion>
+        <owlapiVersion>5.1.0</owlapiVersion>
+	</properties>
 
     <modules>
         <module>cnl-toolchain</module>
