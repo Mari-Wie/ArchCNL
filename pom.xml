@@ -16,7 +16,7 @@
         <log4jVersion>2.8.2</log4jVersion>
         <stanfordnlpVersion>3.9.1</stanfordnlpVersion>
         <commonsioVersion>2.6</commonsioVersion>
-        <apachejenaVersion>3.2.0</apachejenaVersion>
+        <apachejenaVersion>3.3.0</apachejenaVersion>
         <owlapiVersion>5.1.0</owlapiVersion>
 	</properties>
 
