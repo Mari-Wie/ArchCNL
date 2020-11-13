@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import api.StardogDatabaseInterface;
 //import api.StardogConnectionAPI;
 import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
@@ -13,7 +14,6 @@ import conformancecheck.api.IConformanceCheck;
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
 import datatypes.RuleType;
-import impl.StardogDatabase;
 import impl.StardogDatabase.StardogDatabaseBuilder;
 
 public class Startup {
@@ -23,7 +23,7 @@ public class Startup {
 		StardogICVAPI icvAPI = injector.getInstance(StardogICVAPI.class);
 
 		try {
-			StardogDatabase db = new StardogDatabaseBuilder().server("http://localhost:5820")
+			StardogDatabaseInterface db = new StardogDatabaseBuilder().server("http://localhost:5820")
 					.databaseName("test-database").userName("admin").password("admin").createStardogDatabase();
 			db.connect();
 			String context = "http://graphs.org/test-database/v1.0";

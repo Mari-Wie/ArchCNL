@@ -25,6 +25,7 @@ import com.stardog.stark.Resource;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
 
+import api.StardogDatabaseInterface;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
 
@@ -32,7 +33,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class StardogDatabase {
+public class StardogDatabase implements StardogDatabaseInterface {
 
 	private static final Logger LOG = LogManager.getLogger(StardogDatabase.class);
 	
@@ -52,6 +53,7 @@ public class StardogDatabase {
 		_password = password;
 	}
 
+	@Override
 	public void connect() {
 
         LOG.info("Start connecting ....");
@@ -84,6 +86,7 @@ public class StardogDatabase {
 		}
 	}
 
+	@Override
 	public void closeConnectionToServer() {
 
 		releaseConnection();
@@ -103,6 +106,7 @@ public class StardogDatabase {
 		}
 	}
 
+	@Override
 	public Model getModelFromContext(String context) {
 		try {
 			Resource resource = Values.iri(context);
@@ -119,18 +123,22 @@ public class StardogDatabase {
 		return model;
 	}
 
+	@Override
 	public String getServer() {
 		return _server;
 	}
 
+	@Override
 	public String getDatabaseName() {
 		return _databaseName;
 	}
 
+	@Override
 	public String getUserName() {
 		return _userName;
 	}
 
+	@Override
 	public String getPassword() {
 		return _password;
 	}
@@ -162,7 +170,7 @@ public class StardogDatabase {
 			return this;
 		}
 
-		public StardogDatabase createStardogDatabase() throws MissingBuilderArgumentException {
+		public StardogDatabaseInterface createStardogDatabase() throws MissingBuilderArgumentException {
 			if (_server != null && _databaseName != null && _userName != null && _password != null) {
 				return new StardogDatabase(_server, _databaseName, _userName, _password);
 			} else {
@@ -173,6 +181,7 @@ public class StardogDatabase {
 
 	}
 
+	@Override
 	public void addDataByRDFFileAsNamedGraph(String pathToData, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException {
 		if (connection == null) {

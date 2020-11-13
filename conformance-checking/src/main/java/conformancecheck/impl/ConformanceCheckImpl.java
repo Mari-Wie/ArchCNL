@@ -11,12 +11,12 @@ import com.google.inject.Inject;
 
 import api.StardogConstraintViolation;
 import api.StardogConstraintViolationsResultSet;
+import api.StardogDatabaseInterface;
 import api.StardogICVAPI;
 import api.exceptions.NoConnectionToStardogServerException;
 import conformancecheck.api.IConformanceCheck;
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
-import impl.StardogDatabase;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +58,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		ontology.storeArchitectureRule(rule);
 	}
 
-	public void validateRule(ArchitectureRule rule, StardogDatabase db, String context) 
+	public void validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context) 
 	{
     	LOG.info("Starting validateRule ...");
 		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule);
@@ -82,7 +82,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		return result;
 	}
 
-	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabase db,
+	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabaseInterface db,
 			String context) 
 	{
     	LOG.info("Starting storeConformanceCheckingResultInDatabaseForRule: " + rule.getCnlSentence());
@@ -127,7 +127,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		
 	}
 
-	public void saveResultsToDatabase(StardogDatabase db, String context)
+	public void saveResultsToDatabase(StardogDatabaseInterface db, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException 
 	{
     	LOG.info("Starting saveResultsToDatabase ...");

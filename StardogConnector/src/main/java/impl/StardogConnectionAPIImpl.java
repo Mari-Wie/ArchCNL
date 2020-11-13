@@ -28,6 +28,7 @@ import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 
 import api.StardogConnectionAPI;
+import api.StardogDatabaseInterface;
 import api.exceptions.NoConnectionToStardogServerException;
 
 import com.stardog.stark.IRI;
@@ -119,7 +120,7 @@ public class StardogConnectionAPIImpl implements StardogConnectionAPI {
 	}
 	
 	@Override
-	public void createConnectionToDatabase(StardogDatabase db) {
+	public void createConnectionToDatabase(StardogDatabaseInterface db) {
 		this.userName = db.getUserName();
 		this.password = db.getPassword();
 		this.databaseName = db.getDatabaseName();

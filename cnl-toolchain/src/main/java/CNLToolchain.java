@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import api.ExecuteMappingAPI;
 import api.ExecuteMappingAPIFactory;
 import api.ReasoningConfiguration;
+import api.StardogDatabaseInterface;
 import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
@@ -81,7 +82,7 @@ public class CNLToolchain
         String database = "MWTest_"+createTimeSuffix();  
         String server =  "http://localhost:5820";
         String context = "http://graphs.org/" + database + "/1.0";
-        String projectPath = "C:\\WORK\\GitHub\\Mari-Wie\\ArchCNL\\OnionArchitectureDemo\\";
+        String projectPath = "/home/user/study/shk-swk/code/OnionArchitectureDemo/";
         String rulesFile = projectPath + "architecture-documentation-onion.adoc";
         LOG.info("Database     : "+database);
         LOG.info("Server       : "+server);
@@ -159,7 +160,7 @@ public class CNLToolchain
 //            .userName("admin")
 //            .password("admin")
 //            .createStardogDatabase();
-        StardogDatabase db = new StardogDatabase(server,databaseName,"admin","admin");
+        StardogDatabaseInterface db = new StardogDatabase(server,databaseName,"admin","admin");
     	LOG.info("Connect to StardogDB ...");
         db.connect();
         

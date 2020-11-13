@@ -13,7 +13,6 @@ import com.complexible.stardog.api.Connection;
 
 import api.exceptions.NoConnectionToStardogServerException;
 import impl.QueryResultSet;
-import impl.StardogDatabase;
 
 public interface StardogConnectionAPI {
 	
@@ -65,5 +64,5 @@ public interface StardogConnectionAPI {
 
 	public Model getModelFromContext(String context);
 
-	public void createConnectionToDatabase(StardogDatabase db);
+	public void createConnectionToDatabase(StardogDatabaseInterface db);
 }
