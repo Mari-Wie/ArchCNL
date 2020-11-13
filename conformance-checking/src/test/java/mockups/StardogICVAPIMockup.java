@@ -1,6 +1,9 @@
 package mockups;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import api.StardogConnectionAPI;
@@ -12,19 +15,28 @@ import api.exceptions.StardogDatabaseDoesNotExist;
 
 public class StardogICVAPIMockup implements StardogICVAPI {
 
+	private Map<String, Map<String, List<String>>> _constraintFilesByDatabaseAndServer = new HashMap<String, Map<String, List<String>>>();
+	
 //	@Override
 //	public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api)
 //			throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException {
 //		// TODO Auto-generated method stub
 //
 //	}
-
-	@Override
-	public void addIntegrityConstraints(String pathToConstraints, String server, String database)
-			throws FileNotFoundException {
-		// TODO Auto-generated method stub
-
-	}
+	
+//	@Override
+//	public void addIntegrityConstraints(String pathToConstraints, String server, String database)
+//			throws FileNotFoundException {
+//		// TODO Auto-generated method stub
+//		if (!_constraintFilesByDatabaseAndServer.containsKey(server)) {
+//			_constraintFilesByDatabaseAndServer.put(server, new HashMap<String, List<String>>());
+//		}
+//		if (!_constraintFilesByDatabaseAndServer.get(server).containsKey(database)) {
+//			_constraintFilesByDatabaseAndServer.get(server).put(database, new ArrayList<String>());
+//		}
+//
+//		_constraintFilesByDatabaseAndServer.get(server).get(database).add(pathToConstraints);
+//	}
 
 	@Override
 	public void explainViolations(String server, String database) {
@@ -77,4 +89,10 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 		return null;
 	}
 
+	
+	public boolean constraintFileHasBeenAddedToServerAndDatabase(String pathToConstraintFile, String server, String database) {
+		return _constraintFilesByDatabaseAndServer.containsKey(server) && 
+				_constraintFilesByDatabaseAndServer.get(server).containsKey(database) &&
+				_constraintFilesByDatabaseAndServer.get(server).get(database).contains(pathToConstraintFile);
+	}
 }

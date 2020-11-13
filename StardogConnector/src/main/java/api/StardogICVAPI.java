@@ -12,7 +12,14 @@ public interface StardogICVAPI {
 	
 	//public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api) throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException;
 
-	public void addIntegrityConstraints(String pathToConstraints, String server, String database) throws FileNotFoundException;
+//	/**
+//	 * Connects to the given database and adds the integrity constraints stored in the specified file to the database.
+//	 * @param pathToConstraints The path to the RDF-file in XML format which stores the integrity constraints to add.
+//	 * @param server The name of the database server to connect to.
+//	 * @param database The name of the database to connect to.
+//	 * @throws FileNotFoundException When the input file cannot be accessed.
+//	 */
+//	public void addIntegrityConstraints(String pathToConstraints, String server, String database) throws FileNotFoundException;
 	
 	/**
 	 * Explains integrity constraint violations. Integrity constraints must be imported and checked before calling this operation, e.g. by calling the operation {@link StardogICVAPI#validateIntegrityConstraints(String, StardogConnectionAPI)}

@@ -73,21 +73,21 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 //
 //	}
 
-	@Override
-	public void addIntegrityConstraints(String pathToConstraints, String server, String database)
-			throws FileNotFoundException {
-		// Obtain a connection to the database
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
-				.credentials("admin", "admin").connect()) {
-
-			ICVConnection aValidator = aConn.as(ICVConnection.class);
-
-			aConn.begin();
-			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraints));
-			aConn.commit();
-
-		}
-	}
+//	@Override
+//	public void addIntegrityConstraints(String pathToConstraints, String server, String database)
+//			throws FileNotFoundException {
+//		// Obtain a connection to the database
+//		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
+//				.credentials("admin", "admin").connect()) { // TODO: remove hardcoding of credentials
+//
+//			ICVConnection aValidator = aConn.as(ICVConnection.class);
+//
+//			aConn.begin();
+//			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraints));
+//			aConn.commit();
+//
+//		}
+//	}
 
 	@Override
 	public String addIntegrityConstraint(int id, String pathToConstraint, String server, String database)
