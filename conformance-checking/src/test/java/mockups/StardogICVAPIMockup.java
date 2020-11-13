@@ -12,12 +12,12 @@ import api.exceptions.StardogDatabaseDoesNotExist;
 
 public class StardogICVAPIMockup implements StardogICVAPI {
 
-	@Override
-	public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api)
-			throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api)
+//			throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	@Override
 	public void addIntegrityConstraints(String pathToConstraints, String server, String database)

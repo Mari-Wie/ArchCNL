@@ -10,7 +10,7 @@ import api.exceptions.StardogDatabaseDoesNotExist;
 
 public interface StardogICVAPI {
 	
-	public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api) throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException;
+	//public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api) throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException;
 
 	public void addIntegrityConstraints(String pathToConstraints, String server, String database) throws FileNotFoundException;
 	

@@ -57,21 +57,21 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 		constraintsAsString = new HashMap<>();
 	}
 
-	@Override
-	public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api)
-			throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException {
-
-		ICVConnection aValidator = api.getConnection().as(ICVConnection.class);
-
-		api.getConnection().begin();
-		aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(new File(pathToConstraints)));
-		api.getConnection().commit();
-
-		// System.out.println("The data " +
-		// (aValidator.isValid(ContextSets.DEFAULT_ONLY) ? "is" : "is NOT") + "
-		// valid!");
-
-	}
+//	@Override
+//	public void validateIntegrityConstraints(String pathToConstraints, StardogConnectionAPI api)
+//			throws StardogDatabaseDoesNotExist, FileNotFoundException, ConstraintsNotAddedException {
+//
+//		ICVConnection aValidator = api.getConnection().as(ICVConnection.class);
+//
+//		api.getConnection().begin();
+//		aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(new File(pathToConstraints)));
+//		api.getConnection().commit();
+//
+//		// System.out.println("The data " +
+//		// (aValidator.isValid(ContextSets.DEFAULT_ONLY) ? "is" : "is NOT") + "
+//		// valid!");
+//
+//	}
 
 	@Override
 	public void addIntegrityConstraints(String pathToConstraints, String server, String database)
