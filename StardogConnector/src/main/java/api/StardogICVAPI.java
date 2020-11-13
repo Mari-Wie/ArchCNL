@@ -21,12 +21,12 @@ public interface StardogICVAPI {
 //	 */
 //	public void addIntegrityConstraints(String pathToConstraints, String server, String database) throws FileNotFoundException;
 	
-	/**
-	 * Explains integrity constraint violations. Integrity constraints must be imported and checked before calling this operation, e.g. by calling the operation {@link StardogICVAPI#validateIntegrityConstraints(String, StardogConnectionAPI)}
-	 * @param server
-	 * @param database
-	 */
-	public void explainViolations(String server, String database);
+//	/**
+//	 * Explains integrity constraint violations. Integrity constraints must be imported and checked before calling this operation, e.g. by calling the operation {@link StardogICVAPI#validateIntegrityConstraints(String, StardogConnectionAPI)}
+//	 * @param server
+//	 * @param database
+//	 */
+//	public void explainViolations(String server, String database);
 	
 	public Map<String, StardogConstraintViolationResult> getViolations();
 

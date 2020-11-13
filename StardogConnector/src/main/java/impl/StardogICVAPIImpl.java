@@ -147,24 +147,26 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 		}
 	}
 
-	public void explainViolations(String server, String database) {
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
-				.credentials("admin", "admin").connect()) { // TODO remove hard coded username and password
+//	@Override
+//	public void explainViolations(String server, String database) {
+//		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
+//				.credentials("admin", "admin").connect()) { // TODO remove hard coded username and password
+//
+//			ICVConnection aValidator = aConn.as(ICVConnection.class);
+//
+//			Set<Constraint> constraints = aValidator.getConstraints();
+//
+//			for (Constraint constraint : constraints) {
+//				Iterable<Proof> proofs = aValidator.explain(constraint).countLimit(600).proofs();
+//				// explanations.put(constraint, proofs);
+//			}
+//
+//			storeViolations();
+//
+//		}
+//	}
 
-			ICVConnection aValidator = aConn.as(ICVConnection.class);
-
-			Set<Constraint> constraints = aValidator.getConstraints();
-
-			for (Constraint constraint : constraints) {
-				Iterable<Proof> proofs = aValidator.explain(constraint).countLimit(600).proofs();
-				// explanations.put(constraint, proofs);
-			}
-
-			storeViolations();
-
-		}
-	}
-
+	@Override
 	public void explainViolationsForContext(String server, String database, String context) {
 		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
 				.credentials("admin", "admin").connect()) { // TODO remove hard coded username and password
