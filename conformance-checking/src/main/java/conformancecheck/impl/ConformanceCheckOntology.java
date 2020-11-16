@@ -14,9 +14,9 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
-import api.StardogConstraintViolation;
-import api.StatementTriple;
 import datatypes.ArchitectureRule;
+import reasoners.ConstraintViolation;
+import reasoners.StatementTriple;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,7 +72,7 @@ public class ConformanceCheckOntology
 	}
 
 	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
-			StardogConstraintViolation violation) 
+			ConstraintViolation violation) 
 	{
 		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
 		
@@ -99,7 +99,7 @@ public class ConformanceCheckOntology
 	}
 
 	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
-			StardogConstraintViolation violation) 
+			ConstraintViolation violation) 
 	{
 		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
 

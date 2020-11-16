@@ -107,20 +107,20 @@ public class StardogDatabase implements StardogDatabaseInterface {
 	}
 
 	@Override
-	public Model getModelFromContext(String context) {
+	public void writeModelFromContextToFile(String context, String path) {
 		try {
 			Resource resource = Values.iri(context);
 			connection.export().context(resource).format(RDFFormats.RDFXML)
-					.to(new FileOutputStream(new File("./tmp.owl")));
+					.to(new FileOutputStream(new File(path)));
 		} catch (StardogException | FileNotFoundException e) {
 			// TODO Auto-generated catch block
 	        LOG.error("CONNECTION ERROR: " + e.getClass());
 	        LOG.error("CONNECTION ERROR: File not found or no connection to database");
 			e.printStackTrace();
 		}
-		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read("./tmp.owl");
-		return model;
+//		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+//		model.read("./tmp.owl");
+//		return model;
 	}
 
 	@Override

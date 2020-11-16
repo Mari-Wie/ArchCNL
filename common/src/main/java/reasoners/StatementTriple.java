@@ -1,4 +1,4 @@
-package api;
+package reasoners;
 
 public class StatementTriple {
 	

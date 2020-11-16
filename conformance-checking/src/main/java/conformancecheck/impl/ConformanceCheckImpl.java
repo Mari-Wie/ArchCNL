@@ -5,18 +5,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 import com.google.inject.Inject;
 
-import api.StardogConstraintViolation;
-import api.StardogConstraintViolationsResultSet;
 import api.StardogDatabaseInterface;
 import api.StardogICVAPI;
-import api.exceptions.NoConnectionToStardogServerException;
 import conformancecheck.api.IConformanceCheck;
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
+import reasoners.ConstraintViolation;
+import reasoners.ConstraintViolationsResultSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,18 +28,16 @@ public class ConformanceCheckImpl implements IConformanceCheck
 {
 	private static final Logger LOG = LogManager.getLogger(ConformanceCheckImpl.class);
 	
-	private StardogICVAPI icvAPI;
+//	private StardogICVAPI icvAPI;
 
 	private ConformanceCheckOntology ontology;
 
 	private String resultPath;
 
-	private StardogConstraintViolationsResultSet result;
-
 	@Inject
-	public ConformanceCheckImpl(StardogICVAPI icvAPI) 
+	public ConformanceCheckImpl(/*StardogICVAPI icvAPI*/) 
 	{
-		this.icvAPI = icvAPI;
+//		this.icvAPI = icvAPI;
 
 		String dir = "./conformance_checks/";
 		new File(dir).mkdirs();
@@ -53,90 +53,67 @@ public class ConformanceCheckImpl implements IConformanceCheck
 
 	}
 
-	/**
-	 * Only relevant for a unit test. 
-	 */
-	public String getResultPath() {
-		// TODO: Introducing a public method just for a unit test is bad practice.
-		//		 Refactor this class so that this method is not required anymore.
-		return resultPath;
-	}
-	
 	@Override
-	public void validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context) 
+	public String validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context, String modelPath, StardogICVAPI icvAPI) 
 	{
-		// TODO: remove dependency on StardogConnector
-		// TODO: change to a single method or express the required workflow in another, better way
-		//		 than having to call several methods in a fixed order (createNewConformanceCheck, validateRule, store...).
+		// TODO: resolve dependency on StardogConnector
     	LOG.info("Starting validateRule ...");
     	ontology.storeArchitectureRule(rule);
 		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule); // TODO: remove dependency on the singleton
-		String constraint;
+		
 		try 
 		{
-			constraint = icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
-			icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);
+			String constraint = icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
 			rule.setStardogConstraint(constraint);
-			this.result = icvAPI.getResult();
 		}
 		catch (FileNotFoundException e) 
 		{
 			LOG.error(e.getMessage()+ " : " + path);
 		}
 
+		icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);
+		
+		Model codemodel = loadModelFromFile(modelPath);
+    	
+		storeRuleViolationsInOntology(rule, codemodel, icvAPI.getResult());
+		
+		LOG.info("add model to code model");
+		codemodel.add(ontology.getModel());
+		
+		writeModelToFile(codemodel);
+		
+
+		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
+		return this.resultPath;
 	}
 
-	@Override
-	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabaseInterface db,
-			String context) 
-	{
-    	LOG.info("Starting storeConformanceCheckingResultInDatabaseForRule: " + rule.getCnlSentence());
-		storeRuleViolationsInOntology(rule, db, context);
-		
-		try 
+	private void storeRuleViolationsInOntology(ArchitectureRule rule, Model codeModel, ConstraintViolationsResultSet result) {
+		List<ConstraintViolation> violations = result.getViolations();
+
+		for (ConstraintViolation violation : violations) 
 		{
-			saveResultsToDatabase(db, context);
+			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
+		}
+	}
+	
+	// the following methods are protected so that they can be used as a seam during testing
+	protected Model loadModelFromFile(String filename) {
+		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		model.read(filename);
+		return model;
+	}
+	
+	protected void writeModelToFile(Model codemodel) {
+		try 
+		{	
+			File file = new File(this.resultPath);			
+			LOG.info("write to code model");
+			codemodel.write(new FileOutputStream(file));
 		} 
 		catch (FileNotFoundException e) 
 		{
 			LOG.error(e.getMessage());
 			e.printStackTrace();
 		} 
-		catch (NoConnectionToStardogServerException e) 
-		{
-			LOG.error(e.getMessage());
-			e.printStackTrace();
-		}
-
-		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
 	}
-
-	private void storeRuleViolationsInOntology(ArchitectureRule rule, StardogDatabaseInterface db, String context) {
-		List<StardogConstraintViolation> violations = result.getViolations();
-		
-		Model codeModel = db.getModelFromContext(context);
-
-		for (StardogConstraintViolation violation : violations) 
-		{
-			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
-		}
-	}
-
-	private void saveResultsToDatabase(StardogDatabaseInterface db, String context)
-			throws FileNotFoundException, NoConnectionToStardogServerException 
-	{
-    	LOG.info("Starting saveResultsToDatabase ...");
-		Model codemodel = db.getModelFromContext(context);
-    	
-    	LOG.info("add model to code model");
-		codemodel.add(ontology.getModel());
-		File file = new File(this.resultPath);
-		
-		LOG.info("write to code model");
-		codemodel.write(new FileOutputStream(file));
-		
-		LOG.info("add data to database");
-		db.addDataByRDFFileAsNamedGraph(this.resultPath, context);
-	}
-
 }

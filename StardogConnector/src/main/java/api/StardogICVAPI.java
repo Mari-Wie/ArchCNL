@@ -2,6 +2,8 @@ package api;
 
 import java.io.FileNotFoundException;
 
+import reasoners.ConstraintViolationsResultSet;
+
 public interface StardogICVAPI {
 
 	/**
@@ -39,7 +41,7 @@ public interface StardogICVAPI {
 	 * {@link #explainViolationsForContext(String, String, String)}.
 	 * @return the violations and their explanations
 	 */
-	public StardogConstraintViolationsResultSet getResult();
+	public ConstraintViolationsResultSet getResult();
 
 
 

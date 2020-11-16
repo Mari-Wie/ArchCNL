@@ -1,4 +1,4 @@
-package api;
+package reasoners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
-public class StardogConstraintViolation {
+public class ConstraintViolation {
 
 
 	private List<StatementTriple> asserted;
@@ -18,7 +18,7 @@ public class StardogConstraintViolation {
 	private String notInferredSubjectName;
 	private List<String> proofs;
 
-	public StardogConstraintViolation() {
+	public ConstraintViolation() {
 		asserted = new ArrayList<>();
 		notInferred = new ArrayList<>();
 		proofs = new ArrayList<>();

@@ -22,13 +22,12 @@ public interface StardogDatabaseInterface {
 	void closeConnectionToServer();
 
 	/**
-	 * Retrieves an ontology from the database which matches the given RDF context.
-	 * Must be connected a database.
-	 * Note: Contexts are an extension of the core RDF model.
+	 * Retrieves an ontology from the database which matches the given RDF context. The ontology
+	 * is written to the specified file as an OWL file in XML format.
 	 * @param context The URI of the context.
-	 * @return An <code>org.apache.jena.rdf.model.Model</code> containing the matching part of the ontology.
+	 * @param path The path to the file to which the retrieved model will be written.
 	 */
-	Model getModelFromContext(String context);
+	void writeModelFromContextToFile(String context, String path);
 
 	/**
 	 * @return the server's name

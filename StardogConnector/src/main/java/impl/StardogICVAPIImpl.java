@@ -17,15 +17,15 @@ import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
 import com.stardog.stark.io.RDFFormats;
 
-import api.StardogConstraintViolation;
-import api.StardogConstraintViolationsResultSet;
 import api.StardogICVAPI;
+import reasoners.ConstraintViolation;
+import reasoners.ConstraintViolationsResultSet;
 
 public class StardogICVAPIImpl implements StardogICVAPI {
 
 	private static int id = 0;
 
-	private StardogConstraintViolationsResultSet result;
+	private ConstraintViolationsResultSet result;
 
 	@Override
 	public String addIntegrityConstraint(String pathToConstraint, String server, String database)
@@ -82,16 +82,16 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	}
 
 	@Override
-	public StardogConstraintViolationsResultSet getResult() {
+	public ConstraintViolationsResultSet getResult() {
 		return result;
 	}
 	
 
 	private void storeViolations(int id, Constraint constraint, Iterable<Proof> proofs) {
-		result = new StardogConstraintViolationsResultSet(id);
+		result = new ConstraintViolationsResultSet(id);
 		for (Proof proof : proofs) {
 			Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
-			StardogConstraintViolation violation = new StardogConstraintViolation();
+			ConstraintViolation violation = new ConstraintViolation();
 			for (Statement statement : asserted) {
 				violation.setViolation(statement.subject().toString(), statement.predicate().toString(),
 						statement.object().toString());

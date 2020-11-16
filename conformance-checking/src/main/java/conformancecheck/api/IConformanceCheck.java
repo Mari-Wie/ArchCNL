@@ -1,10 +1,7 @@
 package conformancecheck.api;
 
-import java.io.FileNotFoundException;
-
-import api.StardogConstraintViolationsResultSet;
 import api.StardogDatabaseInterface;
-import api.exceptions.NoConnectionToStardogServerException;
+import api.StardogICVAPI;
 import datatypes.ArchitectureRule;
 
 public interface IConformanceCheck {
@@ -14,6 +11,7 @@ public interface IConformanceCheck {
 	 */
 	public void createNewConformanceCheck();
 	
+	// TODO: rewrite comment when dependencies are resolved
 	/**
 	 * Adds the given architecture rule to the specified database and RDF context as an integrity 
 	 * constraint and validates it. {@link #createNewConformanceCheck()} must have been called before.
@@ -21,14 +19,16 @@ public interface IConformanceCheck {
 	 * @param db The database to use.
 	 * @param context The RDF context to use.
 	 */
-	public void validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context);
+	public String validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context, String modelPath, StardogICVAPI icvAPI);
 	
 	/**
-	 * Stores the results of a previous rule validation in the given database and removes any integrity contraints
+	 * Writes the results of a previous rule validation to an OWL file and removes any integrity constraints
 	 * from this database. {@link #validateRule(ArchitectureRule, StardogDatabaseInterface, String)} must have been called before.
 	 * @param rule The rule that has been validated.
 	 * @param db The database to use.
 	 * @param context The RDF context to use.
+	 * @param modelPath The path to the OWL file containing the code model from the context in XML format.
+	 * @return The path of the OWL file (XML format) to which the results have been written.
 	 */
-	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabaseInterface db, String context);
+//	public String writeConformanceCheckingResultForRuleToFile(ArchitectureRule rule, StardogDatabaseInterface db, String context, String modelPath);
 }

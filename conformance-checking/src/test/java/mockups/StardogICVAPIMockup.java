@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import api.StardogConstraintViolationsResultSet;
 import api.StardogICVAPI;
+import reasoners.ConstraintViolationsResultSet;
 
 public class StardogICVAPIMockup implements StardogICVAPI {
 
@@ -57,8 +57,8 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 	}
 	
 	@Override
-	public StardogConstraintViolationsResultSet getResult() {
-		StardogConstraintViolationsResultSet res = new StardogConstraintViolationsResultSet(_testedRuleID);
+	public ConstraintViolationsResultSet getResult() {
+		ConstraintViolationsResultSet res = new ConstraintViolationsResultSet(_testedRuleID);
 		return res;
 	}
 

@@ -170,19 +170,17 @@ public class CNLToolchain
                 context); //TODO ConformanceCheck component?
 
     	LOG.info("Start conformance checking...");
-        IConformanceCheck check = new ConformanceCheckImpl(icvAPI);
+        IConformanceCheck check = new ConformanceCheckImpl();
         check.createNewConformanceCheck();
         for (ArchitectureRule rule : ArchitectureRules.getInstance()
             .getRules()
             .keySet())
         {
         	LOG.info("conformance checking rule: " + rule.getCnlSentence());
-        	// TODO: rule hat offenbar keinen Type .... Recherche hier fortfuehren!
-        //	LOG.info("conformance checking rule: " + rule.getType().toString());
-            //check.storeArchitectureRule(rule);
-            check.validateRule(rule, db, context);
-            check.storeConformanceCheckingResultInDatabaseForRule(rule, db,
-                    context);
+            String tempfile = "./tmp.owl";
+            db.writeModelFromContextToFile(context, tempfile);
+            String resultPath = check.validateRule(rule, db, context, tempfile, icvAPI);
+            db.addDataByRDFFileAsNamedGraph(resultPath, context);
         }
 
     	LOG.info("End execution.");

@@ -35,9 +35,7 @@ public class StardogDatabaseMockup implements StardogDatabaseInterface {
 	}
 
 	@Override
-	public Model getModelFromContext(String context) {
-		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		return model;
+	public void writeModelFromContextToFile(String context, String path) {
 	}
 
 	@Override
