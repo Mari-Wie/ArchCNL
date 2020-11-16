@@ -53,6 +53,15 @@ public class ConformanceCheckImpl implements IConformanceCheck
 
 	}
 
+	/**
+	 * Only relevant for a unit test. 
+	 */
+	public String getResultPath() {
+		// TODO: Introducing a public method just for a unit test is bad practice.
+		//		 Refactor this class so that this method is not required anymore.
+		return resultPath;
+	}
+	
 	@Override
 	public void validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context) 
 	{

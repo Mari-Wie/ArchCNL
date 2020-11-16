@@ -1,6 +1,7 @@
 package mockups;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,8 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 
 	private Map<String, Map<String, List<String>>> _constraintFilesByDatabaseAndServer = new HashMap<String, Map<String, List<String>>>();
 	private Map<String, Map<String, Integer>> _timesClearedByDatabaseAndServer = new HashMap<String, Map<String, Integer>>();
-
+	private int _testedRuleID;
+	
 	@Override
 	public void explainViolationsForContext(String server, String database, String context) {
 		// TODO Auto-generated method stub
@@ -22,14 +24,20 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 	@Override
 	public String addIntegrityConstraint(String pathToConstraint, String server, String database)
 			throws FileNotFoundException {
-		// TODO Auto-generated method stub
+		if (!_constraintFilesByDatabaseAndServer.containsKey(server)) {
+			_constraintFilesByDatabaseAndServer.put(server, new HashMap<String, List<String>>());
+		}
+		if (!_constraintFilesByDatabaseAndServer.get(server).containsKey(database)) {
+			_constraintFilesByDatabaseAndServer.get(server).put(database, new ArrayList<String>());
+		}
 		
-		return "foobar";
+		_constraintFilesByDatabaseAndServer.get(server).get(database).add(pathToConstraint);
+		
+		return "foobar" + pathToConstraint;
 	}
 
 	@Override
 	public void removeIntegrityConstraints(String server, String database) {
-		// TODO Auto-generated method stub
 		if (!_timesClearedByDatabaseAndServer.containsKey(server)) {
 			_timesClearedByDatabaseAndServer.put(server, new HashMap<String, Integer>());
 		}
@@ -44,10 +52,14 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 
 	}
 
+	public void setTestedRuleID(int id) {
+		_testedRuleID = id;
+	}
+	
 	@Override
 	public StardogConstraintViolationsResultSet getResult() {
-		// TODO Auto-generated method stub
-		return null;
+		StardogConstraintViolationsResultSet res = new StardogConstraintViolationsResultSet(_testedRuleID);
+		return res;
 	}
 
 	

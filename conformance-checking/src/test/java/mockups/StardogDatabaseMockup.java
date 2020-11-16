@@ -67,7 +67,7 @@ public class StardogDatabaseMockup implements StardogDatabaseInterface {
 			_storedRDFFilesByContext.put(context, new ArrayList<String>());
 		}
 		
-		_storedRDFFilesByContext.get(context).add(context);
+		_storedRDFFilesByContext.get(context).add(pathToData);
 	}
 
 	
