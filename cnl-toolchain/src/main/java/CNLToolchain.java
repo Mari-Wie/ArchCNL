@@ -179,7 +179,7 @@ public class CNLToolchain
         	LOG.info("conformance checking rule: " + rule.getCnlSentence());
         	// TODO: rule hat offenbar keinen Type .... Recherche hier fortfuehren!
         //	LOG.info("conformance checking rule: " + rule.getType().toString());
-            check.storeArchitectureRule(rule);
+            //check.storeArchitectureRule(rule);
             check.validateRule(rule, db, context);
             check.storeConformanceCheckingResultInDatabaseForRule(rule, db,
                     context);

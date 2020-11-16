@@ -6,21 +6,12 @@ import api.StardogDatabaseInterface;
 import api.StardogICVAPI;
 import conformancecheck.api.IConformanceCheck;
 import conformancecheck.impl.ConformanceCheckImpl;
-//import api.StardogConnectionAPI;
-//import api.StardogICVAPI;
-//import conformancecheck.api.IConformanceCheck;
-//import conformancecheck.impl.ConformanceCheckImpl;
-//import conformancecheck.impl.ConformanceCheckOntology;
 import datatypes.ArchitectureRule;
 import mockups.StardogDatabaseMockup;
 import mockups.StardogICVAPIMockup;
 
 public class ConformanceCheckImplTest {
 	
-	//	private StardogConnectionAPI connectionAPI;
-	//private StardogICVAPI icvAPI;
-	//private IConformanceCheck check;
-	//private ConformanceCheckOntology ontology;
 	
 	private StardogDatabaseInterface _db;
 	private StardogICVAPI _icv;

@@ -44,6 +44,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		this.resultPath = dir + "check.owl";
 	}
 
+	@Override
 	public void createNewConformanceCheck() 
 	{
     	LOG.info("Starting createNewConformanceCheck ...");
@@ -52,20 +53,26 @@ public class ConformanceCheckImpl implements IConformanceCheck
 
 	}
 
-	public void storeArchitectureRule(ArchitectureRule rule) 
-	{
-    	LOG.info("Starting storeArchitectureRule ...");
-		ontology.storeArchitectureRule(rule);
-	}
+//	@Override
+//	public void storeArchitectureRule(ArchitectureRule rule) 
+//	{
+//    	LOG.info("Starting storeArchitectureRule ...");
+//		ontology.storeArchitectureRule(rule);
+//	}
 
+	@Override
 	public void validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context) 
 	{
+		// TODO: remove dependency on StardogConnector
+		// TODO: change to a single method or express the required workflow in another, better way
+		//		 than having to call several methods in a fixed order (createNewConformanceCheck, validateRule, store...).
     	LOG.info("Starting validateRule ...");
-		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule);
+    	ontology.storeArchitectureRule(rule);
+		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule); // TODO: remove dependency on the singleton
 		String constraint;
 		try 
 		{
-			constraint = icvAPI.addIntegrityConstraint(/*rule.getId(), */path, db.getServer(), db.getDatabaseName());
+			constraint = icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
 			icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);
 			rule.setStardogConstraint(constraint);
 			this.result = icvAPI.getResult();
@@ -77,11 +84,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 
 	}
 
-	public StardogConstraintViolationsResultSet getResult() 
-	{
-		return result;
-	}
-
+	@Override
 	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabaseInterface db,
 			String context) 
 	{
@@ -116,7 +119,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
 	}
 
-	public void saveResultsToDatabase(StardogDatabaseInterface db, String context)
+	private void saveResultsToDatabase(StardogDatabaseInterface db, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException 
 	{
     	LOG.info("Starting saveResultsToDatabase ...");

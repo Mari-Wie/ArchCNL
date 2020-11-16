@@ -39,19 +39,22 @@ public class Startup {
 					"./src/test/resources/architecture0.owl");
 
 			check.createNewConformanceCheck();
-			check.storeArchitectureRule(rule);
+			//check.storeArchitectureRule(rule);
 
 			check.validateRule(rule, db, context);
 			check.storeConformanceCheckingResultInDatabaseForRule(rule, db, context);
-			try {
-				check.saveResultsToDatabase(db, context);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoConnectionToStardogServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			// Note: the following commented block of code is redundant, as check.storeConformance...
+			//		 is already storing the results in the data base.
+//			try {
+//				check.saveResultsToDatabase(db, context);
+//			} catch (FileNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (NoConnectionToStardogServerException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 
 		} catch (
 
