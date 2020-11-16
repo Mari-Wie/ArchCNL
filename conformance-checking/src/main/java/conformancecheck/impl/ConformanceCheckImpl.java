@@ -114,10 +114,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	private void storeRuleViolationsInOntology(ArchitectureRule rule, StardogDatabaseInterface db, String context) {
 		List<StardogConstraintViolation> violations = result.getViolations();
 		
-		// TODO connects the code model with conformance check instances
-		// Model model = connectionAPI.getModelFromContext(context);
-		Model model = db.getModelFromContext(context);
-		/*Code*/Model codeModel = /*new CodeModel(context, model)*/ model;
+		Model codeModel = db.getModelFromContext(context);
 
 		for (StardogConstraintViolation violation : violations) 
 		{

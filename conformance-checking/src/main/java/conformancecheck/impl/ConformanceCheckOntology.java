@@ -71,7 +71,7 @@ public class ConformanceCheckOntology
 
 	}
 
-	public void storeConformanceCheckingResultForRule(/*Code*/Model codemodel, ArchitectureRule rule,
+	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
 			StardogConstraintViolation violation) 
 	{
 		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
@@ -98,7 +98,7 @@ public class ConformanceCheckOntology
 		connectCodeElementsWithViolations(codemodel, rule, violation);
 	}
 
-	private void connectCodeElementsWithViolations(/*Code*/Model codeModel, ArchitectureRule rule,
+	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
 			StardogConstraintViolation violation) 
 	{
 		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
