@@ -10,6 +10,7 @@ import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
@@ -70,7 +71,7 @@ public class ConformanceCheckOntology
 
 	}
 
-	public void storeConformanceCheckingResultForRule(CodeModel codemodel, ArchitectureRule rule,
+	public void storeConformanceCheckingResultForRule(/*Code*/Model codemodel, ArchitectureRule rule,
 			StardogConstraintViolation violation) 
 	{
 		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
@@ -97,7 +98,7 @@ public class ConformanceCheckOntology
 		connectCodeElementsWithViolations(codemodel, rule, violation);
 	}
 
-	private void connectCodeElementsWithViolations(CodeModel codeModel, ArchitectureRule rule,
+	private void connectCodeElementsWithViolations(/*Code*/Model codeModel, ArchitectureRule rule,
 			StardogConstraintViolation violation) 
 	{
 		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());

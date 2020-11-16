@@ -91,17 +91,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 			String context) 
 	{
     	LOG.info("Starting storeConformanceCheckingResultInDatabaseForRule: " + rule.getCnlSentence());
-		List<StardogConstraintViolation> violations = result.getViolations();
-		
-		// TODO connects the code model with conformance check instances
-		// Model model = connectionAPI.getModelFromContext(context);
-		Model model = db.getModelFromContext(context);
-		CodeModel codeModel = new CodeModel(context, model);
-
-		for (StardogConstraintViolation violation : violations) 
-		{
-			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
-		}
+		storeRuleViolationsInOntology(rule, db, context);
 		
 		try 
 		{
@@ -119,6 +109,20 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		}
 
 		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
+	}
+
+	private void storeRuleViolationsInOntology(ArchitectureRule rule, StardogDatabaseInterface db, String context) {
+		List<StardogConstraintViolation> violations = result.getViolations();
+		
+		// TODO connects the code model with conformance check instances
+		// Model model = connectionAPI.getModelFromContext(context);
+		Model model = db.getModelFromContext(context);
+		/*Code*/Model codeModel = /*new CodeModel(context, model)*/ model;
+
+		for (StardogConstraintViolation violation : violations) 
+		{
+			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
+		}
 	}
 
 	private void saveResultsToDatabase(StardogDatabaseInterface db, String context)
