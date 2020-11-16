@@ -14,13 +14,6 @@ public interface IConformanceCheck {
 	 */
 	public void createNewConformanceCheck();
 	
-//	/**
-//	 * Adds a new architecture rule to be checked. 
-//	 * {@link #createNewConformanceCheck()} must have been called before.
-//	 * @param rule The rule to store.
-//	 */
-//	public void storeArchitectureRule(ArchitectureRule rule);
-	
 	/**
 	 * Adds the given architecture rule to the specified database and RDF context as an integrity 
 	 * constraint and validates it. {@link #createNewConformanceCheck()} must have been called before.
@@ -38,14 +31,4 @@ public interface IConformanceCheck {
 	 * @param context The RDF context to use.
 	 */
 	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabaseInterface db, String context);
-	
-//	/**
-//	 * 
-//	 * @param db
-//	 * @param context
-//	 * @throws FileNotFoundException
-//	 * @throws NoConnectionToStardogServerException
-//	 */
-//	public void saveResultsToDatabase(StardogDatabaseInterface db, String context) throws FileNotFoundException, NoConnectionToStardogServerException;
-
 }

@@ -53,13 +53,6 @@ public class ConformanceCheckImpl implements IConformanceCheck
 
 	}
 
-//	@Override
-//	public void storeArchitectureRule(ArchitectureRule rule) 
-//	{
-//    	LOG.info("Starting storeArchitectureRule ...");
-//		ontology.storeArchitectureRule(rule);
-//	}
-
 	@Override
 	public void validateRule(ArchitectureRule rule, StardogDatabaseInterface db, String context) 
 	{
