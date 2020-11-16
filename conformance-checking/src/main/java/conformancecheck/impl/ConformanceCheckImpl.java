@@ -65,7 +65,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		String constraint;
 		try 
 		{
-			constraint = icvAPI.addIntegrityConstraint(rule.getId(), path, db.getServer(), db.getDatabaseName());
+			constraint = icvAPI.addIntegrityConstraint(/*rule.getId(), */path, db.getServer(), db.getDatabaseName());
 			icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);
 			rule.setStardogConstraint(constraint);
 			this.result = icvAPI.getResult();
@@ -113,18 +113,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 			e.printStackTrace();
 		}
 
-		String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule);
-		
-		try 
-		{
-			icvAPI.removeIntegrityConstraints(path, db.getServer(), db.getDatabaseName());
-		} 
-		catch (FileNotFoundException e) 
-		{
-			LOG.error(e.getMessage());
-			e.printStackTrace();
-		}
-		
+		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
 	}
 
 	public void saveResultsToDatabase(StardogDatabaseInterface db, String context)
