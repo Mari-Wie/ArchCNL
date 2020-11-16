@@ -28,17 +28,17 @@ public interface StardogICVAPI {
 //	 */
 //	public void explainViolations(String server, String database);
 	
-	public Map<String, StardogConstraintViolationResult> getViolations();
+	//public Map<String, StardogConstraintViolationResult> getViolations();
 
-	void validateIntegrityConstraintsInContext(String pathToConstraints, String server, String database, String context)
-			throws FileNotFoundException;
+//	void validateIntegrityConstraintsInContext(String pathToConstraints, String server, String database, String context)
+//			throws FileNotFoundException;
 
 	public void explainViolationsForContext(String server, String database, String context);
 
 	public String addIntegrityConstraint(int id, String pathToConstraint, String server, String database)
 			throws FileNotFoundException;
 
-	Map<Integer, String> getConstraintsAsString();
+//	Map<Integer, String> getConstraintsAsString();
 
 	void removeIntegrityConstraints(String pathToConstraints, String server, String database) throws FileNotFoundException;
 

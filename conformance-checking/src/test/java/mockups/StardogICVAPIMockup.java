@@ -44,18 +44,18 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 //
 //	}
 
-	@Override
-	public Map<String, StardogConstraintViolationResult> getViolations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Map<String, StardogConstraintViolationResult> getViolations() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public void validateIntegrityConstraintsInContext(String pathToConstraints, String server, String database,
-			String context) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void validateIntegrityConstraintsInContext(String pathToConstraints, String server, String database,
+//			String context) throws FileNotFoundException {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	@Override
 	public void explainViolationsForContext(String server, String database, String context) {
@@ -70,11 +70,11 @@ public class StardogICVAPIMockup implements StardogICVAPI {
 		return null;
 	}
 
-	@Override
-	public Map<Integer, String> getConstraintsAsString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Map<Integer, String> getConstraintsAsString() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
 	public void removeIntegrityConstraints(String pathToConstraints, String server, String database)

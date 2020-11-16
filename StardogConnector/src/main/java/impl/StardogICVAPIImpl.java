@@ -1,6 +1,6 @@
 package impl;
 
-import java.io.File;
+//import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -31,13 +31,13 @@ import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
 import com.stardog.stark.io.RDFFormats;
 
-import api.StardogConnectionAPI;
+//import api.StardogConnectionAPI;
 import api.StardogConstraintViolation;
 import api.StardogConstraintViolationResult;
 import api.StardogConstraintViolationsResultSet;
 import api.StardogICVAPI;
-import api.exceptions.ConstraintsNotAddedException;
-import api.exceptions.StardogDatabaseDoesNotExist;
+//import api.exceptions.ConstraintsNotAddedException;
+//import api.exceptions.StardogDatabaseDoesNotExist;
 
 public class StardogICVAPIImpl implements StardogICVAPI {
 
@@ -131,21 +131,21 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 		}
 	}
 
-	@Override
-	public void validateIntegrityConstraintsInContext(String pathToConstraints, String server, String database,
-			String context) throws FileNotFoundException {
-		// Obtain a connection to the database
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
-				.credentials("admin", "admin").connect()) {
-
-			ICVConnection aValidator = aConn.as(ICVConnection.class);
-
-			aConn.begin();
-			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraints));
-			aConn.commit();
-
-		}
-	}
+//	@Override
+//	public void validateIntegrityConstraintsInContext(String pathToConstraints, String server, String database,
+//			String context) throws FileNotFoundException {
+//		// Obtain a connection to the database
+//		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
+//				.credentials("admin", "admin").connect()) {
+//
+//			ICVConnection aValidator = aConn.as(ICVConnection.class);
+//
+//			aConn.begin();
+//			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraints));
+//			aConn.commit();
+//
+//		}
+//	}
 
 //	@Override
 //	public void explainViolations(String server, String database) {
@@ -224,44 +224,44 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 		}
 	}
 
-	private void storeViolations() {
+//	private void storeViolations() {
+//
+//		StardogConstraintViolationResult violationResultForConstraint;
+//		StardogConstraintViolation violation;
+//		for (StardogConstraint constraint : explanations.keySet()) {
+//			violationResultForConstraint = new StardogConstraintViolationResult(constraint);
+//			Iterable<Proof> proofs = explanations.get(constraint);
+//			if (proofs != null) {
+//				for (Proof proof : proofs) {
+//					violation = new StardogConstraintViolation();
+//					//System.out.println(ProofWriter.toString(proof));
+//					Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
+//					for (Statement statement : asserted) {
+//						violation.setViolation(statement.subject().toString(), statement.predicate().toString(),
+//								statement.object().toString());
+//					}
+//					Iterable<Statement> notInferred = proof.getStatements(ProofType.NOT_INFERRED);
+//					for (Statement statement : notInferred) {
+//						violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
+//								statement.object().toString());
+//					}
+//					System.out.println("NOT INFERRED: " + violation.getNotInferred().size());
+//
+//					violationResultForConstraint.addViolation(violation);
+//				}
+//			}
+//			violations.put(constraint.getConstraint().toString(), violationResultForConstraint);
+//		}
+//	}
 
-		StardogConstraintViolationResult violationResultForConstraint;
-		StardogConstraintViolation violation;
-		for (StardogConstraint constraint : explanations.keySet()) {
-			violationResultForConstraint = new StardogConstraintViolationResult(constraint);
-			Iterable<Proof> proofs = explanations.get(constraint);
-			if (proofs != null) {
-				for (Proof proof : proofs) {
-					violation = new StardogConstraintViolation();
-					//System.out.println(ProofWriter.toString(proof));
-					Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
-					for (Statement statement : asserted) {
-						violation.setViolation(statement.subject().toString(), statement.predicate().toString(),
-								statement.object().toString());
-					}
-					Iterable<Statement> notInferred = proof.getStatements(ProofType.NOT_INFERRED);
-					for (Statement statement : notInferred) {
-						violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
-								statement.object().toString());
-					}
-					System.out.println("NOT INFERRED: " + violation.getNotInferred().size());
+//	@Override
+//	public Map<String, StardogConstraintViolationResult> getViolations() {
+//		return violations;
+//	}
 
-					violationResultForConstraint.addViolation(violation);
-				}
-			}
-			violations.put(constraint.getConstraint().toString(), violationResultForConstraint);
-		}
-	}
-
-	@Override
-	public Map<String, StardogConstraintViolationResult> getViolations() {
-		return violations;
-	}
-
-	@Override
-	public Map<Integer, String> getConstraintsAsString() {
-		return constraintsAsString;
-	}
+//	@Override
+//	public Map<Integer, String> getConstraintsAsString() {
+//		return constraintsAsString;
+//	}
 
 }
