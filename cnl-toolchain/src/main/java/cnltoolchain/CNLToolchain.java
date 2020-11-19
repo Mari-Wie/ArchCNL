@@ -1,3 +1,5 @@
+package cnltoolchain;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Date;
@@ -115,7 +117,7 @@ public class CNLToolchain
         }
     }
 
-	private static String createTimeSuffix() {
+	protected static String createTimeSuffix() {
 		Date date = Calendar.getInstance().getTime();  
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");  
         String strDate = dateFormat.format(date);
