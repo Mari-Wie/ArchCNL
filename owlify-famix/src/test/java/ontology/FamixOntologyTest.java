@@ -4,6 +4,7 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class FamixOntologyTest {
 
 	@Before
 	public void initialize() {
-		ontology = new FamixOntology("./ontology/famix.owl");
+		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
+		ontology = new FamixOntology(famixOntologyInputStream);
 	}
 
 	@Test

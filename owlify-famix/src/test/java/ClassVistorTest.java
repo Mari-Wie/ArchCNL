@@ -1,6 +1,8 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.InputStream;
+
 //import org.apache.jena.ontology.Individual;
 //import org.apache.jena.rdf.model.Property;
 import org.junit.Before;
@@ -26,8 +28,8 @@ public class ClassVistorTest {
 
 	@Before
 	public void intializeVisitor() {
-
-		classVisitor = new JavaTypeVisitor("./ontology/famix.owl");
+		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
+		classVisitor = new JavaTypeVisitor(famixOntologyInputStream);
 		delegator = new JavaParserDelegator();
 	}
 

@@ -1,6 +1,10 @@
 package parser;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +46,10 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 
 	public FamixOntologyTransformer() {
 		super("./result.owl");
-		ontology = new FamixOntology("./ontology/famix.owl");
-		mainOntology = new GeneralSoftwareArtifactOntology("./ontology/main.owl");
+		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
+		ontology = new FamixOntology(famixOntologyInputStream);
+		InputStream mainOntologyInputStream = getClass().getResourceAsStream("/ontologies/main.owl");
+		mainOntology = new GeneralSoftwareArtifactOntology(mainOntologyInputStream);
 		visitor = new JavaTypeVisitor(ontology);
 		delegator = new JavaParserDelegator();
 

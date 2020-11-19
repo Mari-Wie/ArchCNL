@@ -3,6 +3,7 @@ package ontology;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,18 +42,18 @@ public class FamixOntology {
 	private long invocationId;
 	private long importId;
 
-	public FamixOntology(String famixOntologyPath) {
+	public FamixOntology(InputStream famixOntologyInputStream) {
 		famixTypeIndividualCache = new HashMap<String, Individual>();
 		individualToConcreteOntClass = new HashMap<String, String>();
 		namespaceIndividualCache = new HashMap<String, Individual>();
 		classesAndProperties = new FamixOntClassesAndProperties();
 		annotationTypeToAttribute = new HashMap<Individual, Map<String,Individual>>();
-		loadFamixModel(famixOntologyPath);
+		loadFamixModel(famixOntologyInputStream);
 	}
 
-	private void loadFamixModel(String famixOntologyPath) {
+	private void loadFamixModel(InputStream famixOntologyInputStream) {
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read(famixOntologyPath);
+		model.read(famixOntologyInputStream, null);
 	}
 	
 	public Individual getNamespaceIndividualWithName(String namespaceName) {

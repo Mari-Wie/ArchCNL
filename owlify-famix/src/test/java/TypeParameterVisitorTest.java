@@ -1,3 +1,5 @@
+import java.io.InputStream;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,8 +19,8 @@ public class TypeParameterVisitorTest {
 	
 	@Before
 	public void intializeVisitor() {
-
-		typeParameterVisitor = new TypeParameterVisitor(new FamixOntology("./ontology/famix.owl"));
+		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
+		typeParameterVisitor = new TypeParameterVisitor(new FamixOntology(famixOntologyInputStream));
 		delegator = new JavaParserDelegator();
 	}
 

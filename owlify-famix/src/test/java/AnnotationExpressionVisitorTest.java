@@ -1,3 +1,5 @@
+import java.io.InputStream;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +30,8 @@ public class AnnotationExpressionVisitorTest {
 
 	@Before
 	public void initializeVisitor() {
-		ontology = new FamixOntology("./ontology/famix.owl");
+		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
+		ontology = new FamixOntology(famixOntologyInputStream);
 
 //		normalVisitor = new NormalAnnotationExpressionVisitor(ontology);
 //		singleVisitor = new SingleMemberAnnotationExpressionVisitor(ontology);

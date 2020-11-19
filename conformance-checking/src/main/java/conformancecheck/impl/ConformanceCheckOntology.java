@@ -1,5 +1,6 @@
 package conformancecheck.impl;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,8 @@ public class ConformanceCheckOntology
 	{
 		LOG.info("Start ConformanceCheckOntology ...");
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read("./architectureconformance.owl");
+		InputStream architectureConformanceInputStream = getClass().getResourceAsStream("/ontologies/architectureconformance.owl");
+		model.read(architectureConformanceInputStream, null);
 		architectureRuleIndividualCache = new HashMap<Integer, Individual>();
 	}
 

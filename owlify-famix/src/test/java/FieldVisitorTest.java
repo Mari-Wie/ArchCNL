@@ -1,3 +1,5 @@
+import java.io.InputStream;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +29,8 @@ public class FieldVisitorTest {
 	@Test
 	public void testVisitsField() throws FileIsNotAJavaClassException {
 		unit = delegator.getCompilationUnitFromFilePath(pathToJavaClass);
-		FamixOntology ontology = new FamixOntology("./ontology/famix.owl");
+		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
+		FamixOntology ontology = new FamixOntology(famixOntologyInputStream);
 		JavaTypeVisitor classVisitor = new JavaTypeVisitor(ontology);
 		visitor = new JavaFieldVisitor(ontology, classVisitor.getFamixTypeIndividual());
 		unit.accept(visitor, null);
