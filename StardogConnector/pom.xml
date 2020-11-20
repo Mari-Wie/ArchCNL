@@ -25,6 +25,12 @@
     </repositories>
 
     <dependencies>
+    	<!-- TODO: remove dependency to common package when refactor is done -->
+    	<dependency>
+			<groupId>cnl</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
         <dependency>
             <groupId>com.complexible.stardog</groupId>
             <artifactId>client-http</artifactId>
