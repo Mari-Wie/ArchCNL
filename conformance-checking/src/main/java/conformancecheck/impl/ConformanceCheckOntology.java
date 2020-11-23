@@ -1,5 +1,6 @@
 package conformancecheck.impl;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +11,13 @@ import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
-import api.StardogConstraintViolation;
-import api.StatementTriple;
 import datatypes.ArchitectureRule;
+import datatypes.ConstraintViolation;
+import datatypes.StatementTriple;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +39,8 @@ public class ConformanceCheckOntology
 	{
 		LOG.info("Start ConformanceCheckOntology ...");
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read("./architectureconformance.owl");
+		InputStream architectureConformanceInputStream = getClass().getResourceAsStream("/ontologies/architectureconformance.owl");
+		model.read(architectureConformanceInputStream, null);
 		architectureRuleIndividualCache = new HashMap<Integer, Individual>();
 	}
 
@@ -70,8 +73,8 @@ public class ConformanceCheckOntology
 
 	}
 
-	public void storeConformanceCheckingResultForRule(CodeModel codemodel, ArchitectureRule rule,
-			StardogConstraintViolation violation) 
+	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
+			ConstraintViolation violation) 
 	{
 		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
 		
@@ -97,8 +100,8 @@ public class ConformanceCheckOntology
 		connectCodeElementsWithViolations(codemodel, rule, violation);
 	}
 
-	private void connectCodeElementsWithViolations(CodeModel codeModel, ArchitectureRule rule,
-			StardogConstraintViolation violation) 
+	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
+			ConstraintViolation violation) 
 	{
 		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
 
@@ -107,19 +110,13 @@ public class ConformanceCheckOntology
 		architectureRuleIndividual.addLiteral(datatypeProperty, ruleType);
 
 		LOG.info("architectureRuleIndividual hinzugefügt");
-		// violation.getNotInferredSubjectName();
-		// violation.getNotInferredObjectName();
 
 		List<StatementTriple> violations = violation.getAsserted();
-		//String text = "";
+
 		for (StatementTriple triple : violations) 
 		{
 			LOG.info("StatementTriple: " + triple.getSubject() + " , " + triple.getPredicate() + " , " + triple.getObject());
-			// if (!triple.getPredicate().contains("type")) {
-			//String subjectName = codeModel.getNameOfResource(triple.getSubject());
-			//String objectName = codeModel.getNameOfResource(triple.getObject());
-			//text = subjectName + "  " + triple.getPredicate().split("#")[1] + "  " + objectName;
-
+			
 			Resource subjectResource = codeModel.getResource(triple.getSubject());
 			Resource objectResource = codeModel.getResource(triple.getObject());
 			LOG.info("Subject und Objet Ressource erstellt");

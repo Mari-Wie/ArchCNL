@@ -10,7 +10,7 @@ public class ConformanceCheckOntologyClassesAndProperties
 {
 
 	//TODO: remove hard-coded string
-	private static String namespace = "http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#";
+	private static final String namespace = "http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#";
 	private static int violationId;
 	private static int proofId;
 

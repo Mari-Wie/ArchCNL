@@ -1,5 +1,7 @@
 package visitors;
 
+import java.io.InputStream;
+
 //import java.util.EnumSet;
 
 import org.apache.jena.ontology.Individual;
@@ -21,8 +23,8 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 	private String famixTypeName;
 	private FamixOntology ontology;
 
-	public JavaTypeVisitor(String famixOntology) {
-		ontology = new FamixOntology(famixOntology);
+	public JavaTypeVisitor(InputStream famixOntologyInputStream) {
+		ontology = new FamixOntology(famixOntologyInputStream);
 	}
 
 	public JavaTypeVisitor(FamixOntology ontology) {

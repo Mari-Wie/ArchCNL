@@ -5,15 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntModelSpec;
-//import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-//import org.openrdf.model.Resource;
-//import org.openrdf.rio.RDFFormat;
-
-//import com.complexible.common.rdf.model.Values;
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
@@ -25,6 +16,7 @@ import com.stardog.stark.Resource;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
 
+import api.StardogDatabaseInterface;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
 
@@ -32,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class StardogDatabase {
+public class StardogDatabase implements StardogDatabaseInterface {
 
 	private static final Logger LOG = LogManager.getLogger(StardogDatabase.class);
 	
@@ -52,6 +44,7 @@ public class StardogDatabase {
 		_password = password;
 	}
 
+	@Override
 	public void connect() {
 
         LOG.info("Start connecting ....");
@@ -84,6 +77,7 @@ public class StardogDatabase {
 		}
 	}
 
+	@Override
 	public void closeConnectionToServer() {
 
 		releaseConnection();
@@ -103,34 +97,39 @@ public class StardogDatabase {
 		}
 	}
 
-	public Model getModelFromContext(String context) {
+	@Override
+	public void writeModelFromContextToFile(String context, String path) {
 		try {
 			Resource resource = Values.iri(context);
 			connection.export().context(resource).format(RDFFormats.RDFXML)
-					.to(new FileOutputStream(new File("./tmp.owl")));
+					.to(new FileOutputStream(new File(path)));
 		} catch (StardogException | FileNotFoundException e) {
 			// TODO Auto-generated catch block
 	        LOG.error("CONNECTION ERROR: " + e.getClass());
 	        LOG.error("CONNECTION ERROR: File not found or no connection to database");
 			e.printStackTrace();
 		}
-		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read("./tmp.owl");
-		return model;
+//		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+//		model.read("./tmp.owl");
+//		return model;
 	}
 
+	@Override
 	public String getServer() {
 		return _server;
 	}
 
+	@Override
 	public String getDatabaseName() {
 		return _databaseName;
 	}
 
+	@Override
 	public String getUserName() {
 		return _userName;
 	}
 
+	@Override
 	public String getPassword() {
 		return _password;
 	}
@@ -162,7 +161,7 @@ public class StardogDatabase {
 			return this;
 		}
 
-		public StardogDatabase createStardogDatabase() throws MissingBuilderArgumentException {
+		public StardogDatabaseInterface createStardogDatabase() throws MissingBuilderArgumentException {
 			if (_server != null && _databaseName != null && _userName != null && _password != null) {
 				return new StardogDatabase(_server, _databaseName, _userName, _password);
 			} else {
@@ -173,6 +172,7 @@ public class StardogDatabase {
 
 	}
 
+	@Override
 	public void addDataByRDFFileAsNamedGraph(String pathToData, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException {
 		if (connection == null) {

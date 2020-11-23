@@ -1,5 +1,6 @@
 package core;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,15 +18,15 @@ public class GeneralSoftwareArtifactOntology {
 	private long artifactId;
 	
 
-	public GeneralSoftwareArtifactOntology(String ontologyPath) {
-		loadOntology(ontologyPath);
+	public GeneralSoftwareArtifactOntology(InputStream ontologyInputStream) {
+		loadOntology(ontologyInputStream);
 		artifactFileIndividualCache = new HashMap<String, Individual>();
 		classesAndProperties = new GeneralSoftwareArtifactClassesAndProperties();
 	}
 
-	private void loadOntology(String ontologyPath) {
+	private void loadOntology(InputStream ontologyInpuStream) {
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read(ontologyPath);
+		model.read(ontologyInpuStream, null);
 	}
 	
 	public void setSoftwareArtifactFileContainsSoftwareArtifact(Individual artifact, Individual file) {

@@ -7,7 +7,7 @@ public class APIFactory {
 	public static OntologyAPI get() {
 
 		if(instance == null) {
-			instance = new OWLAPIImpl2();
+			instance = new OWLAPIImpl();
 		}
 		
 		return instance;

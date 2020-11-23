@@ -1,20 +1,25 @@
 package conformancecheck.api;
 
-import java.io.FileNotFoundException;
-
-import api.StardogConstraintViolationsResultSet;
-import api.exceptions.NoConnectionToStardogServerException;
 import datatypes.ArchitectureRule;
-import impl.StardogDatabase;
+import datatypes.ConstraintViolationsResultSet;
 
 public interface IConformanceCheck {
 	
+	/**
+	 * Sets up a new conformance check.
+	 */
 	public void createNewConformanceCheck();
-	public void storeArchitectureRule(ArchitectureRule rule);
-	public void validateRule(ArchitectureRule rule, StardogDatabase db, String context);
-	public void storeConformanceCheckingResultInDatabaseForRule(ArchitectureRule rule, StardogDatabase db, String context);
-	public StardogConstraintViolationsResultSet getResult();
-//	public void saveResultsToDatabase() throws FileNotFoundException, NoConnectionToStardogServerException;
-	public void saveResultsToDatabase(StardogDatabase db, String context) throws FileNotFoundException, NoConnectionToStardogServerException;
-
+	
+	/**
+	 * Loads the given OWL ontology file containing a code model and adds 
+	 * the architecture violations for the given architecture rule to it.
+	 * The resulting model is stored in a new file. The path of this file 
+	 * is returned by this method.
+	 * {@link #createNewConformanceCheck()} must have been called before
+	 * this method is called.
+	 * @param rule The architecture rule to validate. It must be stored in the {@link datatypes.ArchitectureRules} singleton class.
+	 * @param modelPath The path to the RDF/OWL file (XML format) containing the code model to use.
+	 * @param violations Set of architecture violations to add.
+	 */
+	public String validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations);
 }
