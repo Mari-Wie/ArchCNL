@@ -16,11 +16,12 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
 import datatypes.ArchitectureRule;
-import reasoners.ConstraintViolation;
-import reasoners.StatementTriple;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import api.ConstraintViolation;
+import api.StatementTriple;
  
 public class ConformanceCheckOntology 
 {
@@ -74,7 +75,7 @@ public class ConformanceCheckOntology
 	}
 
 	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
-			ConstraintViolation violation) 
+			/*ConstraintViolation violation*/List<StatementTriple> violations) 
 	{
 		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
 		
@@ -97,11 +98,11 @@ public class ConformanceCheckOntology
 		proofIndividual.addProperty(ConformanceCheckOntologyClassesAndProperties.getProofsProperty(model),
 				architectureViolationIndividual);
 
-		connectCodeElementsWithViolations(codemodel, rule, violation);
+		connectCodeElementsWithViolations(codemodel, rule, /*violation*/violations);
 	}
 
 	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
-			ConstraintViolation violation) 
+			/*ConstraintViolation violation*/List<StatementTriple> violations) 
 	{
 		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
 
@@ -113,7 +114,7 @@ public class ConformanceCheckOntology
 		// violation.getNotInferredSubjectName();
 		// violation.getNotInferredObjectName();
 
-		List<StatementTriple> violations = violation.getAsserted();
+		//List<StatementTriple> violations = violation.getAsserted();
 		//String text = "";
 		for (StatementTriple triple : violations) 
 		{

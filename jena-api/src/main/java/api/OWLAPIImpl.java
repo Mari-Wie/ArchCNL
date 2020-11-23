@@ -2,9 +2,7 @@ package api;
 
 import java.io.File;
 import java.util.ArrayList;
-//import java.util.HashMap;
 import java.util.List;
-//import java.util.Map;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
@@ -30,20 +28,19 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLProperty;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-import datatypes.axioms.MaxCardinalityRestrictionAxiom;
-import datatypes.axioms.MinCardinalityRestrictionAxiom;
-import datatypes.axioms.NegationAxiom;
-import datatypes.axioms.RangeAxiom;
-import datatypes.axioms.UniversalAxiom;
-import datatypes.CustomAxioms;
-import datatypes.axioms.ConditionalAxiom;
-import datatypes.axioms.CustomAxiom;
-import datatypes.axioms.DomainAxiom;
-import datatypes.axioms.ExactCardinalityAxiom;
-import datatypes.axioms.ExistentialAxiom;
+import axioms.ConditionalAxiom;
+import axioms.CustomAxiom;
+import axioms.DomainAxiom;
+import axioms.ExactCardinalityAxiom;
+import axioms.ExistentialAxiom;
+import axioms.MaxCardinalityRestrictionAxiom;
+import axioms.MinCardinalityRestrictionAxiom;
+import axioms.NegationAxiom;
+import axioms.RangeAxiom;
+import axioms.UniversalAxiom;
 import stemmer.StanfordLemmatizer;
 
-public class OWLAPIImpl2 implements OWLAPI {
+public class OWLAPIImpl implements OntologyAPI {
 
 	private OWLOntology currentOntology;
 	private OWLDataFactory df = OWLManager.getOWLDataFactory();
@@ -52,7 +49,7 @@ public class OWLAPIImpl2 implements OWLAPI {
 
 	private List<String> _numbers;
 
-	public OWLAPIImpl2() {
+	public OWLAPIImpl() {
 
 		_numbers = new ArrayList<String>();
 		_numbers.add("no");

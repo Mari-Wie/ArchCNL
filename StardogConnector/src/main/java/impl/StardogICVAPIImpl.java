@@ -17,9 +17,12 @@ import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
 import com.stardog.stark.io.RDFFormats;
 
+
+import com.complexible.stardog.ContextSets;// TODO: only temporary
+
+import api.ConstraintViolation;
+import api.ConstraintViolationsResultSet;
 import api.StardogICVAPI;
-import reasoners.ConstraintViolation;
-import reasoners.ConstraintViolationsResultSet;
 
 public class StardogICVAPIImpl implements StardogICVAPI {
 
@@ -60,15 +63,18 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 
 	@Override
 	public void explainViolationsForContext(String server, String database, String context) {
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
+		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(true /*false*/)
 				.credentials("admin", "admin").connect()) { // TODO remove hard coded username and password
 
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
 			Set<Constraint> constraints = aValidator.getConstraints();
-
+			
 			Collection<com.stardog.stark.IRI> selectedContext = new ArrayList<>();
 			selectedContext.add(Values.iri(context));
+			
+			System.out.println("is valid: " + aValidator.isValid(ContextSets.DEFAULT_ONLY));
+			
 			for (Constraint constraint : constraints) {
 				Iterable<Proof> proofs = aValidator.explain(constraint).activeGraphs(selectedContext).countLimit(600)
 						.proofs();
@@ -101,7 +107,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 				violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
 						statement.object().toString());
 			}
-			violation.addProof(proof.toString());
+//			violation.addProof(proof.toString());
 			System.out.println(proof.toString());
 			result.addViolation(violation);
 		}

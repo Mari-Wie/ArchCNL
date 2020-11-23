@@ -2,8 +2,6 @@ package api;
 
 import java.io.FileNotFoundException;
 
-import org.apache.jena.rdf.model.Model;
-
 import api.exceptions.NoConnectionToStardogServerException;
 
 public interface StardogDatabaseInterface {

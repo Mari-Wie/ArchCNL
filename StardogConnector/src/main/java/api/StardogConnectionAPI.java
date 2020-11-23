@@ -1,12 +1,8 @@
 package api;
 
 import java.io.FileNotFoundException;
-//import java.io.IOException;
 
 import org.apache.jena.rdf.model.Model;
-//import org.openrdf.query.QueryEvaluationException;
-//import org.openrdf.query.TupleQueryResultHandlerException;
-//import org.openrdf.query.resultio.UnsupportedQueryResultFormatException;
 
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;

@@ -12,13 +12,13 @@ import org.apache.jena.rdf.model.ModelFactory;
 
 import com.google.inject.Inject;
 
+import api.ConstraintViolation;
+import api.ConstraintViolationsResultSet;
 import api.StardogDatabaseInterface;
 import api.StardogICVAPI;
 import conformancecheck.api.IConformanceCheck;
 import datatypes.ArchitectureRule;
 import datatypes.ArchitectureRules;
-import reasoners.ConstraintViolation;
-import reasoners.ConstraintViolationsResultSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,17 +28,13 @@ public class ConformanceCheckImpl implements IConformanceCheck
 {
 	private static final Logger LOG = LogManager.getLogger(ConformanceCheckImpl.class);
 	
-//	private StardogICVAPI icvAPI;
-
 	private ConformanceCheckOntology ontology;
 
 	private String resultPath;
 
 	@Inject
-	public ConformanceCheckImpl(/*StardogICVAPI icvAPI*/) 
+	public ConformanceCheckImpl() 
 	{
-//		this.icvAPI = icvAPI;
-
 		String dir = "./conformance_checks/";
 		new File(dir).mkdirs();
 		this.resultPath = dir + "check.owl";
@@ -92,7 +88,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 
 		for (ConstraintViolation violation : violations) 
 		{
-			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
+			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation.getAsserted());
 		}
 	}
 	

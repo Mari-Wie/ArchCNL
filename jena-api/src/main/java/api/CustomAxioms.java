@@ -1,9 +1,9 @@
-package datatypes;
+package api;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import datatypes.axioms.CustomAxiom;
+import axioms.CustomAxiom;
 
 public class CustomAxioms {
 	

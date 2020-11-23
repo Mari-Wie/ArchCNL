@@ -9,14 +9,9 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.openrdf.query.TupleQueryResult;
 
-import org.openrdf.model.Resource;
-import org.openrdf.query.Binding;
-import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResult;
-//import org.openrdf.rio.RDFFormat;
-//import com.complexible.common.rdf.model.Values;
+import org.openrdf.query.Binding;
 
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
@@ -34,9 +29,6 @@ import api.exceptions.NoConnectionToStardogServerException;
 import com.stardog.stark.IRI;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
-import com.stardog.stark.query.SelectQueryResult;
-
-import com.complexible.common.openrdf.query.ForwardingTupleQueryResult;
 
 
 public class StardogConnectionAPIImpl implements StardogConnectionAPI {

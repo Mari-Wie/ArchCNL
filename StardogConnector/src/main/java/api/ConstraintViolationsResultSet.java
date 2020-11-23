@@ -1,16 +1,16 @@
-package reasoners;
+package api;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConstraintViolationsResultSet {
 	
-	private int id;
+//	private int id;
 	private List<ConstraintViolation> violations;
 	
 	public ConstraintViolationsResultSet(int id) {
 
-		this.id = id;
+//		this.id = id;
 		violations = new ArrayList<>();
 		
 	}
@@ -22,10 +22,10 @@ public class ConstraintViolationsResultSet {
 	public void addViolation(ConstraintViolation violation) {
 		violations.add(violation);
 	}
-	
-	public int getId() {
-		return id;
-	}
-	
+//	
+//	public int getId() {
+//		return id;
+//	}
+//	
 
 }

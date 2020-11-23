@@ -1,4 +1,4 @@
-package api.axioms;
+package axioms;
 
 import datatypes.RuleType;
 
