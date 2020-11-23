@@ -1,4 +1,4 @@
-package api;
+package datatypes;
 
 public class StatementTriple {
 	

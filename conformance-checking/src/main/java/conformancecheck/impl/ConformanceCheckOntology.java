@@ -16,12 +16,11 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 
 import datatypes.ArchitectureRule;
+import datatypes.ConstraintViolation;
+import datatypes.StatementTriple;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import api.ConstraintViolation;
-import api.StatementTriple;
  
 public class ConformanceCheckOntology 
 {
@@ -75,7 +74,7 @@ public class ConformanceCheckOntology
 	}
 
 	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
-			/*ConstraintViolation violation*/List<StatementTriple> violations) 
+			ConstraintViolation violation) 
 	{
 		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
 		
@@ -98,11 +97,11 @@ public class ConformanceCheckOntology
 		proofIndividual.addProperty(ConformanceCheckOntologyClassesAndProperties.getProofsProperty(model),
 				architectureViolationIndividual);
 
-		connectCodeElementsWithViolations(codemodel, rule, /*violation*/violations);
+		connectCodeElementsWithViolations(codemodel, rule, violation);
 	}
 
 	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
-			/*ConstraintViolation violation*/List<StatementTriple> violations) 
+			ConstraintViolation violation) 
 	{
 		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
 
@@ -111,19 +110,13 @@ public class ConformanceCheckOntology
 		architectureRuleIndividual.addLiteral(datatypeProperty, ruleType);
 
 		LOG.info("architectureRuleIndividual hinzugefügt");
-		// violation.getNotInferredSubjectName();
-		// violation.getNotInferredObjectName();
 
-		//List<StatementTriple> violations = violation.getAsserted();
-		//String text = "";
+		List<StatementTriple> violations = violation.getAsserted();
+
 		for (StatementTriple triple : violations) 
 		{
 			LOG.info("StatementTriple: " + triple.getSubject() + " , " + triple.getPredicate() + " , " + triple.getObject());
-			// if (!triple.getPredicate().contains("type")) {
-			//String subjectName = codeModel.getNameOfResource(triple.getSubject());
-			//String objectName = codeModel.getNameOfResource(triple.getObject());
-			//text = subjectName + "  " + triple.getPredicate().split("#")[1] + "  " + objectName;
-
+			
 			Resource subjectResource = codeModel.getResource(triple.getSubject());
 			Resource objectResource = codeModel.getResource(triple.getObject());
 			LOG.info("Subject und Objet Ressource erstellt");

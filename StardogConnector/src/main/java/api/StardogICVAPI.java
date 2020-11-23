@@ -2,6 +2,8 @@ package api;
 
 import java.io.FileNotFoundException;
 
+import datatypes.ConstraintViolationsResultSet;
+
 public interface StardogICVAPI {
 
 	/**

@@ -20,9 +20,9 @@ import com.stardog.stark.io.RDFFormats;
 
 import com.complexible.stardog.ContextSets;// TODO: only temporary
 
-import api.ConstraintViolation;
-import api.ConstraintViolationsResultSet;
 import api.StardogICVAPI;
+import datatypes.ConstraintViolation;
+import datatypes.ConstraintViolationsResultSet;
 
 public class StardogICVAPIImpl implements StardogICVAPI {
 

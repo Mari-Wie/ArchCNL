@@ -26,7 +26,6 @@
 	</build>
 
 	<dependencies>
-		<!-- TODO: remove dependency to common package when refactoring is done -->
 		<dependency>
 			<groupId>cnl</groupId>
 			<artifactId>common</artifactId>
@@ -70,10 +69,6 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.stardog.examples</groupId>
-			<artifactId>stardog-wrapper</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
+		
 	</dependencies>
 </project>

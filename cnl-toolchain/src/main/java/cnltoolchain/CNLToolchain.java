@@ -178,10 +178,28 @@ public class CNLToolchain
             .getRules()
             .keySet())
         {
+        	
+        	String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule); // TODO: remove dependency on the singleton
+    		
         	LOG.info("conformance checking rule: " + rule.getCnlSentence());
             String tempfile = "./tmp.owl";
             db.writeModelFromContextToFile(context, tempfile);
-            String resultPath = check.validateRule(rule, db, context, tempfile, icvAPI);
+            
+            try 
+    		{
+    			String constraint = icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
+    			rule.setStardogConstraint(constraint);
+    		}
+    		catch (FileNotFoundException e) 
+    		{
+    			LOG.error(e.getMessage()+ " : " + path);
+    		}
+
+    		icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);    		
+    		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
+            
+            
+            String resultPath = check.validateRule(rule, tempfile, icvAPI.getResult());
             db.addDataByRDFFileAsNamedGraph(resultPath, context);
         }
 
