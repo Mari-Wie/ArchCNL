@@ -54,12 +54,6 @@
 							</includes>
 						</fileset>
 						<fileset>
-							<directory>${basedir}/../org.architecture.cnl.ide/src/main/xtext-gen/</directory>
-							<includes>
-								<include>**/*</include>
-							</includes>
-						</fileset>
-						<fileset>
 							<directory>${basedir}/model/generated/</directory>
 						</fileset>
 					</filesets>
