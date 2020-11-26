@@ -52,14 +52,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena-libs</artifactId>
-			<type>pom</type>
+			<artifactId>jena-core</artifactId>
 			<version>${apachejenaVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.owlapi</groupId>
-			<artifactId>owlapi-distribution</artifactId>
-			<version>${owlapiVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.javaparser</groupId>

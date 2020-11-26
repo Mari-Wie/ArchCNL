@@ -172,23 +172,6 @@
 			<artifactId>xtext-antlr-generator</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-corenlp</artifactId>
-			<version>${stanfordnlpVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-corenlp</artifactId>
-			<classifier>models</classifier>
-			<version>${stanfordnlpVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
-		<dependency>
-			<groupId>net.sourceforge.owlapi</groupId>
-			<artifactId>owlapi-distribution</artifactId>
-			<version>${owlapiVersion}</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
