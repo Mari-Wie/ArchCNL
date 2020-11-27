@@ -147,15 +147,7 @@ public class CNLToolchain
         
         supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
-        
-//        supportedOWLNamespaces.put("java", "http://arch-ont.org/ontologies/javacodeontology.owl#");
-//        supportedOWLNamespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
-//        supportedOWLNamespaces.put("maven", "http://arch-ont.org/ontologies/maven.owl#");
-//        supportedOWLNamespaces.put("main", "http://arch-ont.org/ontologies/main.owl#");
-//        supportedOWLNamespaces.put("osgi", "http://arch-ont.org/ontologies/osgi.owl#");
-//        supportedOWLNamespaces.put("git", "http://www.arch-ont.org/ontologies/git.owl#");
-//        supportedOWLNamespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
-        
+      
     	LOG.info("Start parsing...");
         AsciiDocArc42Parser parser = new AsciiDocArc42Parser(supportedOWLNamespaces);
         parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
