@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Properties>
+        <Property name="log-path">./logs/</Property>
+    </Properties>
     <Appenders>
         <!-- File Appender -->
-        <File name="ArchCnlLogFile" fileName="./logs/ArchCnlLogFile_${current.date}.log" append="true">
+        <File name="ArchCnlLogFile" fileName="${log-path}ArchCnlLogFile.${date:yyyy-MM-dd_hh-mm-ss}.log" append="true">
             <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n" />
         </File>
         <!-- Console Appender -->
