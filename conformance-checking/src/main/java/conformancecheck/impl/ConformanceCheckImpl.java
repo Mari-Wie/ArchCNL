@@ -3,12 +3,16 @@ package conformancecheck.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 
@@ -16,9 +20,6 @@ import conformancecheck.api.IConformanceCheck;
 import datatypes.ArchitectureRule;
 import datatypes.ConstraintViolation;
 import datatypes.ConstraintViolationsResultSet;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
  
 
 public class ConformanceCheckImpl implements IConformanceCheck 
@@ -84,5 +85,12 @@ public class ConformanceCheckImpl implements IConformanceCheck
 			LOG.error(e.getMessage());
 			e.printStackTrace();
 		} 
+	}
+
+	@Override
+	public Map<String, String> getProvidedNamespaces() {
+		HashMap<String, String> res = new HashMap<>();
+		res.put("architecture", ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace());
+		return res;
 	}
 }

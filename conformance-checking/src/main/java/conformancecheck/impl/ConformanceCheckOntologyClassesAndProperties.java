@@ -9,11 +9,15 @@ import org.apache.jena.ontology.OntModel;
 public class ConformanceCheckOntologyClassesAndProperties 
 {
 
-	//TODO: remove hard-coded string
+	//TODO: replace with an URI that is similar to the other ones
 	private static final String namespace = "http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#";
 	private static int violationId;
 	private static int proofId;
 
+	public static String getOntologyNamespace() {
+		return namespace;
+	}
+	
 	public static Individual getConformanceCheckIndividual(OntModel model) 
 	{
 		OntClass conformanceClass = model.getOntClass(namespace + "ConformanceCheck");

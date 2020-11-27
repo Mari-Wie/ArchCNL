@@ -51,6 +51,10 @@ public class FamixOntology {
 		loadFamixModel(famixOntologyInputStream);
 	}
 
+	public String getOntologyNamespace() {
+		return classesAndProperties.getOntologyNamespace();
+	}
+	
 	private void loadFamixModel(InputStream famixOntologyInputStream) {
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		model.read(famixOntologyInputStream, null);

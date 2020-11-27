@@ -9,6 +9,10 @@ import org.apache.jena.ontology.OntModel;
 public class FamixOntClassesAndProperties {
 	private final String famixOntologyNamespace = "http://arch-ont.org/ontologies/famix.owl#";
 	
+	public String getOntologyNamespace() {
+		return famixOntologyNamespace;
+	}
+	
 	public Individual createNamespaceIndividual(OntModel model, long namespaceId) {
 		OntClass namespaceClass = model.getOntClass(famixOntologyNamespace + "Namespace");
 		return model.createIndividual(this.famixOntologyNamespace + "Namespace" + namespaceId, namespaceClass);
