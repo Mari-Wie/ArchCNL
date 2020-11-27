@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.ontology.Individual;
@@ -184,6 +186,14 @@ public class MavenPOMFileParser extends AbstractOwlifyComponent {
 				System.out.println(file.getName());
 			}
 		}
+	}
+
+	@Override
+	public Map<String, String> getProvidedNamespaces() {
+		Map<String, String> res = new HashMap<>();
+		res.put("maven", ontClasses.getOntologyNamespace());
+		res.put("main", ontClasses.getOntologyMainNamespace());
+		return res;
 	}
 
 }

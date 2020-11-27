@@ -24,6 +24,11 @@ public class MavenOntClasses {
 		return ontologyNamespace;
 	}
 
+	public String getOntologyMainNamespace() {
+		return ontologyMainNamespace;
+	}
+
+	
 	public OntModel getOntoModel() {
 		return ontoModel;
 	}

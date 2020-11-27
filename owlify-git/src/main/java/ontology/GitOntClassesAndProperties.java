@@ -17,22 +17,30 @@ import org.apache.jena.rdf.model.Resource;
 public class GitOntClassesAndProperties {
 
 	private OntModel ontoModel;
-	private String gitOntologyNamespace;
-	private String ontologyMainNamespace;
-	private String ontologyHistoryNamespace;
+	private final String ONTOLOGY_GIT_NAMESPACE;
+	private final String ONTOLOGY_MAIN_NAMESPACE;
+	private final String ONTOLOGY_HISTORY_NAMESPACE;
 
 	public GitOntClassesAndProperties() {
-		gitOntologyNamespace = "http://www.arch-ont.org/ontologies/git.owl#";
-		ontologyMainNamespace = "http://arch-ont.org/ontologies/main.owl#";
-		ontologyHistoryNamespace = "http://arch-ont.org/ontologies/history.owl#";
+		ONTOLOGY_GIT_NAMESPACE = "http://www.arch-ont.org/ontologies/git.owl#";
+		ONTOLOGY_MAIN_NAMESPACE = "http://arch-ont.org/ontologies/main.owl#";
+		ONTOLOGY_HISTORY_NAMESPACE = "http://arch-ont.org/ontologies/history.owl#";
 		ontoModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		ontoModel.read("./ontology/main.owl");
 		ontoModel.read("./ontology/history.owl");
 		ontoModel.read("./ontology/git.owl");
 	}
-
+	
 	public String getOntologyNamespace() {
-		return gitOntologyNamespace;
+		return ONTOLOGY_GIT_NAMESPACE;
+	}
+	
+	public String getMainNamespace() {
+		return ONTOLOGY_MAIN_NAMESPACE;
+	}
+	
+	public String getHistoryNamespace() {
+		return ONTOLOGY_HISTORY_NAMESPACE;
 	}
 
 	public Individual createIndividual(String uri, Resource resource) {
@@ -44,147 +52,147 @@ public class GitOntClassesAndProperties {
 	}
 
 	public OntClass gitRepositoryClass() {
-		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitRepository");
+		return this.ontoModel.getOntClass(ONTOLOGY_GIT_NAMESPACE + "GitRepository");
 	}
 
 	public OntClass gitCommitClass() {
-		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitCommit");
+		return this.ontoModel.getOntClass(ONTOLOGY_GIT_NAMESPACE + "GitCommit");
 	}
 
 	public OntClass gitBranchClass() {
-		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitBranch");
+		return this.ontoModel.getOntClass(ONTOLOGY_GIT_NAMESPACE + "GitBranch");
 	}
 
 	public OntClass gitTagClass() {
-		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitTag");
+		return this.ontoModel.getOntClass(ONTOLOGY_GIT_NAMESPACE + "GitTag");
 	}
 
 	public OntClass gitChangeClass() {
-		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitChange");
+		return this.ontoModel.getOntClass(ONTOLOGY_GIT_NAMESPACE + "GitChange");
 	}
 
 	public OntClass gitAuthor() {
-		return this.ontoModel.getOntClass(gitOntologyNamespace + "GitAuthor");
+		return this.ontoModel.getOntClass(ONTOLOGY_GIT_NAMESPACE + "GitAuthor");
 	}
 
 	public OntClass gitCommitter() {
-		return this.ontoModel.getOntClass(ontologyHistoryNamespace + "Committer");
+		return this.ontoModel.getOntClass(ONTOLOGY_HISTORY_NAMESPACE + "Committer");
 	}
 	
 	public Resource fileClass() {
-		return this.ontoModel.getOntClass(ontologyMainNamespace + "SoftwareArtifactFile");
+		return this.ontoModel.getOntClass(ONTOLOGY_MAIN_NAMESPACE + "SoftwareArtifactFile");
 	}
 
 	// Data Properties
 	public DatatypeProperty hasNameProperty() {
-		return ontoModel.getDatatypeProperty(ontologyMainNamespace + "hasName");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_MAIN_NAMESPACE + "hasName");
 	}
 
 	public DatatypeProperty hasSHAProperty() {
-		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasSHAIdentifier");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_GIT_NAMESPACE + "hasSHAIdentifier");
 	}
 
 	public DatatypeProperty hasMessageProperty() {
-		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasMessage");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_GIT_NAMESPACE + "hasMessage");
 	}
 
 	public DatatypeProperty hasShortMessageProperty() {
 		// TODO Auto-generated method stub
-		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasShortMessage");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_GIT_NAMESPACE + "hasShortMessage");
 	}
 	
 	public DatatypeProperty hasCommitDateProperty() {
-		return ontoModel.getDatatypeProperty(ontologyHistoryNamespace + "committedOn");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_HISTORY_NAMESPACE + "committedOn");
 	}
 	
 	public DatatypeProperty hasRelativePathProperty() {
-		return ontoModel.getDatatypeProperty(ontologyMainNamespace + "hasRelativePath");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_MAIN_NAMESPACE + "hasRelativePath");
 	}
 	
 	public DatatypeProperty isCreatedOnProperty() {
-		return ontoModel.getDatatypeProperty(ontologyHistoryNamespace + "isCreatedOn");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_HISTORY_NAMESPACE + "isCreatedOn");
 	}
 	
 	public DatatypeProperty copiedOnProperty() {
-		return ontoModel.getDatatypeProperty(ontologyHistoryNamespace + "isCopiedOn");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_HISTORY_NAMESPACE + "isCopiedOn");
 	}
 	
 	public DatatypeProperty isDeletedOnProperty() {
-		return ontoModel.getDatatypeProperty(ontologyHistoryNamespace + "isDeletedOn");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_HISTORY_NAMESPACE + "isDeletedOn");
 	}
 	
 	public DatatypeProperty renamedOnProperty() {
-		return ontoModel.getDatatypeProperty(ontologyHistoryNamespace + "isRenamedOn");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_HISTORY_NAMESPACE + "isRenamedOn");
 	}
 	
 	public DatatypeProperty lastModificationOnProperty() {
-		return ontoModel.getDatatypeProperty(ontologyHistoryNamespace + "lastModifiedOn");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_HISTORY_NAMESPACE + "lastModifiedOn");
 	}
 	
 	public DatatypeProperty hasLabelProperty() {
-		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasLabel");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_GIT_NAMESPACE + "hasLabel");
 	}
 	
 	public DatatypeProperty hasEmailAdressProperty() {
-		return ontoModel.getDatatypeProperty(gitOntologyNamespace + "hasEmailAddress");
+		return ontoModel.getDatatypeProperty(ONTOLOGY_GIT_NAMESPACE + "hasEmailAddress");
 	}
 
 	// Object Properties
 	public ObjectProperty hasHeadProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasHead");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "hasHead");
 	}
 
 	public ObjectProperty hasBranchProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasBranch");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "hasBranch");
 	}
 
 	public ObjectProperty hasCommitProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasCommit");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "hasCommit");
 	}
 
 	public ObjectProperty hasAuthorProperty() {
 
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasAuthor");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "hasAuthor");
 	}
 	
 	public ObjectProperty performsCommitProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "performsCommit");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "performsCommit");
 	}
 
 
 	public ObjectProperty hasCommitterProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "isCommittedBy");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "isCommittedBy");
 	}
 	
 	public ObjectProperty modifiesFileProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "modifiesFile");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "modifiesFile");
 	}
 	
 	public ObjectProperty hasModificationKindProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasModificationKind");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "hasModificationKind");
 	}
 	
 	public ObjectProperty createsFileProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "createsFile");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "createsFile");
 	}
 	
 	//Individuals
 	
 	public Individual getModificationKindIndividual(String modificationKind) {
 		if(modificationKind.equals("A")) {
-			return ontoModel.getIndividual(gitOntologyNamespace + "Add");
+			return ontoModel.getIndividual(ONTOLOGY_GIT_NAMESPACE + "Add");
 		}
 		else if(modificationKind.equals("D")) {
-			return ontoModel.getIndividual(gitOntologyNamespace + "Delete");
+			return ontoModel.getIndividual(ONTOLOGY_GIT_NAMESPACE + "Delete");
 		}
 		else if(modificationKind.equals("C")) {
-			return ontoModel.getIndividual(gitOntologyNamespace + "Copy");
+			return ontoModel.getIndividual(ONTOLOGY_GIT_NAMESPACE + "Copy");
 		}
 		else if(modificationKind.equals("R")) {
-			return ontoModel.getIndividual(gitOntologyNamespace + "Rename");
+			return ontoModel.getIndividual(ONTOLOGY_GIT_NAMESPACE + "Rename");
 		}
 		else {
-			return ontoModel.getIndividual(gitOntologyNamespace + "Update");
+			return ontoModel.getIndividual(ONTOLOGY_GIT_NAMESPACE + "Update");
 		}
 	}
 	
@@ -201,39 +209,39 @@ public class GitOntClassesAndProperties {
 	}
 
 	public ObjectProperty isNewCopyOfProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "isNewCopyOf");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "isNewCopyOf");
 	}
 
 	public ObjectProperty copiesFileProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "copiesFile");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "copiesFile");
 	}
 
 	public ObjectProperty deletesFileProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "deletesFile");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "deletesFile");
 	}
 
 	public ObjectProperty isRenamedToProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "isRenamedTo");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "isRenamedTo");
 	}
 
 	public ObjectProperty renamesFileProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "renamesFile");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "renamesFile");
 	}
 
 	public ObjectProperty updatesFileProperty() {
-		return ontoModel.getObjectProperty(ontologyHistoryNamespace + "updatesFiles");
+		return ontoModel.getObjectProperty(ONTOLOGY_HISTORY_NAMESPACE + "updatesFiles");
 	}
 
 	public ObjectProperty hasParentProperty() {
-		return ontoModel.getObjectProperty(ontologyMainNamespace + "hasParent");
+		return ontoModel.getObjectProperty(ONTOLOGY_MAIN_NAMESPACE + "hasParent");
 	}
 
 	public ObjectProperty atCommitProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "tagAtCommit");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "tagAtCommit");
 	}
 
 	public ObjectProperty hasTagProperty() {
-		return ontoModel.getObjectProperty(gitOntologyNamespace + "hasTag");
+		return ontoModel.getObjectProperty(ONTOLOGY_GIT_NAMESPACE + "hasTag");
 	}
 
 	

@@ -2,11 +2,15 @@ package cnltoolchain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Date;
-import java.util.Calendar;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;   
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import api.ExecuteMappingAPI;
 import api.ExecuteMappingAPIFactory;
@@ -15,7 +19,6 @@ import api.StardogDatabaseAPI;
 import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
-
 import asciidocparser.AsciiDocArc42Parser;
 import conformancecheck.api.IConformanceCheck;
 import conformancecheck.impl.ConformanceCheckImpl;
@@ -26,9 +29,6 @@ import impl.StardogAPIFactory;
 import impl.StardogDatabase;
 //import impl.StardogDatabase.StardogDatabaseBuilder;
 import parser.FamixOntologyTransformer;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
  
 public class CNLToolchain
 {
@@ -139,11 +139,25 @@ public class CNLToolchain
         if (! directory.exists()){
             directory.mkdir();
         }
-    	
+
+        IConformanceCheck check = new ConformanceCheckImpl();
+        
         String mappingFilePath = TEMPORARY_DIRECTORY + "/mapping.txt";
+        HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
+        
+        supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
+        supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
+        
+//        supportedOWLNamespaces.put("java", "http://arch-ont.org/ontologies/javacodeontology.owl#");
+//        supportedOWLNamespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
+//        supportedOWLNamespaces.put("maven", "http://arch-ont.org/ontologies/maven.owl#");
+//        supportedOWLNamespaces.put("main", "http://arch-ont.org/ontologies/main.owl#");
+//        supportedOWLNamespaces.put("osgi", "http://arch-ont.org/ontologies/osgi.owl#");
+//        supportedOWLNamespaces.put("git", "http://www.arch-ont.org/ontologies/git.owl#");
+//        supportedOWLNamespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
         
     	LOG.info("Start parsing...");
-        AsciiDocArc42Parser parser = new AsciiDocArc42Parser();
+        AsciiDocArc42Parser parser = new AsciiDocArc42Parser(supportedOWLNamespaces);
         parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
         parser.parseMappingRulesFromDocumentation(docPath, mappingFilePath);
         ontologyPaths = parser.getOntologyPaths();
@@ -175,7 +189,6 @@ public class CNLToolchain
                 context); //TODO ConformanceCheck component?
 
     	LOG.info("Start conformance checking...");
-        IConformanceCheck check = new ConformanceCheckImpl();
         check.createNewConformanceCheck();
         for (ArchitectureRule rule : ArchitectureRules.getInstance()
             .getRules()

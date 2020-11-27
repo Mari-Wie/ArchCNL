@@ -142,4 +142,11 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 		}
 	}
 
+	@Override
+	public Map<String, String> getProvidedNamespaces() {
+		HashMap<String, String> res = new HashMap<>();
+		res.put("famix", ontology.getOntologyNamespace());
+		return res;
+	}
+
 }

@@ -20,7 +20,7 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 
 	public void setReasoningConfiguration(ReasoningConfiguration config, String outputFilePath) {
 		this.config = config;
-		this.reasoningResultPath = outputFilePath; //"./mapped.owl";
+		this.reasoningResultPath = outputFilePath;
 	}
 
 	public void executeMapping() throws FileNotFoundException {

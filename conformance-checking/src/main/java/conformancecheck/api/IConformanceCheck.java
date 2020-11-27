@@ -1,5 +1,7 @@
 package conformancecheck.api;
 
+import java.util.Map;
+
 import datatypes.ArchitectureRule;
 import datatypes.ConstraintViolationsResultSet;
 
@@ -23,4 +25,11 @@ public interface IConformanceCheck {
 	 * @param outputPath The path to the file to which the results will be written.
 	 */
 	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath);
+	
+	/**
+	 * @return 
+	 * 	Returns a map which contains all OWL namespaces which are provided by the component.
+	 * 	The keys are the abbreviations, and the values are the full URIs of these namespaces.
+	 */
+	public Map<String, String> getProvidedNamespaces();
 }
