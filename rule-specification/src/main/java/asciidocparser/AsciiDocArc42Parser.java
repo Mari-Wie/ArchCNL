@@ -3,6 +3,9 @@ package asciidocparser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +17,6 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
-
 import org.architecture.cnl.CNL2OWLGenerator;
 
 import datatypes.ArchitectureRule;
@@ -27,7 +29,6 @@ public class AsciiDocArc42Parser
 {
 	private static final Logger LOG = LogManager.getLogger(AsciiDocArc42Parser.class);
 	
-    private final static String TMP_MAPPING_FILE_NAME = "./mapping.txt";
     private final static String EXTENSION = ".architecture";
     private final static String OWL_EXTENSION = ".owl";
     private final static String PREFIX = "tmp";
@@ -65,8 +66,9 @@ public class AsciiDocArc42Parser
      * - Delete RuleFile
      * 
      * @param path - Path of Rule-File (.adoc-File)
+     * @param outputDirectory - Path where the generated files will be placed (without a slash (/) at the end)
      */
-    public void parseRulesFromDocumentation(String path)
+    public void parseRulesFromDocumentation(String path, String outputDirectory)
     {
         LOG.info("Start parseRulesFromDocumentation...");
         
@@ -91,7 +93,8 @@ public class AsciiDocArc42Parser
             for (String line : lines)
             {
                 rulePath = PREFIX + "_" + id_for_file + EXTENSION;
-                ontologyPath = "./architecture" + id_for_file + OWL_EXTENSION;
+                String ontologyFile = "/architecture" + id_for_file + OWL_EXTENSION; // TODO: remove hardcoded solution
+                ontologyPath = outputDirectory + ontologyFile;
                 LOG.info("Rule Id      : " + id);
                 LOG.info("Rule         : " + line);
                 LOG.info("File Id      : " + id_for_file);
@@ -118,6 +121,13 @@ public class AsciiDocArc42Parser
                     LOG.info("Ended addRuleWithPathToConstraint");
                     
                     generator.transformCNLFile(rulePath);
+                    
+                    // TODO replace this dirty workaround:
+                    // the org.architecture.cnl module creates the file
+                    // at a fixed location, move it to the specified directory
+                    LOG.info("Moving ."+ontologyFile+" to "+ontologyPath);
+                    Files.move(Paths.get("."+ontologyFile), Paths.get(ontologyPath), StandardCopyOption.REPLACE_EXISTING);
+                    
                     LOG.info("Rule transformed to OWL: "+rulePath);
 
                     //f.delete();
@@ -126,7 +136,7 @@ public class AsciiDocArc42Parser
                 {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                    LOG.error("IOException while processing tmp_"+id+".architecture: "+e.toString());
+                    LOG.error("IOException while processing "+rulePath+": "+e.toString());
                 }
                 finally
                 {	// Relicts of tmp_{id}.architecture create ExecutionErrors due to  
@@ -143,7 +153,13 @@ public class AsciiDocArc42Parser
 
     }
 
-    public void parseMappingRulesFromDocumentation(String path)
+    /**
+    * Extracts architecture-to-code mapping rules from the given .adoc file.
+    * 
+    * @param path - Path of Rule-File (.adoc-File)
+    * @param outputFile - Path where the resulting ontology file (.owl) will be stored.
+    */
+    public void parseMappingRulesFromDocumentation(String path, String outputFile)
     {
         Asciidoctor ascii = Asciidoctor.Factory.create();
         Document doc = ascii.loadFile(new File(path),
@@ -152,7 +168,7 @@ public class AsciiDocArc42Parser
         selector.put("role", "mapping");
 
         List<StructuralNode> result = doc.findBy(selector);
-        File f = new File(TMP_MAPPING_FILE_NAME);
+        File f = new File(outputFile);
         if (f.exists())
         {
             f.delete();
@@ -198,14 +214,11 @@ public class AsciiDocArc42Parser
 
     }
 
+    /**
+     * @return The list of all architecture rule ontology (.owl) files which have been extracted from a .adoc file.
+     */
     public List<String> getOntologyPaths()
     {
         return ontologyPaths;
     }
-
-    public String getMappingFilePath()
-    {
-        return TMP_MAPPING_FILE_NAME;
-    }
-
 }

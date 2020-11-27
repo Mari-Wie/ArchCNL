@@ -41,8 +41,11 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 	private Map<Individual, String> individualToNameMap;
 	private GeneralSoftwareArtifactOntology mainOntology;
 
-	public FamixOntologyTransformer() {
-		super("./result.owl");
+	/**
+	 * @param resultPath - Path to the file in which the results will be stored.
+	 */
+	public FamixOntologyTransformer(String resultPath) {
+		super(resultPath);
 		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
 		ontology = new FamixOntology(famixOntologyInputStream);
 		InputStream mainOntologyInputStream = getClass().getResourceAsStream("/ontologies/main.owl");
@@ -55,15 +58,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 
 	}
 
-//	public static void main(String[] args) throws FileIsNotAJavaClassException {
-//		FamixOntologyTransformer parser = new FamixOntologyTransformer();
-//		parser.setSource("C:\\Users\\sandr\\Documents\\workspaces\\workspace_cnl_test\\TestProject\\src");
-//		parser.transform();
-//	}
-
 	public void transform() {
-
-//		System.out.println(super.getSourcePath());
 		CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
 		combinedTypeSolver.add(new ReflectionTypeSolver());
 		List<String> sourcePaths = super.getSourcePaths();
@@ -71,14 +66,54 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 			System.out.println(path);
 			combinedTypeSolver.add(new JavaParserTypeSolver(path));
 		}
-//		combinedTypeSolver.add(new JavaParserTypeSolver(super.getSourcePath()+"/main/"));
-//		combinedTypeSolver.add(new JavaParserTypeSolver(super.getSourcePath()+"/test/"));
-//		combinedTypeSolver.add(new JavaParserTypeSolver(super.getSourcePath()+"/client/"));
 
 		JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedTypeSolver);
 		StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
 
-		// 1. step: resolve all types
+		resolveAllTypes(sourcePaths);
+		parseOtherElements(sourcePaths);
+		
+		ontology.add(mainOntology.getOntology());
+		ontology.save(super.getResultPath());
+
+	}
+
+	private void parseOtherElements(List<String> sourcePaths) {
+		for (String path : sourcePaths) {
+			for (File file : FileUtils.listFiles(new File(path),
+					new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
+					TrueFileFilter.INSTANCE)) {
+				CompilationUnit unit;
+				try {
+					unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
+					Individual currentUnitIndividual = unitToIndividualMap.get(unit);
+					if (currentUnitIndividual != null) {
+						// some calls are commented to increase performance
+						// however, this decreases the number of architecture
+						// violations that can be found
+						unit.accept(new InheritanceVisitor(ontology, currentUnitIndividual), null);
+						unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
+//				unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnitIndividual), null);
+						unit.accept(new MethodDeclarationVisitor(ontology, currentUnitIndividual), null);
+						unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual,
+								individualToNameMap.get(currentUnitIndividual)), null);
+						unit.accept(new NormalAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
+						unit.accept(new MarkerAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
+						unit.accept(new SingleMemberAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
+//				unit.accept(new AccessVisitor(ontology,currentUnitIndividual), null);
+						unit.accept(new ImportDeclarationVisitor(ontology, currentUnitIndividual), null);
+					} else { // type is a package-info.java
+						System.out.println(file.getAbsolutePath());
+					}
+				} catch (FileIsNotAJavaClassException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void resolveAllTypes(List<String> sourcePaths) {
 		for (String path : sourcePaths) {
 			for (File file : FileUtils.listFiles(new File(path),
 					new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
@@ -105,44 +140,6 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 				}
 			}
 		}
-
-		// 2. step parse the other elements
-		for (String path : sourcePaths) {
-			for (File file : FileUtils.listFiles(new File(path),
-					new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
-					TrueFileFilter.INSTANCE)) {
-				CompilationUnit unit;
-				try {
-					unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
-					Individual currentUnitIndividual = unitToIndividualMap.get(unit);
-					if (currentUnitIndividual != null) {
-						// Einige Aufrufe sind aufgrund von Effizienz-Steigerung auskommentiert. Wenn
-						// etwas auskommentiert ist, werden diese Informationen auch aus dem Code
-						// extrahiert und auf Basis dieser Codeinformationen können dann auch keine
-						// Verletzungen gefunden werden.
-						unit.accept(new InheritanceVisitor(ontology, currentUnitIndividual), null);
-						unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
-//				unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnitIndividual), null);
-						unit.accept(new MethodDeclarationVisitor(ontology, currentUnitIndividual), null);
-						unit.accept(new NamespaceVisitor(ontology, currentUnitIndividual,
-								individualToNameMap.get(currentUnitIndividual)), null);
-						unit.accept(new NormalAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
-						unit.accept(new MarkerAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
-						unit.accept(new SingleMemberAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
-//				unit.accept(new AccessVisitor(ontology,currentUnitIndividual), null);
-						unit.accept(new ImportDeclarationVisitor(ontology, currentUnitIndividual), null);
-					} else { // type is a package-info.java
-						System.out.println(file.getAbsolutePath());
-					}
-				} catch (FileIsNotAJavaClassException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		ontology.add(mainOntology.getOntology());
-		ontology.save(super.getResultPath());
-
 	}
 
 }

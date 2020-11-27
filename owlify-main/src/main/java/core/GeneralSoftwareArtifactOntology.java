@@ -14,13 +14,11 @@ import org.apache.jena.rdf.model.ModelFactory;
 public class GeneralSoftwareArtifactOntology {
 	private OntModel model;
 	private GeneralSoftwareArtifactClassesAndProperties classesAndProperties;
-	private Map<String, Individual> artifactFileIndividualCache;
 	private long artifactId;
 	
 
 	public GeneralSoftwareArtifactOntology(InputStream ontologyInputStream) {
 		loadOntology(ontologyInputStream);
-		artifactFileIndividualCache = new HashMap<String, Individual>();
 		classesAndProperties = new GeneralSoftwareArtifactClassesAndProperties();
 	}
 

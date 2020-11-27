@@ -18,9 +18,9 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	private ReasoningConfiguration config;
 	private String reasoningResultPath;
 
-	public void setReasoningConfiguration(ReasoningConfiguration config) {
+	public void setReasoningConfiguration(ReasoningConfiguration config, String outputFilePath) {
 		this.config = config;
-		this.reasoningResultPath = "./mapped.owl";
+		this.reasoningResultPath = outputFilePath; //"./mapped.owl";
 	}
 
 	public void executeMapping() throws FileNotFoundException {
@@ -37,8 +37,6 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 				ontModel.read(path);
 			}
 		}
-
-//		System.out.println(ontModel.listStatements().toList().size());
 
 		System.out.println("reasoner");
 		Reasoner reasoner = new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));

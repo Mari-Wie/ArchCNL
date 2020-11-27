@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 import api.exceptions.NoConnectionToStardogServerException;
 
-public interface StardogDatabaseInterface {
+public interface StardogDatabaseAPI {
 
 	/**
 	 * Connects to the database using an admin connection if not already connected.

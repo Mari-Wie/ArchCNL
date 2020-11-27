@@ -27,15 +27,9 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	
 	private ConformanceCheckOntology ontology;
 
-	private String resultPath;
 
 	@Inject
-	public ConformanceCheckImpl() 
-	{
-		String dir = "./conformance_checks/";
-		new File(dir).mkdirs();
-		this.resultPath = dir + "check.owl";
-	}
+	public ConformanceCheckImpl() {}
 
 	@Override
 	public void createNewConformanceCheck() 
@@ -47,7 +41,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	}
 
 	@Override
-	public String validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations) 
+	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath) 
 	{
     	LOG.info("Starting validateRule ...");
     	ontology.storeArchitectureRule(rule);
@@ -58,8 +52,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		LOG.info("add model to code model");
 		codemodel.add(ontology.getModel());
 		
-		writeModelToFile(codemodel);
-		return this.resultPath;
+		writeModelToFile(codemodel, outputPath);
 	}
 
 	private void storeRuleViolationsInOntology(ArchitectureRule rule, Model codeModel, ConstraintViolationsResultSet result) {
@@ -79,10 +72,10 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		return model;
 	}
 	
-	protected void writeModelToFile(Model codemodel) {
+	protected void writeModelToFile(Model codemodel, String outputPath) {
 		try 
 		{	
-			File file = new File(this.resultPath);			
+			File file = new File(outputPath);			
 			LOG.info("write to code model");
 			codemodel.write(new FileOutputStream(file));
 		} 
