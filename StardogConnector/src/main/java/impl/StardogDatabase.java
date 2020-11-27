@@ -109,9 +109,6 @@ public class StardogDatabase implements StardogDatabaseAPI {
 	        LOG.error("CONNECTION ERROR: File not found or no connection to database");
 			e.printStackTrace();
 		}
-//		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-//		model.read("./tmp.owl");
-//		return model;
 	}
 
 	@Override
