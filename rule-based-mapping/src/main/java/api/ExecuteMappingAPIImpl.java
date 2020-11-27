@@ -38,8 +38,6 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 			}
 		}
 
-//		System.out.println(ontModel.listStatements().toList().size());
-
 		System.out.println("reasoner");
 		Reasoner reasoner = new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));
 		System.out.println("infmodel");

@@ -157,11 +157,6 @@ public class CNLToolchain
 
         //create stardog db
     	LOG.info("Create StardogDB ...");
-//        StardogDatabase db = new StardogDatabaseBuilder().server(server)
-//            .databaseName(databaseName)
-//            .userName("admin")
-//            .password("admin")
-//            .createStardogDatabase();
         StardogDatabaseAPI db = new StardogDatabase(server,databaseName,"admin","admin");
     	LOG.info("Connect to StardogDB ...");
         db.connect();
