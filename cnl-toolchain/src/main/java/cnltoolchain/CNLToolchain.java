@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import api.ExecuteMappingAPI;
 import api.ExecuteMappingAPIFactory;
 import api.ReasoningConfiguration;
-import api.StardogDatabaseInterface;
+import api.StardogDatabaseAPI;
 import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
@@ -162,7 +162,7 @@ public class CNLToolchain
 //            .userName("admin")
 //            .password("admin")
 //            .createStardogDatabase();
-        StardogDatabaseInterface db = new StardogDatabase(server,databaseName,"admin","admin");
+        StardogDatabaseAPI db = new StardogDatabase(server,databaseName,"admin","admin");
     	LOG.info("Connect to StardogDB ...");
         db.connect();
         

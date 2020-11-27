@@ -16,7 +16,7 @@ import com.stardog.stark.Resource;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
 
-import api.StardogDatabaseInterface;
+import api.StardogDatabaseAPI;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
 
@@ -24,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class StardogDatabase implements StardogDatabaseInterface {
+public class StardogDatabase implements StardogDatabaseAPI {
 
 	private static final Logger LOG = LogManager.getLogger(StardogDatabase.class);
 	
@@ -161,7 +161,7 @@ public class StardogDatabase implements StardogDatabaseInterface {
 			return this;
 		}
 
-		public StardogDatabaseInterface createStardogDatabase() throws MissingBuilderArgumentException {
+		public StardogDatabaseAPI createStardogDatabase() throws MissingBuilderArgumentException {
 			if (_server != null && _databaseName != null && _userName != null && _password != null) {
 				return new StardogDatabase(_server, _databaseName, _userName, _password);
 			} else {
