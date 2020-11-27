@@ -41,8 +41,11 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 	private Map<Individual, String> individualToNameMap;
 	private GeneralSoftwareArtifactOntology mainOntology;
 
-	public FamixOntologyTransformer() {
-		super("./result.owl");
+	/**
+	 * @param resultPath - Path to the file in which the results will be stored.
+	 */
+	public FamixOntologyTransformer(String resultPath) {
+		super(resultPath);
 		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
 		ontology = new FamixOntology(famixOntologyInputStream);
 		InputStream mainOntologyInputStream = getClass().getResourceAsStream("/ontologies/main.owl");

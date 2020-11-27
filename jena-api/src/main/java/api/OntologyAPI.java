@@ -11,10 +11,8 @@ import org.semanticweb.owlapi.model.OWLDataProperty;
 //import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
-//import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLProperty;
 
-//import api.axioms.CustomAxiom;
 import java.util.ArrayList;
 
 public interface OntologyAPI {

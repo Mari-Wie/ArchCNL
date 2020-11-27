@@ -1,5 +1,6 @@
 package cnltoolchain;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Date;
@@ -34,13 +35,14 @@ public class CNLToolchain
 	private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
 
     private List<String> ontologyPaths;
-    //private OwlifyComponent javaOWLTransformer;
     private OwlifyComponent famixTransformer;
     private ExecuteMappingAPI mappingAPI;
     private StardogICVAPI icvAPI;
 
     private String databaseName;
     private String server;
+    
+    private final String TEMPORARY_DIRECTORY = "./temp";
     
     /**
      * Konstruktur f�r CNLToolchain
@@ -58,7 +60,7 @@ public class CNLToolchain
         this.databaseName = databaseName;
         this.server = server;
         this.icvAPI = StardogAPIFactory.getICVAPI();
-        this.famixTransformer = new FamixOntologyTransformer();
+        this.famixTransformer = new FamixOntologyTransformer(TEMPORARY_DIRECTORY + "/results.owl");
     }
     
     /**
@@ -131,28 +133,34 @@ public class CNLToolchain
     {	
     	LOG.info("Start execution.");
 
+    	LOG.info("Create temporary directory");
+    	
+    	File directory = new File(TEMPORARY_DIRECTORY);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+    	
+        String mappingFilePath = TEMPORARY_DIRECTORY + "/mapping.txt";
+        
     	LOG.info("Start parsing...");
         AsciiDocArc42Parser parser = new AsciiDocArc42Parser();
-        parser.parseRulesFromDocumentation(docPath);
-        parser.parseMappingRulesFromDocumentation(docPath);
+        parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
+        parser.parseMappingRulesFromDocumentation(docPath, mappingFilePath);
         ontologyPaths = parser.getOntologyPaths();
 
     	LOG.info("Start famix transformation...");
         // Source Code Transformation
         famixTransformer.addSourcePath(sourceCodePath);
         famixTransformer.transform();
-        //javaOWLTransformer = new JavaCodeOntologyAPIImpl();
-        //javaOWLTransformer.setSource(sourceCodePath);
-        //javaOWLTransformer.transform();
-
+        
         // Mapping
     	LOG.info("Start get mappings...");
         mappingAPI = ExecuteMappingAPIFactory.get();
         ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build()
             .addPathsToConcepts(ontologyPaths)
-            .withMappingRules(parser.getMappingFilePath())
+            .withMappingRules(mappingFilePath)
             .withData(famixTransformer.getResultPath());
-        mappingAPI.setReasoningConfiguration(reasoningConfig);
+        mappingAPI.setReasoningConfiguration(reasoningConfig, TEMPORARY_DIRECTORY + "/mapped.owl");
         mappingAPI.executeMapping();
 
         //create stardog db
@@ -177,7 +185,7 @@ public class CNLToolchain
         	String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule); // TODO: remove dependency on the singleton
     		
         	LOG.info("conformance checking rule: " + rule.getCnlSentence());
-            String tempfile = "./tmp.owl";
+            String tempfile = TEMPORARY_DIRECTORY + "/tmp.owl";
             db.writeModelFromContextToFile(context, tempfile);
             
             try 
@@ -193,8 +201,8 @@ public class CNLToolchain
     		icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);    		
     		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
             
-            
-            String resultPath = check.validateRule(rule, tempfile, icvAPI.getResult());
+            String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
+            check.validateRule(rule, tempfile, icvAPI.getResult(), resultPath);
             db.addDataByRDFFileAsNamedGraph(resultPath, context);
         }
 

@@ -14,12 +14,13 @@ public interface IConformanceCheck {
 	 * Loads the given OWL ontology file containing a code model and adds 
 	 * the architecture violations for the given architecture rule to it.
 	 * The resulting model is stored in a new file. The path of this file 
-	 * is returned by this method.
+	 * is specified by a parameter.
 	 * {@link #createNewConformanceCheck()} must have been called before
 	 * this method is called.
 	 * @param rule The architecture rule to validate. It must be stored in the {@link datatypes.ArchitectureRules} singleton class.
 	 * @param modelPath The path to the RDF/OWL file (XML format) containing the code model to use.
 	 * @param violations Set of architecture violations to add.
+	 * @param outputPath The path to the file to which the results will be written.
 	 */
-	public String validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations);
+	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath);
 }

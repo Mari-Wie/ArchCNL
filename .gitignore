@@ -142,4 +142,8 @@ xtend-gen/
 # Ignore plugin.xml_gen and feature.xml_gen files, when build Eclipse Plugins.
 *.xml_gen
 
+# Temporary files
+temp/
+cnl-toolchain/temp/
+
 # End of https://www.toptal.com/developers/gitignore/api/maven,eclipse,xtext,java,macos
