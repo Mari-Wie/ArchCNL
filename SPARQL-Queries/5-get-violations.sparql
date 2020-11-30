@@ -6,13 +6,17 @@ PREFIX conformance: <http://www.semanticweb.org/sandr/ontologies/2018/4/architec
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 
-SELECT ?subject ?object
+SELECT DISTINCT ?cnl ?subject ?property ?object
 WHERE {
 GRAPH ?g
   {
-    ?x architecture:use ?y.
+    ?rule rdf:type conformance:ArchitectureRule.
+    ?rule conformance:hasRuleRepresentation ?cnl.
+    ?violation conformance:violates ?rule.
+    ?x conformance:isPartOfViolationSubject ?violation.
+    ?y conformance:isPartOfViolationObject ?violation.
     ?x famix:hasName ?subject.
-    ?y famix:hasName ?object.
-    ?conformanceCheck conformance:validatesVersion '1.0'^^xsd:string
-
-  }}
+    # Optional, because the "Every Aggregate must residein a DomainRing" rule's object has no "famix:hasName" attribute.
+    OPTIONAL {?y famix:hasName ?object. ?x ?property ?y.}
+  }
+}

@@ -5,13 +5,11 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX conformance: <http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
-
-SELECT ?domainring ?name ?type
+SELECT ?violation ?text
 WHERE {
-GRAPH ?g
-  {
-    ?domainring rdf:type architecture:DomainRing.
-    ?domainring famix:hasName ?name.
-    ?domainring rdf:type ?type.
-    ?confCheck conformance:validatesVersion "1.0"^^xsd:string.
-  }}
+    GRAPH ?g {
+        ?violation conformance:violates ?rule.
+        ?rule conformance:hasRuleRepresentation "Every Aggregate must residein a DomainRing."^^xsd:string.
+        ?violation conformance:hasViolationText ?text.
+    }
+}

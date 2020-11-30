@@ -6,14 +6,11 @@ PREFIX conformance: <http://www.semanticweb.org/sandr/ontologies/2018/4/architec
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 
-SELECT ?cnl ?violation
+SELECT ?subject ?object
 WHERE {
 GRAPH ?g
   {
-    ?rule rdf:type conformance:ArchitectureRule.
-    ?rule conformance:hasRuleRepresentation ?cnl.
-    ?violation conformance:violates ?rule.
-    ?conformanceCheck conformance:validatesVersion '1.0'^^xsd:string.
-    ?violation rdf:type conformance:ArchitectureViolation.
-  }
-}
+    ?x architecture:use ?y.
+    ?x famix:hasName ?subject.
+    ?y famix:hasName ?object.
+  }}

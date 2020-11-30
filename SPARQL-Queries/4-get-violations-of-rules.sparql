@@ -5,10 +5,15 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX conformance: <http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
-SELECT ?violation ?text
-WHERE{
-GRAPH ?g {
- ?violation conformance:violates ?rule.
-?rule conformance:hasRuleRepresentation "Every Aggregate must residein a DomainRing."^^xsd:string.
-?violation conformance:hasViolationText ?text.
-?c conformance:validatesVersion "2.0"^^xsd:string}}
+
+SELECT ?cnl ?violation ?date
+WHERE {
+GRAPH ?g
+  {
+    ?rule rdf:type conformance:ArchitectureRule.
+    ?rule conformance:hasRuleRepresentation ?cnl.
+    ?violation conformance:violates ?rule.
+    ?violation rdf:type conformance:ArchitectureViolation.
+    ?x conformance:hasCheckingDate ?date.
+  }
+}

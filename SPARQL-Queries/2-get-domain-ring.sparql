@@ -6,11 +6,11 @@ PREFIX conformance: <http://www.semanticweb.org/sandr/ontologies/2018/4/architec
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 
-SELECT ?aggregate ?name
+SELECT ?domainring ?name ?type
 WHERE {
 GRAPH ?g
   {
-    ?aggregate rdf:type architecture:Aggregate.
-    ?x conformance:validatesVersion "1.0"^^xsd:string.
-    ?aggregate famix:hasName ?name.
+    ?domainring rdf:type architecture:DomainRing.
+    ?domainring famix:hasName ?name.
+    ?domainring rdf:type ?type.
   }}
