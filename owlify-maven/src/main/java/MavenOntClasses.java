@@ -11,8 +11,8 @@ import org.apache.jena.rdf.model.Resource;
 public class MavenOntClasses {
 
 	private OntModel ontoModel;
-	private String ontologyNamespace;
-	private String ontologyMainNamespace;
+	private final String ontologyNamespace;
+	private final String ontologyMainNamespace;
 
 	public MavenOntClasses() {
 		ontologyNamespace = "http://www.arch-ont.org/ontologies/maven.owl#";
