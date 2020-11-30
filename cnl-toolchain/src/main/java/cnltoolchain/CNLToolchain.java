@@ -2,6 +2,7 @@ package cnltoolchain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -83,11 +84,21 @@ public class CNLToolchain
     {    	 
     	// TODO: Parameter von aussen uebergeben (z.B. ueber Parameter-File)
         LOG.info("Initializing ...");
+        CNLToolchainProperties props = new CNLToolchainProperties();
+        try {
+			props.readPropValues();
+		} catch (IOException e1) {
+			System.err.println(e1.getMessage());
+			return;
+		}
+        
+        
+        
         String database = "MWTest_"+createTimeSuffix();  
-        String server =  "http://localhost:5820";
+        String server =  props.getServer();
         String context = "http://graphs.org/" + database + "/1.0";
-        String projectPath = "/home/user/study/shk-swk/code/OnionArchitectureDemo/";
-        String rulesFile = projectPath + "architecture-documentation-onion.adoc";
+        String projectPath = props.getProjectPath();
+        String rulesFile = projectPath + props.getRulesFile();
         LOG.info("Database     : "+database);
         LOG.info("Server       : "+server);
         LOG.info("Context      : "+context);
