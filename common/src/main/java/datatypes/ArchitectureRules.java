@@ -8,20 +8,24 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Singleton class used to store architecture rules.
+ *
+ */
 public class ArchitectureRules {
 
 	private static final Logger LOG = LogManager.getLogger(ArchitectureRules.class);
 	private static ArchitectureRules instance;
-	private Map<ArchitectureRule, Integer> rules;
-	private Map<ArchitectureRule, String> pathToConvertedConstraint;
+	private Map<Integer, ArchitectureRule> rules; // using a mutable type as key can cause strange behavior, it did so in the past
 
-	public ArchitectureRules() {
+	private ArchitectureRules() {
 
 		rules = new HashMap<>();
-		pathToConvertedConstraint = new HashMap<>();
-
 	}
 
+	/**
+	 * returns the singleton instance
+	 */
 	public static ArchitectureRules getInstance() {
 		if (instance == null) {
 			instance = new ArchitectureRules();
@@ -29,18 +33,23 @@ public class ArchitectureRules {
 		return instance;
 	}
 
-	public void addRule(ArchitectureRule r, int id) {
-        LOG.info("\n -- AddRule --------------------- \n"+r.toString());
-		rules.put(r, id);
-	}
-	
+	/**
+	 * Adds the given architecture rule
+	 * @param r the rule to add
+	 * @param id the ID of the rule
+	 * @param path path to an OWL file which contains the rule as OWL constraints
+	 */
 	public void addRuleWithPathToConstraint(ArchitectureRule r, int id, String path) {
-		rules.put(r, id);
-		pathToConvertedConstraint.put(r, path);
+		r.setContraintFile(path);
+//		rules.put(r, id);
+		rules.put(id, r);
 	}
 	
+	/**
+	 * Returns the path to the OWL file which contains the given rule as OWL constraints
+	 */
 	public String getPathOfConstraintForRule(ArchitectureRule r) {
-		return pathToConvertedConstraint.get(r);
+		return r.getContraintFile();
 	}
 	
 	/**
@@ -48,18 +57,14 @@ public class ArchitectureRules {
 	 * @return the rule with the given ID, or null, if no rule with the given ID exists
 	 */
 	public ArchitectureRule getRuleWithID(int id) {
-		for (ArchitectureRule rule : rules.keySet()) {
-			if(rules.get(rule) == id) {
-				return rule;
-			}
-		}
-		return null;
+		LOG.info("getRuleWithID id: " + id);
+		return rules.get(id);
 	}
 	
 	/**
 	 * @return a list of all currently stored architecture rules 
 	 */
 	public List<ArchitectureRule> getRules() {
-		return new ArrayList<>(rules.keySet());
+		return new ArrayList<>(rules.values()); 
 	}
 }
