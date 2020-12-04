@@ -191,11 +191,11 @@ public class CNLToolchain
         db.addDataByRDFFileAsNamedGraph(mappingAPI.getReasoningResultPath(),
                 context); //TODO ConformanceCheck component?
 
+        // TODO: check all rules at once?
     	LOG.info("Start conformance checking...");
         check.createNewConformanceCheck();
         for (ArchitectureRule rule : ArchitectureRules.getInstance()
-            .getRules()
-            .keySet())
+            .getRules())
         {
         	
         	String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule); // TODO: remove dependency on the singleton
@@ -206,8 +206,7 @@ public class CNLToolchain
             
             try 
     		{
-    			String constraint = icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
-    			rule.setStardogConstraint(constraint);
+    			icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
     		}
     		catch (FileNotFoundException e) 
     		{
@@ -218,7 +217,7 @@ public class CNLToolchain
     		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
             
             String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
-            check.validateRule(rule, tempfile, icvAPI.getResult(), resultPath);
+            check.validateRule(rule, tempfile, icvAPI.getResult(), resultPath); // TODO use return value
             db.addDataByRDFFileAsNamedGraph(resultPath, context);
         }
 

@@ -28,16 +28,6 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLProperty;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-import axioms.ConditionalAxiom;
-import axioms.CustomAxiom;
-import axioms.DomainAxiom;
-import axioms.ExactCardinalityAxiom;
-import axioms.ExistentialAxiom;
-import axioms.MaxCardinalityRestrictionAxiom;
-import axioms.MinCardinalityRestrictionAxiom;
-import axioms.NegationAxiom;
-import axioms.RangeAxiom;
-import axioms.UniversalAxiom;
 import stemmer.StanfordLemmatizer;
 
 public class OWLAPIImpl implements OntologyAPI {
@@ -120,24 +110,19 @@ public class OWLAPIImpl implements OntologyAPI {
 
 	public OWLClassExpression addMaxCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		CustomAxiom axiom = new MaxCardinalityRestrictionAxiom(namespace, "", "", "", "2");
-
-		CustomAxioms.get().addCustomAxiom(axiom);
-
+		
 		return df.getOWLObjectMaxCardinality(count, property, object);
 	}
 
 	public OWLClassExpression addMinCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		CustomAxiom axiom = new MinCardinalityRestrictionAxiom("", "", "", "", "");
-		CustomAxioms.get().addCustomAxiom(axiom);
+		
 		return df.getOWLObjectMinCardinality(count, property, object);
 	}
 
 	public OWLClassExpression addExactCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		CustomAxiom axiom = new ExactCardinalityAxiom(namespace, "", "", "", "2");
-		CustomAxioms.get().addCustomAxiom(axiom);
+		
 		return df.getOWLObjectExactCardinality(count, property, object);
 	}
 
@@ -195,9 +180,6 @@ public class OWLAPIImpl implements OntologyAPI {
 
 		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(roleName, expression);
 		
-		CustomAxiom axiom = new ExistentialAxiom(iriPath, "", "", "");
-		CustomAxioms.get().addCustomAxiom(axiom);
-
 		triggerSave();
 
 		return someValues;
@@ -210,9 +192,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, superclass);
 		OWLSubClassOfAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subclass, someValues);
 		manager.addAxiom(currentOntology, subClassAxiom);
-
-		CustomAxiom axiom = new ExistentialAxiom(iriPath, "", "", "");
-		CustomAxioms.get().addCustomAxiom(axiom);
 
 		triggerSave();
 
@@ -234,12 +213,7 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLObjectPropertyRangeAxiom rangeAxiom = df.getOWLObjectPropertyRangeAxiom(property, object);
 		manager.addAxiom(currentOntology, domainAxiom);
 		manager.addAxiom(currentOntology, rangeAxiom);
-		CustomAxiom axiom = new DomainAxiom("", "");
-		CustomAxiom axiom2 = new RangeAxiom("","");
-
-		CustomAxioms.get().addCustomAxioms(axiom, axiom2);
 		
-
 		triggerSave();
 	}
 
@@ -264,9 +238,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(subject, complement);
 		manager.addAxiom(currentOntology, subClass);
 
-		CustomAxiom axiom = new NegationAxiom(subject.toString(), complement.toString());
-		CustomAxioms.get().addCustomAxiom(axiom);
-
 		triggerSave();
 
 	}
@@ -276,9 +247,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(subject, complement);
 		manager.addAxiom(currentOntology, subClass);
 		
-		CustomAxiom axiom = new NegationAxiom(subject.toString(), complement.toString());
-		CustomAxioms.get().addCustomAxiom(axiom);
-
 		triggerSave();
 	}
 
@@ -289,10 +257,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(sub, sup);
 
 		manager.addAxiom(currentOntology, subPropertyAxiom);
-		CustomAxiom axiom = new ConditionalAxiom(iriPath, lemmatizeProperty(subProperty),
-				lemmatizeProperty(superProperty));
-		CustomAxioms.get().addCustomAxiom(axiom);
-		
 		triggerSave();
 	}
 
@@ -306,9 +270,6 @@ public class OWLAPIImpl implements OntologyAPI {
 			OWLClassExpression concept) {
 
 		OWLObjectAllValuesFrom allValues = df.getOWLObjectAllValuesFrom(role, concept);
-
-		CustomAxiom axiom = new UniversalAxiom(iriPath, "", null, "");
-		CustomAxioms.get().addCustomAxiom(axiom);
 
 		return allValues;
 	}

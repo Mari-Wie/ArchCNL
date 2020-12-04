@@ -117,7 +117,7 @@ public class AsciiDocArc42Parser
             for (String line : lines)
             {
                 rulePath = PREFIX + "_" + id_for_file + EXTENSION;
-                String ontologyFile = "/architecture" + id_for_file + OWL_EXTENSION; // TODO: remove hardcoded solution
+                String ontologyFile = "/architecture" + id_for_file + OWL_EXTENSION;
                 ontologyPath = outputDirectory + ontologyFile;
                 LOG.info("Rule Id      : " + id);
                 LOG.info("Rule         : " + line);
@@ -129,7 +129,7 @@ public class AsciiDocArc42Parser
                 rule.setId(id);
                 rule.setCnlSentence(line);
                 ArchitectureRules rules = ArchitectureRules.getInstance();
-                rules.addRule(rule, id);
+                // rules.addRule(rule, id); // (1)
                 LOG.info("Rule added");
                 id++;
 
@@ -141,7 +141,7 @@ public class AsciiDocArc42Parser
                     //File f = new File(rulePath);
                     FileUtils.writeStringToFile(f, line + "\n", (Charset) null,
                             true);
-                    rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath);
+                    rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath); // replaces (1)
                     LOG.info("Ended addRuleWithPathToConstraint");
                     
                     generator.transformCNLFile(rulePath);

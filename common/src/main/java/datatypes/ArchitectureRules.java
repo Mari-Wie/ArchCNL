@@ -1,6 +1,8 @@
 package datatypes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +43,10 @@ public class ArchitectureRules {
 		return pathToConvertedConstraint.get(r);
 	}
 	
+	/**
+	 * @param id the ID of the rule to return
+	 * @return the rule with the given ID, or null, if no rule with the given ID exists
+	 */
 	public ArchitectureRule getRuleWithID(int id) {
 		for (ArchitectureRule rule : rules.keySet()) {
 			if(rules.get(rule) == id) {
@@ -50,48 +56,10 @@ public class ArchitectureRules {
 		return null;
 	}
 	
-	public Map<ArchitectureRule,Integer> getRules() {
-		return rules;
+	/**
+	 * @return a list of all currently stored architecture rules 
+	 */
+	public List<ArchitectureRule> getRules() {
+		return new ArrayList<>(rules.keySet());
 	}
-	
-	public int getIDOfRule(String constraint) {
-		for (ArchitectureRule r : rules.keySet()) {
-			if(r.getOwlAxiom().equals(constraint)) {
-				return rules.get(r);
-			}
-			else if(r.getSecondOWLAxiom()!= null && r.getSecondOWLAxiom().equals(constraint)) {
-				return rules.get(r);
-			}
-		}
-		return -1;
-	}
-	
-	public ArchitectureRule getRuleWithConstraint(String constraint) {
-		for (ArchitectureRule r : rules.keySet()) {
-			if(r.getOwlAxiom().equals(constraint)) {
-				return r;
-			}
-			else if(r.getSecondOWLAxiom()!= null && r.getSecondOWLAxiom().equals(constraint)) {
-				return r;
-			}
-		}
-		return null;
-	}
-	
-	public ArchitectureRule getRuleByCNLSentence(String cnlSentence) {
-		for (ArchitectureRule r : rules.keySet()) {
-			if(r.getCnlSentence().equals(cnlSentence)) {
-				return r;
-			}
-		}
-		
-		return null;
-	}
-
-	public void print() {
-		for (ArchitectureRule rule : rules.keySet()) {
-			System.out.println("id: " + rules.get(rule).toString());
-		}
-	}
-
 }
