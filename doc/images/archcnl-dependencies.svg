@@ -92,7 +92,7 @@
       ><text x="47" font-size="14px" y="50.6094" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >OntologyAPI</text
     ></g
-    ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(900,330)" stroke-opacity="0" stroke="rgb(255,255,255)"
+    ><g fill="rgb(0,0,255)" fill-opacity="0.4902" transform="translate(900,330)" stroke-opacity="0.4902" stroke="rgb(0,0,255)"
     ><path d="M0.5 0.5 L100.4336 0.5 L100.4336 21.6094 L129 21.6094 L129 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath3)"
     /></g
     ><g transform="translate(900,330)"
@@ -151,7 +151,7 @@
       ><text x="8" font-size="14px" y="50.6094" clip-path="url(#clipPath6)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >FamixOntologyTransformer</text
     ></g
-    ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(890,470)" stroke-opacity="0" stroke="rgb(255,255,255)"
+    ><g fill="rgb(0,0,255)" fill-opacity="0.4902" transform="translate(890,470)" stroke-opacity="0.4902" stroke="rgb(0,0,255)"
     ><path d="M0.5 0.5 L71.4766 0.5 L71.4766 21.6094 L99 21.6094 L99 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath7)"
     /></g
     ><g transform="translate(890,470)"
@@ -184,7 +184,7 @@
       ><text x="43" font-size="14px" y="50.6094" clip-path="url(#clipPath6)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >ArchcnlGenerator</text
     ></g
-    ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(910,60)" stroke-opacity="0" stroke="rgb(255,255,255)"
+    ><g fill="rgb(255,165,0)" fill-opacity="0.4902" transform="translate(910,60)" stroke-opacity="0.4902" stroke="rgb(255,165,0)"
     ><path d="M0.5 0.5 L91.54 0.5 L91.54 21.6094 L149 21.6094 L149 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath9)"
     /></g
     ><g transform="translate(910,60)"
