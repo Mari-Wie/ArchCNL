@@ -18,6 +18,7 @@
         <commonsioVersion>2.6</commonsioVersion>
         <apachejenaVersion>3.3.0</apachejenaVersion>
         <owlapiVersion>5.1.0</owlapiVersion>
+        <junitVersion>4.12</junitVersion>
 	</properties>
 
     <modules>
