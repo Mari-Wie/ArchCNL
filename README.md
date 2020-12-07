@@ -2,58 +2,7 @@
 
 Central Repository for all projects that are needed for the execution of ArchCNL
 
-## Setup and usage with Eclipse
-
-- Install Eclipse
-  - Either install Eclipse DSL
-  - Or take any other Version and add the Xtext and Xtend plugins
-- Fetch the source of ArchCNL
-
-```bash
-git clone https://github.com/Mari-Wie/ArchCNL.git
-```
-
-- Import the project as maven project in Eclipse
-- Run "GenerateArchCnl.mwe2" from ``org.architecture.cnl`` as "MWE2 Workflow" to generate the Xtext and Xtend files
-- Adjust the ``projectPath`` in ``CNLToolchain.java``
-- Start a stardog database
-- Run the ``main``Method of ``CNLToolchain.java``
-
-## Setup and usage with maven
-
-- Fetch the source of ArchCNL
-
-```bash
-git clone https://github.com/Mari-Wie/ArchCNL.git
-```
-
-- Execute ``mvn clean package`` in the project directory
-- Execute the generated JAR and inspect the help with ``java -jar cnl-toolchain/target/cnl-toolchain-0.0.1-SNAPSHOT.jar``
-- Use the paths to the project and adoc as arguments
-
-## ArchCNL CLI
-
-The current cli interface is as follows
-
-```bash
-Usage: ArchCNL CLI [-hV] [-c=<context>] [-d=<database>] [-s=<server>] <project path> <rules file>
-      <project path>        The path to the project
-      <rules file>          The path to the rules, relative to the project path
-  -c, --context=<context>   Specifiy the context
-  -d, --database=<database> Specifiy the database name
-  -h, --help                Show this help message and exit.
-  -s, --server=<server>     Specifiy the server
-  -V, --version             Print version information and exit.
-```
-
-The required arguments are ``<project path>``and ``<rules file>``.
-If the project is at the path ``a/b/``and the adoc or rules file is at ``a/b/c.adoc``the arguments would be as follows
-
-```bash
-java -jar cnl-toolchain/target/cnl-toolchain-0.0.1-SNAPSHOT.jar /a/b/ c.adoc
-```
-
-Please note the appended backslash in the project path.
+The documentation, a user guide, and a developer guide are provided in the [wiki](https://github.com/Mari-Wie/ArchCNL/wiki).
 
 ## Projects that make up ArchCNL
 
