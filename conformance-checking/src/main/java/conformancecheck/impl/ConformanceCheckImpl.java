@@ -90,7 +90,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	@Override
 	public Map<String, String> getProvidedNamespaces() {
 		HashMap<String, String> res = new HashMap<>();
-		res.put("architecture", ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace());
+		res.put("architectureconformance", ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace());
 		return res;
 	}
 }
