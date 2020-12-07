@@ -7,7 +7,7 @@ public class ConstraintViolationsResultSet {
 	
 	private List<ConstraintViolation> violations;
 	
-	public ConstraintViolationsResultSet(int id) {
+	public ConstraintViolationsResultSet() {
 		violations = new ArrayList<>();
 		
 	}
