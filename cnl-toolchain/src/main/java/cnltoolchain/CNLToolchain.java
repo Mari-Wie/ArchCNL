@@ -158,6 +158,7 @@ public class CNLToolchain
         
         supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
+        supportedOWLNamespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
       
     	LOG.info("Start parsing...");
         AsciiDocArc42Parser parser = new AsciiDocArc42Parser(supportedOWLNamespaces);
