@@ -30,7 +30,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/conformance-checking"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/conformancechecking-documentation"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.architecture.cnl"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.architecture.cnl.ide"/>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

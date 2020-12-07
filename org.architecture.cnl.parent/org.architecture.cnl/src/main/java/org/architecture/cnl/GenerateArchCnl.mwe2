@@ -12,9 +12,6 @@ Workflow {
 			project = StandardProjectConfig {
 				baseName = "org.architecture.cnl"
 				rootPath = rootPath
-				genericIde = {
-					enabled = true
-				}
 				mavenLayout = true
 			}
 			code = {
