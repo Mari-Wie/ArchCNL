@@ -42,30 +42,11 @@
             <version>${stardogVersion}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.complexible.stardog.rdf4j</groupId>
-            <artifactId>stardog-rdf4j</artifactId>
-            <version>${stardogVersion}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.complexible.stardog.sesame</groupId>
-            <artifactId>stardog-sesame-core</artifactId>
-            <version>${stardogVersion}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.complexible.stardog.jena</groupId>
-            <artifactId>stardog-jena</artifactId>
-            <version>${stardogVersion}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.complexible.stardog.gremlin</groupId>
-            <artifactId>stardog-gremlin</artifactId>
-            <version>${stardogVersion}</version>
-            <scope>compile</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>${apachejenaVersion}</version>
+		</dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>

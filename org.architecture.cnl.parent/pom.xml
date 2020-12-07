@@ -14,7 +14,6 @@
 	
 	<modules>
 		<module>org.architecture.cnl</module>
-		<module>org.architecture.cnl.ide</module>
 	</modules>
 	
 	<dependencyManagement>
