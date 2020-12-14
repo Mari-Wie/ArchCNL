@@ -119,7 +119,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 				violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
 						statement.object().toString());
 			}
-//			violation.addProof(proof.toString());
+
 			System.out.println(proof.toString());
 			result.addViolation(violation);
 		}

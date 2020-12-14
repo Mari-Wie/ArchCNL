@@ -28,14 +28,6 @@ public class ArchitectureRuleTest {
 		r2.setId(0);
 		r3.setId(1);
 		
-		r1.setOwlAxiom("axiom");
-		r2.setOwlAxiom("axiom");
-		r3.setOwlAxiom("another axiom");
-		
-		r1.setSecondOWLAxiom("yet another axiom");
-		r2.setSecondOWLAxiom("yet another axiom");
-		r3.setSecondOWLAxiom("completely different axiom");
-		
 		r1.setType(RuleType.AT_LEAST);
 		r2.setType(RuleType.AT_LEAST);
 		r3.setType(RuleType.AT_MOST);

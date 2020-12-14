@@ -7,8 +7,6 @@ public class ArchitectureRule {
 	// TODO: change to value class?
 	private Integer id;
 	private String cnlSentence;
-	private String owlAxiom;
-	private String secondOWLAxiom; //for domain range constraint
 	private String contraintFile;
 	
 	private RuleType type;
@@ -42,28 +40,6 @@ public class ArchitectureRule {
 	}
 
 	/**
-	 * @return the OWL axiom associated with this rule (as a string)
-	 */
-	public String getOwlAxiom() {
-		return owlAxiom;
-	}
-
-	/**
-	 * sets the OWL axiom associated with this rule (as a string)
-	 */
-	public void setOwlAxiom(String owlAxiom) {
-		this.owlAxiom = owlAxiom;
-	}
-
-	public void setSecondOWLAxiom(String axiom) {
-		this.secondOWLAxiom = axiom;
-	}
-	
-	public String getSecondOWLAxiom() {
-		return secondOWLAxiom;
-	}
-
-	/**
 	 * @return The type of this rule. It corresponds to the way how this rule's CNL sentence can be deferred from the grammar.
 	 */
 	public RuleType getType() {
@@ -90,8 +66,6 @@ public class ArchitectureRule {
 	public void setContraintFile(String contraintFile) {
 		this.contraintFile = contraintFile;
 	}
-
-	
 	
 	@Override
 	public int hashCode() {
@@ -100,8 +74,6 @@ public class ArchitectureRule {
 		result = prime * result + ((cnlSentence == null) ? 0 : cnlSentence.hashCode());
 		result = prime * result + ((contraintFile == null) ? 0 : contraintFile.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((owlAxiom == null) ? 0 : owlAxiom.hashCode());
-		result = prime * result + ((secondOWLAxiom == null) ? 0 : secondOWLAxiom.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -129,16 +101,6 @@ public class ArchitectureRule {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (owlAxiom == null) {
-			if (other.owlAxiom != null)
-				return false;
-		} else if (!owlAxiom.equals(other.owlAxiom))
-			return false;
-		if (secondOWLAxiom == null) {
-			if (other.secondOWLAxiom != null)
-				return false;
-		} else if (!secondOWLAxiom.equals(other.secondOWLAxiom))
 			return false;
 		if (type != other.type)
 			return false;

@@ -1,0 +1,6 @@
+@prefix architectureconformance: <http://arch-ont.org/ontologies/architectureconformance#>
+@prefix famix: <http://arch-ont.org/ontologies/famix.owl#>
+@prefix architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
+[useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?f rdf:type famix:Attribute) (?class famix:definesAttribute ?f) (?f famix:hasDeclaredType ?class2) -> (?class architecture:use ?class2)]
+[isLayerOne: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, 'TestLayerOne') -> (?class rdf:type architecture:LayerOne)]
+[isLayerTwo: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, 'TestLayerTwo') -> (?class rdf:type architecture:LayerTwo)]

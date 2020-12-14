@@ -25,16 +25,7 @@
     <!-- http://www.arch-ont.org/ontologies/architecture.owl#use -->
 
 
-    <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#use">
-        <rdfs:domain rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#LayerOne"/>
-        <rdfs:range>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:range>
-    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#use"/>
     
 
 
@@ -60,7 +51,18 @@
     <!-- http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo -->
 
 
-    <owl:Class rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo"/>
+    <owl:Class rdf:about="http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo">
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:complementOf>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#use"/>
+                        <owl:someValuesFrom rdf:resource="http://www.arch-ont.org/ontologies/architecture.owl#LayerOne"/>
+                    </owl:Restriction>
+                </owl:complementOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>
 </rdf:RDF>
 
 
