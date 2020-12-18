@@ -44,11 +44,11 @@ public class StanfordLemmatizer {
 		return lemmas;
 	}
 
-	public static void main(String[] args) {
-		System.out.println("Starting Stanford Lemmatizer");
-		String text = "accesses";
-		StanfordLemmatizer slem = new StanfordLemmatizer();
-		System.out.println(slem.lemmatize(text));
-	}
+//	public static void main(String[] args) {
+//		System.out.println("Starting Stanford Lemmatizer");
+//		String text = "accesses";
+//		StanfordLemmatizer slem = new StanfordLemmatizer();
+//		System.out.println(slem.lemmatize(text));
+//	}
 
 }

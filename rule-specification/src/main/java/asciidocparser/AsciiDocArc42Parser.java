@@ -25,6 +25,9 @@ import datatypes.ArchitectureRules;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
  
+/**
+ * Parser for AsciiDoc files containing architecture rules and mapping rules.
+ */
 public class AsciiDocArc42Parser
 {
 	private static final Logger LOG = LogManager.getLogger(AsciiDocArc42Parser.class);

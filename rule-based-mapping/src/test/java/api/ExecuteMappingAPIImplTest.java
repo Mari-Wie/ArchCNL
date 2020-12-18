@@ -31,7 +31,7 @@ public class ExecuteMappingAPIImplTest {
 		ruleOntology.add("architecture1.owl");
 		ReasoningConfiguration config = ReasoningConfiguration.build();
 		config.withMappingRules("mapping.txt");
-		config.addPathsToConcepts(ruleOntology);
+		config.withPathsToConcepts(ruleOntology);
 		config.withData("results.owl");
 		
 		ExecuteMappingAPI e = new ExecuteMappingAPIImpl();

@@ -37,22 +37,7 @@ public class OWLAPIImpl implements OntologyAPI {
 	OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private String filePath;
 
-	private List<String> _numbers;
-
 	public OWLAPIImpl() {
-
-		_numbers = new ArrayList<String>();
-		_numbers.add("no");
-		_numbers.add("one");
-		_numbers.add("two");
-		_numbers.add("three");
-		_numbers.add("four");
-		_numbers.add("five");
-		_numbers.add("six");
-		_numbers.add("seven");
-		_numbers.add("eight");
-		_numbers.add("nine");
-		_numbers.add("ten");
 
 	}
 

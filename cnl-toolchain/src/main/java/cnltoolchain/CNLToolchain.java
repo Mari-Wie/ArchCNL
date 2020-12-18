@@ -35,11 +35,11 @@ public class CNLToolchain
 {
 	private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
 
-    private List<String> ontologyPaths;
     private OwlifyComponent famixTransformer;
     private ExecuteMappingAPI mappingAPI;
     private StardogICVAPI icvAPI;
-
+    private IConformanceCheck check;
+    
     private String databaseName;
     private String server;
     
@@ -62,6 +62,7 @@ public class CNLToolchain
         this.server = server;
         this.icvAPI = StardogAPIFactory.getICVAPI();
         this.famixTransformer = new FamixOntologyTransformer(TEMPORARY_DIRECTORY + "/results.owl");
+        this.check = new ConformanceCheckImpl();
     }
     
     /**
@@ -91,8 +92,6 @@ public class CNLToolchain
 			System.err.println(e1.getMessage());
 			return;
 		}
-        
-        
         
         String database = "MWTest_"+createTimeSuffix();  
         String server =  props.getServer();
@@ -137,7 +136,15 @@ public class CNLToolchain
 		return strDate;
 	}
     
-    
+    /**
+     * Executes the ArchCNL tool chain.
+     * @param docPath path to the file containing the architecture rules and the architecture-to-code mapping
+     * @param sourceCodePath path to the root of the project to analyse
+     * @param context the database context to use
+     * @throws MissingBuilderArgumentException
+     * @throws FileNotFoundException when a file (input or a temporary one) cannot be accessed
+     * @throws NoConnectionToStardogServerException when no connection to the database can be established
+     */
     public void execute(String docPath, String sourceCodePath, String context)
             throws MissingBuilderArgumentException, FileNotFoundException,
             NoConnectionToStardogServerException
@@ -150,42 +157,15 @@ public class CNLToolchain
         if (! directory.exists()){
             directory.mkdir();
         }
-
-        IConformanceCheck check = new ConformanceCheckImpl();
         
-        String mappingFilePath = TEMPORARY_DIRECTORY + "/mapping.txt";
-        HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
-        
-        supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
-        supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
-        supportedOWLNamespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
+        final String mappingFilePath = TEMPORARY_DIRECTORY + "/mapping.txt";
       
-    	LOG.info("Start parsing...");
-        AsciiDocArc42Parser parser = new AsciiDocArc42Parser(supportedOWLNamespaces);
-        parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
-        parser.parseMappingRulesFromDocumentation(docPath, mappingFilePath);
-        ontologyPaths = parser.getOntologyPaths();
+    	List<String> ontologyPaths = parseRuleFile(docPath, mappingFilePath);
+    	String codeModelPath = buildCodeModel(sourceCodePath);
+    	
+        performArchitectureToCodeMapping(mappingFilePath, ontologyPaths, codeModelPath);
 
-    	LOG.info("Start famix transformation...");
-        // Source Code Transformation
-        famixTransformer.addSourcePath(sourceCodePath);
-        famixTransformer.transform();
-        
-        // Mapping
-    	LOG.info("Start get mappings...");
-        mappingAPI = ExecuteMappingAPIFactory.get();
-        ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build()
-            .addPathsToConcepts(ontologyPaths)
-            .withMappingRules(mappingFilePath)
-            .withData(famixTransformer.getResultPath());
-        mappingAPI.setReasoningConfiguration(reasoningConfig, TEMPORARY_DIRECTORY + "/mapped.owl");
-        mappingAPI.executeMapping();
-
-        //create stardog db
-    	LOG.info("Create StardogDB ...");
-        StardogDatabaseAPI db = new StardogDatabase(server,databaseName,"admin","admin");
-    	LOG.info("Connect to StardogDB ...");
-        db.connect();
+        StardogDatabaseAPI db = connectToDatabase();
         
         // Load code to stardog and perform conformance checking
     	LOG.info("Start reasoning...");
@@ -224,6 +204,55 @@ public class CNLToolchain
 
     	LOG.info("End execution.");
     }
+
+	private StardogDatabaseAPI connectToDatabase() {
+		//create stardog db
+    	LOG.info("Create StardogDB ...");
+        StardogDatabaseAPI db = new StardogDatabase(server,databaseName,"admin","admin");
+    	LOG.info("Connect to StardogDB ...");
+        db.connect();
+		return db;
+	}
+
+	private void performArchitectureToCodeMapping(final String mappingFilePath, List<String> ontologyPaths,
+			String codeModelPath) throws FileNotFoundException {
+		// Mapping
+    	LOG.info("Start get mappings...");
+        mappingAPI = ExecuteMappingAPIFactory.get();
+        ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build()
+            .withPathsToConcepts(ontologyPaths)
+            .withMappingRules(mappingFilePath)
+            .withData(codeModelPath);
+        mappingAPI.setReasoningConfiguration(reasoningConfig, TEMPORARY_DIRECTORY + "/mapped.owl");
+        mappingAPI.executeMapping();
+	}
+
+	private String buildCodeModel(String sourceCodePath) {
+		LOG.info("Start famix transformation...");
+        // Source Code Transformation
+        famixTransformer.addSourcePath(sourceCodePath);
+        famixTransformer.transform();
+        String codeModelPath = famixTransformer.getResultPath();
+		return codeModelPath;
+	}
+
+	private List<String> parseRuleFile(String docPath, final String mappingFilePath) {
+		LOG.info("Start parsing...");
+        AsciiDocArc42Parser parser = new AsciiDocArc42Parser(gatherOWLNamespaces());
+        parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
+        parser.parseMappingRulesFromDocumentation(docPath, mappingFilePath);
+        List<String> ontologyPaths = parser.getOntologyPaths();
+		return ontologyPaths;
+	}
+
+	private HashMap<String, String> gatherOWLNamespaces() {
+		HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
+        
+        supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
+        supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
+        supportedOWLNamespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
+		return supportedOWLNamespaces;
+	}
 
 
 

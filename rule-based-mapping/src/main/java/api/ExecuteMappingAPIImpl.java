@@ -13,6 +13,10 @@ import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
 import org.apache.jena.reasoner.rulesys.Rule;
 
+/**
+ * Implementation of the ExecuteMappingAPI interface. Can be
+ * instantiated via the ExecuteMappingAPIFactory. 
+ */
 class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	
 	private ReasoningConfiguration config;
@@ -24,29 +28,42 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	}
 
 	public void executeMapping() throws FileNotFoundException {
-		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		System.out.println("reading");
-		ontModel.read(config.getPathToData());
-		
-		if(config.getPathsToConcepts().size() == 0) {
-			ontModel.read(config.getPathToConcepts());			
-		}
-		else {
-			for (String path : config.getPathsToConcepts()) {
-				System.out.println(path);
-				ontModel.read(path);
-			}
-		}
+		OntModel ontModel = readInputs();
+		Reasoner reasoner = readMappingRules();
+		InfModel infmodel = doMapping(ontModel, reasoner);
+		writeOutput(infmodel);
+	}
 
-		System.out.println("reasoner");
-		Reasoner reasoner = new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));
-		System.out.println("infmodel");
-		InfModel infmodel = ModelFactory.createInfModel(reasoner, ontModel);
+	private void writeOutput(InfModel infmodel) throws FileNotFoundException {
 		System.out.println("writing to: " + this.reasoningResultPath);
 		infmodel.write(new FileOutputStream(new File(this.reasoningResultPath)));
 
 		StmtIterator statements = infmodel.listStatements();
 		System.out.println(statements.toList().size());
+	}
+
+	private InfModel doMapping(OntModel ontModel, Reasoner reasoner) {
+		System.out.println("infmodel");
+		InfModel infmodel = ModelFactory.createInfModel(reasoner, ontModel);
+		return infmodel;
+	}
+
+	private Reasoner readMappingRules() {
+		System.out.println("reasoner");
+		Reasoner reasoner = new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));
+		return reasoner;
+	}
+
+	private OntModel readInputs() {
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		System.out.println("reading");
+		ontModel.read(config.getPathToData());
+		
+		for (String path : config.getPathsToConcepts()) {
+			System.out.println(path);
+			ontModel.read(path);
+		}
+		return ontModel;
 	}
 
 	public String getReasoningResultPath() {
