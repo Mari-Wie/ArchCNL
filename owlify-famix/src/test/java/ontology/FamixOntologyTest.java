@@ -78,10 +78,9 @@ public class FamixOntologyTest {
 	
 	@Test
 	public void testInheritanceHasSubclassAndSuperclassSet() {
-
 		Individual subClass = ontology.getFamixClassWithName("TestClass");
 		Individual superClass = ontology.getFamixClassWithName("TestClass2");
-		Individual inheritance = ontology.getInheritanceBetweenSubClassAndSuperClass(subClass, superClass);
+		Individual inheritance = ontology.getInheritanceBetweenSubClassAndSuperClass(superClass, subClass);
 		ObjectProperty subClassProperty = ontology.getSubClassProperty();
 		ObjectProperty superClassProperty = ontology.getSuperClassProperty();
 		RDFNode subValue = inheritance.getPropertyValue(subClassProperty);

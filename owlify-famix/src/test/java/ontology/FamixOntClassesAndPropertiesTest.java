@@ -3,6 +3,9 @@ package ontology;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import org.apache.jena.ontology.Individual;
 //import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -12,15 +15,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class FamixOntClassesAndPropertiesTest {
-
+// TODO
+	
 	private FamixOntClassesAndProperties classesAndProperties;
 	private OntModel model;
 	
 	@Before
-	public void intialize() {
+	public void intialize() throws FileNotFoundException {
 		classesAndProperties = new FamixOntClassesAndProperties();
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read("./ontology/famix.owl");
+		model.read(FamixOntClassesAndPropertiesTest.class.getResourceAsStream("/ontologies/famix.owl"), null);
 	}
 	
 	@Test

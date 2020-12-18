@@ -2,13 +2,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
+import java.util.List;
 
 //import org.apache.jena.ontology.Individual;
 //import org.apache.jena.rdf.model.Property;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import exceptions.FileIsNotAJavaClassException;
 //import ontology.FamixOntClassesAndProperties;
@@ -16,7 +22,7 @@ import parser.JavaParserDelegator;
 import visitors.JavaTypeVisitor;
 
 public class ClassVistorTest {
-
+	
 	private JavaTypeVisitor classVisitor;
 	private JavaParserDelegator delegator;
 	private CompilationUnit unit;
@@ -31,6 +37,12 @@ public class ClassVistorTest {
 		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
 		classVisitor = new JavaTypeVisitor(famixOntologyInputStream);
 		delegator = new JavaParserDelegator();
+		
+		// set a symbol solver
+		CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+		combinedTypeSolver.add(new ReflectionTypeSolver());
+		combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/examples/"));
+		StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
 	}
 
 	@Test
