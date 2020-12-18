@@ -60,6 +60,8 @@ public class AsciiDocArc42ParserTest {
 		
 		Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		actual0.read("./src/test/resources/architecture0.owl");
+
+		assertTrue(expected0.isIsomorphicWith(actual0));
 		
 		// 2nd rule
 		Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
