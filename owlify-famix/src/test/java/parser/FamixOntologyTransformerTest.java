@@ -75,6 +75,6 @@ public class FamixOntologyTransformerTest {
             });
         }
 		
-		Files.writeString(Paths.get(filepath), builder.toString());
+		Files.writeString(Paths.get(filepath), builder.toString(), StandardCharsets.UTF_8);
 	}
 }
