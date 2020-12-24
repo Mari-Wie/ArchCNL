@@ -15,16 +15,87 @@ import org.junit.runner.RunWith
 @RunWith(XtextRunner)
 @InjectWith(ArchcnlInjectorProvider)
 class ArchcnlParsingTest {
+	// primary focus: test the grammar
 	@Inject
 	ParseHelper<Model> parseHelper
 	
 	@Test
-	def void loadModel() {
-//		val result = parseHelper.parse('''
-//			Hello Xtext!
-//		''')
-//		Assert.assertNotNull(result)
-//		val errors = result.eResource.errors
-//		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	def void testErrorDetected() {
+		val result = parseHelper.parse('''
+			This is not ArchCNL because the syntax is not complied with.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertFalse('''Expected errors are not present''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testEveryRule() {
+		val result = parseHelper.parse('''
+			Every Observer must observe an Observable.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testOnlyCanRule() {
+		val result = parseHelper.parse('''
+			Only LayerAbove can use LayerBelow.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testConditionalRule() {
+		val result = parseHelper.parse('''
+			If Class creates Resource, then it must destroy this Resource.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testNegationRule() {
+		val result = parseHelper.parse('''
+			No LayerBelow can use LayerAbove.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testRelativeClauseRule() {
+		val result = parseHelper.parse('''
+			No Class that (belongsTo FancyComponent) can use UglyPackage.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testCardinalityRule() {
+		val result = parseHelper.parse('''
+			Only a BadClass can import at-least 100 Package.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+	}
+	
+	@Test
+	def void testDataRule() {
+		val result = parseHelper.parse('''
+			Only a BadClass can haveMethod equal-to 100.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
 	}
 }
