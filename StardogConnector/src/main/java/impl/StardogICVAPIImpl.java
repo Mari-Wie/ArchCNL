@@ -23,6 +23,7 @@ import com.stardog.stark.io.RDFFormats;
 
 import com.complexible.stardog.ContextSets;// TODO: only temporary
 
+import api.StardogDatabaseAPI;
 import api.StardogICVAPI;
 import datatypes.ConstraintViolation;
 import datatypes.ConstraintViolationsResultSet;
@@ -35,13 +36,23 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 
 	private ConstraintViolationsResultSet result;
 
+	private StardogDatabaseAPI db;
+	
+	/**
+	 * Constructor.
+	 * @param database The database to use.
+	 */
+	public StardogICVAPIImpl(StardogDatabaseAPI database) {
+		db = database;
+	}
+	
 	@Override
-	public String addIntegrityConstraint(String pathToConstraint, String server, String database)
+	public String addIntegrityConstraint(String pathToConstraint)
 			throws FileNotFoundException {
 		LOG.info("Adding contraints file: " + pathToConstraint);
 		// Obtain a connection to the database
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
-				.credentials("admin", "admin").connect()) { // TODO: avoid hard-coded credentials
+		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(false)
+				.credentials(db.getUserName(), db.getPassword()).connect()) {
 
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
@@ -56,9 +67,9 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	}
 
 	@Override
-	public void removeIntegrityConstraints(String server, String database) {
+	public void removeIntegrityConstraints() {
 		LOG.info("Removing all constraints");
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
+		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(false)
 				.credentials("admin", "admin").connect()) { // TODO: avoid hard-coded credentials
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
@@ -71,12 +82,12 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	}
 
 	@Override
-	public void explainViolationsForContext(String server, String database, String context) {
+	public void explainViolationsForContext(String context) {
 
 		LOG.info("Explaining violations for context: " + context);
 		
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(true /*false*/)
-				.credentials("admin", "admin").connect()) { // TODO remove hard coded username and password
+		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(true)
+				.credentials(db.getUserName(), db.getPassword()).connect()) {
 
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 			

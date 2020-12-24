@@ -186,6 +186,4 @@ public class StardogDatabase implements StardogDatabaseAPI {
 		connection.commit();
         LOG.info("Change committed...");
 	}
-	
-
 }

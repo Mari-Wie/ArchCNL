@@ -39,6 +39,7 @@ public class CNLToolchain
     private ExecuteMappingAPI mappingAPI;
     private StardogICVAPI icvAPI;
     private IConformanceCheck check;
+    private StardogDatabaseAPI db;
     
     private String databaseName;
     private String server;
@@ -60,7 +61,8 @@ public class CNLToolchain
     {
         this.databaseName = databaseName;
         this.server = server;
-        this.icvAPI = StardogAPIFactory.getICVAPI();
+        this.db = new StardogDatabase(server,databaseName,"admin","admin");
+        this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.famixTransformer = new FamixOntologyTransformer(TEMPORARY_DIRECTORY + "/results.owl");
         this.check = new ConformanceCheckImpl();
     }
@@ -165,7 +167,8 @@ public class CNLToolchain
     	
         performArchitectureToCodeMapping(mappingFilePath, ontologyPaths, codeModelPath);
 
-        StardogDatabaseAPI db = connectToDatabase();
+        LOG.info("Connect to StardogDB ...");
+        db.connect();
         
         // Load code to stardog and perform conformance checking
     	LOG.info("Start reasoning...");
@@ -187,15 +190,15 @@ public class CNLToolchain
             
             try 
     		{
-    			icvAPI.addIntegrityConstraint(path, db.getServer(), db.getDatabaseName());
+    			icvAPI.addIntegrityConstraint(path);
     		}
     		catch (FileNotFoundException e) 
     		{
     			LOG.error(e.getMessage()+ " : " + path);
     		}
 
-    		icvAPI.explainViolationsForContext(db.getServer(), db.getDatabaseName(), context);    		
-    		icvAPI.removeIntegrityConstraints(db.getServer(), db.getDatabaseName());
+    		icvAPI.explainViolationsForContext(context);    		
+    		icvAPI.removeIntegrityConstraints();
             
             String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
             check.validateRule(rule, tempfile, icvAPI.getResult(), resultPath); // TODO use return value
@@ -204,15 +207,6 @@ public class CNLToolchain
 
     	LOG.info("End execution.");
     }
-
-	private StardogDatabaseAPI connectToDatabase() {
-		//create stardog db
-    	LOG.info("Create StardogDB ...");
-        StardogDatabaseAPI db = new StardogDatabase(server,databaseName,"admin","admin");
-    	LOG.info("Connect to StardogDB ...");
-        db.connect();
-		return db;
-	}
 
 	private void performArchitectureToCodeMapping(final String mappingFilePath, List<String> ontologyPaths,
 			String codeModelPath) throws FileNotFoundException {

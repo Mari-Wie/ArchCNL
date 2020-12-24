@@ -14,6 +14,12 @@ public class OWLAPIImplTest {
 	private OntologyAPI api;
 	final String IRI_PATH = "http://test";
 	final String FILE_PATH = "./src/test/resources/ontology.owl";
+	
+	// Only a few methods with suitable testability are tested.
+	// The other methods are not, because OWLAPIImpl is just a 
+	// simple wrapper of some calls to the external library
+	// org.semanticweb.owlapi which is assumed to work correctly.
+	
 	@Before
 	public void setUp() throws Exception {
 		api = new OWLAPIImpl();
@@ -104,5 +110,4 @@ public class OWLAPIImplTest {
 		assertFalse(c.asOWLClass().isOWLDatatype());
 		assertFalse(c.asOWLClass().isOWLObjectProperty());
 	}
-	
 }

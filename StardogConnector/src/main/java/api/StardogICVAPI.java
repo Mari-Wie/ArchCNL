@@ -11,29 +11,23 @@ public interface StardogICVAPI {
 	 * current integrity constraints is violated in the given context. 
 	 * The explanations/proofs of identified violations can be queried with 
 	 * {@link #getResult()}.
-	 * @param server The name of the database server to connect to.
-	 * @param database The name of the database to connect to.
 	 * @param context The URI of the RDF context to use.
 	 */
-	public void explainViolationsForContext(String server, String database, String context);
+	public void explainViolationsForContext(String context);
 
 	/**
 	 * Connects to the given database and adds the integrity constraints stored in the specified file to the database.
 	 * @param pathToConstraints The path to the RDF-file in XML format which stores the integrity constraints to add.
-	 * @param server The name of the database server to connect to.
-	 * @param database The name of the database to connect to.
 	 * @return A string representation of the added constraint.
 	 * @throws FileNotFoundException When the input file cannot be accessed.
 	 */
-	public String addIntegrityConstraint(String pathToConstraint, String server, String database)
+	public String addIntegrityConstraint(String pathToConstraint)
 			throws FileNotFoundException;
 
 	/**
 	 * Connects to the given database and removes all integrity constraints from it.
-	 * @param server The name of the database server to connect to.
-	 * @param database The name of the database to connect to.
 	 */
-	void removeIntegrityConstraints(String server, String database);
+	void removeIntegrityConstraints();
 
 	/**
 	 * Returns the violations of integrity contraints as well as the explanetions/proofs
@@ -42,7 +36,4 @@ public interface StardogICVAPI {
 	 * @return the violations and their explanations
 	 */
 	public ConstraintViolationsResultSet getResult();
-
-
-
 }
