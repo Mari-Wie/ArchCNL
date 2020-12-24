@@ -136,4 +136,3 @@ Variable:
 terminal VARIABLE_NAME:
 	('A'..'Z')
 ;
-

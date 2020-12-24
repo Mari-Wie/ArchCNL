@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.architecture.cnl</groupId>
@@ -11,11 +12,16 @@
 		<artifactId>archcnl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
+	<properties>
+		<xtextVersion>2.23.0</xtextVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 	<modules>
 		<module>org.architecture.cnl</module>
 	</modules>
-	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -24,47 +30,7 @@
 				<version>${xtextVersion}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>	
-		
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>apache-jena-libs</artifactId>
-				<type>pom</type>
-				<version>${apachejenaVersion}</version>
 			</dependency>
-			
-			<dependency>
-				<groupId>edu.stanford.nlp</groupId>
-				<artifactId>stanford-corenlp</artifactId>
-				<version>${stanfordnlpVersion}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>edu.stanford.nlp</groupId>
-				<artifactId>stanford-corenlp</artifactId>
-				<version>${stanfordnlpVersion}</version>
-				<classifier>models</classifier>
-			</dependency>
-				
-			<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
-			<dependency>
-				<groupId>net.sourceforge.owlapi</groupId>
-				<artifactId>owlapi-distribution</artifactId>
-				<version>${owlapiVersion}</version>
-			</dependency>
-			<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-	        <dependency>
-	            <groupId>org.apache.logging.log4j</groupId>
-	            <artifactId>log4j-core</artifactId>
-	            <version>${log4jVersion}</version>
-	        </dependency>
-	        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-	        <dependency>
-	            <groupId>org.apache.logging.log4j</groupId>
-	            <artifactId>log4j-api</artifactId>
-	            <version>${log4jVersion}</version>
-	        </dependency>
-	        
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -206,5 +172,23 @@
 	</profiles>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
+		<dependency>
+			<groupId>net.sourceforge.owlapi</groupId>
+			<artifactId>owlapi-distribution</artifactId>
+			<version>${owlapiVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
 	</dependencies>
 </project>
