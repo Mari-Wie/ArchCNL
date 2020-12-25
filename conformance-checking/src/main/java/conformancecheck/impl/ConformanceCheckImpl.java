@@ -3,6 +3,7 @@ package conformancecheck.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	}
 
 	@Override
-	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath) 
+	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath) throws FileNotFoundException 
 	{
     	LOG.info("Starting validateRule ...");
     	ontology.storeArchitectureRule(rule);
@@ -65,11 +66,9 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		}
 	}
 	
-	// TODO: better approach?
-	// the following methods are protected so that they can be used as a seam during testing
-	protected Model loadModelFromFile(String filename) {
+	private Model loadModelFromFile(String filename) throws FileNotFoundException {
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		model.read(filename);
+		model.read(new FileReader(filename), "");
 		return model;
 	}
 	

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.stardog.stark.Statement;
 import com.stardog.stark.Values;
 import com.complexible.stardog.api.Connection;
@@ -20,6 +23,7 @@ import com.stardog.stark.io.RDFFormats;
 
 import com.complexible.stardog.ContextSets;// TODO: only temporary
 
+import api.StardogDatabaseAPI;
 import api.StardogICVAPI;
 import datatypes.ConstraintViolation;
 import datatypes.ConstraintViolationsResultSet;
@@ -27,18 +31,32 @@ import datatypes.ConstraintViolationsResultSet;
 public class StardogICVAPIImpl implements StardogICVAPI {
 
 	private static int id = 0;
+	
+	private static final Logger LOG = LogManager.getLogger(StardogICVAPI.class);
 
 	private ConstraintViolationsResultSet result;
 
+	private StardogDatabaseAPI db;
+	
+	/**
+	 * Constructor.
+	 * @param database The database to use.
+	 */
+	public StardogICVAPIImpl(StardogDatabaseAPI database) {
+		db = database;
+	}
+	
 	@Override
-	public String addIntegrityConstraint(String pathToConstraint, String server, String database)
+	public String addIntegrityConstraint(String pathToConstraint)
 			throws FileNotFoundException {
+		LOG.info("Adding contraints file: " + pathToConstraint);
 		// Obtain a connection to the database
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
-				.credentials("admin", "admin").connect()) { // TODO: avoid hard-coded credentials
+		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(false)
+				.credentials(db.getUserName(), db.getPassword()).connect()) {
 
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
+			
 			aConn.begin();
 			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraint));
 			aConn.commit();
@@ -49,11 +67,13 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	}
 
 	@Override
-	public void removeIntegrityConstraints(String server, String database) {
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(false)
+	public void removeIntegrityConstraints() {
+		LOG.info("Removing all constraints");
+		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(false)
 				.credentials("admin", "admin").connect()) { // TODO: avoid hard-coded credentials
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
 
+			
 			aValidator.begin();
 			aValidator.clearConstraints();
 			aValidator.commit();
@@ -62,18 +82,21 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	}
 
 	@Override
-	public void explainViolationsForContext(String server, String database, String context) {
-		try (Connection aConn = ConnectionConfiguration.to(database).server(server).reasoning(true /*false*/)
-				.credentials("admin", "admin").connect()) { // TODO remove hard coded username and password
+	public void explainViolationsForContext(String context) {
+
+		LOG.info("Explaining violations for context: " + context);
+		
+		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(true)
+				.credentials(db.getUserName(), db.getPassword()).connect()) {
 
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
-
+			
 			Set<Constraint> constraints = aValidator.getConstraints();
 			
 			Collection<com.stardog.stark.IRI> selectedContext = new ArrayList<>();
 			selectedContext.add(Values.iri(context));
 			
-			System.out.println("is valid: " + aValidator.isValid(ContextSets.DEFAULT_ONLY));
+			LOG.info("is valid: " + aValidator.isValid(ContextSets.DEFAULT_ONLY));
 			
 			for (Constraint constraint : constraints) {
 				Iterable<Proof> proofs = aValidator.explain(constraint).activeGraphs(selectedContext).countLimit(600)
@@ -94,7 +117,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	
 
 	private void storeViolations(int id, Constraint constraint, Iterable<Proof> proofs) {
-		result = new ConstraintViolationsResultSet(id);
+		result = new ConstraintViolationsResultSet();
 		for (Proof proof : proofs) {
 			Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
 			ConstraintViolation violation = new ConstraintViolation();
@@ -107,7 +130,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 				violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
 						statement.object().toString());
 			}
-//			violation.addProof(proof.toString());
+
 			System.out.println(proof.toString());
 			result.addViolation(violation);
 		}

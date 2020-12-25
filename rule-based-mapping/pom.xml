@@ -18,5 +18,12 @@
 			<artifactId>jena-arq</artifactId>
 			<version>${apachejenaVersion}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitVersion}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

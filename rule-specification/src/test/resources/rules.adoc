@@ -1,0 +1,14 @@
+[role="rule"]
+Only LayerOne can use LayerTwo.
+
+[role="rule"]
+No LayerTwo can use LayerOne.
+
+[role="mapping"]
+useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?f rdf:type famix:Attribute) (?class famix:definesAttribute ?f) (?f famix:hasDeclaredType ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+isLayerOne: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, 'TestLayerOne') -> (?class rdf:type architecture:LayerOne)
+
+[role="mapping"]
+isLayerTwo: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, 'TestLayerTwo') -> (?class rdf:type architecture:LayerTwo)

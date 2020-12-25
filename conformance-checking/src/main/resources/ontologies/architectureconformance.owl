@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#"
-     xml:base="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance"
+<rdf:RDF xmlns="http://arch-ont.org/ontologies/architectureconformance#"
+     xml:base="http://arch-ont.org/ontologies/architectureconformance"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -12,7 +12,7 @@
 <!-- This part of the native implemantation led to an error message without any impact 
 	 on the execution fo the programm. Commenting removed this error message.
 
-    <owl:Ontology rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance">
+    <owl:Ontology rdf:about="http://arch-ont.org/ontologies/architectureconformance">
         <owl:imports rdf:resource="http://www.arch-ont.org/ontologies/git.owl"/>
     </owl:Ontology>
  -->   
@@ -28,80 +28,80 @@
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasDetected -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasDetected -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasDetected">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasDetected">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasViolation -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasViolation -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasViolation">
-        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#violates"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasViolation">
+        <owl:inverseOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#violates"/>
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#isPartOfViolationObject -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationObject -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#isPartOfViolationObject">
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationObject">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#isPartOfViolationSubject -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationSubject -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#isPartOfViolationSubject">
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationSubject">
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#isProofedBy -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#isProofedBy -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#isProofedBy">
-        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#proofs"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#isProofedBy">
+        <owl:inverseOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#proofs"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#proofs -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#proofs -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#proofs">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#Proof"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#proofs">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#Proof"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#validates -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#validates -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#validates">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#validates">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#validatesVersion -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#validatesVersion -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#validatesVersion">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#validatesVersion">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/history.owl#Version"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#violates -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#violates -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#violates">
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule"/>
+    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#violates">
+        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
     </owl:ObjectProperty>
     
 
@@ -117,68 +117,68 @@
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasCheckingDate -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasCheckingDate -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasCheckingDate">
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasCheckingDate">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck"/>
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasDescription -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasDescription -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasDescription">
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasDescription">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasExplanationText -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasExplanationText -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasExplanationText"/>
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasExplanationText"/>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasProofText -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasProofText -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasProofText">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#Proof"/>
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasProofText">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#Proof"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasRuleID -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasRuleID -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasRuleID">
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasRuleID">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasRuleRepresentation -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasRuleRepresentation -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasRuleRepresentation">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule"/>
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasRuleRepresentation">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
         <rdfs:comment>Constitutes the CNL representation of the architecture rule, e.g. Every Entity must define an Identifier.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasRuleType -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasRuleType -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasRuleType">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule"/>
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasRuleType">
+        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasViolationText -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#hasViolationText -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#hasViolationText">
+    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasViolationText">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
@@ -195,40 +195,40 @@
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureConformanceCheckingThing -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule">
+        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation">
+        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck">
+        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#Proof -->
+    <!-- http://arch-ont.org/ontologies/architectureconformance#Proof -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#Proof">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#Proof">
+        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
     
 
@@ -244,10 +244,10 @@
     <rdf:Description>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureRule"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ArchitectureViolation"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#ConformanceCheck"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/sandr/ontologies/2018/4/architectureconformance#Proof"/>
+            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
+            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
+            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
+            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#Proof"/>
         </owl:members>
     </rdf:Description>
 </rdf:RDF>

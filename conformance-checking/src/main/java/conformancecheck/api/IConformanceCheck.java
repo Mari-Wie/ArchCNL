@@ -1,5 +1,6 @@
 package conformancecheck.api;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 import datatypes.ArchitectureRule;
@@ -23,8 +24,9 @@ public interface IConformanceCheck {
 	 * @param modelPath The path to the RDF/OWL file (XML format) containing the code model to use.
 	 * @param violations Set of architecture violations to add.
 	 * @param outputPath The path to the file to which the results will be written.
+	 * @throws FileNotFoundException when the input file cannot be read
 	 */
-	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath);
+	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath) throws FileNotFoundException;
 	
 	/**
 	 * @return 

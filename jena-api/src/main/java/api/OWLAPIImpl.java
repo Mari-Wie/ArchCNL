@@ -26,18 +26,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLProperty;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-import axioms.ConditionalAxiom;
-import axioms.CustomAxiom;
-import axioms.DomainAxiom;
-import axioms.ExactCardinalityAxiom;
-import axioms.ExistentialAxiom;
-import axioms.MaxCardinalityRestrictionAxiom;
-import axioms.MinCardinalityRestrictionAxiom;
-import axioms.NegationAxiom;
-import axioms.RangeAxiom;
-import axioms.UniversalAxiom;
 import stemmer.StanfordLemmatizer;
 
 public class OWLAPIImpl implements OntologyAPI {
@@ -47,22 +36,7 @@ public class OWLAPIImpl implements OntologyAPI {
 	OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private String filePath;
 
-	private List<String> _numbers;
-
 	public OWLAPIImpl() {
-
-		_numbers = new ArrayList<String>();
-		_numbers.add("no");
-		_numbers.add("one");
-		_numbers.add("two");
-		_numbers.add("three");
-		_numbers.add("four");
-		_numbers.add("five");
-		_numbers.add("six");
-		_numbers.add("seven");
-		_numbers.add("eight");
-		_numbers.add("nine");
-		_numbers.add("ten");
 
 	}
 
@@ -81,9 +55,6 @@ public class OWLAPIImpl implements OntologyAPI {
 			manager.saveOntology(currentOntology, new OWLXMLDocumentFormat(), documentIRI2);
 			// save in RDF/XML
 			manager.saveOntology(currentOntology, documentIRI2);
-			// print out the ontology
-			// StringDocumentTarget target = new StringDocumentTarget();
-			// manager.saveOntology(currentOntology, target);
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,18 +67,14 @@ public class OWLAPIImpl implements OntologyAPI {
 	
 	@Override
 	public void removeOntology(String iriPath) {
+		// TODO: parameter iriPath is not used -> remove it
 		manager.removeOntology(currentOntology);
 	}
 
 	public void addSubClassAxiom(String iriPath, OWLClassExpression superClass, OWLClassExpression subClass) {
-
+		// TODO: parameter iriPath is not used -> remove it
 		OWLAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subClass, superClass);
 		manager.addAxiom(currentOntology, subClassAxiom);
-
-		// CustomAxiom axiom = new SubConceptAxiom(subClass.toString(),
-		// superClass.toString());
-		// axioms.put(axiom, id);
-
 		triggerSave();
 
 	}
@@ -120,24 +87,19 @@ public class OWLAPIImpl implements OntologyAPI {
 
 	public OWLClassExpression addMaxCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		CustomAxiom axiom = new MaxCardinalityRestrictionAxiom(namespace, "", "", "", "2");
-
-		CustomAxioms.get().addCustomAxiom(axiom);
-
+		// TODO: parameter namespace is not used -> remove it
 		return df.getOWLObjectMaxCardinality(count, property, object);
 	}
 
 	public OWLClassExpression addMinCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		CustomAxiom axiom = new MinCardinalityRestrictionAxiom("", "", "", "", "");
-		CustomAxioms.get().addCustomAxiom(axiom);
+		
 		return df.getOWLObjectMinCardinality(count, property, object);
 	}
 
 	public OWLClassExpression addExactCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		CustomAxiom axiom = new ExactCardinalityAxiom(namespace, "", "", "", "2");
-		CustomAxioms.get().addCustomAxiom(axiom);
+		
 		return df.getOWLObjectExactCardinality(count, property, object);
 	}
 
@@ -170,76 +132,72 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	public OWLDataHasValue addDataHasValue(String iriPath, String value, OWLDataProperty roleName) {
-
+		// TODO: parameter iriPath is not used, remove it
 		OWLLiteral literal = df.getOWLLiteral(value);
 		OWLDataHasValue hasValues = df.getOWLDataHasValue(roleName, literal);
 
+		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
 		triggerSave();
 
 		return hasValues;
-
 	}
 
+	// TODO: This would be a fine case of method overloading. Change the name to addDataHasValue()
 	public OWLDataHasValue addDataHasIntegerValue(String iriPath, int value, OWLDataProperty roleName) {
-
+		// TODO: parameter iriPath is not used, remove it
 		OWLLiteral literal = df.getOWLLiteral(value);
-		OWLDataHasValue hasValues = df.getOWLDataHasValue(roleName, literal);
-
+		OWLDataHasValue hasValue = df.getOWLDataHasValue(roleName, literal);
+		
+		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
 		triggerSave();
 
-		return hasValues;
+		return hasValue;
 	}
 
-	public OWLClassExpression addSomeValuesFrom(String iriPath, OWLObjectProperty roleName,
+	public OWLClassExpression addSomeValuesFrom(String iriPath, OWLObjectProperty role,
 			OWLClassExpression expression) {
-
-		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(roleName, expression);
+		// TODO: parameter iriPath is not used, remove it
+		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, expression);
 		
-		CustomAxiom axiom = new ExistentialAxiom(iriPath, "", "", "");
-		CustomAxioms.get().addCustomAxiom(axiom);
-
+		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
 		triggerSave();
 
 		return someValues;
 
 	}
 
-	public void addSomeValuesFrom(String iriPath, OWLClassExpression subclass, OWLClassExpression superclass,
-			OWLObjectProperty role) {
-
-		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, superclass);
-		OWLSubClassOfAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subclass, someValues);
-		manager.addAxiom(currentOntology, subClassAxiom);
-
-		CustomAxiom axiom = new ExistentialAxiom(iriPath, "", "", "");
-		CustomAxioms.get().addCustomAxiom(axiom);
-
-		triggerSave();
-
-	}
+//	public void addSomeValuesFrom(String iriPath, OWLClassExpression subclass, OWLClassExpression superclass,
+//			OWLObjectProperty role) {
+//		// TODO: parameter iriPath is not used, remove it
+//		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, superclass);
+//		OWLSubClassOfAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subclass, someValues);
+//		manager.addAxiom(currentOntology, subClassAxiom);
+//
+//		triggerSave();
+//
+//	}
 
 	public OWLObjectIntersectionOf intersectionOf(String iriPath, OWLClassExpression first, OWLClassExpression second) {
+		// TODO: parameter iriPath is not used, remove it
+		// TODO: use the version with a list instead?
 		return df.getOWLObjectIntersectionOf(first, second);
 
 	}
 
 	public OWLObjectIntersectionOf intersectionOf(String iriPath, OWLClassExpression[] list) {
+		// TODO: parameter iriPath is not used, remove it
 		return df.getOWLObjectIntersectionOf(list);
 	}
 
 	public void addDomainRangeAxiom(String namespace, OWLClassExpression subject, OWLClassExpression object,
 			OWLObjectProperty property) {
+		// TODO: parameter namespace is not used, remove it
 		OWLObjectPropertyDomainAxiom domainAxiom = df.getOWLObjectPropertyDomainAxiom(property, subject);
 
 		OWLObjectPropertyRangeAxiom rangeAxiom = df.getOWLObjectPropertyRangeAxiom(property, object);
 		manager.addAxiom(currentOntology, domainAxiom);
 		manager.addAxiom(currentOntology, rangeAxiom);
-		CustomAxiom axiom = new DomainAxiom("", "");
-		CustomAxiom axiom2 = new RangeAxiom("","");
-
-		CustomAxioms.get().addCustomAxioms(axiom, axiom2);
 		
-
 		triggerSave();
 	}
 
@@ -249,72 +207,56 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	public OWLProperty getOWLDatatypeProperty(String iriPath, String roleName) {
+		// TODO: the role name is not lemmatized, unlike the behavior of getOWLObjectProperty()
 		return df.getOWLDataProperty(iriPath + "#" + roleName);
 	}
 
 	public OWLClassExpression unionOf(String namespace, ArrayList<OWLClassExpression> expressions) {
+		// TODO: parameter namespace is not used, remove it
 		return df.getOWLObjectUnionOf(expressions);
 	}
 
 	public void addNegationAxiom(String string, OWLClassExpression subject, OWLClassExpression object,
 			OWLObjectProperty property) {
-
+		// TODO: parameter string is not used, remove it
 		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(property, object);
 		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(someValues);
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(subject, complement);
 		manager.addAxiom(currentOntology, subClass);
 
-		CustomAxiom axiom = new NegationAxiom(subject.toString(), complement.toString());
-		CustomAxioms.get().addCustomAxiom(axiom);
-
 		triggerSave();
-
 	}
 
-	public void addNegationAxiom(String string, OWLClassExpression subject, OWLClassExpression object) {
-		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(object);
-		OWLAxiom subClass = df.getOWLSubClassOfAxiom(subject, complement);
+	public void addNegationAxiom(String string, OWLClassExpression first, OWLClassExpression second) {
+		// TODO: parameter string is not used, remove it
+		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(second);
+		OWLAxiom subClass = df.getOWLSubClassOfAxiom(first, complement);
 		manager.addAxiom(currentOntology, subClass);
 		
-		CustomAxiom axiom = new NegationAxiom(subject.toString(), complement.toString());
-		CustomAxioms.get().addCustomAxiom(axiom);
-
 		triggerSave();
 	}
 
 	public void addSubPropertyOfAxiom(String iriPath, String subProperty, String superProperty) {
-
+		// TODO: This might cause some bugs: DatatypeProperties are not used here?
 		OWLObjectProperty sub = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(subProperty));
 		OWLObjectProperty sup = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(superProperty));
 		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(sub, sup);
 
 		manager.addAxiom(currentOntology, subPropertyAxiom);
-		CustomAxiom axiom = new ConditionalAxiom(iriPath, lemmatizeProperty(subProperty),
-				lemmatizeProperty(superProperty));
-		CustomAxioms.get().addCustomAxiom(axiom);
-		
 		triggerSave();
 	}
 
 	public OWLClassExpression getOWLTop(String namespace) {
-
+		// TODO: parameter namespace is not used, remove it
 		return df.getOWLThing();
 
 	}
 
 	public OWLClassExpression createOnlyRestriction(String iriPath, OWLObjectProperty role,
 			OWLClassExpression concept) {
-
+		// TODO: parameter iriPath is not used, remove it
 		OWLObjectAllValuesFrom allValues = df.getOWLObjectAllValuesFrom(role, concept);
-
-		CustomAxiom axiom = new UniversalAxiom(iriPath, "", null, "");
-		CustomAxioms.get().addCustomAxiom(axiom);
 
 		return allValues;
 	}
-
-
-
-	
-
 }

@@ -25,6 +25,9 @@ import datatypes.ArchitectureRules;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
  
+/**
+ * Parser for AsciiDoc files containing architecture rules and mapping rules.
+ */
 public class AsciiDocArc42Parser
 {
 	private static final Logger LOG = LogManager.getLogger(AsciiDocArc42Parser.class);
@@ -33,23 +36,8 @@ public class AsciiDocArc42Parser
     private final static String OWL_EXTENSION = ".owl";
     private final static String PREFIX = "tmp";
 
-//    private final static String javaOntologyNamespace = "@prefix java: <http://arch-ont.org/ontologies/javacodeontology.owl#>\n";
-//    private final static String famixNamespace = "@prefix famix: <http://arch-ont.org/ontologies/famix.owl#>\n";
-//    private final static String mavenOntologyNamespace = "@prefix maven: <http://arch-ont.org/ontologies/maven.owl#>\n";
-//    private final static String mainOntologyNamespace = "@prefix main: <http://arch-ont.org/ontologies/main.owl#>\n";
-//    private final static String osgiOntologyNamespace = "@prefix osgi: <http://arch-ont.org/ontologies/osgi.owl#>\n";
-//    private final static String historyOntologyNamespace = "@prefix git: <http://www.arch-ont.org/ontologies/git.owl#>\n";
-//    private final static String architectureOntologyNamespace = "@prefix architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>\n\n";
-//
-//    private final static String ONTOLOGY_PREFIXES_FOR_MAPPING = famixNamespace
-//            + javaOntologyNamespace + mavenOntologyNamespace
-//            + mainOntologyNamespace + osgiOntologyNamespace
-//            + historyOntologyNamespace + architectureOntologyNamespace;
-
     private final String ONTOLOGY_PREFIXES_FOR_MAPPING;
-    
-    private static int id = 0;
-
+   
     private List<String> ontologyPaths;
 
     /**
@@ -117,28 +105,26 @@ public class AsciiDocArc42Parser
             for (String line : lines)
             {
                 rulePath = PREFIX + "_" + id_for_file + EXTENSION;
-                String ontologyFile = "/architecture" + id_for_file + OWL_EXTENSION; // TODO: remove hardcoded solution
+                String ontologyFile = "/architecture" + id_for_file + OWL_EXTENSION;
                 ontologyPath = outputDirectory + ontologyFile;
-                LOG.info("Rule Id      : " + id);
+                LOG.info("Rule Id      : " + id_for_file);
                 LOG.info("Rule         : " + line);
                 LOG.info("File Id      : " + id_for_file);
                 LOG.info("RulePath     : " + rulePath);
                 LOG.info("OntologyPath : " + ontologyPath);
                 
                 ArchitectureRule rule = new ArchitectureRule();
-                rule.setId(id);
+                rule.setId(id_for_file);
                 rule.setCnlSentence(line);
                 ArchitectureRules rules = ArchitectureRules.getInstance();
-                rules.addRule(rule, id);
+
                 LOG.info("Rule added");
-                id++;
 
                 File f = new File(rulePath);
                 try 
                 {
                     ontologyPaths.add(ontologyPath);
                     
-                    //File f = new File(rulePath);
                     FileUtils.writeStringToFile(f, line + "\n", (Charset) null,
                             true);
                     rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath);
@@ -231,7 +217,6 @@ public class AsciiDocArc42Parser
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // f.delete();
 
     }
 
