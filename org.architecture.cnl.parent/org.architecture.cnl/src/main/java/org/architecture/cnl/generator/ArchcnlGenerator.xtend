@@ -41,7 +41,8 @@ import org.apache.logging.log4j.Logger;
 
 
 /**
- * Generates code from your model files on save.
+ * This class is responsible for the conversion from the (already parsed) CNL to
+ * OWL statements.
  * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
@@ -54,21 +55,33 @@ class ArchcnlGenerator extends AbstractGenerator {
 	Iterable<EObject> resourceIterable
 	Iterable<Sentence> sentenceIterable
 
+	/**
+	 * "Translates" some parsed CNL sentences to an OWL ontology. The ontology will be stored in
+	 * a file. The file's path is './architecture<id>.owl' where '<id>' is a counter which counts
+	 * how often this method is called. Thus, the first call will produce a file 'architecture0.owl', 
+	 * the second one a file 'architecture1.owl', and so on.
+	 * 
+	 * The ontology uses the namespace "http://www.arch-ont.org/ontologies/architecture.owl". When
+	 * refering to its elements, this namespace/prefix must be used (e.g. when writing architecture-to-code
+	 * mapping rules).
+	 * 
+	 * @param resource The parsed CNL input.
+	 * @param fsa ???, but is not used anyway
+	 * @param context ???, but is not used anyway
+	 */
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		namespace = "http://www.arch-ont.org/ontologies/architecture.owl"
 
 		api = APIFactory.get();  
 		api.createOntology("./architecture"+id+".owl", namespace)
 
-		//Punkt-Schreibweise zerlegt zum Besseren debuggen
+		// decomposed the dot-notion to simplify debugging
 		resourceIterable = resource.allContents.toIterable
 		sentenceIterable = resourceIterable.filter(typeof(Sentence))
 
 		LOG.info("Start compiling sentences ...")
 		
-		//Lambda-Schreibweise führte zu Fehlern/Abbrüchen, daher auf for-Schleife umgestellt
-		//sentenceIterator.forEach[s|s.compile]
-		
+		// compile each sentence
 		for(Sentence s:sentenceIterable)
 		{
 			LOG.info("ID " + id + ": " +"sentence subject: "+s.subject)
@@ -79,10 +92,18 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.info("compiled all sentences")
 		
 		api.removeOntology(namespace);
+		// This looks like the file is deleted.
+		// However, it is not and one of the callers "higher up the stack trace"
+		// (in the module conformancechecking-documentation) uses this file to
+		// retrieve the parsing results.
+		// In short, I don't known what this does exactly.
 		val f = new File("architecture"+id+".owl")
 		Files.deleteIfExists(f.toPath)
 	}
 
+	/**
+	 * Compiles a single CNL sentence.
+	 */
 	def void compile(Sentence s) {
 		val subject = s.subject
 		val ruletype = s.ruletype

@@ -11,6 +11,7 @@ import org.eclipse.xtext.testing.util.ParseHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.architecture.cnl.archcnl.*
 
 @RunWith(XtextRunner)
 @InjectWith(ArchcnlInjectorProvider)
@@ -37,6 +38,38 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof MustRuleType)
+	}
+	
+	@Test
+	def void testEveryMustBeRule() {
+		val result = parseHelper.parse('''
+			Every LayerAbove must be a Layer.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof SubConceptRuleType)
+	}
+	
+	@Test
+	def void testEveryCanOnlyRule() {
+		val result = parseHelper.parse('''
+			Every LayerBelow can-only import Common.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof CanOnlyRuleType)
 	}
 	
 	@Test
@@ -47,6 +80,10 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof OnlyCanRuleType)
 	}
 	
 	@Test
@@ -57,6 +94,10 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof ConditionalRuleType)
 	}
 	
 	@Test
@@ -67,6 +108,10 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof NegationRuleType)
 	}
 	
 	@Test
@@ -77,6 +122,10 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof NegationRuleType)
 	}
 	
 	@Test
@@ -87,6 +136,10 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof OnlyCanRuleType)
 	}
 	
 	@Test
@@ -97,5 +150,24 @@ class ArchcnlParsingTest {
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
 		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof OnlyCanRuleType)
 	}
+	
+	@Test
+	def void testFact() {
+		// TODO: doesn't work yet (issue #65)
+//		val result = parseHelper.parse('''
+//			FancyClass is a Class.
+//		''')
+//		Assert.assertNotNull(result)
+//		val errors = result.eResource.errors
+//		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+//		
+//		Assert.assertEquals(result.sentence.size, 1)
+//		val sentence = result.sentence.get(0)
+//		Assert.assertTrue(sentence.ruletype instanceof FactStatement)
+		}
 }
