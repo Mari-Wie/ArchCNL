@@ -43,4 +43,19 @@
         <module>rule-specification</module>
         <module>StardogConnector</module>
     </modules>
+    
+    <dependencies>
+    	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
+    </dependencies>
 </project>

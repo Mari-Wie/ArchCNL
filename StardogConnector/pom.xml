@@ -47,17 +47,5 @@
 			<artifactId>jena-core</artifactId>
 			<version>${apachejenaVersion}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4jVersion}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4jVersion}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>
