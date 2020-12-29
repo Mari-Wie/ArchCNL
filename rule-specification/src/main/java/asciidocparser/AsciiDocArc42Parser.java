@@ -20,7 +20,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.architecture.cnl.CNL2OWLGenerator;
 
 import datatypes.ArchitectureRule;
-import datatypes.ArchitectureRules;
+import datatypes.RuleType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,8 +79,9 @@ public class AsciiDocArc42Parser
      * 
      * @param path - Path of Rule-File (.adoc-File)
      * @param outputDirectory - Path where the generated files will be placed (without a slash (/) at the end)
+     * @return The list of architecture rules from the rule file.
      */
-    public void parseRulesFromDocumentation(String path, String outputDirectory)
+    public List<ArchitectureRule> parseRulesFromDocumentation(String path, String outputDirectory)
     {
         LOG.trace("Starting parseRulesFromDocumentation ...");
         
@@ -98,6 +99,9 @@ public class AsciiDocArc42Parser
         int id_for_file = 0;
         String ontologyPath = "";
         String rulePath = "";
+        
+        List<ArchitectureRule> rules = new ArrayList<>();
+        
         for (StructuralNode structuralNode : result)
         {
             Block b = (Block) structuralNode;
@@ -118,7 +122,7 @@ public class AsciiDocArc42Parser
                 ArchitectureRule rule = new ArchitectureRule();
                 rule.setId(id_for_file);
                 rule.setCnlSentence(line);
-                ArchitectureRules rules = ArchitectureRules.getInstance();
+                // ArchitectureRules rules = ArchitectureRules.getInstance();
 
                 LOG.debug("Adding the architecture rule: " + rule.getCnlSentence());
 
@@ -132,10 +136,17 @@ public class AsciiDocArc42Parser
                     
                     FileUtils.writeStringToFile(f, line + "\n", (Charset) null,
                             true);
-                    rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath);
+                    rule.setContraintFile(ontologyPath);
                     
                     LOG.debug("Transforming the rule from CNL to an OWL constraint ...");
-                    generator.transformCNLFile(rulePath);
+                    RuleType typeOfParsedRule = generator.transformCNLFile(rulePath);
+
+                    if (typeOfParsedRule == null) {
+                    	LOG.error("The parser could not parse the following rule: " + rule.getCnlSentence());
+                    } else {
+                    	rule.setType(typeOfParsedRule);
+                        rules.add(rule);
+                    }
                     
                     // TODO replace this dirty workaround:
                     // the org.architecture.cnl module creates the file
@@ -162,9 +173,10 @@ public class AsciiDocArc42Parser
                 }
                 
                 id_for_file++;
-            }
+            }            
         }
-
+        
+        return rules;
     }
 
     /**
@@ -238,12 +250,4 @@ public class AsciiDocArc42Parser
         }
 		return f;
 	}
-
-    /**
-     * @return The list of all architecture rule ontology (.owl) files which have been extracted from a .adoc file.
-     */
-    public List<String> getOntologyPaths()
-    {
-        return ontologyPaths;
-    }
 }

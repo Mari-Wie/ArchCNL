@@ -2,10 +2,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
-import java.util.List;
 
-//import org.apache.jena.ontology.Individual;
-//import org.apache.jena.rdf.model.Property;
 import org.junit.Before;
 import org.junit.Test;
 

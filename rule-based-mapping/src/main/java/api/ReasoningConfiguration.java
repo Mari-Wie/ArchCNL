@@ -73,7 +73,6 @@ public class ReasoningConfiguration {
 
 	/**
 	 * Returns the path to the output ontology file (OWL format).
-	 * @return
 	 */
 	public String getResultPath() {
 		return resultPath;
