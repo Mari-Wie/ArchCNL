@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,18 +24,16 @@ import com.stardog.stark.io.RDFFormats;
 
 import com.complexible.stardog.ContextSets;// TODO: only temporary
 
+import api.ConstraintViolationsResultSet;
 import api.StardogDatabaseAPI;
 import api.StardogICVAPI;
-import datatypes.ConstraintViolation;
-import datatypes.ConstraintViolationsResultSet;
+import datatypes.ConstraintViolation.ConstraintViolationBuilder;
 
 public class StardogICVAPIImpl implements StardogICVAPI {
 
 	private static int id = 0;
 	
 	private static final Logger LOG = LogManager.getLogger(StardogICVAPI.class);
-
-	private ConstraintViolationsResultSet result;
 
 	private StardogDatabaseAPI db;
 	
@@ -80,9 +79,11 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	}
 
 	@Override
-	public void explainViolationsForContext(String context) {
+	public List<ConstraintViolationsResultSet> explainViolationsForContext(String context) {
 
 		LOG.trace("Explaining violations for context: " + context);
+		
+		List<ConstraintViolationsResultSet> result = new ArrayList<>();
 		
 		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(true)
 				.credentials(db.getUserName(), db.getPassword()).connect()) {
@@ -102,35 +103,32 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 				for(Proof p: proofs) {
 					System.out.println(ProofWriter.toString(p));
 				}
-				storeViolations(id, constraint, proofs);
+				result.add(storeViolations(id, constraint, proofs));
 				id++;
 			}
 		}
-	}
-
-	@Override
-	public ConstraintViolationsResultSet getResult() {
 		return result;
 	}
-	
 
-	private void storeViolations(int id, Constraint constraint, Iterable<Proof> proofs) {
-		result = new ConstraintViolationsResultSet();
+	private ConstraintViolationsResultSet storeViolations(int id, Constraint constraint, Iterable<Proof> proofs) {
+		ConstraintViolationsResultSet result = new ConstraintViolationsResultSet();
 		for (Proof proof : proofs) {
 			Iterable<Statement> asserted = proof.getStatements(ProofType.ASSERTED);
-			ConstraintViolation violation = new ConstraintViolation();
+			ConstraintViolationBuilder builder = new ConstraintViolationBuilder();
+			
 			for (Statement statement : asserted) {
-				violation.setViolation(statement.subject().toString(), statement.predicate().toString(),
+				builder.addViolation(statement.subject().toString(), statement.predicate().toString(),
 						statement.object().toString());
 			}
 			Iterable<Statement> notInferred = proof.getStatements(ProofType.NOT_INFERRED);
 			for (Statement statement : notInferred) {
-				violation.setNotInferred(statement.subject().toString(), statement.predicate().toString(),
+				builder.addNotInferredStatement(statement.subject().toString(), statement.predicate().toString(),
 						statement.object().toString());
 			}
 
 			LOG.debug("Proof: " + proof.toString());
-			result.addViolation(violation);
+			result.addViolation(builder.build());
 		}
+		return result;
 	}
 }

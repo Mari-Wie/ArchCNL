@@ -6,7 +6,6 @@ package org.architecture.cnl.generator
 import api.APIFactory
 import api.OntologyAPI
 
-import datatypes.ArchitectureRules
 import datatypes.RuleType
 import java.io.File
 import java.nio.file.Files
@@ -27,6 +26,7 @@ import org.architecture.cnl.archcnl.Sentence
 import org.architecture.cnl.archcnl.SubConceptRuleType
 import org.architecture.cnl.archcnl.ThatExpression
 import org.architecture.cnl.archcnl.VariableStatement
+import org.architecture.cnl.RuleTypeStorageSingleton;
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.generator.AbstractGenerator
@@ -107,30 +107,29 @@ class ArchcnlGenerator extends AbstractGenerator {
 	def void compile(Sentence s) {
 		val subject = s.subject
 		val ruletype = s.ruletype
-		val rules = ArchitectureRules.getInstance();
+		val typeStorage = RuleTypeStorageSingleton.getInstance()
 		
 		LOG.trace("Compiling a new sentence ...")
-		LOG.trace("ID " + id + ": " + rules.getRuleWithID(id).cnlSentence)
 		LOG.trace("ID " + id + ": " + ruletype)
 		
 		if (ruletype instanceof MustRuleType) {
 			ruletype.compile(subject)
-			rules.getRuleWithID(id).type = RuleType.EXISTENTIAL
+			typeStorage.storeTypeOfRule(id, RuleType.EXISTENTIAL) 
 		} else if (ruletype instanceof CanOnlyRuleType) {
 			ruletype.compile(subject)
-			rules.getRuleWithID(id).type = RuleType.UNIVERSAL
+			typeStorage.storeTypeOfRule(id, RuleType.UNIVERSAL) 
 		} else if (ruletype instanceof OnlyCanRuleType) {
 			ruletype.compile
-			rules.getRuleWithID(id).type = RuleType.DOMAIN_RANGE
+			typeStorage.storeTypeOfRule(id, RuleType.DOMAIN_RANGE) 
 		} else if (ruletype instanceof ConditionalRuleType) {
 			ruletype.compile
-			rules.getRuleWithID(id).type = RuleType.CONDITIONAL
+			typeStorage.storeTypeOfRule(id, RuleType.CONDITIONAL) 
 		} else if (ruletype instanceof NegationRuleType) {
 			ruletype.compile
-			rules.getRuleWithID(id).type = RuleType.NEGATION
+			typeStorage.storeTypeOfRule(id, RuleType.NEGATION) 
 		} else if (ruletype instanceof SubConceptRuleType) {
 			ruletype.compile(subject)
-			rules.getRuleWithID(id).type = RuleType.SUB_CONCEPT
+			typeStorage.storeTypeOfRule(id, RuleType.SUB_CONCEPT) 
 		} else if (ruletype instanceof CardinalityRuleType) {
 			ruletype.compile(subject)
 		}
@@ -357,17 +356,18 @@ class ArchcnlGenerator extends AbstractGenerator {
 		val concept = object.concept.compile
 		val count = object.number
 		
+		val typeStorage = RuleTypeStorageSingleton.getInstance();
 		
 		if(object.cardinality == 'at-most') {
-			ArchitectureRules.getInstance().getRuleWithID(id).type = RuleType.AT_MOST
+			typeStorage.storeTypeOfRule(id, RuleType.AT_MOST)
 			return api.addMaxCardinalityRestrictionAxiom(concept,relation,count)
 		}
 		else if(object.cardinality == 'at-least') {
-			ArchitectureRules.getInstance().getRuleWithID(id).type = RuleType.AT_LEAST
+			typeStorage.storeTypeOfRule(id, RuleType.AT_LEAST)
 			return api.addMinCardinalityRestrictionAxiom(concept,relation,count)
 		}
 		else if(object.cardinality == 'exactly') {
-			ArchitectureRules.getInstance().getRuleWithID(id).type = RuleType.EXACTLY
+			typeStorage.storeTypeOfRule(id, RuleType.EXACTLY)
 			return api.addExactCardinalityRestrictionAxiom(concept,relation,count)
 		}
 		else {

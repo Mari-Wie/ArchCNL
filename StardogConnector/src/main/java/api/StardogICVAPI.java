@@ -1,19 +1,20 @@
 package api;
 
 import java.io.FileNotFoundException;
-
-import datatypes.ConstraintViolationsResultSet;
+import java.util.List;
 
 public interface StardogICVAPI {
 
 	/**
 	 * Connects to the given database and checks whether each of the 
 	 * current integrity constraints is violated in the given context. 
-	 * The explanations/proofs of identified violations can be queried with 
-	 * {@link #getResult()}.
+	 * The explanations/proofs of identified violations are returned in a list.
+	 * The list contains one <code>ConstraintViolationsResultSet</code> for each 
+	 * integrity constraint present in the database.
 	 * @param context The URI of the RDF context to use.
+	 * @return the list of all identified violations and their explanations
 	 */
-	public void explainViolationsForContext(String context);
+	public List<ConstraintViolationsResultSet> explainViolationsForContext(String context);
 
 	/**
 	 * Connects to the given database and adds the integrity constraints stored in the specified file to the database.
@@ -28,12 +29,4 @@ public interface StardogICVAPI {
 	 * Connects to the given database and removes all integrity constraints from it.
 	 */
 	void removeIntegrityConstraints();
-
-	/**
-	 * Returns the violations of integrity contraints as well as the explanetions/proofs
-	 * of such violations which have been identified by a previous call of
-	 * {@link #explainViolationsForContext(String, String, String)}.
-	 * @return the violations and their explanations
-	 */
-	public ConstraintViolationsResultSet getResult();
 }

@@ -2,12 +2,8 @@ package parser;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,8 +11,8 @@ import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +43,6 @@ public class FamixOntologyTransformerTest {
 		actual.read(new FileInputStream(famixTransformer.getResultPath()), null);
 		
 		// workaround: remove the absolute paths
-		FamixOntClassesAndProperties a = new FamixOntClassesAndProperties();
 		expected.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath").removeProperties();
 		actual.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath").removeProperties();
 		

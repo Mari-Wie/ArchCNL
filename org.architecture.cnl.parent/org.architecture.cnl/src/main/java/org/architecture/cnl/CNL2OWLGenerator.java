@@ -16,6 +16,8 @@ import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Injector;
 
+import datatypes.RuleType;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,8 +25,17 @@ public class CNL2OWLGenerator {
 
 private static final Logger LOG = LogManager.getLogger(CNL2OWLGenerator.class);
 
+	private static int id = 0;
 
-	public void transformCNLFile(String path) {
+	/**
+	 * Translates the given file from ArchCNL's CNL to OWL. The resulting OWL ontology
+	 * is written to the file "architecture{id}.owl", where ID is the a counter starting at 0 which is incremented after
+	 * each call. Thus, the output file of the first call will be "architecture0.owl", the second one
+	 * "architecture1.owl", and so on. Each input file must contain exactly one rule in the CNL!
+	 * @param path The path of the file to transform.
+	 * @return The RuleType of the parsed rule or null when something went wrong.
+	 */
+	public RuleType transformCNLFile(String path) {
 
 		LOG.trace("transforming CNL file with path: "+path);
 
@@ -53,6 +64,10 @@ private static final Logger LOG = LogManager.getLogger(CNL2OWLGenerator.class);
 
 		LOG.trace("resource: "+resource);
 		generator.doGenerate(resource, fsa);
+		
+		RuleType ruleType = RuleTypeStorageSingleton.getInstance().retrieveTypeOfRule(id);
+		
+		id++;
+		return ruleType;
 	}
-
 }

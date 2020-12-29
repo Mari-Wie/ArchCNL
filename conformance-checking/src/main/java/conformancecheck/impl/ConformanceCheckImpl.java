@@ -18,9 +18,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.Inject;
 
 import conformancecheck.api.IConformanceCheck;
-import datatypes.ArchitectureRule;
+import conformancecheck.api.CheckedRule;
 import datatypes.ConstraintViolation;
-import datatypes.ConstraintViolationsResultSet;
  
 
 public class ConformanceCheckImpl implements IConformanceCheck 
@@ -43,13 +42,13 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	}
 
 	@Override
-	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath) throws FileNotFoundException 
+	public void validateRule(CheckedRule rule, String modelPath, String outputPath) throws FileNotFoundException 
 	{
     	LOG.trace("Starting validateRule ...");
-    	ontology.storeArchitectureRule(rule);
+    	ontology.storeArchitectureRule(rule.getRule());
 		Model codemodel = loadModelFromFile(modelPath);
 		
-		storeRuleViolationsInOntology(rule, codemodel, violations);
+		storeRuleViolationsInOntology(rule, codemodel);
 		
 		LOG.debug("Adding model to code model");
 		codemodel.add(ontology.getModel());
@@ -57,12 +56,12 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		writeModelToFile(codemodel, outputPath);
 	}
 
-	private void storeRuleViolationsInOntology(ArchitectureRule rule, Model codeModel, ConstraintViolationsResultSet result) {
-		List<ConstraintViolation> violations = result.getViolations();
+	private void storeRuleViolationsInOntology(CheckedRule rule, Model codeModel) {
+		List<ConstraintViolation> violations = rule.getViolations();
 
 		for (ConstraintViolation violation : violations) 
 		{
-			ontology.storeConformanceCheckingResultForRule(codeModel, rule, violation);
+			ontology.storeConformanceCheckingResultForRule(codeModel, rule.getRule(), violation);
 		}
 	}
 	

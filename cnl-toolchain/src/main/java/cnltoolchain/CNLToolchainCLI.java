@@ -1,12 +1,5 @@
 package cnltoolchain;
 
-import java.io.FileNotFoundException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import api.exceptions.MissingBuilderArgumentException;
-import api.exceptions.NoConnectionToStardogServerException;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -14,8 +7,6 @@ import picocli.CommandLine.Parameters;
 
 @Command(name = "ArchCNL CLI", version = "ArchCNL CLI 0.0.1", mixinStandardHelpOptions = true) 
 public class CNLToolchainCLI implements Runnable {
-	
-	private static final Logger LOG = LogManager.getLogger(CNLToolchainCLI.class);
 	
 	@Option(names = {"-d", "--database"}, description = "Specifiy the database name")
 	private String database = "MWTest_"+  CNLToolchain.createTimeSuffix();

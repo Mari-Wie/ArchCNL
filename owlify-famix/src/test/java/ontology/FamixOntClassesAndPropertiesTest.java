@@ -3,11 +3,9 @@ package ontology;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import org.apache.jena.ontology.Individual;
-//import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -15,8 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class FamixOntClassesAndPropertiesTest {
-// TODO
-	
+
 	private FamixOntClassesAndProperties classesAndProperties;
 	private OntModel model;
 	

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -14,7 +15,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Test;
 
 import datatypes.ArchitectureRule;
-import datatypes.ArchitectureRules;
 import datatypes.RuleType;
 
 public class AsciiDocArc42ParserTest {
@@ -28,16 +28,15 @@ public class AsciiDocArc42ParserTest {
 		namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
 		AsciiDocArc42Parser parser = new AsciiDocArc42Parser(namespaces);
 		
-		parser.parseRulesFromDocumentation("./src/test/resources/rules.adoc", "./src/test/resources");
+		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation("./src/test/resources/rules.adoc", "./src/test/resources");
         parser.parseMappingRulesFromDocumentation("./src/test/resources/rules.adoc", "./src/test/resources/mapping.txt");
         
-        ArchitectureRules ar = ArchitectureRules.getInstance();
         
         // assert that the extracted rules are correct
-        assertEquals(2, ar.getRules().size());
+        assertEquals(2, rules.size());
         
-        ArchitectureRule r0 = ar.getRuleWithID(0);
-        ArchitectureRule r1 = ar.getRuleWithID(1);
+        ArchitectureRule r0 = rules.get(0);
+        ArchitectureRule r1 = rules.get(1);
         
         assertNotNull(r0);
         assertNotNull(r1);
