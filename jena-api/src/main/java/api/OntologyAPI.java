@@ -42,11 +42,10 @@ public interface OntologyAPI {
 	/**
 	 * Adds an OWL axiom to this ontology which states that the OWL class "subClass" is the sub class of 
 	 * the OWL class "superClass". The ontology is subsequently saved by calling {@link #triggerSave()}.
-	 * @param iriPath unused
 	 * @param superClass the super class
 	 * @param subClass the sub class
 	 */
-	public void addSubClassAxiom(String iriPath, OWLClassExpression superClass, OWLClassExpression subClass);
+	public void addSubClassAxiom(OWLClassExpression superClass, OWLClassExpression subClass);
 
 	// TODO: This method seems very error-prone due to its restricted and "strange" interface/signature.
 	/**
@@ -74,24 +73,22 @@ public interface OntologyAPI {
 	 * given subject class and that its range is the given object class. Note that this is not
 	 * a "constraint" on the property but rather a statement used during inference.
 	 * Saves the ontology by calling {@link #triggerSave()}.
-	 * @param namespace unused
 	 * @param subject The class of legitimate subjects.
 	 * @param object The class of legitimate objects.
 	 * @param property The property which is defined/restricted.
 	 */
-	public void addDomainRangeAxiom(String namespace, OWLClassExpression subject, OWLClassExpression object, OWLObjectProperty property);
+	public void addDomainRangeAxiom(OWLClassExpression subject, OWLClassExpression object, OWLObjectProperty property);
 
 	// TODO: The prefix "create" messes the naming even more up than it already is. Rename method, I choose you!
 	/**
 	 * Returns an OWL class expression which represents the set of individuals which have only "role" properties 
 	 * where the object is from the class "concept". Example: role="makes-sound" concept="Bark" -> a class of objects
 	 * which can only make "Bark" sounds.
-	 * @param iriPath unused
 	 * @param role The property used in the expression.
 	 * @param concept The class of objects used in the expression.
 	 * @return The class expression.
 	 */
-	public OWLClassExpression createOnlyRestriction(String iriPath, OWLObjectProperty role, OWLClassExpression concept);
+	public OWLClassExpression createOnlyRestriction(OWLObjectProperty role, OWLClassExpression concept);
 
 	/**
 	 * Returns an OWL class with the given name from the given namespace (IRI).
@@ -122,60 +119,46 @@ public interface OntologyAPI {
 	/**
 	 * Returns an OWL restriction which states that the given OWL data property must have the
 	 * specified (string) value.
-	 * @param iriPath not used
 	 * @param value The required value of the data property.
 	 * @param role The data property which is restricted.
 	 * @return The restriction.
 	 */
-	public OWLDataHasValue addDataHasValue(String iriPath, String value, OWLDataProperty role);
+	public OWLDataHasValue addDataHasValue(String value, OWLDataProperty role);
 	
 	/**
 	 * Returns an OWL restriction which states that the given OWL data property must have the
 	 * specified (integer) value.
-	 * @param iriPath not used
 	 * @param value The required value of the data property.
 	 * @param role The data property which is restricted.
 	 * @return The restriction.
 	 */
-	public OWLDataHasValue addDataHasIntegerValue(String iriPath, int value, OWLDataProperty roleName);
+	public OWLDataHasValue addDataHasValue(int value, OWLDataProperty roleName);
 	
 //	public void addSomeValuesFrom(String iriPath, OWLClassExpression subclass, OWLClassExpression superclass, OWLObjectProperty roleName);
 	
 	/**
 	 * Returns an OWL restriction which states that the given OWL property "role" must exist at least once with an object
 	 * from the OWL class "expression"
-	 * @param iriPath unused
 	 * @param role The property which is restricted.
 	 * @param expression The class of the objects to which the restriction applies.
 	 * @return The restriction.
 	 */
-	public OWLClassExpression addSomeValuesFrom(String iriPath, OWLObjectProperty role, OWLClassExpression expression);
+	public OWLClassExpression addSomeValuesFrom(OWLObjectProperty role, OWLClassExpression expression);
 	
-	/**
-	 * Returns an OWL class which represents the intersection of the given classes.
-	 * @param iriPath unused
-	 * @param first the first class
-	 * @param second the second class
-	 * @return A new class description representing the intersection of the input classes.
-	 */
-	public OWLObjectIntersectionOf  intersectionOf(String iriPath, OWLClassExpression first, OWLClassExpression second);
-
 	// TODO: change parameter to ArrayList (so that this method is similar to unionOf())
 	/**
 	 * Returns an OWL class which represents the intersection of the given classes.
-	 * @param iriPath unused
 	 * @param expressions The list of OWL class expressions which are intersected.
 	 * @return A new class description representing the intersection of the input classes.
 	 */
-	public OWLObjectIntersectionOf  intersectionOf(String iriPath, OWLClassExpression[] list);
+	public OWLObjectIntersectionOf  intersectionOf(ArrayList<OWLClassExpression> expressions);
 	
 	/**
 	 * Returns an OWL class which represents the union of the given classes.
-	 * @param iriPath unused
 	 * @param expressions The list of OWL class expressions which are united.
 	 * @return A new class description representing the union of the input classes.
 	 */
-	public OWLClassExpression unionOf(String iriPath, ArrayList<OWLClassExpression> expressions);
+	public OWLClassExpression unionOf(ArrayList<OWLClassExpression> expressions);
 
 	/**
 	 * Adds an axiom to the ontology which states that the given property does not apply to the "subject" 
@@ -183,61 +166,55 @@ public interface OntologyAPI {
 	 * adds an axiom which implies that (if no other axioms are present) everything which does not make a sound from
 	 * the class "Bark" can be considered as a "Cat".
 	 * The ontology is saved after the modification by calling {@link #triggerSave()}.
-	 * @param string unused
 	 * @param subject The class to which the axiom applies.
 	 * @param object The object class used in the axiom.
 	 * @param property The property used in the axiom.
 	 */
-	public void addNegationAxiom(String string, OWLClassExpression subject, OWLClassExpression object, OWLObjectProperty property);
+	public void addNegationAxiom(OWLClassExpression subject, OWLClassExpression object, OWLObjectProperty property);
 
 	/**
 	 * Adds an axiom to the onology which states that the first class is not contained in the second class, i.e. that
 	 * it is a subset of the complement of the second class.
 	 * The ontology is saved after the modification by calling {@link #triggerSave()}.
-	 * @param string unused
 	 * @param first The first class, i.e. the class to which the axiom applies.
 	 * @param second The second class, i.e. the class which is used in the axiom.
 	 */
-	public void addNegationAxiom(String string, OWLClassExpression first, OWLClassExpression second);
+	public void addNegationAxiom(OWLClassExpression first, OWLClassExpression second);
 
 	/**
 	 * Returns the "topmost" OWL class "Thing", which is the superclass of every OWL class.
-	 * @param string unused
 	 * @return The corresponding OWL class.
 	 */
-	public OWLClassExpression getOWLTop(String string);
+	public OWLClassExpression getOWLTop();
 	
 	/**
 	 * Returns an OWL class expression which states that the given property "relation" must be present at most "count" times for the
 	 * instances of the OWL class "object".
-	 * @param namespace unused
 	 * @param object The object to which the constraint applies.
 	 * @param relation The property to which the constrain applies.
 	 * @param count The upper bound on the cardinality.
 	 * @return The corresponding class expression.
 	 */
-	public OWLClassExpression addMaxCardinalityRestrictionAxiom(String namespace, OWLClassExpression object, OWLObjectProperty relation, int count);
+	public OWLClassExpression addMaxCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 	
 	/**
 	 * Returns an OWL class expression which states that the given property "relation" must be present at least "count" times for the
 	 * instances of the OWL class "object".
-	 * @param namespace unused
 	 * @param object The object to which the constraint applies.
 	 * @param relation The property to which the constrain applies.
 	 * @param count The lower bound on the cardinality.
 	 * @return The corresponding class expression.
 	 */
-	public OWLClassExpression addMinCardinalityRestrictionAxiom(String namespace, OWLClassExpression object, OWLObjectProperty relation, int count);
+	public OWLClassExpression addMinCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 	
 	/**
 	 * Returns an OWL class expression which states that the given property "relation" must be present exactly "count" times for the
 	 * instances of the OWL class "object".
-	 * @param namespace unused
 	 * @param object The object to which the constraint applies.
 	 * @param relation The property to which the constrain applies.
 	 * @param count The exact value of the cardinality.
 	 * @return The corresponding class expression.
 	 */
-	public OWLClassExpression addExactCardinalityRestrictionAxiom(String namespace, OWLClassExpression object, OWLObjectProperty relation, int count);
+	public OWLClassExpression addExactCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 
 }

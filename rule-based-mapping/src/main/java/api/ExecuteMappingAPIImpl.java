@@ -8,16 +8,18 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
 import org.apache.jena.reasoner.rulesys.Rule;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Implementation of the ExecuteMappingAPI interface. Can be
  * instantiated via the ExecuteMappingAPIFactory. 
  */
 class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
+	private static final Logger LOG = LogManager.getLogger(ExecuteMappingAPIImpl.class);
 	
 	private ReasoningConfiguration config;
 	private String reasoningResultPath;
@@ -35,32 +37,31 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	}
 
 	private void writeOutput(InfModel infmodel) throws FileNotFoundException {
-		System.out.println("writing to: " + this.reasoningResultPath);
+		LOG.debug("Writing output to: " + this.reasoningResultPath);
 		infmodel.write(new FileOutputStream(new File(this.reasoningResultPath)));
 
-		StmtIterator statements = infmodel.listStatements();
-		System.out.println(statements.toList().size());
+		LOG.debug("Wrote "+infmodel.listStatements().toList().size()+"statements");
 	}
 
 	private InfModel doMapping(OntModel ontModel, Reasoner reasoner) {
-		System.out.println("infmodel");
+		LOG.trace("executing mapping");
 		InfModel infmodel = ModelFactory.createInfModel(reasoner, ontModel);
 		return infmodel;
 	}
 
 	private Reasoner readMappingRules() {
-		System.out.println("reasoner");
+		LOG.debug("reading mapping rules");
 		Reasoner reasoner = new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));
 		return reasoner;
 	}
 
 	private OntModel readInputs() {
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		System.out.println("reading");
+		LOG.debug("Reading code model");
 		ontModel.read(config.getPathToData());
 		
 		for (String path : config.getPathsToConcepts()) {
-			System.out.println(path);
+			LOG.debug("Reading concept file: "+path);
 			ontModel.read(path);
 		}
 		return ontModel;

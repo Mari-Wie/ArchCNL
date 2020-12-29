@@ -37,8 +37,9 @@ public class ConformanceCheckOntology
 
 	public ConformanceCheckOntology() 
 	{
-		LOG.info("Start ConformanceCheckOntology ...");
+		LOG.trace("Starting ConformanceCheckOntology ...");
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		LOG.debug("Reading resource ontology...");
 		InputStream architectureConformanceInputStream = getClass().getResourceAsStream("/ontologies/architectureconformance.owl");
 		model.read(architectureConformanceInputStream, null);
 		architectureRuleIndividualCache = new HashMap<Integer, Individual>();
@@ -46,7 +47,7 @@ public class ConformanceCheckOntology
 
 	public void newConformanceCheck() 
 	{
-		LOG.info("Start newConformanceCheck ...");
+		LOG.trace("Starting newConformanceCheck ...");
 		conformanceCheckIndividual = ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(model);
 		DatatypeProperty dateProperty = ConformanceCheckOntologyClassesAndProperties.getDateProperty(model);
 		conformanceCheckIndividual.addLiteral(dateProperty, Calendar.getInstance().getTime().toString());
@@ -55,7 +56,8 @@ public class ConformanceCheckOntology
 
 	public void storeArchitectureRule(ArchitectureRule rule) 
 	{
-		LOG.info("Start storeArchitectureRule ...");
+		LOG.trace("Starting storeArchitectureRule ...");
+		LOG.debug("Storing architecture rule: " + rule.getCnlSentence());
 		architectureRuleIndividual = ConformanceCheckOntologyClassesAndProperties.getArchitectureRuleIndividual(model,
 				rule.getId());
 
@@ -68,7 +70,6 @@ public class ConformanceCheckOntology
 
 		DatatypeProperty hasRuleIDProperty = ConformanceCheckOntologyClassesAndProperties.getHasRuleIDProperty(model);
 		architectureRuleIndividual.addLiteral(hasRuleIDProperty, rule.getId());
-
 		architectureRuleIndividualCache.put(rule.getId(), architectureRuleIndividual);
 
 	}
@@ -76,8 +77,9 @@ public class ConformanceCheckOntology
 	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
 			ConstraintViolation violation) 
 	{
-		LOG.info("Start storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
-		
+		LOG.trace("Starting storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
+		LOG.debug("Storing conformance checking results for architecture rule: " + rule.getCnlSentence());
+		LOG.debug("Creating ArchitectureViolation ...");
 		architectureViolationIndividual = ConformanceCheckOntologyClassesAndProperties
 				.getArchitectureViolationIndividual(model);
 		
@@ -92,6 +94,7 @@ public class ConformanceCheckOntology
 		architectureViolationIndividual.addProperty(
 				ConformanceCheckOntologyClassesAndProperties.getViolatesProperty(model), architectureRuleIndividual);
 
+		LOG.debug("Creating Proof ...");
 		Individual proofIndividual = ConformanceCheckOntologyClassesAndProperties.getProofIndividual(model);
 		
 		proofIndividual.addProperty(ConformanceCheckOntologyClassesAndProperties.getProofsProperty(model),
@@ -103,23 +106,21 @@ public class ConformanceCheckOntology
 	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
 			ConstraintViolation violation) 
 	{
-		LOG.info("Start connectCodeElementsWithViolations: " + rule.getCnlSentence());
-
+		LOG.trace("Starting connectCodeElementsWithViolations: " + rule.getCnlSentence());
+		LOG.debug("Storing the rule type ...");
+		
 		String ruleType = rule.getType().toString();
 		DatatypeProperty datatypeProperty = ConformanceCheckOntologyClassesAndProperties.getHasRuleTypeProperty(model);
 		architectureRuleIndividual.addLiteral(datatypeProperty, ruleType);
 
-		LOG.info("architectureRuleIndividual hinzugefügt");
-
+		LOG.debug("Adding asserted statements ...");
 		List<StatementTriple> violations = violation.getAsserted();
-
 		for (StatementTriple triple : violations) 
 		{
-			LOG.info("StatementTriple: " + triple.getSubject() + " , " + triple.getPredicate() + " , " + triple.getObject());
+			LOG.debug("Adding statement: " + triple.getSubject() + " " + triple.getPredicate() + " " + triple.getObject());
 			
 			Resource subjectResource = codeModel.getResource(triple.getSubject());
 			Resource objectResource = codeModel.getResource(triple.getObject());
-			LOG.info("Subject und Objet Ressource erstellt");
 			
 			model.add(subjectResource,
 					ConformanceCheckOntologyClassesAndProperties.getCodeElementIsPartOfViolationSubject(model),

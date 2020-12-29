@@ -36,7 +36,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	@Override
 	public void createNewConformanceCheck() 
 	{
-    	LOG.info("Starting createNewConformanceCheck ...");
+    	LOG.trace("Starting createNewConformanceCheck ...");
 		ontology = new ConformanceCheckOntology();
 		ontology.newConformanceCheck();
 
@@ -45,13 +45,13 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	@Override
 	public void validateRule(ArchitectureRule rule, String modelPath, ConstraintViolationsResultSet violations, String outputPath) throws FileNotFoundException 
 	{
-    	LOG.info("Starting validateRule ...");
+    	LOG.trace("Starting validateRule ...");
     	ontology.storeArchitectureRule(rule);
 		Model codemodel = loadModelFromFile(modelPath);
 		
 		storeRuleViolationsInOntology(rule, codemodel, violations);
 		
-		LOG.info("add model to code model");
+		LOG.debug("Adding model to code model");
 		codemodel.add(ontology.getModel());
 		
 		writeModelToFile(codemodel, outputPath);
@@ -67,6 +67,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	}
 	
 	private Model loadModelFromFile(String filename) throws FileNotFoundException {
+		LOG.debug("Reading model from file: " + filename);
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		model.read(new FileReader(filename), "");
 		return model;
@@ -76,12 +77,12 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		try 
 		{	
 			File file = new File(outputPath);			
-			LOG.info("write to code model");
+			LOG.debug("Writing code model to file: " + outputPath);
 			codemodel.write(new FileOutputStream(file));
 		} 
 		catch (FileNotFoundException e) 
 		{
-			LOG.error(e.getMessage());
+			LOG.fatal(e.getMessage());
 			e.printStackTrace();
 		} 
 	}

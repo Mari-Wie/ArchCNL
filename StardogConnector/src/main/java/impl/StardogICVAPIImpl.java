@@ -49,26 +49,24 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	@Override
 	public String addIntegrityConstraint(String pathToConstraint)
 			throws FileNotFoundException {
-		LOG.info("Adding contraints file: " + pathToConstraint);
+		LOG.debug("Adding contraints file to database: " + pathToConstraint);
 		// Obtain a connection to the database
 		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(false)
 				.credentials(db.getUserName(), db.getPassword()).connect()) {
 
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
-
 			
 			aConn.begin();
 			aValidator.addConstraints().format(RDFFormats.RDFXML).stream(new FileInputStream(pathToConstraint));
 			aConn.commit();
 
 			return aValidator.getConstraints().iterator().next().toString();
-
 		}
 	}
 
 	@Override
 	public void removeIntegrityConstraints() {
-		LOG.info("Removing all constraints");
+		LOG.debug("Removing all constraints from the database");
 		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(false)
 				.credentials("admin", "admin").connect()) { // TODO: avoid hard-coded credentials
 			ICVConnection aValidator = aConn.as(ICVConnection.class);
@@ -84,7 +82,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 	@Override
 	public void explainViolationsForContext(String context) {
 
-		LOG.info("Explaining violations for context: " + context);
+		LOG.trace("Explaining violations for context: " + context);
 		
 		try (Connection aConn = ConnectionConfiguration.to(db.getDatabaseName()).server(db.getServer()).reasoning(true)
 				.credentials(db.getUserName(), db.getPassword()).connect()) {
@@ -96,7 +94,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 			Collection<com.stardog.stark.IRI> selectedContext = new ArrayList<>();
 			selectedContext.add(Values.iri(context));
 			
-			LOG.info("is valid: " + aValidator.isValid(ContextSets.DEFAULT_ONLY));
+			LOG.trace("is valid: " + aValidator.isValid(ContextSets.DEFAULT_ONLY));
 			
 			for (Constraint constraint : constraints) {
 				Iterable<Proof> proofs = aValidator.explain(constraint).activeGraphs(selectedContext).countLimit(600)
@@ -131,7 +129,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 						statement.object().toString());
 			}
 
-			System.out.println(proof.toString());
+			LOG.debug("Proof: " + proof.toString());
 			result.addViolation(violation);
 		}
 	}

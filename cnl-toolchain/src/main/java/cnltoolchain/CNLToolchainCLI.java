@@ -34,36 +34,7 @@ public class CNLToolchainCLI implements Runnable {
 
 	@Override
 	public void run() {
-    	LOG.info("Initializing ...");
-    	
-    	String rulesFileInProject = projectPath + rulesFile;
-        
-        LOG.info("Database     : "+database);
-        LOG.info("Server       : "+server);
-        LOG.info("Context      : "+context);
-        LOG.info("Project Path : "+projectPath);
-        LOG.info("RulesFile    : "+rulesFileInProject);
-        
-        CNLToolchain tool = new CNLToolchain(database, server);
-        LOG.info("CNLToolchain initialized.");
-        
-        try
-        {
-            tool.execute(rulesFileInProject, projectPath, context);
-            LOG.info("CNLToolchain completed successfully!");
-        }
-        catch (FileNotFoundException e)
-        {
-            LOG.error("File not found", e);
-        }
-        catch (MissingBuilderArgumentException e)
-        {
-            LOG.error("Missing builder argument", e);
-        }
-        catch (NoConnectionToStardogServerException e)
-        {
-        	LOG.error("No connection to stardog", e);
-        }
+        CNLToolchain.runToolchain(database, server, context, projectPath, projectPath + rulesFile);
 	}
 	
 	public static void main(String[] args) {

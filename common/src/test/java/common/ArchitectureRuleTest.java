@@ -40,4 +40,17 @@ public class ArchitectureRuleTest {
 		assertEquals(r1.hashCode(), r2.hashCode());
 	}
 
+	@Test 
+	public void testConstraintStorage() {
+		final String path = "somepath";
+		
+		ArchitectureRule r1 = new ArchitectureRule();
+		
+		assertNull(r1.getContraintFile());
+		
+		r1.setContraintFile(path);
+		
+		assertEquals(path, r1.getContraintFile());
+	}
+	
 }

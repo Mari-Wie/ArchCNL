@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
@@ -31,6 +33,8 @@ import stemmer.StanfordLemmatizer;
 
 public class OWLAPIImpl implements OntologyAPI {
 
+	private static final Logger LOG = LogManager.getLogger(OWLAPIImpl.class);
+	
 	private OWLOntology currentOntology;
 	private OWLDataFactory df = OWLManager.getOWLDataFactory();
 	OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -40,8 +44,9 @@ public class OWLAPIImpl implements OntologyAPI {
 
 	}
 
+	@Override
 	public void createOntology(String filePath, String iriPath) {
-
+		LOG.trace("creating ontology with filePath \""+filePath+"\" and iriPath \""+iriPath+"\"");
 		this.filePath = filePath;
 		try {
 			IRI iri = IRI.create(iriPath);
@@ -51,14 +56,17 @@ public class OWLAPIImpl implements OntologyAPI {
 			// previous line with the following
 			// File output = File.createTempFile("saved_pizza", ".owl");
 			IRI documentIRI2 = IRI.create(output);
+			LOG.debug("Saving ontology to file: " + output.getAbsolutePath());
 			// save in OWL/XML format
 			manager.saveOntology(currentOntology, new OWLXMLDocumentFormat(), documentIRI2);
 			// save in RDF/XML
 			manager.saveOntology(currentOntology, documentIRI2);
 		} catch (OWLOntologyCreationException e) {
+			LOG.error("Creating an ontology failed.");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OWLOntologyStorageException e) {
+			LOG.error("Saving an ontology failed.");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -71,8 +79,8 @@ public class OWLAPIImpl implements OntologyAPI {
 		manager.removeOntology(currentOntology);
 	}
 
-	public void addSubClassAxiom(String iriPath, OWLClassExpression superClass, OWLClassExpression subClass) {
-		// TODO: parameter iriPath is not used -> remove it
+	@Override
+	public void addSubClassAxiom(OWLClassExpression superClass, OWLClassExpression subClass) {
 		OWLAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subClass, superClass);
 		manager.addAxiom(currentOntology, subClassAxiom);
 		triggerSave();
@@ -85,19 +93,21 @@ public class OWLAPIImpl implements OntologyAPI {
 		return result.get(0);
 	}
 
-	public OWLClassExpression addMaxCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
+	@Override
+	public OWLClassExpression addMaxCardinalityRestrictionAxiom(OWLClassExpression object,
 			OWLObjectProperty property, int count) {
-		// TODO: parameter namespace is not used -> remove it
 		return df.getOWLObjectMaxCardinality(count, property, object);
 	}
 
-	public OWLClassExpression addMinCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
+	@Override
+	public OWLClassExpression addMinCardinalityRestrictionAxiom(OWLClassExpression object,
 			OWLObjectProperty property, int count) {
 		
 		return df.getOWLObjectMinCardinality(count, property, object);
 	}
 
-	public OWLClassExpression addExactCardinalityRestrictionAxiom(String namespace, OWLClassExpression object,
+	@Override
+	public OWLClassExpression addExactCardinalityRestrictionAxiom(OWLClassExpression object,
 			OWLObjectProperty property, int count) {
 		
 		return df.getOWLObjectExactCardinality(count, property, object);
@@ -111,28 +121,32 @@ public class OWLAPIImpl implements OntologyAPI {
 //		return Integer.parseInt(count);
 //	}
 
+	@Override
 	public void triggerSave() {
 		File output = new File(this.filePath);
 		IRI documentIRI2 = IRI.create(output);
 		// save in OWL/XML format
 		try {
+			LOG.debug("Saving ontology to file: " + output.getAbsolutePath());
 			manager.saveOntology(currentOntology, new OWLXMLDocumentFormat(), documentIRI2);
 			// save in RDF/XML
 			manager.saveOntology(currentOntology, documentIRI2);
 		} catch (OWLOntologyStorageException e) {
+			LOG.error("Saving an ontology failed.");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	@Override
 	public OWLClass getOWLClass(String iriPath, String subjectName) {
 		OWLClass subject = df.getOWLClass(iriPath + "#" + subjectName);
 
 		return subject;
 	}
 
-	public OWLDataHasValue addDataHasValue(String iriPath, String value, OWLDataProperty roleName) {
-		// TODO: parameter iriPath is not used, remove it
+	@Override
+	public OWLDataHasValue addDataHasValue(String value, OWLDataProperty roleName) {
 		OWLLiteral literal = df.getOWLLiteral(value);
 		OWLDataHasValue hasValues = df.getOWLDataHasValue(roleName, literal);
 
@@ -142,9 +156,8 @@ public class OWLAPIImpl implements OntologyAPI {
 		return hasValues;
 	}
 
-	// TODO: This would be a fine case of method overloading. Change the name to addDataHasValue()
-	public OWLDataHasValue addDataHasIntegerValue(String iriPath, int value, OWLDataProperty roleName) {
-		// TODO: parameter iriPath is not used, remove it
+	@Override
+	public OWLDataHasValue addDataHasValue(int value, OWLDataProperty roleName) {
 		OWLLiteral literal = df.getOWLLiteral(value);
 		OWLDataHasValue hasValue = df.getOWLDataHasValue(roleName, literal);
 		
@@ -154,9 +167,9 @@ public class OWLAPIImpl implements OntologyAPI {
 		return hasValue;
 	}
 
-	public OWLClassExpression addSomeValuesFrom(String iriPath, OWLObjectProperty role,
+	@Override
+	public OWLClassExpression addSomeValuesFrom(OWLObjectProperty role,
 			OWLClassExpression expression) {
-		// TODO: parameter iriPath is not used, remove it
 		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, expression);
 		
 		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
@@ -165,7 +178,8 @@ public class OWLAPIImpl implements OntologyAPI {
 		return someValues;
 
 	}
-
+	
+//	@Override
 //	public void addSomeValuesFrom(String iriPath, OWLClassExpression subclass, OWLClassExpression superclass,
 //			OWLObjectProperty role) {
 //		// TODO: parameter iriPath is not used, remove it
@@ -177,21 +191,14 @@ public class OWLAPIImpl implements OntologyAPI {
 //
 //	}
 
-	public OWLObjectIntersectionOf intersectionOf(String iriPath, OWLClassExpression first, OWLClassExpression second) {
-		// TODO: parameter iriPath is not used, remove it
-		// TODO: use the version with a list instead?
-		return df.getOWLObjectIntersectionOf(first, second);
-
+	@Override
+	public OWLObjectIntersectionOf intersectionOf(ArrayList<OWLClassExpression> expressions) {
+		return df.getOWLObjectIntersectionOf(expressions);
 	}
 
-	public OWLObjectIntersectionOf intersectionOf(String iriPath, OWLClassExpression[] list) {
-		// TODO: parameter iriPath is not used, remove it
-		return df.getOWLObjectIntersectionOf(list);
-	}
-
-	public void addDomainRangeAxiom(String namespace, OWLClassExpression subject, OWLClassExpression object,
+	@Override
+	public void addDomainRangeAxiom(OWLClassExpression subject, OWLClassExpression object,
 			OWLObjectProperty property) {
-		// TODO: parameter namespace is not used, remove it
 		OWLObjectPropertyDomainAxiom domainAxiom = df.getOWLObjectPropertyDomainAxiom(property, subject);
 
 		OWLObjectPropertyRangeAxiom rangeAxiom = df.getOWLObjectPropertyRangeAxiom(property, object);
@@ -201,24 +208,27 @@ public class OWLAPIImpl implements OntologyAPI {
 		triggerSave();
 	}
 
+	@Override
 	public OWLProperty getOWLObjectProperty(String iriPath, String roleName) {
 		OWLObjectProperty prop = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(roleName));
 		return prop;
 	}
 
+	@Override
 	public OWLProperty getOWLDatatypeProperty(String iriPath, String roleName) {
 		// TODO: the role name is not lemmatized, unlike the behavior of getOWLObjectProperty()
+		// is this desired?
 		return df.getOWLDataProperty(iriPath + "#" + roleName);
 	}
 
-	public OWLClassExpression unionOf(String namespace, ArrayList<OWLClassExpression> expressions) {
-		// TODO: parameter namespace is not used, remove it
+	@Override
+	public OWLClassExpression unionOf(ArrayList<OWLClassExpression> expressions) {
 		return df.getOWLObjectUnionOf(expressions);
 	}
 
-	public void addNegationAxiom(String string, OWLClassExpression subject, OWLClassExpression object,
+	@Override
+	public void addNegationAxiom(OWLClassExpression subject, OWLClassExpression object,
 			OWLObjectProperty property) {
-		// TODO: parameter string is not used, remove it
 		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(property, object);
 		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(someValues);
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(subject, complement);
@@ -227,8 +237,8 @@ public class OWLAPIImpl implements OntologyAPI {
 		triggerSave();
 	}
 
-	public void addNegationAxiom(String string, OWLClassExpression first, OWLClassExpression second) {
-		// TODO: parameter string is not used, remove it
+	@Override
+	public void addNegationAxiom(OWLClassExpression first, OWLClassExpression second) {
 		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(second);
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(first, complement);
 		manager.addAxiom(currentOntology, subClass);
@@ -236,8 +246,9 @@ public class OWLAPIImpl implements OntologyAPI {
 		triggerSave();
 	}
 
+	@Override
 	public void addSubPropertyOfAxiom(String iriPath, String subProperty, String superProperty) {
-		// TODO: This might cause some bugs: DatatypeProperties are not used here?
+		// TODO: This might cause some bugs: what if one of the properties refers to a DatatypeProperty?
 		OWLObjectProperty sub = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(subProperty));
 		OWLObjectProperty sup = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(superProperty));
 		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(sub, sup);
@@ -246,15 +257,15 @@ public class OWLAPIImpl implements OntologyAPI {
 		triggerSave();
 	}
 
-	public OWLClassExpression getOWLTop(String namespace) {
-		// TODO: parameter namespace is not used, remove it
+	@Override
+	public OWLClassExpression getOWLTop() {
 		return df.getOWLThing();
 
 	}
 
-	public OWLClassExpression createOnlyRestriction(String iriPath, OWLObjectProperty role,
+	@Override
+	public OWLClassExpression createOnlyRestriction(OWLObjectProperty role,
 			OWLClassExpression concept) {
-		// TODO: parameter iriPath is not used, remove it
 		OWLObjectAllValuesFrom allValues = df.getOWLObjectAllValuesFrom(role, concept);
 
 		return allValues;
