@@ -82,8 +82,9 @@ public class AsciiDocArc42Parser
      */
     public void parseRulesFromDocumentation(String path, String outputDirectory)
     {
-        LOG.info("Start parseRulesFromDocumentation...");
+        LOG.trace("Starting parseRulesFromDocumentation ...");
         
+        LOG.debug("Parsing architecture rules from file: " + path);
         Asciidoctor ascii = Asciidoctor.Factory.create();
         CNL2OWLGenerator generator = new CNL2OWLGenerator();
         
@@ -104,43 +105,46 @@ public class AsciiDocArc42Parser
 
             for (String line : lines)
             {
+            	LOG.debug("Found an architecture rule:");
                 rulePath = PREFIX + "_" + id_for_file + EXTENSION;
                 String ontologyFile = "/architecture" + id_for_file + OWL_EXTENSION;
                 ontologyPath = outputDirectory + ontologyFile;
-                LOG.info("Rule Id      : " + id_for_file);
-                LOG.info("Rule         : " + line);
-                LOG.info("File Id      : " + id_for_file);
-                LOG.info("RulePath     : " + rulePath);
-                LOG.info("OntologyPath : " + ontologyPath);
+                LOG.debug("Rule Id      : " + id_for_file);
+                LOG.debug("Rule         : " + line);
+                LOG.debug("File Id      : " + id_for_file);
+                LOG.debug("RulePath     : " + rulePath);
+                LOG.debug("OntologyPath : " + ontologyPath);
                 
                 ArchitectureRule rule = new ArchitectureRule();
                 rule.setId(id_for_file);
                 rule.setCnlSentence(line);
                 ArchitectureRules rules = ArchitectureRules.getInstance();
 
-                LOG.info("Rule added");
+                LOG.debug("Adding the architecture rule: " + rule.getCnlSentence());
 
                 File f = new File(rulePath);
                 try 
                 {
+                	// TODO: Passing the rule to the generator as a string rather than as a file
+                	// 		 would increase performance.
+                	LOG.debug("Writing the rule to a seperate file: " + rulePath);
                     ontologyPaths.add(ontologyPath);
                     
                     FileUtils.writeStringToFile(f, line + "\n", (Charset) null,
                             true);
                     rules.addRuleWithPathToConstraint(rule, id_for_file, ontologyPath);
-                    LOG.info("Ended addRuleWithPathToConstraint");
                     
+                    LOG.debug("Transforming the rule from CNL to an OWL constraint ...");
                     generator.transformCNLFile(rulePath);
                     
                     // TODO replace this dirty workaround:
                     // the org.architecture.cnl module creates the file
                     // at a fixed location, move it to the specified directory
-                    LOG.info("Moving ."+ontologyFile+" to "+ontologyPath);
+                    LOG.debug("Moving constraint file ."+ontologyFile+" to "+ontologyPath);
                     Files.move(Paths.get("."+ontologyFile), Paths.get(ontologyPath), StandardCopyOption.REPLACE_EXISTING);
                     
-                    LOG.info("Rule transformed to OWL: "+rulePath);
-
-                    //f.delete();
+                    LOG.debug("Rule transformed to OWL constraint: "+rulePath);
+                    LOG.info("Added the architecture rule: " + rule.getCnlSentence());
                 }
                 catch (IOException e)
                 {
@@ -171,6 +175,10 @@ public class AsciiDocArc42Parser
     */
     public void parseMappingRulesFromDocumentation(String path, String outputFile)
     {
+    	LOG.trace("Starting parseMappingRulesFromDocumentation ...");
+        
+        LOG.debug("Parsing mapping rules from file: " + path);
+        
         Asciidoctor ascii = Asciidoctor.Factory.create();
         Document doc = ascii.loadFile(new File(path),
                 new HashMap<String, Object>());
@@ -178,19 +186,6 @@ public class AsciiDocArc42Parser
         selector.put("role", "mapping");
 
         List<StructuralNode> result = doc.findBy(selector);
-        File f = new File(outputFile);
-        if (f.exists())
-        {
-            f.delete();
-            try
-            {
-                f.createNewFile();
-            }
-            catch (IOException e)
-            {
-                System.out.println("Can't create file for mapping.");
-            }
-        }
         String allMappingRules = "";
         for (StructuralNode structuralNode : result)
         {
@@ -202,10 +197,17 @@ public class AsciiDocArc42Parser
             {
                 tmp += line;
             }
-            System.out.println("[" + tmp + "]");
+            LOG.debug("Encountered mapping rule: [" + tmp + "]");
             allMappingRules += "[" + tmp + "]" + "\n";
 
         }
+        writeMappingRulesToFile(outputFile, allMappingRules);
+        LOG.info("Processed architecture-to-code mapping");
+    }
+
+	void writeMappingRulesToFile(String outputFile, String allMappingRules) {
+		LOG.debug("Writing mapping rules to seperate file: " + outputFile);
+        File f = createNewFile(outputFile);
         try
         {
             FileUtils.writeStringToFile(f,
@@ -214,11 +216,28 @@ public class AsciiDocArc42Parser
         }
         catch (IOException e)
         {
+        	LOG.fatal("Unable to write mapping rules to file: " + outputFile);
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+	}
 
-    }
+	File createNewFile(String outputFile) {
+		File f = new File(outputFile);
+        if (f.exists())
+        {
+            f.delete();
+            try
+            {
+                f.createNewFile();
+            }
+            catch (IOException e)
+            {
+                LOG.error("Cannot create file: " + f.getAbsolutePath());
+            }
+        }
+		return f;
+	}
 
     /**
      * @return The list of all architecture rule ontology (.owl) files which have been extracted from a .adoc file.

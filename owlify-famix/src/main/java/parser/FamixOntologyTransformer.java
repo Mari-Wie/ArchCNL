@@ -10,6 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.jena.ontology.Individual;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -34,6 +36,8 @@ import visitors.SingleMemberAnnotationExpressionVisitor;
 
 public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 
+	private static final Logger LOG = LogManager.getLogger(FamixOntologyTransformer.class);
+	
 	private JavaTypeVisitor visitor;
 	private JavaParserDelegator delegator;
 	private FamixOntology ontology;
@@ -46,6 +50,7 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 	 */
 	public FamixOntologyTransformer(String resultPath) {
 		super(resultPath);
+		LOG.debug("Reading resource ontologies ...");
 		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
 		ontology = new FamixOntology(famixOntologyInputStream);
 		InputStream mainOntologyInputStream = getClass().getResourceAsStream("/ontologies/main.owl");
@@ -59,11 +64,13 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 	}
 
 	public void transform() {
+		LOG.trace("Starting transform");
+		
 		CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
 		combinedTypeSolver.add(new ReflectionTypeSolver());
 		List<String> sourcePaths = super.getSourcePaths();
 		for (String path : sourcePaths) {
-			System.out.println(path);
+			LOG.debug("Adding Java source path: " + path);
 			combinedTypeSolver.add(new JavaParserTypeSolver(path));
 		}
 
@@ -74,15 +81,17 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 		parseOtherElements(sourcePaths);
 		
 		ontology.add(mainOntology.getOntology());
+		LOG.debug("Writing code model to the file: " + super.getResultPath());
 		ontology.save(super.getResultPath());
-
 	}
 
 	private void parseOtherElements(List<String> sourcePaths) {
+		LOG.trace("Starting parseOtherElements ...");
 		for (String path : sourcePaths) {
 			for (File file : FileUtils.listFiles(new File(path),
 					new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 					TrueFileFilter.INSTANCE)) {
+				LOG.debug("Parsing code file: " + file.getAbsolutePath());
 				CompilationUnit unit;
 				try {
 					unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
@@ -102,11 +111,11 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 						unit.accept(new SingleMemberAnnotationExpressionVisitor(ontology, currentUnitIndividual), null);
 //				unit.accept(new AccessVisitor(ontology,currentUnitIndividual), null);
 						unit.accept(new ImportDeclarationVisitor(ontology, currentUnitIndividual), null);
-					} else { // type is a package-info.java
-						System.out.println(file.getAbsolutePath());
+					} else {
+						LOG.debug("Skipping the file, it is a package-info.java");
 					}
 				} catch (FileIsNotAJavaClassException e) {
-					// TODO Auto-generated catch block
+					LOG.error("The file is not a Java file. Skipping it ...");
 					e.printStackTrace();
 				}
 			}

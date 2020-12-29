@@ -47,10 +47,10 @@ public class StardogDatabase implements StardogDatabaseAPI {
 	@Override
 	public void connect() {
 
-        LOG.info("Start connecting ....");
+        LOG.info("Connecting to the database ....");
 		if (connectionPool == null && connection == null) 
 		{
-	        LOG.info("No Connection, no pool - start AdminConnection ....");
+	        LOG.debug("No Connection, no pool - creating new ones ....");
 			try (final AdminConnection aConn = AdminConnectionConfiguration.toServer(_server)
 					.credentials(_userName, _password).connect()) 
 			{
@@ -61,20 +61,21 @@ public class StardogDatabase implements StardogDatabaseAPI {
 				}
 				else
 				{
-			        LOG.info("Database already exists: "+_databaseName);
+			        LOG.warn("Database already exists: "+_databaseName);
 				}
 			}
 
-	        LOG.info("Start connection configuration ...");
+	        LOG.debug("Start connection configuration ...");
 			ConnectionConfiguration connectionConfig = ConnectionConfiguration.to(_databaseName).server(_server)
 				.reasoning(false).credentials(_userName, _password);
 			ConnectionPoolConfig poolConfig = ConnectionPoolConfig.using(connectionConfig);
 			connectionPool = poolConfig.create();
-	        LOG.info("ConnectionPool created.");
+	        LOG.debug("ConnectionPool created.");
 			
 			connection = connectionPool.obtain();	
-	        LOG.info("Connection obtained.");	
+	        LOG.debug("Connection obtained.");	
 		}
+		LOG.info("Connection established.");
 	}
 
 	@Override
@@ -100,6 +101,7 @@ public class StardogDatabase implements StardogDatabaseAPI {
 	@Override
 	public void writeModelFromContextToFile(String context, String path) {
 		try {
+			LOG.debug("Retrieving ontology from the database, storing it in a file: " + path);
 			Resource resource = Values.iri(context);
 			connection.export().context(resource).format(RDFFormats.RDFXML)
 					.to(new FileOutputStream(new File(path)));
@@ -177,13 +179,13 @@ public class StardogDatabase implements StardogDatabaseAPI {
 			throw new NoConnectionToStardogServerException();
 		}
 
-        LOG.info("Adding graph from context ...");
+        LOG.debug("Adding ontology from file: " + pathToData);
 		Resource namedGraph = Values.iri(context);
 		connection.begin();
 		// declare the transaction
 		connection.add().io().context(namedGraph).format(RDFFormats.RDFXML).stream(new FileInputStream(pathToData));
 		// and commit the change
 		connection.commit();
-        LOG.info("Change committed...");
+        LOG.info("Change committed.");
 	}
 }

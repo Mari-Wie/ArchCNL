@@ -41,15 +41,7 @@ public class ArchitectureRules {
 	 */
 	public void addRuleWithPathToConstraint(ArchitectureRule r, int id, String path) {
 		r.setContraintFile(path);
-//		rules.put(r, id);
 		rules.put(id, r);
-	}
-	
-	/**
-	 * Returns the path to the OWL file which contains the given rule as OWL constraints
-	 */
-	public String getPathOfConstraintForRule(ArchitectureRule r) {
-		return r.getContraintFile();
 	}
 	
 	/**
@@ -57,7 +49,7 @@ public class ArchitectureRules {
 	 * @return the rule with the given ID, or null, if no rule with the given ID exists
 	 */
 	public ArchitectureRule getRuleWithID(int id) {
-		LOG.info("getRuleWithID id: " + id);
+		LOG.trace("getRuleWithID id: " + id);
 		return rules.get(id);
 	}
 	

@@ -91,7 +91,7 @@ public class OWLAPIImplTest {
 	
 	@Test
 	public void testGetTopClass() {
-		OWLClassExpression c = api.getOWLTop(null);
+		OWLClassExpression c = api.getOWLTop();
 		
 		assertTrue(c.isOWLClass());
 		assertTrue(c.isClassExpressionLiteral());

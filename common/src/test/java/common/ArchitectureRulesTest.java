@@ -57,19 +57,6 @@ public class ArchitectureRulesTest {
 		assertNull(instance.getRuleWithID(3));
 	}
 
-	@Test 
-	public void testConstraintStorage() {
-		final String path = "somepath";
-		
-		assertNull(instance.getPathOfConstraintForRule(r1));
-		assertNull(instance.getPathOfConstraintForRule(r2));
-		
-		instance.addRuleWithPathToConstraint(r1, 0, path);
-		
-		assertEquals(instance.getPathOfConstraintForRule(r1), path);
-		assertNull(instance.getPathOfConstraintForRule(r2));
-	}
-	
 	@Test
 	public void testGetRules() {
 

@@ -4,19 +4,19 @@
         <Property name="log-path">./logs/</Property>
     </Properties>
     <Appenders>
-        <!-- File Appender -->
+        <!-- Logs to a file, uses the DEBUG level -->
         <File name="ArchCnlLogFile" fileName="${log-path}ArchCnlLogFile.${date:yyyy-MM-dd_hh-mm-ss}.log" append="true">
             <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n" />
         </File>
-        <!-- Console Appender -->
+        <!-- Logs to the console, uses the INFO level and displays less information -->
         <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n" />
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] | %-5level- %msg%n" />
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="info">
-            <AppenderRef ref="STDOUT" />
-            <AppenderRef ref="ArchCnlLogFile" />
+        <Root level="debug">
+            <AppenderRef ref="STDOUT" level="info" />
+            <AppenderRef ref="ArchCnlLogFile" level="debug" />
         </Root>
     </Loggers>
 </Configuration>

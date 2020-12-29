@@ -10,8 +10,12 @@ import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GeneralSoftwareArtifactOntology {
+	private static final Logger LOG = LogManager.getLogger(GeneralSoftwareArtifactOntology.class);
+			
 	private OntModel model;
 	private GeneralSoftwareArtifactClassesAndProperties classesAndProperties;
 	private long artifactId;
@@ -23,6 +27,7 @@ public class GeneralSoftwareArtifactOntology {
 	}
 
 	private void loadOntology(InputStream ontologyInpuStream) {
+		LOG.debug("Reading resource ontology");
 		model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		model.read(ontologyInpuStream, null);
 	}

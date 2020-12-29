@@ -46,18 +46,8 @@ public class CNLToolchain
     
     private final String TEMPORARY_DIRECTORY = "./temp";
     
-    /**
-     * Konstruktur f�r CNLToolchain
-     * 
-     * Zugriffe auf 
-     * - Stardog-API
-     * - FamixTransformerAPI 
-     * werden erstellt
-     * 
-     * @param databaseName	- Name der Stardog-DB, in der die Ontologien einschl. der Ergebnis-Ontologie abgelegt wird
-     * @param server		- Server und Port der DB-Instanz der Datenbank
-     */
-    public CNLToolchain(String databaseName, String server)
+    // private, use runToolchain to create and execute the toolchain
+    private CNLToolchain(String databaseName, String server)
     {
         this.databaseName = databaseName;
         this.server = server;
@@ -100,11 +90,24 @@ public class CNLToolchain
         String context = "http://graphs.org/" + database + "/1.0";
         String projectPath = props.getProjectPath();
         String rulesFile = projectPath + props.getRulesFile();
-        LOG.info("Database     : "+database);
-        LOG.info("Server       : "+server);
-        LOG.info("Context      : "+context);
-        LOG.info("Project Path : "+projectPath);
-        LOG.info("RulesFile    : "+rulesFile);
+        
+        runToolchain(database, server, context, projectPath, rulesFile);
+    }
+
+    /**
+     * Creates a Toolchain and executes it.
+     * @param database The name of the database to use.
+     * @param server The hostname of the database server to connect to.
+     * @param context The OWL context to use.
+     * @param projectPath The path to the root of the project which should be analysed.
+     * @param rulesFile The path to the AsciiDoc file which contains both the architecture and mapping rules.
+     */
+	public static void runToolchain(String database, String server, String context, String projectPath, String rulesFile) {
+		LOG.debug("Database     : "+database);
+        LOG.debug("Server       : "+server);
+        LOG.debug("Context      : "+context);
+        LOG.debug("Project path : "+projectPath);
+        LOG.debug("RulesFile    : "+rulesFile);
         
         CNLToolchain tool = new CNLToolchain(database, server);
         LOG.info("CNLToolchain initialized.");
@@ -112,26 +115,28 @@ public class CNLToolchain
         try
         {
             tool.execute(rulesFile, projectPath, context);
-            LOG.info("CNLToolchain completed successfully!");
         }
         catch (FileNotFoundException e)
         {
+        	LOG.error("File not found", e);
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         catch (MissingBuilderArgumentException e)
         {
+        	LOG.error("Missing builder argument", e);
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         catch (NoConnectionToStardogServerException e)
         {
+        	LOG.error("No connection to stardog", e);
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
+	}
 
-	protected static String createTimeSuffix() {
+	static String createTimeSuffix() {
 		Date date = Calendar.getInstance().getTime();  
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");  
         String strDate = dateFormat.format(date);
@@ -147,44 +152,41 @@ public class CNLToolchain
      * @throws FileNotFoundException when a file (input or a temporary one) cannot be accessed
      * @throws NoConnectionToStardogServerException when no connection to the database can be established
      */
-    public void execute(String docPath, String sourceCodePath, String context)
+    private void execute(String docPath, String sourceCodePath, String context)
             throws MissingBuilderArgumentException, FileNotFoundException,
             NoConnectionToStardogServerException
     {	
-    	LOG.info("Start execution.");
+    	LOG.info("Starting the execution");
 
-    	LOG.info("Create temporary directory");
-    	
-    	File directory = new File(TEMPORARY_DIRECTORY);
-        if (! directory.exists()){
-            directory.mkdir();
-        }
+    	createTemporaryDirectory();
         
         final String mappingFilePath = TEMPORARY_DIRECTORY + "/mapping.txt";
-      
+        
+        
     	List<String> ontologyPaths = parseRuleFile(docPath, mappingFilePath);
+    	
     	String codeModelPath = buildCodeModel(sourceCodePath);
     	
         performArchitectureToCodeMapping(mappingFilePath, ontologyPaths, codeModelPath);
 
-        LOG.info("Connect to StardogDB ...");
+        LOG.debug("Connecting to the database ...");
         db.connect();
         
         // Load code to stardog and perform conformance checking
-    	LOG.info("Start reasoning...");
+    	LOG.debug("Adding the mapped model to the database...");
         db.addDataByRDFFileAsNamedGraph(mappingAPI.getReasoningResultPath(),
                 context); //TODO ConformanceCheck component?
 
         // TODO: check all rules at once?
-    	LOG.info("Start conformance checking...");
+    	LOG.info("Starting conformance checking...");
         check.createNewConformanceCheck();
         for (ArchitectureRule rule : ArchitectureRules.getInstance()
             .getRules())
         {
         	
-        	String path = ArchitectureRules.getInstance().getPathOfConstraintForRule(rule); // TODO: remove dependency on the singleton
+        	String path = rule.getContraintFile(); // TODO: remove dependency on the singleton
     		
-        	LOG.info("conformance checking rule: " + rule.getCnlSentence());
+        	LOG.info("Checking the rule: " + rule.getCnlSentence());
             String tempfile = TEMPORARY_DIRECTORY + "/tmp.owl";
             db.writeModelFromContextToFile(context, tempfile);
             
@@ -205,13 +207,20 @@ public class CNLToolchain
             db.addDataByRDFFileAsNamedGraph(resultPath, context);
         }
 
-    	LOG.info("End execution.");
+        LOG.info("CNLToolchain completed successfully!");
     }
+
+	private void createTemporaryDirectory() {
+		LOG.debug("Creating temporary directory " + TEMPORARY_DIRECTORY);
+    	File directory = new File(TEMPORARY_DIRECTORY);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+	}
 
 	private void performArchitectureToCodeMapping(final String mappingFilePath, List<String> ontologyPaths,
 			String codeModelPath) throws FileNotFoundException {
-		// Mapping
-    	LOG.info("Start get mappings...");
+		LOG.info("Peforming the architecture-to-code mapping");
         mappingAPI = ExecuteMappingAPIFactory.get();
         ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build()
             .withPathsToConcepts(ontologyPaths)
@@ -222,8 +231,9 @@ public class CNLToolchain
 	}
 
 	private String buildCodeModel(String sourceCodePath) {
-		LOG.info("Start famix transformation...");
-        // Source Code Transformation
+		LOG.info("Creating the code model ...");
+		LOG.info("Starting famix transformation ...");
+        // source code transformation
         famixTransformer.addSourcePath(sourceCodePath);
         famixTransformer.transform();
         String codeModelPath = famixTransformer.getResultPath();
@@ -231,9 +241,11 @@ public class CNLToolchain
 	}
 
 	private List<String> parseRuleFile(String docPath, final String mappingFilePath) {
-		LOG.info("Start parsing...");
+		LOG.info("Parsing the rule file ...");
         AsciiDocArc42Parser parser = new AsciiDocArc42Parser(gatherOWLNamespaces());
+        LOG.debug("Parsing the architecture rules ...");
         parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
+        LOG.debug("Parsing the mapping rules ...");
         parser.parseMappingRulesFromDocumentation(docPath, mappingFilePath);
         List<String> ontologyPaths = parser.getOntologyPaths();
 		return ontologyPaths;
@@ -241,13 +253,9 @@ public class CNLToolchain
 
 	private HashMap<String, String> gatherOWLNamespaces() {
 		HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
-        
         supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
         supportedOWLNamespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
 		return supportedOWLNamespaces;
 	}
-
-
-
 }

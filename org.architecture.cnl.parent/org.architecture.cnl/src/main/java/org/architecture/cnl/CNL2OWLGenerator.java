@@ -26,30 +26,32 @@ private static final Logger LOG = LogManager.getLogger(CNL2OWLGenerator.class);
 
 	public void transformCNLFile(String path) {
 
-		 LOG.info("path    : "+path);
+		LOG.trace("transforming CNL file with path: "+path);
 
 		ArchcnlStandaloneSetup setup = new ArchcnlStandaloneSetup();
 
 		Injector injector = setup.createInjectorAndDoEMFRegistration();
 
 		XtextResourceSet set = injector.getInstance(XtextResourceSet.class);
+		
 		// load a resource by URI, in this case from the file system
 		URI uri = URI.createFileURI(path);
-		LOG.info("uri     : "+uri.toString());
+		LOG.trace("uri: "+uri);
 		
+		LOG.debug("Reading CNL file: " + path);
 		Resource resource = set.getResource(uri, true);
 		
 		IResourceValidator validator = ((XtextResource) resource).getResourceServiceProvider().getResourceValidator();
 		List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
 		for (Issue issue : issues) {
-			System.out.println(issue.getMessage());
+			LOG.error(issue.getMessage());
 		}
 		GeneratorDelegate generator = injector.getInstance(GeneratorDelegate.class);
 		
 		//fsa wird nur als leer Hülle  für den Aufruf erstellt, aber nicht weiter verwendet.
 		InMemoryFileSystemAccess fsa = new InMemoryFileSystemAccess();
 
-		LOG.info("resource: "+resource);
+		LOG.trace("resource: "+resource);
 		generator.doGenerate(resource, fsa);
 	}
 
