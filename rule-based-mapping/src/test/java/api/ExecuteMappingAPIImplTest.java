@@ -25,28 +25,30 @@ public class ExecuteMappingAPIImplTest {
 		List<String> ruleOntology = new ArrayList<>();
 		ruleOntology.add("architecture0.owl");
 		ruleOntology.add("architecture1.owl");
-		ReasoningConfiguration config = ReasoningConfiguration.build();
-		config.withMappingRules("mapping.txt");
-		config.withPathsToConcepts(ruleOntology);
-		config.withData("results.owl");
-		
+		ReasoningConfiguration config = ReasoningConfiguration.builder()
+				.withMappingRules("mapping.txt")
+				.withPathsToConcepts(ruleOntology)
+				.withData("results.owl")
+				.withResult(outputPath)
+				.build();
+
 		ExecuteMappingAPI e = new ExecuteMappingAPIImpl();
-		e.setReasoningConfiguration(config, outputPath);
+		e.setReasoningConfiguration(config);
 		try {
 			e.executeMapping();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 			fail();
 		}
-		
+
 		assertEquals(outputPath, e.getReasoningResultPath());
-		
+
 		Model expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		expected.read("mapped-expected.owl");
-		
+
 		Model actual = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		actual.read(outputPath);
-		
+
 		assertTrue(expected.isIsomorphicWith(actual));
 	}
 

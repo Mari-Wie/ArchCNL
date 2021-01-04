@@ -7,6 +7,6 @@ public class TestClassA implements Interface{
 	TestClassA a;
 	
 	public TestClassA() {
-		// TODO Auto-generated constructor stub
+		// Auto-generated constructor stub
 	}
 }

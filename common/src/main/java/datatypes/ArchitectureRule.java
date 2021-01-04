@@ -2,14 +2,28 @@ package datatypes;
 
 /**
  * Class for exchanging architecture rules between modules.
+ * 
+ * Value object.
  */
 public class ArchitectureRule {
-	// TODO: change to value class?
-	private Integer id;
-	private String cnlSentence;
-	private String contraintFile;
+	private final int id;
+	private final String cnlSentence;
+	private final String constraintFile;
+	private final RuleType type;
 	
-	private RuleType type;
+	/**
+	 * 
+	 * @param id the ID of the rule
+	 * @param cnlSentence the CNL sentence which is represented by this rule
+	 * @param type the type of this rule. It corresponds to the way how this rule's CNL sentence can be deferred from the grammar.
+	 * @param contraintFile the path to the file which stores this rule as an OWL constraint
+	 */
+	public ArchitectureRule(int id, String cnlSentence, RuleType type, String constraintFilePath) {
+		this.id = id;
+		this.cnlSentence = cnlSentence;
+		this.constraintFile = constraintFilePath;
+		this.type = type;
+	}
 	
 	/**
 	 * @return the ID of this rule
@@ -19,24 +33,10 @@ public class ArchitectureRule {
 	}
 
 	/**
-	 * sets this rule's ID
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	/**
 	 * @return the CNL sentence represented by this rule
 	 */
 	public String getCnlSentence() {
 		return cnlSentence;
-	}
-
-	/**
-	 * sets the CNL sentence which is represented by this rule
-	 */
-	public void setCnlSentence(String cnlSentence) {
-		this.cnlSentence = cnlSentence;
 	}
 
 	/**
@@ -47,33 +47,21 @@ public class ArchitectureRule {
 	}
 
 	/**
-	 * Sets the type of this rule. It corresponds to the way how this rule's CNL sentence can be deferred from the grammar.
-	 */
-	public void setType(RuleType type) {
-		this.type = type;
-	}
-
-	/**
 	 * @return the path to the file which stores this rule as an OWL constraint
 	 */
 	public String getContraintFile() {
-		return contraintFile;
+		return constraintFile;
 	}
 
-	/**
-	 * @param contraintFile the path to the file which stores this rule as an OWL constraint
-	 */
-	public void setContraintFile(String contraintFile) {
-		this.contraintFile = contraintFile;
-	}
+	
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((cnlSentence == null) ? 0 : cnlSentence.hashCode());
-		result = prime * result + ((contraintFile == null) ? 0 : contraintFile.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((constraintFile == null) ? 0 : constraintFile.hashCode());
+		result = prime * result + id;
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -92,15 +80,12 @@ public class ArchitectureRule {
 				return false;
 		} else if (!cnlSentence.equals(other.cnlSentence))
 			return false;
-		if (contraintFile == null) {
-			if (other.contraintFile != null)
+		if (constraintFile == null) {
+			if (other.constraintFile != null)
 				return false;
-		} else if (!contraintFile.equals(other.contraintFile))
+		} else if (!constraintFile.equals(other.constraintFile))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if (id != other.id)
 			return false;
 		if (type != other.type)
 			return false;

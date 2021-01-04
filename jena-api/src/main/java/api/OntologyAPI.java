@@ -19,9 +19,6 @@ import java.util.ArrayList;
  * the org.semanticweb.owlapi library.
  */
 public interface OntologyAPI {
-	// TODO: fix naming mess with "addXY" methods that just return something without modifying the ontology 
-	// -> rename them to "getXY", "createXY", or something similar
-	
 	/**
 	 * Creates a new OWL ontology. Must be called before any other method which adds something to an ontology.
 	 * @param filePath The path to the file in which the ontology will be stored (in XML format).
@@ -35,9 +32,8 @@ public interface OntologyAPI {
 	 * To create a new ontology, call {@link #createOntology(String, String)} again. No method of this
 	 * interface which adds something to an ontology 
 	 * must be called until a new ontology has been created.
-	 * @param iriPath unused
 	 */
-	public void removeOntology(String iriPath);
+	public void removeOntology();
 
 	/**
 	 * Adds an OWL axiom to this ontology which states that the OWL class "subClass" is the sub class of 
@@ -79,7 +75,6 @@ public interface OntologyAPI {
 	 */
 	public void addDomainRangeAxiom(OWLClassExpression subject, OWLClassExpression object, OWLObjectProperty property);
 
-	// TODO: The prefix "create" messes the naming even more up than it already is. Rename method, I choose you!
 	/**
 	 * Returns an OWL class expression which represents the set of individuals which have only "role" properties 
 	 * where the object is from the class "concept". Example: role="makes-sound" concept="Bark" -> a class of objects
@@ -96,7 +91,7 @@ public interface OntologyAPI {
 	 * @param subjectName The name of the OWL class.
 	 * @return An OWL class with the name "<IRI>#<classname>".
 	 */
-	public OWLClass getOWLClass(String iriPath, String subjectName);
+	public OWLClass createOWLClass(String iriPath, String subjectName);
 	
 	/**
 	 * Returns an OWL object property (property between two indivuduals/classes and not between an
@@ -105,7 +100,7 @@ public interface OntologyAPI {
 	 * @param roleName The name of the property.
 	 * @return The property with the name "<IRI>#<lemmatized-property-name>",
 	 */
-	public OWLProperty getOWLObjectProperty(String iriPath, String roleName);
+	public OWLProperty creteOWLObjectProperty(String iriPath, String roleName);
 	
 	/**
 	 * Returns an OWL datatype property (property between an individual and a literal and not
@@ -114,7 +109,7 @@ public interface OntologyAPI {
 	 * @param roleName The name of the property.
 	 * @return The property with the name "<IRI>#<property-name>",
 	 */
-	public OWLProperty getOWLDatatypeProperty(String iriPath, String roleName);
+	public OWLProperty createOWLDatatypeProperty(String iriPath, String roleName);
 	
 	/**
 	 * Returns an OWL restriction which states that the given OWL data property must have the
@@ -123,7 +118,7 @@ public interface OntologyAPI {
 	 * @param role The data property which is restricted.
 	 * @return The restriction.
 	 */
-	public OWLDataHasValue addDataHasValue(String value, OWLDataProperty role);
+	public OWLDataHasValue createDataHasValue(String value, OWLDataProperty role);
 	
 	/**
 	 * Returns an OWL restriction which states that the given OWL data property must have the
@@ -132,9 +127,7 @@ public interface OntologyAPI {
 	 * @param role The data property which is restricted.
 	 * @return The restriction.
 	 */
-	public OWLDataHasValue addDataHasValue(int value, OWLDataProperty roleName);
-	
-//	public void addSomeValuesFrom(String iriPath, OWLClassExpression subclass, OWLClassExpression superclass, OWLObjectProperty roleName);
+	public OWLDataHasValue createDataHasValue(int value, OWLDataProperty roleName);
 	
 	/**
 	 * Returns an OWL restriction which states that the given OWL property "role" must exist at least once with an object
@@ -143,22 +136,21 @@ public interface OntologyAPI {
 	 * @param expression The class of the objects to which the restriction applies.
 	 * @return The restriction.
 	 */
-	public OWLClassExpression addSomeValuesFrom(OWLObjectProperty role, OWLClassExpression expression);
+	public OWLClassExpression createSomeValuesFrom(OWLObjectProperty role, OWLClassExpression expression);
 	
-	// TODO: change parameter to ArrayList (so that this method is similar to unionOf())
 	/**
 	 * Returns an OWL class which represents the intersection of the given classes.
 	 * @param expressions The list of OWL class expressions which are intersected.
 	 * @return A new class description representing the intersection of the input classes.
 	 */
-	public OWLObjectIntersectionOf  intersectionOf(ArrayList<OWLClassExpression> expressions);
+	public OWLObjectIntersectionOf createIntersection(ArrayList<OWLClassExpression> expressions);
 	
 	/**
 	 * Returns an OWL class which represents the union of the given classes.
 	 * @param expressions The list of OWL class expressions which are united.
 	 * @return A new class description representing the union of the input classes.
 	 */
-	public OWLClassExpression unionOf(ArrayList<OWLClassExpression> expressions);
+	public OWLClassExpression createUnion(ArrayList<OWLClassExpression> expressions);
 
 	/**
 	 * Adds an axiom to the ontology which states that the given property does not apply to the "subject" 
@@ -173,13 +165,13 @@ public interface OntologyAPI {
 	public void addNegationAxiom(OWLClassExpression subject, OWLClassExpression object, OWLObjectProperty property);
 
 	/**
-	 * Adds an axiom to the onology which states that the first class is not contained in the second class, i.e. that
+	 * Adds an axiom to the ontology which states that the given classes are disjoint, i.e. that
 	 * it is a subset of the complement of the second class.
 	 * The ontology is saved after the modification by calling {@link #triggerSave()}.
 	 * @param first The first class, i.e. the class to which the axiom applies.
 	 * @param second The second class, i.e. the class which is used in the axiom.
 	 */
-	public void addNegationAxiom(OWLClassExpression first, OWLClassExpression second);
+	public void addDisjointAxiom(OWLClassExpression first, OWLClassExpression second);
 
 	/**
 	 * Returns the "topmost" OWL class "Thing", which is the superclass of every OWL class.
@@ -195,7 +187,7 @@ public interface OntologyAPI {
 	 * @param count The upper bound on the cardinality.
 	 * @return The corresponding class expression.
 	 */
-	public OWLClassExpression addMaxCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
+	public OWLClassExpression createMaxCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 	
 	/**
 	 * Returns an OWL class expression which states that the given property "relation" must be present at least "count" times for the
@@ -205,7 +197,7 @@ public interface OntologyAPI {
 	 * @param count The lower bound on the cardinality.
 	 * @return The corresponding class expression.
 	 */
-	public OWLClassExpression addMinCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
+	public OWLClassExpression createMinCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 	
 	/**
 	 * Returns an OWL class expression which states that the given property "relation" must be present exactly "count" times for the
@@ -215,6 +207,6 @@ public interface OntologyAPI {
 	 * @param count The exact value of the cardinality.
 	 * @return The corresponding class expression.
 	 */
-	public OWLClassExpression addExactCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
+	public OWLClassExpression createExactCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 
 }

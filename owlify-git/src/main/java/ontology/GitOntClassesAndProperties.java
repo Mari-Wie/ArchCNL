@@ -97,7 +97,6 @@ public class GitOntClassesAndProperties {
 	}
 
 	public DatatypeProperty hasShortMessageProperty() {
-		// TODO Auto-generated method stub
 		return ontoModel.getDatatypeProperty(ONTOLOGY_GIT_NAMESPACE + "hasShortMessage");
 	}
 	

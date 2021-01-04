@@ -74,8 +74,7 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 	
 	@Override
-	public void removeOntology(String iriPath) {
-		// TODO: parameter iriPath is not used -> remove it
+	public void removeOntology() {
 		manager.removeOntology(currentOntology);
 	}
 
@@ -94,20 +93,20 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	@Override
-	public OWLClassExpression addMaxCardinalityRestrictionAxiom(OWLClassExpression object,
+	public OWLClassExpression createMaxCardinalityRestrictionAxiom(OWLClassExpression object,
 			OWLObjectProperty property, int count) {
 		return df.getOWLObjectMaxCardinality(count, property, object);
 	}
 
 	@Override
-	public OWLClassExpression addMinCardinalityRestrictionAxiom(OWLClassExpression object,
+	public OWLClassExpression createMinCardinalityRestrictionAxiom(OWLClassExpression object,
 			OWLObjectProperty property, int count) {
 		
 		return df.getOWLObjectMinCardinality(count, property, object);
 	}
 
 	@Override
-	public OWLClassExpression addExactCardinalityRestrictionAxiom(OWLClassExpression object,
+	public OWLClassExpression createExactCardinalityRestrictionAxiom(OWLClassExpression object,
 			OWLObjectProperty property, int count) {
 		
 		return df.getOWLObjectExactCardinality(count, property, object);
@@ -139,60 +138,39 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	@Override
-	public OWLClass getOWLClass(String iriPath, String subjectName) {
+	public OWLClass createOWLClass(String iriPath, String subjectName) {
 		OWLClass subject = df.getOWLClass(iriPath + "#" + subjectName);
 
 		return subject;
 	}
 
 	@Override
-	public OWLDataHasValue addDataHasValue(String value, OWLDataProperty roleName) {
+	public OWLDataHasValue createDataHasValue(String value, OWLDataProperty roleName) {
 		OWLLiteral literal = df.getOWLLiteral(value);
 		OWLDataHasValue hasValues = df.getOWLDataHasValue(roleName, literal);
-
-		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
-		triggerSave();
 
 		return hasValues;
 	}
 
 	@Override
-	public OWLDataHasValue addDataHasValue(int value, OWLDataProperty roleName) {
+	public OWLDataHasValue createDataHasValue(int value, OWLDataProperty roleName) {
 		OWLLiteral literal = df.getOWLLiteral(value);
 		OWLDataHasValue hasValue = df.getOWLDataHasValue(roleName, literal);
 		
-		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
-		triggerSave();
-
 		return hasValue;
 	}
 
 	@Override
-	public OWLClassExpression addSomeValuesFrom(OWLObjectProperty role,
+	public OWLClassExpression createSomeValuesFrom(OWLObjectProperty role,
 			OWLClassExpression expression) {
 		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, expression);
 		
-		// TODO: Is the state even modified here? If not, the call of triggerSave() has no effect and can be removed.
-		triggerSave();
-
 		return someValues;
 
 	}
-	
-//	@Override
-//	public void addSomeValuesFrom(String iriPath, OWLClassExpression subclass, OWLClassExpression superclass,
-//			OWLObjectProperty role) {
-//		// TODO: parameter iriPath is not used, remove it
-//		OWLObjectSomeValuesFrom someValues = df.getOWLObjectSomeValuesFrom(role, superclass);
-//		OWLSubClassOfAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subclass, someValues);
-//		manager.addAxiom(currentOntology, subClassAxiom);
-//
-//		triggerSave();
-//
-//	}
 
 	@Override
-	public OWLObjectIntersectionOf intersectionOf(ArrayList<OWLClassExpression> expressions) {
+	public OWLObjectIntersectionOf createIntersection(ArrayList<OWLClassExpression> expressions) {
 		return df.getOWLObjectIntersectionOf(expressions);
 	}
 
@@ -209,20 +187,20 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	@Override
-	public OWLProperty getOWLObjectProperty(String iriPath, String roleName) {
+	public OWLProperty creteOWLObjectProperty(String iriPath, String roleName) {
 		OWLObjectProperty prop = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(roleName));
 		return prop;
 	}
 
 	@Override
-	public OWLProperty getOWLDatatypeProperty(String iriPath, String roleName) {
+	public OWLProperty createOWLDatatypeProperty(String iriPath, String roleName) {
 		// TODO: the role name is not lemmatized, unlike the behavior of getOWLObjectProperty()
 		// is this desired?
 		return df.getOWLDataProperty(iriPath + "#" + roleName);
 	}
 
 	@Override
-	public OWLClassExpression unionOf(ArrayList<OWLClassExpression> expressions) {
+	public OWLClassExpression createUnion(ArrayList<OWLClassExpression> expressions) {
 		return df.getOWLObjectUnionOf(expressions);
 	}
 
@@ -238,7 +216,7 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	@Override
-	public void addNegationAxiom(OWLClassExpression first, OWLClassExpression second) {
+	public void addDisjointAxiom(OWLClassExpression first, OWLClassExpression second) {
 		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(second);
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(first, complement);
 		manager.addAxiom(currentOntology, subClass);

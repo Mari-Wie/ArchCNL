@@ -38,7 +38,7 @@ public class GitCommit {
 		this.committer = committer;
 	}
 	
-	//TODO nicht mit Date, lieber Calendar
+	//TODO better: use Datetime
 	public Date getDate() {
 		return date;
 	}

@@ -255,7 +255,6 @@ public class GitOntologyTransformer extends AbstractOwlifyComponent {
 
 	@Override
 	public Map<String, String> getProvidedNamespaces() {
-		// TODO Auto-generated method stub
 		HashMap<String, String> res = new HashMap<>();
 		res.put("git", ontClassesAndProperties.getOntologyNamespace());
 		res.put("main", ontClassesAndProperties.getMainNamespace());
