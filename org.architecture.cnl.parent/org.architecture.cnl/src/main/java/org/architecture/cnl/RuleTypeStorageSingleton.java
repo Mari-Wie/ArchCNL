@@ -8,14 +8,36 @@ import datatypes.RuleType;
 /**
  * This singleton class is used by the ArchcnlGenerator to communicate the
  * RuleType of the parsed architecture rules to the CNL2OWLGenerator. 
+ * Moreover, it is used to transmit the output filename from the CNL2OWLGenerator
+ * to the ArchcnlGenerator.
+ * 
+ * This is not a really clean design, however, CNL2OWLGenerator uses the ArchcnlGenerator
+ * only via an xtext-specific interface and the dependecy is resolved/injected by xtext.
+ * Thus, the interface cannot be extended.
  */
 public class RuleTypeStorageSingleton {
 	private static RuleTypeStorageSingleton instance = new RuleTypeStorageSingleton();
 	
 	private Map<Integer, RuleType> ruleTypes;
 	
+	private String outputFile;
+	
 	private RuleTypeStorageSingleton() {
 		ruleTypes = new HashMap<>();
+	}
+	
+	/**
+	 * Returns the path to the output file in which the next transformed rule should be stored.
+	 */
+	public String getOutputFile() {
+		return outputFile;
+	}
+	
+	/**
+	 * Sets the path to the output file in which the next transformed rule should be stored.
+	 */
+	public void setOutputFile(String outputFile) {
+		this.outputFile = outputFile;
 	}
 	
 	/**

@@ -28,7 +28,7 @@ public class OWLAPIImplTest {
 	@Test
 	public void testGetClass() {
 		final String className = "Foo";
-		OWLClass c = api.getOWLClass(IRI_PATH, className);
+		OWLClass c = api.createOWLClass(IRI_PATH, className);
 		
 		assertEquals(IRI_PATH + "#" + className, c.getIRI().toString());
 		
@@ -51,7 +51,7 @@ public class OWLAPIImplTest {
 	public void testGetObjectProperty() {
 		final String roleName = "develops";
 		final String roleNameLemmatized = "develop";
-		OWLProperty c = api.getOWLObjectProperty(IRI_PATH, roleName);
+		OWLProperty c = api.creteOWLObjectProperty(IRI_PATH, roleName);
 		
 		assertEquals(IRI_PATH + "#" + roleNameLemmatized, c.getIRI().toString());
 		
@@ -72,7 +72,7 @@ public class OWLAPIImplTest {
 	@Test
 	public void testGetDatatypeProperty() {
 		final String roleName = "develops";
-		OWLProperty c = api.getOWLDatatypeProperty(IRI_PATH, roleName);
+		OWLProperty c = api.createOWLDatatypeProperty(IRI_PATH, roleName);
 		
 		assertEquals(IRI_PATH + "#" + roleName, c.getIRI().toString());
 		assertTrue(c.isOWLDataProperty());

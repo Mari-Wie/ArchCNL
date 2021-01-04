@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.stardog.stark.Statement;
 import com.stardog.stark.Values;
+import com.stardog.stark.io.RDFFormats;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.icv.Constraint;
@@ -19,10 +20,7 @@ import com.complexible.stardog.icv.api.ICVConnection;
 import com.complexible.stardog.reasoning.Proof;
 import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
-import com.stardog.stark.io.RDFFormats;
-
-
-import com.complexible.stardog.ContextSets;// TODO: only temporary
+import com.complexible.stardog.ContextSets;
 
 import api.ConstraintViolationsResultSet;
 import api.StardogDatabaseAPI;

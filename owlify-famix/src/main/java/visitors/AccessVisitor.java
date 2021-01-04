@@ -35,7 +35,6 @@ public class AccessVisitor extends VoidVisitorAdapter<Void> {
 
 //	@Override
 //	public void visit(FieldAccessExpr n, Void arg) {
-//		// TODO Auto-generated method stub
 //		// FAMIX access
 ////		System.out.println("visit field access");
 ////		System.out.println("Name: " + n.getName());
@@ -46,7 +45,6 @@ public class AccessVisitor extends VoidVisitorAdapter<Void> {
 
 	@Override
 	public void visit(AssignExpr n, Void arg) {
-		// TODO Auto-generated method stub
 //		System.out.println("AssignExpr");
 //		System.out.println(n.getValue());
 //		System.out.println(n.getTarget());
@@ -58,7 +56,6 @@ public class AccessVisitor extends VoidVisitorAdapter<Void> {
 
 	@Override
 	public void visit(ObjectCreationExpr n, Void arg) {
-		// TODO Auto-generated method stub
 //		System.out.println("ObjectCreationExpr");
 //		System.out.println(n.getType());
 //		System.out.println(n.getParentNode());
@@ -81,7 +78,6 @@ public class AccessVisitor extends VoidVisitorAdapter<Void> {
 
 	@Override
 	public void visit(MethodCallExpr n, Void arg) {
-		// TODO Auto-generated method stub
 //		System.out.println(n.getName());
 		// Famix Invocation
 		// scope: receiver

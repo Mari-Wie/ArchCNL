@@ -68,7 +68,6 @@ public class CNLToolchain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO: Parameter von aussen uebergeben (z.B. ueber Parameter-File)
 		LOG.info("Initializing ...");
 		CNLToolchainProperties props = new CNLToolchainProperties();
 		try {

@@ -16,21 +16,9 @@ public class ArchitectureRuleTest {
 
 	@Test
 	public void testEqualsAndHashCode() {
-		ArchitectureRule r1 = new ArchitectureRule();
-		ArchitectureRule r2 = new ArchitectureRule();
-		ArchitectureRule r3 = new ArchitectureRule();
-		
-		r1.setCnlSentence("test");
-		r2.setCnlSentence("test");
-		r3.setCnlSentence("not test");
-		
-		r1.setId(0);
-		r2.setId(0);
-		r3.setId(1);
-		
-		r1.setType(RuleType.AT_LEAST);
-		r2.setType(RuleType.AT_LEAST);
-		r3.setType(RuleType.AT_MOST);
+		ArchitectureRule r1 = new ArchitectureRule(0, "test", RuleType.AT_LEAST, "file1");
+		ArchitectureRule r2 = new ArchitectureRule(0, "test", RuleType.AT_LEAST, "file1");
+		ArchitectureRule r3 = new ArchitectureRule(1, "not test", RuleType.AT_MOST, "file2");
 		
 		assertEquals(r1, r1);
 		assertEquals(r1, r2);
@@ -39,18 +27,4 @@ public class ArchitectureRuleTest {
 		
 		assertEquals(r1.hashCode(), r2.hashCode());
 	}
-
-	@Test 
-	public void testConstraintStorage() {
-		final String path = "somepath";
-		
-		ArchitectureRule r1 = new ArchitectureRule();
-		
-		assertNull(r1.getContraintFile());
-		
-		r1.setContraintFile(path);
-		
-		assertEquals(path, r1.getContraintFile());
-	}
-	
 }

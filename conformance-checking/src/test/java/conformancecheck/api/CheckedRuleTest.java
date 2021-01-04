@@ -22,11 +22,7 @@ public class CheckedRuleTest {
 
 	@Test
 	public void test() {
-		ArchitectureRule rule = new ArchitectureRule();
-		rule.setCnlSentence("Only A can use B.");
-		rule.setContraintFile("somefile");
-		rule.setId(0);
-		rule.setType(RuleType.DOMAIN_RANGE);
+		ArchitectureRule rule = new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE, "some file");
 		
 		ConstraintViolationBuilder violationBuilder = new ConstraintViolationBuilder();
 		violationBuilder.addViolation("subject", "predicate", "object");

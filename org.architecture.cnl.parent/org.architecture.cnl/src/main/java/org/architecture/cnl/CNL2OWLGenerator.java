@@ -29,16 +29,17 @@ private static final Logger LOG = LogManager.getLogger(CNL2OWLGenerator.class);
 
 	/**
 	 * Translates the given file from ArchCNL's CNL to OWL. The resulting OWL ontology
-	 * is written to the file "architecture{id}.owl", where ID is the a counter starting at 0 which is incremented after
-	 * each call. Thus, the output file of the first call will be "architecture0.owl", the second one
-	 * "architecture1.owl", and so on. Each input file must contain exactly one rule in the CNL!
+	 * is written to the specified output file.
 	 * @param path The path of the file to transform.
+	 * @param outputPath The path of the output file.
 	 * @return The RuleType of the parsed rule or null when something went wrong.
 	 */
-	public RuleType transformCNLFile(String path) {
+	public RuleType transformCNLFile(String path, String outputPath) {
 
 		LOG.trace("transforming CNL file with path: "+path);
 
+		RuleTypeStorageSingleton.getInstance().setOutputFile(outputPath);
+		
 		ArchcnlStandaloneSetup setup = new ArchcnlStandaloneSetup();
 
 		Injector injector = setup.createInjectorAndDoEMFRegistration();

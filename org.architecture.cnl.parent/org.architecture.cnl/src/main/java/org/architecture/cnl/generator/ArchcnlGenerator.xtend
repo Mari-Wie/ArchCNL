@@ -72,8 +72,10 @@ class ArchcnlGenerator extends AbstractGenerator {
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		namespace = "http://www.arch-ont.org/ontologies/architecture.owl"
 
+		val filename = RuleTypeStorageSingleton.getInstance().getOutputFile()
+
 		api = APIFactory.get();  
-		api.createOntology("./architecture"+id+".owl", namespace)
+		api.createOntology(filename, namespace)
 
 		// decomposed the dot-notion to simplify debugging
 		resourceIterable = resource.allContents.toIterable
@@ -91,14 +93,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		
 		LOG.debug("... compiled all sentences.")
 		
-		api.removeOntology(namespace);
-		// This looks like the file is deleted.
-		// However, it is not and one of the callers "higher up the stack trace"
-		// (in the module conformancechecking-documentation) uses this file to
-		// retrieve the parsing results.
-		// In short, I don't known what this does exactly.
-		val f = new File("architecture"+id+".owl")
-		Files.deleteIfExists(f.toPath)
+		api.removeOntology();
 	}
 
 	/**
@@ -142,7 +137,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 	{
 		LOG.trace("ID " + id + ": " +"compiling SubConceptRuleType ...")
 		val subjectConceptExpression = subject.compile
-		val object = api.getOWLClass(namespace, subconcept.object.concept.conceptName)
+		val object = api.createOWLClass(namespace, subconcept.object.concept.conceptName)
 
 		
 		api.addSubClassAxiom(object, subjectConceptExpression)
@@ -162,7 +157,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 			listResult.add(result)
 		}
 		if (listResult.size > 1) {
-			object = api.intersectionOf(listResult)
+			object = api.createIntersection(listResult)
 			listResult.clear
 		}
 
@@ -171,7 +166,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 			listResult.add(result)
 		}
 		if (listResult.size > 1) {
-			object = api.unionOf( listResult)
+			object = api.createUnion( listResult)
 			listResult.clear
 		}
 		
@@ -193,7 +188,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 				listResult.add(result)
 			}
 			if (listResult.size > 1) {
-				object = api.intersectionOf(listResult)
+				object = api.createIntersection(listResult)
 				listResult.clear
 			}
 
@@ -202,15 +197,15 @@ class ArchcnlGenerator extends AbstractGenerator {
 				listResult.add(result)
 			}
 			if (listResult.size > 1) {
-				object = api.unionOf(listResult)
+				object = api.createUnion(listResult)
 				listResult.clear
 			}
 
-			api.addNegationAxiom(subject, object)
+			api.addDisjointAxiom(subject, object)
 		} else {
 			val subjectConceptExpression = negation.subject.compile
 			if (negation.object.anything !== null) {
-				val relation = api.getOWLObjectProperty(namespace,
+				val relation = api.creteOWLObjectProperty(namespace,
 					negation.object.anything.relation.relationName) as OWLObjectProperty
 				var object = api.getOWLTop()
 				api.addNegationAxiom(subjectConceptExpression, object, relation)
@@ -223,7 +218,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 					listResult.add(result)
 				}
 				if (listResult.size > 1) {
-					object = api.intersectionOf(listResult)
+					object = api.createIntersection(listResult)
 					listResult.clear
 				}
 
@@ -232,11 +227,11 @@ class ArchcnlGenerator extends AbstractGenerator {
 					listResult.add(result)
 				}
 				if (listResult.size > 1) {
-					object = api.unionOf(listResult)
+					object = api.createUnion(listResult)
 					listResult.clear
 				}
 
-				api.addNegationAxiom(subjectConceptExpression, object)
+				api.addDisjointAxiom(subjectConceptExpression, object)
 
 			}
 		}
@@ -254,7 +249,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.trace("ID " + id + ": " +"compiling OnlyCanRuleType ...")
 		val subjectConceptExpression = onlycan.subject.compile
 		var object = onlycan.object.expression.concept.compile
-		var relation = api.getOWLObjectProperty(namespace,
+		var relation = api.creteOWLObjectProperty(namespace,
 			onlycan.object.expression.relation.relationName) as OWLObjectProperty
 
 		val objectOrList = onlycan.object.objectOrList
@@ -268,7 +263,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 			listResult.add(result)
 		}
 
-		object = api.unionOf(listResult)
+		object = api.createUnion(listResult)
 		api.addDomainRangeAxiom(subjectConceptExpression, object, relation)
 
 	}
@@ -278,7 +273,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.trace("ID " + id + ": " +"compiling CanOnlyRuleType ...")
 		val subjectConceptExpression = subject.compile
 		var object = canonly.object.expression.concept.compile
-		var relation = api.getOWLObjectProperty(namespace,
+		var relation = api.creteOWLObjectProperty(namespace,
 			canonly.object.expression.relation.relationName) as OWLObjectProperty
 
 		val objectAndList = canonly.object.objectAndList
@@ -296,7 +291,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 			listResult.add(result)
 		}
 		if (listResult.size > 1) {
-			object = api.intersectionOf(listResult)
+			object = api.createIntersection(listResult)
 			listResult.clear
 		}
 
@@ -306,7 +301,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 			listResult.add(result)
 		}
 		if (listResult.size > 1) {
-			object = api.unionOf(listResult)
+			object = api.createUnion(listResult)
 			listResult.clear
 		}
 
@@ -318,32 +313,32 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.trace("ID " + id + ": " +"compiling MustRuleType ... ")
 		val subjectConceptExpression = subject.compile
 		var object = must.object.expression.concept.compile
-		var relation = api.getOWLObjectProperty(namespace,
+		var relation = api.creteOWLObjectProperty(namespace,
 			must.object.expression.relation.relationName) as OWLObjectProperty
 	
 		val objectAndList = must.object.objectAndList
 		val objectOrList = must.object.objectOrList
 		val listResult = new ArrayList
 
-		object = api.addSomeValuesFrom(relation, object)
+		object = api.createSomeValuesFrom(relation, object)
 		listResult.add(object)
 		
 		for (o : objectAndList) {
 			var result = o.expression.concept.compile
-			result = api.addSomeValuesFrom(relation,result)
+			result = api.createSomeValuesFrom(relation,result)
 			listResult.add(result)
 		}
 		if (listResult.size > 1) {
-			object = api.intersectionOf(listResult)
+			object = api.createIntersection(listResult)
 			listResult.clear
 		}
 		for (o : objectOrList) {
 			var result = o.expression.concept.compile
-			result = api.addSomeValuesFrom(relation,result)
+			result = api.createSomeValuesFrom(relation,result)
 			listResult.add(result)
 		}
 		if (listResult.size > 1) {
-			object = api.unionOf(listResult)
+			object = api.createUnion(listResult)
 			listResult.clear
 		}
 		api.addSubClassAxiom(object, subjectConceptExpression)
@@ -352,7 +347,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 	def OWLClassExpression compile(ObjectConceptExpression object) 
 	{
 		LOG.trace("ID " + id + ": " +"compiling ObjectConceptExpression ...")
-		val relation = api.getOWLObjectProperty(namespace, object.relation.relationName) as OWLObjectProperty
+		val relation = api.creteOWLObjectProperty(namespace, object.relation.relationName) as OWLObjectProperty
 		val concept = object.concept.compile
 		val count = object.number
 		
@@ -360,18 +355,18 @@ class ArchcnlGenerator extends AbstractGenerator {
 		
 		if(object.cardinality == 'at-most') {
 			typeStorage.storeTypeOfRule(id, RuleType.AT_MOST)
-			return api.addMaxCardinalityRestrictionAxiom(concept,relation,count)
+			return api.createMaxCardinalityRestrictionAxiom(concept,relation,count)
 		}
 		else if(object.cardinality == 'at-least') {
 			typeStorage.storeTypeOfRule(id, RuleType.AT_LEAST)
-			return api.addMinCardinalityRestrictionAxiom(concept,relation,count)
+			return api.createMinCardinalityRestrictionAxiom(concept,relation,count)
 		}
 		else if(object.cardinality == 'exactly') {
 			typeStorage.storeTypeOfRule(id, RuleType.EXACTLY)
-			return api.addExactCardinalityRestrictionAxiom(concept,relation,count)
+			return api.createExactCardinalityRestrictionAxiom(concept,relation,count)
 		}
 		else {
-			return api.addSomeValuesFrom(relation, concept)			
+			return api.createSomeValuesFrom(relation, concept)			
 		}
 	}
 
@@ -379,7 +374,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 	{
 		LOG.trace("ID " + id + ": " +"compiling ConceptExpression ... ")
 
-		val conceptAsOWL = api.getOWLClass(namespace, conceptExpression.concept.conceptName)
+		val conceptAsOWL = api.createOWLClass(namespace, conceptExpression.concept.conceptName)
 
 		var result = conceptAsOWL as OWLClassExpression
 		val thatList = conceptExpression.that
@@ -407,23 +402,23 @@ class ArchcnlGenerator extends AbstractGenerator {
 			val expression = statements.expression
 			if (expression instanceof ConceptExpression) {
 				val relation = statements.relation as ObjectRelation
-				val thatRoleOWL = api.getOWLObjectProperty(namespace, relation.relationName) as OWLObjectProperty
+				val thatRoleOWL = api.creteOWLObjectProperty(namespace, relation.relationName) as OWLObjectProperty
 				val owlexpression = expression.compile
-				var result = api.addSomeValuesFrom(thatRoleOWL, owlexpression)
+				var result = api.createSomeValuesFrom(thatRoleOWL, owlexpression)
 				results.add(result)
 			// result = api.intersectionOf(namespace, conceptAsOWL, result)
 			} else if (expression instanceof DataStatement) {
 				LOG.trace(statements.relation)
 				val relation = statements.relation as DatatypeRelation
-				val thatRoleOWL = api.getOWLDatatypeProperty(namespace, relation.relationName) as OWLDataProperty
+				val thatRoleOWL = api.createOWLDatatypeProperty(namespace, relation.relationName) as OWLDataProperty
 				val dataString = expression.stringValue
 				if (dataString !== null) {
-					val dataHasValue = api.addDataHasValue(dataString, thatRoleOWL)
+					val dataHasValue = api.createDataHasValue(dataString, thatRoleOWL)
 //					return dataHasValue
 					results.add(dataHasValue)
 //				result = api.intersectionOf(namespace, conceptAsOWL, dataHasValue)
 				} else {
-					val dataHasValue = api.addDataHasValue(expression.intValue, thatRoleOWL)
+					val dataHasValue = api.createDataHasValue(expression.intValue, thatRoleOWL)
 					results.add(dataHasValue)
 //					return dataHasValue
 //				result = api.intersectionOf(namespace, conceptAsOWL, dataHasValue)
@@ -436,7 +431,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 
 		}
 
-		return api.intersectionOf(results)
+		return api.createIntersection(results)
 
 	}
 
@@ -446,7 +441,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 	}
 
 	def OWLClass getOWLClass(OntologyAPI api, String string, String string2) {
-		return api.getOWLClass(string, string2)
+		return api.createOWLClass(string, string2)
 	}
 	
 	
