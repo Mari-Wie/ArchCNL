@@ -241,9 +241,15 @@ public class CNLToolchain {
 		LOG.info("Peforming the architecture-to-code mapping");
 		List<String> ontologyPaths = extractRuleOntologyPaths(rules);
 		mappingAPI = ExecuteMappingAPIFactory.get();
-		ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build().withPathsToConcepts(ontologyPaths)
-				.withMappingRules(MAPPING_FILE_PATH).withData(codeModelPath);
-		mappingAPI.setReasoningConfiguration(reasoningConfig, TEMPORARY_DIRECTORY + "/mapped.owl");
+		
+		ReasoningConfiguration reasoningConfig = ReasoningConfiguration.builder()
+				.withPathsToConcepts(ontologyPaths)
+				.withMappingRules(MAPPING_FILE_PATH)
+				.withData(codeModelPath)
+				.withResult(TEMPORARY_DIRECTORY + "/mapped.owl")
+				.build();
+		
+		mappingAPI.setReasoningConfiguration(reasoningConfig);
 		mappingAPI.executeMapping();
 	}
 

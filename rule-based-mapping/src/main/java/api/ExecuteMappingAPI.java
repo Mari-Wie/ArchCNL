@@ -10,11 +10,10 @@ import java.io.FileNotFoundException;
  */
 public interface ExecuteMappingAPI {
 	/**
-	 * Sets the configuration and the path of the file in which the output file will be stored.
+	 * Sets the configuration.
 	 * @param config the configuration to use
-	 * @param outputFilePath the path of the file in which the output ontology is stored
 	 */
-	public void setReasoningConfiguration(ReasoningConfiguration config, String outputFilePath);
+	public void setReasoningConfiguration(ReasoningConfiguration config);
 	
 	/**
 	 * Reads the input ontologies and attempts to unify them. The result is written to the

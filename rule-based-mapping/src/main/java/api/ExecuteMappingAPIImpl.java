@@ -22,11 +22,9 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	private static final Logger LOG = LogManager.getLogger(ExecuteMappingAPIImpl.class);
 	
 	private ReasoningConfiguration config;
-	private String reasoningResultPath;
 
-	public void setReasoningConfiguration(ReasoningConfiguration config, String outputFilePath) {
+	public void setReasoningConfiguration(ReasoningConfiguration config) {
 		this.config = config;
-		this.reasoningResultPath = outputFilePath;
 	}
 
 	public void executeMapping() throws FileNotFoundException {
@@ -37,8 +35,8 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	}
 
 	private void writeOutput(InfModel infmodel) throws FileNotFoundException {
-		LOG.debug("Writing output to: " + this.reasoningResultPath);
-		infmodel.write(new FileOutputStream(new File(this.reasoningResultPath)));
+		LOG.debug("Writing output to: " + config.getResultPath());
+		infmodel.write(new FileOutputStream(new File(config.getResultPath())));
 
 		LOG.debug("Wrote "+infmodel.listStatements().toList().size()+"statements");
 	}
@@ -68,6 +66,6 @@ class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
 	}
 
 	public String getReasoningResultPath() {
-		return reasoningResultPath;
+		return config.getResultPath();
 	}
 }
