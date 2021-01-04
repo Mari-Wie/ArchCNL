@@ -43,6 +43,7 @@ public class CNLToolchain {
 	private StardogDatabaseAPI db;
 
 	private final String TEMPORARY_DIRECTORY = "./temp";
+	private final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
 
 	// private, use runToolchain to create and execute the toolchain
 	private CNLToolchain(String databaseName, String server) {
@@ -152,33 +153,44 @@ public class CNLToolchain {
 
 		createTemporaryDirectory();
 
-		final String mappingFilePath = TEMPORARY_DIRECTORY + "/mapping.txt";
-
-		List<ArchitectureRule> rules = parseRuleFile(docPath, mappingFilePath);
-		List<String> ontologyPaths = rules.stream().map((ArchitectureRule r) -> {
-			return r.getContraintFile();
-		}).collect(Collectors.toList());
+		List<ArchitectureRule> rules = parseRuleFile(docPath);
 
 		String codeModelPath = buildCodeModel(sourceCodePath);
 
-		performArchitectureToCodeMapping(mappingFilePath, ontologyPaths, codeModelPath);
+		combineArchitectureAndCodeModels(rules, codeModelPath);
 
+		LOG.info("Starting conformance checking...");
+		
 		LOG.debug("Connecting to the database ...");
 		db.connect();
 
-		// Load code model to stardog and perform conformance checking
+		storeModelAndConstraintsInDB(context, rules, mappingAPI.getReasoningResultPath());
+		
+		List<ConstraintViolationsResultSet> violations = icvAPI.explainViolationsForContext(context);
+		icvAPI.removeIntegrityConstraints();
+		
+		String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
+		
+		addViolationsToOntology(mappingAPI.getReasoningResultPath(), rules, violations, resultPath);
+		
+		db.addDataByRDFFileAsNamedGraph(resultPath, context);
+
+		LOG.info("CNLToolchain completed successfully!");
+	}
+
+	private List<String> extractRuleOntologyPaths(List<ArchitectureRule> rules) {
+		List<String> ontologyPaths = rules.stream().map((ArchitectureRule r) -> {
+			return r.getContraintFile();
+		}).collect(Collectors.toList());
+		return ontologyPaths;
+	}
+
+	private void storeModelAndConstraintsInDB(String context, List<ArchitectureRule> rules, String modelPath)
+			throws FileNotFoundException, NoConnectionToStardogServerException {
 		LOG.debug("Adding the mapped model to the database...");
-		db.addDataByRDFFileAsNamedGraph(mappingAPI.getReasoningResultPath(), context); // TODO ConformanceCheck
-																						// component?
+		db.addDataByRDFFileAsNamedGraph(modelPath, context); 
 
-		String tempfile = TEMPORARY_DIRECTORY + "/tmp.owl";
-		LOG.debug("Fetching the code model from the database and writing it to a file: " + tempfile);
-		db.writeModelFromContextToFile(context, tempfile); // TODO: use the output of mapping instead?
-
-		LOG.info("Starting conformance checking...");
-		check.createNewConformanceCheck();
-
-		List<Integer> failedIds = new ArrayList<>();
+		List<ArchitectureRule> sucessfulRules = new ArrayList<>();
 		
 		for (ArchitectureRule rule : rules) { 
 			
@@ -188,34 +200,32 @@ public class CNLToolchain {
 
 			try {
 				icvAPI.addIntegrityConstraint(path);
+				sucessfulRules.add(rule);
 			} catch (FileNotFoundException e) {
 				LOG.error(e.getMessage() + " : " + path);
-				failedIds.add(rule.getId());
+				LOG.warn("The following rule will not be stored in the database because its constraint file could not be accessed: " + rule.getCnlSentence());
 			}
 		}
+		rules.clear();
+		rules.addAll(sucessfulRules);
+	}
 
-		List<ConstraintViolationsResultSet> violations = icvAPI.explainViolationsForContext(context);
-		icvAPI.removeIntegrityConstraints();
-
+	private void addViolationsToOntology(String tempfile, List<ArchitectureRule> sucessfulRules,
+			List<ConstraintViolationsResultSet> violations, String resultPath) throws FileNotFoundException {
+		check.createNewConformanceCheck();
 		int ruleIndex = 0;
-		for (ArchitectureRule rule : rules) {
-			if (failedIds.contains(rule.getId())) {
-				LOG.warn("The following rule will not be stored in the database because its constraint file could not be accessed: " + rule.getCnlSentence());
-				continue;
-			}
+		for (ArchitectureRule rule : sucessfulRules) {
+			
 			CheckedRule vr = new CheckedRule(rule, violations.get(ruleIndex).getViolationList());
-			String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
+			
 			
 			if (!vr.getViolations().isEmpty()) {
 				LOG.info("The following rule is violated: " + vr.getRule().getCnlSentence());
 			}
 			
 			check.validateRule(vr, tempfile, resultPath);
-			db.addDataByRDFFileAsNamedGraph(resultPath, context);
 			ruleIndex++;
 		}
-
-		LOG.info("CNLToolchain completed successfully!");
 	}
 
 	private void createTemporaryDirectory() {
@@ -226,12 +236,13 @@ public class CNLToolchain {
 		}
 	}
 
-	private void performArchitectureToCodeMapping(final String mappingFilePath, List<String> ontologyPaths,
+	private void combineArchitectureAndCodeModels(List<ArchitectureRule> rules,
 			String codeModelPath) throws FileNotFoundException {
 		LOG.info("Peforming the architecture-to-code mapping");
+		List<String> ontologyPaths = extractRuleOntologyPaths(rules);
 		mappingAPI = ExecuteMappingAPIFactory.get();
 		ReasoningConfiguration reasoningConfig = ReasoningConfiguration.build().withPathsToConcepts(ontologyPaths)
-				.withMappingRules(mappingFilePath).withData(codeModelPath);
+				.withMappingRules(MAPPING_FILE_PATH).withData(codeModelPath);
 		mappingAPI.setReasoningConfiguration(reasoningConfig, TEMPORARY_DIRECTORY + "/mapped.owl");
 		mappingAPI.executeMapping();
 	}
@@ -246,13 +257,13 @@ public class CNLToolchain {
 		return codeModelPath;
 	}
 
-	private List<ArchitectureRule> parseRuleFile(String docPath, final String mappingFilePath) {
+	private List<ArchitectureRule> parseRuleFile(String docPath) {
 		LOG.info("Parsing the rule file ...");
 		AsciiDocArc42Parser parser = new AsciiDocArc42Parser(gatherOWLNamespaces());
 		LOG.debug("Parsing the architecture rules ...");
 		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(docPath, TEMPORARY_DIRECTORY);
 		LOG.debug("Parsing the mapping rules ...");
-		parser.parseMappingRulesFromDocumentation(docPath, mappingFilePath);
+		parser.parseMappingRulesFromDocumentation(docPath, MAPPING_FILE_PATH);
 
 		return rules;
 	}
