@@ -23,9 +23,15 @@ public class CNLToolchainCLI implements Runnable {
 	@Parameters(paramLabel = "<rules file>", description = "The path to the rules, relative to the project path")
 	private String rulesFile;
 
+	@Option(names = {"-u", "--username"}, description = "Specifiy the username for the database server")
+	private String username = "admin";
+	
+	@Option(names = {"-p", "--password"}, description = "Specifiy the password for the database server")
+	private String password = "admin";
+	
 	@Override
 	public void run() {
-        CNLToolchain.runToolchain(database, server, context, projectPath, projectPath + rulesFile);
+        CNLToolchain.runToolchain(database, server, context, username, password, projectPath, projectPath + rulesFile);
 	}
 	
 	public static void main(String[] args) {
