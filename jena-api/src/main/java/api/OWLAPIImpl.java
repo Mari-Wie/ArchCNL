@@ -82,7 +82,6 @@ public class OWLAPIImpl implements OntologyAPI {
 	public void addSubClassAxiom(OWLClassExpression superClass, OWLClassExpression subClass) {
 		OWLAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subClass, superClass);
 		manager.addAxiom(currentOntology, subClassAxiom);
-		triggerSave();
 
 	}
 
@@ -111,14 +110,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		
 		return df.getOWLObjectExactCardinality(count, property, object);
 	}
-
-	// method is not used as of today, keep for the case it will be needed in future
-//	private int parseCount(String count) {
-//		if (_numbers.contains(count)) {
-//			return _numbers.indexOf(count);
-//		}
-//		return Integer.parseInt(count);
-//	}
 
 	@Override
 	public void triggerSave() {
@@ -182,8 +173,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLObjectPropertyRangeAxiom rangeAxiom = df.getOWLObjectPropertyRangeAxiom(property, object);
 		manager.addAxiom(currentOntology, domainAxiom);
 		manager.addAxiom(currentOntology, rangeAxiom);
-		
-		triggerSave();
 	}
 
 	@Override
@@ -211,8 +200,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(someValues);
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(subject, complement);
 		manager.addAxiom(currentOntology, subClass);
-
-		triggerSave();
 	}
 
 	@Override
@@ -220,8 +207,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLObjectComplementOf complement = df.getOWLObjectComplementOf(second);
 		OWLAxiom subClass = df.getOWLSubClassOfAxiom(first, complement);
 		manager.addAxiom(currentOntology, subClass);
-		
-		triggerSave();
 	}
 
 	@Override
@@ -232,7 +217,6 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(sub, sup);
 
 		manager.addAxiom(currentOntology, subPropertyAxiom);
-		triggerSave();
 	}
 
 	@Override

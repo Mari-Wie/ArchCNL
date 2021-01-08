@@ -91,6 +91,8 @@ class ArchcnlGenerator extends AbstractGenerator {
 			compile(s);
 		}
 		
+		api.triggerSave()
+		
 		LOG.debug("... compiled all sentences.")
 		
 		api.removeOntology();

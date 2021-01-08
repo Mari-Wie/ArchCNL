@@ -37,7 +37,6 @@ public interface OntologyAPI {
 
 	/**
 	 * Adds an OWL axiom to this ontology which states that the OWL class "subClass" is the sub class of 
-	 * the OWL class "superClass". The ontology is subsequently saved by calling {@link #triggerSave()}.
 	 * @param superClass the super class
 	 * @param subClass the sub class
 	 */
@@ -48,7 +47,6 @@ public interface OntologyAPI {
 	 * Adds an axiom to the ontology which states that the two given OWL OBJECT(!) properties are in a sub/super-type
 	 * relation. Datatype properties are NOT viewed by this operation. It is currently unclear whether this is
 	 * intended or not. 
-	 * The ontology is subsequently saved by calling {@link #triggerSave()}.
 	 * 
 	 * @param iriPath The international resource identifier (IRI) of BOTH object properties.
 	 * @param subProperty The name (missing the IRI) of the "sub" property, i.e. which is included by the other one.
@@ -68,7 +66,6 @@ public interface OntologyAPI {
 	 * Adds axioms to the ontology, which state that the domain of the given property is the 
 	 * given subject class and that its range is the given object class. Note that this is not
 	 * a "constraint" on the property but rather a statement used during inference.
-	 * Saves the ontology by calling {@link #triggerSave()}.
 	 * @param subject The class of legitimate subjects.
 	 * @param object The class of legitimate objects.
 	 * @param property The property which is defined/restricted.
@@ -157,7 +154,6 @@ public interface OntologyAPI {
 	 * class when the object is from the "object" class. Example: subject="Cat" property="makes-sound" object="Bark" 
 	 * adds an axiom which implies that (if no other axioms are present) everything which does not make a sound from
 	 * the class "Bark" can be considered as a "Cat".
-	 * The ontology is saved after the modification by calling {@link #triggerSave()}.
 	 * @param subject The class to which the axiom applies.
 	 * @param object The object class used in the axiom.
 	 * @param property The property used in the axiom.
@@ -167,7 +163,6 @@ public interface OntologyAPI {
 	/**
 	 * Adds an axiom to the ontology which states that the given classes are disjoint, i.e. that
 	 * it is a subset of the complement of the second class.
-	 * The ontology is saved after the modification by calling {@link #triggerSave()}.
 	 * @param first The first class, i.e. the class to which the axiom applies.
 	 * @param second The second class, i.e. the class which is used in the axiom.
 	 */
