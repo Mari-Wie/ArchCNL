@@ -46,44 +46,11 @@ public class CNLToolchain {
 	private final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
 
 	// private, use runToolchain to create and execute the toolchain
-	private CNLToolchain(String databaseName, String server) {
-		this.db = new StardogDatabase(server, databaseName, "admin", "admin");
+	private CNLToolchain(String databaseName, String server, String username, String password) {
+		this.db = new StardogDatabase(server, databaseName, username, password);
 		this.icvAPI = StardogAPIFactory.getICVAPI(db);
 		this.famixTransformer = new FamixOntologyTransformer(TEMPORARY_DIRECTORY + "/results.owl");
 		this.check = new ConformanceCheckImpl();
-	}
-
-	/**
-	 * Zentrale Methode zum Aufrufen des gesamten ConformanceChecking-Ablaufs
-	 * 
-	 * Alle Parameter werden hier gesetzt (Bisher werden keine Parameter �bergeben)
-	 * Eine CNLToolchain-Insatz wird erstellt. Die execute()-Methode zur
-	 * Durchf�rhung des ConformanceChecks eird aufgerufen
-	 * 
-	 * Diese Parameter sind: - database Name der Stardog-DB - server localhost und
-	 * Port f�r den Zugriff auf die DB-Instanz - context noch zu kl�ren -
-	 * projectPath Projektpfad des zu �berpr�fenden Projekts - rulesFile Name des
-	 * Asciidoc-Files mit Regeln und Mappings
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		LOG.info("Initializing ...");
-		CNLToolchainProperties props = new CNLToolchainProperties();
-		try {
-			props.readPropValues();
-		} catch (IOException e1) {
-			System.err.println(e1.getMessage());
-			return;
-		}
-
-		String database = "MWTest_" + createTimeSuffix();
-		String server = props.getServer();
-		String context = "http://graphs.org/" + database + "/1.0";
-		String projectPath = props.getProjectPath();
-		String rulesFile = projectPath + props.getRulesFile();
-
-		runToolchain(database, server, context, projectPath, rulesFile);
 	}
 
 	/**
@@ -92,30 +59,28 @@ public class CNLToolchain {
 	 * @param database    The name of the database to use.
 	 * @param server      The hostname of the database server to connect to.
 	 * @param context     The OWL context to use.
+	 * @param username 	  The username to use when connecting to the database server.
+	 * @param password    The password to use when connecting to the database server. 
 	 * @param projectPath The path to the root of the project which should be
 	 *                    analysed.
 	 * @param rulesFile   The path to the AsciiDoc file which contains both the
 	 *                    architecture and mapping rules.
 	 */
-	public static void runToolchain(String database, String server, String context, String projectPath,
-			String rulesFile) {
+	public static void runToolchain(String database, String server, String context, 
+			String username, String password, String projectPath, String rulesFile) {
 		LOG.debug("Database     : " + database);
 		LOG.debug("Server       : " + server);
 		LOG.debug("Context      : " + context);
 		LOG.debug("Project path : " + projectPath);
 		LOG.debug("RulesFile    : " + rulesFile);
 
-		CNLToolchain tool = new CNLToolchain(database, server);
+		CNLToolchain tool = new CNLToolchain(database, server, username, password);
 		LOG.info("CNLToolchain initialized.");
 
 		try {
 			tool.execute(rulesFile, projectPath, context);
 		} catch (FileNotFoundException e) {
 			LOG.error("File not found", e);
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MissingBuilderArgumentException e) {
-			LOG.error("Missing builder argument", e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoConnectionToStardogServerException e) {
@@ -128,8 +93,7 @@ public class CNLToolchain {
 	static String createTimeSuffix() {
 		Date date = Calendar.getInstance().getTime();
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");
-		String strDate = dateFormat.format(date);
-		return strDate;
+		return dateFormat.format(date);
 	}
 
 	/**
@@ -147,7 +111,7 @@ public class CNLToolchain {
 	 *                                              database can be established
 	 */
 	private void execute(String docPath, String sourceCodePath, String context)
-			throws MissingBuilderArgumentException, FileNotFoundException, NoConnectionToStardogServerException {
+			throws FileNotFoundException, NoConnectionToStardogServerException {
 		LOG.info("Starting the execution");
 
 		createTemporaryDirectory();
@@ -178,10 +142,9 @@ public class CNLToolchain {
 	}
 
 	private List<String> extractRuleOntologyPaths(List<ArchitectureRule> rules) {
-		List<String> ontologyPaths = rules.stream().map((ArchitectureRule r) -> {
+		return rules.stream().map((ArchitectureRule r) -> {
 			return r.getContraintFile();
 		}).collect(Collectors.toList());
-		return ontologyPaths;
 	}
 
 	private void storeModelAndConstraintsInDB(String context, List<ArchitectureRule> rules, String modelPath)
