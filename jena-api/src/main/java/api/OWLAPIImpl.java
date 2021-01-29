@@ -183,8 +183,6 @@ public class OWLAPIImpl implements OntologyAPI {
 
 	@Override
 	public OWLProperty createOWLDatatypeProperty(String iriPath, String roleName) {
-		// TODO: the role name is not lemmatized, unlike the behavior of getOWLObjectProperty()
-		// is this desired?
 		return df.getOWLDataProperty(iriPath + "#" + roleName);
 	}
 
@@ -211,7 +209,6 @@ public class OWLAPIImpl implements OntologyAPI {
 
 	@Override
 	public void addSubPropertyOfAxiom(String iriPath, String subProperty, String superProperty) {
-		// TODO: This might cause some bugs: what if one of the properties refers to a DatatypeProperty?
 		OWLObjectProperty sub = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(subProperty));
 		OWLObjectProperty sup = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(superProperty));
 		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(sub, sup);

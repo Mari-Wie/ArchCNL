@@ -10,10 +10,6 @@ import org.semanticweb.owlapi.model.OWLProperty;
 
 import java.util.ArrayList;
 
-// TODO: This interface enforces a dependency to org.semanticweb.owlapi on its clients.
-//		 Moreover, the implementing class OWLAPIImpl does nothing than passing the parameters of its
-//		 methods to this library. Thus, the clients could use the library directly. This would remove
-//		 some code to maintain. (And a class with a very ugly name - OWLAPIImpl.)
 /**
  * Interface for creating and filling OWL 2.0 ontologies with
  * the org.semanticweb.owlapi library.
@@ -42,7 +38,6 @@ public interface OntologyAPI {
 	 */
 	public void addSubClassAxiom(OWLClassExpression superClass, OWLClassExpression subClass);
 
-	// TODO: This method seems very error-prone due to its restricted and "strange" interface/signature.
 	/**
 	 * Adds an axiom to the ontology which states that the two given OWL OBJECT(!) properties are in a sub/super-type
 	 * relation. Datatype properties are NOT viewed by this operation. It is currently unclear whether this is

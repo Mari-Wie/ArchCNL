@@ -120,8 +120,6 @@ public class AsciiDocArc42Parser {
 
 		File f = new File(rulePath);
 		try {
-			// TODO: Passing the rule to the generator as a string rather than as a file
-			// would increase performance.
 			LOG.debug("Writing the rule to a seperate file: " + rulePath);
 			ontologyPaths.add(ontologyPath);
 

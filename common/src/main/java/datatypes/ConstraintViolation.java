@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ConstraintViolation {
 	final private List<StatementTriple> asserted;
-	final private List<StatementTriple> notInferred; // TODO: would it be beneficial to add these statements to the DB?
+	final private List<StatementTriple> notInferred;
 
 	/**
 	 * Constructor.
