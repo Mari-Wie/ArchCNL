@@ -3,9 +3,7 @@ package asciidocparser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +81,7 @@ public class AsciiDocArc42Parser {
 	 *                        (without a slash (/) at the end)
 	 * @return The list of architecture rules from the rule file.
 	 */
-	public List<ArchitectureRule> parseRulesFromDocumentation(String path, String outputDirectory) {
+	public List<ArchitectureRule> parseRulesFromDocumentation(Path path, String outputDirectory) {
 		LOG.trace("Starting parseRulesFromDocumentation ...");
 		LOG.debug("Parsing architecture rules from file: " + path);
 
@@ -146,10 +144,9 @@ public class AsciiDocArc42Parser {
 		}
 	}
 
-	private List<StructuralNode> parseAsciidocFile(String path, String tag) {
+	private List<StructuralNode> parseAsciidocFile(Path path, String tag) {
 		Asciidoctor ascii = Asciidoctor.Factory.create();
-		File file = new File(path);
-		Document doc = ascii.loadFile(file, new HashMap<String, Object>());
+		Document doc = ascii.loadFile(path.toFile(), new HashMap<String, Object>());
 		Map<Object, Object> selector = new HashMap<Object, Object>();
 		selector.put("role", tag);
 		List<StructuralNode> result = doc.findBy(selector);
@@ -163,7 +160,7 @@ public class AsciiDocArc42Parser {
 	 * @param outputFile - Path where the resulting ontology file (.owl) will be
 	 *                   stored.
 	 */
-	public void parseMappingRulesFromDocumentation(String path, String outputFile) {
+	public void parseMappingRulesFromDocumentation(Path path, String outputFile) {
 		LOG.trace("Starting parseMappingRulesFromDocumentation ...");
 
 		LOG.debug("Parsing mapping rules from file: " + path);
