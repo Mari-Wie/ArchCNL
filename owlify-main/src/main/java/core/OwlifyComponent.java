@@ -1,5 +1,6 @@
 package core;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +26,13 @@ public interface OwlifyComponent {
 	/**
 	 * Returns a list of input file/directory path's which have been added in the past.
 	 */
-	public List<String> getSourcePaths();
+	public List<Path> getSourcePaths();
 	
 	/**
 	 * Adds a file (or directory) to this parser's inputs.
 	 * @param path the path of the file/directory to add
 	 */
-	public void addSourcePath(String path);
+	public void addSourcePath(Path path);
 	
 	/**
 	 * @return 

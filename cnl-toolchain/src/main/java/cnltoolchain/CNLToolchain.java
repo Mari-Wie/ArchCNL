@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -64,23 +65,24 @@ public class CNLToolchain {
 	 * @param context     The OWL context to use.
 	 * @param username 	  The username to use when connecting to the database server.
 	 * @param password    The password to use when connecting to the database server. 
-	 * @param projectPath The path to the root of the project which should be
+	 * @param projectDirectory The path to the root of the project which should be
 	 *                    analysed.
 	 * @param rulesFile   The path to the AsciiDoc file which contains both the
 	 *                    architecture and mapping rules.
 	 */
 	public static void runToolchain(String database, String server, String context, 
-			String username, String password, String projectPath, String rulesFile) {
+			String username, String password, String projectDirectory, String rulesFile) {
 		LOG.debug("Database     : " + database);
 		LOG.debug("Server       : " + server);
 		LOG.debug("Context      : " + context);
-		LOG.debug("Project path : " + projectPath);
+		LOG.debug("Project path : " + projectDirectory);
 		LOG.debug("RulesFile    : " + rulesFile);
 
 		CNLToolchain tool = new CNLToolchain(database, server, username, password);
 		LOG.info("CNLToolchain initialized.");
 
 		try {
+			Path projectPath = Paths.get(projectDirectory);
 			Path rulesPath = Paths.get(rulesFile);
 			tool.execute(rulesPath, projectPath, context);
 		} catch (FileNotFoundException e) {
@@ -114,9 +116,17 @@ public class CNLToolchain {
 	 * @throws NoConnectionToStardogServerException when no connection to the
 	 *                                              database can be established
 	 */
-	private void execute(Path docPath, String sourceCodePath, String context)
+	private void execute(Path docPath, Path sourceCodePath, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException {
 		LOG.info("Starting the execution");
+		
+		if(Files.notExists(sourceCodePath)) {
+			throw new FileNotFoundException("The source code folder could not be found: " + sourceCodePath);
+		}
+		
+		if(!Files.isDirectory(sourceCodePath)) {
+			throw new FileNotFoundException("The source code folder is not a valid directory: " + sourceCodePath);
+		}
 		
 		if(Files.notExists(docPath)) {
 			throw new FileNotFoundException("The rules file could not be found: " + docPath);
@@ -223,7 +233,7 @@ public class CNLToolchain {
 		mappingAPI.executeMapping();
 	}
 
-	private String buildCodeModel(String sourceCodePath) {
+	private String buildCodeModel(Path sourceCodePath) {
 		LOG.info("Creating the code model ...");
 		LOG.info("Starting famix transformation ...");
 		// source code transformation

@@ -2,6 +2,8 @@ package parser;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,8 +70,8 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 		
 		CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
 		combinedTypeSolver.add(new ReflectionTypeSolver());
-		List<String> sourcePaths = super.getSourcePaths();
-		for (String path : sourcePaths) {
+		List<Path> sourcePaths = super.getSourcePaths();
+		for (Path path : sourcePaths) {
 			LOG.debug("Adding Java source path: " + path);
 			combinedTypeSolver.add(new JavaParserTypeSolver(path));
 		}
@@ -85,10 +87,10 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 		ontology.save(super.getResultPath());
 	}
 
-	private void parseOtherElements(List<String> sourcePaths) {
+	private void parseOtherElements(List<Path> sourcePaths) {
 		LOG.trace("Starting parseOtherElements ...");
-		for (String path : sourcePaths) {
-			for (File file : FileUtils.listFiles(new File(path),
+		for (Path path : sourcePaths) {
+			for (File file : FileUtils.listFiles(path.toFile(),
 					new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 					TrueFileFilter.INSTANCE)) {
 				LOG.debug("Parsing code file: " + file.getAbsolutePath());
@@ -122,9 +124,9 @@ public class FamixOntologyTransformer extends AbstractOwlifyComponent {
 		}
 	}
 
-	private void resolveAllTypes(List<String> sourcePaths) {
-		for (String path : sourcePaths) {
-			for (File file : FileUtils.listFiles(new File(path),
+	private void resolveAllTypes(List<Path> sourcePaths) {
+		for (Path path : sourcePaths) {
+			for (File file : FileUtils.listFiles(path.toFile(),
 					new WildcardFileFilter(ProgrammingLanguage.getFileExtensionWildCard(ProgrammingLanguage.JAVA)),
 					TrueFileFilter.INSTANCE)) {
 				CompilationUnit unit;
