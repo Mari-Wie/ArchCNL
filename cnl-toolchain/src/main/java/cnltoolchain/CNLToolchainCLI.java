@@ -31,7 +31,7 @@ public class CNLToolchainCLI implements Runnable {
 	
 	@Override
 	public void run() {
-        CNLToolchain.runToolchain(database, server, context, username, password, projectPath, projectPath + rulesFile);
+        CNLToolchain.runToolchain(database, server, context, username, password, projectPath, rulesFile);
 	}
 	
 	public static void main(String[] args) {

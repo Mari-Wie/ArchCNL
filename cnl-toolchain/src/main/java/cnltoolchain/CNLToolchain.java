@@ -67,7 +67,7 @@ public class CNLToolchain {
 	 * @param password    The password to use when connecting to the database server. 
 	 * @param projectDirectory The path to the root of the project which should be
 	 *                    analysed.
-	 * @param rulesFile   The path to the AsciiDoc file which contains both the
+	 * @param rulesFile   The relative path to the AsciiDoc file which contains both the
 	 *                    architecture and mapping rules.
 	 */
 	public static void runToolchain(String database, String server, String context, 
@@ -83,7 +83,7 @@ public class CNLToolchain {
 
 		try {
 			Path projectPath = Paths.get(projectDirectory);
-			Path rulesPath = Paths.get(rulesFile);
+			Path rulesPath = Paths.get(projectDirectory, rulesFile);
 			tool.execute(rulesPath, projectPath, context);
 		} catch (FileNotFoundException e) {
 			LOG.error("File not found", e);
