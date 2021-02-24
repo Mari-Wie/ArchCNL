@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
@@ -27,7 +28,8 @@ public class FamixOntologyTransformerTest {
 	@Test
 	public void testCoarse() throws IOException {
 		FamixOntologyTransformer famixTransformer = new FamixOntologyTransformer("./src/test/resources/results.owl");
-		famixTransformer.addSourcePath("./src/test/resources/project");
+		Path testSourcePath = Paths.get("./src/test/resources/project");
+		famixTransformer.addSourcePath(testSourcePath);
         famixTransformer.transform();
         
         // The output ontology contains some "tags" <hasPath> ... </hasPath> which contain

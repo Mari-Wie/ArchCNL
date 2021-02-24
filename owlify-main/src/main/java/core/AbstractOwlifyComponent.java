@@ -1,5 +1,6 @@
 package core;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public abstract class AbstractOwlifyComponent implements OwlifyComponent {
 	private String resultPath;
 	
 	// list of input paths
-	private List<String> sourcePaths;
+	private List<Path> sourcePaths;
 	
 	/**
 	 * Constructor.
@@ -21,14 +22,14 @@ public abstract class AbstractOwlifyComponent implements OwlifyComponent {
 	 */
 	public AbstractOwlifyComponent(String resultPath) {
 		this.resultPath = resultPath;
-		this.sourcePaths = new ArrayList<String>();
+		this.sourcePaths = new ArrayList<Path>();
 	}
 
-	public void addSourcePath(String path) {
+	public void addSourcePath(Path path) {
 		sourcePaths.add(path);
 	}
 	
-	public List<String> getSourcePaths(){		
+	public List<Path> getSourcePaths(){		
 		return sourcePaths;
 	}
 
