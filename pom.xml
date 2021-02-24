@@ -11,25 +11,25 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-		<mwe2Version>2.11.3</mwe2Version>
-		<xtextVersion>2.22.0</xtextVersion>
+        <mwe2Version>2.11.3</mwe2Version>
+        <xtextVersion>2.22.0</xtextVersion>
         <log4jVersion>2.8.2</log4jVersion>
         <stanfordnlpVersion>3.9.1</stanfordnlpVersion>
         <commonsioVersion>2.6</commonsioVersion>
         <apachejenaVersion>3.3.0</apachejenaVersion>
         <owlapiVersion>5.1.0</owlapiVersion>
         <junitVersion>4.12</junitVersion>
-	</properties>
+    </properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12.4</version>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+            </plugin>
+        </plugins>
+    </build>
 
     <modules>
         <module>cnl-toolchain</module>
@@ -43,19 +43,19 @@
         <module>rule-specification</module>
         <module>StardogConnector</module>
     </modules>
-    
+
     <dependencies>
-    	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4jVersion}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>${log4jVersion}</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4jVersion}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4jVersion}</version>
+        </dependency>
     </dependencies>
 </project>
