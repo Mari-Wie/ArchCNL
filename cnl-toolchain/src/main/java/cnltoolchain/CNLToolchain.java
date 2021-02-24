@@ -3,6 +3,9 @@ package cnltoolchain;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,7 +81,8 @@ public class CNLToolchain {
 		LOG.info("CNLToolchain initialized.");
 
 		try {
-			tool.execute(rulesFile, projectPath, context);
+			Path rulesPath = Paths.get(rulesFile);
+			tool.execute(rulesPath, projectPath, context);
 		} catch (FileNotFoundException e) {
 			LOG.error("File not found", e);
 			// TODO Auto-generated catch block
@@ -110,9 +114,13 @@ public class CNLToolchain {
 	 * @throws NoConnectionToStardogServerException when no connection to the
 	 *                                              database can be established
 	 */
-	private void execute(String docPath, String sourceCodePath, String context)
+	private void execute(Path docPath, String sourceCodePath, String context)
 			throws FileNotFoundException, NoConnectionToStardogServerException {
 		LOG.info("Starting the execution");
+		
+		if(Files.notExists(docPath)) {
+			throw new FileNotFoundException("The rules file could not be found: " + docPath);
+		}
 
 		createTemporaryDirectory();
 
@@ -225,7 +233,7 @@ public class CNLToolchain {
 		return codeModelPath;
 	}
 
-	private List<ArchitectureRule> parseRuleFile(String docPath) {
+	private List<ArchitectureRule> parseRuleFile(Path docPath) {
 		LOG.info("Parsing the rule file ...");
 		AsciiDocArc42Parser parser = new AsciiDocArc42Parser(gatherOWLNamespaces());
 		LOG.debug("Parsing the architecture rules ...");

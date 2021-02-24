@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +30,9 @@ public class AsciiDocArc42ParserTest {
 		namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
 		AsciiDocArc42Parser parser = new AsciiDocArc42Parser(namespaces);
 		
-		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation("./src/test/resources/rules.adoc", "./src/test/resources");
-        parser.parseMappingRulesFromDocumentation("./src/test/resources/rules.adoc", "./src/test/resources/mapping.txt");
+		Path testRulesPath = Paths.get("./src/test/resources/rules.adoc");
+		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(testRulesPath, "./src/test/resources");
+        parser.parseMappingRulesFromDocumentation(testRulesPath, "./src/test/resources/mapping.txt");
         
         
         // assert that the extracted rules are correct
