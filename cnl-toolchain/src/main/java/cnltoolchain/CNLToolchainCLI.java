@@ -29,9 +29,12 @@ public class CNLToolchainCLI implements Runnable {
 	@Option(names = {"-p", "--password"}, description = "Specifiy the password for the database server")
 	private String password = "admin";
 	
+	@Option(names = {"-v", "--verbose"}, description = "Set the log level to ALL and output all log messages")
+	boolean logVerbose;
+	
 	@Override
 	public void run() {
-        CNLToolchain.runToolchain(database, server, context, username, password, projectPath, rulesFile);
+        CNLToolchain.runToolchain(database, server, context, username, password, projectPath, rulesFile, logVerbose);
 	}
 	
 	public static void main(String[] args) {

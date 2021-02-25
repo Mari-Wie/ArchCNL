@@ -14,9 +14,29 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="STDOUT" level="info" />
-            <AppenderRef ref="ArchCnlLogFile" level="debug" />
+        <Root level="ALL">
+            <AppenderRef ref="STDOUT">
+                <filters>
+                    <!-- If the key verboseMode is set and its value is true, log down to TRACE level -->
+                    <!-- If the key verboseMode is set and its value is not true, log down to INFO level -->
+                    <DynamicThresholdFilter key="verboseMode" defaultThreshold="INFO" onMatch="ACCEPT" onMismatch="DENY">
+                        <KeyValuePair key="true" value="TRACE"/>
+                    </DynamicThresholdFilter>
+                    <!-- If the key verboseMode is not set, log down to INFO level -->
+                    <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                </filters>
+            </AppenderRef>
+            <AppenderRef ref="ArchCnlLogFile">
+                <filters>
+                    <!-- If the key verboseMode is set and its value is true, log down to TRACE level -->
+                    <!-- If the key verboseMode is set and its value is not true, log down to DEBUG level -->
+                    <DynamicThresholdFilter key="verboseMode" defaultThreshold="DEBUG" onMatch="ACCEPT" onMismatch="DENY">
+                        <KeyValuePair key="true" value="TRACE"/>
+                    </DynamicThresholdFilter>
+                    <!-- If the key verboseMode is not set, log down to DEBUG level -->
+                    <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+                </filters>
+            </AppenderRef>
         </Root>
     </Loggers>
 </Configuration>
