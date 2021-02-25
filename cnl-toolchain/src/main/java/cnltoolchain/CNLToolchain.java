@@ -2,9 +2,7 @@ package cnltoolchain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -18,6 +16,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 
 import api.ConstraintViolationsResultSet;
 import api.ExecuteMappingAPI;
@@ -28,8 +27,8 @@ import api.StardogICVAPI;
 import api.exceptions.MissingBuilderArgumentException;
 import api.exceptions.NoConnectionToStardogServerException;
 import asciidocparser.AsciiDocArc42Parser;
-import conformancecheck.api.IConformanceCheck;
 import conformancecheck.api.CheckedRule;
+import conformancecheck.api.IConformanceCheck;
 import conformancecheck.impl.ConformanceCheckImpl;
 import core.OwlifyComponent;
 import datatypes.ArchitectureRule;
@@ -69,9 +68,18 @@ public class CNLToolchain {
 	 *                    analysed.
 	 * @param rulesFile   The relative path to the AsciiDoc file which contains both the
 	 *                    architecture and mapping rules.
+	 * @param logVerbose  If all log levels down to trace should be logged in file and on the console
 	 */
-	public static void runToolchain(String database, String server, String context, 
-			String username, String password, String projectDirectory, String rulesFile) {
+	public static void runToolchain(String database, String server, String context, String username, String password,
+			String projectDirectory, String rulesFile, boolean logVerbose) {
+
+		if (logVerbose) {
+			LOG.info("verbose logging is enabled");
+			ThreadContext.put("verboseMode", "true");
+		} else {
+			ThreadContext.put("verboseMode", "false");
+		}
+
 		LOG.debug("Database     : " + database);
 		LOG.debug("Server       : " + server);
 		LOG.debug("Context      : " + context);
