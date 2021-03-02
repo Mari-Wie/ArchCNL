@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.archcnl.architecture-reasoning</groupId>
+	<artifactId>architecture-reasoning</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Architecture Reasoning</name>
+	<description>Performs architecture reasoning to combine the code and architecture models</description>
+
+	<parent>
+		<groupId>org.archcnl</groupId>
+		<artifactId>archcnl</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>${apachejenaVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitVersion}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

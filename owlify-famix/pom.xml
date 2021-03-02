@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>owlify</groupId>
-	<artifactId>famix-parser</artifactId>
+	<groupId>org.archcnl.owlify-famix</groupId>
+	<artifactId>owlify-famix</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Famix Parser</name>
+	<name>Owlify famix</name>
 	<description>Transforms java code to famix ontology</description>
 
 	<parent>
@@ -37,16 +37,9 @@
 			<artifactId>javaparser-symbol-solver-core</artifactId>
 			<version>3.16.2</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junitVersion}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>owlify</groupId>
-			<artifactId>owlify-main</artifactId>
+			<groupId>org.archcnl.owlify</groupId>
+			<artifactId>owlify</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

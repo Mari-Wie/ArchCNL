@@ -3,12 +3,10 @@
  */
 package org.architecture.cnl.generator
 
-import api.APIFactory
-import api.OntologyAPI
+import org.archcnl.owlcreator.api.APIFactory
+import org.archcnl.owlcreator.api.OntologyAPI
 
-import datatypes.RuleType
-import java.io.File
-import java.nio.file.Files
+import org.archcnl.common.datatypes.RuleType
 import java.util.ArrayList
 import org.architecture.cnl.archcnl.CanOnlyRuleType
 import org.architecture.cnl.archcnl.CardinalityRuleType

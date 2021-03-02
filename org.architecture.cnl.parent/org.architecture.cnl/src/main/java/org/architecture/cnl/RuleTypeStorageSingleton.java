@@ -3,7 +3,7 @@ package org.architecture.cnl;
 import java.util.HashMap;
 import java.util.Map;
 
-import datatypes.RuleType;
+import org.archcnl.common.datatypes.RuleType;
 
 /**
  * This singleton class is used by the ArchcnlGenerator to communicate the

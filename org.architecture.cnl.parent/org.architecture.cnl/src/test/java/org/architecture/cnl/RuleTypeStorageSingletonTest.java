@@ -2,9 +2,8 @@ package org.architecture.cnl;
 
 import static org.junit.Assert.*;
 
+import org.archcnl.common.datatypes.RuleType;
 import org.junit.Test;
-
-import datatypes.RuleType;
 
 public class RuleTypeStorageSingletonTest {
 
