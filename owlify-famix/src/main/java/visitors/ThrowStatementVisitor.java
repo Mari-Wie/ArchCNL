@@ -2,7 +2,6 @@ package visitors;
 
 import org.apache.jena.ontology.Individual;
 
-//import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 

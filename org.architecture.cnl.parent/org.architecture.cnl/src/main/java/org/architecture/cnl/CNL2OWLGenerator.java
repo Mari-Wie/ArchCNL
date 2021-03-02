@@ -2,7 +2,6 @@ package org.architecture.cnl;
 
 import java.util.List;
 
-//import org.architecture.cnl.ArchcnlStandaloneSetup;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.GeneratorDelegate;

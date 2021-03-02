@@ -14,7 +14,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import exceptions.FileIsNotAJavaClassException;
-//import ontology.FamixOntClassesAndProperties;
 import parser.JavaParserDelegator;
 import visitors.JavaTypeVisitor;
 

@@ -2,8 +2,6 @@ package visitors;
 
 import java.io.InputStream;
 
-//import java.util.EnumSet;
-
 import org.apache.jena.ontology.Individual;
 
 import com.github.javaparser.ast.Modifier;
