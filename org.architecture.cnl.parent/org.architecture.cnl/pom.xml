@@ -172,11 +172,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
 			<artifactId>org.eclipse.xtext.testing</artifactId>
 			<version>${xtextVersion}</version>
@@ -217,8 +212,8 @@
 		
 		<!-- Add these dependencies when rebuilding the generated code from the grammar: -->
 		<dependency>
-			<groupId>owl-wrapper</groupId>
-			<artifactId>jena-api</artifactId>
+			<groupId>org.archcnl.owl-creator</groupId>
+			<artifactId>owl-creator</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->

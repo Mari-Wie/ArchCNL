@@ -15,10 +15,9 @@ import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Injector;
 
-import datatypes.RuleType;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.common.datatypes.RuleType;
 
 public class CNL2OWLGenerator {
 

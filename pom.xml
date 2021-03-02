@@ -56,16 +56,16 @@
     </build>
 
     <modules>
-        <module>cnl-toolchain</module>
+        <module>architecture-description-parser</module>
+        <module>architecture-reasoning</module>
         <module>common</module>
         <module>conformance-checking</module>
-        <module>jena-api</module>
         <module>org.architecture.cnl.parent</module>
+        <module>owl-creator</module>
+        <module>owlify</module>
         <module>owlify-famix</module>
-        <module>owlify-main</module>
-        <module>rule-based-mapping</module>
-        <module>rule-specification</module>
-        <module>StardogConnector</module>
+        <module>stardog-wrapper</module>
+        <module>toolchain</module>
     </modules>
 
     <dependencies>
@@ -86,5 +86,11 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4jVersion}</version>
         </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitVersion}</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 </project>
