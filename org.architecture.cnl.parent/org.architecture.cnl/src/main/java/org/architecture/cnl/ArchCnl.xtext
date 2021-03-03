@@ -7,8 +7,7 @@ Model:
 
 Sentence:
 	('Every' subject=ConceptExpression ruletype=(MustRuleType|CanOnlyRuleType|CardinalityRuleType|SubConceptRuleType) |
-	ruletype=(OnlyCanRuleType | ConditionalRuleType | NegationRuleType) |
-	facts+=FactStatement) 
+	ruletype=(OnlyCanRuleType | ConditionalRuleType | NegationRuleType | FactStatement)) 
 ;
 
 
@@ -25,7 +24,7 @@ Nothing:
 ;
 
 ConditionalRuleType:
-	start='If' subject=ConceptExpression relation=Relation object=ConceptExpression ',' 'then' 'it' 'must' relation2=Relation 'this' object2=ConceptExpression '.'
+	start='If' subject=ConceptExpression relation=ObjectRelation object=ConceptExpression ',' 'then' 'it' 'must' relation2=ObjectRelation 'this' object2=ConceptExpression '.'
 ;
 
 OnlyCanRuleType:
@@ -100,25 +99,25 @@ DataStatement:
 ;
 
 FactStatement:
-	(assertion=ConceptAssertion | assertion=RoleAssertion) '.'
+	'Fact' ':' (assertion=ConceptAssertion | assertion=RoleAssertion) '.'
 	
 ;
 
 ConceptAssertion:
-	individual=NAME 'is' ('a'|'an') concept=Concept '.'
+	individual=NAME 'is' ('a'|'an') concept=Concept
 ;
 
 RoleAssertion:
-	ObjectPropertyAssertion | DatatypePropertyAssertion '.'
+	ObjectPropertyAssertion | DatatypePropertyAssertion
 	
 ;
 
 DatatypePropertyAssertion:
-	individual=NAME relation=DatatypeRelation (string=STRING|int=INT)
+	individual=NAME relation=DatatypeRelation (stringValue=STRING|intValue=INT)
 ;
 
 ObjectPropertyAssertion:
-	individual=NAME relation=Relation ('a'|'an') concept=Concept 
+	individual=NAME relation=ObjectRelation individual2=NAME
 ;
 
 terminal RELATION_NAME:
