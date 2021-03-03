@@ -82,13 +82,13 @@
       /></clipPath
     ></defs
     ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(1100,600)" stroke-opacity="0" stroke="rgb(255,255,255)"
-    ><path d="M0.5 0.5 L72.5 0.5 L72.5 21.6094 L179 21.6094 L179 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath2)"
+    ><path d="M0.5 0.5 L89.9131 0.5 L89.9131 21.6094 L179 21.6094 L179 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath2)"
     /></g
     ><g transform="translate(1100,600)"
-    ><path fill="none" d="M0.5 0.5 L72.5 0.5 L72.5 21.6094 L179 21.6094 L179 69 L0.5 69 Z" clip-path="url(#clipPath2)"
-      /><path fill="none" d="M0.5 21.6094 L72.5 21.6094" clip-path="url(#clipPath2)"
+    ><path fill="none" d="M0.5 0.5 L89.9131 0.5 L89.9131 21.6094 L179 21.6094 L179 69 L0.5 69 Z" clip-path="url(#clipPath2)"
+      /><path fill="none" d="M0.5 21.6094 L89.9131 21.6094" clip-path="url(#clipPath2)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >jena-api</text
+      >owl-creator</text
       ><text x="47" font-size="14px" y="50.6094" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >OntologyAPI</text
     ></g
@@ -104,24 +104,24 @@
       >CNLToolchain</text
     ></g
     ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(870,190)" stroke-opacity="0" stroke="rgb(255,255,255)"
-    ><path d="M0.5 0.5 L108.4248 0.5 L108.4248 21.6094 L179 21.6094 L179 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath2)"
+    ><path d="M0.5 0.5 L104.5488 0.5 L104.5488 21.6094 L179 21.6094 L179 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath2)"
     /></g
     ><g transform="translate(870,190)"
-    ><path fill="none" d="M0.5 0.5 L108.4248 0.5 L108.4248 21.6094 L179 21.6094 L179 69 L0.5 69 Z" clip-path="url(#clipPath2)"
-      /><path fill="none" d="M0.5 21.6094 L108.4248 21.6094" clip-path="url(#clipPath2)"
+    ><path fill="none" d="M0.5 0.5 L104.5488 0.5 L104.5488 21.6094 L179 21.6094 L179 69 L0.5 69 Z" clip-path="url(#clipPath2)"
+      /><path fill="none" d="M0.5 21.6094 L104.5488 21.6094" clip-path="url(#clipPath2)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >maven-parser</text
+      >owlify-maven</text
       ><text x="16" font-size="14px" y="50.6094" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >MavenPOMFileParser</text
     ></g
     ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(640,320)" stroke-opacity="0" stroke="rgb(255,255,255)"
-    ><path d="M0.5 0.5 L137.7578 0.5 L137.7578 21.6094 L179 21.6094 L179 79 L0.5 79 Z" stroke="none" clip-path="url(#clipPath4)"
+    ><path d="M0.5 0.5 L126.9365 0.5 L126.9365 21.6094 L179 21.6094 L179 79 L0.5 79 Z" stroke="none" clip-path="url(#clipPath4)"
     /></g
     ><g transform="translate(640,320)"
-    ><path fill="none" d="M0.5 0.5 L137.7578 0.5 L137.7578 21.6094 L179 21.6094 L179 79 L0.5 79 Z" clip-path="url(#clipPath4)"
-      /><path fill="none" d="M0.5 21.6094 L137.7578 21.6094" clip-path="url(#clipPath4)"
+    ><path fill="none" d="M0.5 0.5 L126.9365 0.5 L126.9365 21.6094 L179 21.6094 L179 79 L0.5 79 Z" clip-path="url(#clipPath4)"
+      /><path fill="none" d="M0.5 21.6094 L126.9365 21.6094" clip-path="url(#clipPath4)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath4)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >StardogConnector</text
+      >stardog-wrapper</text
       ><text x="18" font-size="14px" y="39.5" clip-path="url(#clipPath4)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >StardogDatabaseAPI</text
       ><text x="11" font-size="14px" y="55.6094" clip-path="url(#clipPath4)" font-family="sans-serif" stroke="none" xml:space="preserve"
@@ -130,24 +130,24 @@
       >StardogICVAPI</text
     ></g
     ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(1060,190)" stroke-opacity="0" stroke="rgb(255,255,255)"
-    ><path d="M0.5 0.5 L108.5889 0.5 L108.5889 21.6094 L239 21.6094 L239 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath5)"
+    ><path d="M0.5 0.5 L96.5 0.5 L96.5 21.6094 L239 21.6094 L239 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath5)"
     /></g
     ><g transform="translate(1060,190)"
-    ><path fill="none" d="M0.5 0.5 L108.5889 0.5 L108.5889 21.6094 L239 21.6094 L239 69 L0.5 69 Z" clip-path="url(#clipPath5)"
-      /><path fill="none" d="M0.5 21.6094 L108.5889 21.6094" clip-path="url(#clipPath5)"
+    ><path fill="none" d="M0.5 0.5 L96.5 0.5 L96.5 21.6094 L239 21.6094 L239 69 L0.5 69 Z" clip-path="url(#clipPath5)"
+      /><path fill="none" d="M0.5 21.6094 L96.5 21.6094" clip-path="url(#clipPath5)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath5)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >history-parser</text
+      >owlify-git</text
       ><text x="34" font-size="14px" y="50.6094" clip-path="url(#clipPath5)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >GitOntologyTransformer</text
     ></g
     ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(650,190)" stroke-opacity="0" stroke="rgb(255,255,255)"
-    ><path d="M0.5 0.5 L99.7568 0.5 L99.7568 21.6094 L209 21.6094 L209 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath6)"
+    ><path d="M0.5 0.5 L95.8809 0.5 L95.8809 21.6094 L209 21.6094 L209 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath6)"
     /></g
     ><g transform="translate(650,190)"
-    ><path fill="none" d="M0.5 0.5 L99.7568 0.5 L99.7568 21.6094 L209 21.6094 L209 69 L0.5 69 Z" clip-path="url(#clipPath6)"
-      /><path fill="none" d="M0.5 21.6094 L99.7568 21.6094" clip-path="url(#clipPath6)"
+    ><path fill="none" d="M0.5 0.5 L95.8809 0.5 L95.8809 21.6094 L209 21.6094 L209 69 L0.5 69 Z" clip-path="url(#clipPath6)"
+      /><path fill="none" d="M0.5 21.6094 L95.8809 21.6094" clip-path="url(#clipPath6)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath6)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >famix-parser</text
+      >owlify-famix</text
       ><text x="8" font-size="14px" y="50.6094" clip-path="url(#clipPath6)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >FamixOntologyTransformer</text
     ></g
@@ -185,24 +185,24 @@
       >ArchcnlGenerator</text
     ></g
     ><g fill="rgb(255,165,0)" fill-opacity="0.4902" transform="translate(910,60)" stroke-opacity="0.4902" stroke="rgb(255,165,0)"
-    ><path d="M0.5 0.5 L91.54 0.5 L91.54 21.6094 L149 21.6094 L149 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath9)"
+    ><path d="M0.5 0.5 L60.5 0.5 L60.5 21.6094 L149 21.6094 L149 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath9)"
     /></g
     ><g transform="translate(910,60)"
-    ><path fill="none" d="M0.5 0.5 L91.54 0.5 L91.54 21.6094 L149 21.6094 L149 69 L0.5 69 Z" clip-path="url(#clipPath9)"
-      /><path fill="none" d="M0.5 21.6094 L91.54 21.6094" clip-path="url(#clipPath9)"
+    ><path fill="none" d="M0.5 0.5 L60.5 0.5 L60.5 21.6094 L149 21.6094 L149 69 L0.5 69 Z" clip-path="url(#clipPath9)"
+      /><path fill="none" d="M0.5 21.6094 L60.5 21.6094" clip-path="url(#clipPath9)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath9)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >owlify-main</text
+      >owlify</text
       ><text x="12" font-size="14px" y="50.6094" clip-path="url(#clipPath9)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >OwlifyComponent</text
     ></g
     ><g fill="rgb(255,255,255)" fill-opacity="0" transform="translate(480,470)" stroke-opacity="0" stroke="rgb(255,255,255)"
-    ><path d="M0.5 0.5 L276.0078 0.5 L276.0078 21.6094 L289 21.6094 L289 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath10)"
+    ><path d="M0.5 0.5 L228.6553 0.5 L228.6553 21.6094 L289 21.6094 L289 69 L0.5 69 Z" stroke="none" clip-path="url(#clipPath10)"
     /></g
     ><g transform="translate(480,470)"
-    ><path fill="none" d="M0.5 0.5 L276.0078 0.5 L276.0078 21.6094 L289 21.6094 L289 69 L0.5 69 Z" clip-path="url(#clipPath10)"
-      /><path fill="none" d="M0.5 21.6094 L276.0078 21.6094" clip-path="url(#clipPath10)"
+    ><path fill="none" d="M0.5 0.5 L228.6553 0.5 L228.6553 21.6094 L289 21.6094 L289 69 L0.5 69 Z" clip-path="url(#clipPath10)"
+      /><path fill="none" d="M0.5 21.6094 L228.6553 21.6094" clip-path="url(#clipPath10)"
       /><text x="5" font-size="14px" y="16.1094" clip-path="url(#clipPath10)" font-family="sans-serif" stroke="none" xml:space="preserve"
-      >conformancechecking-documentation</text
+      >architecture-description-parser</text
       ><text x="72" font-size="14px" y="50.6094" clip-path="url(#clipPath10)" font-family="sans-serif" stroke="none" xml:space="preserve"
       >AsciiDocArc42Parser</text
     ></g

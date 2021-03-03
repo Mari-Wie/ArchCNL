@@ -580,7 +580,7 @@ bg=yellow</panel_attributes>
       <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>famix-parser
+    <panel_attributes>owlify-famix
 --
 FamixOntologyTransformer
 bg=yellow</panel_attributes>
@@ -589,12 +589,12 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>80</x>
+      <x>60</x>
       <y>170</y>
-      <w>220</w>
+      <w>240</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>conformancechecking-doc...
+    <panel_attributes>architecture-description-parser
 --
 AsciiDocArc42Parser
 bg=yellow</panel_attributes>
@@ -608,7 +608,7 @@ bg=yellow</panel_attributes>
       <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>StardogConnector
+    <panel_attributes>stardog-wrapper
 --
 StardogDatabase
 bg=yellow</panel_attributes>
@@ -683,7 +683,7 @@ bg=yellow</panel_attributes>
       <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>StardogConnector
+    <panel_attributes>stardog-wrapper
 --
 StardogICVAPI
 bg=yellow</panel_attributes>
@@ -708,7 +708,7 @@ bg=yellow</panel_attributes>
       <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>StardogConnector
+    <panel_attributes>stardog-wrapper
 --
 StardogDatabase
 bg=yellow</panel_attributes>

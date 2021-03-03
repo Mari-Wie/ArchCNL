@@ -25,7 +25,7 @@ ConformanceCheckOntology</panel_attributes>
       <w>290</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>conformancechecking-documentation
+    <panel_attributes>architecture-description-parser
 --
 AsciiDocArc42Parser</panel_attributes>
     <additional_attributes/>
@@ -38,7 +38,7 @@ AsciiDocArc42Parser</panel_attributes>
       <w>150</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>owlify-main
+    <panel_attributes>owlify
 --
 OwlifyComponent
 bg=orange</panel_attributes>
@@ -114,7 +114,7 @@ bg=blue</panel_attributes>
       <w>210</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>famix-parser
+    <panel_attributes>owlify-famix
 --
 FamixOntologyTransformer</panel_attributes>
     <additional_attributes/>
@@ -138,7 +138,7 @@ FamixOntologyTransformer</panel_attributes>
       <w>240</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>history-parser
+    <panel_attributes>owlify-git
 --
 GitOntologyTransformer</panel_attributes>
     <additional_attributes/>
@@ -162,7 +162,7 @@ GitOntologyTransformer</panel_attributes>
       <w>180</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>StardogConnector
+    <panel_attributes>stardog-wrapper
 --
 StardogDatabaseAPI
 StardogConnectionAPI
@@ -177,7 +177,7 @@ StardogICVAPI</panel_attributes>
       <w>180</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>maven-parser
+    <panel_attributes>owlify-maven
 --
 MavenPOMFileParser</panel_attributes>
     <additional_attributes/>
@@ -292,7 +292,7 @@ bg=blue</panel_attributes>
       <w>180</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>jena-api
+    <panel_attributes>owl-creator
 --
 OntologyAPI</panel_attributes>
     <additional_attributes/>
