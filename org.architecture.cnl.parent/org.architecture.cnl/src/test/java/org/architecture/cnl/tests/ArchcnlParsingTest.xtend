@@ -23,7 +23,7 @@ class ArchcnlParsingTest {
 	@Test
 	def void testErrorDetected() {
 		val result = parseHelper.parse('''
-			This is not ArchCNL because the syntax is not complied with.
+			This is not valid ArchCNL because the syntax is not complied with.
 		''')
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
@@ -101,6 +101,16 @@ class ArchcnlParsingTest {
 	}
 	
 	@Test
+	def void testConditionalRuleDataPropertiesNotAllowed() {
+		val result = parseHelper.parse('''
+			If Class defines Resource, then it must define equal-to this Resource.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertFalse('''Expected errors are not present''', errors.isEmpty)
+	}
+	
+	@Test
 	def void testNegationRule() {
 		val result = parseHelper.parse('''
 			No LayerBelow can use LayerAbove.
@@ -157,17 +167,59 @@ class ArchcnlParsingTest {
 	}
 	
 	@Test
-	def void testFact() {
-		// TODO: doesn't work yet (issue #65)
-//		val result = parseHelper.parse('''
-//			FancyClass is a Class.
-//		''')
-//		Assert.assertNotNull(result)
-//		val errors = result.eResource.errors
-//		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
-//		
-//		Assert.assertEquals(result.sentence.size, 1)
-//		val sentence = result.sentence.get(0)
-//		Assert.assertTrue(sentence.ruletype instanceof FactStatement)
-		}
+	def void testFactConceptAssertion() {
+		val result = parseHelper.parse('''
+			Fact: FancyClass1 is a FancyClass .
+		''')
+		
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof FactStatement)
+	}
+	
+	@Test
+	def void testFactObjectPropertyAssertion() {
+		val result = parseHelper.parse('''
+			Fact: FancyClass2 defines FancyAttribute5.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof FactStatement)
+	}
+	
+	@Test
+	def void testFactObjectDatatypePropertyAssertionInt() {
+		val result = parseHelper.parse('''
+			Fact: FancyAttribute5 hasArrayElements equal-to 42.
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof FactStatement)
+	}
+	
+	@Test
+	def void testFactObjectDatatypePropertyAssertionString() {
+		val result = parseHelper.parse('''
+			Fact: FancyAttribute5 hasName equal-to "fancyArray".
+		''')
+		Assert.assertNotNull(result)
+		val errors = result.eResource.errors
+		Assert.assertTrue('''Unexpected errors: «errors.join(", ")»''', errors.isEmpty)
+		
+		Assert.assertEquals(result.sentence.size, 1)
+		val sentence = result.sentence.get(0)
+		Assert.assertTrue(sentence.ruletype instanceof FactStatement)
+	}
 }
