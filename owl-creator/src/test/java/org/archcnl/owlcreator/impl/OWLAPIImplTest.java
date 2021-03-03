@@ -51,7 +51,7 @@ public class OWLAPIImplTest {
 	public void testGetObjectProperty() {
 		final String roleName = "develops";
 		final String roleNameLemmatized = "develop";
-		OWLProperty c = api.creteOWLObjectProperty(IRI_PATH, roleName);
+		OWLProperty c = api.createOWLObjectProperty(IRI_PATH, roleName);
 		
 		assertEquals(IRI_PATH + "#" + roleNameLemmatized, c.getIRI().toString());
 		

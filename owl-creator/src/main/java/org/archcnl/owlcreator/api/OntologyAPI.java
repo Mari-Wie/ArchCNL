@@ -4,6 +4,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataHasValue;
 import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLProperty;
@@ -39,16 +40,14 @@ public interface OntologyAPI {
 	public void addSubClassAxiom(OWLClassExpression superClass, OWLClassExpression subClass);
 
 	/**
-	 * Adds an axiom to the ontology which states that the two given OWL OBJECT(!) properties are in a sub/super-type
-	 * relation. Datatype properties are NOT viewed by this operation. It is currently unclear whether this is
-	 * intended or not. 
+	 * Adds an axiom to the ontology which states that the two given OWL object properties are in a sub/super-type
+	 * relation. 
 	 * 
-	 * @param iriPath The international resource identifier (IRI) of BOTH object properties.
-	 * @param subProperty The name (missing the IRI) of the "sub" property, i.e. which is included by the other one.
-	 * @param superProperty The name (missing the IRI) of the "super" property, i.e. which includes the other one.
+	 * @param subProperty The "sub" property, i.e. which is included by the other one.
+	 * @param superProperty The "super" property, i.e. which includes the other one.
 	 */
-	public void addSubPropertyOfAxiom(String iriPath, String subProperty, String superProperty);
-
+	public void addSubPropertyOfAxiom(OWLObjectProperty subProperty, OWLObjectProperty superProperty);
+	
 	/**
 	 * Saves the current state of the ontology in two files. The first one is the one specified by
 	 * the filePath passed to {@link #createOntology(String, String)} and stores the ontology in 
@@ -92,7 +91,7 @@ public interface OntologyAPI {
 	 * @param roleName The name of the property.
 	 * @return The property with the name "<IRI>#<lemmatized-property-name>",
 	 */
-	public OWLProperty creteOWLObjectProperty(String iriPath, String roleName);
+	public OWLObjectProperty createOWLObjectProperty(String iriPath, String roleName);
 	
 	/**
 	 * Returns an OWL datatype property (property between an individual and a literal and not
@@ -101,7 +100,7 @@ public interface OntologyAPI {
 	 * @param roleName The name of the property.
 	 * @return The property with the name "<IRI>#<property-name>",
 	 */
-	public OWLProperty createOWLDatatypeProperty(String iriPath, String roleName);
+	public OWLDataProperty createOWLDatatypeProperty(String iriPath, String roleName);
 	
 	/**
 	 * Returns an OWL restriction which states that the given OWL data property must have the
@@ -199,4 +198,26 @@ public interface OntologyAPI {
 	 */
 	public OWLClassExpression createExactCardinalityRestrictionAxiom(OWLClassExpression object, OWLObjectProperty relation, int count);
 
+	/**
+	 * Returns an OWL named individual with the given name in the given namespace.
+	 * @param iriPath the namespace/name prefix
+	 * @param individualName the name of the individual
+	 */
+	public OWLNamedIndividual createNamedIndividual(String iriPath, String individualName);
+	
+	/**
+	 * Adds an axiom which states that the given individual belongs to the given class.
+	 * @param individual The concerned OWL named individual.
+	 * @param concept The concerned OWL class.
+	 */
+	public void addClassAssertionAxiom(OWLNamedIndividual individual, OWLClassExpression concept);
+	
+	/**
+	 * Adds an axiom which states that the given individuals are in the given relation.
+	 * @param individual The individual acting as the subject.
+	 * @param relation The relation between the individuals.
+	 * @param otherIndividual The individual acting as the object.
+	 */
+	public void addObjectPropertyAssertion(OWLNamedIndividual individual, 
+            OWLObjectProperty relation, OWLNamedIndividual otherIndividual);
 }

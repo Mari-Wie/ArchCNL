@@ -13,6 +13,7 @@ public enum RuleType {
 	CONDITIONAL,
 	DOMAIN,
 	RANGE,
+	FACT,
 	DEFAULT
 
 }

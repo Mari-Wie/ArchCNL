@@ -385,7 +385,10 @@ class ArchcnlGenerator extends AbstractGenerator {
 			val that = thatList.get(0)
 		
 			result = that.compile
-			result = api.intersectionOf(namespace, conceptAsOWL, result)
+			var elements = new ArrayList
+			elements.add(conceptAsOWL)
+			elements.add(result)
+			result = api.createIntersection(elements)
 
 			return result
 		}
@@ -434,15 +437,4 @@ class ArchcnlGenerator extends AbstractGenerator {
 		return api.createIntersection(results)
 
 	}
-
-	def OWLClassExpression intersectionOf(OntologyAPI api, String string, OWLClassExpression expression1,
-		OWLClassExpression expression2) {
-		return api.intersectionOf(namespace, expression1, expression2)
-	}
-
-	def OWLClass getOWLClass(OntologyAPI api, String string, String string2) {
-		return api.createOWLClass(string, string2)
-	}
-	
-	
 }
