@@ -25,9 +25,7 @@ class ArchcnlParsingTest {
 		val result = parseHelper.parse('''
 			This is not valid ArchCNL because the syntax is not complied with.
 		''')
-		Assert.assertNotNull(result)
-		val errors = result.eResource.errors
-		Assert.assertFalse('''Expected errors are not present''', errors.isEmpty)
+		Assert.assertNull(result)
 	}
 	
 	@Test
