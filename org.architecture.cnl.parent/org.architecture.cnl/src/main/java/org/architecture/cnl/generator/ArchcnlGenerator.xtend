@@ -30,13 +30,17 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import org.semanticweb.owlapi.model.OWLClass
 import org.semanticweb.owlapi.model.OWLClassExpression
 import org.semanticweb.owlapi.model.OWLDataProperty
 import org.semanticweb.owlapi.model.OWLObjectProperty
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.architecture.cnl.archcnl.FactStatement
+import org.architecture.cnl.archcnl.ConceptAssertion
+import org.architecture.cnl.archcnl.RoleAssertion
+import org.architecture.cnl.archcnl.ObjectPropertyAssertion
+import org.architecture.cnl.archcnl.DatatypePropertyAssertion
+import org.semanticweb.owlapi.model.OWLDataHasValue
 
 /**
  * This class is responsible for the conversion from the (already parsed) CNL to
@@ -127,6 +131,9 @@ class ArchcnlGenerator extends AbstractGenerator {
 			typeStorage.storeTypeOfRule(id, RuleType.SUB_CONCEPT) 
 		} else if (ruletype instanceof CardinalityRuleType) {
 			ruletype.compile(subject)
+		} else if (ruletype instanceof FactStatement) {
+			compile(ruletype as FactStatement)
+			typeStorage.storeTypeOfRule(id, RuleType.FACT) 
 		}
 		
 		LOG.debug("Processed sentence with ID " + id)
@@ -205,7 +212,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		} else {
 			val subjectConceptExpression = negation.subject.compile
 			if (negation.object.anything !== null) {
-				val relation = api.creteOWLObjectProperty(namespace,
+				val relation = api.createOWLObjectProperty(namespace,
 					negation.object.anything.relation.relationName) as OWLObjectProperty
 				var object = api.getOWLTop()
 				api.addNegationAxiom(subjectConceptExpression, object, relation)
@@ -240,8 +247,13 @@ class ArchcnlGenerator extends AbstractGenerator {
 	def void compile(ConditionalRuleType conditional) {
 		conditional.subject.compile
 		conditional.object.compile
-
-		api.addSubPropertyOfAxiom(namespace, conditional.relation.relationName, conditional.relation2.relationName)
+		// the CNL permits only object properties
+		// reason 1: datatype properties don't make sense here
+		// reason 2: sub-properties are only defined when both properites have the same type (datatype or object property)
+		//           enforcing this would require larger changes 
+		var subProperty = api.createOWLObjectProperty(namespace, conditional.relation.relationName)
+		var superProperty = api.createOWLObjectProperty(namespace, conditional.relation2.relationName)
+		api.addSubPropertyOfAxiom(subProperty, superProperty)
 	}
 
 	def void compile(OnlyCanRuleType onlycan) 
@@ -249,7 +261,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.trace("ID " + id + ": " +"compiling OnlyCanRuleType ...")
 		val subjectConceptExpression = onlycan.subject.compile
 		var object = onlycan.object.expression.concept.compile
-		var relation = api.creteOWLObjectProperty(namespace,
+		var relation = api.createOWLObjectProperty(namespace,
 			onlycan.object.expression.relation.relationName) as OWLObjectProperty
 
 		val objectOrList = onlycan.object.objectOrList
@@ -273,7 +285,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.trace("ID " + id + ": " +"compiling CanOnlyRuleType ...")
 		val subjectConceptExpression = subject.compile
 		var object = canonly.object.expression.concept.compile
-		var relation = api.creteOWLObjectProperty(namespace,
+		var relation = api.createOWLObjectProperty(namespace,
 			canonly.object.expression.relation.relationName) as OWLObjectProperty
 
 		val objectAndList = canonly.object.objectAndList
@@ -313,7 +325,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 		LOG.trace("ID " + id + ": " +"compiling MustRuleType ... ")
 		val subjectConceptExpression = subject.compile
 		var object = must.object.expression.concept.compile
-		var relation = api.creteOWLObjectProperty(namespace,
+		var relation = api.createOWLObjectProperty(namespace,
 			must.object.expression.relation.relationName) as OWLObjectProperty
 	
 		val objectAndList = must.object.objectAndList
@@ -347,7 +359,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 	def OWLClassExpression compile(ObjectConceptExpression object) 
 	{
 		LOG.trace("ID " + id + ": " +"compiling ObjectConceptExpression ...")
-		val relation = api.creteOWLObjectProperty(namespace, object.relation.relationName) as OWLObjectProperty
+		val relation = api.createOWLObjectProperty(namespace, object.relation.relationName) as OWLObjectProperty
 		val concept = object.concept.compile
 		val count = object.number
 		
@@ -385,7 +397,10 @@ class ArchcnlGenerator extends AbstractGenerator {
 			val that = thatList.get(0)
 		
 			result = that.compile
-			result = api.intersectionOf(namespace, conceptAsOWL, result)
+			var elements = new ArrayList
+			elements.add(conceptAsOWL)
+			elements.add(result)
+			result = api.createIntersection(elements)
 
 			return result
 		}
@@ -402,7 +417,7 @@ class ArchcnlGenerator extends AbstractGenerator {
 			val expression = statements.expression
 			if (expression instanceof ConceptExpression) {
 				val relation = statements.relation as ObjectRelation
-				val thatRoleOWL = api.creteOWLObjectProperty(namespace, relation.relationName) as OWLObjectProperty
+				val thatRoleOWL = api.createOWLObjectProperty(namespace, relation.relationName) as OWLObjectProperty
 				val owlexpression = expression.compile
 				var result = api.createSomeValuesFrom(thatRoleOWL, owlexpression)
 				results.add(result)
@@ -426,7 +441,6 @@ class ArchcnlGenerator extends AbstractGenerator {
 			} else if (expression instanceof VariableStatement) {
 				LOG.trace("with Variable")
 				return null
-			// TODO generate rules based on facts
 			}
 
 		}
@@ -434,15 +448,56 @@ class ArchcnlGenerator extends AbstractGenerator {
 		return api.createIntersection(results)
 
 	}
-
-	def OWLClassExpression intersectionOf(OntologyAPI api, String string, OWLClassExpression expression1,
-		OWLClassExpression expression2) {
-		return api.intersectionOf(namespace, expression1, expression2)
-	}
-
-	def OWLClass getOWLClass(OntologyAPI api, String string, String string2) {
-		return api.createOWLClass(string, string2)
+	
+	def void compile(FactStatement fact) {
+		LOG.trace("ID " + id + ": " +"compiling FactStatement ...")
+		
+		if (fact.assertion instanceof ConceptAssertion) {
+			compile(fact.assertion as ConceptAssertion)
+		} else if (fact.assertion instanceof RoleAssertion) {
+			compile(fact.assertion as RoleAssertion)
+		}
 	}
 	
+	def void compile(ConceptAssertion fact) {
+		LOG.trace("ID " + id + ": " +"compiling ConceptAssertion...")
+		
+		var individual = api.createNamedIndividual(namespace, fact.individual)
+		var concept = api.createOWLClass(namespace, fact.concept.conceptName)
+		
+		api.addClassAssertionAxiom(individual, concept)
+	}
 	
+	def void compile(RoleAssertion fact) {
+		LOG.trace("ID " + id + ": " +"compiling RoleAssertion...")
+		
+		var individual = api.createNamedIndividual(namespace, fact.individual)
+		
+		if (fact instanceof ObjectPropertyAssertion) {
+			compile(fact as ObjectPropertyAssertion)
+		}
+		else if (fact instanceof DatatypePropertyAssertion) {
+			compile(fact as DatatypePropertyAssertion)
+		}
+	}
+	
+	def void compile(ObjectPropertyAssertion fact) {
+		var individual = api.createNamedIndividual(namespace, fact.individual)
+		var relation = api.createOWLObjectProperty(namespace, fact.relation.relationName)
+		var otherIndividual = api.createNamedIndividual(namespace, fact.individual2)
+
+		api.addObjectPropertyAssertion(individual, relation, otherIndividual)
+	}
+	
+	def void compile(DatatypePropertyAssertion fact) {
+		var individual = api.createNamedIndividual(namespace, fact.individual)
+		var relation = api.createOWLDatatypeProperty(namespace, fact.relation.relationName)
+			
+		if (fact.stringValue !== null) {
+			api.addClassAssertionAxiom(individual, api.createDataHasValue(fact.stringValue, relation))
+		}
+		else {
+			api.addClassAssertionAxiom(individual, api.createDataHasValue(fact.intValue, relation))
+		}
+	}
 }

@@ -18,6 +18,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataHasValue;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectComplementOf;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
@@ -176,13 +177,12 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	@Override
-	public OWLProperty creteOWLObjectProperty(String iriPath, String roleName) {
-		OWLObjectProperty prop = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(roleName));
-		return prop;
+	public OWLObjectProperty createOWLObjectProperty(String iriPath, String roleName) {
+		return df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(roleName));
 	}
 
 	@Override
-	public OWLProperty createOWLDatatypeProperty(String iriPath, String roleName) {
+	public OWLDataProperty createOWLDatatypeProperty(String iriPath, String roleName) {
 		return df.getOWLDataProperty(iriPath + "#" + roleName);
 	}
 
@@ -208,11 +208,8 @@ public class OWLAPIImpl implements OntologyAPI {
 	}
 
 	@Override
-	public void addSubPropertyOfAxiom(String iriPath, String subProperty, String superProperty) {
-		OWLObjectProperty sub = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(subProperty));
-		OWLObjectProperty sup = df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(superProperty));
-		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(sub, sup);
-
+	public void addSubPropertyOfAxiom(OWLObjectProperty subProperty, OWLObjectProperty superProperty) {
+		OWLAxiom subPropertyAxiom = df.getOWLSubObjectPropertyOfAxiom(subProperty, superProperty);
 		manager.addAxiom(currentOntology, subPropertyAxiom);
 	}
 
@@ -228,5 +225,23 @@ public class OWLAPIImpl implements OntologyAPI {
 		OWLObjectAllValuesFrom allValues = df.getOWLObjectAllValuesFrom(role, concept);
 
 		return allValues;
+	}
+	
+	@Override
+	public OWLNamedIndividual createNamedIndividual(String iriPath, String individualName) {
+        return df.getOWLNamedIndividual(iriPath + individualName);
+	}
+	
+	@Override
+	public void addClassAssertionAxiom(OWLNamedIndividual individual, OWLClassExpression concept) {
+	    OWLAxiom axiomIsA = df.getOWLClassAssertionAxiom(concept, individual);
+	    manager.addAxiom(currentOntology, axiomIsA);
+	}
+	
+	@Override
+	public void addObjectPropertyAssertion(OWLNamedIndividual individual, 
+	        OWLObjectProperty relation, OWLNamedIndividual otherIndividual) {
+	    OWLAxiom objectPropertyAxiom = df.getOWLObjectPropertyAssertionAxiom(relation, individual, otherIndividual);
+        manager.addAxiom(currentOntology, objectPropertyAxiom);
 	}
 }
