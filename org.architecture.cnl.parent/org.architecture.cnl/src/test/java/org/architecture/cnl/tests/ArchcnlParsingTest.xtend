@@ -169,7 +169,7 @@ class ArchcnlParsingTest {
 	@Test
 	def void testFactConceptAssertion() {
 		val result = parseHelper.parse('''
-			Fact: FancyClass1 is a FancyClass .
+			Fact: FancyClass is a Class .
 		''')
 		
 		Assert.assertNotNull(result)
@@ -184,7 +184,7 @@ class ArchcnlParsingTest {
 	@Test
 	def void testFactObjectPropertyAssertion() {
 		val result = parseHelper.parse('''
-			Fact: FancyClass2 defines FancyAttribute5.
+			Fact: FancyClass defines FancyAttribute.
 		''')
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
@@ -198,7 +198,7 @@ class ArchcnlParsingTest {
 	@Test
 	def void testFactObjectDatatypePropertyAssertionInt() {
 		val result = parseHelper.parse('''
-			Fact: FancyAttribute5 hasArrayElements equal-to 42.
+			Fact: FancyAttribute hasArrayElements equal-to 42.
 		''')
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
@@ -212,7 +212,7 @@ class ArchcnlParsingTest {
 	@Test
 	def void testFactObjectDatatypePropertyAssertionString() {
 		val result = parseHelper.parse('''
-			Fact: FancyAttribute5 hasName equal-to "fancyArray".
+			Fact: FancyAttribute hasName equal-to "fancyArray".
 		''')
 		Assert.assertNotNull(result)
 		val errors = result.eResource.errors
