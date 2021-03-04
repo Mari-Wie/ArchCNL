@@ -69,32 +69,32 @@
 		</dependency>
 		<!-- Other ArchCNL modules  -->
 		<dependency>
-			<groupId>org.archcnl.architecture-reasoning</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>architecture-reasoning</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.archcnl.stardog-wrapper</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>stardog-wrapper</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.archcnl.architecture-description-parser</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>architecture-description-parser</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.archcnl.conformance-checking</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>conformance-checking</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.archcnl.owlify</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>owlify</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.archcnl.owlify-famix</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>owlify-famix</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

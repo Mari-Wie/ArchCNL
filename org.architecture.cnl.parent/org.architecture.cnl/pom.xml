@@ -212,7 +212,7 @@
 		
 		<!-- Add these dependencies when rebuilding the generated code from the grammar: -->
 		<dependency>
-			<groupId>org.archcnl.owl-creator</groupId>
+			<groupId>org.archcnl</groupId>
 			<artifactId>owl-creator</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
