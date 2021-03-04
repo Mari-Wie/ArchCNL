@@ -190,6 +190,12 @@ public class FamixOntology {
 		annotationInstanceIndividual.addProperty(hasAnnotationTypeProperty, annotationType);
 	}
 
+	public OntModel toJenaModel() {
+	    OntModel copyOfModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+	    copyOfModel.add(model);
+	    return copyOfModel;
+	}
+	
 	public void save(String resultPath) {
 		try {
 			model.write(new FileOutputStream(new File(resultPath)));
@@ -389,5 +395,39 @@ public class FamixOntology {
 		accessingUnit.addProperty(property, receiver);
 	}
 
+	/**
+	 * Returns an Individual representing the given type.
+	 * @param name Fully qualified and resolved type name.
+	 * @return An Individual representing the given type.
+	 */
+	public Individual getTypeIndividualFor(String name) {
+        if (isPrimitiveType(name)) {
+            return getPrimitiveTypeIndividual(name);
+        } 
+        
+        String ontologyClassOfFamixTypeIndividual = getOntologyClassOfFamixTypeIndividual(name);
+        if (ontologyClassOfFamixTypeIndividual == null) {
+            // type not defined in source code, e.g. external library or java lib
+            Individual tmp = getFamixClassWithName(name);
+            setHasNamePropertyForNamedEntity(name, tmp);
+            setIsExternalTypeProperty(true, tmp);
+            return tmp;
+        } 
+        if (ontologyClassOfFamixTypeIndividual.equals("FamixClass")) {
+            return getFamixClassWithName(name);
+        }
+        if (ontologyClassOfFamixTypeIndividual.equals("Enum")) {
+            return getEnumTypeIndividualWithName(name);
+        } 
+        if (ontologyClassOfFamixTypeIndividual.equals("AnnotationType")) {
+            return getAnnotationTypeIndividualWithName(name);
+        }
+        return null;
+    }
+
+    private boolean isPrimitiveType(String name) {
+        return name.equals("double") || name.equals("char") || name.equals("byte") || name.equals("String")
+                || name.equals("int") || name.equals("boolean") || name.equals("Integer");
+    }
 
 }
