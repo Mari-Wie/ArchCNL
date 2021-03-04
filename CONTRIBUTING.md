@@ -22,6 +22,8 @@ Changes to this document can be proposed at any time (via a pull request).
 
 ## Opening Issues
 
+Note: Try to kepp issues fine-grained and small. This leads to fewer changes in the corresponding pull requests and thus less merge conflicts. Large issues can be implemented by several smaller sub-issues as long as each increment results in a runnable software (basic idea for CI/CD).
+
 1. Make sure that no exisiting issue covers the same problem.
 2. Find a brief yet meaningful title.
 3. Further describe the problem in the description. Other people should be able to understand
