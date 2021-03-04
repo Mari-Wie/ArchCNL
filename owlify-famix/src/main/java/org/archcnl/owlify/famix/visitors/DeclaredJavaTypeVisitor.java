@@ -1,6 +1,8 @@
 package org.archcnl.owlify.famix.visitors;
 
 import org.apache.jena.ontology.Individual;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -11,6 +13,8 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 
 public class DeclaredJavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
+    private static final Logger LOG = LogManager.getLogger(DeclaredJavaTypeVisitor.class);
+    
 	private Individual declaredType;
 
 	private FamixOntology ontology;
@@ -22,50 +26,15 @@ public class DeclaredJavaTypeVisitor extends VoidVisitorAdapter<Void> {
 	@Override
 	public void visit(ClassOrInterfaceType n, Void arg) {
 
-//		String name = n.getName().asString();
-		String name = null;
+	    String name;
 		try {
-			name = n.resolve().asReferenceType().getQualifiedName();
-			createTypeIndividual(n, name);
+		    name = n.resolve().asReferenceType().getQualifiedName();
 
-		} catch (UnsolvedSymbolException e) {
-//			System.out.println("Unable to resolve type: " + e.getName() + " using simple name instead.");
+		} catch (UnsolvedSymbolException | UnsupportedOperationException e) {
 			name = n.getName().asString();
-			createTypeIndividual(n, name);
-		} catch (UnsupportedOperationException e) {
-//			System.out
-//					.println("UnsupportedOperatuibException for type: " + n.getName() + " using simple name instead.");
-			name = n.getName().asString();
-			createTypeIndividual(n, name);
-		}
-
-	}
-
-	private void createTypeIndividual(ClassOrInterfaceType n, String name) {
-		String ontologyClassOfFamixTypeIndividual = ontology.getOntologyClassOfFamixTypeIndividual(name);
-
-		if (isPrimitiveType(name)) {
-			declaredType = ontology.getPrimitiveTypeIndividual(name);
-		} else if (ontologyClassOfFamixTypeIndividual == null) {
-			// type not defined in source code, e.g. external library or java lib
-			Individual tmp = ontology.getFamixClassWithName(name);
-			ontology.setHasNamePropertyForNamedEntity(name, tmp);
-//			ontology.setHasFullQualifiedNameForType(tmp, name);
-			ontology.setIsExternalTypeProperty(true, tmp);
-			declaredType = tmp;
-		} else if (ontologyClassOfFamixTypeIndividual.equals("FamixClass")) {
-
-			declaredType = ontology.getFamixClassWithName(name);
-		} else if (ontologyClassOfFamixTypeIndividual.equals("Enum")) {
-			declaredType = ontology.getEnumTypeIndividualWithName(name);
-		} else if (ontologyClassOfFamixTypeIndividual.equals("AnnotationType")) {
-			declaredType = ontology.getAnnotationTypeIndividualWithName(name);
-		}
-	}
-
-	private boolean isPrimitiveType(String name) {
-		return name.equals("double") || name.equals("char") || name.equals("byte") || name.equals("String")
-				|| name.equals("int") || name.equals("boolean") || name.equals("Integer");
+			LOG.debug("Unable to resolve type, using simple name instead: %s", name);
+		} 
+        declaredType = ontology.getTypeIndividualFor(name);
 	}
 
 	@Override
