@@ -32,6 +32,14 @@ public class ConstraintViolation {
 	}
 	
 	/**
+     * Returns the list of statements which could not be inferred. 
+     */
+    public List<StatementTriple> getNotInferred() {
+        // return a copy to prevent modifications
+        return new ArrayList<>(notInferred); 
+    }
+	
+	/**
 	 * Builder for ConstraintViolations
 	 */
 	static public class ConstraintViolationBuilder {

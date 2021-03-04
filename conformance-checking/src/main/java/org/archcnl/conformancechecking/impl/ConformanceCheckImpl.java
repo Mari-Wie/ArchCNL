@@ -65,7 +65,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 	}
 	
 	private Model loadModelFromFile(String filename) throws FileNotFoundException {
-		LOG.debug("Reading model from file: " + filename);
+		LOG.debug("Reading model from file: %s", filename);
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		model.read(new FileReader(filename), "");
 		return model;
@@ -75,7 +75,7 @@ public class ConformanceCheckImpl implements IConformanceCheck
 		try 
 		{	
 			File file = new File(outputPath);			
-			LOG.debug("Writing code model to file: " + outputPath);
+			LOG.debug("Writing code model to file: %s", outputPath);
 			codemodel.write(new FileOutputStream(file));
 		} 
 		catch (FileNotFoundException e) 
