@@ -56,14 +56,14 @@ Note: Try to keep issues fine-grained and small. This leads to fewer changes in 
 
 Issues can be closed when
 
-- the problem is solved, e.g. when an associated pull request solving the problem has benn merged into master, when the wiki has been updated, etc.
+- the problem is solved, e.g. when an associated pull request solving the problem has been merged into master, when the wiki has been updated, etc.
 - the issue is a duplicate of another issue or concerns a nonexistent problem. Communicate (preferably in the comment section) with the person who opened the issue before doing so to verify that the problem is indeed duplicate/nonexistent.  
 - the problem is considered not (realistically) solveable after thorough examination. Write the reasons into the issue's comment section. The issue should only be closed with the approbal of at least one other contributor.     
 
 ## Pull Requests
 
 - Work in a feature branch. Your branch should have a concise, unique, and meaningful name. Examples are `feature/feature-name`, `bugfix/bug-description`, and `refactor/some-class-or-module`.
-- When you work is done (see below), push your branch (if you have not done so already) and create a pull request.
+- When your work is done (see below), push your branch (if you have not done so already) and create a pull request.
 - Add a meaningful title and brief description. When your branch closes the issue number *X*, write `Closes #X` into the description. This tells Github to close the issue when the pull request is merged. If the issue is already describing the problem, the pull request does not have to contain a redundant description.  
 - When enough other contributors are around (e.g. because a master project is currently running *hint* *hint*), let someone else review your changes. Incorporate your reviewer's feedback and inform him/her when you are done. The pull request is merged by the reviewer.   
 
@@ -75,20 +75,21 @@ Pull requests are only eligable for merging when
 - no bugs are introduced,
 - the pipeline is "green", i.e. all tests are passing,
 - new code is covered by tests in a reasonable way (100% code coverage is not necessary, but important parts should be tested),
-- no significant decrease in code quality is introduced ("leave the code a bit cleaner than you found it"),
-- the documentation is updated when necessary. The wiki should only be updated once the pull request is merged.
+- no significant decrease in code quality is introduced (Boy-Scout-Rule: "leave the campside (=code) a bit cleaner than you found it"),
+- the documentation is updated when necessary. The wiki should only be updated once the pull request is merged. Please state a suggestion for documentation changes with teh pull-request.
 
 ### Review Process
 
 Reviewers have to check whether the definition of done is complied with. Do not look only at functional correctness but also at other code quality attributes. These questions can be used as a guidance:
 
-- Is the documentation up-to-date? 
 - Have new classes, methods, variables, etc. meaningful names? 
 - When an existing class/method/... was modified without changing its name, is the old name still fitting? 
 - Are the tests reasonable (and present)?
+- Is the documentation up-to-date? (Change suggestion is made)
 - Are new code smells introduced?
 - Are common pitfalls (e.g. null pointers, missing files, ...) present?
-- Is error handling present?
+- Is error / exception handling present?
+- Are logging messages included?
 - Are the naming conventions, logging conventions, ... (see wiki) complied with? 
 - ...
 
@@ -96,7 +97,7 @@ Reviewers have to check whether the definition of done is complied with. Do not 
 
 ArchCNL's documentation is split three-fold:
 
-1. Java and XML comments in the code, ontologies, pom files, log4j configuration files, etc. These comments should point out important things directly where it matters. (Simplified) example:
+1. Java and XML comments in the code, ontologies, pom files, log4j configuration files, etc. These comments should point out "important things" directly where it matters. "Important things" are not HOW the code is written (code should be self-explanatory), but WHY it is written that way. (Simplified) example:
 ```Java
 public void someMethod(int importantParameter) {
   // PoorlyWrittenLibrary has problems with integers, but work fine with longs
