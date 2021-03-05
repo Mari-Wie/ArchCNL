@@ -55,7 +55,7 @@ public class ConformanceCheckOntology
 	public void storeArchitectureRule(ArchitectureRule rule) 
 	{
 		LOG.trace("Starting storeArchitectureRule ...");
-		LOG.debug("Storing architecture rule: %s", rule.getCnlSentence());
+		LOG.debug("Storing architecture rule:" + rule.getCnlSentence());
 		architectureRuleIndividual = ConformanceCheckOntologyClassesAndProperties.getArchitectureRuleIndividual(model,
 				rule.getId());
 
@@ -74,8 +74,8 @@ public class ConformanceCheckOntology
 	public void storeConformanceCheckingResultForRule(Model codemodel, ArchitectureRule rule,
 			ConstraintViolation violation) 
 	{
-		LOG.trace("Starting storeConformanceCheckingResultForRule: %s", rule.getCnlSentence());
-		LOG.debug("Storing conformance checking results for architecture rule: %s", rule.getCnlSentence());
+		LOG.trace("Starting storeConformanceCheckingResultForRule: " + rule.getCnlSentence());
+		LOG.debug("Storing conformance checking results for architecture rule: " + rule.getCnlSentence());
 		LOG.debug("Creating ArchitectureViolation ...");
 		architectureViolationIndividual = ConformanceCheckOntologyClassesAndProperties
 				.getArchitectureViolationIndividual(model);
@@ -97,7 +97,7 @@ public class ConformanceCheckOntology
 	private void connectCodeElementsWithViolations(Model codeModel, ArchitectureRule rule,
 			ConstraintViolation violation) 
 	{
-		LOG.trace("Starting connectCodeElementsWithViolations: %s", rule.getCnlSentence());
+		LOG.trace("Starting connectCodeElementsWithViolations: " + rule.getCnlSentence());
 		
 		Individual proofIndividual = addNewProof();
 		storeRuleType(rule);
@@ -126,8 +126,8 @@ public class ConformanceCheckOntology
         LOG.debug("Adding asserted statements ...");
 		for (StatementTriple triple : violation.getAsserted()) 
 		{
-			LOG.debug("Adding asserted statement to proof: %s %s %s", triple.getSubject(), triple.getPredicate(), triple.getObject());
-			
+		    LOG.debug("Adding asserted statement to proof: " + triple.getSubject() + " " + triple.getPredicate() + " " + triple.getObject());
+
 			Individual assertedStatement = ConformanceCheckOntologyClassesAndProperties.getAssertedStatement(model);
 			addTripleToStatement(codeModel, triple, assertedStatement);
 			proofIndividual.addProperty(ConformanceCheckOntologyClassesAndProperties.getHasAssertedStatement(model), assertedStatement);
@@ -138,7 +138,7 @@ public class ConformanceCheckOntology
         LOG.debug("Adding not inferred statements ...");
 		for (StatementTriple triple : violation.getNotInferred()) 
         {
-            LOG.debug("Adding not inferred statement to proof: %s %s %s", triple.getSubject(), triple.getPredicate(), triple.getObject());
+            LOG.debug("Adding not inferred statement to proof: " + triple.getSubject() + " " + triple.getPredicate() + " " + triple.getObject());
 
             Individual notInferredStatement = ConformanceCheckOntologyClassesAndProperties.getNotInferredStatement(model);
             addTripleToStatement(codeModel, triple, notInferredStatement);

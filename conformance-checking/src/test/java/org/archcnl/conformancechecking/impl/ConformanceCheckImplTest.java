@@ -30,108 +30,73 @@ public class ConformanceCheckImplTest {
 		ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE, "architecture0.owl");
 		ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION, "architecture1.owl");
 		
-		List<ConstraintViolation> violations = new ArrayList<>();
+		List<ConstraintViolation> violations1 = new ArrayList<>();
 		ConstraintViolationBuilder violation = new ConstraintViolationBuilder();
 		violation.addViolation(
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0", 
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1");
-		violation.addViolation(
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://www.w3.org/2000/01/rdf-schema#domain", 
-				"http://www.arch-ont.org/ontologies/architecture.owl#LayerOne");
-		violation.addViolation(
 				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1", 
 				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
 				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
-		violation.addViolation(
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://www.w3.org/2000/01/rdf-schema#range", 
-				"http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
-		violation.addViolation(
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1", 
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
-		violations.add(violation.build());
 		
+		
+		violation.addNotInferredStatement(
+		        "http://arch-ont.org/ontologies/famix.owl#TestLayerOne0", 
+		        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", 
+		        "http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
+		violations1.add(violation.build());
+
+		List<ConstraintViolation> violations2 = new ArrayList<>();
 		ConstraintViolationBuilder violation2 = new ConstraintViolationBuilder();
 		violation2.addViolation(
 				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1", 
 				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
 				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
 		violation2.addViolation(
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://www.w3.org/2000/01/rdf-schema#domain", 
+				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0", 
+				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", 
 				"http://www.arch-ont.org/ontologies/architecture.owl#LayerOne");
 		violation2.addViolation(
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0", 
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1");
-		violation2.addViolation(
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://www.w3.org/2000/01/rdf-schema#range", 
+				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1", 
+				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", 
 				"http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
-		violation2.addViolation(
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0", 
-				"http://www.arch-ont.org/ontologies/architecture.owl#use", 
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1");
-		violations.add(violation2.build());
+		violations2.add(violation2.build());
 		
-		CheckedRule r0 = new CheckedRule(rule0, new ArrayList<>());
-		CheckedRule r1 = new CheckedRule(rule1, violations);
+		CheckedRule r0 = new CheckedRule(rule0, violations1);
+		CheckedRule r1 = new CheckedRule(rule1, violations2);
 		
-		// validate the results for the 1st rule:
-		final String outputPath0 = "src/test/resources/check0.owl";
-		check.validateRule(r0, "./src/test/resources/tmp0.owl", outputPath0);
+		final String outputPath = "src/test/resources/check.owl";
+		check.validateRule(r0, "./src/test/resources/mapped.owl", outputPath);
+        check.validateRule(r1, "./src/test/resources/mapped.owl", outputPath);
 		
-		OntModel expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		expected0.read(new FileReader("./src/test/resources/check0-expected.owl"), "");
+		OntModel expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		expected.read(new FileReader("./src/test/resources/check-expected.owl"), "");
 		
-		OntModel actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		actual0.read(new FileReader(outputPath0), "");
+		OntModel actual = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		actual.read(new FileReader(outputPath), "");
 		
 		// workaround: remove the checking date
-		expected0.getProperty(
-				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(expected0), 
-				ConformanceCheckOntologyClassesAndProperties.getDateProperty(expected0))
+		expected.getProperty(
+				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(expected), 
+				ConformanceCheckOntologyClassesAndProperties.getDateProperty(expected))
 		.remove();
-		actual0.getProperty(
-				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(actual0), 
-				ConformanceCheckOntologyClassesAndProperties.getDateProperty(actual0)).
+		actual.getProperty(
+				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(actual), 
+				ConformanceCheckOntologyClassesAndProperties.getDateProperty(actual)).
 		remove();
+
+		System.out.println("IN EXPECTED BUT NOT IN ACTUAL:");
+		expected.listStatements().forEachRemaining((s) -> {
+		   if (!actual.contains(s)) {
+		       System.out.println(s.toString());
+		   }
+		});
+
+        System.out.println("IN ACTUAL BUT NOT IN EXPECTED:");
+		actual.listStatements().forEachRemaining((s) -> {
+	           if (!expected.contains(s)) {
+	               System.out.println(s.toString());
+	           }
+	        });
 		
-		actual0.listNamedClasses().forEachRemaining(i -> System.out.println(i.toString()));
-        actual0.listObjectProperties().forEachRemaining(i -> System.out.println(i.toString()));
-		
-		//assertTrue(expected0.isIsomorphicWith(actual0)); // TODO
-		
-		// 2nd rule:
-		final String outputPath1 = "src/test/resources/check1.owl";
-		check.validateRule(r1, "./src/test/resources/tmp1.owl", outputPath1);
-		
-		OntModel expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		expected1.read(new FileReader("./src/test/resources/check1-expected.owl"), "");
-		
-		OntModel actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		actual1.read(new FileReader(outputPath1), "");
-		
-		// workaround: remove the checking date
-		expected1.getProperty(
-				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(expected1), 
-				ConformanceCheckOntologyClassesAndProperties.getDateProperty(expected1))
-		.remove();
-		actual1.getProperty(
-				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(actual1), 
-				ConformanceCheckOntologyClassesAndProperties.getDateProperty(actual1))
-		.remove();
-		// remove it twice, because there are two statements: one originates from the input file (tmp1.owl),
-		// the other one is generated by the check object. Under normal conditions, both statements would be
-		// equivalent and thus the duplicate would not occur.
-		actual1.getProperty(
-				ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(actual1), 
-				ConformanceCheckOntologyClassesAndProperties.getDateProperty(actual1))
-		.remove();
-		
-		//assertTrue(expected1.isIsomorphicWith(actual1)); // TODO
+		assertTrue(expected.isIsomorphicWith(actual)); 
 	}
 }
