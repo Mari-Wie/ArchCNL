@@ -48,7 +48,7 @@ Note: Try to keep issues fine-grained and small. This leads to fewer changes in 
   | project management | The issue addresses an organizational problem |
   | restructuring/improvement | An **existing** feature should be improved (in quality)** |
   
-  \*: ArchCNL is currently being developed by the SWK working group of the department of informatics from the university of Hamburg, Germany. These labels are used for internal organization. Please do not use or change them if you are not a member of SWK.   
+  \*: ArchCNL is currently being developed by the SWK working group (https://www.inf.uni-hamburg.de/en/inst/ab/swk/home.html) of the department of informatics from the university of Hamburg, Germany. These labels are used for internal organization. Please do not use or change them if you are not a member of SWK.   
   \*\*: Refactorings, reengineerings, and optimisations are typical examples.
   
 
