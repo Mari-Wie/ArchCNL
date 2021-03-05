@@ -18,19 +18,19 @@ Changes to this document can be proposed at any time (via a pull request).
 
 - The [Wiki](https://github.com/Mari-Wie/ArchCNL/wiki) contains useful information. Questions like how to start ArchCNL, how to build it, what the different packages do, etc. are answered there. Naming conventions and design decisions are also documented there. 
 - The master should *always* be runnable. Work in branches and create a pull request when you are done.
-- When you want to work on something, assign yourself to the corresponding issue. If someone else is already working on it, ask them whether it is OK when you help out. If no existing issue covers your problem or feature, open a new one and assign yourself to it. This allows everyone to keep track of who is working on what. Wiki pages can be edited without opening  an issue. 
+- When you want to work on something, assign yourself to the corresponding issue. If someone else is already working on it, ask them whether it is OK to help out. If no existing issue covers your problem or feature, open a new one and assign yourself to it. This allows everyone to keep track of who is working on what. Wiki pages can be edited without opening an issue. 
 
 ## Opening Issues
 
-Note: Try to kepp issues fine-grained and small. This leads to fewer changes in the corresponding pull requests and thus less merge conflicts. Large issues can be implemented by several smaller sub-issues as long as each increment results in a runnable software (basic idea for CI/CD).
+Note: Try to keep issues fine-grained and small. This leads to fewer changes in the corresponding pull requests and thus less merge conflicts. Large issues can be implemented by several smaller sub-issues as long as each increment results in a runnable software (basic idea for CI/CD).
 
 1. Make sure that no exisiting issue covers the same problem.
 2. Find a brief yet meaningful title.
 3. Further describe the problem in the description. Other people should be able to understand
   - what the problem is,
   - why it is relevant, 
-  - which parts of the project (code or documentation, when code is affected which module?), and 
-  - whether there are a proposed solution, helpful links, etc.
+  - which parts of the project (code or documentation, when code is affected which module?) are affected, and 
+  - whether there are proposed solutions, helpful links, etc.
 4. If you want to work on the issue yourself *right now*, assign yourself to it.  
 5. Add useful labels. These labels are in use as of 2021-03-04:
   
