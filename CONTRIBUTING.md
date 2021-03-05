@@ -17,7 +17,7 @@ Changes to this document can be proposed at any time (via a pull request).
 ## General Remarks
 
 - The [Wiki](https://github.com/Mari-Wie/ArchCNL/wiki) contains useful information. Questions like how to start ArchCNL, how to build it, what the different packages do, etc. are answered there. Naming conventions and design decisions are also documented there. 
-- The master should *always* runnable. Work in branches and create a pull request when you are done.
+- The master should *always* be runnable. Work in branches and create a pull request when you are done.
 - When you want to work on something, assign yourself to the corresponding issue. If someone else is already working on it, ask them whether it is OK when you help out. If no existing issue covers your problem or feature, open a new one and assign yourself to it. This allows everyone to keep track of who is working on what. Wiki pages can be edited without opening  an issue. 
 
 ## Opening Issues
