@@ -11,6 +11,8 @@ public class ConformanceCheckOntologyClassesAndProperties
 	private static final String namespace = "http://arch-ont.org/ontologies/architectureconformance#";
 	private static int violationId;
 	private static int proofId;
+	private static int assertedId;
+    private static int notInferredId;
 
 	public static String getOntologyNamespace() {
 		return namespace;
@@ -30,8 +32,7 @@ public class ConformanceCheckOntologyClassesAndProperties
 	public static Individual getArchitectureRuleIndividual(OntModel model, int id) 
 	{
 		OntClass ruleClass = model.getOntClass(namespace + "ArchitectureRule");
-		Individual ruleIndividual = model.createIndividual(namespace + "ArchitectureRule" + id, ruleClass);
-		return ruleIndividual;
+		return model.createIndividual(namespace + "ArchitectureRule" + id, ruleClass);
 	}
 
 	public static DatatypeProperty getCNLRepresentationProperty(OntModel model) 
@@ -78,17 +79,6 @@ public class ConformanceCheckOntologyClassesAndProperties
 		return model.getDatatypeProperty(namespace + "hasViolationText");
 	}
 	
-	public static ObjectProperty getCodeElementIsPartOfViolationSubject(OntModel model) 
-	{
-		
-		return model.getObjectProperty(namespace + "isPartOfViolationSubject");
-	}
-	
-	public static ObjectProperty getCodeElementIsPartOfViolationObject(OntModel model) 
-	{
-		return model.getObjectProperty(namespace + "isPartOfViolationObject");
-	}
-	
 	public static DatatypeProperty getHasRuleTypeProperty(OntModel model)
 	{
 		return model.getDatatypeProperty(namespace + "hasRuleType");
@@ -111,5 +101,40 @@ public class ConformanceCheckOntologyClassesAndProperties
 	}
 	
 	
-
+	public static Individual getAssertedStatement(OntModel model) 
+    {
+        OntClass statementClass = model.getOntClass(namespace + "AssertedStatement");
+        return model.createIndividual(namespace + "AssertedStatement" + assertedId++, statementClass);
+    }
+	
+	public static Individual getNotInferredStatement(OntModel model) 
+    {
+        OntClass statementClass = model.getOntClass(namespace + "NotInferredStatement");
+        return model.createIndividual(namespace + "NotInferredStatement" + notInferredId++, statementClass);
+    }
+	
+	public static ObjectProperty getHasSubject(OntModel model) 
+    {
+        return model.getObjectProperty(namespace + "hasSubject");
+    }
+    
+    public static ObjectProperty getHasPredicate(OntModel model) 
+    {
+        return model.getObjectProperty(namespace + "hasPredicate");
+    }
+    
+    public static ObjectProperty getHasObject(OntModel model) 
+    {
+        return model.getObjectProperty(namespace + "hasObject");
+    }
+    
+    public static ObjectProperty getHasAssertedStatement(OntModel model) 
+    {
+        return model.getObjectProperty(namespace + "hasAssertedStatement");
+    }
+    
+    public static ObjectProperty getHasNotInferredStatement(OntModel model) 
+    {
+        return model.getObjectProperty(namespace + "hasNotInferredStatement");
+    }
 }

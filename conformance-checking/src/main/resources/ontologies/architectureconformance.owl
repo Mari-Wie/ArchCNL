@@ -6,18 +6,18 @@
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-  
+
     <owl:Ontology rdf:about="http://arch-ont.org/ontologies/architectureconformance.owl"/>
-    
-<!-- This part of the native implemantation led to an error message without any impact 
+
+<!-- This part of the native implemantation led to an error message without any impact
 	 on the execution fo the programm. Commenting removed this error message.
 
     <owl:Ontology rdf:about="http://arch-ont.org/ontologies/architectureconformance">
         <owl:imports rdf:resource="http://www.arch-ont.org/ontologies/git.owl"/>
     </owl:Ontology>
- -->   
+ -->
 
-    <!-- 
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Object Properties
@@ -25,88 +25,70 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasDetected -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasDetected">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="#hasDetected">
+        <rdfs:domain rdf:resource="#ConformanceCheck"/>
+        <rdfs:range rdf:resource="#ArchitectureViolation"/>
     </owl:ObjectProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasViolation -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasViolation">
-        <owl:inverseOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#violates"/>
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="#hasViolation">
+        <owl:inverseOf rdf:resource="#violates"/>
+        <rdfs:domain rdf:resource="#ArchitectureRule"/>
+        <rdfs:range rdf:resource="#ArchitectureViolation"/>
     </owl:ObjectProperty>
-    
 
+    <owl:ObjectProperty rdf:about="#hasSubject">
+      <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+      <rdfs:domain rdf:resource="#Statement"/>
+    </owl:ObjectProperty>
 
-    <!-- http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationObject -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationObject">
+    <owl:ObjectProperty rdf:about="#hasPredicate">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="#Statement"/>
     </owl:ObjectProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationSubject -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#isPartOfViolationSubject">
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="#hasObject">
+      <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+      <rdfs:domain rdf:resource="#Statement"/>
     </owl:ObjectProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#isProofedBy -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#isProofedBy">
-        <owl:inverseOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#proofs"/>
+    <owl:ObjectProperty rdf:about="#hasAssertedStatement">
+      <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+      <rdfs:domain rdf:resource="#Proof"/>
+      <rdfs:range rdf:resource="#AssertedStatement"/>
     </owl:ObjectProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#proofs -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#proofs">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#Proof"/>
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
+    <owl:ObjectProperty rdf:about="#hasNotInferredStatement">
+      <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+      <rdfs:domain rdf:resource="#Proof"/>
+      <rdfs:range rdf:resource="#NotInferredStatement"/>
     </owl:ObjectProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#validates -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#validates">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
+    <owl:ObjectProperty rdf:about="#isProofedBy">
+        <owl:inverseOf rdf:resource="#proofs"/>
     </owl:ObjectProperty>
-    
 
+    <owl:ObjectProperty rdf:about="#proofs">
+        <rdfs:domain rdf:resource="#Proof"/>
+        <rdfs:range rdf:resource="#ArchitectureViolation"/>
+    </owl:ObjectProperty>
 
-    <!-- http://arch-ont.org/ontologies/architectureconformance#validatesVersion -->
+    <owl:ObjectProperty rdf:about="#validates">
+        <rdfs:domain rdf:resource="#ConformanceCheck"/>
+        <rdfs:range rdf:resource="#ArchitectureRule"/>
+    </owl:ObjectProperty>
 
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#validatesVersion">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
+    <owl:ObjectProperty rdf:about="#validatesVersion">
+        <rdfs:domain rdf:resource="#ConformanceCheck"/>
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/history.owl#Version"/>
     </owl:ObjectProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#violates -->
-
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#violates">
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
+    <owl:ObjectProperty rdf:about="#violates">
+        <rdfs:range rdf:resource="#ArchitectureRule"/>
     </owl:ObjectProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -114,77 +96,44 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasCheckingDate -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasCheckingDate">
+    <owl:DatatypeProperty rdf:about="#hasCheckingDate">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
+        <rdfs:domain rdf:resource="#ConformanceCheck"/>
     </owl:DatatypeProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasDescription -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasDescription">
+    <owl:DatatypeProperty rdf:about="#hasDescription">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
 
+    <owl:DatatypeProperty rdf:about="#hasExplanationText"/>
 
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasExplanationText -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasExplanationText"/>
-    
-
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasProofText -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasProofText">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#Proof"/>
+    <owl:DatatypeProperty rdf:about="#hasProofText">
+        <rdfs:domain rdf:resource="#Proof"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasRuleID -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasRuleID">
+    <owl:DatatypeProperty rdf:about="#hasRuleID">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
     </owl:DatatypeProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasRuleRepresentation -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasRuleRepresentation">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
+    <owl:DatatypeProperty rdf:about="#hasRuleRepresentation">
+        <rdfs:domain rdf:resource="#ArchitectureRule"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
         <rdfs:comment>Constitutes the CNL representation of the architecture rule, e.g. Every Entity must define an Identifier.</rdfs:comment>
     </owl:DatatypeProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasRuleType -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasRuleType">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
+    <owl:DatatypeProperty rdf:about="#hasRuleType">
+        <rdfs:domain rdf:resource="#ArchitectureRule"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#hasViolationText -->
-
-    <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/architectureconformance#hasViolationText">
+    <owl:DatatypeProperty rdf:about="#hasViolationText">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Classes
@@ -192,48 +141,40 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+    <owl:Class rdf:about="#ArchitectureConformanceCheckingThing"/>
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing -->
-
-    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
-    
-
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule -->
-
-    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule">
-        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="#ArchitectureRule">
+        <rdfs:subClassOf rdf:resource="#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation -->
-
-    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation">
-        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="#ArchitectureViolation">
+        <rdfs:subClassOf rdf:resource="#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck -->
-
-    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck">
-        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="#ConformanceCheck">
+        <rdfs:subClassOf rdf:resource="#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
-    
 
-
-    <!-- http://arch-ont.org/ontologies/architectureconformance#Proof -->
-
-    <owl:Class rdf:about="http://arch-ont.org/ontologies/architectureconformance#Proof">
-        <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/architectureconformance#ArchitectureConformanceCheckingThing"/>
+    <owl:Class rdf:about="#Proof">
+        <rdfs:subClassOf rdf:resource="#ArchitectureConformanceCheckingThing"/>
     </owl:Class>
-    
 
+    <owl:Class rdf:about="#AssertedStatement">
+        <rdfs:subClassOf rdf:resource="#ArchitectureConformanceCheckingThing"/>
+    </owl:Class>
 
-    <!-- 
+    <owl:Class rdf:about="#NotInferredStatement">
+        <rdfs:subClassOf rdf:resource="#ArchitectureConformanceCheckingThing"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Statement">
+      <owl:unionOf rdf:parseType="Collection">
+        <owl:Class rdf:about="#AssertedStatement"/>
+        <owl:Class rdf:about="#NotInferredStatement"/>
+      </owl:unionOf>
+    </owl:Class>
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // General axioms
@@ -244,15 +185,12 @@
     <rdf:Description>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureRule"/>
-            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#ArchitectureViolation"/>
-            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#ConformanceCheck"/>
-            <rdf:Description rdf:about="http://arch-ont.org/ontologies/architectureconformance#Proof"/>
+            <rdf:Description rdf:about="#ArchitectureRule"/>
+            <rdf:Description rdf:about="#ArchitectureViolation"/>
+            <rdf:Description rdf:about="#ConformanceCheck"/>
+            <rdf:Description rdf:about="#Proof"/>
+            <rdf:Description rdf:about="#AssertedStatement"/>
+            <rdf:Description rdf:about="#NotInferredStatement"/>
         </owl:members>
     </rdf:Description>
 </rdf:RDF>
-
-
-
-<!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
-
