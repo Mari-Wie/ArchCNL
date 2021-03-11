@@ -1,5 +1,3 @@
 package examples;
 
-public interface Interface {
-
-}
+public interface Interface {}

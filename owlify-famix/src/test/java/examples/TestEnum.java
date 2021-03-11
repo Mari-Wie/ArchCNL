@@ -1,5 +1,3 @@
 package examples;
 
-public enum TestEnum {
-
-}
+public enum TestEnum {}

@@ -7,222 +7,236 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
 public class FamixOntClassesAndProperties {
-	private final String famixOntologyNamespace = "http://arch-ont.org/ontologies/famix.owl#";
-	
-	public String getOntologyNamespace() {
-		return famixOntologyNamespace;
-	}
-	
-	public Individual createNamespaceIndividual(OntModel model, long namespaceId) {
-		OntClass namespaceClass = model.getOntClass(famixOntologyNamespace + "Namespace");
-		return model.createIndividual(this.famixOntologyNamespace + "Namespace" + namespaceId, namespaceClass);
-	}
-	
-	public Individual getFamixClassIndividual(OntModel model, String name, long classID) {
-		OntClass famixClass = model.getOntClass(famixOntologyNamespace + "FamixClass");
-		return model.createIndividual(this.famixOntologyNamespace + name + classID, famixClass);
-	}
+    private final String famixOntologyNamespace = "http://arch-ont.org/ontologies/famix.owl#";
 
-	public Individual getAnnotationTypeIndividual(OntModel model, String annotationTypeName, long annotationTypeID) {
-		OntClass annotationClass = model.getOntClass(famixOntologyNamespace + "AnnotationType");
-		return model.createIndividual(this.famixOntologyNamespace + annotationTypeName + annotationTypeID, annotationClass);
-	}
+    public String getOntologyNamespace() {
+        return famixOntologyNamespace;
+    }
 
-	public Individual getEnumTypeIndividual(OntModel model, String enumTypeName, long enumTypeID) {
-		OntClass enumClass = model.getOntClass(famixOntologyNamespace + "Enum");
-		return model.createIndividual(this.famixOntologyNamespace + enumTypeName + enumTypeID, enumClass);
-	}
+    public Individual createNamespaceIndividual(OntModel model, long namespaceId) {
+        OntClass namespaceClass = model.getOntClass(famixOntologyNamespace + "Namespace");
+        return model.createIndividual(
+                this.famixOntologyNamespace + "Namespace" + namespaceId, namespaceClass);
+    }
 
-	public DatatypeProperty getHasNameProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace + "hasName");
-	}
+    public Individual getFamixClassIndividual(OntModel model, String name, long classID) {
+        OntClass famixClass = model.getOntClass(famixOntologyNamespace + "FamixClass");
+        return model.createIndividual(this.famixOntologyNamespace + name + classID, famixClass);
+    }
 
-	public DatatypeProperty getIsInterfaceProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace + "isInterface");
-	}
+    public Individual getAnnotationTypeIndividual(
+            OntModel model, String annotationTypeName, long annotationTypeID) {
+        OntClass annotationClass = model.getOntClass(famixOntologyNamespace + "AnnotationType");
+        return model.createIndividual(
+                this.famixOntologyNamespace + annotationTypeName + annotationTypeID,
+                annotationClass);
+    }
 
-	public DatatypeProperty getHasModifierProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace + "hasModifier");
-	}
+    public Individual getEnumTypeIndividual(OntModel model, String enumTypeName, long enumTypeID) {
+        OntClass enumClass = model.getOntClass(famixOntologyNamespace + "Enum");
+        return model.createIndividual(
+                this.famixOntologyNamespace + enumTypeName + enumTypeID, enumClass);
+    }
 
-	public ObjectProperty getHasAnnotationInstanceProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationInstance");
-	}
+    public DatatypeProperty getHasNameProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "hasName");
+    }
 
-	public Individual getInheritanceIndividual(OntModel model, long inheritanceID) {
-		OntClass inheritanceClass = model.getOntClass(famixOntologyNamespace + "Inheritance");
-		return model.createIndividual(famixOntologyNamespace + "Inheritance"+inheritanceID,inheritanceClass);
-	}
+    public DatatypeProperty getIsInterfaceProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "isInterface");
+    }
 
-	public ObjectProperty getSubClassProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"hasSubClass");
-	}
+    public DatatypeProperty getHasModifierProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "hasModifier");
+    }
 
-	public ObjectProperty getSuperClassProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"hasSuperClass");
-	}
+    public ObjectProperty getHasAnnotationInstanceProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationInstance");
+    }
 
-	public Individual getAnnotationInstanceIndividual(OntModel model, long annotationInstanceID) {
-		OntClass annotationInstanceClass = model.getOntClass(famixOntologyNamespace+"AnnotationInstance");
-		return model.createIndividual(famixOntologyNamespace + "AnnotationInstance" + annotationInstanceID, annotationInstanceClass);
-	}
+    public Individual getInheritanceIndividual(OntModel model, long inheritanceID) {
+        OntClass inheritanceClass = model.getOntClass(famixOntologyNamespace + "Inheritance");
+        return model.createIndividual(
+                famixOntologyNamespace + "Inheritance" + inheritanceID, inheritanceClass);
+    }
 
-	public ObjectProperty getHasAnnotationTypeProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationType");		
-	}
-	
-	public Individual getAttributeIndividual(OntModel model, long attributeID) {
-		OntClass attribute = model.getOntClass(famixOntologyNamespace+"Attribute");
-		return model.createIndividual(famixOntologyNamespace + "Attribute" + attributeID, attribute);
-	}
+    public ObjectProperty getSubClassProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasSubClass");
+    }
 
-	public ObjectProperty getDefinesAttributeObjectProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "definesAttribute");
-	}
+    public ObjectProperty getSuperClassProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasSuperClass");
+    }
 
-	public ObjectProperty getHasDeclaredTypeProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasDeclaredType");
-	}
+    public Individual getAnnotationInstanceIndividual(OntModel model, long annotationInstanceID) {
+        OntClass annotationInstanceClass =
+                model.getOntClass(famixOntologyNamespace + "AnnotationInstance");
+        return model.createIndividual(
+                famixOntologyNamespace + "AnnotationInstance" + annotationInstanceID,
+                annotationInstanceClass);
+    }
 
-	public Individual getPrimitiveTypeIndividual(OntModel model, String primitiveTypeName) {
-		return model.getIndividual(famixOntologyNamespace+primitiveTypeName);
-	}
+    public ObjectProperty getHasAnnotationTypeProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationType");
+    }
 
-	public Individual getMethodIndividual(OntModel model, long methodId) {
-		OntClass method = model.getOntClass(famixOntologyNamespace + "Method");
-		return model.createIndividual(famixOntologyNamespace+"Method"+methodId,method);
-	}
+    public Individual getAttributeIndividual(OntModel model, long attributeID) {
+        OntClass attribute = model.getOntClass(famixOntologyNamespace + "Attribute");
+        return model.createIndividual(
+                famixOntologyNamespace + "Attribute" + attributeID, attribute);
+    }
 
-	public DatatypeProperty getHasSignatureProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace+"hasSignature");
-	}
+    public ObjectProperty getDefinesAttributeObjectProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "definesAttribute");
+    }
 
-	public ObjectProperty getDefinesMethodProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "definesMethod");
-	}
+    public ObjectProperty getHasDeclaredTypeProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasDeclaredType");
+    }
 
-	public Individual getParameterIndividual(OntModel model, long parameterId) {
-		OntClass parameter = model.getOntClass(famixOntologyNamespace + "Parameter");
-		return model.createIndividual(famixOntologyNamespace + "Parameter" + parameterId, parameter);
-	}
+    public Individual getPrimitiveTypeIndividual(OntModel model, String primitiveTypeName) {
+        return model.getIndividual(famixOntologyNamespace + primitiveTypeName);
+    }
 
-	public ObjectProperty getDefinesParameterProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"definesParameter");
-	}
+    public Individual getMethodIndividual(OntModel model, long methodId) {
+        OntClass method = model.getOntClass(famixOntologyNamespace + "Method");
+        return model.createIndividual(famixOntologyNamespace + "Method" + methodId, method);
+    }
 
-	public DatatypeProperty getIsExternalProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace+"isExternal");
-	}
+    public DatatypeProperty getHasSignatureProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "hasSignature");
+    }
 
-	public ObjectProperty getHasDeclaredExceptionProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"hasDeclaredException");
-	}
+    public ObjectProperty getDefinesMethodProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "definesMethod");
+    }
 
-	public OntClass getDeclaredExceptionClass(OntModel model) {
-		return model.getOntClass(famixOntologyNamespace+"DeclaredException");
-	}
-	
-	public Individual getDeclaredExceptionIndividual(OntModel model, long declaredId) {
-		OntClass declared = model.getOntClass(famixOntologyNamespace+"DeclaredException");
-		return model.createIndividual(famixOntologyNamespace+"DeclaredException"+declaredId, declared);
-	}
+    public Individual getParameterIndividual(OntModel model, long parameterId) {
+        OntClass parameter = model.getOntClass(famixOntologyNamespace + "Parameter");
+        return model.createIndividual(
+                famixOntologyNamespace + "Parameter" + parameterId, parameter);
+    }
 
-	public Individual getThrownExceptionIndividual(OntModel model, long thrownId) {
-		OntClass thrown = model.getOntClass(famixOntologyNamespace+"ThrownException");
-		return model.createIndividual(famixOntologyNamespace+"ThrownException"+thrownId, thrown);
-		
-	}
+    public ObjectProperty getDefinesParameterProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "definesParameter");
+    }
 
-	public Individual getCaughtExceptionIndividual(OntModel model, long caughtId) {
-		OntClass caught = model.getOntClass(famixOntologyNamespace+"CaughtException");
-		return model.createIndividual(famixOntologyNamespace+"CaughtException"+caughtId, caught);
-		
-	}
+    public DatatypeProperty getIsExternalProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "isExternal");
+    }
 
-	public ObjectProperty getHasCaughtExceptionProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"hasCaughtException");
-	}
-	
-	public ObjectProperty getThrowsExceptionProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"throwsException");
-	}
+    public ObjectProperty getHasDeclaredExceptionProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasDeclaredException");
+    }
 
-	public ObjectProperty getHasDefiningClassProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasDefiningClass");
-	}
+    public OntClass getDeclaredExceptionClass(OntModel model) {
+        return model.getOntClass(famixOntologyNamespace + "DeclaredException");
+    }
 
-	public Individual getLocalVariableIndividual(OntModel model, long localVariableId) {
-		OntClass localVariableClass = model.getOntClass(famixOntologyNamespace + "LocalVariable");
-		return model.createIndividual(famixOntologyNamespace + "LocalVariable" + localVariableId, localVariableClass);
-	}
+    public Individual getDeclaredExceptionIndividual(OntModel model, long declaredId) {
+        OntClass declared = model.getOntClass(famixOntologyNamespace + "DeclaredException");
+        return model.createIndividual(
+                famixOntologyNamespace + "DeclaredException" + declaredId, declared);
+    }
 
-	public DatatypeProperty getIsConstructorProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace + "isConstructor");
-	}
+    public Individual getThrownExceptionIndividual(OntModel model, long thrownId) {
+        OntClass thrown = model.getOntClass(famixOntologyNamespace + "ThrownException");
+        return model.createIndividual(
+                famixOntologyNamespace + "ThrownException" + thrownId, thrown);
+    }
 
-	public ObjectProperty getNamespaceContainsProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "namespaceContains");
-	}
+    public Individual getCaughtExceptionIndividual(OntModel model, long caughtId) {
+        OntClass caught = model.getOntClass(famixOntologyNamespace + "CaughtException");
+        return model.createIndividual(
+                famixOntologyNamespace + "CaughtException" + caughtId, caught);
+    }
 
-	public Individual getAnnotationTypeAttributeIndividual(OntModel model, long id) {
-		OntClass typeAttribute = model.getOntClass(famixOntologyNamespace + "AnnotationTypeAttribute");
-		
-		return model.createIndividual(famixOntologyNamespace + "AnnotationTypeAttribute" + id, typeAttribute);
-	}
+    public ObjectProperty getHasCaughtExceptionProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasCaughtException");
+    }
 
-	public ObjectProperty getHasAnnotationTypeAttributeProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationTypeAttribute");
-	}
+    public ObjectProperty getThrowsExceptionProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "throwsException");
+    }
 
-	public Individual getAnnotationInstanceAttributeIndividual(OntModel model, long id) {
-		OntClass instanceAttribute = model.getOntClass(famixOntologyNamespace + "AnnotationInstanceAttribute");
-		return model.createIndividual(famixOntologyNamespace+"AnnotationInstanceAttribute"+id, instanceAttribute);
-	}
+    public ObjectProperty getHasDefiningClassProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasDefiningClass");
+    }
 
-	public ObjectProperty getHasAnnotationInstanceAttribute(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationInstanceAttribute");
-	}
+    public Individual getLocalVariableIndividual(OntModel model, long localVariableId) {
+        OntClass localVariableClass = model.getOntClass(famixOntologyNamespace + "LocalVariable");
+        return model.createIndividual(
+                famixOntologyNamespace + "LocalVariable" + localVariableId, localVariableClass);
+    }
 
-	public DatatypeProperty getHasValueProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace + "hasValue");
-	}
+    public DatatypeProperty getIsConstructorProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "isConstructor");
+    }
 
-	public DatatypeProperty getHasFullQualifiedNameProperty(OntModel model) {
-		return model.getDatatypeProperty(famixOntologyNamespace + "hasFullQualifiedName");
-	}
+    public ObjectProperty getNamespaceContainsProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "namespaceContains");
+    }
 
-	public ObjectProperty getDefinesVariableProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "definesVariable");
-	}
+    public Individual getAnnotationTypeAttributeIndividual(OntModel model, long id) {
+        OntClass typeAttribute =
+                model.getOntClass(famixOntologyNamespace + "AnnotationTypeAttribute");
 
-	public Individual getInvocationIndividual(OntModel model, long invocationId) {
-		OntClass invocation = model.getOntClass(famixOntologyNamespace + "Invocation");
-		return model.createIndividual(famixOntologyNamespace + "Invocation"+invocationId, invocation);
-	}
+        return model.createIndividual(
+                famixOntologyNamespace + "AnnotationTypeAttribute" + id, typeAttribute);
+    }
 
-	public ObjectProperty getHasReceiverProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "hasReceiver");
-	}
+    public ObjectProperty getHasAnnotationTypeAttributeProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationTypeAttribute");
+    }
 
-	public ObjectProperty getHasSenderProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace+"hasSender");
-	}
+    public Individual getAnnotationInstanceAttributeIndividual(OntModel model, long id) {
+        OntClass instanceAttribute =
+                model.getOntClass(famixOntologyNamespace + "AnnotationInstanceAttribute");
+        return model.createIndividual(
+                famixOntologyNamespace + "AnnotationInstanceAttribute" + id, instanceAttribute);
+    }
 
-	public Individual getImportAssociationIndividual(OntModel model, long importId) {
-		OntClass importAssociation = model.getOntClass(famixOntologyNamespace + "Import");
-		return model.createIndividual(famixOntologyNamespace + "Import" + importId, importAssociation);
-	}
+    public ObjectProperty getHasAnnotationInstanceAttribute(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasAnnotationInstanceAttribute");
+    }
 
-	public ObjectProperty getImportsProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "imports");
-	}
+    public DatatypeProperty getHasValueProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "hasValue");
+    }
 
-	public ObjectProperty getInvokesProperty(OntModel model) {
-		return model.getObjectProperty(famixOntologyNamespace + "invokes");
-	}
+    public DatatypeProperty getHasFullQualifiedNameProperty(OntModel model) {
+        return model.getDatatypeProperty(famixOntologyNamespace + "hasFullQualifiedName");
+    }
 
+    public ObjectProperty getDefinesVariableProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "definesVariable");
+    }
 
+    public Individual getInvocationIndividual(OntModel model, long invocationId) {
+        OntClass invocation = model.getOntClass(famixOntologyNamespace + "Invocation");
+        return model.createIndividual(
+                famixOntologyNamespace + "Invocation" + invocationId, invocation);
+    }
 
-	
+    public ObjectProperty getHasReceiverProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasReceiver");
+    }
 
+    public ObjectProperty getHasSenderProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "hasSender");
+    }
+
+    public Individual getImportAssociationIndividual(OntModel model, long importId) {
+        OntClass importAssociation = model.getOntClass(famixOntologyNamespace + "Import");
+        return model.createIndividual(
+                famixOntologyNamespace + "Import" + importId, importAssociation);
+    }
+
+    public ObjectProperty getImportsProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "imports");
+    }
+
+    public ObjectProperty getInvokesProperty(OntModel model) {
+        return model.getObjectProperty(famixOntologyNamespace + "invokes");
+    }
 }

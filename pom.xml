@@ -1,96 +1,140 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.archcnl</groupId>
-    <artifactId>archcnl</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>ArchCNL</name>
-    <packaging>pom</packaging>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.archcnl</groupId>
+	<artifactId>archcnl</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ArchCNL</name>
+	<packaging>pom</packaging>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <mwe2Version>2.11.3</mwe2Version>
-        <xtextVersion>2.22.0</xtextVersion>
-        <log4jVersion>2.14.0</log4jVersion>
-        <stanfordnlpVersion>3.9.1</stanfordnlpVersion>
-        <commonsioVersion>2.6</commonsioVersion>
-        <apachejenaVersion>3.3.0</apachejenaVersion>
-        <owlapiVersion>5.1.0</owlapiVersion>
-        <junitVersion>4.12</junitVersion>
-        <surefireVersion>2.12.4</surefireVersion>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<mwe2Version>2.11.3</mwe2Version>
+		<xtextVersion>2.22.0</xtextVersion>
+		<log4jVersion>2.14.0</log4jVersion>
+		<stanfordnlpVersion>3.9.1</stanfordnlpVersion>
+		<commonsioVersion>2.6</commonsioVersion>
+		<apachejenaVersion>3.3.0</apachejenaVersion>
+		<owlapiVersion>5.1.0</owlapiVersion>
+		<junitVersion>4.12</junitVersion>
+		<surefireVersion>2.12.4</surefireVersion>
+		<spotlessVersion>2.9.0</spotlessVersion>
+	</properties>
 
-    <profiles>
-        <profile>
-            <id>github-ci</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${surefireVersion}</version>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/FamixOntologyTransformerTest.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+	<profiles>
+		<profile>
+			<id>github-ci</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${surefireVersion}</version>
+						<configuration>
+							<excludes>
+								<exclude>**/FamixOntologyTransformerTest.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefireVersion}</version>
-            </plugin>
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefireVersion}</version>
+			</plugin>
+			<!-- Spotless plugin: Enforce code conventions in the verify phase -->
+			<plugin>
+			<groupId>com.diffplug.spotless</groupId>
+			<artifactId>spotless-maven-plugin</artifactId>
+			<version>${spotlessVersion}</version>
+			<configuration>
+				<!--  UTF-8 encoding is used by default -->
+				<!-- limit format enforcement to just the files changed by this feature branch -->
+				<ratchetFrom>origin/master</ratchetFrom>
+				<formats>
+				<format>
+					<!-- Format for Markdown and XML files and gitignore -->
+					<includes>
+					<include>*.md</include>
+					<include>*.xml</include>
+					<include>.gitignore</include>
+					</includes>
+					<trimTrailingWhitespace/>
+					<endWithNewline/>
+					<indent>
+					<tabs>true</tabs>
+					<spacesPerTab>4</spacesPerTab>
+					</indent>
+				</format>
+				</formats>
+				<!-- Format of Java source files -->
+				<java>
+				<!-- apply a specific flavor of google-java-format -->
+				<googleJavaFormat>
+					<version>1.8</version>
+					<style>AOSP</style>
+				</googleJavaFormat>
+				<!-- Spotless can also generate license headers, but we don't use this currently -->
+				</java>
+			</configuration>
+			<executions>
+				<execution>
+				<goals>
+					<goal>check</goal>
+				</goals>
+				</execution>
+			</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-    <modules>
-        <module>architecture-description-parser</module>
-        <module>architecture-reasoning</module>
-        <module>common</module>
-        <module>conformance-checking</module>
-        <module>org.architecture.cnl.parent</module>
-        <module>owl-creator</module>
-        <module>owlify</module>
-        <module>owlify-famix</module>
-        <module>stardog-wrapper</module>
-        <module>toolchain</module>
-    </modules>
+	<modules>
+		<module>architecture-description-parser</module>
+		<module>architecture-reasoning</module>
+		<module>common</module>
+		<module>conformance-checking</module>
+		<module>org.architecture.cnl.parent</module>
+		<module>owl-creator</module>
+		<module>owlify</module>
+		<module>owlify-famix</module>
+		<module>stardog-wrapper</module>
+		<module>toolchain</module>
+	</modules>
 
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4jVersion}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4jVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4jVersion}</version>
-        </dependency>
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junitVersion}</version>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 </project>
