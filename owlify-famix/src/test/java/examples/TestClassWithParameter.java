@@ -1,7 +1,6 @@
 package examples;
 
 public class TestClassWithParameter<E> {
-	
-	private E bla;
 
+    private E bla;
 }

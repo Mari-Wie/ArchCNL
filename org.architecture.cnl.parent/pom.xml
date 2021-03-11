@@ -31,7 +31,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			
+
 			<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>

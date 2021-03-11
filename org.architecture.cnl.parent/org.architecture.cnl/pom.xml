@@ -40,7 +40,7 @@
 				<groupId>org.eclipse.xtend</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
 			</plugin>
-	
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -209,7 +209,7 @@
 			<artifactId>xtext-antlr-generator</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- Add these dependencies when rebuilding the generated code from the grammar: -->
 		<dependency>
 			<groupId>org.archcnl</groupId>
@@ -218,11 +218,11 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
 		<dependency>
-		    <groupId>com.google.inject</groupId>
-		    <artifactId>guice</artifactId>
-		    <version>4.2.3</version>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>4.2.3</version>
 		</dependency>
-		
+
 		<!-- ...up to here -->
 	</dependencies>
 </project>
