@@ -60,8 +60,8 @@
 			<version>${spotlessVersion}</version>
 			<configuration>
 				<!--  UTF-8 encoding is used by default -->
-				<!-- optional: limit format enforcement to just the files changed by this feature branch -->
-				<!-- <ratchetFrom>origin/main</ratchetFrom> -->
+				<!-- limit format enforcement to just the files changed by this feature branch -->
+				<ratchetFrom>origin/main</ratchetFrom>
 				<formats>
 				<format>
 					<!-- Format for Markdown and XML files and gitignore -->
