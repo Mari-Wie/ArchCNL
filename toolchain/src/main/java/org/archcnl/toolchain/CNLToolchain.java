@@ -2,6 +2,7 @@ package org.archcnl.toolchain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -98,13 +99,13 @@ public class CNLToolchain {
             Path rulesPath = Paths.get(projectDirectory, rulesFile);
             tool.execute(rulesPath, projectPath, context);
         } catch (FileNotFoundException e) {
-            LOG.error("File not found", e);
-            // TODO Auto-generated catch block
+            LOG.fatal("File not found", e);
             e.printStackTrace();
         } catch (NoConnectionToStardogServerException e) {
-            LOG.error("No connection to stardog", e);
-            // TODO Auto-generated catch block
+            LOG.fatal("No connection to stardog", e);
             e.printStackTrace();
+        } catch (IOException e) {
+            LOG.fatal("An I/O operation failed.", e);
         }
     }
 
@@ -127,7 +128,7 @@ public class CNLToolchain {
      *     established
      */
     private void execute(Path docPath, Path sourceCodePath, String context)
-            throws FileNotFoundException, NoConnectionToStardogServerException {
+            throws FileNotFoundException, NoConnectionToStardogServerException, IOException {
         LOG.info("Starting the execution");
 
         if (Files.notExists(sourceCodePath)) {
@@ -266,7 +267,7 @@ public class CNLToolchain {
         return codeModelPath;
     }
 
-    private List<ArchitectureRule> parseRuleFile(Path docPath) {
+    private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {
         LOG.info("Parsing the rule file ...");
         AsciiDocArc42Parser parser = new AsciiDocArc42Parser(gatherOWLNamespaces());
         LOG.debug("Parsing the architecture rules ...");
