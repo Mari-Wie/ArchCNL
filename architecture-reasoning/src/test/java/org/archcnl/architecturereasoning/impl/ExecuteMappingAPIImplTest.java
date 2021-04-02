@@ -1,15 +1,16 @@
 package org.archcnl.architecturereasoning.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.archcnl.architecturereasoning.api.ExecuteMappingAPI;
-import org.archcnl.architecturereasoning.api.ReasoningConfiguration;
+import org.archcnl.common.datatypes.ArchitectureRule;
+import org.archcnl.common.datatypes.RuleType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,35 +20,30 @@ public class ExecuteMappingAPIImplTest {
     public void setUp() throws Exception {}
 
     @Test
-    public void testCoarse() throws FileNotFoundException {
-        final String outputPath = "src/test/resources/mapped.owl";
-        List<String> ruleOntology = new ArrayList<>();
-        ruleOntology.add("architecture0.owl");
-        ruleOntology.add("architecture1.owl");
-        ReasoningConfiguration config =
-                ReasoningConfiguration.builder()
-                        .withMappingRules("mapping.txt")
-                        .withPathsToConcepts(ruleOntology)
-                        .withData("results.owl")
-                        .withResult(outputPath)
-                        .build();
+    public void testEntireModule() throws IOException {
+        List<ArchitectureRule> architectureModel =
+                Arrays.asList(
+                        new ArchitectureRule(
+                                0,
+                                "Only LayerOne can use LayerTwo.",
+                                RuleType.DOMAIN_RANGE,
+                                "./src/test/resources/architecture0.owl"),
+                        new ArchitectureRule(
+                                1,
+                                "No LayerTwo can use LayerOne.",
+                                RuleType.NEGATION,
+                                "./src/test/resources/architecture1.owl"));
 
         ExecuteMappingAPI e = new ExecuteMappingAPIImpl();
-        e.setReasoningConfiguration(config);
-        try {
-            e.executeMapping();
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-            fail();
-        }
 
-        assertEquals(outputPath, e.getReasoningResultPath());
+        Model codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        codeModel.read("src/test/resources/results.owl");
+
+        Model actual =
+                e.executeMapping(codeModel, architectureModel, "src/test/resources/mapping.txt");
 
         Model expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected.read("mapped-expected.owl");
-
-        Model actual = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        actual.read(outputPath);
 
         assertTrue(expected.isIsomorphicWith(actual));
     }

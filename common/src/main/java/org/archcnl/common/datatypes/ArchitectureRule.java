@@ -1,5 +1,9 @@
 package org.archcnl.common.datatypes;
 
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+
 /**
  * Class for exchanging architecture rules between modules.
  *
@@ -8,7 +12,7 @@ package org.archcnl.common.datatypes;
 public class ArchitectureRule {
     private final int id;
     private final String cnlSentence;
-    private final String constraintFile;
+    private final Model ruleModel;
     private final RuleType type;
 
     /**
@@ -21,8 +25,24 @@ public class ArchitectureRule {
     public ArchitectureRule(int id, String cnlSentence, RuleType type, String constraintFilePath) {
         this.id = id;
         this.cnlSentence = cnlSentence;
-        this.constraintFile = constraintFilePath;
         this.type = type;
+
+        ruleModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        ruleModel.read(constraintFilePath);
+    }
+
+    /**
+     * @param id the ID of the rule
+     * @param cnlSentence the CNL sentence which is represented by this rule
+     * @param type the type of this rule. It corresponds to the way how this rule's CNL sentence can
+     *     be deferred from the grammar.
+     * @param ruleModel OWL constraint/ontology modelling this rule
+     */
+    public ArchitectureRule(int id, String cnlSentence, RuleType type, Model ruleModel) {
+        this.id = id;
+        this.cnlSentence = cnlSentence;
+        this.type = type;
+        this.ruleModel = ruleModel;
     }
 
     /** @return the ID of this rule */
@@ -43,9 +63,11 @@ public class ArchitectureRule {
         return type;
     }
 
-    /** @return the path to the file which stores this rule as an OWL constraint */
-    public String getContraintFile() {
-        return constraintFile;
+    /** @return this rule as an OWL constraint/ontology */
+    public Model getRuleModel() {
+        Model model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        model.add(ruleModel);
+        return model;
     }
 
     @Override
@@ -53,7 +75,6 @@ public class ArchitectureRule {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((cnlSentence == null) ? 0 : cnlSentence.hashCode());
-        result = prime * result + ((constraintFile == null) ? 0 : constraintFile.hashCode());
         result = prime * result + id;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
@@ -68,9 +89,9 @@ public class ArchitectureRule {
         if (cnlSentence == null) {
             if (other.cnlSentence != null) return false;
         } else if (!cnlSentence.equals(other.cnlSentence)) return false;
-        if (constraintFile == null) {
-            if (other.constraintFile != null) return false;
-        } else if (!constraintFile.equals(other.constraintFile)) return false;
+        if (ruleModel == null) {
+            if (other.ruleModel != null) return false;
+        } else if (!ruleModel.isIsomorphicWith(other.ruleModel)) return false;
         if (id != other.id) return false;
         if (type != other.type) return false;
         return true;

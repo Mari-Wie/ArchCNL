@@ -5,24 +5,29 @@ import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.icv.Constraint;
 import com.complexible.stardog.icv.api.ICVConnection;
+import com.complexible.stardog.protocols.http.client.BaseHttpClient.HttpClientException;
 import com.complexible.stardog.reasoning.Proof;
 import com.complexible.stardog.reasoning.ProofType;
 import com.complexible.stardog.reasoning.ProofWriter;
 import com.stardog.stark.Statement;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.common.datatypes.ConstraintViolation.ConstraintViolationBuilder;
 import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
+import org.archcnl.stardogwrapper.api.exceptions.DBAccessException;
 
 public class StardogICVAPIImpl implements StardogICVAPI {
 
@@ -42,18 +47,25 @@ public class StardogICVAPIImpl implements StardogICVAPI {
     }
 
     @Override
-    public String addIntegrityConstraint(String pathToConstraint) throws FileNotFoundException {
-        LOG.debug("Adding contraints file to database: " + pathToConstraint);
+    public String addIntegrityConstraint(Model constraintModel) throws DBAccessException {
+        LOG.debug("Adding contraints to database");
         try (Connection aConn = establishConnection()) {
-
             ICVConnection aValidator = aConn.as(ICVConnection.class);
 
             aConn.begin();
-            aValidator.addConstraints().format(RDFFormats.RDFXML).stream(
-                    new FileInputStream(pathToConstraint));
+            Writer writer = new StringWriter();
+
+            constraintModel.write(writer);
+
+            InputStream reader = new ByteArrayInputStream(writer.toString().getBytes());
+            aValidator.addConstraints().format(RDFFormats.RDFXML).stream(reader);
+
             aConn.commit();
 
             return aValidator.getConstraints().iterator().next().toString();
+        } catch (HttpClientException e) {
+            LOG.error("Error while adding constraints to the database: ", e);
+            throw new DBAccessException("Adding integrity constraints failed.", e);
         }
     }
 

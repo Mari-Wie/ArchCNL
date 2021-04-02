@@ -1,19 +1,14 @@
 package org.archcnl.architecturereasoning.impl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.reasoner.Reasoner;
-import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
-import org.apache.jena.reasoner.rulesys.Rule;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.architecturereasoning.api.ExecuteMappingAPI;
-import org.archcnl.architecturereasoning.api.ReasoningConfiguration;
+import org.archcnl.common.datatypes.ArchitectureRule;
 
 /**
  * Implementation of the ExecuteMappingAPI interface. Can be instantiated via the
@@ -22,52 +17,31 @@ import org.archcnl.architecturereasoning.api.ReasoningConfiguration;
 public class ExecuteMappingAPIImpl implements ExecuteMappingAPI {
     private static final Logger LOG = LogManager.getLogger(ExecuteMappingAPIImpl.class);
 
-    private ReasoningConfiguration config;
+    /**
+     * Maps the architecture and code models onto each other using the given mapping rules.
+     *
+     * @param codeModel Ontology modeling the source code/implemented architecture.
+     * @param architectureModel List of architecture rules modeling the (desired) architecture.
+     * @param pathToMapping Path to a file containing SWRL rules which describe the
+     *     architecture-to-code mapping.
+     * @return An ontology modeling the code, architecture, and relations between their elements.
+     */
+    public Model executeMapping(
+            Model codeModel, List<ArchitectureRule> architectureModel, String pathToMapping)
+            throws IOException {
+        ArchitectureToCodeMapper mapper = new ArchitectureToCodeMapper();
 
-    public void setReasoningConfiguration(ReasoningConfiguration config) {
-        this.config = config;
-    }
+        try (BufferedReader reader = new BufferedReader(new FileReader(pathToMapping))) {
+            return mapper.executeMapping(codeModel, architectureModel, reader);
 
-    public void executeMapping() throws FileNotFoundException {
-        OntModel ontModel = readInputs();
-        Reasoner reasoner = readMappingRules();
-        InfModel infmodel = doMapping(ontModel, reasoner);
-        writeOutput(infmodel);
-    }
-
-    private void writeOutput(InfModel infmodel) throws FileNotFoundException {
-        LOG.debug("Writing output to: " + config.getResultPath());
-        infmodel.write(new FileOutputStream(new File(config.getResultPath())));
-
-        LOG.debug("Wrote " + infmodel.listStatements().toList().size() + "statements");
-    }
-
-    private InfModel doMapping(OntModel ontModel, Reasoner reasoner) {
-        LOG.trace("executing mapping");
-        InfModel infmodel = ModelFactory.createInfModel(reasoner, ontModel);
-        return infmodel;
-    }
-
-    private Reasoner readMappingRules() {
-        LOG.debug("reading mapping rules");
-        Reasoner reasoner =
-                new GenericRuleReasoner(Rule.rulesFromURL(config.getPathToMappingRules()));
-        return reasoner;
-    }
-
-    private OntModel readInputs() {
-        OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        LOG.debug("Reading code model");
-        ontModel.read(config.getPathToData());
-
-        for (String path : config.getPathsToConcepts()) {
-            LOG.debug("Reading concept file: " + path);
-            ontModel.read(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOG.fatal(
+                    "Error while accessing the architecture to code mapping \""
+                            + pathToMapping
+                            + "\":",
+                    e);
+            throw e;
         }
-        return ontModel;
-    }
-
-    public String getReasoningResultPath() {
-        return config.getResultPath();
     }
 }

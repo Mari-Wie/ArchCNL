@@ -6,6 +6,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.common.datatypes.ArchitectureRule;
@@ -32,7 +35,7 @@ public class CNLTranslator {
             LOG.debug("Writing the rule to a seperate file: " + rulePath);
 
             try {
-                writeSentenceToFile(line, i, rulePath);
+                writeSentenceToFile(line, rulePath);
                 addRule(line, i, rulePath, ontologyPath, rules);
             } catch (IOException e) {
                 LOG.error("Cannot access the temporary file \"" + rulePath + "\"!");
@@ -45,7 +48,7 @@ public class CNLTranslator {
         return rules;
     }
 
-    private void writeSentenceToFile(String line, int index, String path) throws IOException {
+    private void writeSentenceToFile(String line, String path) throws IOException {
         File f = new File(path);
         FileUtils.writeStringToFile(f, line + "\n", (Charset) null, true);
     }
@@ -59,6 +62,9 @@ public class CNLTranslator {
         LOG.debug("Transforming the rule from CNL to an OWL constraint ...");
         RuleType typeOfParsedRule = generator.transformCNLFile(rulePath, ontologyPath);
 
+        Model ruleModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        ruleModel.read(ontologyPath);
+
         if (typeOfParsedRule == null) {
             LOG.error("The parser could not parse the following rule: " + sentence);
         } else {
@@ -68,7 +74,7 @@ public class CNLTranslator {
             LOG.debug("Type         : " + typeOfParsedRule.name());
             LOG.debug("OntologyPath : " + ontologyPath);
 
-            rules.add(new ArchitectureRule(index, sentence, typeOfParsedRule, ontologyPath));
+            rules.add(new ArchitectureRule(index, sentence, typeOfParsedRule, ruleModel));
         }
     }
 

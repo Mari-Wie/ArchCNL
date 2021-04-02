@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.common.datatypes.ConstraintViolation;
 import org.archcnl.common.datatypes.ConstraintViolation.ConstraintViolationBuilder;
@@ -18,8 +21,9 @@ public class CheckedRuleTest {
 
     @Test
     public void test() {
+        Model emptyModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         ArchitectureRule rule =
-                new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE, "some file");
+                new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE, emptyModel);
 
         ConstraintViolationBuilder violationBuilder = new ConstraintViolationBuilder();
         violationBuilder.addViolation("subject", "predicate", "object");

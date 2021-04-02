@@ -2,6 +2,7 @@ package org.archcnl.toolchain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,14 +14,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.archcnl.architecturedescriptionparser.AsciiDocArc42Parser;
 import org.archcnl.architecturereasoning.api.ExecuteMappingAPI;
 import org.archcnl.architecturereasoning.api.ExecuteMappingAPIFactory;
-import org.archcnl.architecturereasoning.api.ReasoningConfiguration;
 import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
@@ -31,6 +33,7 @@ import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
+import org.archcnl.stardogwrapper.api.exceptions.DBAccessException;
 import org.archcnl.stardogwrapper.api.exceptions.MissingBuilderArgumentException;
 import org.archcnl.stardogwrapper.api.exceptions.NoConnectionToStardogServerException;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
@@ -39,13 +42,13 @@ public class CNLToolchain {
     private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
 
     private OwlifyComponent famixTransformer;
-    private ExecuteMappingAPI mappingAPI;
     private StardogICVAPI icvAPI;
     private IConformanceCheck check;
     private StardogDatabaseAPI db;
 
-    private final String TEMPORARY_DIRECTORY = "./temp";
-    private final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
+    private static final String TEMPORARY_DIRECTORY = "./temp";
+    private static final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
+    private static final String MAPPED_ONTOLOGY_PATH = TEMPORARY_DIRECTORY + "/mapped.owl";
 
     // private, use runToolchain to create and execute the toolchain
     private CNLToolchain(String databaseName, String server, String username, String password) {
@@ -158,7 +161,7 @@ public class CNLToolchain {
         LOG.debug("Connecting to the database ...");
         db.connect();
 
-        storeModelAndConstraintsInDB(context, rules, mappingAPI.getReasoningResultPath());
+        storeModelAndConstraintsInDB(context, rules, MAPPED_ONTOLOGY_PATH);
 
         List<ConstraintViolationsResultSet> violations =
                 icvAPI.explainViolationsForContext(context);
@@ -166,20 +169,11 @@ public class CNLToolchain {
 
         String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
 
-        addViolationsToOntology(mappingAPI.getReasoningResultPath(), rules, violations, resultPath);
+        addViolationsToOntology(MAPPED_ONTOLOGY_PATH, rules, violations, resultPath);
 
         db.addDataByRDFFileAsNamedGraph(resultPath, context);
 
         LOG.info("CNLToolchain completed successfully!");
-    }
-
-    private List<String> extractRuleOntologyPaths(List<ArchitectureRule> rules) {
-        return rules.stream()
-                .map(
-                        (ArchitectureRule r) -> {
-                            return r.getContraintFile();
-                        })
-                .collect(Collectors.toList());
     }
 
     private void storeModelAndConstraintsInDB(
@@ -188,26 +182,27 @@ public class CNLToolchain {
         LOG.debug("Adding the mapped model to the database...");
         db.addDataByRDFFileAsNamedGraph(modelPath, context);
 
-        List<ArchitectureRule> sucessfulRules = new ArrayList<>();
+        List<ArchitectureRule> sucessfullyCheckedRules = new ArrayList<>();
 
         for (ArchitectureRule rule : rules) {
-
-            String path = rule.getContraintFile();
+            String path = TEMPORARY_DIRECTORY + "/architecture" + rule.getId() + ".owl";
 
             LOG.info("Checking the rule: " + rule.getCnlSentence());
 
             try {
-                icvAPI.addIntegrityConstraint(path);
-                sucessfulRules.add(rule);
-            } catch (FileNotFoundException e) {
-                LOG.error(e.getMessage() + " : " + path);
+                icvAPI.addIntegrityConstraint(rule.getRuleModel());
+                sucessfullyCheckedRules.add(rule);
+            } catch (DBAccessException e) {
+                LOG.error(e.getMessage());
                 LOG.warn(
-                        "The following rule will not be stored in the database because its constraint file could not be accessed: "
-                                + rule.getCnlSentence());
+                        "The following rule will not be stored in the database because its constraint could not be added to the database: "
+                                + rule.getCnlSentence()
+                                + " stored in "
+                                + path);
             }
         }
         rules.clear();
-        rules.addAll(sucessfulRules);
+        rules.addAll(sucessfullyCheckedRules);
     }
 
     private void addViolationsToOntology(
@@ -240,21 +235,21 @@ public class CNLToolchain {
     }
 
     private void combineArchitectureAndCodeModels(
-            List<ArchitectureRule> rules, String codeModelPath) throws FileNotFoundException {
+            List<ArchitectureRule> rules, String codeModelPath) throws IOException {
         LOG.info("Peforming the architecture-to-code mapping");
-        List<String> ontologyPaths = extractRuleOntologyPaths(rules);
-        mappingAPI = ExecuteMappingAPIFactory.get();
+        ExecuteMappingAPI mappingAPI = ExecuteMappingAPIFactory.get();
 
-        ReasoningConfiguration reasoningConfig =
-                ReasoningConfiguration.builder()
-                        .withPathsToConcepts(ontologyPaths)
-                        .withMappingRules(MAPPING_FILE_PATH)
-                        .withData(codeModelPath)
-                        .withResult(TEMPORARY_DIRECTORY + "/mapped.owl")
-                        .build();
+        Model codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        codeModel.read(codeModelPath);
 
-        mappingAPI.setReasoningConfiguration(reasoningConfig);
-        mappingAPI.executeMapping();
+        Model mappedModel = mappingAPI.executeMapping(codeModel, rules, MAPPING_FILE_PATH);
+
+        try (FileWriter writer = new FileWriter(MAPPED_ONTOLOGY_PATH)) {
+            mappedModel.write(writer);
+        } catch (IOException e) {
+            LOG.fatal("Writing the mapped model to \"" + MAPPED_ONTOLOGY_PATH + "\" failed: ", e);
+            throw e;
+        }
     }
 
     private String buildCodeModel(Path sourceCodePath) {
