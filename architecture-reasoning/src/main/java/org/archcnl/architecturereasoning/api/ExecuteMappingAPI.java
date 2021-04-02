@@ -1,6 +1,9 @@
 package org.archcnl.architecturereasoning.api;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import org.apache.jena.rdf.model.Model;
+import org.archcnl.common.datatypes.ArchitectureRule;
 
 /**
  * API for the mapping between architectural concepts used in architecture rules and the code model.
@@ -10,23 +13,16 @@ import java.io.FileNotFoundException;
  */
 public interface ExecuteMappingAPI {
     /**
-     * Sets the configuration.
+     * Maps the code and architecture models onto each other.
      *
-     * @param config the configuration to use
+     * @param codeModel The ontology model describing the source code.
+     * @param architectureModel List containing all architecture rules.
+     * @param pathToMapping Path to the SWRL file containing the architecture-to-code mapping.
+     * @return The mapped model describing the code and architecture as well as the relation between
+     *     their elements.
+     * @throws IOException When accessing the mapping file fails.
      */
-    public void setReasoningConfiguration(ReasoningConfiguration config);
-
-    /**
-     * Reads the input ontologies and attempts to unify them. The result is written to the output
-     * ontology.
-     *
-     * @throws FileNotFoundException when an input or output file cannot be accessed
-     */
-    public void executeMapping() throws FileNotFoundException;
-
-    /**
-     * Returns the path of the output file which was given to {@link
-     * #setReasoningConfiguration(ReasoningConfiguration, String)}
-     */
-    public String getReasoningResultPath();
+    public Model executeMapping(
+            Model codeModel, List<ArchitectureRule> architectureModel, String pathToMapping)
+            throws IOException;
 }

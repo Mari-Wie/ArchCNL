@@ -1,7 +1,8 @@
 package org.archcnl.stardogwrapper.api;
 
-import java.io.FileNotFoundException;
 import java.util.List;
+import org.apache.jena.rdf.model.Model;
+import org.archcnl.stardogwrapper.api.exceptions.DBAccessException;
 
 public interface StardogICVAPI {
 
@@ -18,14 +19,13 @@ public interface StardogICVAPI {
 
     /**
      * Connects to the given database and adds the integrity constraints stored in the specified
-     * file to the database.
+     * ontology to the database.
      *
-     * @param pathToConstraints The path to the RDF-file in XML format which stores the integrity
-     *     constraints to add.
+     * @param constraintModel The ontology modeling the constraints.
      * @return A string representation of the added constraint.
-     * @throws FileNotFoundException When the input file cannot be accessed.
+     * @throws DBAccessException When accessing the database fails.
      */
-    public String addIntegrityConstraint(String pathToConstraint) throws FileNotFoundException;
+    public String addIntegrityConstraint(Model constraintModel) throws DBAccessException;
 
     /** Connects to the given database and removes all integrity constraints from it. */
     void removeIntegrityConstraints();
