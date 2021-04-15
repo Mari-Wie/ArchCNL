@@ -1,16 +1,23 @@
 package org.archcnl.owlify.famix.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
+
+import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,13 +46,30 @@ public class FamixOntologyTransformerTest {
 
         OntModel actual = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         actual.read(new FileInputStream(famixTransformer.getResultPath()), null);
+//        actual.read(this.getClass().getResourceAsStream("results-from-marion.owl"), null);
 
         // workaround: remove the absolute paths
         expected.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath").removeProperties();
         actual.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath").removeProperties();
-
+        
+//        assertNotNull(expected.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module"));
+//        assertNotNull(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module"));
+//        List<OntClass> disjoint = expected.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module").listDisjointWith().toList();
+//        
+//        assertEquals(2, disjoint.size());
+//        assertTrue(disjoint.contains(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Namespace")));
+//        assertTrue(disjoint.contains(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Package")));
+//        
+//        Model a = expected.difference(actual);
+//        a.write(new FileWriter("expected-actual.owl"));
+//        
+//        a = actual.difference(expected);
+//        a.write(new FileWriter("actual-expected.owl"));
+//        
+//        
+        
         // TODO: does not work on some systems
-        // assertTrue(expected.isIsomorphicWith(actual));
+        assertTrue(expected.isIsomorphicWith(actual));
     }
 
     private boolean skip = false;

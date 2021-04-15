@@ -1,11 +1,11 @@
 package org.archcnl.owlify.famix.ontology;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
@@ -206,8 +206,8 @@ public class FamixOntology {
 
     public void save(String resultPath) {
         try {
-            model.write(new FileOutputStream(new File(resultPath)));
-        } catch (FileNotFoundException e) {
+            model.write(new FileWriter(resultPath));
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
