@@ -1,5 +1,6 @@
 package org.archcnl.owlify.famix.parser;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -45,27 +47,11 @@ public class FamixOntologyTransformerTest {
         expected.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath").removeProperties();
         actual.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath").removeProperties();
 
-        //
-        // assertNotNull(expected.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module"));
-        //
-        // assertNotNull(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module"));
-        //        List<OntClass> disjoint =
-        // expected.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module").listDisjointWith().toList();
-        //
-        //        assertEquals(2, disjoint.size());
-        //
-        // assertTrue(disjoint.contains(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Namespace")));
-        //
-        // assertTrue(disjoint.contains(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Package")));
-        //
-        //        Model a = expected.difference(actual);
-        //        a.write(new FileWriter("expected-actual.owl"));
-        //
-        //        a = actual.difference(expected);
-        //        a.write(new FileWriter("actual-expected.owl"));
-        //
-        //
-
+        
+         assertNotNull(expected.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module"));
+        
+         assertNotNull(actual.getOntClass("http://arch-ont.org/ontologies/famix.owl#Module"));
+         
         // TODO: does not work on some systems
         assertTrue(expected.isIsomorphicWith(actual));
     }
