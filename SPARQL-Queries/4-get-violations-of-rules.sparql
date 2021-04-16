@@ -6,7 +6,9 @@ PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 
-SELECT ?cnl ?violation ?date
+# Returns the violated rules and the date of the corresponding conformance check
+
+SELECT ?cnl ?date
 WHERE {
 GRAPH ?g
   {

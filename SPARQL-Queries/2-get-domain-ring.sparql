@@ -6,7 +6,9 @@ PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 
-SELECT ?domainring ?name ?type
+# Returns all domain rings and their type
+
+SELECT ?name ?type
 WHERE {
 GRAPH ?g
   {
