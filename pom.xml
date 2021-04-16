@@ -37,7 +37,7 @@
 						<version>${surefireVersion}</version>
 						<configuration>
 							<excludes>
-								<exclude>**/FamixOntologyTransformerTest.java</exclude>
+								<!-- <exclude>**/FamixOntologyTransformerTest.java</exclude> -->
 							</excludes>
 						</configuration>
 					</plugin>
