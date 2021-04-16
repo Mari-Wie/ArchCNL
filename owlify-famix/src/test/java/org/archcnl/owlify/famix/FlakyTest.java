@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -39,6 +40,12 @@ public class FlakyTest {
         actual.removeAll(null, actual.getProperty("http://arch-ont.org/ontologies/famix.owl#hasPath"), null);
         actual.removeAll(null, actual.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath"), null);
 
+        StringWriter writer = new StringWriter();
+        
+        actual.write(writer,  "RDF/XML-ABBREV");
+        
+        System.out.println(writer.toString());
+        
         // TODO: does not work on some systems
         assertTrue(expected.isIsomorphicWith(actual));
     }
