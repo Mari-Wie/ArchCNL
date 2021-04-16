@@ -6,6 +6,8 @@ PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 
+# Returns the names of Java elements which violate the rule 'Every Aggregate must residein a DomainRing.'
+
 SELECT ?cnl ?subject
 WHERE {
 GRAPH ?g
@@ -14,7 +16,9 @@ GRAPH ?g
     ?rule conformance:hasRuleRepresentation 'Every Aggregate must residein a DomainRing.'^^xsd:string.
     ?rule conformance:hasRuleRepresentation ?cnl.
     ?violation conformance:violates ?rule.
-    ?x conformance:isPartOfViolationSubject ?violation.
+    ?proof conformance:proofs ?violation.
+    ?proof conformance:hasNotInferredStatement ?notInferred. 
+    ?notInferred conformance:hasSubject ?x.
     ?x famix:hasName ?subject.
   }
 }

@@ -5,10 +5,18 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
-SELECT ?proof ?subject ?predicate ?object
+
+# Returns all statements which could not be inferred for the rule 'Every Aggregate must residein a DomainRing.'
+# An architecture rule consists of multiple statements. When a violation is detected, some statements could be
+# asserted (i.e. the code ontologies complies with them/they are "true") while other statements could not be inferred
+# (i.e. the code ontologies does not satisfy them/they are "false"). Both asserted and not-inferred statements
+# provide information why and by which elements a rule is violated.
+
+SELECT ?cnl ?subject ?predicate ?object
 WHERE {
     GRAPH ?g {
         ?rule conformance:hasRuleRepresentation "Every Aggregate must residein a DomainRing."^^xsd:string.
+        ?rule conformance:hasRuleRepresentation ?cnl.
         ?violation conformance:violates ?rule.
         ?proof conformance:proofs ?violation.
         ?proof conformance:hasNotInferredStatement ?notInferred. 
