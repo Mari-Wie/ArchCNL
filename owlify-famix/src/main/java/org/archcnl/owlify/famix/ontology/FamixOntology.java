@@ -205,7 +205,7 @@ public class FamixOntology {
 
     public void save(String resultPath) {
         try {
-            model.write(new FileWriter(resultPath));
+            model.write(new FileWriter(resultPath), "RDF/XML-ABBREV");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -1,8 +1,10 @@
 package org.archcnl.owlify.famix;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -36,10 +38,7 @@ public class FlakyTest {
         expected.removeAll(null, expected.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath"), null);
         actual.removeAll(null, actual.getProperty("http://arch-ont.org/ontologies/famix.owl#hasPath"), null);
         actual.removeAll(null, actual.getProperty("http://arch-ont.org/ontologies/main.owl#hasPath"), null);
-        
 
-        actual.write(new FileWriter("actual-without-paths"));
-        
         // TODO: does not work on some systems
         assertTrue(expected.isIsomorphicWith(actual));
     }

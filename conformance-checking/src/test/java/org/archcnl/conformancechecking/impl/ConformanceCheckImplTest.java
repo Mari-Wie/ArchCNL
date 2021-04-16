@@ -88,24 +88,6 @@ public class ConformanceCheckImplTest {
                         ConformanceCheckOntologyClassesAndProperties.getDateProperty(actual))
                 .remove();
 
-        System.out.println("IN EXPECTED BUT NOT IN ACTUAL:");
-        expected.listStatements()
-                .forEachRemaining(
-                        (s) -> {
-                            if (!actual.contains(s)) {
-                                System.out.println(s.toString());
-                            }
-                        });
-
-        System.out.println("IN ACTUAL BUT NOT IN EXPECTED:");
-        actual.listStatements()
-                .forEachRemaining(
-                        (s) -> {
-                            if (!expected.contains(s)) {
-                                System.out.println(s.toString());
-                            }
-                        });
-
         assertTrue(expected.isIsomorphicWith(actual));
     }
 }
