@@ -14,9 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -28,7 +26,7 @@ import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckImpl;
 import org.archcnl.owlify.core.OwlifyComponent;
-import org.archcnl.owlify.famix.parser.FamixOntologyTransformer;
+import org.archcnl.owlify.famix.parser.JavaOntologyTransformer;
 import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
@@ -54,7 +52,9 @@ public class CNLToolchain {
     private CNLToolchain(String databaseName, String server, String username, String password) {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
-        this.famixTransformer = new FamixOntologyTransformer(TEMPORARY_DIRECTORY + "/results.owl");
+        this.famixTransformer = new JavaOntologyTransformer(); // TODO new
+        // FamixOntologyTransformer(TEMPORARY_DIRECTORY +
+        // "/results.owl");
         this.check = new ConformanceCheckImpl();
     }
 
@@ -152,9 +152,9 @@ public class CNLToolchain {
 
         List<ArchitectureRule> rules = parseRuleFile(docPath);
 
-        String codeModelPath = buildCodeModel(sourceCodePath);
+        Model codeModel = buildCodeModel(sourceCodePath);
 
-        combineArchitectureAndCodeModels(rules, codeModelPath);
+        combineArchitectureAndCodeModels(rules, codeModel);
 
         LOG.info("Starting conformance checking...");
 
@@ -234,13 +234,10 @@ public class CNLToolchain {
         }
     }
 
-    private void combineArchitectureAndCodeModels(
-            List<ArchitectureRule> rules, String codeModelPath) throws IOException {
+    private void combineArchitectureAndCodeModels(List<ArchitectureRule> rules, Model codeModel)
+            throws IOException {
         LOG.info("Peforming the architecture-to-code mapping");
         ExecuteMappingAPI mappingAPI = ExecuteMappingAPIFactory.get();
-
-        Model codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        codeModel.read(codeModelPath);
 
         Model mappedModel = mappingAPI.executeMapping(codeModel, rules, MAPPING_FILE_PATH);
 
@@ -252,14 +249,12 @@ public class CNLToolchain {
         }
     }
 
-    private String buildCodeModel(Path sourceCodePath) {
+    private Model buildCodeModel(Path sourceCodePath) {
         LOG.info("Creating the code model ...");
         LOG.info("Starting famix transformation ...");
         // source code transformation
         famixTransformer.addSourcePath(sourceCodePath);
-        famixTransformer.transform();
-        String codeModelPath = famixTransformer.getResultPath();
-        return codeModelPath;
+        return famixTransformer.transform();
     }
 
     private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {

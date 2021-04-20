@@ -6,6 +6,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.apache.jena.ontology.Individual;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.owlify.famix.codemodel.Type;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
@@ -14,6 +15,9 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
 
     private FamixOntology ontology;
     private Individual parent;
+    private Type thrownException;
+
+    public ThrowStatementVisitor() {}
 
     public ThrowStatementVisitor(FamixOntology ontology, Individual parent) {
         this.ontology = ontology;
@@ -25,20 +29,36 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
         ObjectCreationExpressionVisitor typeOfCreatedObjectVisitor =
                 new ObjectCreationExpressionVisitor(ontology);
         n.getExpression().accept(typeOfCreatedObjectVisitor, null);
-        Individual typeOfThrownException = typeOfCreatedObjectVisitor.getTypeOfCreatedObject();
+        Individual typeOfThrownException = typeOfCreatedObjectVisitor.getTypeOfCreatedObject2();
 
-        Individual thrownExceptionIndividual = ontology.getThrownExceptionIndividual();
+        thrownException = typeOfCreatedObjectVisitor.getTypeOfCreatedObject();
 
         if (typeOfThrownException == null) {
             LOG.debug(
-                    "Throw statement does not match \"throw new X()\", using fall back solution: %s",
-                    n.toString());
+                    "Throw statement does not match \"throw new X()\", using fall back solution: "
+                            + n.toString());
             Expression throwExpression = n.getExpression();
             String typeName =
                     throwExpression.calculateResolvedType().asReferenceType().getQualifiedName();
-            typeOfThrownException = ontology.getTypeIndividualFor(typeName);
+            //            typeOfThrownException = ontology.getReferenceTypeIndividual(typeName);
         }
-        ontology.setExceptionHasDefiningClass(thrownExceptionIndividual, typeOfThrownException);
-        ontology.setThrowsExceptionProperty(thrownExceptionIndividual, parent);
+
+        if (thrownException == null) {
+            LOG.debug(
+                    "Throw statement does not match \"throw new X()\", using fall back solution: "
+                            + n.toString());
+
+            Expression throwExpression = n.getExpression();
+            String typeName =
+                    throwExpression.calculateResolvedType().asReferenceType().getQualifiedName();
+
+            thrownException = new Type(typeName, false); // primitives types cannot be thrown
+        }
+
+        //        ontology.getThrownExceptionIndividual(typeOfThrownException, parent);
+    }
+
+    public Type getThrownExceptionType() {
+        return thrownException;
     }
 }

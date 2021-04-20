@@ -1,16 +1,19 @@
 package org.archcnl.owlify.famix.visitors;
 
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.jena.ontology.Individual;
+import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
+import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private FamixOntology ontology;
     private Individual annotatedEntity;
+    private AnnotationInstance annotationInstance;
 
     public NormalAnnotationExpressionVisitor(
             FamixOntology famixOntology, Individual annotatedEntity) {
@@ -19,34 +22,25 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
         this.annotatedEntity = annotatedEntity;
     }
 
+    public NormalAnnotationExpressionVisitor() {}
+
     @Override
     public void visit(NormalAnnotationExpr n, Void arg) {
+        //        ontology.getAnnotationInstanceIndividual(n.getName().asString(), annotatedEntity,
+        // n.getPairs());
 
-        Individual annotationInstanceIndividual = ontology.getAnnotationInstanceIndividual();
-        ontology.setHasAnnotationInstanceForEntity(annotationInstanceIndividual, annotatedEntity);
+        List<AnnotationMemberValuePair> values =
+                n.getPairs().stream()
+                        .map(
+                                pair ->
+                                        new AnnotationMemberValuePair(
+                                                pair.getNameAsString(), pair.getValue().toString()))
+                        .collect(Collectors.toList());
 
-        Individual annotationType =
-                ontology.getAnnotationTypeIndividualWithName(n.getName().asString());
-        ontology.setHasAnnotationTypeProperty(annotationInstanceIndividual, annotationType);
-        Individual annotationTypeAttributeIndividual = null;
-        for (MemberValuePair memberValuePair : n.getPairs()) {
-            Expression value = memberValuePair.getValue();
-            Individual annotationTypeAttribute =
-                    ontology.getAnnotationTypeAttributeOfAnnotationTypeByName(
-                            memberValuePair.getName().asString(), annotationType);
-            if (annotationTypeAttribute == null) {
-                annotationTypeAttribute = ontology.createAnnotationTypeAttributeIndividual();
-                ontology.setHasNamePropertyForNamedEntity(
-                        memberValuePair.getName().asString(), annotationTypeAttribute);
-            }
-            Individual annotationInstanceAttribute =
-                    ontology.getAnnotationInstanceAttributeIndividual();
-            ontology.setHasAnnotationTypeAttributeForAnnotationInstanceAttribute(
-                    annotationTypeAttribute, annotationInstanceAttribute);
-            ontology.setHasAnnotationInstanceAttributeForAnnotationInstance(
-                    annotationInstanceAttribute, annotationInstanceIndividual);
-            ontology.setHasValueForAnnotationInstanceAttribute(
-                    annotationInstanceAttribute, value.toString());
-        }
+        annotationInstance = new AnnotationInstance(n.getName().asString(), values);
+    }
+
+    public AnnotationInstance getAnnotationInstance() {
+        return annotationInstance;
     }
 }

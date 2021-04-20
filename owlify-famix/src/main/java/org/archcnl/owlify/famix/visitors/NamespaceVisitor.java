@@ -3,32 +3,37 @@ package org.archcnl.owlify.famix.visitors;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.apache.jena.ontology.Individual;
+import org.archcnl.owlify.famix.codemodel.Namespace;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 public class NamespaceVisitor extends VoidVisitorAdapter<Void> {
 
     private FamixOntology ontology;
     private Individual currentUnitIndividual;
-    private String nameOfCurrentUnit;
 
-    public NamespaceVisitor(
-            FamixOntology ontology, Individual currentUnitIndividual, String nameOfcurrentUnit) {
+    private Namespace namespace;
+
+    public NamespaceVisitor(FamixOntology ontology, Individual currentUnitIndividual) {
         this.ontology = ontology;
         this.currentUnitIndividual = currentUnitIndividual;
-        this.nameOfCurrentUnit = nameOfcurrentUnit;
 
-        Individual metaNamespace = ontology.getNamespaceIndividualWithName("");
+        Individual metaNamespace = ontology.createNamespaceIndividual("");
+
         ontology.setHasNamePropertyForNamedEntity("", metaNamespace);
+
+        namespace = Namespace.TOP;
+    }
+
+    public NamespaceVisitor() {
+        namespace = Namespace.TOP;
     }
 
     @Override
     public void visit(PackageDeclaration n, Void arg) {
         createPackageBasedOnQualifiedName(n.getName().asString());
-        Individual namespaceIndividual =
-                ontology.getNamespaceIndividualWithName(n.getName().asString());
-        // ontology.setHasFullQualifiedNameForType(currentUnitIndividual,
-        // n.getName().asString()+"."+nameOfCurrentUnit);
-        ontology.setNamespaceContainsProperty(namespaceIndividual, currentUnitIndividual);
+        //        Individual namespaceIndividual =
+        // ontology.getNamespaceIndividual(n.getName().asString());
+        //        ontology.setNamespaceContainsProperty(namespaceIndividual, currentUnitIndividual);
     }
 
     private void createPackageBasedOnQualifiedName(String packageName) {
@@ -47,10 +52,15 @@ public class NamespaceVisitor extends VoidVisitorAdapter<Void> {
     }
 
     private void createOrUpdate(String parent, String name) {
-        Individual parentNamespace = ontology.getNamespaceIndividualWithName(parent);
-        Individual namespaceIndividual = ontology.getNamespaceIndividualWithName(name);
+        //        Individual parentNamespace = ontology.getNamespaceIndividual(parent);
+        //        Individual namespaceIndividual = ontology.createNamespaceIndividual(name);
 
-        ontology.setHasNamePropertyForNamedEntity(name, namespaceIndividual);
-        ontology.setNamespaceContainsProperty(parentNamespace, namespaceIndividual);
+        //        ontology.setNamespaceContainsProperty(parentNamespace, namespaceIndividual);
+
+        namespace = new Namespace(name, namespace);
+    }
+
+    public Namespace getNamespace() {
+        return namespace;
     }
 }

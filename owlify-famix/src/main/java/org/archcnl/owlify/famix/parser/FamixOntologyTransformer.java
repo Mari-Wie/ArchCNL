@@ -1,186 +1,170 @@
 package org.archcnl.owlify.famix.parser;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.jena.ontology.Individual;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.archcnl.owlify.core.AbstractOwlifyComponent;
-import org.archcnl.owlify.core.GeneralSoftwareArtifactOntology;
-import org.archcnl.owlify.famix.exceptions.FileIsNotAJavaClassException;
-import org.archcnl.owlify.famix.ontology.FamixOntology;
-import org.archcnl.owlify.famix.visitors.ImportDeclarationVisitor;
-import org.archcnl.owlify.famix.visitors.InheritanceVisitor;
-import org.archcnl.owlify.famix.visitors.JavaFieldVisitor;
-import org.archcnl.owlify.famix.visitors.JavaTypeVisitor;
-import org.archcnl.owlify.famix.visitors.MarkerAnnotationExpressionVisitor;
-import org.archcnl.owlify.famix.visitors.MethodDeclarationVisitor;
-import org.archcnl.owlify.famix.visitors.NamespaceVisitor;
-import org.archcnl.owlify.famix.visitors.NormalAnnotationExpressionVisitor;
-import org.archcnl.owlify.famix.visitors.SingleMemberAnnotationExpressionVisitor;
-
-public class FamixOntologyTransformer extends AbstractOwlifyComponent {
-
-    private static final Logger LOG = LogManager.getLogger(FamixOntologyTransformer.class);
-
-    private JavaTypeVisitor visitor;
-    private JavaParserDelegator delegator;
-    private FamixOntology ontology;
-    private Map<CompilationUnit, Individual> unitToIndividualMap;
-    private Map<Individual, String> individualToNameMap;
-    private GeneralSoftwareArtifactOntology mainOntology;
-
-    /** @param resultPath - Path to the file in which the results will be stored. */
-    public FamixOntologyTransformer(String resultPath) {
-        super(resultPath);
-        LOG.debug("Reading resource ontologies ...");
-        InputStream famixOntologyInputStream =
-                getClass().getResourceAsStream("/ontologies/famix.owl");
-        ontology = new FamixOntology(famixOntologyInputStream);
-        InputStream mainOntologyInputStream =
-                getClass().getResourceAsStream("/ontologies/main.owl");
-        mainOntology = new GeneralSoftwareArtifactOntology(mainOntologyInputStream);
-        visitor = new JavaTypeVisitor(ontology);
-        delegator = new JavaParserDelegator();
-
-        unitToIndividualMap = new HashMap<CompilationUnit, Individual>();
-        individualToNameMap = new HashMap<Individual, String>();
-    }
-
-    public void transform() {
-        LOG.trace("Starting transform");
-
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        List<Path> sourcePaths = super.getSourcePaths();
-        for (Path path : sourcePaths) {
-            LOG.debug("Adding Java source path: " + path);
-            combinedTypeSolver.add(new JavaParserTypeSolver(path));
-        }
-
-        JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedTypeSolver);
-        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
-
-        resolveAllTypes(sourcePaths);
-        parseOtherElements(sourcePaths);
-
-        ontology.add(mainOntology.getOntology());
-        LOG.debug("Writing code model to the file: " + super.getResultPath());
-        ontology.save(super.getResultPath());
-    }
-
-    private void parseOtherElements(List<Path> sourcePaths) {
-        LOG.trace("Starting parseOtherElements ...");
-        for (Path path : sourcePaths) {
-            for (File file :
-                    FileUtils.listFiles(
-                            path.toFile(),
-                            new WildcardFileFilter(
-                                    ProgrammingLanguage.getFileExtensionWildCard(
-                                            ProgrammingLanguage.JAVA)),
-                            TrueFileFilter.INSTANCE)) {
-                LOG.debug("Parsing code file: " + file.getAbsolutePath());
-                CompilationUnit unit;
-                try {
-                    unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
-                    Individual currentUnitIndividual = unitToIndividualMap.get(unit);
-                    if (currentUnitIndividual != null) {
-                        // some calls are commented to increase performance
-                        // however, this decreases the number of architecture
-                        // violations that can be found
-                        unit.accept(new InheritanceVisitor(ontology, currentUnitIndividual), null);
-                        unit.accept(new JavaFieldVisitor(ontology, currentUnitIndividual), null);
-                        //				unit.accept(new ConstructorDeclarationVisitor(ontology,
-                        // currentUnitIndividual), null);
-                        unit.accept(
-                                new MethodDeclarationVisitor(ontology, currentUnitIndividual),
-                                null);
-                        unit.accept(
-                                new NamespaceVisitor(
-                                        ontology,
-                                        currentUnitIndividual,
-                                        individualToNameMap.get(currentUnitIndividual)),
-                                null);
-                        unit.accept(
-                                new NormalAnnotationExpressionVisitor(
-                                        ontology, currentUnitIndividual),
-                                null);
-                        unit.accept(
-                                new MarkerAnnotationExpressionVisitor(
-                                        ontology, currentUnitIndividual),
-                                null);
-                        unit.accept(
-                                new SingleMemberAnnotationExpressionVisitor(
-                                        ontology, currentUnitIndividual),
-                                null);
-                        //				unit.accept(new AccessVisitor(ontology,currentUnitIndividual), null);
-                        unit.accept(
-                                new ImportDeclarationVisitor(ontology, currentUnitIndividual),
-                                null);
-                    } else {
-                        LOG.debug("Skipping the file, it is a package-info.java");
-                    }
-                } catch (FileIsNotAJavaClassException e) {
-                    LOG.error("The file is not a Java file. Skipping it ...");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void resolveAllTypes(List<Path> sourcePaths) {
-        for (Path path : sourcePaths) {
-            for (File file :
-                    FileUtils.listFiles(
-                            path.toFile(),
-                            new WildcardFileFilter(
-                                    ProgrammingLanguage.getFileExtensionWildCard(
-                                            ProgrammingLanguage.JAVA)),
-                            TrueFileFilter.INSTANCE)) {
-                CompilationUnit unit;
-                try {
-
-                    unit = delegator.getCompilationUnitFromFilePath(file.getAbsolutePath());
-                    unit.accept(visitor, null);
-                    if (visitor.getFamixTypeIndividual() != null) {
-                        unitToIndividualMap.put(unit, visitor.getFamixTypeIndividual());
-                        Individual softwareArtifactFileIndividual =
-                                mainOntology.getSoftwareArtifactFileIndividual();
-                        mainOntology.setHasFilePath(
-                                softwareArtifactFileIndividual, file.getAbsolutePath());
-                        mainOntology.setSoftwareArtifactFileContainsSoftwareArtifact(
-                                softwareArtifactFileIndividual, visitor.getFamixTypeIndividual());
-                        individualToNameMap.put(
-                                visitor.getFamixTypeIndividual(), visitor.getNameOfFamixType());
-                    } else {
-                        System.out.println(file.getAbsolutePath());
-                    }
-
-                } catch (FileIsNotAJavaClassException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Override
-    public Map<String, String> getProvidedNamespaces() {
-        HashMap<String, String> res = new HashMap<>();
-        res.put("famix", ontology.getOntologyNamespace());
-        return res;
-    }
-}
+//
+// public class FamixOntologyTransformer extends AbstractOwlifyComponent {
+//
+//    private static final Logger LOG = LogManager.getLogger(FamixOntologyTransformer.class);
+//
+//    private FamixOntology ontology;
+//    private GeneralSoftwareArtifactOntology mainOntology;
+//    private Map<String, Individual> unitToIndividualMap;
+//
+//    private List<SourceFile> sourceFileModels;
+//
+//    /** @param resultPath - Path to the file in which the results will be stored. */
+//    public FamixOntologyTransformer(String resultPath) {
+//        super(resultPath);
+//        LOG.debug("Reading resource ontologies ...");
+//        InputStream famixOntologyInputStream =
+//                getClass().getResourceAsStream("/ontologies/famix.owl");
+//        ontology = new FamixOntology(famixOntologyInputStream);
+//        InputStream mainOntologyInputStream =
+//                getClass().getResourceAsStream("/ontologies/main.owl");
+//        mainOntology = new GeneralSoftwareArtifactOntology(mainOntologyInputStream);
+//
+//        unitToIndividualMap = new HashMap<>();
+//
+//        sourceFileModels = new ArrayList<>();
+//    }
+//
+//    public void transform() {
+//        LOG.trace("Starting transform");
+//
+//        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+//        combinedTypeSolver.add(new ReflectionTypeSolver());
+//        List<Path> sourcePaths = super.getSourcePaths();
+//        for (Path path : sourcePaths) {
+//            LOG.debug("Adding Java source path: " + path);
+//            combinedTypeSolver.add(new JavaParserTypeSolver(path));
+//        }
+//
+//        JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedTypeSolver);
+//        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+//
+//        resolveAllTypes(sourcePaths);
+//        parseOtherElements(sourcePaths);
+//
+//        ontology.add(mainOntology.getOntology());
+//        LOG.debug("Writing code model to the file: " + super.getResultPath());
+//        ontology.save(super.getResultPath());
+//    }
+//
+//    private void parseOtherElements(List<Path> sourcePaths) {
+//        LOG.trace("Starting parseOtherElements ...");
+//        visitJavaFiles(sourcePaths, (filePath, unit) -> {
+//            LOG.debug("Parsing code file: " + filePath);
+//
+//            Individual currentUnit = unitToIndividualMap.get(filePath);
+//
+//            // some calls are commented to increase performance
+//            // however, this decreases the number of architecture
+//            // violations that can be found
+//            unit.accept(new InheritanceVisitor(ontology, currentUnit), null); // instantiated only
+// here
+//            unit.accept(new JavaFieldVisitor(ontology, currentUnit), null); // instantiated only
+// here
+//            unit.accept(new ConstructorDeclarationVisitor(ontology, currentUnit), null); //
+// instantiated only here
+//            unit.accept(
+//                    new MethodDeclarationVisitor(ontology, currentUnit), // instantiated only here
+//                    null);
+//            unit.accept(
+//                    new NamespaceVisitor( // instantiated only here
+//                            ontology,
+//                            currentUnit),
+//                    null);
+//            unit.accept(
+//                    new NormalAnnotationExpressionVisitor(
+//                            ontology, currentUnit),
+//                    null);
+//            unit.accept(
+//                    new MarkerAnnotationExpressionVisitor(
+//                            ontology, currentUnit),
+//                    null);
+//            unit.accept(
+//                    new SingleMemberAnnotationExpressionVisitor(
+//                            ontology, currentUnit),
+//                    null);
+//            //              unit.accept(new AccessVisitor(ontology,currentUnitIndividual), null);
+//            unit.accept(
+//                    new ImportDeclarationVisitor(ontology, currentUnit), // instantiated only here
+//                    null);
+//
+//        });
+//    }
+//
+//    private void resolveAllTypes(List<Path> sourcePaths) {
+//        visitJavaFiles(sourcePaths, (filePath, unit) -> {
+//            JavaTypeVisitor visitor = new JavaTypeVisitor(ontology);
+//            unit.accept(visitor, null);
+//
+//            if (visitor.getFamixTypeIndividual() == null) {
+//                LOG.error("The following file does not contain a valid Java type: " + filePath);
+//                return;
+//            }
+//
+//            mainOntology.getSoftwareArtifactFileIndividual(filePath,
+// visitor.getFamixTypeIndividual());
+//
+//            unitToIndividualMap.put(filePath, visitor.getFamixTypeIndividual());
+//        });
+//    }
+//
+//    @Override
+//    public Map<String, String> getProvidedNamespaces() {
+//        HashMap<String, String> res = new HashMap<>();
+//        res.put("famix", ontology.getOntologyNamespace());
+//        return res;
+//    }
+//
+//    /**
+//     * Executes the specified lambda on all Java source files located under the given source
+// paths.
+//     * @param sourcePaths A list of paths to directories containing the files to process.
+//     * @param visitor A lambda expression which is executed on each file.
+//     */
+//    private void visitJavaFiles(List<Path> sourcePaths, JavaFileVisitor visitor) {
+//        for (Path path : sourcePaths) {
+//            for (File file : getJavaFilesAtPath(path)) {
+//                try {
+//                    visitor.visitFile(file.getAbsolutePath(),
+// CompilationUnitFactory.getFromPath(file.getAbsolutePath()));
+//
+//                } catch (FileIsNotAJavaClassException e) {
+//                    LOG.error("The following file is not a Java file. Skipping it ... : " +
+// file.getAbsolutePath());
+//                    e.printStackTrace();
+//                } catch (FileNotFoundException e) {
+//                    LOG.error("The following file cannot be accessed. Skipping it ... : " +
+// file.getAbsolutePath());
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Returns all Java Files located under the specified path.
+//     * Only files with the suffix ".java" will be returned.
+//     */
+//    private Collection<File> getJavaFilesAtPath(Path path) {
+//        return FileUtils.listFiles(
+//                path.toFile(),
+//                new WildcardFileFilter(
+//                        ProgrammingLanguage.getFileExtensionWildCard(
+//                                ProgrammingLanguage.JAVA)),
+//                TrueFileFilter.INSTANCE);
+//    }
+//
+//    private static interface JavaFileVisitor {
+//        /**
+//         * Used as a parameter for accepting lambda expressions. Implementations are supposed to
+//         * process the given Java file/compilation unit.
+//         *
+//         * @param filePath The path of the file being processed.
+//         * @param unit The CompilationUnit corresponding to the file being processed.
+//         */
+//        public void visitFile(String filePath, CompilationUnit unit);
+//    }
+//
+// }

@@ -4,36 +4,50 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.ontology.Individual;
+import org.archcnl.owlify.famix.codemodel.Type;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
+
+// TODO: delete this class when refactoring is completed
 
 public class InheritanceVisitor extends VoidVisitorAdapter<Void> {
 
     private FamixOntology ontology;
-
     private Individual subClass;
+    private List<Type> supertypes;
 
     public InheritanceVisitor(FamixOntology ontology, Individual subClass) {
         this.ontology = ontology;
         this.subClass = subClass;
+        this.supertypes = new ArrayList<>();
+    }
+
+    public InheritanceVisitor() {
+        this.supertypes = new ArrayList<>();
     }
 
     @Override
     public void visit(ClassOrInterfaceDeclaration n, Void arg) {
+        setSubclassProperties(n.getExtendedTypes());
+        setSubclassProperties(n.getImplementedTypes());
+    }
 
-        DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
-        NodeList<ClassOrInterfaceType> extendedTypes = n.getExtendedTypes();
+    private void setSubclassProperties(NodeList<ClassOrInterfaceType> extendedTypes) {
+        //        DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
+        DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
         for (ClassOrInterfaceType classOrInterfaceType : extendedTypes) {
             classOrInterfaceType.accept(visitor, null);
-            Individual declaredType = visitor.getDeclaredType();
-            ontology.setInheritanceBetweenSubClassAndSuperClass(declaredType, subClass);
-        }
+            //
+            // ontology.setInheritanceBetweenSubClassAndSuperClass(visitor.getDeclaredType(),
+            // subClass);
 
-        NodeList<ClassOrInterfaceType> implementedTypes = n.getImplementedTypes();
-        for (ClassOrInterfaceType classOrInterfaceType : implementedTypes) {
-            classOrInterfaceType.accept(visitor, null);
-            Individual declaredType = visitor.getDeclaredType();
-            ontology.setInheritanceBetweenSubClassAndSuperClass(declaredType, subClass);
+            supertypes.add(visitor.getType());
         }
+    }
+
+    public List<Type> getSupertypes() {
+        return supertypes;
     }
 }

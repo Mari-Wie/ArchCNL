@@ -3,15 +3,15 @@ package org.archcnl.owlify.famix.parser;
 import static org.junit.Assert.assertNotNull;
 
 import com.github.javaparser.ast.CompilationUnit;
+import java.io.FileNotFoundException;
 import org.archcnl.owlify.famix.exceptions.FileIsNotAJavaClassException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class JavaParserDelegatorTest {
+public class CompilationUnitFactoryTest {
 
-    private JavaParserDelegator delegator;
     private String path;
     private String pathToNonJavaFile;
 
@@ -19,22 +19,22 @@ public class JavaParserDelegatorTest {
 
     @Before
     public void initialize() {
-        delegator = new JavaParserDelegator();
-        path = "./src/test/java/examples/TestClassA.java";
+        path = "./src/test/java/examples/SimpleClass.java";
         pathToNonJavaFile = "./src/test/java/examples/test.xml";
     }
 
     @Test
     public void testDelegatorReturnCompilationUnitThatIsNotNull()
-            throws FileIsNotAJavaClassException {
+            throws FileIsNotAJavaClassException, FileNotFoundException {
 
-        CompilationUnit unit = delegator.getCompilationUnitFromFilePath(path);
+        CompilationUnit unit = CompilationUnitFactory.getFromPath(path);
         assertNotNull(unit);
     }
 
     @Test
-    public void testDelegatorThrowsExceptionForNonJavaFiles() throws FileIsNotAJavaClassException {
+    public void testDelegatorThrowsExceptionForNonJavaFiles()
+            throws FileIsNotAJavaClassException, FileNotFoundException {
         thrown.expect(FileIsNotAJavaClassException.class);
-        delegator.getCompilationUnitFromFilePath(pathToNonJavaFile);
+        CompilationUnitFactory.getFromPath(pathToNonJavaFile);
     }
 }

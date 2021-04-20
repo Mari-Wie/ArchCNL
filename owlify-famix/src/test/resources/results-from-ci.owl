@@ -1,0 +1,620 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://arch-ont.org/ontologies/main.owl#"
+    xmlns:j.0="http://arch-ont.org/ontologies/famix.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <owl:Ontology rdf:about="http://arch-ont.org/ontologies/main.owl"/>
+  <owl:Ontology rdf:about="http://arch-ont.org/ontologies/famix.owl"/>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#StructuralEntity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#LeafEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Invocation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Package">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ImplicitVariable">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#ArtifactThing"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ScopingEntity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ContainerEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#LeafEntity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizableClass">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Import">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourcedEntity">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CustomSourceLanguage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationTypeAttribute">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Attribute"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Exception">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Attribute">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceLanguage">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/main.owl#ArtifactThing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Function">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Method"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#TypeAlias">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Enum">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#EnumValue">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Reference">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixClass">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Module">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ContainerEntity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Method">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#GlobalVariable">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#JavaSourceLanguage">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#LocalVariable">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizedType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ThrownException">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CSourceLanguage">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Parameter">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#NamedEntity">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FileAnchor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceAnchor"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceTextAnchor"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Comment">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ContainerEntity">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    <owl:disjointWith rdf:resource="http://arch-ont.org/ontologies/famix.owl#LeafEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceTextAnchor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceAnchor"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnkownSourceLanguage">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SmalltalkLanguage">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Inheritance">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceAnchor">
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnknownVariable">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#PrimitiveType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#ContainerEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Access">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Association"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterType">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CaughtException">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#DeclaredException">
+    <rdfs:subClassOf rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasDefiningClass">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Exception"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#definesVariable">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#LocalVariable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasDeclaredType">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#definesParameter">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Parameter"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#imports">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasSender">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasReceiver">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#definesAttribute">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Attribute"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#containsArtifact">
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#namespaceContains">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Namespace"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#definesMethod">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#dependsOn">
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationInstance">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Entity"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationTypeAttribute">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationTypeAttribute"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasSuperClass">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#throwsException">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#ThrownException"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasParent">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifact"/>
+          <owl:Class rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationType">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasCaughtException">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#CaughtException"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#invokes">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#StructuralEntity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasDeclaredException">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#DeclaredException"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasSubClass">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasAnnotationInstanceAttribute">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
+    <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasPath">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasDescription">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasFullQualifiedName">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasValue">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasName">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasModifier">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#isExternal">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasIdentifier">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasCreationDate">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#isConstructor">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#Method"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#hasSignature">
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasRelativePath"/>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#isInterface">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://arch-ont.org/ontologies/main.owl#hasModificationDate">
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </owl:DatatypeProperty>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Module"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Package"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile1">
+    <containsArtifact>
+      <j.0:FamixClass rdf:about="http://arch-ont.org/ontologies/famix.owl#StartUp1">
+        <j.0:hasName>StartUp</j.0:hasName>
+        <j.0:isInterface rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</j.0:isInterface>
+        <j.0:hasModifier>public </j.0:hasModifier>
+        <j.0:definesMethod>
+          <j.0:Method rdf:about="http://arch-ont.org/ontologies/famix.owl#Method1">
+            <j.0:hasName>main</j.0:hasName>
+            <j.0:hasDeclaredType>
+              <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#void">
+                <j.0:hasName>void</j.0:hasName>
+                <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+              </owl:NamedIndividual>
+            </j.0:hasDeclaredType>
+            <j.0:hasSignature>main(String[])</j.0:hasSignature>
+            <j.0:hasModifier>public </j.0:hasModifier>
+            <j.0:hasModifier>static </j.0:hasModifier>
+            <j.0:definesParameter>
+              <j.0:Parameter rdf:about="http://arch-ont.org/ontologies/famix.owl#Parameter1">
+                <j.0:hasName>args</j.0:hasName>
+                <j.0:hasDeclaredType>
+                  <j.0:FamixClass rdf:about="http://arch-ont.org/ontologies/famix.owl#java.lang.String3">
+                    <j.0:hasName>java.lang.String</j.0:hasName>
+                    <j.0:isExternal rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</j.0:isExternal>
+                  </j.0:FamixClass>
+                </j.0:hasDeclaredType>
+              </j.0:Parameter>
+            </j.0:definesParameter>
+            <j.0:definesVariable>
+              <j.0:LocalVariable rdf:about="http://arch-ont.org/ontologies/famix.owl#LocalVariable0">
+                <j.0:hasName>topmostLayer</j.0:hasName>
+                <j.0:hasDeclaredType>
+                  <j.0:FamixClass rdf:about="http://arch-ont.org/ontologies/famix.owl#TestLayerOne0">
+                    <j.0:hasName>TestLayerOne</j.0:hasName>
+                    <j.0:isInterface rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >false</j.0:isInterface>
+                    <j.0:hasModifier>public </j.0:hasModifier>
+                    <j.0:definesAttribute>
+                      <j.0:Attribute rdf:about="http://arch-ont.org/ontologies/famix.owl#Attribute0">
+                        <j.0:hasName>layerBelow</j.0:hasName>
+                        <j.0:hasDeclaredType>
+                          <j.0:FamixClass rdf:about="http://arch-ont.org/ontologies/famix.owl#TestLayerTwo2">
+                            <j.0:hasName>TestLayerTwo</j.0:hasName>
+                            <j.0:isInterface rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                            >false</j.0:isInterface>
+                            <j.0:hasModifier>public </j.0:hasModifier>
+                            <j.0:definesAttribute>
+                              <j.0:Attribute rdf:about="http://arch-ont.org/ontologies/famix.owl#Attribute1">
+                                <j.0:hasName>layerAbove</j.0:hasName>
+                                <j.0:hasDeclaredType rdf:resource="http://arch-ont.org/ontologies/famix.owl#TestLayerOne0"/>
+                                <j.0:hasModifier>private </j.0:hasModifier>
+                              </j.0:Attribute>
+                            </j.0:definesAttribute>
+                            <j.0:definesMethod>
+                              <j.0:Method rdf:about="http://arch-ont.org/ontologies/famix.owl#Method2">
+                                <j.0:hasName>doStuff</j.0:hasName>
+                                <j.0:hasDeclaredType>
+                                  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#int">
+                                    <j.0:hasName>int</j.0:hasName>
+                                    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+                                  </owl:NamedIndividual>
+                                </j.0:hasDeclaredType>
+                                <j.0:hasSignature>doStuff(int)</j.0:hasSignature>
+                                <j.0:hasModifier>public </j.0:hasModifier>
+                                <j.0:definesParameter>
+                                  <j.0:Parameter rdf:about="http://arch-ont.org/ontologies/famix.owl#Parameter2">
+                                    <j.0:hasName>param</j.0:hasName>
+                                    <j.0:hasDeclaredType rdf:resource="http://arch-ont.org/ontologies/famix.owl#int"/>
+                                  </j.0:Parameter>
+                                </j.0:definesParameter>
+                              </j.0:Method>
+                            </j.0:definesMethod>
+                          </j.0:FamixClass>
+                        </j.0:hasDeclaredType>
+                        <j.0:hasModifier>private </j.0:hasModifier>
+                      </j.0:Attribute>
+                    </j.0:definesAttribute>
+                    <j.0:definesMethod>
+                      <j.0:Method rdf:about="http://arch-ont.org/ontologies/famix.owl#Method0">
+                        <j.0:hasName>doStuff</j.0:hasName>
+                        <j.0:hasDeclaredType rdf:resource="http://arch-ont.org/ontologies/famix.owl#int"/>
+                        <j.0:hasSignature>doStuff(int)</j.0:hasSignature>
+                        <j.0:hasModifier>public </j.0:hasModifier>
+                        <j.0:definesParameter>
+                          <j.0:Parameter rdf:about="http://arch-ont.org/ontologies/famix.owl#Parameter0">
+                            <j.0:hasName>param</j.0:hasName>
+                            <j.0:hasDeclaredType rdf:resource="http://arch-ont.org/ontologies/famix.owl#int"/>
+                          </j.0:Parameter>
+                        </j.0:definesParameter>
+                      </j.0:Method>
+                    </j.0:definesMethod>
+                  </j.0:FamixClass>
+                </j.0:hasDeclaredType>
+              </j.0:LocalVariable>
+            </j.0:definesVariable>
+          </j.0:Method>
+        </j.0:definesMethod>
+      </j.0:FamixClass>
+    </containsArtifact>
+  </SoftwareArtifactFile>
+  <SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile0">
+    <containsArtifact rdf:resource="http://arch-ont.org/ontologies/famix.owl#TestLayerOne0"/>
+  </SoftwareArtifactFile>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#BehaviouralEntity"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ScopingEntity"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstance"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationInstanceAttribute"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Exception"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceAnchor"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SourcedEntity"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#long">
+    <j.0:hasName>long</j.0:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Access"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Inheritance"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Invocation"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Reference"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#char">
+    <j.0:hasName>char</j.0:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#String">
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <j.0:Namespace rdf:about="http://arch-ont.org/ontologies/famix.owl#Namespace0">
+    <j.0:hasName></j.0:hasName>
+  </j.0:Namespace>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Attribute"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#EnumValue"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#GlobalVariable"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ImplicitVariable"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#LocalVariable"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Parameter"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnknownVariable"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CaughtException"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#DeclaredException"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ThrownException"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Association"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Comment"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#NamedEntity"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#CustomSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#JavaSourceLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#SmalltalkLanguage"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#UnkownSourceLanguage"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#double">
+    <j.0:hasName>double</j.0:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#byte">
+    <j.0:hasName>byte</j.0:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#boolean">
+    <j.0:hasName>boolean</j.0:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+  <owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#AnnotationType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#Enum"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#FamixClass"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#ParameterizedType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+      <owl:Class rdf:about="http://arch-ont.org/ontologies/famix.owl#TypeAlias"/>
+    </owl:members>
+  </owl:AllDisjointClasses>
+  <SoftwareArtifactFile rdf:about="http://arch-ont.org/ontologies/main.owl#SoftwareArtifactFile2">
+    <containsArtifact rdf:resource="http://arch-ont.org/ontologies/famix.owl#TestLayerTwo2"/>
+  </SoftwareArtifactFile>
+  <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#Integer">
+    <j.0:hasName>Integer</j.0:hasName>
+    <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+  </owl:NamedIndividual>
+</rdf:RDF>

@@ -1,22 +1,40 @@
 package org.archcnl.owlify.famix.visitors;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.jena.ontology.Individual;
+import org.archcnl.owlify.famix.codemodel.Annotation;
+import org.archcnl.owlify.famix.codemodel.AnnotationAttribute;
+import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
+import org.archcnl.owlify.famix.codemodel.DefinedType;
+import org.archcnl.owlify.famix.codemodel.Enumeration;
+import org.archcnl.owlify.famix.codemodel.Field;
+import org.archcnl.owlify.famix.codemodel.Method;
+import org.archcnl.owlify.famix.codemodel.Type;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.visitors.helper.VisitorHelpers;
 
 public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private Individual famixTypeIndividual;
     private String famixTypeName;
     private FamixOntology ontology;
+
+    private List<DefinedType> definedTypes;
+    private List<Type> supertypes;
 
     public JavaTypeVisitor(InputStream famixOntologyInputStream) {
         ontology = new FamixOntology(famixOntologyInputStream);
@@ -26,87 +44,133 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
         this.ontology = ontology;
     }
 
+    public JavaTypeVisitor() {
+        definedTypes = new ArrayList<>();
+        this.supertypes = new ArrayList<>();
+    }
+
     @Override
     public void visit(ClassOrInterfaceDeclaration n, Void arg) {
-        //		famixTypeIndividual = ontology.getFamixClassWithName(n.getName().asString());
-        famixTypeIndividual = ontology.getFamixClassWithName(n.resolve().getQualifiedName());
 
-        // data type properties
+        setSubclassProperties(n.getExtendedTypes());
+        setSubclassProperties(n.getImplementedTypes());
 
-        // set name
-        // famixTypeName = n.getName().asString();
-        famixTypeName = n.resolve().getQualifiedName();
-        ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
-
-        // set if interface
-        boolean isInterface = n.isInterface();
-        ontology.setIsInterfaceForFamixClass(isInterface, famixTypeIndividual);
-
-        // set source code -> compilationUnit
-        //		System.out.println(n);
-
-        // set modifiers
-        NodeList<Modifier> modifiers = n.getModifiers();
-        for (Modifier modifier : modifiers) {
-            ontology.setHasModifierForNamedEntity(modifier.toString(), famixTypeIndividual);
-        }
+        definedTypes.add(
+                new ClassOrInterface(
+                        n.resolve().getQualifiedName(),
+                        processNestedTypes(n.getMembers()),
+                        processAllMethods(n.getMethods(), n.getConstructors()),
+                        processFields(n.getFields()),
+                        VisitorHelpers.processModifiers(n.getModifiers()),
+                        VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        n.isInterface(),
+                        supertypes));
 
         super.visit(n, null);
-
-        // parameterized type
-        // n.getTypeParameters()
-
     }
 
     @Override
     public void visit(EnumDeclaration n, Void arg) {
-        System.out.println("Enum: " + n.resolve().getQualifiedName());
-        famixTypeIndividual =
-                ontology.getEnumTypeIndividualWithName(n.resolve().getQualifiedName());
 
-        // set name
-        famixTypeName = n.resolve().getQualifiedName();
-        ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
+        //        famixTypeIndividual = ontology.createEnumWithName(famixTypeName);
+        //        ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
 
-        // Enum members
-        // n.getMembers()
+        definedTypes.add(
+                new Enumeration(
+                        n.resolve().getQualifiedName(),
+                        processNestedTypes(n.getMembers()),
+                        processAllMethods(n.getMethods(), n.getConstructors()),
+                        processFields(n.getFields()),
+                        VisitorHelpers.processModifiers(n.getModifiers()),
+                        VisitorHelpers.processAnnotations(n.getAnnotations())));
 
         super.visit(n, null);
     }
 
     @Override
     public void visit(AnnotationDeclaration n, Void arg) {
-        System.out.println("Annotation: " + n.resolve().getQualifiedName());
-        famixTypeIndividual =
-                ontology.getAnnotationTypeIndividualWithName(n.resolve().getQualifiedName());
+        //        famixTypeIndividual = ontology.getAnnotationTypeIndividualWithName(famixTypeName);
 
-        // set name
-        famixTypeName = n.resolve().getQualifiedName();
-        ontology.setHasNamePropertyForNamedEntity(famixTypeName, famixTypeIndividual);
+        //        n.getMembers().forEach(m -> processAnnotationMemberDeclaration(m));
 
-        DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
-        for (BodyDeclaration<?> bodyDeclaration : n.getMembers()) {
-            if (bodyDeclaration instanceof AnnotationMemberDeclaration) {
-                AnnotationMemberDeclaration annotationMember =
-                        (AnnotationMemberDeclaration) bodyDeclaration;
-                // System.out.println(annotationMember.getType() + " " +
-                // annotationMember.getName());
-                Individual annotationTypeAttributeIndividual =
-                        ontology.createAnnotationTypeAttributeIndividual();
-                ontology.setHasNamePropertyForNamedEntity(
-                        annotationMember.getName().asString(), annotationTypeAttributeIndividual);
-                annotationMember.getType().accept(visitor, null);
-                Individual declaredType = visitor.getDeclaredType();
-                ontology.setDeclaredTypeForBehavioralOrStructuralEntity(
-                        annotationTypeAttributeIndividual, declaredType);
-                ontology.setHasAnnotationTypeAttributeForAnnotationType(
-                        famixTypeIndividual,
-                        annotationMember.getName().asString(),
-                        annotationTypeAttributeIndividual);
-            }
-        }
+        definedTypes.add(
+                new Annotation(
+                        n.resolve().getQualifiedName(),
+                        VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        processAnnotationAttributes(n.getMembers())));
 
         super.visit(n, null);
+    }
+
+    private void setSubclassProperties(NodeList<ClassOrInterfaceType> extendedTypes) {
+        //      DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
+        DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
+        for (ClassOrInterfaceType classOrInterfaceType : extendedTypes) {
+            classOrInterfaceType.accept(visitor, null);
+            //
+            // ontology.setInheritanceBetweenSubClassAndSuperClass(visitor.getDeclaredType(),
+            // subClass);
+
+            supertypes.add(visitor.getType());
+        }
+    }
+
+    private List<AnnotationAttribute> processAnnotationAttributes(
+            NodeList<BodyDeclaration<?>> members) {
+        return members.stream()
+                .filter(bodyDeclaration -> bodyDeclaration instanceof AnnotationMemberDeclaration)
+                .map(
+                        declaration -> {
+                            AnnotationMemberDeclaration annotationMember =
+                                    (AnnotationMemberDeclaration) declaration;
+                            DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
+                            annotationMember.getType().accept(visitor, null);
+                            return new AnnotationAttribute(
+                                    annotationMember.getNameAsString(), visitor.getType());
+                        })
+                .collect(Collectors.toList());
+    }
+
+    private void processAnnotationMemberDeclaration(BodyDeclaration<?> bodyDeclaration) {
+        if (bodyDeclaration instanceof AnnotationMemberDeclaration) {
+            AnnotationMemberDeclaration annotationMember =
+                    (AnnotationMemberDeclaration) bodyDeclaration;
+
+            final String memberName = annotationMember.getName().asString();
+
+            DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
+            annotationMember.getType().accept(visitor, null);
+
+            Individual declaredType = visitor.getDeclaredType();
+            //            ontology.addAnnotationTypeAttribute(memberName, declaredType,
+            // famixTypeIndividual);
+        }
+    }
+
+    private List<Method> processAllMethods(
+            List<MethodDeclaration> methods, List<ConstructorDeclaration> constructors) {
+        MethodDeclarationVisitor methodVisitor = new MethodDeclarationVisitor();
+        ConstructorDeclarationVisitor constructorVisitor = new ConstructorDeclarationVisitor();
+
+        methods.forEach(declaration -> declaration.accept(methodVisitor, null));
+        constructors.forEach(declaration -> declaration.accept(constructorVisitor, null));
+
+        List<Method> allMethods = methodVisitor.getMethods();
+        allMethods.addAll(constructorVisitor.getConstructors());
+
+        return allMethods;
+    }
+
+    private List<Field> processFields(List<FieldDeclaration> fields) {
+        JavaFieldVisitor fieldVisitor = new JavaFieldVisitor();
+        fields.forEach(declaration -> declaration.accept(fieldVisitor, null));
+        return fieldVisitor.getFields();
+    }
+
+    private List<DefinedType> processNestedTypes(NodeList<BodyDeclaration<?>> declarations) {
+        JavaTypeVisitor typeVisitor = new JavaTypeVisitor();
+        declarations.accept(typeVisitor, null);
+        return typeVisitor.getDefinedTypes();
     }
 
     public Individual getFamixTypeIndividual() {
@@ -115,5 +179,9 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     public String getNameOfFamixType() {
         return famixTypeName;
+    }
+
+    public List<DefinedType> getDefinedTypes() {
+        return definedTypes;
     }
 }

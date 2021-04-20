@@ -1,21 +1,25 @@
 package org.archcnl.owlify.famix.visitors;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.util.List;
 import org.apache.jena.ontology.Individual;
+import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.visitors.helper.VisitorHelpers;
 
 public class ParameterVisitor extends VoidVisitorAdapter<Void> {
 
     private FamixOntology ontology;
     private Individual parent;
+    private org.archcnl.owlify.famix.codemodel.Parameter parameter;
 
     public ParameterVisitor(FamixOntology ontology, Individual parent) {
         this.ontology = ontology;
         this.parent = parent;
     }
+
+    public ParameterVisitor() {}
 
     @Override
     public void visit(Parameter n, Void arg) {
@@ -23,26 +27,24 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
         DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
         n.accept(visitor, null);
 
-        Individual parameterIndividual = ontology.getParameterIndividual();
-        ontology.setHasNamePropertyForNamedEntity(n.getName().asString(), parameterIndividual);
+        //        Individual parameterIndividual =
+        // ontology.getParameterIndividual(n.getName().asString(), visitor.getDeclaredType(),
+        // parent, n.getModifiers().stream().map(Modifier::toString).collect(Collectors.toList()));
+        //        ontology.setHasNamePropertyForNamedEntity(n.getName().asString(),
+        // parameterIndividual);
+        //        AnnotationProcessor.visitAnnotations(ontology, n.getAnnotations(),
+        // parameterIndividual);
 
-        ontology.setDeclaredTypeForBehavioralOrStructuralEntity(
-                parameterIndividual, visitor.getDeclaredType());
+        List<AnnotationInstance> annotations =
+                VisitorHelpers.processAnnotations(n.getAnnotations());
+        List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers =
+                VisitorHelpers.processModifiers(n.getModifiers());
+        parameter =
+                new org.archcnl.owlify.famix.codemodel.Parameter(
+                        n.getNameAsString(), visitor.getType(), modifiers, annotations);
+    }
 
-        for (AnnotationExpr annotationExpr : n.getAnnotations()) {
-            annotationExpr.accept(
-                    new MarkerAnnotationExpressionVisitor(ontology, parameterIndividual), null);
-            annotationExpr.accept(
-                    new SingleMemberAnnotationExpressionVisitor(ontology, parameterIndividual),
-                    null);
-            annotationExpr.accept(
-                    new NormalAnnotationExpressionVisitor(ontology, parameterIndividual), null);
-        }
-
-        for (Modifier modifier : n.getModifiers()) {
-            ontology.setHasModifierForNamedEntity(modifier.toString(), parameterIndividual);
-        }
-
-        ontology.setDefinesParameterPropertyForBehavioralEntity(parent, parameterIndividual);
+    public org.archcnl.owlify.famix.codemodel.Parameter getParameter() {
+        return parameter;
     }
 }

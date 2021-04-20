@@ -3,6 +3,7 @@ package org.archcnl.owlify.core;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Abstract base class of input parsers which can be used as a template for new input parsers. It
@@ -11,18 +12,14 @@ import java.util.List;
 public abstract class AbstractOwlifyComponent implements OwlifyComponent {
 
     // path of the output file
-    private String resultPath;
+    //    private String resultPath;
 
     // list of input paths
     private List<Path> sourcePaths;
 
-    /**
-     * Constructor.
-     *
-     * @param resultPath the path to the file in which the generated ontology will be stored
-     */
-    public AbstractOwlifyComponent(String resultPath) {
-        this.resultPath = resultPath;
+    /** Constructor. */
+    public AbstractOwlifyComponent() {
+        //        this.resultPath = resultPath;
         this.sourcePaths = new ArrayList<Path>();
     }
 
@@ -35,10 +32,10 @@ public abstract class AbstractOwlifyComponent implements OwlifyComponent {
     }
 
     // implement this method in your parser
-    public abstract void transform();
+    public abstract Model transform();
 
-    public String getResultPath() {
-
-        return this.resultPath;
-    }
+    //    public String getResultPath() {
+    //
+    //        return this.resultPath;
+    //    }
 }

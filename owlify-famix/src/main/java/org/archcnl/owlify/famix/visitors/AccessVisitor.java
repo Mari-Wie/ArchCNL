@@ -12,7 +12,7 @@ import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 public class AccessVisitor extends VoidVisitorAdapter<Void> {
-
+    // TODO: class is never used
     private FamixOntology ontology;
     private Individual accessingUnit;
 
@@ -59,8 +59,10 @@ public class AccessVisitor extends VoidVisitorAdapter<Void> {
         //		Individual type = ontology.getFamixClassWithName(n.getType().getName().toString());
         try {
             ResolvedReferenceType resolvedType = n.getType().resolve();
-            Individual type = ontology.getFamixClassWithName(resolvedType.getQualifiedName());
-            ontology.setHasFullQualifiedNameForType(type, resolvedType.getQualifiedName());
+            //            Individual type =
+            // ontology.getFamixClassWithName(resolvedType.getQualifiedName());
+            Individual type = ontology.getReferenceTypeIndividual(resolvedType.getQualifiedName());
+
             ontology.setInvokes(accessingUnit, type);
         } catch (UnsolvedSymbolException e) {
             //			System.out.println("Unable to resolve type: " + e.getName());
@@ -73,34 +75,33 @@ public class AccessVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(MethodCallExpr n, Void arg) {
-        //		System.out.println(n.getName());
         // Famix Invocation
         // scope: receiver
 
         //		Individual invocation = ontology.getInvocationIndividual();
         try {
-            Individual receiver = ontology.getLocalVariableIndividual();
-            //				ontology.setHasReceiverProperty(invocation,receiver);
 
             ResolvedMethodDeclaration resolvedMethodDeclaration = n.resolve();
-            //				System.out.println(n.getName() + " " + resolvedMethodDeclaration.getClassName());
+
             // Type where method is declared
-            //			Individual declaringType = ontology
-            //					.getFamixClassWithName(resolvedMethodDeclaration.declaringType().getName());
+            //            Individual declaringType =
+            //                    ontology.getFamixClassWithName(
+            //
+            // resolvedMethodDeclaration.declaringType().getQualifiedName());
+
             Individual declaringType =
-                    ontology.getFamixClassWithName(
+                    ontology.getReferenceTypeIndividual(
                             resolvedMethodDeclaration.declaringType().getQualifiedName());
-            ontology.setHasFullQualifiedNameForType(
-                    declaringType, resolvedMethodDeclaration.declaringType().getQualifiedName());
+            // TODO: changed to be consistent with the case above
+            // TODO: does this break anything?
+            // TODO: write an issue when checking in
 
-            ontology.setDeclaredTypeForBehavioralOrStructuralEntity(receiver, declaringType);
-            //				ontology.setHasSender(invocation,accessingUnit);
-
-            ontology.setInvokes(accessingUnit, receiver);
+            //            Individual receiver = ontology.getLocalVariableIndividual(declaringType);
+            //            ontology.setInvokes(accessingUnit, receiver);
+            ontology.setInvokes(accessingUnit, declaringType);
 
         } catch (Exception e) {
             // TODO: handle exception
-            //			System.out.println("type could not be resolved");
         }
 
         super.visit(n, arg);
