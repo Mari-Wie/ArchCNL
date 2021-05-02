@@ -21,6 +21,7 @@
 		<junitVersion>4.12</junitVersion>
 		<surefireVersion>2.12.4</surefireVersion>
 		<spotlessVersion>2.9.0</spotlessVersion>
+		<antlr.version>4.9.2</antlr.version>
 	</properties>
 
 	<profiles>

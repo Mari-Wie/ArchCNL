@@ -1,6 +1,9 @@
 package org.archcnl.owlify.famix.kotlin.parser;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +38,15 @@ public class FamixKotlinOntologyTransformer extends AbstractOwlifyComponent {
 	public void transform() {
 		LOG.trace("Starting kotlin to famix-owl transformation");
 		
-		// TODO: add transformation
+		for (Path sourcePath : super.getSourcePaths()) {
+			var fileVisitor = new FileVisitor();
+			try {
+				Files.walkFileTree(sourcePath, fileVisitor);
+			} catch (IOException e) {
+				LOG.error("FileVisitor produced an error: ", e);
+				e.printStackTrace();
+			}
+		}
 		
 		ontology.add(mainOntology.getOntology());
         LOG.debug("Writing code model to the file: " + super.getResultPath());
