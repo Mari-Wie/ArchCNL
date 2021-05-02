@@ -28,6 +28,7 @@ import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckImpl;
 import org.archcnl.javaparser.parser.JavaOntologyTransformer;
 import org.archcnl.owlify.core.OwlifyComponent;
+import org.archcnl.owlify.famix.kotlin.parser.FamixKotlinOntologyTransformer;
 import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
@@ -40,6 +41,7 @@ public class CNLToolchain {
     private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
 
     private OwlifyComponent javaTransformer;
+    private OwlifyComponent famixKotlinTransformer;
     private StardogICVAPI icvAPI;
     private IConformanceCheck check;
     private StardogDatabaseAPI db;
@@ -53,6 +55,7 @@ public class CNLToolchain {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.javaTransformer = new JavaOntologyTransformer();
+        this.famixKotlinTransformer = new FamixKotlinOntologyTransformer(TEMPORARY_DIRECTORY + "/kotlin-results.owl");
         this.check = new ConformanceCheckImpl();
     }
 
@@ -276,7 +279,9 @@ public class CNLToolchain {
         // source code transformation
         for (var sourceCodePath : sourceCodePaths) {
             javaTransformer.addSourcePath(sourceCodePath);
+            famixKotlinTransformer.addSourcePath(sourceCodePath);
         }
+        famixKotlinTransformer.transform();
         return javaTransformer.transform();
     }
 
