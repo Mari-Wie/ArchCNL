@@ -28,23 +28,14 @@ public class AnnotationInstance {
 
     public void modelIn(FamixOntologyNew ontology, Individual entity) {
         OntClass clazz = ontology.codeModel().getOntClass(FamixURIs.ANNOTATION_INSTANCE);
-        Individual individual = clazz.createIndividual("TODO" + "-" + name); // TODO: name
+        Individual individual = clazz.createIndividual(entity.getURI() + "-" + name);
 
         entity.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.HAS_ANNOTATION_INSTANCE),
                 individual);
 
-        // TODO: somewhat similar to getTypeIndividual()
-
-        if (!ontology.typeCache().isUserDefined(name)) {
-            Individual annotationType =
-                    ontology.codeModel()
-                            .getOntClass(FamixURIs.ANNOTATION_TYPE)
-                            .createIndividual(name);
-            annotationType.addLiteral(
-                    ontology.codeModel().getDatatypeProperty(FamixURIs.IS_EXTERNAL), true);
-            annotationType.addLiteral(
-                    ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_NAME), name);
+        if (!ontology.typeCache().isDefined(name)) {
+            createNewAnnotationType(ontology);
         }
 
         Individual annotationType = ontology.typeCache().getIndividual(name);
@@ -56,5 +47,17 @@ public class AnnotationInstance {
         for (AnnotationMemberValuePair memberValuePair : values) {
             memberValuePair.modelIn(ontology, name, individual);
         }
+    }
+
+    private void createNewAnnotationType(FamixOntologyNew ontology) {
+        // this code is different from the similar code in Type.getIndividual()
+        // in this case, the external type is known to be an annotation
+        Individual annotationType =
+                ontology.codeModel().getOntClass(FamixURIs.ANNOTATION_TYPE).createIndividual(name);
+        annotationType.addLiteral(
+                ontology.codeModel().getDatatypeProperty(FamixURIs.IS_EXTERNAL), true);
+        annotationType.addLiteral(
+                ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME), name);
+        ontology.typeCache().addDefinedType(name, annotationType);
     }
 }

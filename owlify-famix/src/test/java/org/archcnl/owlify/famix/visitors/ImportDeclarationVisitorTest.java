@@ -11,6 +11,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.archcnl.owlify.famix.codemodel.Type;
 import org.archcnl.owlify.famix.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.owlify.famix.parser.CompilationUnitFactory;
 import org.junit.Before;
@@ -35,45 +38,40 @@ public class ImportDeclarationVisitorTest {
 
     @Test
     public void testNoImports() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "EmptyClass.java");
-        unit.accept(visitor, null);
-
-        assertTrue(visitor.getImports().isEmpty());
+        List<String> imports = extractImportedTypes(pathToExamplePackage + "EmptyClass.java");
+        assertEquals(0, imports.size());
+        ;
     }
 
     @Test
     public void testSomeImports() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "ComplexClass.java");
-        unit.accept(visitor, null);
+        List<String> imports = extractImportedTypes(pathToExamplePackage + "ComplexClass.java");
 
-        assertEquals(3, visitor.getImports().size());
-
-        assertEquals("java.util.ArrayList", visitor.getImports().get(0).getName());
-        assertFalse(visitor.getImports().get(0).isPrimitive());
-
-        assertEquals("java.util.List", visitor.getImports().get(1).getName());
-        assertFalse(visitor.getImports().get(1).isPrimitive());
-
-        assertEquals(
-                "examples.subpackage.ClassInSubpackage", visitor.getImports().get(2).getName());
-        assertFalse(visitor.getImports().get(2).isPrimitive());
+        assertEquals(3, imports.size());
+        assertTrue(imports.contains("examples.subpackage.ClassInSubpackage"));
+        assertTrue(imports.contains("java.util.ArrayList"));
+        assertTrue(imports.contains("java.util.List"));
     }
 
     @Test
     public void testStaticImports() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(
-                        pathToExamplePackage + "extractortest/ClassA.java");
+        List<String> imports =
+                extractImportedTypes(pathToExamplePackage + "extractortest/ClassA.java");
+
+        assertEquals(3, imports.size());
+        assertTrue(imports.contains("examples.extractortest.namespace.ClassB"));
+        assertTrue(imports.contains("examples.extractortest.namespace.ClassC"));
+        assertTrue(imports.contains("java.util.Arrays"));
+    }
+
+    private List<String> extractImportedTypes(String path)
+            throws FileNotFoundException, FileIsNotAJavaClassException {
+        CompilationUnit unit = CompilationUnitFactory.getFromPath(path);
         unit.accept(visitor, null);
 
-        assertEquals(3, visitor.getImports().size());
+        // primitive types cannot be imported
+        visitor.getImports().forEach(type -> assertFalse(type.isPrimitive()));
 
-        assertEquals(
-                "examples.extractortest.namespace.ClassB", visitor.getImports().get(0).getName());
-        assertEquals(
-                "examples.extractortest.namespace.ClassC", visitor.getImports().get(1).getName());
-        assertEquals("java.util.Arrays", visitor.getImports().get(2).getName());
+        return visitor.getImports().stream().map(Type::getName).collect(Collectors.toList());
     }
 }

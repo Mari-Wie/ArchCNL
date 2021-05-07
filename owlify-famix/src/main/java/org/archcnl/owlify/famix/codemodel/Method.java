@@ -116,8 +116,8 @@ public class Method {
         }
 
         modifiers.forEach(mod -> mod.modelIn(ontology, m));
-        parameters.forEach(param -> param.modelIn(ontology, parentName, m));
-        localVariables.forEach(localVar -> localVar.modelIn(ontology, parentName, m));
+        parameters.forEach(param -> param.modelIn(ontology, m));
+        localVariables.forEach(localVar -> localVar.modelIn(ontology, m));
         annotations.forEach(anno -> anno.modelIn(ontology, m));
 
         addDeclaredExceptions(ontology, m);

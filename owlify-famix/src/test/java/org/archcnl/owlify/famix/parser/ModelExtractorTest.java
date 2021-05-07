@@ -69,9 +69,10 @@ public class ModelExtractorTest {
         assertEquals("examples.extractortest", interfacE.getNamespace().getName());
         assertEquals("examples", interfacE.getNamespace().getParent().getName());
 
-        assertTrue(interfacE.getDefinedType() instanceof ClassOrInterface);
+        assertEquals(1, interfacE.getDefinedTypes().size());
+        assertTrue(interfacE.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-        ClassOrInterface type = (ClassOrInterface) interfacE.getDefinedType();
+        ClassOrInterface type = (ClassOrInterface) interfacE.getDefinedTypes().get(0);
 
         assertEquals(0, type.getSupertypes().size());
         assertEquals(1, type.getMethods().size());
@@ -94,9 +95,10 @@ public class ModelExtractorTest {
         assertEquals("examples.extractortest", classA.getNamespace().getName());
         assertEquals("examples", classA.getNamespace().getParent().getName());
 
-        assertTrue(classA.getDefinedType() instanceof ClassOrInterface);
+        assertEquals(1, classA.getDefinedTypes().size());
+        assertTrue(classA.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-        ClassOrInterface type = (ClassOrInterface) classA.getDefinedType();
+        ClassOrInterface type = (ClassOrInterface) classA.getDefinedTypes().get(0);
 
         assertEquals(2, type.getFields().size());
         assertEquals(1, type.getSupertypes().size());

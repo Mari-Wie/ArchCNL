@@ -8,14 +8,17 @@ import org.archcnl.owlify.famix.ontology.FamixURIs;
 
 public class SourceFile {
     private final Path path;
-    private DefinedType definedType;
+    private List<DefinedType> definedTypes;
     private final Namespace namespace;
     private List<Type> importedTypes;
 
     public SourceFile(
-            Path path, DefinedType definedType, Namespace namespace, List<Type> importedTypes) {
+            Path path,
+            List<DefinedType> definedTypes,
+            Namespace namespace,
+            List<Type> importedTypes) {
         this.path = path;
-        this.definedType = definedType;
+        this.definedTypes = definedTypes;
         this.namespace = namespace;
         this.importedTypes = importedTypes;
     }
@@ -26,8 +29,8 @@ public class SourceFile {
     }
 
     /** @return the definedType */
-    public DefinedType getDefinedType() {
-        return definedType;
+    public List<DefinedType> getDefinedTypes() {
+        return definedTypes;
     }
 
     /** @return the namespace */
@@ -41,26 +44,28 @@ public class SourceFile {
     }
 
     public void modelFirstPass(FamixOntologyNew ontology) {
-        definedType.firstPass(ontology);
+        definedTypes.forEach(t -> t.firstPass(ontology));
     }
 
     public void modelSecondPass(FamixOntologyNew ontology) {
-        ontology.mainModel()
-                .getSoftwareArtifactFileIndividual(
-                        path.toString(), ontology.typeCache().getIndividual(definedType.getName()));
+        for (DefinedType definedType : definedTypes) {
+            ontology.mainModel()
+                    .getSoftwareArtifactFileIndividual(
+                            path.toString(),
+                            ontology.typeCache().getIndividual(definedType.getName()));
 
-        for (String containedName : definedType.getNestedTypeNames()) {
-            Individual contained = ontology.typeCache().getIndividual(containedName);
+            for (String containedName : definedType.getNestedTypeNames()) {
+                Individual contained = ontology.typeCache().getIndividual(containedName);
 
-            for (Type imported : importedTypes) {
-                contained.addProperty(
-                        ontology.codeModel().getObjectProperty(FamixURIs.IMPORTS),
-                        imported.getIndividual(ontology));
+                for (Type imported : importedTypes) {
+                    contained.addProperty(
+                            ontology.codeModel().getObjectProperty(FamixURIs.IMPORTS),
+                            imported.getIndividual(ontology));
+                }
             }
+
+            namespace.modelIn(ontology, definedType.getNestedTypeNames());
+            definedType.secondPass(ontology);
         }
-
-        definedType.secondPass(ontology);
-
-        namespace.modelIn(ontology, definedType.getNestedTypeNames());
     }
 }

@@ -27,7 +27,7 @@ public class AnnotationAttribute {
         Individual individual =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.ANNOTATION_TYPE_ATTRIBUTE)
-                        .createIndividual("TODO");
+                        .createIndividual(annotation.getURI() + "-" + name);
         individual.addLiteral(ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_NAME), name);
         individual.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.HAS_DECLARED_TYPE),

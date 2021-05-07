@@ -43,11 +43,11 @@ public class Field {
         return modifiers;
     }
 
-    public void modelIn(FamixOntologyNew ontology, String parentName, Individual parent) {
+    public void modelIn(FamixOntologyNew ontology, Individual parent) {
         Individual attribute =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.ATTRIBUTE)
-                        .createIndividual(parentName + "." + name);
+                        .createIndividual(parent.getURI() + "." + name);
 
         parent.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.DEFINES_ATTRIBUTE), attribute);

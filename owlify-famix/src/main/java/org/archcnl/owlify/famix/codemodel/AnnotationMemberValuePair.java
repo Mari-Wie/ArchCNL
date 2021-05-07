@@ -23,18 +23,17 @@ public class AnnotationMemberValuePair {
         return value;
     }
 
+    /**
+     * Models this annotation member-value-pair in the given ontology.
+     *
+     * @param ontology The ontology in which this pair will be modeled.
+     * @param annotationName The fully qualified name of the annotation this pair belongs to.
+     * @param annotationInstance
+     */
     public void modelIn(
             FamixOntologyNew ontology, String annotationName, Individual annotationInstance) {
         if (!ontology.annotationAttributeCache().isKnownAttribute(annotationName, name)) {
-            Individual attribute =
-                    ontology.codeModel()
-                            .getOntClass(FamixURIs.ANNOTATION_TYPE_ATTRIBUTE)
-                            .createIndividual(annotationName + "-" + name);
-            attribute.addLiteral(
-                    ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_NAME), name);
-
-            ontology.annotationAttributeCache()
-                    .addAnnotationAttribute(annotationName, name, attribute);
+            modelTypeAttribute(ontology, annotationName);
         }
 
         Individual annotationTypeAttribute =
@@ -42,7 +41,7 @@ public class AnnotationMemberValuePair {
         Individual annotationInstanceAttribute =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.ANNOTATION_INSTANCE_ATTRIBUTE)
-                        .createIndividual("TODO: name"); // TODO name
+                        .createIndividual(annotationInstance.getURI() + "-" + name);
 
         annotationInstanceAttribute.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE),
@@ -52,5 +51,18 @@ public class AnnotationMemberValuePair {
                 annotationInstanceAttribute);
         annotationInstanceAttribute.addLiteral(
                 ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_VALUE), value);
+    }
+
+    private void modelTypeAttribute(FamixOntologyNew ontology, String annotationName) {
+        Individual attribute =
+                ontology.codeModel()
+                        .getOntClass(FamixURIs.ANNOTATION_TYPE_ATTRIBUTE)
+                        .createIndividual(
+                                annotationName
+                                        + "-"
+                                        + name); // TODO name creation is a code duplicate
+        attribute.addLiteral(ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_NAME), name);
+
+        ontology.annotationAttributeCache().addAnnotationAttribute(annotationName, name, attribute);
     }
 }

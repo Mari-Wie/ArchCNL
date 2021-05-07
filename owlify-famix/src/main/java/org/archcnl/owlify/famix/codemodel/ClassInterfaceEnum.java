@@ -10,7 +10,6 @@ public abstract class ClassInterfaceEnum extends DefinedType {
     private List<DefinedType> nestedTypes;
     private List<Method> methods;
     private List<Field> fields;
-    private List<Modifier> modifiers;
 
     public ClassInterfaceEnum(
             String name,
@@ -19,11 +18,10 @@ public abstract class ClassInterfaceEnum extends DefinedType {
             List<Field> fields,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations) {
-        super(name, annotations);
+        super(name, annotations, modifiers);
         this.nestedTypes = nestedTypes;
         this.methods = methods;
         this.fields = fields;
-        this.modifiers = modifiers;
     }
 
     /** @return the nestedTypes */
@@ -41,11 +39,6 @@ public abstract class ClassInterfaceEnum extends DefinedType {
         return fields;
     }
 
-    /** @return the modifiers */
-    public List<Modifier> getModifiers() {
-        return modifiers;
-    }
-
     @Override
     public List<String> getNestedTypeNames() {
         List<String> result = new ArrayList<>();
@@ -57,9 +50,8 @@ public abstract class ClassInterfaceEnum extends DefinedType {
 
     @Override
     protected void secondPassProcess(FamixOntologyNew ontology, Individual individual) {
-        fields.forEach(field -> field.modelIn(ontology, getName(), individual));
+        fields.forEach(field -> field.modelIn(ontology, individual));
         methods.forEach(method -> method.modelIn(ontology, getName(), individual));
-        modifiers.forEach(mod -> mod.modelIn(ontology, individual));
 
         // recursively call nested types
         nestedTypes.forEach(t -> t.secondPass(ontology));

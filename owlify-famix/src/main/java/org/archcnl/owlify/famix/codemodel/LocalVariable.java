@@ -24,11 +24,11 @@ public class LocalVariable {
         return name;
     }
 
-    public void modelIn(FamixOntologyNew ontology, String parentName, Individual method) {
+    public void modelIn(FamixOntologyNew ontology, Individual method) {
         Individual individual =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.LOCAL_VARIABLE)
-                        .createIndividual(parentName + "." + name);
+                        .createIndividual(method.getURI() + "." + name);
         individual.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.HAS_DECLARED_TYPE),
                 type.getIndividual(ontology));

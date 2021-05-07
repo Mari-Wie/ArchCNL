@@ -43,11 +43,11 @@ public class Parameter {
         return annotations;
     }
 
-    public void modelIn(FamixOntologyNew ontology, String parentName, Individual method) {
+    public void modelIn(FamixOntologyNew ontology, Individual method) {
         Individual individual =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.PARAMETER)
-                        .createIndividual(parentName + "." + name);
+                        .createIndividual(method.getURI() + "." + name);
 
         individual.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.HAS_DECLARED_TYPE),

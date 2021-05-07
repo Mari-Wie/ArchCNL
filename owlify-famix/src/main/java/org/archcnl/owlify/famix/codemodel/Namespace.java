@@ -39,7 +39,8 @@ public class Namespace {
 
     private Individual modelIn(FamixOntologyNew ontology) {
         OntClass namespaceClass = ontology.codeModel().getOntClass(FamixURIs.NAMESPACE);
-        Individual individual = namespaceClass.createIndividual(name);
+        // possible recreation of the individual is safe (covered by a test)
+        Individual individual = namespaceClass.createIndividual("NAMESPACE/" + name);
         individual.addLiteral(ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_NAME), name);
 
         if (this != Namespace.TOP) {

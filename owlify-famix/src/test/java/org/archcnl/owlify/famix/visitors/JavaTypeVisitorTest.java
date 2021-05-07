@@ -55,8 +55,8 @@ public class JavaTypeVisitorTest {
         ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
         assertEquals(2, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0));
-        assertEquals("final", definedClass.getModifiers().get(1));
+        assertEquals("public", definedClass.getModifiers().get(0).getName());
+        assertEquals("final", definedClass.getModifiers().get(1).getName());
         assertFalse(definedClass.isInterface());
     }
 
@@ -76,7 +76,7 @@ public class JavaTypeVisitorTest {
         ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
         assertEquals(1, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0));
+        assertEquals("public", definedClass.getModifiers().get(0).getName());
         assertTrue(definedClass.isInterface());
     }
 
@@ -91,8 +91,11 @@ public class JavaTypeVisitorTest {
         DefinedType definedType = visitor.getDefinedTypes().get(0);
 
         assertEquals("examples.Annotation", definedType.getName());
-        assertTrue(definedType instanceof Annotation);
 
+        assertEquals(1, definedType.getModifiers().size());
+        assertEquals("public", definedType.getModifiers().get(0).getName());
+
+        assertTrue(definedType instanceof Annotation);
         Annotation definedAnnotation = (Annotation) definedType;
 
         List<AnnotationAttribute> attributes = definedAnnotation.getAttributes();
@@ -133,7 +136,7 @@ public class JavaTypeVisitorTest {
                         pathToExamplePackage + "ClassWithInnerClass.java");
         unit.accept(visitor, null);
 
-        assertEquals(2, visitor.getDefinedTypes().size());
+        assertEquals(1, visitor.getDefinedTypes().size());
 
         DefinedType definedType = visitor.getDefinedTypes().get(0);
 
@@ -144,7 +147,7 @@ public class JavaTypeVisitorTest {
 
         assertFalse(definedClass.isInterface());
         assertEquals(1, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0));
+        assertEquals("public", definedClass.getModifiers().get(0).getName());
 
         assertEquals(2, definedClass.getFields().size());
         assertEquals("field1", definedClass.getFields().get(0).getName());
@@ -165,7 +168,7 @@ public class JavaTypeVisitorTest {
         assertEquals(0, definedClass.getAnnotations().size());
 
         assertEquals(1, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0));
+        assertEquals("public", definedClass.getModifiers().get(0).getName());
     }
 
     @Test
@@ -175,9 +178,14 @@ public class JavaTypeVisitorTest {
                         pathToExamplePackage + "ClassWithInnerClass.java");
         unit.accept(visitor, null);
 
-        assertEquals(2, visitor.getDefinedTypes().size());
+        assertEquals(1, visitor.getDefinedTypes().size());
+        assertTrue(visitor.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-        DefinedType innerType = visitor.getDefinedTypes().get(1);
+        ClassOrInterface outerType = (ClassOrInterface) visitor.getDefinedTypes().get(0);
+
+        assertEquals(1, outerType.getNestedTypes().size());
+
+        DefinedType innerType = outerType.getNestedTypes().get(0);
 
         assertEquals("examples.ClassWithInnerClass.InnerClass", innerType.getName());
         assertTrue(innerType instanceof ClassOrInterface);
@@ -185,10 +193,38 @@ public class JavaTypeVisitorTest {
         ClassOrInterface innerClass = (ClassOrInterface) innerType;
 
         assertEquals(2, innerClass.getModifiers().size());
-        assertEquals("private", innerClass.getModifiers().get(0));
-        assertEquals("static", innerClass.getModifiers().get(1));
+        assertEquals("private", innerClass.getModifiers().get(0).getName());
+        assertEquals("static", innerClass.getModifiers().get(1).getName());
         assertFalse(innerClass.isInterface());
         assertEquals(1, innerClass.getFields().size());
         assertEquals("innerField", innerClass.getFields().get(0).getName());
+    }
+
+    @Test
+    public void testTwoTopLevelClasses()
+            throws FileNotFoundException, FileIsNotAJavaClassException {
+        CompilationUnit unit =
+                CompilationUnitFactory.getFromPath(
+                        pathToExamplePackage + "TwoTopLevelClasses.java");
+        unit.accept(visitor, null);
+
+        assertEquals(2, visitor.getDefinedTypes().size());
+
+        DefinedType type1 = visitor.getDefinedTypes().get(0);
+        DefinedType type2 = visitor.getDefinedTypes().get(1);
+
+        assertEquals("examples.TwoTopLevelClasses", type1.getName());
+        assertEquals("examples.OtherTopLevelClass", type2.getName());
+
+        assertTrue(type1 instanceof ClassOrInterface);
+        assertTrue(type2 instanceof ClassOrInterface);
+
+        ClassOrInterface class1 = (ClassOrInterface) type1;
+        ClassOrInterface class2 = (ClassOrInterface) type2;
+
+        assertEquals(1, class1.getModifiers().size());
+        assertEquals("public", class1.getModifiers().get(0).getName());
+
+        assertEquals(0, class2.getModifiers().size());
     }
 }

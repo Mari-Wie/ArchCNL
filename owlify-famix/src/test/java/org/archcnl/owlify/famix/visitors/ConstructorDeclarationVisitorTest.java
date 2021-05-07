@@ -74,7 +74,8 @@ public class ConstructorDeclarationVisitorTest {
     }
 
     @Test
-    public void testComplexClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+    public void testComplexClassConstructor1()
+            throws FileNotFoundException, FileIsNotAJavaClassException {
         CompilationUnit unit =
                 CompilationUnitFactory.getFromPath(pathToExamplePackage + "ComplexClass.java");
         unit.accept(visitor, null);
@@ -85,6 +86,9 @@ public class ConstructorDeclarationVisitorTest {
 
         assertEquals("ComplexClass(double)", constructor1.getSignature());
         assertEquals(1, constructor1.getAnnotations().size());
+
+        assertEquals(1, constructor1.getModifiers().size());
+        assertEquals("public", constructor1.getModifiers().get(0).getName());
 
         AnnotationInstance annotation = constructor1.getAnnotations().get(0);
         assertEquals("Deprecated", annotation.getName());
@@ -98,6 +102,16 @@ public class ConstructorDeclarationVisitorTest {
         assertTrue(constructor1.getThrownExceptions().isEmpty());
 
         assertEquals(1, constructor1.getParameters().size());
+    }
+
+    @Test
+    public void testComplexClassConstructor2()
+            throws FileNotFoundException, FileIsNotAJavaClassException {
+        CompilationUnit unit =
+                CompilationUnitFactory.getFromPath(pathToExamplePackage + "ComplexClass.java");
+        unit.accept(visitor, null);
+
+        assertEquals(2, visitor.getConstructors().size());
 
         Method constructor2 = visitor.getConstructors().get(1);
 
@@ -105,6 +119,9 @@ public class ConstructorDeclarationVisitorTest {
         assertTrue(constructor2.getAnnotations().isEmpty());
         assertTrue(constructor2.getDeclaredExceptions().isEmpty());
         assertTrue(constructor2.getThrownExceptions().isEmpty());
+
+        assertEquals(1, constructor2.getModifiers().size());
+        assertEquals("public", constructor2.getModifiers().get(0).getName());
 
         assertEquals(1, constructor2.getLocalVariables().size());
         LocalVariable variable = constructor2.getLocalVariables().get(0);
@@ -121,7 +138,7 @@ public class ConstructorDeclarationVisitorTest {
         assertEquals("radius", param1.getName());
         assertTrue(param1.getAnnotations().isEmpty());
         assertEquals(1, param1.getModifiers().size());
-        assertEquals("final", param1.getModifiers().get(0));
+        assertEquals("final", param1.getModifiers().get(0).getName());
 
         assertEquals("otherHalfOfRadius", param2.getName());
         assertEquals(1, param2.getAnnotations().size());

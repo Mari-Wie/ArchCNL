@@ -48,7 +48,7 @@ public class JavaFieldVisitorTest {
         assertEquals("int", field.getType().getName());
         assertTrue(field.getType().isPrimitive());
         assertEquals(1, field.getModifiers().size());
-        assertEquals("private", field.getModifiers().get(0));
+        assertEquals("private", field.getModifiers().get(0).getName());
         assertTrue(field.getAnnotations().isEmpty());
     }
 

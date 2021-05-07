@@ -12,8 +12,9 @@ public class Annotation extends DefinedType {
     public Annotation(
             String name,
             List<AnnotationInstance> annotations,
+            List<Modifier> modifiers,
             List<AnnotationAttribute> attributes) {
-        super(name, annotations);
+        super(name, annotations, modifiers);
         this.attributes = attributes;
     }
 

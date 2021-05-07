@@ -58,7 +58,9 @@ public class ModelExtractor {
     private void visitFile(Path path, CompilationUnit unit) {
         JavaTypeVisitor typeVisitor = new JavaTypeVisitor();
 
-        unit.accept(typeVisitor, null);
+        unit.getTypes().forEach(type -> type.accept(typeVisitor, null));
+
+        //        unit.accept(typeVisitor, null);
 
         if (typeVisitor.getDefinedTypes().isEmpty()) {
             LOG.error(
@@ -76,7 +78,7 @@ public class ModelExtractor {
         project.addFile(
                 new SourceFile(
                         path,
-                        typeVisitor.getDefinedTypes().get(0),
+                        typeVisitor.getDefinedTypes(),
                         namespaceVisitor.getNamespace(),
                         importVisitor.getImports()));
     }

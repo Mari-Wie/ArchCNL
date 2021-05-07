@@ -12,21 +12,21 @@ public class DefinedTypeCache {
         types = new HashMap<>();
     }
 
-    public void addUserDefinedType(String fullyQualifiedName, Individual typeIndividual) {
+    public void addDefinedType(String fullyQualifiedName, Individual typeIndividual) {
 
-        assert (!isUserDefined(fullyQualifiedName));
+        assert (!isDefined(fullyQualifiedName));
 
         types.put(fullyQualifiedName, typeIndividual);
     }
 
     public Individual getIndividual(String fullyQualifiedName) {
 
-        assert (isUserDefined(fullyQualifiedName));
+        assert (isDefined(fullyQualifiedName));
 
         return types.getOrDefault(fullyQualifiedName, null);
     }
 
-    public boolean isUserDefined(String fullyQualifiedName) {
+    public boolean isDefined(String fullyQualifiedName) {
         return types.containsKey(fullyQualifiedName);
     }
 }

@@ -9,10 +9,13 @@ import org.archcnl.owlify.famix.ontology.FamixURIs;
 public abstract class DefinedType {
     private final String name;
     private List<AnnotationInstance> annotations;
+    private List<Modifier> modifiers;
 
-    protected DefinedType(String name, List<AnnotationInstance> annotations) {
+    protected DefinedType(
+            String name, List<AnnotationInstance> annotations, List<Modifier> modifiers) {
         this.name = name;
         this.annotations = annotations;
+        this.modifiers = modifiers;
     }
 
     /** @return the name */
@@ -24,6 +27,11 @@ public abstract class DefinedType {
         return annotations;
     }
 
+    /** @return the modifiers */
+    public List<Modifier> getModifiers() {
+        return modifiers;
+    }
+
     public void firstPass(FamixOntologyNew ontology) {
         Individual individual = createIndividual(ontology);
 
@@ -33,7 +41,7 @@ public abstract class DefinedType {
         individual.addLiteral(
                 ontology.codeModel().getDatatypeProperty(FamixURIs.IS_EXTERNAL), false);
 
-        ontology.typeCache().addUserDefinedType(name, individual);
+        ontology.typeCache().addDefinedType(name, individual);
 
         firstPassPostProcess(ontology);
     }
@@ -42,6 +50,7 @@ public abstract class DefinedType {
         Individual individual = ontology.typeCache().getIndividual(name);
 
         annotations.forEach(anno -> anno.modelIn(ontology, individual));
+        modifiers.forEach(mod -> mod.modelIn(ontology, individual));
 
         secondPassProcess(ontology, individual);
     }

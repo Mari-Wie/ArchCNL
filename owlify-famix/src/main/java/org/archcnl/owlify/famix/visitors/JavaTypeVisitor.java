@@ -34,7 +34,6 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
     private FamixOntology ontology;
 
     private List<DefinedType> definedTypes;
-    private List<Type> supertypes;
 
     public JavaTypeVisitor(InputStream famixOntologyInputStream) {
         ontology = new FamixOntology(famixOntologyInputStream);
@@ -46,14 +45,13 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     public JavaTypeVisitor() {
         definedTypes = new ArrayList<>();
-        this.supertypes = new ArrayList<>();
     }
 
     @Override
     public void visit(ClassOrInterfaceDeclaration n, Void arg) {
-
-        setSubclassProperties(n.getExtendedTypes());
-        setSubclassProperties(n.getImplementedTypes());
+        List<Type> supertypes = new ArrayList<>();
+        setSubclassProperties(supertypes, n.getExtendedTypes());
+        setSubclassProperties(supertypes, n.getImplementedTypes());
 
         definedTypes.add(
                 new ClassOrInterface(
@@ -66,7 +64,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                         n.isInterface(),
                         supertypes));
 
-        super.visit(n, null);
+        //        super.visit(n, null);
     }
 
     @Override
@@ -84,7 +82,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                         VisitorHelpers.processModifiers(n.getModifiers()),
                         VisitorHelpers.processAnnotations(n.getAnnotations())));
 
-        super.visit(n, null);
+        //        super.visit(n, null);
     }
 
     @Override
@@ -97,12 +95,14 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                 new Annotation(
                         n.resolve().getQualifiedName(),
                         VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        VisitorHelpers.processModifiers(n.getModifiers()),
                         processAnnotationAttributes(n.getMembers())));
 
-        super.visit(n, null);
+        //        super.visit(n, null);
     }
 
-    private void setSubclassProperties(NodeList<ClassOrInterfaceType> extendedTypes) {
+    private void setSubclassProperties(
+            List<Type> supertypes, NodeList<ClassOrInterfaceType> extendedTypes) {
         //      DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
         DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
         for (ClassOrInterfaceType classOrInterfaceType : extendedTypes) {
@@ -129,22 +129,6 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                                     annotationMember.getNameAsString(), visitor.getType());
                         })
                 .collect(Collectors.toList());
-    }
-
-    private void processAnnotationMemberDeclaration(BodyDeclaration<?> bodyDeclaration) {
-        if (bodyDeclaration instanceof AnnotationMemberDeclaration) {
-            AnnotationMemberDeclaration annotationMember =
-                    (AnnotationMemberDeclaration) bodyDeclaration;
-
-            final String memberName = annotationMember.getName().asString();
-
-            DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor(ontology);
-            annotationMember.getType().accept(visitor, null);
-
-            Individual declaredType = visitor.getDeclaredType();
-            //            ontology.addAnnotationTypeAttribute(memberName, declaredType,
-            // famixTypeIndividual);
-        }
     }
 
     private List<Method> processAllMethods(

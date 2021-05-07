@@ -29,15 +29,15 @@ public class DefinedTypeCacheTest {
 
     @Test
     public void testUnknownClass() {
-        assertFalse(cache.isUserDefined("non.existent.Type"));
+        assertFalse(cache.isDefined("non.existent.Type"));
     }
 
     @Test
     public void testKnownClass() {
         final String name = "existent.Type";
-        cache.addUserDefinedType(name, type1);
+        cache.addDefinedType(name, type1);
 
-        assertTrue(cache.isUserDefined(name));
+        assertTrue(cache.isDefined(name));
         assertSame(type1, cache.getIndividual(name));
     }
 
@@ -45,11 +45,11 @@ public class DefinedTypeCacheTest {
     public void testTwoKnownClasses() {
         final String name1 = "existent.Type";
         final String name2 = "existent.another.Type";
-        cache.addUserDefinedType(name1, type1);
-        cache.addUserDefinedType(name2, type2);
+        cache.addDefinedType(name1, type1);
+        cache.addDefinedType(name2, type2);
 
-        assertTrue(cache.isUserDefined(name1));
-        assertTrue(cache.isUserDefined(name2));
+        assertTrue(cache.isDefined(name1));
+        assertTrue(cache.isDefined(name2));
         assertSame(type1, cache.getIndividual(name1));
         assertSame(type2, cache.getIndividual(name2));
     }

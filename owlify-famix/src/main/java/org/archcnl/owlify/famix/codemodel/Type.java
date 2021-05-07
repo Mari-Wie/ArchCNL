@@ -31,7 +31,7 @@ public class Type {
             return ontology.codeModel().getIndividual(FamixURIs.PREFIX + name);
         }
 
-        if (!ontology.typeCache().isUserDefined(name)) {
+        if (!ontology.typeCache().isDefined(name)) {
             // create a new external type individual
 
             // TODO: hasName or hasFullQualifiedName
@@ -43,7 +43,10 @@ public class Type {
                     ontology.codeModel().getOntClass(FamixURIs.FAMIX_CLASS).createIndividual(name);
             typeIndividual.addLiteral(
                     ontology.codeModel().getDatatypeProperty(FamixURIs.IS_EXTERNAL), true);
-            ontology.typeCache().addUserDefinedType(name, typeIndividual);
+            typeIndividual.addLiteral(
+                    ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME),
+                    name);
+            ontology.typeCache().addDefinedType(name, typeIndividual);
         }
 
         return ontology.typeCache().getIndividual(name);

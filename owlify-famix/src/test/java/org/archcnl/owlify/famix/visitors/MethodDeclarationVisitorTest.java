@@ -65,8 +65,8 @@ public class MethodDeclarationVisitorTest {
         assertEquals(0, method.getParameters().get(0).getModifiers().size());
         assertEquals(0, method.getParameters().get(0).getAnnotations().size());
         assertEquals(2, method.getModifiers().size());
-        assertEquals("public", method.getModifiers().get(0));
-        assertEquals("static", method.getModifiers().get(1));
+        assertEquals("public", method.getModifiers().get(0).getName());
+        assertEquals("static", method.getModifiers().get(1).getName());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class MethodDeclarationVisitorTest {
         assertEquals(0, method.getLocalVariables().size());
         assertEquals(0, method.getParameters().size());
         assertEquals(1, method.getModifiers().size());
-        assertEquals("public", method.getModifiers().get(0));
+        assertEquals("public", method.getModifiers().get(0).getName());
     }
 
     @Test
