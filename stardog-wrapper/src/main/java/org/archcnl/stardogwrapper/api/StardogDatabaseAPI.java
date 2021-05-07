@@ -10,8 +10,10 @@ public interface StardogDatabaseAPI {
      * database, user name, and password returned by <code>getServer()</code>, <code>
      * getDatabaseName()</code>, <code>getUserName()</code>, and <code>getPassword()</code>. If the
      * database does not exist, a new one with the given name will be created.
+     *
+     * @param deletePreviousDatabases If all previous databases should be deleted
      */
-    void connect();
+    void connect(boolean deletePreviousDatabases);
 
     /** Disconnects from the database. */
     void closeConnectionToServer();

@@ -41,36 +41,46 @@ public class StardogDatabase implements StardogDatabaseAPI {
     }
 
     @Override
-    public void connect() {
-
+    public void connect(boolean deletePreviousDatabases) {
         LOG.info("Connecting to the database ....");
-        if (connectionPool == null && connection == null) {
-            LOG.debug("No Connection, no pool - creating new ones ....");
-            try (final AdminConnection aConn =
-                    AdminConnectionConfiguration.toServer(_server)
-                            .credentials(_userName, _password)
-                            .connect()) {
-                if (!aConn.list().contains(_databaseName)) {
-                    aConn.newDatabase(_databaseName).create();
-                    LOG.info("New database created: " + _databaseName);
-                } else {
-                    LOG.warn("Database already exists: " + _databaseName);
+        if (connectionPool != null || connection != null) {
+            LOG.debug("Closing existing Connections");
+            closeConnectionToServer();
+        }
+
+        try (final AdminConnection aConn =
+                AdminConnectionConfiguration.toServer(_server)
+                        .credentials(_userName, _password)
+                        .connect()) {
+
+            if (deletePreviousDatabases) {
+                LOG.debug("Deleting previous databases");
+                for (String databaseName : aConn.list()) {
+                    aConn.drop(databaseName);
                 }
             }
 
-            LOG.debug("Start connection configuration ...");
-            ConnectionConfiguration connectionConfig =
-                    ConnectionConfiguration.to(_databaseName)
-                            .server(_server)
-                            .reasoning(false)
-                            .credentials(_userName, _password);
-            ConnectionPoolConfig poolConfig = ConnectionPoolConfig.using(connectionConfig);
-            connectionPool = poolConfig.create();
-            LOG.debug("ConnectionPool created.");
-
-            connection = connectionPool.obtain();
-            LOG.debug("Connection obtained.");
+            if (!aConn.list().contains(_databaseName)) {
+                aConn.newDatabase(_databaseName).create();
+                LOG.info("New database created: " + _databaseName);
+            } else {
+                LOG.warn("Database already exists: " + _databaseName);
+            }
         }
+
+        LOG.debug("Start connection configuration ...");
+        ConnectionConfiguration connectionConfig =
+                ConnectionConfiguration.to(_databaseName)
+                        .server(_server)
+                        .reasoning(false)
+                        .credentials(_userName, _password);
+        ConnectionPoolConfig poolConfig = ConnectionPoolConfig.using(connectionConfig);
+        connectionPool = poolConfig.create();
+        LOG.debug("ConnectionPool created.");
+
+        connection = connectionPool.obtain();
+        LOG.debug("Connection obtained.");
+
         LOG.info("Connection established.");
     }
 

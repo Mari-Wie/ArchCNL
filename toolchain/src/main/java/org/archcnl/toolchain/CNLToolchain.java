@@ -70,6 +70,7 @@ public class CNLToolchain {
      * @param rulesFile The relative path to the AsciiDoc file which contains both the architecture
      *     and mapping rules.
      * @param logVerbose If all log levels down to trace should be logged in file and on the console
+     * @param removePreviousDatabases
      */
     public static void runToolchain(
             String database,
@@ -79,7 +80,8 @@ public class CNLToolchain {
             String password,
             String projectDirectory,
             String rulesFile,
-            boolean logVerbose) {
+            boolean logVerbose,
+            boolean removePreviousDatabases) {
 
         if (logVerbose) {
             LOG.info("verbose logging is enabled");
@@ -100,7 +102,7 @@ public class CNLToolchain {
         try {
             Path projectPath = Paths.get(projectDirectory);
             Path rulesPath = Paths.get(projectDirectory, rulesFile);
-            tool.execute(rulesPath, projectPath, context);
+            tool.execute(rulesPath, projectPath, context, removePreviousDatabases);
         } catch (FileNotFoundException e) {
             LOG.fatal("File not found", e);
             e.printStackTrace();
@@ -130,7 +132,8 @@ public class CNLToolchain {
      * @throws NoConnectionToStardogServerException when no connection to the database can be
      *     established
      */
-    private void execute(Path docPath, Path sourceCodePath, String context)
+    private void execute(
+            Path docPath, Path sourceCodePath, String context, boolean removePreviousDatabases)
             throws FileNotFoundException, NoConnectionToStardogServerException, IOException {
         LOG.info("Starting the execution");
 
@@ -159,7 +162,7 @@ public class CNLToolchain {
         LOG.info("Starting conformance checking...");
 
         LOG.debug("Connecting to the database ...");
-        db.connect();
+        db.connect(removePreviousDatabases);
 
         storeModelAndConstraintsInDB(context, rules, MAPPED_ONTOLOGY_PATH);
 
