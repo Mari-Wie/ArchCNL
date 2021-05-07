@@ -11,7 +11,7 @@ public class CNLToolchainCLI implements Runnable {
     @Option(
             names = {"-d", "--database"},
             description = "Specifiy the database name")
-    private String database = "MWTest_" + CNLToolchain.createTimeSuffix();
+    private String database = "ArchCNL_" + CNLToolchain.createTimeSuffix();
 
     @Option(
             names = {"-s", "--server"},

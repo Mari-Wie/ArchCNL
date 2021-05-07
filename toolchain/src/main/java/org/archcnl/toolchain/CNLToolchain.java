@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -90,6 +91,13 @@ public class CNLToolchain {
             ThreadContext.put("verboseMode", "false");
         }
 
+        if (!isDatabaseNameValid(database)) {
+            LOG.fatal(
+                    "Databasename: {} is not possible, the database name must start with an alpha character followed by any alphanumeric character, dash or underscore.",
+                    database);
+            return;
+        }
+
         LOG.debug("Database     : " + database);
         LOG.debug("Server       : " + server);
         LOG.debug("Context      : " + context);
@@ -116,7 +124,7 @@ public class CNLToolchain {
 
     static String createTimeSuffix() {
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd__'at'__HH-mm-ss_z");
         return dateFormat.format(date);
     }
 
@@ -284,5 +292,16 @@ public class CNLToolchain {
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
         return supportedOWLNamespaces;
+    }
+
+    /*
+     * Match the databaseName to a regex provided by Stardog
+     *
+     * @see <a href="https://docs.stardog.com/operating-stardog/database-administration/database-configuration#databasename">Stardog Documentation</a>
+     */
+    private static boolean isDatabaseNameValid(String databaseName) {
+        var pattern = Pattern.compile("[A-Za-z]{1}[A-Za-z0-9_-]*");
+        var matcher = pattern.matcher(databaseName);
+        return matcher.matches();
     }
 }
