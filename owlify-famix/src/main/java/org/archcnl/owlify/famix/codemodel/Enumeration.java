@@ -1,12 +1,28 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.Enum;
+
 import java.util.List;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
 
+/**
+ * Models an enumeration type defined in the analyzed project.
+ *
+ * <p>Represented by the "Enum" ontology class.
+ */
 public class Enumeration extends ClassInterfaceEnum {
 
+    /**
+     * Constructor.
+     *
+     * @param name Fully qualified name of the enumeration.
+     * @param nestedTypes List of nested type definitions.
+     * @param methods List of methods defined in this class.
+     * @param fields List of fields defined in this class.
+     * @param modifiers List of modifiers for this enumeration.
+     * @param annotations List of annotation instances for this enumeration.
+     */
     public Enumeration(
             String name,
             List<DefinedType> nestedTypes,
@@ -19,6 +35,6 @@ public class Enumeration extends ClassInterfaceEnum {
 
     @Override
     protected Individual createIndividual(FamixOntologyNew ontology) {
-        return ontology.codeModel().getOntClass(FamixURIs.ENUMERATION).createIndividual(getName());
+        return ontology.createIndividual(Enum, getName());
     }
 }

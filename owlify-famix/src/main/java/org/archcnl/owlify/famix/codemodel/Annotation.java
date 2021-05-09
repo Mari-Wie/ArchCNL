@@ -1,14 +1,27 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationType;
+
 import java.util.List;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
 
+/**
+ * Models a user-defined annotation (the declaration). Represented by the "AnnotationType" class in
+ * the ontology.
+ */
 public class Annotation extends DefinedType {
 
     private List<AnnotationAttribute> attributes;
 
+    /**
+     * Constructor.
+     *
+     * @param name The fully qualified name of the annotation.
+     * @param annotations List of annotation instances of the declaration.
+     * @param modifiers List of modifiers of the declaration.
+     * @param attributes List of annotation attributes defined in the declaration.
+     */
     public Annotation(
             String name,
             List<AnnotationInstance> annotations,
@@ -25,10 +38,7 @@ public class Annotation extends DefinedType {
 
     @Override
     protected Individual createIndividual(FamixOntologyNew ontology) {
-        Individual individual =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.ANNOTATION_TYPE)
-                        .createIndividual(getName());
+        Individual individual = ontology.createIndividual(AnnotationType, getName());
         attributes.forEach(attr -> attr.modelIn(ontology, getName(), individual));
         return individual;
     }

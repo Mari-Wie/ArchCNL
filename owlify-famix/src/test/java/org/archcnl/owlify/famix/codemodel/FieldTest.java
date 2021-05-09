@@ -1,5 +1,6 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.Attribute;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -30,7 +31,7 @@ public class FieldTest {
 
     @Test
     public void testAttribute() {
-
+        final String parentName = "namespace.SomeClass";
         final String name = "field";
         final Type type = new Type("double", true);
         final List<AnnotationInstance> annotations =
@@ -41,11 +42,13 @@ public class FieldTest {
         Individual parent =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.FAMIX_CLASS)
-                        .createIndividual("namespace.SomeClass");
+                        .createIndividual(parentName);
 
-        field.modelIn(ontology, parent);
+        field.modelIn(ontology, parentName, parent);
 
-        Individual individual = ontology.codeModel().getIndividual("namespace.SomeClass.field");
+        Individual individual =
+                ontology.codeModel()
+                        .getIndividual(Attribute.individualUri("namespace.SomeClass.field"));
         Individual typeIndividual =
                 ontology.codeModel().getIndividual(FamixURIs.PREFIX + type.getName());
         Property definesAttribute = ontology.codeModel().getProperty(FamixURIs.DEFINES_ATTRIBUTE);

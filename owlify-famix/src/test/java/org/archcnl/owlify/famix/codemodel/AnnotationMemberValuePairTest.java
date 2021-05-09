@@ -1,5 +1,6 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationInstanceAttribute;
 import static org.junit.Assert.*;
 
 import java.io.FileInputStream;
@@ -41,14 +42,17 @@ public class AnnotationMemberValuePairTest {
 
         ontology.annotationAttributeCache()
                 .addAnnotationAttribute(annotationName, name, attributeIndividual);
-        pair.modelIn(ontology, annotationName, annotation);
+        pair.modelIn(ontology, annotationName, parentURI, annotation);
 
         Property hasAnnotationTypeAttribute =
                 ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
         Property hasAnnotationInstanceAttribute =
                 ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE_ATTRIBUTE);
         Property hasValue = ontology.codeModel().getProperty(FamixURIs.HAS_VALUE);
-        Individual individual = ontology.codeModel().getIndividual(parentURI + "-" + name);
+        Individual individual =
+                ontology.codeModel()
+                        .getIndividual(
+                                AnnotationInstanceAttribute.individualUri(parentURI + "-" + name));
 
         assertNotNull(individual);
         assertTrue(
@@ -72,14 +76,17 @@ public class AnnotationMemberValuePairTest {
                         .getOntClass(FamixURIs.ANNOTATION_INSTANCE)
                         .createIndividual(parentURI);
 
-        pair.modelIn(ontology, annotationName, annotation);
+        pair.modelIn(ontology, annotationName, parentURI, annotation);
 
         Property hasAnnotationTypeAttribute =
                 ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
         Property hasAnnotationInstanceAttribute =
                 ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE_ATTRIBUTE);
         Property hasValue = ontology.codeModel().getProperty(FamixURIs.HAS_VALUE);
-        Individual individual = ontology.codeModel().getIndividual(parentURI + "-" + name);
+        Individual individual =
+                ontology.codeModel()
+                        .getIndividual(
+                                AnnotationInstanceAttribute.individualUri(parentURI + "-" + name));
         Individual attributeIndividual =
                 ontology.codeModel().getIndividual(annotationName + "-" + name);
 

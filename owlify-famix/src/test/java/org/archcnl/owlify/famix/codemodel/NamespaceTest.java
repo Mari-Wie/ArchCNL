@@ -1,5 +1,6 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.FamixClass;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.rdf.model.Property;
 import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses;
 import org.archcnl.owlify.famix.ontology.FamixURIs;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +18,6 @@ import org.junit.Test;
 public class NamespaceTest {
 
     private FamixOntologyNew ontology;
-    private static final String prefix = "NAMESPACE/";
     private static final String type1 = "namespace.SomeType";
     private static final String type2 = "namespace.SomeOtherType";
 
@@ -32,10 +33,8 @@ public class NamespaceTest {
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
 
-        type1Individual =
-                ontology.codeModel().getOntClass(FamixURIs.FAMIX_CLASS).createIndividual(type1);
-        type2Individual =
-                ontology.codeModel().getOntClass(FamixURIs.FAMIX_CLASS).createIndividual(type2);
+        type1Individual = ontology.createIndividual(FamixClass, type1);
+        type2Individual = ontology.createIndividual(FamixClass, type2);
 
         ontology.typeCache().addDefinedType(type1, type1Individual);
         ontology.typeCache().addDefinedType(type2, type2Individual);
@@ -51,7 +50,9 @@ public class NamespaceTest {
         namespace.modelIn(ontology, Arrays.asList(type1, type2));
 
         Individual individual =
-                ontology.codeModel().getIndividual(prefix + Namespace.TOP.getName());
+                ontology.codeModel()
+                        .getIndividual(
+                                FamixClasses.Namespace.individualUri(Namespace.TOP.getName()));
 
         assertNotNull(individual);
         assertTrue(ontology.codeModel().containsLiteral(individual, hasName, ""));
@@ -66,10 +67,17 @@ public class NamespaceTest {
 
         namespace.modelIn(ontology, Arrays.asList(type1, type2));
 
-        Individual individual0 = ontology.codeModel().getIndividual(prefix + "");
-        Individual individual1 = ontology.codeModel().getIndividual(prefix + "namespace");
+        Individual individual0 =
+                ontology.codeModel()
+                        .getIndividual(
+                                FamixClasses.Namespace.individualUri(Namespace.TOP.getName()));
+        Individual individual1 =
+                ontology.codeModel()
+                        .getIndividual(FamixClasses.Namespace.individualUri("namespace"));
         Individual individual2 =
-                ontology.codeModel().getIndividual(prefix + "namespace.subnamespace");
+                ontology.codeModel()
+                        .getIndividual(
+                                FamixClasses.Namespace.individualUri("namespace.subnamespace"));
 
         assertNotNull(individual0);
         assertNotNull(individual1);
@@ -92,9 +100,15 @@ public class NamespaceTest {
         n2.modelIn(ontology, Arrays.asList(type2));
 
         Individual individual0 =
-                ontology.codeModel().getIndividual(prefix + Namespace.TOP.getName());
-        Individual individual1 = ontology.codeModel().getIndividual(prefix + n1.getName());
-        Individual individual2 = ontology.codeModel().getIndividual(prefix + n2.getName());
+                ontology.codeModel()
+                        .getIndividual(
+                                FamixClasses.Namespace.individualUri(Namespace.TOP.getName()));
+        Individual individual1 =
+                ontology.codeModel()
+                        .getIndividual(FamixClasses.Namespace.individualUri(n1.getName()));
+        Individual individual2 =
+                ontology.codeModel()
+                        .getIndividual(FamixClasses.Namespace.individualUri(n2.getName()));
 
         assertNotNull(individual0);
         assertNotNull(individual1);

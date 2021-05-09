@@ -98,8 +98,8 @@ public class Method {
         return localVariables;
     }
 
-    public void modelIn(FamixOntologyNew ontology, String parentName, Individual parent) {
-        final String uri = parentName + "." + name;
+    public void modelIn(FamixOntologyNew ontology, Individual parent) {
+        final String uri = parent.getURI() + "." + signature;
 
         Individual m = ontology.codeModel().getOntClass(FamixURIs.METHOD).createIndividual(uri);
 
@@ -118,7 +118,7 @@ public class Method {
         modifiers.forEach(mod -> mod.modelIn(ontology, m));
         parameters.forEach(param -> param.modelIn(ontology, m));
         localVariables.forEach(localVar -> localVar.modelIn(ontology, m));
-        annotations.forEach(anno -> anno.modelIn(ontology, m));
+        annotations.forEach(anno -> anno.modelIn(ontology, uri, m));
 
         addDeclaredExceptions(ontology, m);
         addThrownExceptions(ontology, m);
@@ -128,47 +128,65 @@ public class Method {
     private void addThrownExceptions(FamixOntologyNew ontology, Individual method) {
         for (Type exception : thrownExceptions) {
             // TODO: proper name or issue 117
-            Individual individual =
-                    ontology.codeModel()
-                            .getOntClass(FamixURIs.THROWN_EXCEPTION)
-                            .createIndividual("TODO NAME");
-            individual.addProperty(
-                    ontology.codeModel().getObjectProperty(FamixURIs.HAS_DEFINING_CLASS),
-                    exception.getIndividual(ontology));
+            //            Individual individual =
+            //                    ontology.codeModel()
+            //                            .getOntClass(FamixURIs.THROWN_EXCEPTION)
+            //                            .createIndividual("TODO NAME");
+            //            individual.addProperty(
+            //
+            // ontology.codeModel().getObjectProperty(FamixURIs.HAS_DEFINING_CLASS),
+            //                    exception.getIndividual(ontology));
+            //            method.addProperty(
+            //
+            // ontology.codeModel().getObjectProperty(FamixURIs.THROWS_EXCEPTION), individual);
+
             method.addProperty(
-                    ontology.codeModel().getObjectProperty(FamixURIs.THROWS_EXCEPTION), individual);
+                    ontology.codeModel().getObjectProperty(FamixURIs.THROWS_EXCEPTION),
+                    exception.getIndividual(ontology));
         }
     }
 
     private void addCaughtExceptions(FamixOntologyNew ontology, Individual method) {
         for (Type exception : caughtExceptions) {
             // TODO: proper name or issue 117
-            Individual individual =
-                    ontology.codeModel()
-                            .getOntClass(FamixURIs.CAUGHT_EXCEPTION)
-                            .createIndividual("TODO NAME");
-            individual.addProperty(
-                    ontology.codeModel().getObjectProperty(FamixURIs.HAS_DEFINING_CLASS),
-                    exception.getIndividual(ontology));
+            //            Individual individual =
+            //                    ontology.codeModel()
+            //                            .getOntClass(FamixURIs.CAUGHT_EXCEPTION)
+            //                            .createIndividual("TODO NAME");
+            //            individual.addProperty(
+            //
+            // ontology.codeModel().getObjectProperty(FamixURIs.HAS_DEFINING_CLASS),
+            //                    exception.getIndividual(ontology));
+            //            method.addProperty(
+            //
+            // ontology.codeModel().getObjectProperty(FamixURIs.HAS_CAUGHT_EXCEPTION),
+            //                    individual);
+
             method.addProperty(
                     ontology.codeModel().getObjectProperty(FamixURIs.HAS_CAUGHT_EXCEPTION),
-                    individual);
+                    exception.getIndividual(ontology));
         }
     }
 
     private void addDeclaredExceptions(FamixOntologyNew ontology, Individual method) {
         for (Type exception : declaredExceptions) {
             // TODO: proper name or issue 117
-            Individual declaredException =
-                    ontology.codeModel()
-                            .getOntClass(FamixURIs.DECLARED_EXCEPTION)
-                            .createIndividual(exception.getName());
-            declaredException.addProperty(
-                    ontology.codeModel().getObjectProperty(FamixURIs.HAS_DEFINING_CLASS),
-                    exception.getIndividual(ontology));
+            //            Individual declaredException =
+            //                    ontology.codeModel()
+            //                            .getOntClass(FamixURIs.DECLARED_EXCEPTION)
+            //                            .createIndividual(exception.getName());
+            //            declaredException.addProperty(
+            //
+            // ontology.codeModel().getObjectProperty(FamixURIs.HAS_DEFINING_CLASS),
+            //                    exception.getIndividual(ontology));
+            //            method.addProperty(
+            //
+            // ontology.codeModel().getObjectProperty(FamixURIs.HAS_DECLARED_EXCEPTION),
+            //                    declaredException);
+
             method.addProperty(
                     ontology.codeModel().getObjectProperty(FamixURIs.HAS_DECLARED_EXCEPTION),
-                    declaredException);
+                    exception.getIndividual(ontology));
         }
     }
 }

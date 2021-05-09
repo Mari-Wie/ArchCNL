@@ -5,13 +5,24 @@ import java.util.List;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
 
+/** Abstract super-class of classes, interfaces and enums. */
 public abstract class ClassInterfaceEnum extends DefinedType {
 
     private List<DefinedType> nestedTypes;
     private List<Method> methods;
     private List<Field> fields;
 
-    public ClassInterfaceEnum(
+    /**
+     * Constructor.
+     *
+     * @param name Fully qualified name of the modeled class/interface/enum.
+     * @param nestedTypes List of types which declaration is nested in the declaration of this type.
+     * @param methods List of methods defined for this type.
+     * @param fields List of fields defined in this type.
+     * @param modifiers List of modifiers for this type's declaration.
+     * @param annotations List of annotation instances for this type's declaration.
+     */
+    protected ClassInterfaceEnum(
             String name,
             List<DefinedType> nestedTypes,
             List<Method> methods,
@@ -50,8 +61,8 @@ public abstract class ClassInterfaceEnum extends DefinedType {
 
     @Override
     protected void secondPassProcess(FamixOntologyNew ontology, Individual individual) {
-        fields.forEach(field -> field.modelIn(ontology, individual));
-        methods.forEach(method -> method.modelIn(ontology, getName(), individual));
+        fields.forEach(field -> field.modelIn(ontology, getName(), individual));
+        methods.forEach(method -> method.modelIn(ontology, individual));
 
         // recursively call nested types
         nestedTypes.forEach(t -> t.secondPass(ontology));

@@ -1,5 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationTypeAttribute;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -26,22 +28,24 @@ public class AnnotationAttributeTest {
     }
 
     @Test
-    public void test() {
+    public void testAnnotationAttributeTransformation() {
         final String name = "attribute";
         final String annotationName = "namespace.SomeAnnotation";
         final Type type = new Type("Type", false);
 
         AnnotationAttribute attribute = new AnnotationAttribute(name, type);
-        Individual annotation =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.ANNOTATION_TYPE)
-                        .createIndividual(annotationName);
+        //        Individual annotation =
+        //                ontology.codeModel()
+        //                        .getOntClass(FamixURIs.ANNOTATION_TYPE)
+        //                        .createIndividual(annotationName);
         Individual typeIndividual =
                 ontology.codeModel()
                         .getOntClass(FamixURIs.FAMIX_CLASS)
                         .createIndividual(type.getName());
 
         ontology.typeCache().addDefinedType(type.getName(), typeIndividual);
+
+        Individual annotation = ontology.createIndividual(AnnotationType, annotationName);
 
         attribute.modelIn(ontology, annotationName, annotation);
 
@@ -50,7 +54,9 @@ public class AnnotationAttributeTest {
         Property hasAnnotationTypeAttribute =
                 ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
         Individual individual =
-                ontology.codeModel().getIndividual("namespace.SomeAnnotation-attribute");
+                ontology.codeModel()
+                        .getIndividual(
+                                AnnotationTypeAttribute.individualUri(annotationName + "/" + name));
 
         assertNotNull(individual);
         assertTrue(ontology.codeModel().containsLiteral(individual, hasName, name));

@@ -44,10 +44,9 @@ public class Parameter {
     }
 
     public void modelIn(FamixOntologyNew ontology, Individual method) {
+        final String uri = method.getURI() + "." + name;
         Individual individual =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.PARAMETER)
-                        .createIndividual(method.getURI() + "." + name);
+                ontology.codeModel().getOntClass(FamixURIs.PARAMETER).createIndividual(uri);
 
         individual.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.HAS_DECLARED_TYPE),
@@ -55,7 +54,7 @@ public class Parameter {
         individual.addLiteral(ontology.codeModel().getDatatypeProperty(FamixURIs.HAS_NAME), name);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
-        annotations.forEach(anno -> anno.modelIn(ontology, individual));
+        annotations.forEach(anno -> anno.modelIn(ontology, uri, individual));
 
         method.addProperty(
                 ontology.codeModel().getObjectProperty(FamixURIs.DEFINES_PARAMETER), individual);
