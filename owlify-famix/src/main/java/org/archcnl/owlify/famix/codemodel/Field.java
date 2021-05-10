@@ -1,13 +1,13 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.Attribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.definesAttribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasDeclaredType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Attribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 /**
  * Models a field/attribute for a given type.
@@ -67,7 +67,7 @@ public class Field {
      * @param parentName A unique name identifying the type to which this field belongs.
      * @param parent The OWL individual of the type to which this field belongs.
      */
-    public void modelIn(FamixOntologyNew ontology, String parentName, Individual parent) {
+    public void modelIn(FamixOntology ontology, String parentName, Individual parent) {
         String uri = parentName + "." + name;
         Individual attribute = ontology.createIndividual(Attribute, uri);
         parent.addProperty(ontology.get(definesAttribute), attribute);

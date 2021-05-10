@@ -1,7 +1,11 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationType;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -9,20 +13,18 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AnnotationAttributeTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
@@ -31,40 +33,30 @@ public class AnnotationAttributeTest {
     public void testAnnotationAttributeTransformation() {
         final String name = "attribute";
         final String annotationName = "namespace.SomeAnnotation";
-        final Type type = new Type("Type", false);
+        final Type type = new Type("Type", "t", false);
 
         AnnotationAttribute attribute = new AnnotationAttribute(name, type);
-        //        Individual annotation =
-        //                ontology.codeModel()
-        //                        .getOntClass(FamixURIs.ANNOTATION_TYPE)
-        //                        .createIndividual(annotationName);
-        Individual typeIndividual =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.FAMIX_CLASS)
-                        .createIndividual(type.getName());
-
-        ontology.typeCache().addDefinedType(type.getName(), typeIndividual);
-
+        Individual typeIndividual = ontology.createIndividual(FamixClass, type.getName());
         Individual annotation = ontology.createIndividual(AnnotationType, annotationName);
 
+        ontology.typeCache().addDefinedType(type.getName(), typeIndividual);
         attribute.modelIn(ontology, annotationName, annotation);
 
-        Property hasName = ontology.codeModel().getProperty(FamixURIs.HAS_NAME);
-        Property hasDeclaredType = ontology.codeModel().getProperty(FamixURIs.HAS_DECLARED_TYPE);
-        Property hasAnnotationTypeAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
         Individual individual =
                 ontology.codeModel()
                         .getIndividual(
                                 AnnotationTypeAttribute.individualUri(annotationName + "/" + name));
 
         assertNotNull(individual);
-        assertTrue(ontology.codeModel().containsLiteral(individual, hasName, name));
-        assertTrue(
-                ontology.codeModel().containsLiteral(individual, hasDeclaredType, typeIndividual));
+        assertTrue(ontology.codeModel().containsLiteral(individual, ontology.get(hasName), name));
         assertTrue(
                 ontology.codeModel()
-                        .containsLiteral(annotation, hasAnnotationTypeAttribute, individual));
+                        .containsLiteral(
+                                individual, ontology.get(hasDeclaredType), typeIndividual));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(
+                                annotation, ontology.get(hasAnnotationTypeAttribute), individual));
 
         assertTrue(ontology.annotationAttributeCache().isKnownAttribute(annotationName, name));
         assertSame(

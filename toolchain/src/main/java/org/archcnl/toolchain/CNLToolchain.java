@@ -25,8 +25,8 @@ import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckImpl;
+import org.archcnl.javaparser.parser.JavaOntologyTransformer;
 import org.archcnl.owlify.core.OwlifyComponent;
-import org.archcnl.owlify.famix.parser.JavaOntologyTransformer;
 import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
@@ -39,7 +39,7 @@ import org.archcnl.stardogwrapper.impl.StardogDatabase;
 public class CNLToolchain {
     private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
 
-    private OwlifyComponent famixTransformer;
+    private OwlifyComponent javaTransformer;
     private StardogICVAPI icvAPI;
     private IConformanceCheck check;
     private StardogDatabaseAPI db;
@@ -52,9 +52,7 @@ public class CNLToolchain {
     private CNLToolchain(String databaseName, String server, String username, String password) {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
-        this.famixTransformer = new JavaOntologyTransformer(); // TODO new
-        // FamixOntologyTransformer(TEMPORARY_DIRECTORY +
-        // "/results.owl");
+        this.javaTransformer = new JavaOntologyTransformer();
         this.check = new ConformanceCheckImpl();
     }
 
@@ -66,9 +64,10 @@ public class CNLToolchain {
      * @param context The OWL context to use.
      * @param username The username to use when connecting to the database server.
      * @param password The password to use when connecting to the database server.
-     * @param projectDirectory The path to the root of the project which should be analysed.
-     * @param rulesFile The relative path to the AsciiDoc file which contains both the architecture
-     *     and mapping rules.
+     * @param projectDirectory The path to the root of the project's Java source code which should
+     *     be analysed (usually some kind of "src" folder in the project).
+     * @param rulesFile The path to the AsciiDoc file which contains both the architecture and
+     *     mapping rules.
      * @param logVerbose If all log levels down to trace should be logged in file and on the console
      */
     public static void runToolchain(
@@ -99,7 +98,7 @@ public class CNLToolchain {
 
         try {
             Path projectPath = Paths.get(projectDirectory);
-            Path rulesPath = Paths.get(projectDirectory, rulesFile);
+            Path rulesPath = Paths.get(rulesFile);
             tool.execute(rulesPath, projectPath, context);
         } catch (FileNotFoundException e) {
             LOG.fatal("File not found", e);
@@ -253,8 +252,8 @@ public class CNLToolchain {
         LOG.info("Creating the code model ...");
         LOG.info("Starting famix transformation ...");
         // source code transformation
-        famixTransformer.addSourcePath(sourceCodePath);
-        return famixTransformer.transform();
+        javaTransformer.addSourcePath(sourceCodePath);
+        return javaTransformer.transform();
     }
 
     private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {
@@ -271,7 +270,7 @@ public class CNLToolchain {
 
     private HashMap<String, String> gatherOWLNamespaces() {
         HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
-        supportedOWLNamespaces.putAll(famixTransformer.getProvidedNamespaces());
+        supportedOWLNamespaces.putAll(javaTransformer.getProvidedNamespaces());
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");

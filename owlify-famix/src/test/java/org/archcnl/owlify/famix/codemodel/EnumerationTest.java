@@ -1,7 +1,14 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.Enum;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Enum;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasModifier;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -11,15 +18,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class EnumerationTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     private static final String name = "MyEnumeration";
     private static final String fullName = "namespace." + name;
@@ -27,7 +32,7 @@ public class EnumerationTest {
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
@@ -37,6 +42,7 @@ public class EnumerationTest {
         DefinedType type =
                 new Enumeration(
                         fullName,
+                        name,
                         Arrays.asList(DummyObjects.definedType()),
                         Arrays.asList(DummyObjects.method()),
                         Arrays.asList(DummyObjects.field()),
@@ -46,18 +52,15 @@ public class EnumerationTest {
         type.firstPass(ontology);
 
         Individual individual = ontology.codeModel().getIndividual(Enum.individualUri(fullName));
-        Property hasName = ontology.codeModel().getProperty(FamixURIs.HAS_NAME);
-        Property hasFullQualifiedName =
-                ontology.codeModel().getProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME);
-        Property isExternal = ontology.codeModel().getProperty(FamixURIs.IS_EXTERNAL);
 
         assertNotNull(individual);
-        //        assertTrue(ontology.codeModel().containsLiteral(individual, hasName, name)); //
-        // TODO
+        assertTrue(ontology.codeModel().containsLiteral(individual, ontology.get(hasName), name));
         assertTrue(
-                ontology.codeModel().containsLiteral(individual, hasFullQualifiedName, fullName));
-        assertTrue(ontology.codeModel().containsLiteral(individual, isExternal, false));
-        assertEquals(FamixURIs.ENUMERATION, individual.getOntClass().getURI());
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(hasFullQualifiedName), fullName));
+        assertTrue(
+                ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
+        assertEquals(Enum.uri(), individual.getOntClass().getURI());
 
         assertTrue(ontology.typeCache().isDefined(fullName));
         assertSame(individual, ontology.typeCache().getIndividual(fullName));
@@ -68,6 +71,7 @@ public class EnumerationTest {
         DefinedType type =
                 new Enumeration(
                         fullName,
+                        name,
                         Arrays.asList(DummyObjects.definedType()),
                         Arrays.asList(DummyObjects.method()),
                         Arrays.asList(DummyObjects.field()),
@@ -77,18 +81,22 @@ public class EnumerationTest {
         type.firstPass(ontology);
 
         String nestedName = DummyObjects.definedType().getName();
+        String nestedSimpleName = DummyObjects.definedType().getSimpleName();
 
         Individual individual =
                 ontology.codeModel().getIndividual(FamixClass.individualUri(nestedName));
-        Property hasFullQualifiedName =
-                ontology.codeModel().getProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME);
-        Property isExternal = ontology.codeModel().getProperty(FamixURIs.IS_EXTERNAL);
 
         assertNotNull(individual);
         assertTrue(
-                ontology.codeModel().containsLiteral(individual, hasFullQualifiedName, nestedName));
-        assertTrue(ontology.codeModel().containsLiteral(individual, isExternal, false));
-        assertEquals(FamixURIs.FAMIX_CLASS, individual.getOntClass().getURI());
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(hasName), nestedSimpleName));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(
+                                individual, ontology.get(hasFullQualifiedName), nestedName));
+        assertTrue(
+                ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
+        assertEquals(FamixClass.uri(), individual.getOntClass().getURI());
 
         assertTrue(ontology.typeCache().isDefined(nestedName));
         assertSame(individual, ontology.typeCache().getIndividual(nestedName));
@@ -99,6 +107,7 @@ public class EnumerationTest {
         DefinedType type =
                 new Enumeration(
                         fullName,
+                        name,
                         Arrays.asList(DummyObjects.definedType()),
                         Arrays.asList(DummyObjects.method()),
                         Arrays.asList(DummyObjects.field()),
@@ -109,17 +118,13 @@ public class EnumerationTest {
         type.secondPass(ontology);
 
         Individual individual = ontology.codeModel().getIndividual(Enum.individualUri(fullName));
-        Property definesMethod = ontology.codeModel().getProperty(FamixURIs.DEFINES_METHOD);
-        Property definesAttribute = ontology.codeModel().getProperty(FamixURIs.DEFINES_ATTRIBUTE);
-        Property hasModifier = ontology.codeModel().getProperty(FamixURIs.HAS_MODIFIER);
-        Property hasAnnotationInstance =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE);
 
         assertNotNull(individual);
-        assertNotNull(ontology.codeModel().getProperty(individual, definesMethod));
-        assertNotNull(ontology.codeModel().getProperty(individual, definesAttribute));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasModifier));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasAnnotationInstance));
+        assertNotNull(ontology.codeModel().getProperty(individual, ontology.get(definesMethod)));
+        assertNotNull(ontology.codeModel().getProperty(individual, ontology.get(definesAttribute)));
+        assertNotNull(ontology.codeModel().getProperty(individual, ontology.get(hasModifier)));
+        assertNotNull(
+                ontology.codeModel().getProperty(individual, ontology.get(hasAnnotationInstance)));
     }
 
     @Test
@@ -127,6 +132,7 @@ public class EnumerationTest {
         DefinedType type =
                 new Enumeration(
                         fullName,
+                        name,
                         Arrays.asList(DummyObjects.definedType()),
                         Arrays.asList(DummyObjects.method()),
                         Arrays.asList(DummyObjects.field()),

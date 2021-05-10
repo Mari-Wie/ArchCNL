@@ -1,66 +1,73 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.junit.Assert.*;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TypeTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
 
     @Test
     public void testPrimitiveType() {
-        Type type = new Type("int", true);
+        Type type = new Type("int", "int", true);
         Individual individual = type.getIndividual(ontology);
 
-        assertEquals(FamixURIs.PREFIX + "int", individual.getURI());
+        assertEquals(FamixOntology.PREFIX + "int", individual.getURI());
     }
 
     @Test
     public void testPrimitiveTypesHaveSameIndividual() {
-        Type type1 = new Type("int", true);
-        Type type2 = new Type("int", true);
+        Type type1 = new Type("int", "int", true);
+        Type type2 = new Type("int", "int", true);
 
         assertSame(type1.getIndividual(ontology), type2.getIndividual(ontology));
     }
 
     @Test
     public void testUnknownType() {
-        final String name = "namespace.Type";
-        Type type = new Type(name, false);
+        final String simpleName = "Type";
+        final String name = "namespace." + simpleName;
+        Type type = new Type(name, simpleName, false);
         Individual individual = type.getIndividual(ontology);
-        Property isExternal = ontology.codeModel().getProperty(FamixURIs.IS_EXTERNAL);
-        Property hasFullQualifiedName =
-                ontology.codeModel().getProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME);
 
-        assertEquals(name, individual.getURI());
-        assertTrue(ontology.codeModel().containsLiteral(individual, isExternal, true));
-        assertTrue(ontology.codeModel().containsLiteral(individual, hasFullQualifiedName, name));
-        assertEquals(FamixURIs.FAMIX_CLASS, individual.getOntClass().getURI());
+        assertEquals(FamixClass.individualUri(name), individual.getURI());
+        assertTrue(
+                ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), true));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(hasName), simpleName));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(hasFullQualifiedName), name));
+        assertEquals(FamixClass.uri(), individual.getOntClass().getURI());
         assertTrue(ontology.typeCache().isDefined(name));
     }
 
     @Test
     public void testKnownType() {
         final String name = "namespace.Type";
-        Individual individual =
-                ontology.codeModel().getOntClass(FamixURIs.FAMIX_CLASS).createIndividual(name);
-        Type type = new Type(name, false);
+        Individual individual = ontology.createIndividual(FamixClass, name);
+        Type type = new Type(name, "Type", false);
 
         ontology.typeCache().addDefinedType(name, individual);
         assertSame(individual, type.getIndividual(ontology));

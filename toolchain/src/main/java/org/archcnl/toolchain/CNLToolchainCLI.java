@@ -23,12 +23,13 @@ public class CNLToolchainCLI implements Runnable {
             description = "Specifiy the context")
     private String context = "http://graphs.org/" + database + "/1.0";
 
-    @Parameters(paramLabel = "<project path>", description = "The path to the project")
+    @Parameters(
+            paramLabel = "<project path>",
+            description =
+                    "The path to the project's Java source code root directory (usually some kind of \"src\" folder)")
     private String projectPath;
 
-    @Parameters(
-            paramLabel = "<rules file>",
-            description = "The path to the rules, relative to the project path")
+    @Parameters(paramLabel = "<rules file>", description = "The path to the rules")
     private String rulesFile;
 
     @Option(

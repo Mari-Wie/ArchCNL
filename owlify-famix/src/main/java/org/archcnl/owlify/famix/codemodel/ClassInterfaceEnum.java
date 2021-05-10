@@ -3,7 +3,7 @@ package org.archcnl.owlify.famix.codemodel;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 /** Abstract super-class of classes, interfaces and enums. */
 public abstract class ClassInterfaceEnum extends DefinedType {
@@ -16,6 +16,7 @@ public abstract class ClassInterfaceEnum extends DefinedType {
      * Constructor.
      *
      * @param name Fully qualified name of the modeled class/interface/enum.
+     * @param simpleName The simple name of the type.
      * @param nestedTypes List of types which declaration is nested in the declaration of this type.
      * @param methods List of methods defined for this type.
      * @param fields List of fields defined in this type.
@@ -24,12 +25,13 @@ public abstract class ClassInterfaceEnum extends DefinedType {
      */
     protected ClassInterfaceEnum(
             String name,
+            String simpleName,
             List<DefinedType> nestedTypes,
             List<Method> methods,
             List<Field> fields,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations) {
-        super(name, annotations, modifiers);
+        super(name, simpleName, annotations, modifiers);
         this.nestedTypes = nestedTypes;
         this.methods = methods;
         this.fields = fields;
@@ -60,16 +62,16 @@ public abstract class ClassInterfaceEnum extends DefinedType {
     }
 
     @Override
-    protected void secondPassProcess(FamixOntologyNew ontology, Individual individual) {
+    protected void secondPassProcess(FamixOntology ontology, Individual individual) {
         fields.forEach(field -> field.modelIn(ontology, getName(), individual));
-        methods.forEach(method -> method.modelIn(ontology, individual));
+        methods.forEach(method -> method.modelIn(ontology, getName(), individual));
 
         // recursively call nested types
         nestedTypes.forEach(t -> t.secondPass(ontology));
     }
 
     @Override
-    protected void firstPassPostProcess(FamixOntologyNew ontology) {
+    protected void firstPassPostProcess(FamixOntology ontology) {
         nestedTypes.forEach(t -> t.firstPass(ontology));
     }
 }

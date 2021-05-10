@@ -110,6 +110,7 @@
 		<module>owlify-famix</module>
 		<module>stardog-wrapper</module>
 		<module>toolchain</module>
+		<module>java-parser</module>
 	</modules>
 
 	<dependencies>

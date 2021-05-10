@@ -18,7 +18,7 @@ public abstract class AbstractOwlifyComponent implements OwlifyComponent {
     private List<Path> sourcePaths;
 
     /** Constructor. */
-    public AbstractOwlifyComponent() {
+    protected AbstractOwlifyComponent() {
         //        this.resultPath = resultPath;
         this.sourcePaths = new ArrayList<Path>();
     }

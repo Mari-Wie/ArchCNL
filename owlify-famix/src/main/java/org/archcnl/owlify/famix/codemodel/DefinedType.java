@@ -1,12 +1,13 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.hasFullQualifiedName;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
 
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 /**
  * Models a type defined in the analyzed project. These types must be modeled via two passes: In the
@@ -15,27 +16,38 @@ import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
  * to be external once.
  */
 public abstract class DefinedType {
-    private final String name;
+    private final String fullyQualifiedName;
+    private final String simpleName;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
 
     /**
      * Constructor.
      *
-     * @param name Fully qualified name of the type.
+     * @param fullyQualifiedName Fully qualified name of the type.
+     * @param simpleName The simple name of the type.
      * @param annotations List of annotation instances for the type declaration.
      * @param modifiers List of annotation instances for the type.
      */
     protected DefinedType(
-            String name, List<AnnotationInstance> annotations, List<Modifier> modifiers) {
-        this.name = name;
+            String fullyQualifiedName,
+            String simpleName,
+            List<AnnotationInstance> annotations,
+            List<Modifier> modifiers) {
+        this.fullyQualifiedName = fullyQualifiedName;
+        this.simpleName = simpleName;
         this.annotations = annotations;
         this.modifiers = modifiers;
     }
 
     /** @return the fully qualified type name */
     public String getName() {
-        return name;
+        return fullyQualifiedName;
+    }
+
+    /** @return the simple name */
+    public String getSimpleName() {
+        return simpleName;
     }
 
     /** @return the annotation instances */
@@ -53,24 +65,24 @@ public abstract class DefinedType {
      *
      * @param ontology The ontology in which the code model will be created.
      */
-    public void firstPass(FamixOntologyNew ontology) {
+    public void firstPass(FamixOntology ontology) {
         // template method: implementing classes determine how individuals are created
         Individual individual = createIndividual(ontology);
 
-        // individual.addLiteral(ontology.get(hasName), name) // TODO: also add the simple name?
-        individual.addLiteral(ontology.get(hasFullQualifiedName), name);
+        individual.addLiteral(ontology.get(hasName), simpleName);
+        individual.addLiteral(ontology.get(hasFullQualifiedName), fullyQualifiedName);
         individual.addLiteral(ontology.get(isExternal), false);
 
-        ontology.typeCache().addDefinedType(name, individual);
+        ontology.typeCache().addDefinedType(fullyQualifiedName, individual);
 
         // give implementing classes a chance to do some post-processing stuff during the first pass
         firstPassPostProcess(ontology);
     }
 
-    public void secondPass(FamixOntologyNew ontology) {
-        Individual individual = ontology.typeCache().getIndividual(name);
+    public void secondPass(FamixOntology ontology) {
+        Individual individual = ontology.typeCache().getIndividual(fullyQualifiedName);
 
-        annotations.forEach(anno -> anno.modelIn(ontology, name, individual));
+        annotations.forEach(anno -> anno.modelIn(ontology, fullyQualifiedName, individual));
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
 
         // template method: implementing classes can add further information on the type
@@ -79,7 +91,7 @@ public abstract class DefinedType {
 
     /** @return A list the fully qualified type names of this type and all nested types. */
     public List<String> getNestedTypeNames() {
-        return Arrays.asList(name);
+        return Arrays.asList(fullyQualifiedName);
     }
 
     /**
@@ -89,7 +101,7 @@ public abstract class DefinedType {
      * @param ontology The ontology in which the type must be created.
      * @return The created OWL individual.
      */
-    protected abstract Individual createIndividual(FamixOntologyNew ontology);
+    protected abstract Individual createIndividual(FamixOntology ontology);
 
     /**
      * Implement this method. Here, some post-processing actions for the first pass can be stated,
@@ -98,7 +110,7 @@ public abstract class DefinedType {
      *
      * @param ontology The ontology in which the type was created.
      */
-    protected abstract void firstPassPostProcess(FamixOntologyNew ontology);
+    protected abstract void firstPassPostProcess(FamixOntology ontology);
 
     /**
      * Implement this method. Here, some post-processing actions for the second pass can be stated.
@@ -106,7 +118,7 @@ public abstract class DefinedType {
      *
      * @param ontology The ontology in which the type was created.
      * @param individual The individual of this type (the one created by {@link
-     *     #createIndividual(FamixOntologyNew)}
+     *     #createIndividual(FamixOntology)}
      */
-    protected abstract void secondPassProcess(FamixOntologyNew ontology, Individual individual);
+    protected abstract void secondPassProcess(FamixOntology ontology, Individual individual);
 }

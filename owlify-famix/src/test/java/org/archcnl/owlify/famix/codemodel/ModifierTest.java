@@ -1,32 +1,30 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.junit.Assert.*;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasModifier;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Test;
 
 public class ModifierTest {
 
     @Test
     public void testModifierTransformation() throws FileNotFoundException {
-        FamixOntologyNew ontology =
-                new FamixOntologyNew(
+        FamixOntology ontology =
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
 
         Modifier mod = new Modifier("public");
-
-        Individual clazz =
-                ontology.codeModel().getOntClass(FamixURIs.FAMIX_CLASS).createIndividual("Test");
-        Property hasModifier = ontology.codeModel().getProperty(FamixURIs.HAS_MODIFIER);
+        Individual clazz = ontology.createIndividual(FamixClass, "Test");
 
         mod.modelIn(ontology, clazz);
 
-        assertTrue(ontology.codeModel().containsLiteral(clazz, hasModifier, "public"));
+        assertTrue(
+                ontology.codeModel().containsLiteral(clazz, ontology.get(hasModifier), "public"));
     }
 }

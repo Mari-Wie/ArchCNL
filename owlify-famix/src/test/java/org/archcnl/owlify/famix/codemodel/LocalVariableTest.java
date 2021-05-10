@@ -1,51 +1,58 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.junit.Assert.*;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.LocalVariable;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Method;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesVariable;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LocalVariableTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
 
     @Test
     public void testLocalVariableTransformation() {
-        Type type = new Type("Type", false);
+        Type type = new Type("Type", "Type", false);
+        final String parentUri = "SomeClass.someMethod";
         LocalVariable variable = new LocalVariable(type, "i");
-        Individual method =
+        Individual method = ontology.createIndividual(Method, parentUri);
+
+        variable.modelIn(ontology, parentUri, method);
+
+        Individual individual =
                 ontology.codeModel()
-                        .getOntClass(FamixURIs.METHOD)
-                        .createIndividual("SomeClass.someMethod");
-        Property definesVariable = ontology.codeModel().getProperty(FamixURIs.DEFINES_VARIABLE);
-        Property hasDeclaredType = ontology.codeModel().getProperty(FamixURIs.HAS_DECLARED_TYPE);
-        Property hasName = ontology.codeModel().getProperty(FamixURIs.HAS_NAME);
-        Individual typeIndividual =
-                ontology.codeModel().getOntClass(FamixURIs.FAMIX_CLASS).createIndividual("Type");
-
-        ontology.typeCache().addDefinedType(type.getName(), typeIndividual);
-        variable.modelIn(ontology, method);
-
-        Individual individual = ontology.codeModel().getIndividual("SomeClass.someMethod.i");
+                        .getIndividual(
+                                FamixClasses.LocalVariable.individualUri("SomeClass.someMethod.i"));
 
         assertNotNull(individual);
-        assertEquals(FamixURIs.LOCAL_VARIABLE, individual.getOntClass().getURI());
-        assertTrue(ontology.codeModel().contains(method, definesVariable, individual));
-        assertTrue(ontology.codeModel().containsLiteral(individual, hasName, "i"));
-        assertTrue(ontology.codeModel().contains(individual, hasDeclaredType, typeIndividual));
+        assertEquals(LocalVariable.uri(), individual.getOntClass().getURI());
+        assertTrue(
+                ontology.codeModel().contains(method, ontology.get(definesVariable), individual));
+        assertTrue(ontology.codeModel().containsLiteral(individual, ontology.get(hasName), "i"));
+        assertTrue(
+                ontology.codeModel()
+                        .contains(
+                                individual,
+                                ontology.get(hasDeclaredType),
+                                type.getIndividual(ontology)));
     }
 }

@@ -1,6 +1,8 @@
 package org.archcnl.owlify.famix.ontology;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntClass;

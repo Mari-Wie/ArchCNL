@@ -1,6 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.namespaceContains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
@@ -13,20 +14,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ProjectTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
@@ -56,7 +56,11 @@ public class ProjectTest {
         // an annotation "@collision"
         DefinedType type =
                 new Annotation(
-                        collidingName, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                        collidingName,
+                        collidingName,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        new ArrayList<>());
         // a namespace "collision"
         Namespace namespace = new Namespace(collidingName, Namespace.TOP);
 
@@ -81,20 +85,21 @@ public class ProjectTest {
         Individual namespaceIndividual =
                 ontology.codeModel()
                         .getIndividual(
-                                FamixOntologyNew.FamixClasses.Namespace.individualUri(
-                                        collidingName));
-        Property namespaceContains = ontology.codeModel().getProperty(FamixURIs.NAMESPACE_CONTAINS);
+                                FamixOntology.FamixClasses.Namespace.individualUri(collidingName));
 
         assertNotNull(typeIndividual);
         assertNotNull(namespaceIndividual);
         assertNotSame(typeIndividual, namespaceIndividual);
 
-        assertEquals(FamixURIs.ANNOTATION_TYPE, typeIndividual.getOntClass().getURI());
-        assertEquals(FamixURIs.NAMESPACE, namespaceIndividual.getOntClass().getURI());
+        assertEquals(AnnotationType.uri(), typeIndividual.getOntClass().getURI());
+        assertEquals(FamixClasses.Namespace.uri(), namespaceIndividual.getOntClass().getURI());
 
         // only the namespace has a "namespaceContains" property
-        assertNull(ontology.codeModel().getProperty(typeIndividual, namespaceContains));
-        assertNotNull(ontology.codeModel().getProperty(namespaceIndividual, namespaceContains));
+        assertNull(
+                ontology.codeModel().getProperty(typeIndividual, ontology.get(namespaceContains)));
+        assertNotNull(
+                ontology.codeModel()
+                        .getProperty(namespaceIndividual, ontology.get(namespaceContains)));
     }
 
     static class SourceFileMockup extends SourceFile {
@@ -112,12 +117,12 @@ public class ProjectTest {
         }
 
         @Override
-        public void modelFirstPass(FamixOntologyNew ont) {
+        public void modelFirstPass(FamixOntology ont) {
             firstPassCalled = true;
         }
 
         @Override
-        public void modelSecondPass(FamixOntologyNew ont) {
+        public void modelSecondPass(FamixOntology ont) {
             secondPassCalled = true;
         }
 

@@ -1,25 +1,29 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationInstanceAttribute;
-import static org.junit.Assert.*;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationInstance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationInstanceAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasValue;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstanceAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationTypeAttribute;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AnnotationMemberValuePairTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
@@ -31,24 +35,14 @@ public class AnnotationMemberValuePairTest {
         final String annotationName = "SomeAnnotation";
         final String parentURI = "SomeClass." + annotationName;
         AnnotationMemberValuePair pair = new AnnotationMemberValuePair(name, value);
-        Individual annotation =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.ANNOTATION_INSTANCE)
-                        .createIndividual(parentURI);
+        Individual annotation = ontology.createIndividual(AnnotationInstance, parentURI);
         Individual attributeIndividual =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.ANNOTATION_TYPE_ATTRIBUTE)
-                        .createIndividual();
+                ontology.createIndividual(AnnotationTypeAttribute, "attribute");
 
         ontology.annotationAttributeCache()
                 .addAnnotationAttribute(annotationName, name, attributeIndividual);
         pair.modelIn(ontology, annotationName, parentURI, annotation);
 
-        Property hasAnnotationTypeAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
-        Property hasAnnotationInstanceAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE_ATTRIBUTE);
-        Property hasValue = ontology.codeModel().getProperty(FamixURIs.HAS_VALUE);
         Individual individual =
                 ontology.codeModel()
                         .getIndividual(
@@ -57,11 +51,17 @@ public class AnnotationMemberValuePairTest {
         assertNotNull(individual);
         assertTrue(
                 ontology.codeModel()
-                        .contains(individual, hasAnnotationTypeAttribute, attributeIndividual));
+                        .contains(
+                                individual,
+                                ontology.get(hasAnnotationTypeAttribute),
+                                attributeIndividual));
         assertTrue(
                 ontology.codeModel()
-                        .contains(annotation, hasAnnotationInstanceAttribute, individual));
-        assertTrue(ontology.codeModel().contains(individual, hasValue, value));
+                        .contains(
+                                annotation,
+                                ontology.get(hasAnnotationInstanceAttribute),
+                                individual));
+        assertTrue(ontology.codeModel().contains(individual, ontology.get(hasValue), value));
     }
 
     @Test
@@ -71,33 +71,32 @@ public class AnnotationMemberValuePairTest {
         final String annotationName = "SomeAnnotation";
         final String parentURI = "SomeClass." + annotationName;
         AnnotationMemberValuePair pair = new AnnotationMemberValuePair(name, value);
-        Individual annotation =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.ANNOTATION_INSTANCE)
-                        .createIndividual(parentURI);
+        Individual annotation = ontology.createIndividual(AnnotationInstance, parentURI);
 
         pair.modelIn(ontology, annotationName, parentURI, annotation);
 
-        Property hasAnnotationTypeAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
-        Property hasAnnotationInstanceAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE_ATTRIBUTE);
-        Property hasValue = ontology.codeModel().getProperty(FamixURIs.HAS_VALUE);
+        assertTrue(ontology.annotationAttributeCache().isKnownAttribute(annotationName, name));
+
         Individual individual =
                 ontology.codeModel()
                         .getIndividual(
                                 AnnotationInstanceAttribute.individualUri(parentURI + "-" + name));
         Individual attributeIndividual =
-                ontology.codeModel().getIndividual(annotationName + "-" + name);
+                ontology.annotationAttributeCache().getAnnotationAttribute(annotationName, name);
 
         assertNotNull(individual);
         assertTrue(
                 ontology.codeModel()
-                        .contains(individual, hasAnnotationTypeAttribute, attributeIndividual));
+                        .contains(
+                                individual,
+                                ontology.get(hasAnnotationTypeAttribute),
+                                attributeIndividual));
         assertTrue(
                 ontology.codeModel()
-                        .contains(annotation, hasAnnotationInstanceAttribute, individual));
-        assertTrue(ontology.codeModel().contains(individual, hasValue, value));
-        assertTrue(ontology.annotationAttributeCache().isKnownAttribute(annotationName, name));
+                        .contains(
+                                annotation,
+                                ontology.get(hasAnnotationInstanceAttribute),
+                                individual));
+        assertTrue(ontology.codeModel().contains(individual, ontology.get(hasValue), value));
     }
 }

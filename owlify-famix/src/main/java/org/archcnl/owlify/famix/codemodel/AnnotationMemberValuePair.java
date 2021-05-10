@@ -1,14 +1,14 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationInstanceAttribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationTypeAttribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.hasValue;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasAnnotationInstanceAttribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasAnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationInstanceAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasValue;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstanceAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationTypeAttribute;
 
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 /**
  * Models an attribute-value pair present in a particular annotation (instance). For instance, when
@@ -52,7 +52,7 @@ public class AnnotationMemberValuePair {
      * @param annotationInstance The annotation instance this pair belongs to.
      */
     public void modelIn(
-            FamixOntologyNew ontology,
+            FamixOntology ontology,
             String annotationName,
             String parentName,
             Individual annotationInstance) {
@@ -72,7 +72,7 @@ public class AnnotationMemberValuePair {
         annotationInstanceAttribute.addLiteral(ontology.get(hasValue), value);
     }
 
-    private void modelTypeAttribute(FamixOntologyNew ontology, String annotationName) {
+    private void modelTypeAttribute(FamixOntology ontology, String annotationName) {
         Individual attribute =
                 ontology.createIndividual(AnnotationTypeAttribute, annotationName + "-" + name);
         attribute.addLiteral(ontology.get(hasName), name);

@@ -1,14 +1,14 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.FamixClass;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.Inheritance;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasSubClass;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasSuperClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Inheritance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasSubClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasSuperClass;
 
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties;
 
 /**
  * Models a class or interface type defined in the analyzed project.
@@ -23,6 +23,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
      * Constructor.
      *
      * @param name Fully qualified name of the type.
+     * @param simpleName The simple name of the type.
      * @param nestedTypes List of types which declaration is nested into this one.
      * @param methods List of methods defined for this type.
      * @param fields List of fields defined for this type.
@@ -33,6 +34,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
      */
     public ClassOrInterface(
             String name,
+            String simpleName,
             List<DefinedType> nestedTypes,
             List<Method> methods,
             List<Field> fields,
@@ -40,7 +42,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
             List<AnnotationInstance> annotations,
             boolean isInterface,
             List<Type> supertypes) {
-        super(name, nestedTypes, methods, fields, modifiers, annotations);
+        super(name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
         this.isInterface = isInterface;
         this.supertypes = supertypes;
     }
@@ -56,12 +58,12 @@ public class ClassOrInterface extends ClassInterfaceEnum {
     }
 
     @Override
-    protected Individual createIndividual(FamixOntologyNew ontology) {
+    protected Individual createIndividual(FamixOntology ontology) {
         return ontology.createIndividual(FamixClass, getName());
     }
 
     @Override
-    protected void secondPassProcess(FamixOntologyNew ontology, Individual individual) {
+    protected void secondPassProcess(FamixOntology ontology, Individual individual) {
         // call super method
         super.secondPassProcess(ontology, individual);
 
@@ -70,7 +72,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
         individual.addLiteral(ontology.get(FamixDatatypeProperties.isInterface), isInterface);
     }
 
-    private void addSupertypes(FamixOntologyNew ontology, Individual individual) {
+    private void addSupertypes(FamixOntology ontology, Individual individual) {
         for (Type supertype : supertypes) {
             Individual inheritance =
                     ontology.createIndividual(Inheritance, getName() + "-" + supertype.getName());

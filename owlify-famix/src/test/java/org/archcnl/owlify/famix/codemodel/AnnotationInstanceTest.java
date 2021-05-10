@@ -1,28 +1,34 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationInstance;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationType;
-import static org.junit.Assert.*;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationInstance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Method;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstanceAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AnnotationInstanceTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
@@ -34,28 +40,24 @@ public class AnnotationInstanceTest {
                 Arrays.asList(new AnnotationMemberValuePair("attribute", "value"));
         AnnotationInstance instance = new AnnotationInstance(name, values);
         String parentName = "namespace.Class.method";
-        Individual parent =
-                ontology.codeModel().getOntClass(FamixURIs.METHOD).createIndividual(parentName);
-        Individual type =
-                ontology.codeModel().getOntClass(FamixURIs.ANNOTATION_TYPE).createIndividual(name);
+        Individual parent = ontology.createIndividual(Method, parentName);
+        Individual type = ontology.createIndividual(AnnotationType, name);
 
         ontology.typeCache().addDefinedType(name, type);
 
         instance.modelIn(ontology, parentName, parent);
-
-        Property hasAnnotationType =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE);
-        Property hasAnnotationInstanceAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE_ATTRIBUTE);
 
         String uri =
                 AnnotationInstance.individualUri("namespace.Class.method-namespace.SomeAnnotation");
         Individual individual = ontology.codeModel().getIndividual(uri);
 
         assertNotNull(individual);
-        assertEquals(FamixURIs.ANNOTATION_INSTANCE, individual.getOntClass().getURI());
-        assertTrue(ontology.codeModel().contains(individual, hasAnnotationType, type));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasAnnotationInstanceAttribute));
+        assertEquals(AnnotationInstance.uri(), individual.getOntClass().getURI());
+        assertTrue(
+                ontology.codeModel().contains(individual, ontology.get(hasAnnotationType), type));
+        assertNotNull(
+                ontology.codeModel()
+                        .getProperty(individual, ontology.get(hasAnnotationInstanceAttribute)));
     }
 
     @Test
@@ -65,18 +67,9 @@ public class AnnotationInstanceTest {
                 Arrays.asList(new AnnotationMemberValuePair("attribute", "value"));
         AnnotationInstance instance = new AnnotationInstance(name, values);
         String parentName = "namespace.Class.method";
-        Individual parent =
-                ontology.codeModel().getOntClass(FamixURIs.METHOD).createIndividual(parentName);
+        Individual parent = ontology.createIndividual(Method, parentName);
 
         instance.modelIn(ontology, parentName, parent);
-
-        Property hasAnnotationType =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE);
-        Property hasAnnotationInstanceAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE_ATTRIBUTE);
-        Property isExternal = ontology.codeModel().getProperty(FamixURIs.IS_EXTERNAL);
-        Property hasFullQualifiedName =
-                ontology.codeModel().getProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME);
 
         String uri =
                 AnnotationInstance.individualUri("namespace.Class.method-namespace.SomeAnnotation");
@@ -86,13 +79,18 @@ public class AnnotationInstanceTest {
         assertNotNull(type);
         assertTrue(ontology.typeCache().isDefined(name));
         assertSame(type, ontology.typeCache().getIndividual(name));
-        assertEquals(FamixURIs.ANNOTATION_TYPE, type.getOntClass().getURI());
-        assertTrue(ontology.codeModel().containsLiteral(type, isExternal, true));
-        assertTrue(ontology.codeModel().containsLiteral(type, hasFullQualifiedName, name));
+        assertEquals(AnnotationType.uri(), type.getOntClass().getURI());
+        assertTrue(ontology.codeModel().containsLiteral(type, ontology.get(isExternal), true));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(type, ontology.get(hasFullQualifiedName), name));
 
         assertNotNull(individual);
-        assertEquals(FamixURIs.ANNOTATION_INSTANCE, individual.getOntClass().getURI());
-        assertTrue(ontology.codeModel().contains(individual, hasAnnotationType, type));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasAnnotationInstanceAttribute));
+        assertEquals(AnnotationInstance.uri(), individual.getOntClass().getURI());
+        assertTrue(
+                ontology.codeModel().contains(individual, ontology.get(hasAnnotationType), type));
+        assertNotNull(
+                ontology.codeModel()
+                        .getProperty(individual, ontology.get(hasAnnotationInstanceAttribute)));
     }
 }

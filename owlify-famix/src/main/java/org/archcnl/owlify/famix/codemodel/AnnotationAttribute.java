@@ -1,12 +1,12 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationTypeAttribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasAnnotationTypeAttribute;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasDeclaredType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationTypeAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 /**
  * Models a single annotation attribute defined for an annotation. Represented by the
@@ -45,7 +45,7 @@ public class AnnotationAttribute {
      *     belongs.
      * @param annotation The OWL individual of the annotation to which this attribute belongs.
      */
-    public void modelIn(FamixOntologyNew ontology, String annotationName, Individual annotation) {
+    public void modelIn(FamixOntology ontology, String annotationName, Individual annotation) {
         Individual individual =
                 ontology.createIndividual(AnnotationTypeAttribute, annotationName + "/" + name);
 

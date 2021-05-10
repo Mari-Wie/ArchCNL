@@ -1,6 +1,8 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.namespaceContains;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -9,27 +11,26 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
 import org.junit.Before;
 import org.junit.Test;
 
 public class NamespaceTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
     private static final String type1 = "namespace.SomeType";
     private static final String type2 = "namespace.SomeOtherType";
 
     private Individual type1Individual;
     private Individual type2Individual;
-    private Property namespaceContains;
-    private Property hasName;
+    private Property contains;
+    private Property named;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
 
@@ -39,8 +40,8 @@ public class NamespaceTest {
         ontology.typeCache().addDefinedType(type1, type1Individual);
         ontology.typeCache().addDefinedType(type2, type2Individual);
 
-        namespaceContains = ontology.codeModel().getProperty(FamixURIs.NAMESPACE_CONTAINS);
-        hasName = ontology.codeModel().getProperty(FamixURIs.HAS_NAME);
+        contains = ontology.get(namespaceContains);
+        named = ontology.get(hasName);
     }
 
     @Test
@@ -55,9 +56,9 @@ public class NamespaceTest {
                                 FamixClasses.Namespace.individualUri(Namespace.TOP.getName()));
 
         assertNotNull(individual);
-        assertTrue(ontology.codeModel().containsLiteral(individual, hasName, ""));
-        assertTrue(ontology.codeModel().contains(individual, namespaceContains, type1Individual));
-        assertTrue(ontology.codeModel().contains(individual, namespaceContains, type2Individual));
+        assertTrue(ontology.codeModel().containsLiteral(individual, named, ""));
+        assertTrue(ontology.codeModel().contains(individual, contains, type1Individual));
+        assertTrue(ontology.codeModel().contains(individual, contains, type2Individual));
     }
 
     @Test
@@ -82,13 +83,12 @@ public class NamespaceTest {
         assertNotNull(individual0);
         assertNotNull(individual1);
         assertNotNull(individual2);
-        assertTrue(ontology.codeModel().containsLiteral(individual0, hasName, ""));
-        assertTrue(ontology.codeModel().containsLiteral(individual1, hasName, "namespace"));
+        assertTrue(ontology.codeModel().containsLiteral(individual0, named, ""));
+        assertTrue(ontology.codeModel().containsLiteral(individual1, named, "namespace"));
         assertTrue(
-                ontology.codeModel()
-                        .containsLiteral(individual2, hasName, "namespace.subnamespace"));
-        assertTrue(ontology.codeModel().contains(individual2, namespaceContains, type1Individual));
-        assertTrue(ontology.codeModel().contains(individual2, namespaceContains, type2Individual));
+                ontology.codeModel().containsLiteral(individual2, named, "namespace.subnamespace"));
+        assertTrue(ontology.codeModel().contains(individual2, contains, type1Individual));
+        assertTrue(ontology.codeModel().contains(individual2, contains, type2Individual));
     }
 
     @Test
@@ -113,12 +113,11 @@ public class NamespaceTest {
         assertNotNull(individual0);
         assertNotNull(individual1);
         assertNotNull(individual2);
-        assertTrue(ontology.codeModel().containsLiteral(individual0, hasName, ""));
-        assertTrue(ontology.codeModel().containsLiteral(individual1, hasName, "namespace"));
+        assertTrue(ontology.codeModel().containsLiteral(individual0, named, ""));
+        assertTrue(ontology.codeModel().containsLiteral(individual1, named, "namespace"));
         assertTrue(
-                ontology.codeModel()
-                        .containsLiteral(individual2, hasName, "namespace.subnamespace"));
-        assertTrue(ontology.codeModel().contains(individual1, namespaceContains, type1Individual));
-        assertTrue(ontology.codeModel().contains(individual2, namespaceContains, type2Individual));
+                ontology.codeModel().containsLiteral(individual2, named, "namespace.subnamespace"));
+        assertTrue(ontology.codeModel().contains(individual1, contains, type1Individual));
+        assertTrue(ontology.codeModel().contains(individual2, contains, type2Individual));
     }
 }

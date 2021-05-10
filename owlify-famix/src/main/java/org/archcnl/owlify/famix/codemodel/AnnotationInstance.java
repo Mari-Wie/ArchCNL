@@ -1,15 +1,15 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationInstance;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.AnnotationType;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.hasFullQualifiedName;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixDatatypeProperties.isExternal;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasAnnotationInstance;
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixObjectProperties.hasAnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationInstance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 
 /**
  * Models an annotation instance, i.e. the "use" of an annotation. For instance, when some class is
@@ -51,7 +51,7 @@ public class AnnotationInstance {
      * @param parentName A unique name identifying the node which is annotated by this instance.
      * @param entity The (OWL) individual of the node which is annotated by this instance.
      */
-    public void modelIn(FamixOntologyNew ontology, String parentName, Individual entity) {
+    public void modelIn(FamixOntology ontology, String parentName, Individual entity) {
         final String uri = parentName + "-" + name;
         Individual individual = ontology.createIndividual(AnnotationInstance, uri);
 
@@ -69,7 +69,7 @@ public class AnnotationInstance {
         }
     }
 
-    private void createNewAnnotationType(FamixOntologyNew ontology) {
+    private void createNewAnnotationType(FamixOntology ontology) {
         // this code is different from the similar code in Type.getIndividual()
         // in this case, the external type is known to be an annotation
         Individual annotationType = ontology.createIndividual(AnnotationType, name);

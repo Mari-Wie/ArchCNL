@@ -1,6 +1,12 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.Attribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Attribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.FamixClass;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasModifier;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -11,60 +17,53 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class FieldTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
 
     @Test
-    public void testAttribute() {
+    public void testAttributeOwlTransformation() {
         final String parentName = "namespace.SomeClass";
         final String name = "field";
-        final Type type = new Type("double", true);
+        final Type type = new Type("double", "double", true);
         final List<AnnotationInstance> annotations =
                 Arrays.asList(new AnnotationInstance("Deprecated", new ArrayList<>()));
         final List<Modifier> modifiers = Arrays.asList(new Modifier("private"));
         Field field = new Field(name, type, annotations, modifiers);
 
-        Individual parent =
-                ontology.codeModel()
-                        .getOntClass(FamixURIs.FAMIX_CLASS)
-                        .createIndividual(parentName);
+        Individual parent = ontology.createIndividual(FamixClass, parentName);
 
         field.modelIn(ontology, parentName, parent);
 
         Individual individual =
                 ontology.codeModel()
                         .getIndividual(Attribute.individualUri("namespace.SomeClass.field"));
-        Individual typeIndividual =
-                ontology.codeModel().getIndividual(FamixURIs.PREFIX + type.getName());
-        Property definesAttribute = ontology.codeModel().getProperty(FamixURIs.DEFINES_ATTRIBUTE);
-        Property hasName = ontology.codeModel().getProperty(FamixURIs.HAS_NAME);
-        Property hasDeclaredType = ontology.codeModel().getProperty(FamixURIs.HAS_DECLARED_TYPE);
-        Property hasModifier = ontology.codeModel().getProperty(FamixURIs.HAS_MODIFIER);
-        Property hasAnnotationInstance =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE);
 
         assertNotNull(individual);
-        assertEquals(FamixURIs.ATTRIBUTE, individual.getOntClass().getURI());
-        assertTrue(ontology.codeModel().contains(parent, definesAttribute, individual));
-        assertTrue(ontology.codeModel().containsLiteral(individual, hasName, name));
+        assertEquals(Attribute.uri(), individual.getOntClass().getURI());
         assertTrue(
-                ontology.codeModel().containsLiteral(individual, hasDeclaredType, typeIndividual));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasModifier));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasAnnotationInstance));
+                ontology.codeModel().contains(parent, ontology.get(definesAttribute), individual));
+        assertTrue(ontology.codeModel().containsLiteral(individual, ontology.get(hasName), name));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(
+                                individual,
+                                ontology.get(hasDeclaredType),
+                                type.getIndividual(ontology)));
+        assertNotNull(ontology.codeModel().getProperty(individual, ontology.get(hasModifier)));
+        assertNotNull(
+                ontology.codeModel().getProperty(individual, ontology.get(hasAnnotationInstance)));
     }
 }

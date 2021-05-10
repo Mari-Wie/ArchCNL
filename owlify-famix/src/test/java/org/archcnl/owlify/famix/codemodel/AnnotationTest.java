@@ -1,7 +1,16 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import static org.archcnl.owlify.famix.ontology.FamixOntologyNew.FamixClasses.*;
-import static org.junit.Assert.*;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasModifier;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationTypeAttribute;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,15 +18,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
-import org.apache.jena.rdf.model.Property;
-import org.archcnl.owlify.famix.ontology.FamixOntologyNew;
-import org.archcnl.owlify.famix.ontology.FamixURIs;
+import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AnnotationTest {
 
-    private FamixOntologyNew ontology;
+    private FamixOntology ontology;
 
     private static final String name = "MyAnnotation";
     private static final String fullName = "namespace." + name;
@@ -25,7 +32,7 @@ public class AnnotationTest {
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
-                new FamixOntologyNew(
+                new FamixOntology(
                         new FileInputStream("./src/test/resources/ontologies/famix.owl"),
                         new FileInputStream("./src/test/resources/ontologies/main.owl"));
     }
@@ -35,27 +42,25 @@ public class AnnotationTest {
         List<AnnotationAttribute> attributes = Arrays.asList(DummyObjects.annotationAttribute());
 
         DefinedType type =
-                new Annotation(fullName, new ArrayList<>(), new ArrayList<>(), attributes);
+                new Annotation(fullName, name, new ArrayList<>(), new ArrayList<>(), attributes);
 
         type.firstPass(ontology);
 
         Individual individual =
                 ontology.codeModel().getIndividual(AnnotationType.individualUri(fullName));
-        Property hasName = ontology.codeModel().getProperty(FamixURIs.HAS_NAME);
-        Property hasFullQualifiedName =
-                ontology.codeModel().getProperty(FamixURIs.HAS_FULL_QUALIFIED_NAME);
-        Property isExternal = ontology.codeModel().getProperty(FamixURIs.IS_EXTERNAL);
-        Property hasAnnotationTypeAttribute =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_TYPE_ATTRIBUTE);
 
         assertNotNull(individual);
-        //        assertTrue(ontology.codeModel().containsLiteral(individual, hasName, name)); //
-        // TODO
+
+        assertTrue(ontology.codeModel().containsLiteral(individual, ontology.get(hasName), name));
         assertTrue(
-                ontology.codeModel().containsLiteral(individual, hasFullQualifiedName, fullName));
-        assertTrue(ontology.codeModel().containsLiteral(individual, isExternal, false));
-        assertEquals(FamixURIs.ANNOTATION_TYPE, individual.getOntClass().getURI());
-        assertNotNull(ontology.codeModel().getProperty(individual, hasAnnotationTypeAttribute));
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(hasFullQualifiedName), fullName));
+        assertTrue(
+                ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
+        assertEquals(AnnotationType.uri(), individual.getOntClass().getURI());
+        assertNotNull(
+                ontology.codeModel()
+                        .getProperty(individual, ontology.get(hasAnnotationTypeAttribute)));
 
         assertTrue(ontology.typeCache().isDefined(fullName));
         assertSame(individual, ontology.typeCache().getIndividual(fullName));
@@ -66,26 +71,26 @@ public class AnnotationTest {
         List<AnnotationInstance> annotations = Arrays.asList(DummyObjects.annotationInstance());
         List<Modifier> modifiers = Arrays.asList(DummyObjects.modifier());
 
-        DefinedType type = new Annotation(fullName, annotations, modifiers, new ArrayList<>());
+        DefinedType type =
+                new Annotation(fullName, name, annotations, modifiers, new ArrayList<>());
 
         type.firstPass(ontology);
         type.secondPass(ontology);
 
         Individual individual =
                 ontology.codeModel().getIndividual(AnnotationType.individualUri(fullName));
-        Property hasModifier = ontology.codeModel().getProperty(FamixURIs.HAS_MODIFIER);
-        Property hasAnnotationInstance =
-                ontology.codeModel().getProperty(FamixURIs.HAS_ANNOTATION_INSTANCE);
 
         assertNotNull(individual);
-        assertNotNull(ontology.codeModel().getProperty(individual, hasModifier));
-        assertNotNull(ontology.codeModel().getProperty(individual, hasAnnotationInstance));
+        assertNotNull(ontology.codeModel().getProperty(individual, ontology.get(hasModifier)));
+        assertNotNull(
+                ontology.codeModel().getProperty(individual, ontology.get(hasAnnotationInstance)));
     }
 
     @Test
     public void testGetNestedTypeNames() {
         DefinedType type =
-                new Annotation(fullName, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new Annotation(
+                        fullName, name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         assertEquals(1, type.getNestedTypeNames().size());
         assertEquals(fullName, type.getNestedTypeNames().get(0));
     }

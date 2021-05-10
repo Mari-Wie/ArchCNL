@@ -16,11 +16,11 @@ public class DummyObjects {
     }
 
     public static Type primitiveType() {
-        return new Type("int", true);
+        return new Type("int", "int", true);
     }
 
     public static Type referenceType() {
-        return new Type("dummies.DummyClass", false);
+        return new Type("dummies.DummyClass", "DummyClass", false);
     }
 
     public static AnnotationMemberValuePair memberValuePair() {
@@ -38,6 +38,7 @@ public class DummyObjects {
     public static DefinedType definedType() {
         return new ClassOrInterface(
                 "dummies.DummyClass",
+                "DummyClass",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
