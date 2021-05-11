@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -69,6 +70,7 @@ public class CNLToolchain {
      * @param rulesFile The path to the AsciiDoc file which contains both the architecture and
      *     mapping rules.
      * @param logVerbose If all log levels down to trace should be logged in file and on the console
+     * @param removePreviousDatabases
      */
     public static void runToolchain(
             String database,
@@ -78,13 +80,21 @@ public class CNLToolchain {
             String password,
             String projectDirectory,
             String rulesFile,
-            boolean logVerbose) {
+            boolean logVerbose,
+            boolean removePreviousDatabases) {
 
         if (logVerbose) {
             LOG.info("verbose logging is enabled");
             ThreadContext.put("verboseMode", "true");
         } else {
             ThreadContext.put("verboseMode", "false");
+        }
+
+        if (!isDatabaseNameValid(database)) {
+            LOG.fatal(
+                    "Databasename: {} is not possible, the database name must start with an alpha character followed by any alphanumeric character, dash or underscore.",
+                    database);
+            return;
         }
 
         LOG.debug("Database     : " + database);
@@ -99,7 +109,7 @@ public class CNLToolchain {
         try {
             Path projectPath = Paths.get(projectDirectory);
             Path rulesPath = Paths.get(rulesFile);
-            tool.execute(rulesPath, projectPath, context);
+            tool.execute(rulesPath, projectPath, context, removePreviousDatabases);
         } catch (FileNotFoundException e) {
             LOG.fatal("File not found", e);
             e.printStackTrace();
@@ -113,7 +123,7 @@ public class CNLToolchain {
 
     static String createTimeSuffix() {
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd__'at'__HH-mm-ss_z");
         return dateFormat.format(date);
     }
 
@@ -129,7 +139,8 @@ public class CNLToolchain {
      * @throws NoConnectionToStardogServerException when no connection to the database can be
      *     established
      */
-    private void execute(Path docPath, Path sourceCodePath, String context)
+    private void execute(
+            Path docPath, Path sourceCodePath, String context, boolean removePreviousDatabases)
             throws FileNotFoundException, NoConnectionToStardogServerException, IOException {
         LOG.info("Starting the execution");
 
@@ -158,7 +169,7 @@ public class CNLToolchain {
         LOG.info("Starting conformance checking...");
 
         LOG.debug("Connecting to the database ...");
-        db.connect();
+        db.connect(removePreviousDatabases);
 
         storeModelAndConstraintsInDB(context, rules, MAPPED_ONTOLOGY_PATH);
 
@@ -275,5 +286,16 @@ public class CNLToolchain {
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
         return supportedOWLNamespaces;
+    }
+
+    /*
+     * Match the databaseName to a regex provided by Stardog
+     *
+     * @see <a href="https://docs.stardog.com/operating-stardog/database-administration/database-configuration#databasename">Stardog Documentation</a>
+     */
+    private static boolean isDatabaseNameValid(String databaseName) {
+        var pattern = Pattern.compile("[A-Za-z]{1}[A-Za-z0-9_-]*");
+        var matcher = pattern.matcher(databaseName);
+        return matcher.matches();
     }
 }

@@ -11,7 +11,7 @@ public class CNLToolchainCLI implements Runnable {
     @Option(
             names = {"-d", "--database"},
             description = "Specifiy the database name")
-    private String database = "MWTest_" + CNLToolchain.createTimeSuffix();
+    private String database = "ArchCNL_" + CNLToolchain.createTimeSuffix();
 
     @Option(
             names = {"-s", "--server"},
@@ -47,10 +47,23 @@ public class CNLToolchainCLI implements Runnable {
             description = "Set the log level to ALL and output all log messages")
     boolean logVerbose;
 
+    @Option(
+            names = {"-rm-db", "--remove-databases"},
+            description = "Remove previous databases before adding new ones")
+    boolean removePreviousDatabases;
+
     @Override
     public void run() {
         CNLToolchain.runToolchain(
-                database, server, context, username, password, projectPath, rulesFile, logVerbose);
+                database,
+                server,
+                context,
+                username,
+                password,
+                projectPath,
+                rulesFile,
+                logVerbose,
+                removePreviousDatabases);
     }
 
     public static void main(String[] args) {
