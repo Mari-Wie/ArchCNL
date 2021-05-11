@@ -32,11 +32,6 @@
 			<version>${apachejenaVersion}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.javaparser</groupId>
-			<artifactId>javaparser-symbol-solver-core</artifactId>
-			<version>3.16.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.archcnl</groupId>
 			<artifactId>owlify</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

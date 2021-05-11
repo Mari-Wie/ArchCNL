@@ -3,6 +3,7 @@ package org.archcnl.owlify.core;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Interface for input parsers. Each parser takes some files as input, parses them into an OWL
@@ -12,12 +13,9 @@ public interface OwlifyComponent {
     /**
      * This method performs the parsing step. Make sure that all input files have been added before
      * calling this method (via {@link #addSourcePath(String)}). The inputs will be read and the
-     * resulting output ontology will be written to the file specified by {@link #getResultPath()}.
+     * resulting output ontology will be returned.
      */
-    public void transform();
-
-    /** Returns the path to the parser's output file which contains the generated OWL ontology. */
-    public String getResultPath();
+    public Model transform();
 
     /** Returns a list of input file/directory path's which have been added in the past. */
     public List<Path> getSourcePaths();

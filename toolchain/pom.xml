@@ -95,7 +95,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.archcnl</groupId>
-			<artifactId>owlify-famix</artifactId>
+			<artifactId>java-parser</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

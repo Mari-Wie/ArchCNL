@@ -15,7 +15,6 @@ public class GeneralSoftwareArtifactOntology {
 
     private OntModel model;
     private GeneralSoftwareArtifactClassesAndProperties classesAndProperties;
-    private long artifactId;
 
     public GeneralSoftwareArtifactOntology(InputStream ontologyInputStream) {
         loadOntology(ontologyInputStream);
@@ -28,17 +27,32 @@ public class GeneralSoftwareArtifactOntology {
         model.read(ontologyInpuStream, null);
     }
 
-    public void setSoftwareArtifactFileContainsSoftwareArtifact(
+    private void setSoftwareArtifactFileContainsSoftwareArtifact(
             Individual artifact, Individual file) {
         ObjectProperty property = classesAndProperties.getFileContainsProperty(model);
         artifact.addProperty(property, file);
     }
 
-    public Individual getSoftwareArtifactFileIndividual() {
-        return classesAndProperties.getSoftwareArtifactFileIndividual(model, artifactId++);
+    /**
+     * Returns a new SoftwareArtifactFile individual. Sets the properties linking the individual to
+     * its path and the famix type individual it contains.
+     *
+     * @param path Path to the file represented by the individual.
+     * @param famixTypeIndividual Individual referring to the famix type contained/defined in the
+     *     file.
+     * @return An SoftwareArtifactFile individual. The aforementioned properties are already set.
+     */
+    public Individual getSoftwareArtifactFileIndividual(
+            String path, Individual famixTypeIndividual) {
+        Individual softwareArtifact =
+                classesAndProperties.getSoftwareArtifactFileIndividual(model, path);
+
+        setHasFilePath(softwareArtifact, path);
+        setSoftwareArtifactFileContainsSoftwareArtifact(softwareArtifact, famixTypeIndividual);
+        return softwareArtifact;
     }
 
-    public void setHasFilePath(Individual fileIndividual, String filePath) {
+    private void setHasFilePath(Individual fileIndividual, String filePath) {
         DatatypeProperty property = classesAndProperties.getHasPathProperty(model);
         fileIndividual.addLiteral(property, filePath);
     }

@@ -8,16 +8,14 @@ import org.apache.jena.ontology.OntModel;
 
 public class GeneralSoftwareArtifactClassesAndProperties {
 
-    private String namespace;
+    private static final String namespace = "http://arch-ont.org/ontologies/main.owl#";
+    public static final String SOFTWARE_ARTIFACT_FILE = namespace + "SoftwareArtifactFile";
 
-    public GeneralSoftwareArtifactClassesAndProperties() {
-        namespace = "http://arch-ont.org/ontologies/main.owl#";
-    }
+    public GeneralSoftwareArtifactClassesAndProperties() {}
 
-    public Individual getSoftwareArtifactFileIndividual(OntModel model, long artifactId) {
-        OntClass artifactClass = model.getOntClass(namespace + "SoftwareArtifactFile");
-        return model.createIndividual(
-                namespace + "SoftwareArtifactFile" + artifactId, artifactClass);
+    public Individual getSoftwareArtifactFileIndividual(OntModel model, String name) {
+        OntClass artifactClass = model.getOntClass(SOFTWARE_ARTIFACT_FILE);
+        return artifactClass.createIndividual(SOFTWARE_ARTIFACT_FILE + "/" + name);
     }
 
     public ObjectProperty getFileContainsProperty(OntModel model) {
