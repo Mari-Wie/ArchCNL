@@ -14,14 +14,19 @@ import org.apache.logging.log4j.Logger;
 
 public class FileVisitor extends SimpleFileVisitor<Path> {
 	private static final Logger LOG = LogManager.getLogger(FileVisitor.class);
-	private final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.kt");
+	private final PathMatcher matcher;
+	private final KotlinFileVisitorListener listener;
+
+	public FileVisitor(KotlinFileVisitorListener listener) {
+		this.matcher = FileSystems.getDefault().getPathMatcher("glob:*.kt");
+		this.listener = listener;
+	}
 
 	private void parse(Path file, String fileName) {
 		try {
 			var content = Files.readString(file);
-			var parser = new KtParser();
 			LOG.debug("Parsing File: {}", fileName);
-			parser.parse(content);
+			listener.handleKotlinFile(file, content);
 		} catch (IOException e) {
 			LOG.error("Could not read file {}, exception {}", fileName, e);
 			e.printStackTrace();
@@ -45,5 +50,9 @@ public class FileVisitor extends SimpleFileVisitor<Path> {
 	public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
 		LOG.error("Error visiting file {}, exception is {}", file, exc);
 		return FileVisitResult.CONTINUE;
+	}
+	
+	interface KotlinFileVisitorListener{
+		void handleKotlinFile(Path path, String content);
 	}
 }

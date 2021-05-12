@@ -55,7 +55,7 @@ public class CNLToolchain {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.javaTransformer = new JavaOntologyTransformer();
-        this.famixKotlinTransformer = new KotlinOntologyTransformer(TEMPORARY_DIRECTORY + "/kotlin-results.owl");
+        this.famixKotlinTransformer = new KotlinOntologyTransformer();
         this.check = new ConformanceCheckImpl();
     }
 
