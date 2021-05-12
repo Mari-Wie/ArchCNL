@@ -112,7 +112,7 @@
 		<module>stardog-wrapper</module>
 		<module>toolchain</module>
 		<module>java-parser</module>
-    	<module>owlify-famix-kotlin</module>
+    	<module>kotlin-parser</module>
 	</modules>
 
 	<dependencies>
