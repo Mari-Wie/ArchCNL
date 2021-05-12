@@ -27,7 +27,7 @@ import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckImpl;
 import org.archcnl.javaparser.parser.JavaOntologyTransformer;
-import org.archcnl.kotlinparser.parser.FamixKotlinOntologyTransformer;
+import org.archcnl.kotlinparser.parser.KotlinOntologyTransformer;
 import org.archcnl.owlify.core.OwlifyComponent;
 import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
@@ -55,7 +55,7 @@ public class CNLToolchain {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.javaTransformer = new JavaOntologyTransformer();
-        this.famixKotlinTransformer = new FamixKotlinOntologyTransformer(TEMPORARY_DIRECTORY + "/kotlin-results.owl");
+        this.famixKotlinTransformer = new KotlinOntologyTransformer(TEMPORARY_DIRECTORY + "/kotlin-results.owl");
         this.check = new ConformanceCheckImpl();
     }
 

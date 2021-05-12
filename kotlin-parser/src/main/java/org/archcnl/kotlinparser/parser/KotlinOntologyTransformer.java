@@ -13,12 +13,12 @@ import org.archcnl.kotlinparser.ontology.FamixOntology;
 import org.archcnl.owlify.core.AbstractOwlifyComponent;
 import org.archcnl.owlify.core.GeneralSoftwareArtifactOntology;
 
-public class FamixKotlinOntologyTransformer extends AbstractOwlifyComponent {
-	private static final Logger LOG = LogManager.getLogger(FamixKotlinOntologyTransformer.class);
+public class KotlinOntologyTransformer extends AbstractOwlifyComponent {
+	private static final Logger LOG = LogManager.getLogger(KotlinOntologyTransformer.class);
 	private FamixOntology ontology;
 	private GeneralSoftwareArtifactOntology mainOntology;
 
-	public FamixKotlinOntologyTransformer(String resultPath) {
+	public KotlinOntologyTransformer(String resultPath) {
 		super(resultPath);
 		LOG.debug("Reading resource ontologies ...");
 		InputStream famixOntologyInputStream = getClass().getResourceAsStream("/ontologies/famix.owl");
