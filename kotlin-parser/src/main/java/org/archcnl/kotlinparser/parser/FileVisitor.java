@@ -1,4 +1,4 @@
-package org.archcnl.owlify.famix.kotlin.parser;
+package org.archcnl.kotlinparser.parser;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;

@@ -1,4 +1,4 @@
-package org.archcnl.owlify.famix.kotlin.ontology;
+package org.archcnl.kotlinparser.ontology;
 
 import java.io.File;
 import java.io.FileNotFoundException;

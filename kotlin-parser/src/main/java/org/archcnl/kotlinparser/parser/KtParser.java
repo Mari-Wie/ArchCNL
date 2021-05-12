@@ -1,4 +1,4 @@
-package org.archcnl.owlify.famix.kotlin.parser;
+package org.archcnl.kotlinparser.parser;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;

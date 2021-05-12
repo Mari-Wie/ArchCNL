@@ -1,4 +1,4 @@
-package org.archcnl.owlify.famix.kotlin.ontology;
+package org.archcnl.kotlinparser.ontology;
 
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;

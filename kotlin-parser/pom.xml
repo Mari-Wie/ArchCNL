@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>kotlin-parser</artifactId>
-	<name>Owlify famix kotlin</name>
-	<description>Transforms kotlin code to famix ontology</description>
+	<name>Kotlin Parser</name>
+	<description>Transform Kotlin projects into the internal code model</description>
 
 	<parent>
 		<artifactId>archcnl</artifactId>
@@ -21,7 +21,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.archcnl</groupId>
-			<artifactId>owlify</artifactId>
+			<artifactId>owlify-famix</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

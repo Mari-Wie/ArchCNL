@@ -1,4 +1,4 @@
-package org.archcnl.owlify.famix.kotlin.parser;
+package org.archcnl.kotlinparser.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,9 +9,9 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.kotlinparser.ontology.FamixOntology;
 import org.archcnl.owlify.core.AbstractOwlifyComponent;
 import org.archcnl.owlify.core.GeneralSoftwareArtifactOntology;
-import org.archcnl.owlify.famix.kotlin.ontology.FamixOntology;
 
 public class FamixKotlinOntologyTransformer extends AbstractOwlifyComponent {
 	private static final Logger LOG = LogManager.getLogger(FamixKotlinOntologyTransformer.class);
