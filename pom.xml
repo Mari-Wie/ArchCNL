@@ -112,7 +112,7 @@
 		<module>stardog-wrapper</module>
 		<module>toolchain</module>
 		<module>java-parser</module>
-    	<module>kotlin-parser</module>
+		<module>kotlin-parser</module>
 	</modules>
 
 	<dependencies>

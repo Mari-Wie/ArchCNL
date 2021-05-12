@@ -17,9 +17,9 @@ public class KotlinOntologyTransformer extends AbstractOwlifyComponent {
         return res;
     }
 
-	@Override
-	public Model transform() {
-		ModelExtractor extractor = new ModelExtractor(getSourcePaths());
+    @Override
+    public Model transform() {
+        ModelExtractor extractor = new ModelExtractor(getSourcePaths());
 
         Project analyzedProject = extractor.extractCodeModel();
 
@@ -31,5 +31,5 @@ public class KotlinOntologyTransformer extends AbstractOwlifyComponent {
         analyzedProject.modelIn(ontology);
 
         return ontology.getFinalModel();
-	}
+    }
 }

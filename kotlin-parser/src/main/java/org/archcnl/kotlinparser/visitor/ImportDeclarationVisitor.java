@@ -1,10 +1,9 @@
 package org.archcnl.kotlinparser.visitor;
 
-import org.archcnl.owlify.famix.kotlin.grammar.KotlinParser.ImportHeaderContext;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.archcnl.owlify.famix.codemodel.Type;
+import org.archcnl.owlify.famix.kotlin.grammar.KotlinParser.ImportHeaderContext;
 import org.archcnl.owlify.famix.kotlin.grammar.KotlinParserBaseVisitor;
 
 public class ImportDeclarationVisitor extends KotlinParserBaseVisitor<Void> {
@@ -14,18 +13,18 @@ public class ImportDeclarationVisitor extends KotlinParserBaseVisitor<Void> {
         this.imports = new ArrayList<>();
     }
 
-	@Override
-	public Void visitImportHeader(ImportHeaderContext ctx) {
-		var identifier = ctx.children.get(1);
-		
-		var importedType = identifier.getText();
-		var simpleName = importedType.substring(importedType.lastIndexOf(".") + 1);
-		imports.add(new Type(importedType, simpleName, false));
-		
-		return super.visitImportHeader(ctx);
-	}
+    @Override
+    public Void visitImportHeader(ImportHeaderContext ctx) {
+        var identifier = ctx.children.get(1);
 
-	public List<Type> getImports() {
-		return imports;
-	}
+        var importedType = identifier.getText();
+        var simpleName = importedType.substring(importedType.lastIndexOf(".") + 1);
+        imports.add(new Type(importedType, simpleName, false));
+
+        return super.visitImportHeader(ctx);
+    }
+
+    public List<Type> getImports() {
+        return imports;
+    }
 }
