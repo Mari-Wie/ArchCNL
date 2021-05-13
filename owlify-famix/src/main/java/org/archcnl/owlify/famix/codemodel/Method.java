@@ -140,7 +140,7 @@ public class Method {
     public void modelIn(FamixOntology ontology, String parentName, Individual parent) {
         String uriBase = parentName + "." + signature;
         // replace the array "marker" [] with (Array), because [] are no valid URI characters
-        final String uri = uriBase.replace("[]", "(Array)");
+        final String uri = uriBase.replace("[]", "(Array)").replace(" ", "");
 
         Individual m = ontology.createIndividual(FamixClasses.Method, uri);
 
