@@ -3,6 +3,7 @@ package example
 import example.subpackage.ClassInSubpackage
 
 import example.anotherPackage.AnotherClass
+import java.util.*
 
 @Deprecated("")
 class ComplexClass : EmptyClass, Interface {

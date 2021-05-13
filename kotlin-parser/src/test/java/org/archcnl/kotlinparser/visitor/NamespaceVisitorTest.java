@@ -3,16 +3,13 @@ package org.archcnl.kotlinparser.visitor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import org.archcnl.kotlinparser.parser.KtParser;
 import org.archcnl.owlify.famix.codemodel.Namespace;
 import org.junit.jupiter.api.Test;
 
 public class NamespaceVisitorTest {
     @Test
     public void testNamespaceFromComplexClass() throws IOException {
-        var parser = new KtParser();
-        var contentOfComplexClass = TestHelper.getContentOfExampleFile("ComplexClass.kt");
-        var treeOfComplexClass = parser.parse(contentOfComplexClass);
+        var treeOfComplexClass = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
 
         var namespaceVisitor = new NamespaceVisitor();
         namespaceVisitor.visit(treeOfComplexClass);
@@ -25,10 +22,8 @@ public class NamespaceVisitorTest {
 
     @Test
     public void testNamespaceFromClassInSubpackage() throws IOException {
-        var parser = new KtParser();
-        var contentOfClassInSbpackage =
-                TestHelper.getContentOfExampleFile("subpackage", "ClassInSubpackage.kt");
-        var treeOfClassInSubpackage = parser.parse(contentOfClassInSbpackage);
+        var treeOfClassInSubpackage =
+                TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt");
 
         var namespaceVisitor = new NamespaceVisitor();
         namespaceVisitor.visit(treeOfClassInSubpackage);
