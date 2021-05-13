@@ -15,10 +15,9 @@ public class ImportDeclarationVisitor extends KotlinParserBaseVisitor<Void> {
 
     @Override
     public Void visitImportHeader(KotlinParser.ImportHeaderContext ctx) {
+        var identifier = ctx.identifier();
         // if there are no imports, do not try to read them
-        if (ctx.children != null && ctx.children.size() >= 2) {
-            var identifier = ctx.children.get(1);
-
+        if (identifier != null) {
             var importedType = identifier.getText();
             var simpleName = importedType.substring(importedType.lastIndexOf(".") + 1);
             imports.add(new Type(importedType, simpleName, false));

@@ -14,10 +14,9 @@ public class NamespaceVisitor extends KotlinParserBaseVisitor<Void> {
 
     @Override
     public Void visitPackageHeader(KotlinParser.PackageHeaderContext ctx) {
+        var identifier = ctx.identifier();
         // if there is no package, do not try to read it
-        if (ctx.children != null && ctx.children.size() >= 2) {
-            var identifier = ctx.children.get(1);
-
+        if (identifier != null) {
             createPackageBasedOnQualifiedName(identifier.getText());
         }
         return super.visitPackageHeader(ctx);
