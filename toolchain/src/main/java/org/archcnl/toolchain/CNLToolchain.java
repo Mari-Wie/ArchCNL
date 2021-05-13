@@ -41,7 +41,7 @@ public class CNLToolchain {
     private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
 
     private OwlifyComponent javaTransformer;
-    private OwlifyComponent famixKotlinTransformer;
+    private OwlifyComponent kotlinTransformer;
     private StardogICVAPI icvAPI;
     private IConformanceCheck check;
     private StardogDatabaseAPI db;
@@ -55,7 +55,7 @@ public class CNLToolchain {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.javaTransformer = new JavaOntologyTransformer();
-        this.famixKotlinTransformer = new KotlinOntologyTransformer();
+        this.kotlinTransformer = new KotlinOntologyTransformer();
         this.check = new ConformanceCheckImpl();
     }
 
@@ -279,9 +279,9 @@ public class CNLToolchain {
         // source code transformation
         for (var sourceCodePath : sourceCodePaths) {
             javaTransformer.addSourcePath(sourceCodePath);
-            famixKotlinTransformer.addSourcePath(sourceCodePath);
+            kotlinTransformer.addSourcePath(sourceCodePath);
         }
-        famixKotlinTransformer.transform();
+        var kotlinModell = kotlinTransformer.transform();
         return javaTransformer.transform();
     }
 

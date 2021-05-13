@@ -1,8 +1,8 @@
 package org.archcnl.kotlinparser.visitor;
 
+import org.archcnl.kotlinparser.grammar.KotlinParser;
+import org.archcnl.kotlinparser.grammar.KotlinParserBaseVisitor;
 import org.archcnl.owlify.famix.codemodel.Namespace;
-import org.archcnl.owlify.famix.kotlin.grammar.KotlinParser.PackageHeaderContext;
-import org.archcnl.owlify.famix.kotlin.grammar.KotlinParserBaseVisitor;
 
 public class NamespaceVisitor extends KotlinParserBaseVisitor<Void> {
 
@@ -13,11 +13,13 @@ public class NamespaceVisitor extends KotlinParserBaseVisitor<Void> {
     }
 
     @Override
-    public Void visitPackageHeader(PackageHeaderContext ctx) {
-        var identifier = ctx.children.get(1);
+    public Void visitPackageHeader(KotlinParser.PackageHeaderContext ctx) {
+        // if there is no package, do not try to read it
+        if (ctx.children != null && ctx.children.size() >= 2) {
+            var identifier = ctx.children.get(1);
 
-        var test = identifier.getText();
-        createPackageBasedOnQualifiedName(test);
+            createPackageBasedOnQualifiedName(identifier.getText());
+        }
         return super.visitPackageHeader(ctx);
     }
 

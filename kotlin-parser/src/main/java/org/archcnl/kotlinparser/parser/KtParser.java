@@ -4,9 +4,9 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.archcnl.owlify.famix.kotlin.grammar.KotlinLexer;
-import org.archcnl.owlify.famix.kotlin.grammar.KotlinParser;
-import org.archcnl.owlify.famix.kotlin.grammar.KotlinParser.KotlinFileContext;
+import org.archcnl.kotlinparser.grammar.KotlinLexer;
+import org.archcnl.kotlinparser.grammar.KotlinParser;
+import org.archcnl.kotlinparser.grammar.KotlinParser.KotlinFileContext;
 
 public class KtParser {
     private static final Logger LOG = LogManager.getLogger(KtParser.class);
