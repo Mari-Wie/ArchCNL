@@ -1,8 +1,9 @@
 package org.archcnl.kotlinparser.visitor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
 import org.archcnl.owlify.famix.codemodel.DefinedType;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,12 @@ class KotlinTypeVisitorTest {
 
         assertEquals("ComplexClass", definedType.getSimpleName());
         assertEquals("example.ComplexClass", definedType.getName());
+
+        assertTrue(definedType instanceof ClassOrInterface);
+
+        ClassOrInterface definedClass = (ClassOrInterface) definedType;
+
+        assertFalse(definedClass.isInterface());
     }
 
     @Test
@@ -59,5 +66,26 @@ class KotlinTypeVisitorTest {
 
         assertEquals("InsideClass", insideClass.getSimpleName());
         assertEquals("example.ClassWithInnerClass.InnerClass.InsideClass", insideClass.getName());
+    }
+
+    @Test
+    void testKotlinTypeOfInterface() throws IOException {
+        var treeOfInterface = TestHelper.getKotlinFileContextFromFile("Interface.kt");
+
+        var kotlinTypeVisitor = new KotlinTypeVisitor();
+        kotlinTypeVisitor.visit(treeOfInterface);
+
+        assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
+
+        DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
+
+        assertEquals("Interface", definedType.getSimpleName());
+        assertEquals("example.Interface", definedType.getName());
+
+        assertTrue(definedType instanceof ClassOrInterface);
+
+        ClassOrInterface definedClass = (ClassOrInterface) definedType;
+
+        assertTrue(definedClass.isInterface());
     }
 }

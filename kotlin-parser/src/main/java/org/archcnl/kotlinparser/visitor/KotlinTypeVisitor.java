@@ -21,6 +21,7 @@ public class KotlinTypeVisitor extends KotlinParserBaseVisitor<Void> {
         if (identifier != null) {
             var className = identifier.getText();
             var fullyQualifiedName = getFullyQualifiedPartBeforeName(ctx).concat(className);
+            var isInterface = ctx.INTERFACE() != null;
 
             var definedType =
                     new ClassOrInterface(
@@ -31,7 +32,7 @@ public class KotlinTypeVisitor extends KotlinParserBaseVisitor<Void> {
                             new ArrayList<>(),
                             new ArrayList<>(),
                             new ArrayList<>(),
-                            false,
+                            isInterface,
                             new ArrayList<>());
             definedTypes.add(definedType);
         }
