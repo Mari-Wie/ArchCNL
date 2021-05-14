@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.kotlinparser.parser.FileVisitor.KotlinFileVisitorListener;
 import org.archcnl.kotlinparser.visitor.ImportDeclarationVisitor;
+import org.archcnl.kotlinparser.visitor.KotlinTypeVisitor;
 import org.archcnl.kotlinparser.visitor.NamespaceVisitor;
 import org.archcnl.owlify.famix.codemodel.Project;
 import org.archcnl.owlify.famix.codemodel.SourceFile;
@@ -50,15 +51,25 @@ public class ModelExtractor implements KotlinFileVisitorListener {
         var fileContexTree = parser.parse(content);
 
         var namespaceVisitor = new NamespaceVisitor();
-        var importVisitor = new ImportDeclarationVisitor();
-
         namespaceVisitor.visit(fileContexTree);
+
+        var typeVisitor = new KotlinTypeVisitor();
+        typeVisitor.visit(fileContexTree);
+
+        if (typeVisitor.getDefinedTypes().isEmpty()) {
+            LOG.error(
+                    "The following file does not contain a valid Kotlin type: "
+                            + path.toAbsolutePath());
+            return;
+        }
+
+        var importVisitor = new ImportDeclarationVisitor();
         importVisitor.visit(fileContexTree);
 
         SourceFile sourceFile =
                 new SourceFile(
                         path,
-                        new ArrayList<>(),
+                        typeVisitor.getDefinedTypes(),
                         namespaceVisitor.getNamespace(),
                         importVisitor.getImports());
         project.addFile(sourceFile);
