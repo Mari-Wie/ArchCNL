@@ -55,6 +55,12 @@ public class FamixOntology {
         codeModel.read(famixOntology, null);
     }
 
+    /**
+     * Creates a new individual of the given ontology class.
+     * @param clazz The ontology class to which the individual will belong.
+     * @param uri The "base name" of the individual's URI. Invalid characters will be displayed in percent-notation. Spaces will be replaced by a -. Also, the class will be added as a prefix. No other individual of the same class should have this name.
+     * @return The created individual.
+     */
     public Individual createIndividual(FamixClasses clazz, String uri) {
         return clazz.createIndividual(codeModel, uri);
     }
@@ -89,12 +95,36 @@ public class FamixOntology {
             return model.getOntClass(uri()).createIndividual(individualUri(name));
         }
 
+        private String replaceSpecialCharacters(String name) {
+            // uses percent-notation, replaces spaces by '-'
+            return name.replace(" ", "-")
+                    .replace("%", "%25") // must be before the replacements using %
+                    .replace("!", "%21")
+                    .replace("#", "%23")
+                    .replace("$", "%24")
+                    .replace("&", "%26")
+                    .replace("'", "%27")
+                    .replace("(", "%28")
+                    .replace(")", "%29")
+                    .replace("*", "%2A")
+                    .replace("+", "%2B")
+                    .replace(",", "%2C")
+                    .replace("/", "%2F")
+                    .replace(":", "%3A")
+                    .replace(";", "%3B")
+                    .replace("=", "%3D")
+                    .replace("?", "%3F")
+                    .replace("@", "%40")
+                    .replace("[", "%5B")
+                    .replace("]", "%5D");
+        }
+        
         public String uri() {
             return PREFIX + this.name();
         }
 
         public String individualUri(String name) {
-            return this.uri() + "/" + name;
+            return this.uri() + "/" + replaceSpecialCharacters(name);
         }
     }
 
