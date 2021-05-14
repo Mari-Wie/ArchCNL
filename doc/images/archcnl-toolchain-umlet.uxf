@@ -60,18 +60,6 @@ mapping</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>510</x>
-      <y>120</y>
-      <w>140</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>architecture0.owl
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
       <x>500</x>
       <y>230</y>
       <w>140</w>
@@ -86,11 +74,11 @@ bg=blue</panel_attributes>
     <coordinates>
       <x>430</x>
       <y>140</y>
-      <w>100</w>
+      <w>70</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -173,18 +161,6 @@ code</panel_attributes>
     <additional_attributes>40.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>500</x>
-      <y>320</y>
-      <w>140</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>results.owl
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
       <x>430</x>
@@ -198,13 +174,13 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>640</x>
+      <x>660</x>
       <y>140</y>
-      <w>80</w>
+      <w>60</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -464,7 +440,7 @@ bg=green</panel_attributes>
       <w>90</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>output
+    <panel_attributes>output file
 bg=blue</panel_attributes>
     <additional_attributes/>
   </element>
@@ -476,7 +452,7 @@ bg=blue</panel_attributes>
       <w>80</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>input
+    <panel_attributes>input file
 bg=green</panel_attributes>
     <additional_attributes/>
   </element>
@@ -580,9 +556,9 @@ bg=yellow</panel_attributes>
       <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>owlify-famix
+    <panel_attributes>java-parser
 --
-FamixOntologyTransformer
+JavaOntologyTransformer
 bg=yellow</panel_attributes>
     <additional_attributes/>
   </element>
@@ -761,34 +737,10 @@ bg=green</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>510</x>
-      <y>150</y>
-      <w>140</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>architecture1.owl
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>510</x>
-      <y>180</y>
-      <w>140</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>...
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>500</x>
-      <y>80</y>
+      <x>480</x>
+      <y>130</y>
       <w>190</w>
       <h>30</h>
     </coordinates>
@@ -834,23 +786,12 @@ bg=pink</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>430</x>
-      <y>90</y>
-      <w>90</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>70.0;10.0;30.0;10.0;30.0;50.0;10.0;50.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>430</x>
-      <y>90</y>
+      <y>130</y>
       <w>310</w>
-      <h>520</h>
+      <h>480</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>10.0;500.0;150.0;500.0;150.0;380.0;290.0;380.0;290.0;10.0;260.0;10.0</additional_attributes>
+    <additional_attributes>10.0;460.0;150.0;460.0;150.0;340.0;290.0;340.0;290.0;10.0;240.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -860,7 +801,19 @@ bg=pink</panel_attributes>
       <w>110</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Variable
+    <panel_attributes>Variable/RAM
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>320</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>code model
 bg=pink</panel_attributes>
     <additional_attributes/>
   </element>

@@ -33,7 +33,7 @@ AsciiDocArc42Parser</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>910</x>
+      <x>900</x>
       <y>60</y>
       <w>150</w>
       <h>70</h>
@@ -109,26 +109,26 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>650</x>
+      <x>660</x>
       <y>190</y>
-      <w>210</w>
+      <w>190</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>owlify-famix
+    <panel_attributes>java-parser
 --
-FamixOntologyTransformer</panel_attributes>
+JavaOntologyTransformer</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>800</x>
       <y>120</y>
-      <w>190</w>
+      <w>160</w>
       <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>170.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>140.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLPackage</id>
@@ -146,13 +146,13 @@ GitOntologyTransformer</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1020</x>
+      <x>1010</x>
       <y>120</y>
-      <w>110</w>
+      <w>120</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;90.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;100.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLPackage</id>
@@ -185,7 +185,7 @@ MavenPOMFileParser</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>970</x>
+      <x>960</x>
       <y>120</y>
       <w>40</w>
       <h>110</h>
@@ -210,13 +210,13 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
+      <x>760</x>
       <y>250</y>
-      <w>150</w>
+      <w>160</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;130.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;140.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -351,5 +351,30 @@ OntologyAPI</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>150.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>660</x>
+      <y>80</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>owlify-famix
+--
+code model
+FamixOntology</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>140</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
 </diagram>
