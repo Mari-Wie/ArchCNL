@@ -138,10 +138,8 @@ public class Method {
      * @param parent The individual of the type in which this method is defined.
      */
     public void modelIn(FamixOntology ontology, String parentName, Individual parent) {
-        String uriBase = parentName + "." + signature;
-        // replace the array "marker" [] with (Array), because [] are no valid URI characters
-        final String uri = uriBase.replace("[]", "(Array)").replace(" ", "");
-
+        final String uri = parentName + "." + signature;
+        
         Individual m = ontology.createIndividual(FamixClasses.Method, uri);
 
         m.addLiteral(ontology.get(hasName), name);
