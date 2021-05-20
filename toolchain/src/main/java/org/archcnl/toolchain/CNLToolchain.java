@@ -33,7 +33,6 @@ import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
 import org.archcnl.stardogwrapper.api.exceptions.DBAccessException;
-import org.archcnl.stardogwrapper.api.exceptions.MissingBuilderArgumentException;
 import org.archcnl.stardogwrapper.api.exceptions.NoConnectionToStardogServerException;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
 
@@ -65,12 +64,12 @@ public class CNLToolchain {
      * @param context The OWL context to use.
      * @param username The username to use when connecting to the database server.
      * @param password The password to use when connecting to the database server.
-     * @param projectDirectory The path to the root of the project's Java source code which should
-     *     be analysed (usually some kind of "src" folder in the project).
+     * @param projectPathsAsString One or more paths to the root of the project's Java source code
+     *     which should be analysed (usually some kind of "src" folder in the project).
      * @param rulesFile The path to the AsciiDoc file which contains both the architecture and
      *     mapping rules.
      * @param logVerbose If all log levels down to trace should be logged in file and on the console
-     * @param removePreviousDatabases
+     * @param removePreviousDatabases If all previous databases should be permanently removed
      */
     public static void runToolchain(
             String database,
@@ -78,7 +77,7 @@ public class CNLToolchain {
             String context,
             String username,
             String password,
-            String projectDirectory,
+            List<String> projectPathsAsString,
             String rulesFile,
             boolean logVerbose,
             boolean removePreviousDatabases) {
@@ -100,16 +99,19 @@ public class CNLToolchain {
         LOG.debug("Database     : " + database);
         LOG.debug("Server       : " + server);
         LOG.debug("Context      : " + context);
-        LOG.debug("Project path : " + projectDirectory);
+        LOG.info("Project path : " + projectPathsAsString);
         LOG.debug("RulesFile    : " + rulesFile);
 
         CNLToolchain tool = new CNLToolchain(database, server, username, password);
         LOG.info("CNLToolchain initialized.");
 
         try {
-            Path projectPath = Paths.get(projectDirectory);
+            List<Path> projectPaths = new ArrayList<>();
+            for (var projectPathAsString : projectPathsAsString) {
+                projectPaths.add(Paths.get(projectPathAsString));
+            }
             Path rulesPath = Paths.get(rulesFile);
-            tool.execute(rulesPath, projectPath, context, removePreviousDatabases);
+            tool.execute(rulesPath, projectPaths, context, removePreviousDatabases);
         } catch (FileNotFoundException e) {
             LOG.fatal("File not found", e);
             e.printStackTrace();
@@ -132,26 +134,30 @@ public class CNLToolchain {
      *
      * @param docPath path to the file containing the architecture rules and the
      *     architecture-to-code mapping
-     * @param sourceCodePath path to the root of the project to analyse
+     * @param sourceCodePaths One or more paths to the root of the project to analyse
      * @param context the database context to use
-     * @throws MissingBuilderArgumentException
      * @throws FileNotFoundException when a file (input or a temporary one) cannot be accessed
      * @throws NoConnectionToStardogServerException when no connection to the database can be
      *     established
      */
     private void execute(
-            Path docPath, Path sourceCodePath, String context, boolean removePreviousDatabases)
-            throws FileNotFoundException, NoConnectionToStardogServerException, IOException {
+            Path docPath,
+            List<Path> sourceCodePaths,
+            String context,
+            boolean removePreviousDatabases)
+            throws NoConnectionToStardogServerException, IOException {
         LOG.info("Starting the execution");
 
-        if (Files.notExists(sourceCodePath)) {
-            throw new FileNotFoundException(
-                    "The source code folder could not be found: " + sourceCodePath);
-        }
+        for (var sourceCodePath : sourceCodePaths) {
+            if (Files.notExists(sourceCodePath)) {
+                throw new FileNotFoundException(
+                        "The source code folder could not be found: " + sourceCodePath);
+            }
 
-        if (!Files.isDirectory(sourceCodePath)) {
-            throw new FileNotFoundException(
-                    "The source code folder is not a valid directory: " + sourceCodePath);
+            if (!Files.isDirectory(sourceCodePath)) {
+                throw new FileNotFoundException(
+                        "The source code folder is not a valid directory: " + sourceCodePath);
+            }
         }
 
         if (Files.notExists(docPath)) {
@@ -162,7 +168,7 @@ public class CNLToolchain {
 
         List<ArchitectureRule> rules = parseRuleFile(docPath);
 
-        Model codeModel = buildCodeModel(sourceCodePath);
+        Model codeModel = buildCodeModel(sourceCodePaths);
 
         combineArchitectureAndCodeModels(rules, codeModel);
 
@@ -259,11 +265,13 @@ public class CNLToolchain {
         }
     }
 
-    private Model buildCodeModel(Path sourceCodePath) {
+    private Model buildCodeModel(List<Path> sourceCodePaths) {
         LOG.info("Creating the code model ...");
         LOG.info("Starting famix transformation ...");
         // source code transformation
-        javaTransformer.addSourcePath(sourceCodePath);
+        for (var sourceCodePath : sourceCodePaths) {
+            javaTransformer.addSourcePath(sourceCodePath);
+        }
         return javaTransformer.transform();
     }
 

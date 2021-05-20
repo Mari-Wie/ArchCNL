@@ -1,5 +1,6 @@
 package org.archcnl.toolchain;
 
+import java.util.List;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -23,14 +24,15 @@ public class CNLToolchainCLI implements Runnable {
             description = "Specifiy the context")
     private String context = "http://graphs.org/" + database + "/1.0";
 
+    @Parameters(paramLabel = "<rules file>", description = "The path to the rules", index = "0")
+    private String rulesFile;
+
     @Parameters(
             paramLabel = "<project path>",
             description =
-                    "The path to the project's Java source code root directory (usually some kind of \"src\" folder)")
-    private String projectPath;
-
-    @Parameters(paramLabel = "<rules file>", description = "The path to the rules")
-    private String rulesFile;
+                    "One or more paths to the project's Java source code root directory (usually some kind of \"src\" folder)",
+            index = "1..*")
+    private List<String> projectPaths;
 
     @Option(
             names = {"-u", "--username"},
@@ -60,7 +62,7 @@ public class CNLToolchainCLI implements Runnable {
                 context,
                 username,
                 password,
-                projectPath,
+                projectPaths,
                 rulesFile,
                 logVerbose,
                 removePreviousDatabases);
