@@ -10,32 +10,7 @@ import org.archcnl.common.datatypes.RuleType;
 import org.archcnl.owlcreator.api.APIFactory;
 import org.archcnl.owlcreator.api.OntologyAPI;
 import org.architecture.cnl.RuleTypeStorageSingleton;
-import org.architecture.cnl.archcnl.AndObjectConceptExpression;
-import org.architecture.cnl.archcnl.Anything;
-import org.architecture.cnl.archcnl.CanOnlyRuleType;
-import org.architecture.cnl.archcnl.CardinalityRuleType;
-import org.architecture.cnl.archcnl.ConceptAssertion;
-import org.architecture.cnl.archcnl.ConceptExpression;
-import org.architecture.cnl.archcnl.ConditionalRuleType;
-import org.architecture.cnl.archcnl.DataStatement;
-import org.architecture.cnl.archcnl.DatatypePropertyAssertion;
-import org.architecture.cnl.archcnl.DatatypeRelation;
-import org.architecture.cnl.archcnl.FactStatement;
-import org.architecture.cnl.archcnl.MustRuleType;
-import org.architecture.cnl.archcnl.NegationRuleType;
-import org.architecture.cnl.archcnl.Nothing;
-import org.architecture.cnl.archcnl.ObjectConceptExpression;
-import org.architecture.cnl.archcnl.ObjectPropertyAssertion;
-import org.architecture.cnl.archcnl.ObjectRelation;
-import org.architecture.cnl.archcnl.OnlyCanRuleType;
-import org.architecture.cnl.archcnl.OrObjectConceptExpression;
-import org.architecture.cnl.archcnl.Relation;
-import org.architecture.cnl.archcnl.RoleAssertion;
-import org.architecture.cnl.archcnl.Sentence;
-import org.architecture.cnl.archcnl.StatementList;
-import org.architecture.cnl.archcnl.SubConceptRuleType;
-import org.architecture.cnl.archcnl.ThatExpression;
-import org.architecture.cnl.archcnl.VariableStatement;
+import org.architecture.cnl.archcnl.*;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -43,12 +18,7 @@ import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataHasValue;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.*;
 
 /**
  * This class is responsible for the conversion from the (already parsed) CNL to OWL statements.
@@ -58,13 +28,9 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 @SuppressWarnings("all")
 public class ArchcnlGenerator extends AbstractGenerator {
     private static final Logger LOG = LogManager.getLogger(AbstractGenerator.class);
-
-    private String namespace;
-
-    private OntologyAPI api;
-
     private static int id = 0;
-
+    private String namespace;
+    private OntologyAPI api;
     private Iterable<EObject> resourceIterable;
 
     private Iterable<Sentence> sentenceIterable;
@@ -128,43 +94,28 @@ public class ArchcnlGenerator extends AbstractGenerator {
         if ((ruletype instanceof MustRuleType)) {
             this.compile(((MustRuleType) ruletype), subject);
             typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.EXISTENTIAL);
-        } else {
-            if ((ruletype instanceof CanOnlyRuleType)) {
-                this.compile(((CanOnlyRuleType) ruletype), subject);
-                typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.UNIVERSAL);
-            } else {
-                if ((ruletype instanceof OnlyCanRuleType)) {
-                    this.compile(((OnlyCanRuleType) ruletype));
-                    typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.DOMAIN_RANGE);
-                } else {
-                    if ((ruletype instanceof ConditionalRuleType)) {
-                        this.compile(((ConditionalRuleType) ruletype));
-                        typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.CONDITIONAL);
-                    } else {
-                        if ((ruletype instanceof NegationRuleType)) {
-                            this.compile(((NegationRuleType) ruletype));
-                            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.NEGATION);
-                        } else {
-                            if ((ruletype instanceof SubConceptRuleType)) {
-                                this.compile(((SubConceptRuleType) ruletype), subject);
-                                typeStorage.storeTypeOfRule(
-                                        ArchcnlGenerator.id, RuleType.SUB_CONCEPT);
-                            } else {
-                                if ((ruletype instanceof CardinalityRuleType)) {
-                                    this.compile(((CardinalityRuleType) ruletype), subject);
-                                } else {
-                                    if ((ruletype instanceof FactStatement)) {
-                                        this.compile(((FactStatement) ruletype));
-                                        typeStorage.storeTypeOfRule(
-                                                ArchcnlGenerator.id, RuleType.FACT);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        } else if ((ruletype instanceof CanOnlyRuleType)) {
+            this.compile(((CanOnlyRuleType) ruletype), subject);
+            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.UNIVERSAL);
+        } else if ((ruletype instanceof OnlyCanRuleType)) {
+            this.compile(((OnlyCanRuleType) ruletype));
+            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.DOMAIN_RANGE);
+        } else if ((ruletype instanceof ConditionalRuleType)) {
+            this.compile(((ConditionalRuleType) ruletype));
+            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.CONDITIONAL);
+        } else if ((ruletype instanceof NegationRuleType)) {
+            this.compile(((NegationRuleType) ruletype));
+            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.NEGATION);
+        } else if ((ruletype instanceof SubConceptRuleType)) {
+            this.compile(((SubConceptRuleType) ruletype), subject);
+            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.SUB_CONCEPT);
+        } else if ((ruletype instanceof CardinalityRuleType)) {
+            this.compile(((CardinalityRuleType) ruletype), subject);
+        } else if ((ruletype instanceof FactStatement)) {
+            this.compile(((FactStatement) ruletype));
+            typeStorage.storeTypeOfRule(ArchcnlGenerator.id, RuleType.FACT);
         }
+
         ArchcnlGenerator.LOG.debug(
                 ("Processed sentence with ID " + Integer.valueOf(ArchcnlGenerator.id)));
         ArchcnlGenerator.id++;
