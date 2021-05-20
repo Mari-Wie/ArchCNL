@@ -1,1 +1,2 @@
 !.classpath
+src/test/java/org/architecture/cnl/tests/ArchcnlParsingTest.xtend
