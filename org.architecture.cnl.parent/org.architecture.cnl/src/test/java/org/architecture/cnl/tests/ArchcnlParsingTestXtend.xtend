@@ -15,7 +15,7 @@ import org.architecture.cnl.archcnl.*
 
 @RunWith(XtextRunner)
 @InjectWith(ArchcnlInjectorProvider)
-class ArchcnlParsingTest {
+class ArchcnlParsingTestXtend {
 	// primary focus: test the grammar
 	@Inject
 	ParseHelper<Model> parseHelper
