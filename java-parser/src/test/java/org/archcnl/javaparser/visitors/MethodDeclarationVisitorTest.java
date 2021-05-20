@@ -122,15 +122,26 @@ public class MethodDeclarationVisitorTest {
 
         assertEquals(1, method3.getParameters().size());
         assertEquals("parameter", method3.getParameters().get(0).getName());
-
         assertEquals(
                 "examples.subpackage.ClassInSubpackage",
                 method3.getParameters().get(0).getType().getName());
         assertEquals("examples.SimpleClass", method3.getReturnType().getName());
+        assertEquals(2, method3.getAnnotations().size());
+        var deprecationAnnotationMethod3 = method3.getAnnotations().get(1);
+        assertEquals("Deprecated", deprecationAnnotationMethod3.getName());
+        var sinceNeverValuePairMethod3 = deprecationAnnotationMethod3.getValues().get(0);
+        assertEquals("since", sinceNeverValuePairMethod3.getName());
+        assertEquals("NEVER", sinceNeverValuePairMethod3.getValue());
 
         assertEquals(1, method4.getLocalVariables().size());
         assertEquals("characters", method4.getLocalVariables().get(0).getName());
         assertEquals("java.util.List", method4.getLocalVariables().get(0).getType().getName());
         assertFalse(method4.getLocalVariables().get(0).getType().isPrimitive());
+        assertEquals(2, method4.getAnnotations().size());
+        var deprecationAnnotationMethod4 = method4.getAnnotations().get(1);
+        assertEquals("Deprecated", deprecationAnnotationMethod4.getName());
+        var sinceNeverValuePairMethod4 = deprecationAnnotationMethod4.getValues().get(0);
+        assertEquals("since", sinceNeverValuePairMethod4.getName());
+        assertEquals("\"never\"", sinceNeverValuePairMethod4.getValue());
     }
 }
