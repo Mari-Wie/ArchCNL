@@ -7,7 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/xtext-gen"/>
-	<classpathentry kind="src" path="src/main/xtend-gen"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="test" value="true"/>
@@ -16,11 +15,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/xtext-gen">
-		<attributes>
-			<attribute name="test" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" output="target/test-classes" path="src/test/xtend-gen">
 		<attributes>
 			<attribute name="test" value="true"/>
 		</attributes>
