@@ -131,7 +131,7 @@ public class MethodDeclarationVisitorTest {
         assertEquals("Deprecated", deprecationAnnotationMethod3.getName());
         var sinceNeverValuePairMethod3 = deprecationAnnotationMethod3.getValues().get(0);
         assertEquals("since", sinceNeverValuePairMethod3.getName());
-        assertEquals("NEVER", sinceNeverValuePairMethod3.getValue());
+        assertEquals("\"neverEver\"", sinceNeverValuePairMethod3.getValue());
 
         assertEquals(1, method4.getLocalVariables().size());
         assertEquals("characters", method4.getLocalVariables().get(0).getName());

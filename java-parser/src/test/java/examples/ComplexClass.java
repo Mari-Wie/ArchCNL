@@ -6,7 +6,7 @@ import java.util.List;
 
 @Deprecated(since = "today")
 public class ComplexClass extends EmptyClass implements Interface {
-    public static final String NEVER = "never";
+    public static final String NEVER = "neverEver";
 
     private static final double PI = 3.141;
 
