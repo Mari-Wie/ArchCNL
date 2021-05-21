@@ -96,6 +96,11 @@ public class CNLToolchain {
             return;
         }
 
+        if(projectPathsAsString == null || projectPathsAsString.isEmpty()){
+            LOG.fatal("There are no project paths provided");
+            return;
+        }
+
         LOG.debug("Database     : " + database);
         LOG.debug("Server       : " + server);
         LOG.debug("Context      : " + context);

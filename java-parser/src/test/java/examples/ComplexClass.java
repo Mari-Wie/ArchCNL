@@ -6,6 +6,7 @@ import java.util.List;
 
 @Deprecated(since = "today")
 public class ComplexClass extends EmptyClass implements Interface {
+    public static final String NEVER = "never";
 
     private static final double PI = 3.141;
 
@@ -36,12 +37,14 @@ public class ComplexClass extends EmptyClass implements Interface {
     }
 
     @Override
+    @Deprecated(since = NEVER)
     public SimpleClass referenceMethod(ClassInSubpackage parameter) {
         // some important comment
         return null;
     }
 
     @Override
+    @Deprecated(since = "never")
     public char primitiveMethod(boolean parameter_with_long__snake_case_name) {
         List<Character> characters = new ArrayList<>();
         return 0;
