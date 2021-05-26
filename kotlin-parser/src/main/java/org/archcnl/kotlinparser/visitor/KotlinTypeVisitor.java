@@ -23,12 +23,16 @@ public class KotlinTypeVisitor extends NamedBaseVisitor {
             var fullyQualifiedName = getFullyQualifiedPartBeforeName(ctx).concat(className);
             var isInterface = ctx.INTERFACE() != null;
 
+            var functionVisitor = new FunctionVisitor(getRulesNames());
+            functionVisitor.visit(ctx);
+            var functions = functionVisitor.getFunctions();
+
             var definedType =
                     new ClassOrInterface(
                             fullyQualifiedName,
                             className,
                             new ArrayList<>(),
-                            new ArrayList<>(),
+                            functions,
                             new ArrayList<>(),
                             new ArrayList<>(),
                             new ArrayList<>(),

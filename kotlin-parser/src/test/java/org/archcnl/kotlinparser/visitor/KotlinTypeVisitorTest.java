@@ -27,6 +27,9 @@ class KotlinTypeVisitorTest {
         ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
         assertFalse(definedClass.isInterface());
+
+        var methodsOfDefinedClass = definedClass.getMethods();
+        assertEquals(4, methodsOfDefinedClass.size());
     }
 
     @Test
