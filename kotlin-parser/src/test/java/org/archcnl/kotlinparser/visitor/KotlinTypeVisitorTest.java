@@ -30,6 +30,15 @@ class KotlinTypeVisitorTest {
 
         var methodsOfDefinedClass = definedClass.getMethods();
         assertEquals(4, methodsOfDefinedClass.size());
+
+        var deprecatedAnnotationOfFirstMethod =
+                methodsOfDefinedClass.get(0).getAnnotations().get(0);
+        assertNotNull(deprecatedAnnotationOfFirstMethod);
+        assertEquals("Deprecated", deprecatedAnnotationOfFirstMethod.getName());
+        var deprecatedAnnotationValues = deprecatedAnnotationOfFirstMethod.getValues();
+        assertEquals(1, deprecatedAnnotationValues.size());
+        assertEquals("message", deprecatedAnnotationValues.get(0).getName());
+        assertEquals("\"nicht mehr verwenden\"", deprecatedAnnotationValues.get(0).getValue());
     }
 
     @Test

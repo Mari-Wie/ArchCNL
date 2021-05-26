@@ -24,6 +24,7 @@ class ComplexClass : EmptyClass, Interface {
         area = calculateArea()
     }
 
+    @Deprecated(message = "nicht mehr verwenden")
     private fun calculateArea(): Double {
         return radius * radius * PI
     }
