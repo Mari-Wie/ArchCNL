@@ -1,14 +1,14 @@
 package org.archcnl.kotlinparser.visitor;
 
 import org.archcnl.kotlinparser.grammar.KotlinParser;
-import org.archcnl.kotlinparser.grammar.KotlinParserBaseVisitor;
 import org.archcnl.owlify.famix.codemodel.Namespace;
 
-public class NamespaceVisitor extends KotlinParserBaseVisitor<Void> {
+public class NamespaceVisitor extends NamedBaseVisitor {
 
     private Namespace namespace;
 
-    public NamespaceVisitor() {
+    public NamespaceVisitor(String[] rulesNames) {
+        super(rulesNames);
         namespace = Namespace.TOP;
     }
 

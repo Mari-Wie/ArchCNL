@@ -52,7 +52,7 @@ public class ModelExtractor implements KotlinFileVisitorListener {
 
         var fileContexTree = namedFileContext.getFileContext();
 
-        var namespaceVisitor = new NamespaceVisitor();
+        var namespaceVisitor = new NamespaceVisitor(namedFileContext.getRulesNames());
         namespaceVisitor.visit(fileContexTree);
 
         var typeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
@@ -65,7 +65,7 @@ public class ModelExtractor implements KotlinFileVisitorListener {
             return;
         }
 
-        var importVisitor = new ImportDeclarationVisitor();
+        var importVisitor = new ImportDeclarationVisitor(namedFileContext.getRulesNames());
         importVisitor.visit(fileContexTree);
 
         SourceFile sourceFile =

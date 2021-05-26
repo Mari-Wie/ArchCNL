@@ -3,13 +3,13 @@ package org.archcnl.kotlinparser.visitor;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
-import org.archcnl.kotlinparser.grammar.KotlinParserBaseVisitor;
 import org.archcnl.owlify.famix.codemodel.Type;
 
-public class ImportDeclarationVisitor extends KotlinParserBaseVisitor<Void> {
+public class ImportDeclarationVisitor extends NamedBaseVisitor {
     private final List<Type> imports;
 
-    public ImportDeclarationVisitor() {
+    public ImportDeclarationVisitor(String[] rulesNames) {
+        super(rulesNames);
         this.imports = new ArrayList<>();
     }
 

@@ -3,16 +3,14 @@ package org.archcnl.kotlinparser.visitor;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
-import org.archcnl.kotlinparser.grammar.KotlinParserBaseVisitor;
 import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
 import org.archcnl.owlify.famix.codemodel.DefinedType;
 
-public class KotlinTypeVisitor extends KotlinParserBaseVisitor<Void> {
+public class KotlinTypeVisitor extends NamedBaseVisitor {
     private final List<DefinedType> definedTypes;
-    private final String[] rulesNames;
 
     public KotlinTypeVisitor(String[] rulesNames) {
-        this.rulesNames = rulesNames;
+        super(rulesNames);
         this.definedTypes = new ArrayList<>();
     }
 

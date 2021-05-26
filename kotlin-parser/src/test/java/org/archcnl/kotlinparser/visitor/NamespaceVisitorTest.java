@@ -9,11 +9,10 @@ import org.junit.jupiter.api.Test;
 public class NamespaceVisitorTest {
     @Test
     public void testNamespaceFromComplexClass() throws IOException {
-        var treeOfComplexClass =
-                TestHelper.getKotlinFileContextFromFile("ComplexClass.kt").getFileContext();
+        var namedFileContext = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
 
-        var namespaceVisitor = new NamespaceVisitor();
-        namespaceVisitor.visit(treeOfComplexClass);
+        var namespaceVisitor = new NamespaceVisitor(namedFileContext.getRulesNames());
+        namespaceVisitor.visit(namedFileContext.getFileContext());
 
         var namespace = namespaceVisitor.getNamespace();
 
@@ -23,12 +22,11 @@ public class NamespaceVisitorTest {
 
     @Test
     public void testNamespaceFromClassInSubpackage() throws IOException {
-        var treeOfClassInSubpackage =
-                TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt")
-                        .getFileContext();
+        var namedFileContext =
+                TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt");
 
-        var namespaceVisitor = new NamespaceVisitor();
-        namespaceVisitor.visit(treeOfClassInSubpackage);
+        var namespaceVisitor = new NamespaceVisitor(namedFileContext.getRulesNames());
+        namespaceVisitor.visit(namedFileContext.getFileContext());
 
         var namespace = namespaceVisitor.getNamespace();
 
