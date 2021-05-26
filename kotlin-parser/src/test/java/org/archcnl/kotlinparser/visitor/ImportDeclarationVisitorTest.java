@@ -9,7 +9,8 @@ class ImportDeclarationVisitorTest {
 
     @Test
     void testImportListFromComplexClass() throws IOException {
-        var treeOfComplexClass = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
+        var treeOfComplexClass =
+                TestHelper.getKotlinFileContextFromFile("ComplexClass.kt").getFileContext();
 
         var importDeclarationVisitor = new ImportDeclarationVisitor();
         importDeclarationVisitor.visit(treeOfComplexClass);

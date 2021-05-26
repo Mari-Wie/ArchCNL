@@ -17,9 +17,9 @@ import org.archcnl.owlify.famix.codemodel.SourceFile;
 public class ModelExtractor implements KotlinFileVisitorListener {
     private static final Logger LOG = LogManager.getLogger(ModelExtractor.class);
 
-    private Project project;
-    private List<Path> sourcePaths;
-    private KtParser parser;
+    private final Project project;
+    private final List<Path> sourcePaths;
+    private final KtParser parser;
 
     public ModelExtractor(List<Path> sourcePaths) {
         this.sourcePaths = new ArrayList<>();
@@ -48,12 +48,14 @@ public class ModelExtractor implements KotlinFileVisitorListener {
     @Override
     public void handleKotlinFile(Path path, String content) {
         LOG.info("Parsing kotlin file: " + path.toString());
-        var fileContexTree = parser.parse(content);
+        var namedFileContext = parser.parse(content);
+
+        var fileContexTree = namedFileContext.getFileContext();
 
         var namespaceVisitor = new NamespaceVisitor();
         namespaceVisitor.visit(fileContexTree);
 
-        var typeVisitor = new KotlinTypeVisitor();
+        var typeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
         typeVisitor.visit(fileContexTree);
 
         if (typeVisitor.getDefinedTypes().isEmpty()) {

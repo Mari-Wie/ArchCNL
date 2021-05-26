@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 class KotlinTypeVisitorTest {
     @Test
     void testKotlinTypeOfComplexClass() throws IOException {
-        var treeOfComplexClass = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
+        var namedFileContext = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor();
-        kotlinTypeVisitor.visit(treeOfComplexClass);
+        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
 
         assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
 
@@ -31,11 +31,11 @@ class KotlinTypeVisitorTest {
 
     @Test
     void testKotlinTypeOfClassInSubpackage() throws IOException {
-        var treeOfComplexClass =
+        var namedFileContext =
                 TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt");
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor();
-        kotlinTypeVisitor.visit(treeOfComplexClass);
+        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
 
         assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
 
@@ -47,10 +47,10 @@ class KotlinTypeVisitorTest {
 
     @Test
     void testKotlinTypeOfClassWithInnerClass() throws IOException {
-        var treeOfComplexClass = TestHelper.getKotlinFileContextFromFile("ClassWithInnerClass.kt");
+        var namedFileContext = TestHelper.getKotlinFileContextFromFile("ClassWithInnerClass.kt");
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor();
-        kotlinTypeVisitor.visit(treeOfComplexClass);
+        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
 
         assertEquals(3, kotlinTypeVisitor.getDefinedTypes().size());
 
@@ -70,10 +70,10 @@ class KotlinTypeVisitorTest {
 
     @Test
     void testKotlinTypeOfInterface() throws IOException {
-        var treeOfInterface = TestHelper.getKotlinFileContextFromFile("Interface.kt");
+        var namedFileContext = TestHelper.getKotlinFileContextFromFile("Interface.kt");
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor();
-        kotlinTypeVisitor.visit(treeOfInterface);
+        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
 
         assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
 

@@ -5,12 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
-import org.archcnl.kotlinparser.grammar.KotlinParser;
 import org.archcnl.kotlinparser.parser.KtParser;
+import org.archcnl.kotlinparser.parser.NamedFileContext;
 
 public class TestHelper {
-    static KotlinParser.KotlinFileContext getKotlinFileContextFromFile(String... fileName)
-            throws IOException {
+    static NamedFileContext getKotlinFileContextFromFile(String... fileName) throws IOException {
         var parser = new KtParser();
         var contentOfFile = TestHelper.getContentOfExampleFile(fileName);
         return parser.parse(contentOfFile);

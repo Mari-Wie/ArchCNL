@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 public class NamespaceVisitorTest {
     @Test
     public void testNamespaceFromComplexClass() throws IOException {
-        var treeOfComplexClass = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
+        var treeOfComplexClass =
+                TestHelper.getKotlinFileContextFromFile("ComplexClass.kt").getFileContext();
 
         var namespaceVisitor = new NamespaceVisitor();
         namespaceVisitor.visit(treeOfComplexClass);
@@ -23,7 +24,8 @@ public class NamespaceVisitorTest {
     @Test
     public void testNamespaceFromClassInSubpackage() throws IOException {
         var treeOfClassInSubpackage =
-                TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt");
+                TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt")
+                        .getFileContext();
 
         var namespaceVisitor = new NamespaceVisitor();
         namespaceVisitor.visit(treeOfClassInSubpackage);

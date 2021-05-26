@@ -9,8 +9,10 @@ import org.archcnl.owlify.famix.codemodel.DefinedType;
 
 public class KotlinTypeVisitor extends KotlinParserBaseVisitor<Void> {
     private final List<DefinedType> definedTypes;
+    private final String[] rulesNames;
 
-    public KotlinTypeVisitor() {
+    public KotlinTypeVisitor(String[] rulesNames) {
+        this.rulesNames = rulesNames;
         this.definedTypes = new ArrayList<>();
     }
 
