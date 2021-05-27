@@ -19,31 +19,42 @@ public class FunctionVisitor extends NamedBaseVisitor {
     @Override
     public Void visitFunctionDeclaration(KotlinParser.FunctionDeclarationContext ctx) {
         var annotations = new ArrayList<AnnotationInstance>();
-        var annotationContexts = ctx.modifiers().annotation();
-        annotationContexts.forEach(
-                annotation -> {
-                    var singleAnnotation = annotation.singleAnnotation();
-                    if (singleAnnotation != null) {
-                        var constructorInvocation =
-                                singleAnnotation.unescapedAnnotation().constructorInvocation();
-                        var userType = constructorInvocation.userType().getText();
+        if (ctx.modifiers() != null && ctx.modifiers().annotation() != null) {
+            var annotationContexts = ctx.modifiers().annotation();
+            annotationContexts.forEach(
+                    annotation -> {
+                        var singleAnnotation = annotation.singleAnnotation();
+                        if (singleAnnotation != null) {
+                            var constructorInvocation =
+                                    singleAnnotation.unescapedAnnotation().constructorInvocation();
+                            if (constructorInvocation != null) {
+                                var userType = constructorInvocation.userType().getText();
 
-                        var annotationValues = new ArrayList<AnnotationMemberValuePair>();
-                        var valueArguments = constructorInvocation.valueArguments().valueArgument();
-                        valueArguments.forEach(
-                                arg -> {
-                                    var name = arg.simpleIdentifier().getText();
-                                    var value = arg.expression().getText();
+                                var annotationValues = new ArrayList<AnnotationMemberValuePair>();
+                                var valueArguments =
+                                        constructorInvocation.valueArguments().valueArgument();
+                                valueArguments.forEach(
+                                        arg -> {
+                                            String name;
+                                            if (arg.simpleIdentifier() != null) {
+                                                name = arg.simpleIdentifier().getText();
+                                            } else {
+                                                name = "";
+                                            }
+                                            var value = arg.expression().getText();
 
-                                    var annotationValue =
-                                            new AnnotationMemberValuePair(name, value);
-                                    annotationValues.add(annotationValue);
-                                });
+                                            var annotationValue =
+                                                    new AnnotationMemberValuePair(name, value);
+                                            annotationValues.add(annotationValue);
+                                        });
 
-                        var annotationInstance = new AnnotationInstance(userType, annotationValues);
-                        annotations.add(annotationInstance);
-                    }
-                });
+                                var annotationInstance =
+                                        new AnnotationInstance(userType, annotationValues);
+                                annotations.add(annotationInstance);
+                            }
+                        }
+                    });
+        }
 
         var functionName = ctx.simpleIdentifier().getText();
 
