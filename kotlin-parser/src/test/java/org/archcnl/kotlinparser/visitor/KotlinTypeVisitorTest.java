@@ -31,6 +31,18 @@ class KotlinTypeVisitorTest {
         var methodsOfDefinedClass = definedClass.getMethods();
         assertEquals(4, methodsOfDefinedClass.size());
 
+        var calculateAreaMethod = methodsOfDefinedClass.get(0);
+        assertEquals("calculateArea()", calculateAreaMethod.getSignature());
+
+        var stringMethod = methodsOfDefinedClass.get(1);
+        assertEquals("stringMethod()", stringMethod.getSignature());
+
+        var referenceMethod = methodsOfDefinedClass.get(2);
+        assertEquals("referenceMethod(ClassInSubpackage?)", referenceMethod.getSignature());
+
+        var primitiveMethod = methodsOfDefinedClass.get(3);
+        assertEquals("primitiveMethod(Boolean)", primitiveMethod.getSignature());
+
         var deprecatedAnnotationOfFirstMethod =
                 methodsOfDefinedClass.get(0).getAnnotations().get(0);
         assertNotNull(deprecatedAnnotationOfFirstMethod);

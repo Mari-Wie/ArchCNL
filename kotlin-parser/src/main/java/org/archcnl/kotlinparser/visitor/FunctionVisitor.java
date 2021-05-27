@@ -21,11 +21,12 @@ public class FunctionVisitor extends NamedBaseVisitor {
         var annotations = annotationVisitor.getAnnotationInstances();
 
         var functionName = ctx.simpleIdentifier().getText();
+        var functionSignature = createMethodSignature(functionName, ctx.functionValueParameters());
 
         var function =
                 new Method(
                         functionName,
-                        "",
+                        functionSignature,
                         new ArrayList<>(),
                         new ArrayList<>(),
                         new ArrayList<>(),
@@ -42,5 +43,32 @@ public class FunctionVisitor extends NamedBaseVisitor {
 
     public List<Method> getFunctions() {
         return functions;
+    }
+
+    // "calculateArea(String, String, String)"
+    private String createMethodSignature(
+            String functionName,
+            KotlinParser.FunctionValueParametersContext functionValueParameters) {
+        var parameterTypes = new ArrayList<String>();
+        for (var functionValueParameter : functionValueParameters.functionValueParameter()) {
+            parameterTypes.add(functionValueParameter.parameter().type_().getText());
+        }
+
+        var parameterTypesString = "";
+        if (!parameterTypes.isEmpty()) {
+            var parameterTypesStringBuilder = new StringBuilder();
+
+            for (String parameterType : parameterTypes) {
+                parameterTypesStringBuilder.append(parameterType);
+                parameterTypesStringBuilder.append(", ");
+            }
+
+            var length = parameterTypesStringBuilder.length();
+            parameterTypesStringBuilder.delete(length - 2, length);
+
+            parameterTypesString = parameterTypesStringBuilder.toString();
+        }
+
+        return functionName + "(" + parameterTypesString + ")";
     }
 }
