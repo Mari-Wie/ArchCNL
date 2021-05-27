@@ -58,8 +58,11 @@ public class FamixOntology {
 
     /**
      * Creates a new individual of the given ontology class.
+     *
      * @param clazz The ontology class to which the individual will belong.
-     * @param uri The "base name" of the individual's URI. Invalid characters will be displayed in percent-notation. Spaces will be replaced by a -. Also, the class will be added as a prefix. No other individual of the same class should have this name.
+     * @param uri The "base name" of the individual's URI. Invalid characters will be displayed in
+     *     percent-notation. Spaces will be replaced by a -. Also, the class will be added as a
+     *     prefix. No other individual of the same class should have this name.
      * @return The created individual.
      */
     public Individual createIndividual(FamixClasses clazz, String uri) {
@@ -113,13 +116,15 @@ public class FamixOntology {
                     .replace("/", "%2F")
                     .replace(":", "%3A")
                     .replace(";", "%3B")
+                    .replace("<", "%3C")
                     .replace("=", "%3D")
+                    .replace(">", "%3E")
                     .replace("?", "%3F")
                     .replace("@", "%40")
                     .replace("[", "%5B")
                     .replace("]", "%5D");
         }
-        
+
         public String uri() {
             return PREFIX + this.name();
         }
