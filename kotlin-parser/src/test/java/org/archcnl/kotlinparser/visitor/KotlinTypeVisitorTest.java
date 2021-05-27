@@ -99,5 +99,37 @@ class KotlinTypeVisitorTest {
         ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
         assertTrue(definedClass.isInterface());
+
+        var methodsOfInterface = definedClass.getMethods();
+        assertEquals(5, methodsOfInterface.size());
+
+        var annotationsOfFirstMethod = methodsOfInterface.get(0).getAnnotations();
+        assertEquals(0, annotationsOfFirstMethod.size());
+
+        var annotationsOfSecondMethod = methodsOfInterface.get(1).getAnnotations();
+        assertEquals(0, annotationsOfSecondMethod.size());
+
+        var annotationsOfThirdMethod = methodsOfInterface.get(2).getAnnotations();
+        assertEquals(0, annotationsOfThirdMethod.size());
+
+        var annotationsOfFourthMethod = methodsOfInterface.get(3).getAnnotations();
+        assertEquals(1, annotationsOfFourthMethod.size());
+        var getAnnotationFourthMethod = annotationsOfFourthMethod.get(0);
+        assertEquals("GET", getAnnotationFourthMethod.getName());
+        var annotationValuesFourthMethod = getAnnotationFourthMethod.getValues();
+        assertEquals(1, annotationValuesFourthMethod.size());
+        var firstNameValuePairFourthMethod = annotationValuesFourthMethod.get(0);
+        assertEquals("", firstNameValuePairFourthMethod.getName());
+        assertEquals("\"/some/url/stuff\"", firstNameValuePairFourthMethod.getValue());
+
+        var annotationsOfFifthMethod = methodsOfInterface.get(4).getAnnotations();
+        assertEquals(1, annotationsOfFifthMethod.size());
+        var getAnnotationFifthMethod = annotationsOfFifthMethod.get(0);
+        assertEquals("GET", getAnnotationFifthMethod.getName());
+        var annotationValuesFifthMethod = getAnnotationFifthMethod.getValues();
+        assertEquals(1, annotationValuesFifthMethod.size());
+        var firstNameValuePairFifthMethod = annotationValuesFifthMethod.get(0);
+        assertEquals("", firstNameValuePairFifthMethod.getName());
+        assertEquals("\"/some/url/otherStuff/{id}\"", firstNameValuePairFifthMethod.getValue());
     }
 }
