@@ -4,6 +4,8 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
@@ -73,16 +75,13 @@ public class SourceFile {
      * @param ontology The ontology in which the code will be modeled.
      */
     public void modelSecondPass(FamixOntology ontology) {
+        List<Individual> topLevelIndividuals = definedTypes
+                .stream()
+                .map(t -> ontology.typeCache().getIndividual(t.getName()))
+                .collect(Collectors.toList());
+        ontology.mainModel().modelSoftwareArtifactFile(path.toString(), topLevelIndividuals);
+        
         for (DefinedType definedType : definedTypes) {
-            // TODO: The main ontology uses still the "old" OWL transformation, with a
-            // XOntClassesAndProperties class, an XOntology class, etc. This should be refactored
-            // to use the "new" way (enums with getIndividual()/getProperty methods, clients
-            // such as this class compose these themselves (better separation of concerns).
-            ontology.mainModel()
-                    .getSoftwareArtifactFileIndividual(
-                            path.toString(),
-                            ontology.typeCache().getIndividual(definedType.getName()));
-
             for (String containedName : definedType.getNestedTypeNames()) {
                 Individual contained = ontology.typeCache().getIndividual(containedName);
 

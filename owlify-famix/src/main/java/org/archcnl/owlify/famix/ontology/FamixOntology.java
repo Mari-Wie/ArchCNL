@@ -1,6 +1,7 @@
 package org.archcnl.owlify.famix.ontology;
 
 import java.io.InputStream;
+
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
@@ -8,19 +9,19 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.archcnl.owlify.core.GeneralSoftwareArtifactOntology;
+import org.archcnl.owlify.core.MainOntology;
 
 public class FamixOntology {
     public static final String PREFIX = "http://arch-ont.org/ontologies/famix.owl#";
 
     private OntModel codeModel;
-    private GeneralSoftwareArtifactOntology mainModel;
+    private MainOntology mainModel;
     private DefinedTypeCache definedTypes;
     private AnnotationAttributeCache annotationAttributes;
 
     public FamixOntology(InputStream famixOntology, InputStream mainOntology) {
         loadBaseOntologies(famixOntology);
-        mainModel = new GeneralSoftwareArtifactOntology(mainOntology);
+        mainModel = new MainOntology(mainOntology);
         definedTypes = new DefinedTypeCache();
         annotationAttributes = new AnnotationAttributeCache();
     }
@@ -29,7 +30,7 @@ public class FamixOntology {
         return codeModel;
     }
 
-    public GeneralSoftwareArtifactOntology mainModel() {
+    public MainOntology mainModel() {
         return mainModel;
     }
 
