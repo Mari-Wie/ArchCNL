@@ -103,4 +103,57 @@ public class ModelExtractorTest {
         assertEquals(2, type.getFields().size());
         assertEquals(1, type.getSupertypes().size());
     }
+
+    @Test
+    public void testClassB() {
+        assertEquals(0, classB.getImportedTypes().size());
+        assertEquals(Path.of(pathToPackage + "/namespace/ClassB.java"), classB.getPath());
+        assertEquals(Namespace.TOP, classB.getNamespace().getParent().getParent().getParent());
+        assertEquals("examples.extractortest.namespace", classB.getNamespace().getName());
+        assertEquals("examples.extractortest", classB.getNamespace().getParent().getName());
+        assertEquals("examples", classB.getNamespace().getParent().getParent().getName());
+
+        assertEquals(1, classB.getDefinedTypes().size());
+        assertTrue(classB.getDefinedTypes().get(0) instanceof ClassOrInterface);
+
+        ClassOrInterface type = (ClassOrInterface) classB.getDefinedTypes().get(0);
+
+        assertEquals(1, type.getFields().size());
+        assertEquals(0, type.getSupertypes().size());
+        assertEquals(2, type.getMethods().size());
+
+        Method method1 = type.getMethods().get(0);
+
+        assertEquals("ClassB", method1.getName());
+        assertEquals(0, method1.getAnnotations().size());
+        assertEquals(0, method1.getLocalVariables().size());
+        assertTrue(method1.isConstructor());    
+        assertEquals(0, method1.getDeclaredExceptions().size());
+        assertEquals(0, method1.getThrownExceptions().size());
+        assertEquals(1, method1.getParameters().size());
+        assertEquals("b", method1.getParameters().get(0).getName());
+        assertEquals("int", method1.getParameters().get(0).getType().getName());
+        assertEquals(1, method1.getModifiers().size());
+        assertEquals("public", method1.getModifiers().get(0).getName());
+
+        Method method2 = type.getMethods().get(1);
+
+        assertEquals("ClassB", method2.getName());
+        assertEquals(1, method2.getAnnotations().size());
+        assertEquals("Deprecated", method2.getAnnotations().get(0).getName());
+        assertEquals(0, method2.getAnnotations().get(0).getValues().size());
+        assertEquals(1, method2.getLocalVariables().size());
+        assertEquals("int", method2.getLocalVariables().get(0).getType().getName());
+        assertEquals("local", method2.getLocalVariables().get(0).getName());
+        assertTrue(method2.isConstructor());
+        assertEquals(0, method2.getDeclaredExceptions().size());
+        assertEquals(0, method2.getThrownExceptions().size());
+        assertEquals(1, method2.getParameters().size());
+        assertEquals("b", method2.getParameters().get(0).getName());
+        assertEquals("Integer", method2.getParameters().get(0).getType().getSimpleName());
+        assertEquals(1, method2.getModifiers().size());
+        assertEquals("public", method2.getModifiers().get(0).getName());
+        
+
+
 }
