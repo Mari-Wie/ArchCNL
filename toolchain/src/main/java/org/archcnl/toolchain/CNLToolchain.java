@@ -9,11 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
@@ -39,16 +35,14 @@ import org.archcnl.stardogwrapper.impl.StardogDatabase;
 
 public class CNLToolchain {
     private static final Logger LOG = LogManager.getLogger(CNLToolchain.class);
-
-    private OwlifyComponent javaTransformer;
-    private OwlifyComponent kotlinTransformer;
-    private StardogICVAPI icvAPI;
-    private IConformanceCheck check;
-    private StardogDatabaseAPI db;
-
     private static final String TEMPORARY_DIRECTORY = "./temp";
     private static final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
     private static final String MAPPED_ONTOLOGY_PATH = TEMPORARY_DIRECTORY + "/mapped.owl";
+    private final OwlifyComponent javaTransformer;
+    private final OwlifyComponent kotlinTransformer;
+    private final StardogICVAPI icvAPI;
+    private final IConformanceCheck check;
+    private final StardogDatabaseAPI db;
 
     // private, use runToolchain to create and execute the toolchain
     private CNLToolchain(String databaseName, String server, String username, String password) {
@@ -99,7 +93,7 @@ public class CNLToolchain {
             return;
         }
 
-        if(projectPathsAsString == null || projectPathsAsString.isEmpty()){
+        if (projectPathsAsString == null || projectPathsAsString.isEmpty()) {
             LOG.fatal("There are no project paths provided");
             return;
         }
@@ -281,8 +275,9 @@ public class CNLToolchain {
             javaTransformer.addSourcePath(sourceCodePath);
             kotlinTransformer.addSourcePath(sourceCodePath);
         }
+        var javaModell = javaTransformer.transform();
         var kotlinModell = kotlinTransformer.transform();
-        return javaTransformer.transform();
+        return javaModell.union(kotlinModell);
     }
 
     private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {
