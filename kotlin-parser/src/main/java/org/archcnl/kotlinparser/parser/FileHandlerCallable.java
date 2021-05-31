@@ -23,7 +23,7 @@ public class FileHandlerCallable implements Callable<SourceFile> {
 
     @Override
     public SourceFile call() {
-        LOG.info("Parsing kotlin file: " + path.toString());
+        LOG.debug("Parsing kotlin file: " + path.toString());
         var namedFileContext = parser.parse(content);
 
         var fileContexTree = namedFileContext.getFileContext();
