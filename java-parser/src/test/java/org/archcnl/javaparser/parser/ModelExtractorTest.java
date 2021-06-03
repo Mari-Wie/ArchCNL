@@ -8,6 +8,8 @@ import static org.junit.Assert.fail;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
+import org.archcnl.owlify.famix.codemodel.Annotation;
+import org.archcnl.owlify.famix.codemodel.ClassInterfaceEnum;
 import org.archcnl.owlify.famix.codemodel.Method;
 import org.archcnl.owlify.famix.codemodel.Namespace;
 import org.archcnl.owlify.famix.codemodel.Project;
@@ -137,7 +139,7 @@ public class ModelExtractorTest {
         assertEquals("public", method1.getModifiers().get(0).getName());
 
         Method method2 = type.getMethods().get(1);
-
+        
         assertEquals("ClassB", method2.getName());
         assertEquals(1, method2.getAnnotations().size());
         assertEquals("Deprecated", method2.getAnnotations().get(0).getName());
@@ -153,6 +155,104 @@ public class ModelExtractorTest {
         assertEquals("Integer", method2.getParameters().get(0).getType().getSimpleName());
         assertEquals(1, method2.getModifiers().size());
         assertEquals("public", method2.getModifiers().get(0).getName());
+    }
+
+    @Test
+    public void testClassC() {
+        assertEquals(2, classC.getImportedTypes().size());
+        assertEquals(Path.of(pathToPackage + "/namespace/ClassC.java"), classC.getPath());
+        assertEquals(Namespace.TOP, classC.getNamespace().getParent().getParent().getParent());
+        assertEquals("examples.extractortest.namespace", classC.getNamespace().getName());
+        assertEquals("examples.extractortest", classC.getNamespace().getParent().getName());
+        assertEquals("examples", classC.getNamespace().getParent().getParent().getName());
+
+        assertEquals(1, classC.getDefinedTypes().size());
+        assertTrue(classC.getDefinedTypes().get(0) instanceof ClassOrInterface);
+
+        ClassOrInterface type = (ClassOrInterface) classC.getDefinedTypes().get(0);
+
+        assertEquals(0, type.getFields().size());
+        assertEquals(0, type.getSupertypes().size());
+        assertEquals(1, type.getMethods().size());
+
+        Method method = type.getMethods().get(0);
+
+        assertEquals("staticMethod", method.getName());
+        assertEquals(0, method.getAnnotations().size());
+        assertEquals(1, method.getLocalVariables().size());
+        assertEquals("localVariable", method.getLocalVariables().get(0).getName());
+        assertFalse(method.isConstructor());
+        assertEquals(1, method.getDeclaredExceptions().size());
+        assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
+        assertEquals(1, method.getCaughtExceptions().size());
+        assertEquals("java.lang.NullPointerException", method.getCaughtExceptions().get(0).getName());
+        assertEquals(1, method.getParameters().size());
+        assertEquals("items", method.getParameters().get(0).getName());
+        assertEquals(2, method.getModifiers().size());
+        assertEquals("public", method.getModifiers().get(0).getName());
+        assertEquals("static", method.getModifiers().get(1).getName());
+
+
+
+
+    }
+
+    @Test
+    public void testAnnotation() {
+        assertEquals(0, annotation.getImportedTypes().size());
+        assertEquals(Path.of(pathToPackage + "/namespace/Annotation.java"), annotation.getPath());
+        assertEquals(Namespace.TOP, annotation.getNamespace().getParent().getParent().getParent());
+        assertEquals("examples.extractortest.namespace", annotation.getNamespace().getName());
+        assertEquals("examples.extractortest", annotation.getNamespace().getParent().getName());
+        assertEquals("examples", annotation.getNamespace().getParent().getParent().getName());
+
+        assertEquals(1, annotation.getDefinedTypes().size());
+        assertTrue(annotation.getDefinedTypes().get(0) instanceof Annotation);
+
+        Annotation type = (Annotation) annotation.getDefinedTypes().get(0);
+
+        assertEquals(1, type.getAttributes().size());
+        assertEquals("description", type.getAttributes().get(0).getName());
+        assertEquals("String", type.getAttributes().get(0).getType().getSimpleName());
+    }
+
+    @Test
+    public void testEnumeration() {
+        assertEquals(0, enumeration.getImportedTypes().size());
+        assertEquals(Path.of(pathToPackage + "/Enumeration.java"), enumeration.getPath());
+        assertEquals(Namespace.TOP, enumeration.getNamespace().getParent().getParent());
+        assertEquals("examples.extractortest", enumeration.getNamespace().getName());
+        assertEquals("examples", enumeration.getNamespace().getParent().getName());
+
+        assertEquals(1, enumeration.getDefinedTypes().size());
+        assertTrue(enumeration.getDefinedTypes().get(0) instanceof ClassInterfaceEnum);
+
+        ClassInterfaceEnum type = (ClassInterfaceEnum) enumeration.getDefinedTypes().get(0);
+
+        assertEquals(0, type.getNestedTypes().size());
+        assertEquals(1, type.getMethods().size());
+        assertEquals(1, type.getFields().size());
+        assertEquals(0, type.getFields().get(0).getAnnotations().size());
+        assertEquals(1, type.getFields().get(0).getModifiers().size());
+        assertEquals("private", type.getFields().get(0).getModifiers().get(0).getName());     
+        assertEquals("String", type.getFields().get(0).getType().getSimpleName());
+        assertEquals("field", type.getFields().get(0).getName());   
+
+
+        Method method = type.getMethods().get(0);
+
+        assertEquals("isOtherValue", method.getName());
+        assertEquals(0, method.getAnnotations().size());
+        assertEquals(0, method.getLocalVariables().size());
+        assertFalse(method.isConstructor());
+        assertEquals(0, method.getDeclaredExceptions().size());
+        assertEquals(0, method.getThrownExceptions().size());
+        assertEquals(0, method.getParameters().size());
+        assertEquals(1, method.getModifiers().size());
+        assertEquals("public", method.getModifiers().get(0).getName());
+        assertEquals("boolean", method.getReturnType().getName());
+
+    }
         
 
 
