@@ -14,7 +14,7 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
 
     private static final Logger LOG = LogManager.getLogger(ThrowStatementVisitor.class);
 
-    private List<Type> thrownExceptions;
+    private final List<Type> thrownExceptions;
 
     public ThrowStatementVisitor() {
         thrownExceptions = new ArrayList<>();
@@ -31,17 +31,27 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
         if (thrownException == null) {
             LOG.debug(
                     "Throw statement does not match \"throw new X()\", using fall back solution: "
-                            + n.toString());
+                            + n);
 
             Expression throwExpression = n.getExpression();
-            String typeName =
-                    throwExpression.calculateResolvedType().asReferenceType().getQualifiedName();
-            String simpleName = typeName.substring(typeName.lastIndexOf(".") + 1);
-            thrownException =
-                    new Type(typeName, simpleName, false); // primitives types cannot be thrown
+
+            try {
+                String typeName =
+                        throwExpression
+                                .calculateResolvedType()
+                                .asReferenceType()
+                                .getQualifiedName();
+                String simpleName = typeName.substring(typeName.lastIndexOf(".") + 1);
+                thrownException =
+                        new Type(typeName, simpleName, false); // primitives types cannot be thrown
+            } catch (UnsupportedOperationException e) {
+                LOG.error("Can not calculate type of " + throwExpression, e);
+            }
         }
 
-        thrownExceptions.add(thrownException);
+        if (thrownException != null) {
+            thrownExceptions.add(thrownException);
+        }
     }
 
     /** @return the declared types of all thrown exceptions */

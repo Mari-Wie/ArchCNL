@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.archcnl</groupId>
 	<artifactId>archcnl</artifactId>
@@ -21,6 +21,7 @@
 		<junitVersion>4.12</junitVersion>
 		<surefireVersion>2.12.4</surefireVersion>
 		<spotlessVersion>2.9.0</spotlessVersion>
+		<antlr.version>4.9.2</antlr.version>
 	</properties>
 
 	<profiles>
@@ -111,6 +112,7 @@
 		<module>stardog-wrapper</module>
 		<module>toolchain</module>
 		<module>java-parser</module>
+		<module>kotlin-parser</module>
 	</modules>
 
 	<dependencies>
