@@ -48,7 +48,7 @@ import org.semanticweb.owlapi.model.OWLDataHasValue
  * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
-class ArchcnlGenerator extends AbstractGenerator {
+class ArchcnlGeneratorXtend extends AbstractGenerator {
 	
 	static final Logger LOG = LogManager.getLogger(AbstractGenerator);
 	String namespace
