@@ -7,30 +7,13 @@ import org.apache.jena.rdf.model.Model;
 import org.archcnl.owlify.core.AbstractOwlifyComponent;
 import org.archcnl.owlify.famix.codemodel.Project;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
+import org.archcnl.owlify.famix.ontology.FamixOntologyTransformer;
 
 /** Transforms the source code of a Java project into an OWL ontology. */
-public class JavaOntologyTransformer extends AbstractOwlifyComponent {
+public class JavaOntologyTransformer extends FamixOntologyTransformer {
 
     @Override
-    public Map<String, String> getProvidedNamespaces() {
-        Map<String, String> res = new HashMap<>();
-        res.put("famix", FamixOntology.PREFIX);
-        return res;
-    }
-
-    @Override
-    public Model transform() {
-        ModelExtractor extractor = new ModelExtractor(getSourcePaths());
-
-        Project analyzedProject = extractor.extractCodeModel();
-
-        InputStream famixOntology = getClass().getResourceAsStream("/ontologies/famix.owl");
-        InputStream mainOntology = getClass().getResourceAsStream("/ontologies/main.owl");
-
-        FamixOntology ontology = new FamixOntology(famixOntology, mainOntology);
-
-        analyzedProject.modelIn(ontology);
-
-        return ontology.getFinalModel();
+    protected Project extractCodeModel() {
+        return new ModelExtractor(getSourcePaths()).extractCodeModel();
     }
 }
