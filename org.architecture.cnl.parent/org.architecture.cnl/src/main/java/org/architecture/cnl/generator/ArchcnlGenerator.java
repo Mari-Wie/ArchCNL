@@ -158,83 +158,76 @@ public class ArchcnlGenerator extends AbstractGenerator {
     public void compile(final NegationRuleType negation) {
         LOG.trace("ID " + id + ": " + "compiling NegationRuleType ...");
         if (negation instanceof Nothing) {
-            final OWLClassExpression subject = this.api.getOWLTop();
-            OWLClassExpression object = this.compile(negation.getObject().getExpression());
-            final ArrayList<OWLClassExpression> listResult = new ArrayList<>();
+            var subject = api.getOWLTop();
+            var object = compile(negation.getObject().getExpression());
+            var listResult = new ArrayList<OWLClassExpression>();
             listResult.add(object);
-            EList<AndObjectConceptExpression> _objectAndList =
-                    negation.getObject().getObjectAndList();
-            for (final AndObjectConceptExpression o : _objectAndList) {
-                {
-                    final OWLClassExpression result = this.compile(o.getExpression());
-                    listResult.add(result);
-                }
+
+            for (var andObject : negation.getObject().getObjectAndList()) {
+                var result = compile(andObject.getExpression());
+                listResult.add(result);
             }
-            int _size = listResult.size();
-            boolean _greaterThan = (_size > 1);
-            if (_greaterThan) {
-                object = this.api.createIntersection(listResult);
+
+            // if there are "and objectes", create intersections
+            if (listResult.size() > 1) {
+                object = api.createIntersection(listResult);
                 listResult.clear();
             }
-            EList<OrObjectConceptExpression> _objectOrList = negation.getObject().getObjectOrList();
-            for (final OrObjectConceptExpression o_1 : _objectOrList) {
-                {
-                    final OWLClassExpression result = this.compile(o_1.getExpression());
-                    listResult.add(result);
-                }
+
+            for (var orObject : negation.getObject().getObjectOrList()) {
+                var result = compile(orObject.getExpression());
+                listResult.add(result);
             }
-            int _size_1 = listResult.size();
-            boolean _greaterThan_1 = (_size_1 > 1);
-            if (_greaterThan_1) {
-                object = this.api.createUnion(listResult);
+
+            // if there are "or objectes", create unions
+            if (listResult.size() > 1) {
+                object = api.createUnion(listResult);
                 listResult.clear();
             }
-            this.api.addDisjointAxiom(subject, object);
+
+            // everything (in this case the topmost owl object, e.g. everything, as subject) should
+            // be disjoint with the object
+            api.addDisjointAxiom(subject, object);
         } else {
-            final OWLClassExpression subjectConceptExpression = this.compile(negation.getSubject());
-            Anything _anything = negation.getObject().getAnything();
-            boolean _tripleNotEquals = (_anything != null);
-            if (_tripleNotEquals) {
-                OWLObjectProperty _createOWLObjectProperty =
-                        this.api.createOWLObjectProperty(
-                                this.namespace,
+            var subject = compile(negation.getSubject());
+
+            if (negation.getObject().getAnything() != null) {
+                var relation =
+                        api.createOWLObjectProperty(
+                                namespace,
                                 negation.getObject().getAnything().getRelation().getRelationName());
-                OWLClassExpression object_1 = this.api.getOWLTop();
-                this.api.addNegationAxiom(
-                        subjectConceptExpression, object_1, _createOWLObjectProperty);
+                var object = api.getOWLTop();
+
+                // the relation does not apply to the subject in any case, since the object topmost
+                // owl object, e.g. everything
+                api.addNegationAxiom(subject, object, relation);
             } else {
-                OWLClassExpression object_2 = this.compile(negation.getObject().getExpression());
-                final ArrayList<OWLClassExpression> listResult_1 = new ArrayList<>();
-                listResult_1.add(object_2);
-                EList<AndObjectConceptExpression> _objectAndList_1 =
-                        negation.getObject().getObjectAndList();
-                for (final AndObjectConceptExpression o_2 : _objectAndList_1) {
-                    {
-                        final OWLClassExpression result = this.compile(o_2.getExpression());
-                        listResult_1.add(result);
-                    }
+                var object = compile(negation.getObject().getExpression());
+                var listResult = new ArrayList<OWLClassExpression>();
+                listResult.add(object);
+
+                for (var andObject : negation.getObject().getObjectAndList()) {
+                    var result = compile(andObject.getExpression());
+                    listResult.add(result);
                 }
-                int _size_2 = listResult_1.size();
-                boolean _greaterThan_2 = (_size_2 > 1);
-                if (_greaterThan_2) {
-                    object_2 = this.api.createIntersection(listResult_1);
-                    listResult_1.clear();
+
+                if (listResult.size() > 1) {
+                    object = api.createIntersection(listResult);
+                    listResult.clear();
                 }
-                EList<OrObjectConceptExpression> _objectOrList_1 =
-                        negation.getObject().getObjectOrList();
-                for (final OrObjectConceptExpression o_3 : _objectOrList_1) {
-                    {
-                        final OWLClassExpression result = this.compile(o_3.getExpression());
-                        listResult_1.add(result);
-                    }
+
+                for (var orObject : negation.getObject().getObjectOrList()) {
+                    var result = compile(orObject.getExpression());
+                    listResult.add(result);
                 }
-                int _size_3 = listResult_1.size();
-                boolean _greaterThan_3 = (_size_3 > 1);
-                if (_greaterThan_3) {
-                    object_2 = this.api.createUnion(listResult_1);
-                    listResult_1.clear();
+
+                if (listResult.size() > 1) {
+                    object = api.createUnion(listResult);
+                    listResult.clear();
                 }
-                this.api.addDisjointAxiom(subjectConceptExpression, object_2);
+
+                // subject should be disjoint with the object
+                api.addDisjointAxiom(subject, object);
             }
         }
     }
