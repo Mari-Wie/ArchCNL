@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 
 import java.nio.file.Path;
 import java.util.Arrays;
-import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
 import org.archcnl.owlify.famix.codemodel.Annotation;
 import org.archcnl.owlify.famix.codemodel.ClassInterfaceEnum;
+import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
 import org.archcnl.owlify.famix.codemodel.Method;
 import org.archcnl.owlify.famix.codemodel.Namespace;
 import org.archcnl.owlify.famix.codemodel.Project;
@@ -19,7 +19,7 @@ import org.junit.Test;
 
 public class ModelExtractorTest {
 
-    private final Path pathToPackage = Path.of("./src/test/java/examples/extractortest/");
+    private final Path pathToPackage = Path.of("./src/test/resources/examples/extractortest/");
 
     private SourceFile classA;
     private SourceFile classB;
@@ -129,7 +129,7 @@ public class ModelExtractorTest {
         assertEquals("ClassB", method1.getName());
         assertEquals(0, method1.getAnnotations().size());
         assertEquals(0, method1.getLocalVariables().size());
-        assertTrue(method1.isConstructor());    
+        assertTrue(method1.isConstructor());
         assertEquals(0, method1.getDeclaredExceptions().size());
         assertEquals(0, method1.getThrownExceptions().size());
         assertEquals(1, method1.getParameters().size());
@@ -139,7 +139,7 @@ public class ModelExtractorTest {
         assertEquals("public", method1.getModifiers().get(0).getName());
 
         Method method2 = type.getMethods().get(1);
-        
+
         assertEquals("ClassB", method2.getName());
         assertEquals(1, method2.getAnnotations().size());
         assertEquals("Deprecated", method2.getAnnotations().get(0).getName());
@@ -185,16 +185,13 @@ public class ModelExtractorTest {
         assertEquals(1, method.getDeclaredExceptions().size());
         assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
         assertEquals(1, method.getCaughtExceptions().size());
-        assertEquals("java.lang.NullPointerException", method.getCaughtExceptions().get(0).getName());
+        assertEquals(
+                "java.lang.NullPointerException", method.getCaughtExceptions().get(0).getName());
         assertEquals(1, method.getParameters().size());
         assertEquals("items", method.getParameters().get(0).getName());
         assertEquals(2, method.getModifiers().size());
         assertEquals("public", method.getModifiers().get(0).getName());
         assertEquals("static", method.getModifiers().get(1).getName());
-
-
-
-
     }
 
     @Test
@@ -234,10 +231,9 @@ public class ModelExtractorTest {
         assertEquals(1, type.getFields().size());
         assertEquals(0, type.getFields().get(0).getAnnotations().size());
         assertEquals(1, type.getFields().get(0).getModifiers().size());
-        assertEquals("private", type.getFields().get(0).getModifiers().get(0).getName());     
+        assertEquals("private", type.getFields().get(0).getModifiers().get(0).getName());
         assertEquals("String", type.getFields().get(0).getType().getSimpleName());
-        assertEquals("field", type.getFields().get(0).getName());   
-
+        assertEquals("field", type.getFields().get(0).getName());
 
         Method method = type.getMethods().get(0);
 
@@ -251,9 +247,5 @@ public class ModelExtractorTest {
         assertEquals(1, method.getModifiers().size());
         assertEquals("public", method.getModifiers().get(0).getName());
         assertEquals("boolean", method.getReturnType().getName());
-
     }
-        
-
-
 }

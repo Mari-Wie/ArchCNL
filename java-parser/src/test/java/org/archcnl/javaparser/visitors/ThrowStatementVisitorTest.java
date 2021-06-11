@@ -20,7 +20,8 @@ import org.junit.Test;
 
 public class ThrowStatementVisitorTest {
 
-    private String pathToJavaClass = "./src/test/java/examples/ExampleClassWithExceptions.java";
+    private String pathToJavaClass =
+            "./src/test/resources/examples/ExampleClassWithExceptions.java";
 
     @Before
     public void initializeVisitor() {
@@ -28,7 +29,7 @@ public class ThrowStatementVisitorTest {
         // set a symbol solver
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/"));
+        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/resources/"));
         StaticJavaParser.getConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
     }

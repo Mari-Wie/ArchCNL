@@ -20,7 +20,7 @@ import org.junit.Test;
 public class MethodDeclarationVisitorTest {
 
     private MethodDeclarationVisitor visitor;
-    private String pathToExamplePackage = "./src/test/java/examples/";
+    private String pathToExamplePackage = "./src/test/resources/examples/";
 
     @Before
     public void initializeVisitor() {
@@ -29,7 +29,7 @@ public class MethodDeclarationVisitorTest {
         // set a symbol solver
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/"));
+        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/resources/"));
         StaticJavaParser.getConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
     }

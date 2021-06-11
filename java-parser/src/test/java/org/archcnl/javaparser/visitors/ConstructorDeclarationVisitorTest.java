@@ -24,7 +24,7 @@ import org.junit.Test;
 public class ConstructorDeclarationVisitorTest {
 
     private ConstructorDeclarationVisitor visitor;
-    private String pathToExamplePackage = "./src/test/java/examples/";
+    private String pathToExamplePackage = "./src/test/resources/examples/";
 
     @Before
     public void initializeVisitor() {
@@ -33,7 +33,7 @@ public class ConstructorDeclarationVisitorTest {
         // set a symbol solver
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/"));
+        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/resources/"));
         StaticJavaParser.getConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
     }
