@@ -13,7 +13,11 @@ Workflow {
 				baseName = "org.architecture.cnl"
 				rootPath = rootPath
 				runtimeTest = {
-					enabled = true
+					// apparently, tests still require Xtend
+					// to circumvent this, the generated Java tests and the 
+					// required injector have been moved
+					// to the src/test/java folder
+					enabled = false
 				}
 				mavenLayout = true
 			}
