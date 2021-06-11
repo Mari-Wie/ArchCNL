@@ -30,7 +30,7 @@ public class CNLToolchainCLI implements Runnable {
     @Parameters(
             paramLabel = "<project path>",
             description =
-                    "One or more paths to the project's Java source code root directory (usually some kind of \"src\" folder)",
+                    "One or more paths to the project's source code root directories (usually some kind of \"src\" folder)",
             index = "1..*")
     private List<String> projectPaths;
 
