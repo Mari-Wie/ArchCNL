@@ -36,10 +36,6 @@ public class ConformanceCheckOntologyClassesAndProperties {
         return model.getDatatypeProperty(NAMESPACE + "hasRuleRepresentation");
     }
 
-    public static ObjectProperty getValidatesProperty(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "validates");
-    }
-
     public static DatatypeProperty getHasRuleIDProperty(OntModel model) {
 
         return model.getDatatypeProperty(NAMESPACE + "hasRuleID");
@@ -49,18 +45,6 @@ public class ConformanceCheckOntologyClassesAndProperties {
         OntClass violationClass = model.getOntClass(NAMESPACE + "ArchitectureViolation");
         return model.createIndividual(
                 NAMESPACE + "ArchitectureViolation" + violationId++, violationClass);
-    }
-
-    public static ObjectProperty getViolatesProperty(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "violates");
-    }
-
-    public static ObjectProperty getHasViolationProperty(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasViolation");
-    }
-
-    public static ObjectProperty getHasDetectedViolationProperty(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasDetected");
     }
 
     public static DatatypeProperty getHasViolationTextProperty(OntModel model) {
@@ -74,10 +58,6 @@ public class ConformanceCheckOntologyClassesAndProperties {
     public static Individual getProofIndividual(OntModel model) {
         OntClass proofClass = model.getOntClass(NAMESPACE + "Proof");
         return model.createIndividual(NAMESPACE + "Proof" + proofId++, proofClass);
-    }
-
-    public static ObjectProperty getProofsProperty(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "proofs");
     }
 
     public static DatatypeProperty getProofsTextProperty(OntModel model) {
@@ -95,24 +75,29 @@ public class ConformanceCheckOntologyClassesAndProperties {
         return model.createIndividual(
                 NAMESPACE + "NotInferredStatement" + notInferredId++, statementClass);
     }
-
-    public static ObjectProperty getHasSubject(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasSubject");
+    
+    public static ObjectProperty get(ConformanceCheckObjectProperties prop, OntModel model) {
+        return prop.getProperty(model);
     }
+    
+    public enum ConformanceCheckObjectProperties {
+    	hasNotInferredStatement,
+    	hasAssertedStatement,
+    	hasObject,
+    	hasPredicate,
+    	hasSubject,
+    	proofs,
+    	hasDetected,
+    	hasViolation,
+    	violates,
+        validates;
 
-    public static ObjectProperty getHasPredicate(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasPredicate");
-    }
-
-    public static ObjectProperty getHasObject(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasObject");
-    }
-
-    public static ObjectProperty getHasAssertedStatement(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasAssertedStatement");
-    }
-
-    public static ObjectProperty getHasNotInferredStatement(OntModel model) {
-        return model.getObjectProperty(NAMESPACE + "hasNotInferredStatement");
+        public ObjectProperty getProperty(OntModel model) {
+            return model.getObjectProperty(getUri());
+        }
+        
+        public String getUri() {
+          return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()  + this.name();
+        }
     }
 }
