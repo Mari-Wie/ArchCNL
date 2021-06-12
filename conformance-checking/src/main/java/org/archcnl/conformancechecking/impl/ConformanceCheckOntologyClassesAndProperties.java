@@ -75,29 +75,30 @@ public class ConformanceCheckOntologyClassesAndProperties {
         return model.createIndividual(
                 NAMESPACE + "NotInferredStatement" + notInferredId++, statementClass);
     }
-    
+
     public static ObjectProperty get(ConformanceCheckObjectProperties prop, OntModel model) {
         return prop.getProperty(model);
     }
-    
+
     public enum ConformanceCheckObjectProperties {
-    	hasNotInferredStatement,
-    	hasAssertedStatement,
-    	hasObject,
-    	hasPredicate,
-    	hasSubject,
-    	proofs,
-    	hasDetected,
-    	hasViolation,
-    	violates,
+        hasNotInferredStatement,
+        hasAssertedStatement,
+        hasObject,
+        hasPredicate,
+        hasSubject,
+        proofs,
+        hasDetected,
+        hasViolation,
+        violates,
         validates;
 
         public ObjectProperty getProperty(OntModel model) {
             return model.getObjectProperty(getUri());
         }
-        
+
         public String getUri() {
-          return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()  + this.name();
+            return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
+                    + this.name();
         }
     }
 }
