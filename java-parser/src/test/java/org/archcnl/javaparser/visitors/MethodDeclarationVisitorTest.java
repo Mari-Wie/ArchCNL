@@ -1,147 +1,127 @@
 package org.archcnl.javaparser.visitors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.io.FileNotFoundException;
+
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.Method;
-import org.junit.Before;
 import org.junit.Test;
 
-public class MethodDeclarationVisitorTest {
+import com.github.javaparser.ast.CompilationUnit;
 
-    private MethodDeclarationVisitor visitor;
-    private String pathToExamplePackage = "./src/test/java/examples/";
+public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDeclarationVisitor> {
 
-    @Before
-    public void initializeVisitor() {
-        visitor = new MethodDeclarationVisitor();
+	@Test
+	public void testEmptyClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "EmptyClass.java");
+		unit.accept(visitor, null);
 
-        // set a symbol solver
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/"));
-        StaticJavaParser.getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-    }
+		assertTrue(visitor.getMethods().isEmpty());
+	}
 
-    @Test
-    public void testEmptyClass() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "EmptyClass.java");
-        unit.accept(visitor, null);
+	@Test
+	public void testEnumeration() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory.getFromPath(PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "Enumeration.java");
+		unit.accept(visitor, null);
 
-        assertTrue(visitor.getMethods().isEmpty());
-    }
+		assertEquals(1, visitor.getMethods().size());
 
-    @Test
-    public void testEnumeration() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "Enumeration.java");
-        unit.accept(visitor, null);
+		final Method method = visitor.getMethods().get(0);
 
-        assertEquals(1, visitor.getMethods().size());
+		assertEquals("getIndex(Enumeration)", method.getSignature());
+		assertEquals("getIndex", method.getName());
+		assertEquals("int", method.getReturnType().getName());
+		assertTrue(method.getReturnType().isPrimitive());
+		assertEquals(0, method.getAnnotations().size());
+		assertEquals(0, method.getDeclaredExceptions().size());
+		assertEquals(0, method.getThrownExceptions().size());
+		assertEquals(0, method.getLocalVariables().size());
+		assertEquals(1, method.getParameters().size());
+		assertEquals("e", method.getParameters().get(0).getName());
+		assertEquals("examples.Enumeration", method.getParameters().get(0).getType().getName());
+		assertEquals("Enumeration", method.getParameters().get(0).getType().getSimpleName());
+		assertEquals(0, method.getParameters().get(0).getModifiers().size());
+		assertEquals(0, method.getParameters().get(0).getAnnotations().size());
+		assertEquals(2, method.getModifiers().size());
+		assertEquals("public", method.getModifiers().get(0).getName());
+		assertEquals("static", method.getModifiers().get(1).getName());
+	}
 
-        Method method = visitor.getMethods().get(0);
+	@Test
+	public void testSimpleClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory.getFromPath(PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "SimpleClass.java");
+		unit.accept(visitor, null);
 
-        assertEquals("getIndex(Enumeration)", method.getSignature());
-        assertEquals("getIndex", method.getName());
-        assertEquals("int", method.getReturnType().getName());
-        assertTrue(method.getReturnType().isPrimitive());
-        assertEquals(0, method.getAnnotations().size());
-        assertEquals(0, method.getDeclaredExceptions().size());
-        assertEquals(0, method.getThrownExceptions().size());
-        assertEquals(0, method.getLocalVariables().size());
-        assertEquals(1, method.getParameters().size());
-        assertEquals("e", method.getParameters().get(0).getName());
-        assertEquals("examples.Enumeration", method.getParameters().get(0).getType().getName());
-        assertEquals("Enumeration", method.getParameters().get(0).getType().getSimpleName());
-        assertEquals(0, method.getParameters().get(0).getModifiers().size());
-        assertEquals(0, method.getParameters().get(0).getAnnotations().size());
-        assertEquals(2, method.getModifiers().size());
-        assertEquals("public", method.getModifiers().get(0).getName());
-        assertEquals("static", method.getModifiers().get(1).getName());
-    }
+		assertEquals(1, visitor.getMethods().size());
 
-    @Test
-    public void testSimpleClass() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "SimpleClass.java");
-        unit.accept(visitor, null);
+		final Method method = visitor.getMethods().get(0);
 
-        assertEquals(1, visitor.getMethods().size());
+		assertEquals("get()", method.getSignature());
+		assertEquals("get", method.getName());
+		assertEquals("int", method.getReturnType().getName());
+		assertTrue(method.getReturnType().isPrimitive());
+		assertEquals(0, method.getAnnotations().size());
+		assertEquals(0, method.getDeclaredExceptions().size());
+		assertEquals(0, method.getThrownExceptions().size());
+		assertEquals(0, method.getLocalVariables().size());
+		assertEquals(0, method.getParameters().size());
+		assertEquals(1, method.getModifiers().size());
+		assertEquals("public", method.getModifiers().get(0).getName());
+	}
 
-        Method method = visitor.getMethods().get(0);
+	@Test
+	public void testComplexClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory.getFromPath(PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "ComplexClass.java");
+		unit.accept(visitor, null);
 
-        assertEquals("get()", method.getSignature());
-        assertEquals("get", method.getName());
-        assertEquals("int", method.getReturnType().getName());
-        assertTrue(method.getReturnType().isPrimitive());
-        assertEquals(0, method.getAnnotations().size());
-        assertEquals(0, method.getDeclaredExceptions().size());
-        assertEquals(0, method.getThrownExceptions().size());
-        assertEquals(0, method.getLocalVariables().size());
-        assertEquals(0, method.getParameters().size());
-        assertEquals(1, method.getModifiers().size());
-        assertEquals("public", method.getModifiers().get(0).getName());
-    }
+		assertEquals(4, visitor.getMethods().size());
 
-    @Test
-    public void testComplexClass() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "ComplexClass.java");
-        unit.accept(visitor, null);
+		final Method method1 = visitor.getMethods().get(0);
+		final Method method2 = visitor.getMethods().get(1);
+		final Method method3 = visitor.getMethods().get(2);
+		final Method method4 = visitor.getMethods().get(3);
 
-        assertEquals(4, visitor.getMethods().size());
+		assertEquals("calculateArea()", method1.getSignature());
+		assertEquals("stringMethod()", method2.getSignature());
+		assertEquals("referenceMethod(ClassInSubpackage)", method3.getSignature());
+		assertEquals("primitiveMethod(boolean)", method4.getSignature());
 
-        Method method1 = visitor.getMethods().get(0);
-        Method method2 = visitor.getMethods().get(1);
-        Method method3 = visitor.getMethods().get(2);
-        Method method4 = visitor.getMethods().get(3);
+		assertEquals(2, method2.getAnnotations().size());
+		assertEquals("Override", method2.getAnnotations().get(0).getName());
+		assertEquals(0, method2.getAnnotations().get(0).getValues().size());
+		assertEquals("SuppressWarnings", method2.getAnnotations().get(1).getName());
+		assertEquals(0, method2.getAnnotations().get(1).getValues().size());
+		assertEquals(0, method2.getLocalVariables().size());
 
-        assertEquals("calculateArea()", method1.getSignature());
-        assertEquals("stringMethod()", method2.getSignature());
-        assertEquals("referenceMethod(ClassInSubpackage)", method3.getSignature());
-        assertEquals("primitiveMethod(boolean)", method4.getSignature());
+		assertEquals(1, method3.getParameters().size());
+		assertEquals("parameter", method3.getParameters().get(0).getName());
+		assertEquals("examples.subpackage.ClassInSubpackage",
+				method3.getParameters().get(0).getType().getName());
+		assertEquals("examples.SimpleClass", method3.getReturnType().getName());
+		assertEquals(2, method3.getAnnotations().size());
+		final var deprecationAnnotationMethod3 = method3.getAnnotations().get(1);
+		assertEquals("Deprecated", deprecationAnnotationMethod3.getName());
+		final var sinceNeverValuePairMethod3 = deprecationAnnotationMethod3.getValues().get(0);
+		assertEquals("since", sinceNeverValuePairMethod3.getName());
+		assertEquals("\"neverEver\"", sinceNeverValuePairMethod3.getValue());
 
-        assertEquals(2, method2.getAnnotations().size());
-        assertEquals("Override", method2.getAnnotations().get(0).getName());
-        assertEquals(0, method2.getAnnotations().get(0).getValues().size());
-        assertEquals("SuppressWarnings", method2.getAnnotations().get(1).getName());
-        assertEquals(0, method2.getAnnotations().get(1).getValues().size());
-        assertEquals(0, method2.getLocalVariables().size());
+		assertEquals(1, method4.getLocalVariables().size());
+		assertEquals("characters", method4.getLocalVariables().get(0).getName());
+		assertEquals("java.util.List", method4.getLocalVariables().get(0).getType().getName());
+		assertFalse(method4.getLocalVariables().get(0).getType().isPrimitive());
+		assertEquals(2, method4.getAnnotations().size());
+		final var deprecationAnnotationMethod4 = method4.getAnnotations().get(1);
+		assertEquals("Deprecated", deprecationAnnotationMethod4.getName());
+		final var sinceNeverValuePairMethod4 = deprecationAnnotationMethod4.getValues().get(0);
+		assertEquals("since", sinceNeverValuePairMethod4.getName());
+		assertEquals("\"never\"", sinceNeverValuePairMethod4.getValue());
+	}
 
-        assertEquals(1, method3.getParameters().size());
-        assertEquals("parameter", method3.getParameters().get(0).getName());
-        assertEquals(
-                "examples.subpackage.ClassInSubpackage",
-                method3.getParameters().get(0).getType().getName());
-        assertEquals("examples.SimpleClass", method3.getReturnType().getName());
-        assertEquals(2, method3.getAnnotations().size());
-        var deprecationAnnotationMethod3 = method3.getAnnotations().get(1);
-        assertEquals("Deprecated", deprecationAnnotationMethod3.getName());
-        var sinceNeverValuePairMethod3 = deprecationAnnotationMethod3.getValues().get(0);
-        assertEquals("since", sinceNeverValuePairMethod3.getName());
-        assertEquals("\"neverEver\"", sinceNeverValuePairMethod3.getValue());
-
-        assertEquals(1, method4.getLocalVariables().size());
-        assertEquals("characters", method4.getLocalVariables().get(0).getName());
-        assertEquals("java.util.List", method4.getLocalVariables().get(0).getType().getName());
-        assertFalse(method4.getLocalVariables().get(0).getType().isPrimitive());
-        assertEquals(2, method4.getAnnotations().size());
-        var deprecationAnnotationMethod4 = method4.getAnnotations().get(1);
-        assertEquals("Deprecated", deprecationAnnotationMethod4.getName());
-        var sinceNeverValuePairMethod4 = deprecationAnnotationMethod4.getValues().get(0);
-        assertEquals("since", sinceNeverValuePairMethod4.getName());
-        assertEquals("\"never\"", sinceNeverValuePairMethod4.getValue());
-    }
+	@Override
+	protected Class<MethodDeclarationVisitor> getVisitorClass() {
+		return MethodDeclarationVisitor.class;
+	}
 }

@@ -1,16 +1,9 @@
 package org.archcnl.javaparser.visitors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.io.FileNotFoundException;
+
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
@@ -18,139 +11,128 @@ import org.archcnl.owlify.famix.codemodel.LocalVariable;
 import org.archcnl.owlify.famix.codemodel.Method;
 import org.archcnl.owlify.famix.codemodel.Parameter;
 import org.archcnl.owlify.famix.codemodel.Type;
-import org.junit.Before;
 import org.junit.Test;
 
-public class ConstructorDeclarationVisitorTest {
+import com.github.javaparser.ast.CompilationUnit;
 
-    private ConstructorDeclarationVisitor visitor;
-    private String pathToExamplePackage = "./src/test/java/examples/";
+public class ConstructorDeclarationVisitorTest extends GenericVisitorTest<ConstructorDeclarationVisitor> {
 
-    @Before
-    public void initializeVisitor() {
-        visitor = new ConstructorDeclarationVisitor();
+	@Test
+	public void testSimpleClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "SimpleClass.java");
+		unit.accept(visitor, null);
 
-        // set a symbol solver
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/"));
-        StaticJavaParser.getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-    }
+		assertEquals(1, visitor.getConstructors().size());
 
-    @Test
-    public void testSimpleClass() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "SimpleClass.java");
-        unit.accept(visitor, null);
+		final Method constructor = visitor.getConstructors().get(0);
 
-        assertEquals(1, visitor.getConstructors().size());
+		assertEquals("SimpleClass", constructor.getName());
+		assertEquals("SimpleClass(int)", constructor.getSignature());
+		assertEquals(Type.UNUSED_VALUE, constructor.getReturnType());
+		assertTrue(constructor.getAnnotations().isEmpty());
+		assertTrue(constructor.getDeclaredExceptions().isEmpty());
+		assertTrue(constructor.getLocalVariables().isEmpty());
 
-        Method constructor = visitor.getConstructors().get(0);
+		assertEquals(1, constructor.getParameters().size());
 
-        assertEquals("SimpleClass", constructor.getName());
-        assertEquals("SimpleClass(int)", constructor.getSignature());
-        assertEquals(Type.UNUSED_VALUE, constructor.getReturnType());
-        assertTrue(constructor.getAnnotations().isEmpty());
-        assertTrue(constructor.getDeclaredExceptions().isEmpty());
-        assertTrue(constructor.getLocalVariables().isEmpty());
+		final Parameter param = constructor.getParameters().get(0);
 
-        assertEquals(1, constructor.getParameters().size());
+		assertTrue(param.getAnnotations().isEmpty());
+		assertTrue(param.getModifiers().isEmpty());
+		assertEquals("parameter", param.getName());
+		assertEquals("int", param.getType().getName());
+		assertTrue(param.getType().isPrimitive());
+	}
 
-        Parameter param = constructor.getParameters().get(0);
+	@Test
+	public void testEmptyClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "EmptyClass.java");
+		unit.accept(visitor, null);
 
-        assertTrue(param.getAnnotations().isEmpty());
-        assertTrue(param.getModifiers().isEmpty());
-        assertEquals("parameter", param.getName());
-        assertEquals("int", param.getType().getName());
-        assertTrue(param.getType().isPrimitive());
-    }
+		assertEquals(0, visitor.getConstructors().size());
+	}
 
-    @Test
-    public void testEmptyClass() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "EmptyClass.java");
-        unit.accept(visitor, null);
+	@Test
+	public void testComplexClassConstructor1() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "ComplexClass.java");
+		unit.accept(visitor, null);
 
-        assertEquals(0, visitor.getConstructors().size());
-    }
+		assertEquals(2, visitor.getConstructors().size());
 
-    @Test
-    public void testComplexClassConstructor1()
-            throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "ComplexClass.java");
-        unit.accept(visitor, null);
+		final Method constructor1 = visitor.getConstructors().get(0);
 
-        assertEquals(2, visitor.getConstructors().size());
+		assertEquals("ComplexClass(double)", constructor1.getSignature());
+		assertEquals(1, constructor1.getAnnotations().size());
 
-        Method constructor1 = visitor.getConstructors().get(0);
+		assertEquals(1, constructor1.getModifiers().size());
+		assertEquals("public", constructor1.getModifiers().get(0).getName());
 
-        assertEquals("ComplexClass(double)", constructor1.getSignature());
-        assertEquals(1, constructor1.getAnnotations().size());
+		final AnnotationInstance annotation = constructor1.getAnnotations().get(0);
+		assertEquals("Deprecated", annotation.getName());
+		assertEquals(0, annotation.getValues().size());
 
-        assertEquals(1, constructor1.getModifiers().size());
-        assertEquals("public", constructor1.getModifiers().get(0).getName());
+		assertEquals(1, constructor1.getDeclaredExceptions().size());
+		assertEquals("java.lang.Exception", constructor1.getDeclaredExceptions().get(0).getName());
+		assertEquals("Exception", constructor1.getDeclaredExceptions().get(0).getSimpleName());
+		assertFalse(constructor1.getDeclaredExceptions().get(0).isPrimitive());
 
-        AnnotationInstance annotation = constructor1.getAnnotations().get(0);
-        assertEquals("Deprecated", annotation.getName());
-        assertEquals(0, annotation.getValues().size());
+		assertTrue(constructor1.getLocalVariables().isEmpty());
+		assertTrue(constructor1.getThrownExceptions().isEmpty());
 
-        assertEquals(1, constructor1.getDeclaredExceptions().size());
-        assertEquals("java.lang.Exception", constructor1.getDeclaredExceptions().get(0).getName());
-        assertEquals("Exception", constructor1.getDeclaredExceptions().get(0).getSimpleName());
-        assertFalse(constructor1.getDeclaredExceptions().get(0).isPrimitive());
+		assertEquals(1, constructor1.getParameters().size());
+	}
 
-        assertTrue(constructor1.getLocalVariables().isEmpty());
-        assertTrue(constructor1.getThrownExceptions().isEmpty());
+	@Test
+	public void testComplexClassConstructor2() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "ComplexClass.java");
+		unit.accept(visitor, null);
 
-        assertEquals(1, constructor1.getParameters().size());
-    }
+		assertEquals(2, visitor.getConstructors().size());
 
-    @Test
-    public void testComplexClassConstructor2()
-            throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "ComplexClass.java");
-        unit.accept(visitor, null);
+		final Method constructor2 = visitor.getConstructors().get(1);
 
-        assertEquals(2, visitor.getConstructors().size());
+		assertEquals("ComplexClass(double, double)", constructor2.getSignature());
+		assertTrue(constructor2.getAnnotations().isEmpty());
+		assertTrue(constructor2.getDeclaredExceptions().isEmpty());
+		assertTrue(constructor2.getThrownExceptions().isEmpty());
 
-        Method constructor2 = visitor.getConstructors().get(1);
+		assertEquals(1, constructor2.getModifiers().size());
+		assertEquals("public", constructor2.getModifiers().get(0).getName());
 
-        assertEquals("ComplexClass(double, double)", constructor2.getSignature());
-        assertTrue(constructor2.getAnnotations().isEmpty());
-        assertTrue(constructor2.getDeclaredExceptions().isEmpty());
-        assertTrue(constructor2.getThrownExceptions().isEmpty());
+		assertEquals(1, constructor2.getLocalVariables().size());
+		final LocalVariable variable = constructor2.getLocalVariables().get(0);
 
-        assertEquals(1, constructor2.getModifiers().size());
-        assertEquals("public", constructor2.getModifiers().get(0).getName());
+		assertEquals("diameter", variable.getName());
+		assertEquals("java.lang.Double", variable.getType().getName());
+		assertEquals("Double", variable.getType().getSimpleName());
+		assertFalse(variable.getType().isPrimitive());
 
-        assertEquals(1, constructor2.getLocalVariables().size());
-        LocalVariable variable = constructor2.getLocalVariables().get(0);
+		assertEquals(2, constructor2.getParameters().size());
 
-        assertEquals("diameter", variable.getName());
-        assertEquals("java.lang.Double", variable.getType().getName());
-        assertEquals("Double", variable.getType().getSimpleName());
-        assertFalse(variable.getType().isPrimitive());
+		final Parameter param1 = constructor2.getParameters().get(0);
+		final Parameter param2 = constructor2.getParameters().get(1);
 
-        assertEquals(2, constructor2.getParameters().size());
+		assertEquals("radius", param1.getName());
+		assertTrue(param1.getAnnotations().isEmpty());
+		assertEquals(1, param1.getModifiers().size());
+		assertEquals("final", param1.getModifiers().get(0).getName());
 
-        Parameter param1 = constructor2.getParameters().get(0);
-        Parameter param2 = constructor2.getParameters().get(1);
+		assertEquals("otherHalfOfRadius", param2.getName());
+		assertEquals(1, param2.getAnnotations().size());
+		final AnnotationInstance param2annotation = param2.getAnnotations().get(0);
+		assertEquals("Deprecated", param2annotation.getName());
+		assertEquals(1, param2annotation.getValues().size());
+		assertEquals("since", param2annotation.getValues().get(0).getName());
+		assertEquals("\"yesterday\"", param2annotation.getValues().get(0).getValue());
+		assertTrue(param2.getModifiers().isEmpty());
+	}
 
-        assertEquals("radius", param1.getName());
-        assertTrue(param1.getAnnotations().isEmpty());
-        assertEquals(1, param1.getModifiers().size());
-        assertEquals("final", param1.getModifiers().get(0).getName());
-
-        assertEquals("otherHalfOfRadius", param2.getName());
-        assertEquals(1, param2.getAnnotations().size());
-        AnnotationInstance param2annotation = param2.getAnnotations().get(0);
-        assertEquals("Deprecated", param2annotation.getName());
-        assertEquals(1, param2annotation.getValues().size());
-        assertEquals("since", param2annotation.getValues().get(0).getName());
-        assertEquals("\"yesterday\"", param2annotation.getValues().get(0).getValue());
-        assertTrue(param2.getModifiers().isEmpty());
-    }
+	@Override
+	protected Class<ConstructorDeclarationVisitor> getVisitorClass() {
+		return ConstructorDeclarationVisitor.class;
+	}
 }
