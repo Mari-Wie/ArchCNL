@@ -38,8 +38,7 @@ public class CNLToolchain {
     private static final String TEMPORARY_DIRECTORY = "./temp";
     private static final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
     private static final String MAPPED_ONTOLOGY_PATH = TEMPORARY_DIRECTORY + "/mapped.owl";
-    private final OwlifyComponent javaTransformer;
-    private final OwlifyComponent kotlinTransformer;
+    private final List<OwlifyComponent> transformers;
     private final StardogICVAPI icvAPI;
     private final IConformanceCheck check;
     private final StardogDatabaseAPI db;
@@ -48,8 +47,9 @@ public class CNLToolchain {
     private CNLToolchain(String databaseName, String server, String username, String password) {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
-        this.javaTransformer = new JavaOntologyTransformer();
-        this.kotlinTransformer = new KotlinOntologyTransformer();
+        this.transformers =
+                List.<OwlifyComponent>of(
+                        new JavaOntologyTransformer(), new KotlinOntologyTransformer());
         this.check = new ConformanceCheckImpl();
     }
 
@@ -272,12 +272,17 @@ public class CNLToolchain {
         LOG.info("Starting famix transformation ...");
         // source code transformation
         for (var sourceCodePath : sourceCodePaths) {
-            javaTransformer.addSourcePath(sourceCodePath);
-            kotlinTransformer.addSourcePath(sourceCodePath);
+            for (var transformer : transformers) {
+                transformer.addSourcePath(sourceCodePath);
+            }
         }
-        var javaModell = javaTransformer.transform();
-        var kotlinModell = kotlinTransformer.transform();
-        return javaModell.union(kotlinModell);
+        var model =
+                transformers.stream()
+                        .map(transformer -> transformer.transform())
+                        .reduce(
+                                null,
+                                (modelA, modelB) -> modelA == null ? modelB : modelA.union(modelB));
+        return model;
     }
 
     private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {
@@ -294,8 +299,9 @@ public class CNLToolchain {
 
     private HashMap<String, String> gatherOWLNamespaces() {
         HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
-        supportedOWLNamespaces.putAll(javaTransformer.getProvidedNamespaces());
-        supportedOWLNamespaces.putAll(kotlinTransformer.getProvidedNamespaces());
+        for (var transformer : transformers) {
+            supportedOWLNamespaces.putAll(transformer.getProvidedNamespaces());
+        }
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
