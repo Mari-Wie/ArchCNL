@@ -295,6 +295,7 @@ public class CNLToolchain {
     private HashMap<String, String> gatherOWLNamespaces() {
         HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
         supportedOWLNamespaces.putAll(javaTransformer.getProvidedNamespaces());
+        supportedOWLNamespaces.putAll(kotlinTransformer.getProvidedNamespaces());
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
