@@ -10,7 +10,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,14 +45,33 @@ public class CNLToolchain {
     private final IConformanceCheck check;
     private final StardogDatabaseAPI db;
 
+    // mapping of name to transformer factories
+    // add new parsers here
+    private final Map<String, Supplier<OwlifyComponent>> transformerFactories =
+            Map.ofEntries(
+                    Map.entry("java", () -> new JavaOntologyTransformer()),
+                    Map.entry("kotlin", () -> new KotlinOntologyTransformer()));
+
     // private, use runToolchain to create and execute the toolchain
-    private CNLToolchain(String databaseName, String server, String username, String password) {
+    private CNLToolchain(
+            String databaseName,
+            String server,
+            String username,
+            String password,
+            List<String> enabledTransformers) {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.transformers =
-                List.<OwlifyComponent>of(
-                        new JavaOntologyTransformer(), new KotlinOntologyTransformer());
+                enabledTransformers.stream()
+                        .map(name -> createTransformer(name))
+                        .collect(Collectors.toList());
         this.check = new ConformanceCheckImpl();
+    }
+
+    private OwlifyComponent createTransformer(String name) {
+        var factory = transformerFactories.get(name);
+        if (factory == null) throw new RuntimeException("Unknown parser '" + name + "'");
+        return factory.get();
     }
 
     /**
@@ -67,6 +88,7 @@ public class CNLToolchain {
      *     mapping rules.
      * @param logVerbose If all log levels down to trace should be logged in file and on the console
      * @param removePreviousDatabases If all previous databases should be permanently removed
+     * @param enabledParsers The names of all enabled parsers.
      */
     public static void runToolchain(
             String database,
@@ -77,7 +99,8 @@ public class CNLToolchain {
             List<String> projectPathsAsString,
             String rulesFile,
             boolean logVerbose,
-            boolean removePreviousDatabases) {
+            boolean removePreviousDatabases,
+            List<String> enabledParsers) {
 
         if (logVerbose) {
             LOG.info("verbose logging is enabled");
@@ -104,7 +127,7 @@ public class CNLToolchain {
         LOG.info("Project path : " + projectPathsAsString);
         LOG.debug("RulesFile    : " + rulesFile);
 
-        CNLToolchain tool = new CNLToolchain(database, server, username, password);
+        CNLToolchain tool = new CNLToolchain(database, server, username, password, enabledParsers);
         LOG.info("CNLToolchain initialized.");
 
         try {
