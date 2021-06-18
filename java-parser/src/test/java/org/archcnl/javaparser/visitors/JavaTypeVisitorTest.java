@@ -1,17 +1,8 @@
 package org.archcnl.javaparser.visitors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.io.FileNotFoundException;
 import java.util.List;
+
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.Annotation;
@@ -19,218 +10,203 @@ import org.archcnl.owlify.famix.codemodel.AnnotationAttribute;
 import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
 import org.archcnl.owlify.famix.codemodel.DefinedType;
 import org.archcnl.owlify.famix.codemodel.Enumeration;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class JavaTypeVisitorTest {
+import com.github.javaparser.ast.CompilationUnit;
 
-    private JavaTypeVisitor visitor;
-    private String pathToExamplePackage = "./src/test/java/examples/";
+public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
 
-    @Before
-    public void initializeVisitor() {
-        visitor = new JavaTypeVisitor();
+	@Test
+	public void testSimpleClass() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "SimpleClass.java");
+		unit.accept(visitor, null);
 
-        // set a symbol solver
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
-        combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver("./src/test/java/"));
-        StaticJavaParser.getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-    }
+		Assert.assertEquals(1, visitor.getDefinedTypes().size());
 
-    @Test
-    public void testSimpleClass() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "SimpleClass.java");
-        unit.accept(visitor, null);
+		final DefinedType definedType = visitor.getDefinedTypes().get(0);
 
-        assertEquals(1, visitor.getDefinedTypes().size());
+		Assert.assertEquals("examples.SimpleClass", definedType.getName());
+		Assert.assertEquals("SimpleClass", definedType.getSimpleName());
+		Assert.assertTrue(definedType instanceof ClassOrInterface);
 
-        DefinedType definedType = visitor.getDefinedTypes().get(0);
+		final ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
-        assertEquals("examples.SimpleClass", definedType.getName());
-        assertEquals("SimpleClass", definedType.getSimpleName());
-        assertTrue(definedType instanceof ClassOrInterface);
+		Assert.assertEquals(2, definedClass.getModifiers().size());
+		Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
+		Assert.assertEquals("final", definedClass.getModifiers().get(1).getName());
+		Assert.assertFalse(definedClass.isInterface());
+	}
 
-        ClassOrInterface definedClass = (ClassOrInterface) definedType;
+	@Test
+	public void testSimpleInterface() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "Interface.java");
+		unit.accept(visitor, null);
 
-        assertEquals(2, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0).getName());
-        assertEquals("final", definedClass.getModifiers().get(1).getName());
-        assertFalse(definedClass.isInterface());
-    }
+		Assert.assertEquals(1, visitor.getDefinedTypes().size());
 
-    @Test
-    public void testSimpleInterface() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "Interface.java");
-        unit.accept(visitor, null);
+		final DefinedType definedType = visitor.getDefinedTypes().get(0);
 
-        assertEquals(1, visitor.getDefinedTypes().size());
+		Assert.assertEquals("examples.Interface", definedType.getName());
+		Assert.assertEquals("Interface", definedType.getSimpleName());
+		Assert.assertTrue(definedType instanceof ClassOrInterface);
 
-        DefinedType definedType = visitor.getDefinedTypes().get(0);
+		final ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
-        assertEquals("examples.Interface", definedType.getName());
-        assertEquals("Interface", definedType.getSimpleName());
-        assertTrue(definedType instanceof ClassOrInterface);
+		Assert.assertEquals(1, definedClass.getModifiers().size());
+		Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
+		Assert.assertTrue(definedClass.isInterface());
+	}
 
-        ClassOrInterface definedClass = (ClassOrInterface) definedType;
+	@Test
+	public void testAnnotation() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "Annotation.java");
+		unit.accept(visitor, null);
 
-        assertEquals(1, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0).getName());
-        assertTrue(definedClass.isInterface());
-    }
+		Assert.assertEquals(1, visitor.getDefinedTypes().size());
 
-    @Test
-    public void testAnnotation() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "Annotation.java");
-        unit.accept(visitor, null);
+		final DefinedType definedType = visitor.getDefinedTypes().get(0);
 
-        assertEquals(1, visitor.getDefinedTypes().size());
+		Assert.assertEquals("examples.Annotation", definedType.getName());
+		Assert.assertEquals("Annotation", definedType.getSimpleName());
 
-        DefinedType definedType = visitor.getDefinedTypes().get(0);
+		Assert.assertEquals(1, definedType.getModifiers().size());
+		Assert.assertEquals("public", definedType.getModifiers().get(0).getName());
 
-        assertEquals("examples.Annotation", definedType.getName());
-        assertEquals("Annotation", definedType.getSimpleName());
+		Assert.assertTrue(definedType instanceof Annotation);
+		final Annotation definedAnnotation = (Annotation) definedType;
 
-        assertEquals(1, definedType.getModifiers().size());
-        assertEquals("public", definedType.getModifiers().get(0).getName());
+		final List<AnnotationAttribute> attributes = definedAnnotation.getAttributes();
 
-        assertTrue(definedType instanceof Annotation);
-        Annotation definedAnnotation = (Annotation) definedType;
+		Assert.assertEquals(3, definedAnnotation.getAttributes().size());
 
-        List<AnnotationAttribute> attributes = definedAnnotation.getAttributes();
+		Assert.assertEquals("string", attributes.get(0).getName());
+		Assert.assertEquals("java.lang.String", attributes.get(0).getType().getName());
+		Assert.assertFalse(attributes.get(0).getType().isPrimitive());
 
-        assertEquals(3, definedAnnotation.getAttributes().size());
+		Assert.assertEquals("integer", attributes.get(1).getName());
+		Assert.assertEquals("int", attributes.get(1).getType().getName());
+		Assert.assertTrue(attributes.get(1).getType().isPrimitive());
 
-        assertEquals("string", attributes.get(0).getName());
-        assertEquals("java.lang.String", attributes.get(0).getType().getName());
-        assertFalse(attributes.get(0).getType().isPrimitive());
+		Assert.assertEquals("floatingPoint", attributes.get(2).getName());
+		Assert.assertEquals("float", attributes.get(2).getType().getName());
+		Assert.assertTrue(attributes.get(2).getType().isPrimitive());
+	}
 
-        assertEquals("integer", attributes.get(1).getName());
-        assertEquals("int", attributes.get(1).getType().getName());
-        assertTrue(attributes.get(1).getType().isPrimitive());
+	@Test
+	public void testEnumeration() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "Enumeration.java");
+		unit.accept(visitor, null);
 
-        assertEquals("floatingPoint", attributes.get(2).getName());
-        assertEquals("float", attributes.get(2).getType().getName());
-        assertTrue(attributes.get(2).getType().isPrimitive());
-    }
+		Assert.assertEquals(1, visitor.getDefinedTypes().size());
 
-    @Test
-    public void testEnumeration() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(pathToExamplePackage + "Enumeration.java");
-        unit.accept(visitor, null);
+		final DefinedType definedType = visitor.getDefinedTypes().get(0);
 
-        assertEquals(1, visitor.getDefinedTypes().size());
+		Assert.assertEquals("examples.Enumeration", definedType.getName());
+		Assert.assertEquals("Enumeration", definedType.getSimpleName());
+		Assert.assertTrue(definedType instanceof Enumeration);
+	}
 
-        DefinedType definedType = visitor.getDefinedTypes().get(0);
+	@Test
+	public void testNestedClassOuter() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "ClassWithInnerClass.java");
+		unit.accept(visitor, null);
 
-        assertEquals("examples.Enumeration", definedType.getName());
-        assertEquals("Enumeration", definedType.getSimpleName());
-        assertTrue(definedType instanceof Enumeration);
-    }
+		Assert.assertEquals(1, visitor.getDefinedTypes().size());
 
-    @Test
-    public void testNestedClassOuter() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(
-                        pathToExamplePackage + "ClassWithInnerClass.java");
-        unit.accept(visitor, null);
+		final DefinedType definedType = visitor.getDefinedTypes().get(0);
 
-        assertEquals(1, visitor.getDefinedTypes().size());
+		Assert.assertEquals("examples.ClassWithInnerClass", definedType.getName());
+		Assert.assertTrue(definedType instanceof ClassOrInterface);
 
-        DefinedType definedType = visitor.getDefinedTypes().get(0);
+		final ClassOrInterface definedClass = (ClassOrInterface) definedType;
 
-        assertEquals("examples.ClassWithInnerClass", definedType.getName());
-        assertTrue(definedType instanceof ClassOrInterface);
+		Assert.assertFalse(definedClass.isInterface());
+		Assert.assertEquals(1, definedClass.getModifiers().size());
+		Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
 
-        ClassOrInterface definedClass = (ClassOrInterface) definedType;
+		Assert.assertEquals(2, definedClass.getFields().size());
+		Assert.assertEquals("field1", definedClass.getFields().get(0).getName());
+		Assert.assertEquals("field2", definedClass.getFields().get(1).getName());
 
-        assertFalse(definedClass.isInterface());
-        assertEquals(1, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0).getName());
+		Assert.assertEquals(1, definedClass.getNestedTypes().size());
+		Assert.assertEquals("InnerClass", definedClass.getNestedTypes().get(0).getSimpleName());
+		Assert.assertEquals("examples.ClassWithInnerClass.InnerClass", definedClass.getNestedTypes().get(0).getName());
 
-        assertEquals(2, definedClass.getFields().size());
-        assertEquals("field1", definedClass.getFields().get(0).getName());
-        assertEquals("field2", definedClass.getFields().get(1).getName());
+		Assert.assertEquals(2, definedClass.getMethods().size());
+		Assert.assertFalse(definedClass.getMethods().get(0).isConstructor());
+		Assert.assertEquals("method()", definedClass.getMethods().get(0).getSignature());
+		Assert.assertTrue(definedClass.getMethods().get(1).isConstructor());
+		Assert.assertEquals("ClassWithInnerClass(int, float)", definedClass.getMethods().get(1).getSignature());
 
-        assertEquals(1, definedClass.getNestedTypes().size());
-        assertEquals("InnerClass", definedClass.getNestedTypes().get(0).getSimpleName());
-        assertEquals(
-                "examples.ClassWithInnerClass.InnerClass",
-                definedClass.getNestedTypes().get(0).getName());
+		Assert.assertEquals(0, definedClass.getAnnotations().size());
 
-        assertEquals(2, definedClass.getMethods().size());
-        assertFalse(definedClass.getMethods().get(0).isConstructor());
-        assertEquals("method()", definedClass.getMethods().get(0).getSignature());
-        assertTrue(definedClass.getMethods().get(1).isConstructor());
-        assertEquals(
-                "ClassWithInnerClass(int, float)", definedClass.getMethods().get(1).getSignature());
+		Assert.assertEquals(1, definedClass.getModifiers().size());
+		Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
+	}
 
-        assertEquals(0, definedClass.getAnnotations().size());
+	@Test
+	public void testNestedClassInner() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "ClassWithInnerClass.java");
+		unit.accept(visitor, null);
 
-        assertEquals(1, definedClass.getModifiers().size());
-        assertEquals("public", definedClass.getModifiers().get(0).getName());
-    }
+		Assert.assertEquals(1, visitor.getDefinedTypes().size());
+		Assert.assertTrue(visitor.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-    @Test
-    public void testNestedClassInner() throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(
-                        pathToExamplePackage + "ClassWithInnerClass.java");
-        unit.accept(visitor, null);
+		final ClassOrInterface outerType = (ClassOrInterface) visitor.getDefinedTypes().get(0);
 
-        assertEquals(1, visitor.getDefinedTypes().size());
-        assertTrue(visitor.getDefinedTypes().get(0) instanceof ClassOrInterface);
+		Assert.assertEquals(1, outerType.getNestedTypes().size());
 
-        ClassOrInterface outerType = (ClassOrInterface) visitor.getDefinedTypes().get(0);
+		final DefinedType innerType = outerType.getNestedTypes().get(0);
 
-        assertEquals(1, outerType.getNestedTypes().size());
+		Assert.assertEquals("examples.ClassWithInnerClass.InnerClass", innerType.getName());
+		Assert.assertEquals("InnerClass", innerType.getSimpleName());
+		Assert.assertTrue(innerType instanceof ClassOrInterface);
 
-        DefinedType innerType = outerType.getNestedTypes().get(0);
+		final ClassOrInterface innerClass = (ClassOrInterface) innerType;
 
-        assertEquals("examples.ClassWithInnerClass.InnerClass", innerType.getName());
-        assertEquals("InnerClass", innerType.getSimpleName());
-        assertTrue(innerType instanceof ClassOrInterface);
+		Assert.assertEquals(2, innerClass.getModifiers().size());
+		Assert.assertEquals("private", innerClass.getModifiers().get(0).getName());
+		Assert.assertEquals("static", innerClass.getModifiers().get(1).getName());
+		Assert.assertFalse(innerClass.isInterface());
+		Assert.assertEquals(1, innerClass.getFields().size());
+		Assert.assertEquals("innerField", innerClass.getFields().get(0).getName());
+	}
 
-        ClassOrInterface innerClass = (ClassOrInterface) innerType;
+	@Test
+	public void testTwoTopLevelClasses() throws FileNotFoundException, FileIsNotAJavaClassException {
+		final CompilationUnit unit = CompilationUnitFactory
+				.getFromPath(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "TwoTopLevelClasses.java");
+		unit.accept(visitor, null);
 
-        assertEquals(2, innerClass.getModifiers().size());
-        assertEquals("private", innerClass.getModifiers().get(0).getName());
-        assertEquals("static", innerClass.getModifiers().get(1).getName());
-        assertFalse(innerClass.isInterface());
-        assertEquals(1, innerClass.getFields().size());
-        assertEquals("innerField", innerClass.getFields().get(0).getName());
-    }
+		Assert.assertEquals(2, visitor.getDefinedTypes().size());
 
-    @Test
-    public void testTwoTopLevelClasses()
-            throws FileNotFoundException, FileIsNotAJavaClassException {
-        CompilationUnit unit =
-                CompilationUnitFactory.getFromPath(
-                        pathToExamplePackage + "TwoTopLevelClasses.java");
-        unit.accept(visitor, null);
+		final DefinedType type1 = visitor.getDefinedTypes().get(0);
+		final DefinedType type2 = visitor.getDefinedTypes().get(1);
 
-        assertEquals(2, visitor.getDefinedTypes().size());
+		Assert.assertEquals("examples.TwoTopLevelClasses", type1.getName());
+		Assert.assertEquals("examples.OtherTopLevelClass", type2.getName());
 
-        DefinedType type1 = visitor.getDefinedTypes().get(0);
-        DefinedType type2 = visitor.getDefinedTypes().get(1);
+		Assert.assertTrue(type1 instanceof ClassOrInterface);
+		Assert.assertTrue(type2 instanceof ClassOrInterface);
 
-        assertEquals("examples.TwoTopLevelClasses", type1.getName());
-        assertEquals("examples.OtherTopLevelClass", type2.getName());
+		final ClassOrInterface class1 = (ClassOrInterface) type1;
+		final ClassOrInterface class2 = (ClassOrInterface) type2;
 
-        assertTrue(type1 instanceof ClassOrInterface);
-        assertTrue(type2 instanceof ClassOrInterface);
+		Assert.assertEquals(1, class1.getModifiers().size());
+		Assert.assertEquals("public", class1.getModifiers().get(0).getName());
 
-        ClassOrInterface class1 = (ClassOrInterface) type1;
-        ClassOrInterface class2 = (ClassOrInterface) type2;
+		Assert.assertEquals(0, class2.getModifiers().size());
+	}
 
-        assertEquals(1, class1.getModifiers().size());
-        assertEquals("public", class1.getModifiers().get(0).getName());
-
-        assertEquals(0, class2.getModifiers().size());
-    }
+	@Override
+	protected Class<JavaTypeVisitor> getVisitorClass() {
+		return JavaTypeVisitor.class;
+	}
 }
