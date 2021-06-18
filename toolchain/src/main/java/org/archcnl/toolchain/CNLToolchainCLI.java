@@ -1,5 +1,6 @@
 package org.archcnl.toolchain;
 
+import java.util.Arrays;
 import java.util.List;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -54,8 +55,14 @@ public class CNLToolchainCLI implements Runnable {
             description = "Remove previous databases before adding new ones")
     boolean removePreviousDatabases;
 
+    @Option(
+            names = {"--parsers"},
+            description = "Specify the enabled parsers (comma-separated list)")
+    private String parsers = "java,kotlin";
+
     @Override
     public void run() {
+        var parsersList = Arrays.asList(parsers.split(","));
         CNLToolchain.runToolchain(
                 database,
                 server,
@@ -65,7 +72,8 @@ public class CNLToolchainCLI implements Runnable {
                 projectPaths,
                 rulesFile,
                 logVerbose,
-                removePreviousDatabases);
+                removePreviousDatabases,
+                parsersList);
     }
 
     public static void main(String[] args) {

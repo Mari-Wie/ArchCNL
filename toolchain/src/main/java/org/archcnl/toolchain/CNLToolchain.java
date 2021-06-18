@@ -10,7 +10,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,19 +40,38 @@ public class CNLToolchain {
     private static final String TEMPORARY_DIRECTORY = "./temp";
     private static final String MAPPING_FILE_PATH = TEMPORARY_DIRECTORY + "/mapping.txt";
     private static final String MAPPED_ONTOLOGY_PATH = TEMPORARY_DIRECTORY + "/mapped.owl";
-    private final OwlifyComponent javaTransformer;
-    private final OwlifyComponent kotlinTransformer;
+    private final List<OwlifyComponent> transformers;
     private final StardogICVAPI icvAPI;
     private final IConformanceCheck check;
     private final StardogDatabaseAPI db;
 
+    // mapping of name to transformer factories
+    // add new parsers here
+    private final Map<String, Supplier<OwlifyComponent>> transformerFactories =
+            Map.ofEntries(
+                    Map.entry("java", () -> new JavaOntologyTransformer()),
+                    Map.entry("kotlin", () -> new KotlinOntologyTransformer()));
+
     // private, use runToolchain to create and execute the toolchain
-    private CNLToolchain(String databaseName, String server, String username, String password) {
+    private CNLToolchain(
+            String databaseName,
+            String server,
+            String username,
+            String password,
+            List<String> enabledTransformers) {
         this.db = new StardogDatabase(server, databaseName, username, password);
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
-        this.javaTransformer = new JavaOntologyTransformer();
-        this.kotlinTransformer = new KotlinOntologyTransformer();
+        this.transformers =
+                enabledTransformers.stream()
+                        .map(name -> createTransformer(name))
+                        .collect(Collectors.toList());
         this.check = new ConformanceCheckImpl();
+    }
+
+    private OwlifyComponent createTransformer(String name) {
+        var factory = transformerFactories.get(name);
+        if (factory == null) throw new RuntimeException("Unknown parser '" + name + "'");
+        return factory.get();
     }
 
     /**
@@ -67,6 +88,7 @@ public class CNLToolchain {
      *     mapping rules.
      * @param logVerbose If all log levels down to trace should be logged in file and on the console
      * @param removePreviousDatabases If all previous databases should be permanently removed
+     * @param enabledParsers The names of all enabled parsers.
      */
     public static void runToolchain(
             String database,
@@ -77,7 +99,8 @@ public class CNLToolchain {
             List<String> projectPathsAsString,
             String rulesFile,
             boolean logVerbose,
-            boolean removePreviousDatabases) {
+            boolean removePreviousDatabases,
+            List<String> enabledParsers) {
 
         if (logVerbose) {
             LOG.info("verbose logging is enabled");
@@ -104,7 +127,7 @@ public class CNLToolchain {
         LOG.info("Project path : " + projectPathsAsString);
         LOG.debug("RulesFile    : " + rulesFile);
 
-        CNLToolchain tool = new CNLToolchain(database, server, username, password);
+        CNLToolchain tool = new CNLToolchain(database, server, username, password, enabledParsers);
         LOG.info("CNLToolchain initialized.");
 
         try {
@@ -272,12 +295,17 @@ public class CNLToolchain {
         LOG.info("Starting famix transformation ...");
         // source code transformation
         for (var sourceCodePath : sourceCodePaths) {
-            javaTransformer.addSourcePath(sourceCodePath);
-            kotlinTransformer.addSourcePath(sourceCodePath);
+            for (var transformer : transformers) {
+                transformer.addSourcePath(sourceCodePath);
+            }
         }
-        var javaModell = javaTransformer.transform();
-        var kotlinModell = kotlinTransformer.transform();
-        return javaModell.union(kotlinModell);
+        var model =
+                transformers.stream()
+                        .map(transformer -> transformer.transform())
+                        .reduce(
+                                null,
+                                (modelA, modelB) -> modelA == null ? modelB : modelA.union(modelB));
+        return model;
     }
 
     private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {
@@ -294,7 +322,9 @@ public class CNLToolchain {
 
     private HashMap<String, String> gatherOWLNamespaces() {
         HashMap<String, String> supportedOWLNamespaces = new HashMap<>();
-        supportedOWLNamespaces.putAll(javaTransformer.getProvidedNamespaces());
+        for (var transformer : transformers) {
+            supportedOWLNamespaces.putAll(transformer.getProvidedNamespaces());
+        }
         supportedOWLNamespaces.putAll(check.getProvidedNamespaces());
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
