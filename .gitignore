@@ -237,5 +237,10 @@ xtext-gen/
 # Temporary files
 temp/
 cnl-toolchain/temp/
+logs/
+
+# Files produced by integration tests
+toolchain/src/integration-test/resources/result.owl
+
 # End of https://www.toptal.com/developers/gitignore/api/java,xtext,macos,maven,eclipse,intellij+all
 
