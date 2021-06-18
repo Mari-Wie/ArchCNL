@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.common.datatypes.ConstraintViolation;
 import org.archcnl.common.datatypes.StatementTriple;
+import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckObjectProperties;
 
 public class ConformanceCheckOntology {
 
@@ -62,7 +63,8 @@ public class ConformanceCheckOntology {
         architectureRuleIndividual.addLiteral(cnlRepresentationProperty, rule.getCnlSentence());
 
         ObjectProperty validatesProperty =
-                ConformanceCheckOntologyClassesAndProperties.getValidatesProperty(model);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.validates, model);
         conformanceCheckIndividual.addProperty(validatesProperty, architectureRuleIndividual);
 
         DatatypeProperty hasRuleIDProperty =
@@ -83,15 +85,18 @@ public class ConformanceCheckOntology {
                         model);
 
         conformanceCheckIndividual.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getHasDetectedViolationProperty(model),
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.hasDetected, model),
                 architectureViolationIndividual);
 
         architectureRuleIndividual.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getHasViolationProperty(model),
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.hasViolation, model),
                 architectureViolationIndividual);
 
         architectureViolationIndividual.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getViolatesProperty(model),
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.violates, model),
                 architectureRuleIndividual);
 
         connectCodeElementsWithViolations(codemodel, rule, violation);
@@ -113,7 +118,8 @@ public class ConformanceCheckOntology {
                 ConformanceCheckOntologyClassesAndProperties.getProofIndividual(model);
 
         proofIndividual.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getProofsProperty(model),
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.proofs, model),
                 architectureViolationIndividual);
         return proofIndividual;
     }
@@ -143,7 +149,8 @@ public class ConformanceCheckOntology {
                     ConformanceCheckOntologyClassesAndProperties.getAssertedStatement(model);
             addTripleToStatement(codeModel, triple, assertedStatement);
             proofIndividual.addProperty(
-                    ConformanceCheckOntologyClassesAndProperties.getHasAssertedStatement(model),
+                    ConformanceCheckOntologyClassesAndProperties.get(
+                            ConformanceCheckObjectProperties.hasAssertedStatement, model),
                     assertedStatement);
         }
     }
@@ -164,7 +171,8 @@ public class ConformanceCheckOntology {
                     ConformanceCheckOntologyClassesAndProperties.getNotInferredStatement(model);
             addTripleToStatement(codeModel, triple, notInferredStatement);
             proofIndividual.addProperty(
-                    ConformanceCheckOntologyClassesAndProperties.getHasNotInferredStatement(model),
+                    ConformanceCheckOntologyClassesAndProperties.get(
+                            ConformanceCheckObjectProperties.hasNotInferredStatement, model),
                     notInferredStatement);
         }
     }
@@ -176,12 +184,17 @@ public class ConformanceCheckOntology {
         Resource objectResource = codeModel.getResource(triple.getObject());
 
         statement.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getHasSubject(model), subjectResource);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.hasSubject, model),
+                subjectResource);
         statement.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getHasPredicate(model),
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.hasPredicate, model),
                 predicateResource);
         statement.addProperty(
-                ConformanceCheckOntologyClassesAndProperties.getHasObject(model), objectResource);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckObjectProperties.hasObject, model),
+                objectResource);
     }
 
     public OntModel getModel() {
