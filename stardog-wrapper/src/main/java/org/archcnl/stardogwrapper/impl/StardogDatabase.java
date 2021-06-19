@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
-import org.archcnl.stardogwrapper.api.exceptions.MissingBuilderArgumentException;
 import org.archcnl.stardogwrapper.api.exceptions.NoConnectionToStardogServerException;
 
 public class StardogDatabase implements StardogDatabaseAPI {
@@ -139,46 +138,6 @@ public class StardogDatabase implements StardogDatabaseAPI {
     @Override
     public String getPassword() {
         return _password;
-    }
-
-    public static class StardogDatabaseBuilder {
-        private String _server;
-        private String _databaseName;
-
-        private String _userName;
-        private String _password;
-
-        public StardogDatabaseBuilder server(String server) {
-            _server = server;
-            return this;
-        }
-
-        public StardogDatabaseBuilder databaseName(String name) {
-            _databaseName = name;
-            return this;
-        }
-
-        public StardogDatabaseBuilder userName(String userName) {
-            _userName = userName;
-            return this;
-        }
-
-        public StardogDatabaseBuilder password(String password) {
-            _password = password;
-            return this;
-        }
-
-        public StardogDatabaseAPI createStardogDatabase() throws MissingBuilderArgumentException {
-            if (_server != null
-                    && _databaseName != null
-                    && _userName != null
-                    && _password != null) {
-                return new StardogDatabase(_server, _databaseName, _userName, _password);
-            } else {
-                LOG.error("CONNECTION ERROR: At least one argument was not set.");
-                throw new MissingBuilderArgumentException("At least one argument was not set.");
-            }
-        }
     }
 
     @Override
