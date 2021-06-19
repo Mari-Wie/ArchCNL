@@ -19,8 +19,8 @@ public class CompilationUnitFactoryTest {
 
     @Before
     public void initialize() {
-        path = "./src/test/java/examples/SimpleClass.java";
-        pathToNonJavaFile = "./src/test/java/examples/test.xml";
+        path = "./src/test/resources/examples/SimpleClass.java";
+        pathToNonJavaFile = "./src/test/resources/examples/test.xml";
     }
 
     @Test
