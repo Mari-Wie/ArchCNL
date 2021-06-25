@@ -1,7 +1,6 @@
 package org.archcnl.owlify.famix.ontology;
 
 import java.io.InputStream;
-
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
@@ -88,10 +87,7 @@ public class FamixOntology {
         AnnotationInstanceAttribute,
         Attribute,
         Method,
-        DeclaredException,
         Parameter,
-        CaughtException,
-        ThrownException,
         LocalVariable,
         Inheritance;
 

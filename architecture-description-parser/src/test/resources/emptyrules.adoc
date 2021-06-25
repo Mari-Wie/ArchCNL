@@ -1,0 +1,13 @@
+File for testing empty architecture and mapping rules.
+Also, it is checked whether unrelated text is not treated as rules.
+
+=== More text
+
+Lorem ipsum...
+
+=== Rules
+
+[role="rule"]
+
+[role="mapping"]
+
