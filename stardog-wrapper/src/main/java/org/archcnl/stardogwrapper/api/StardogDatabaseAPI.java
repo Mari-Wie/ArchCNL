@@ -22,7 +22,8 @@ public interface StardogDatabaseAPI {
      * Retrieves an ontology from the database which matches the given RDF context. The ontology is
      * written to the specified file as an OWL file in XML format.
      *
-     * @param context The URI of the context.
+     * @param context The URI of the context. Stardog stores the data in a named RDF graph. The
+     *     context is the name of this graph.
      * @param path The path to the file to which the retrieved model will be written.
      */
     void writeModelFromContextToFile(String context, String path);
