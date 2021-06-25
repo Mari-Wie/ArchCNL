@@ -44,7 +44,7 @@ public class ComplexClass extends EmptyClass implements Interface {
     }
 
     @Override
-    @Deprecated(since = "never")
+    @FictiveAnnotation(intValue= 0, doubleValue = 3.14)
     public char primitiveMethod(boolean parameter_with_long__snake_case_name) {
         List<Character> characters = new ArrayList<>();
         return 0;

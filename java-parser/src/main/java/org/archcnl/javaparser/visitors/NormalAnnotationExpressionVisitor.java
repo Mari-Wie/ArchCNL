@@ -18,8 +18,6 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
 
     private AnnotationInstance annotationInstance;
 
-    public NormalAnnotationExpressionVisitor() {}
-
     @Override
     public void visit(NormalAnnotationExpr n, Void arg) {
         List<AnnotationMemberValuePair> values =
