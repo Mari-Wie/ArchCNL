@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -15,6 +16,7 @@ import org.archcnl.common.datatypes.ConstraintViolation.ConstraintViolationBuild
 import org.archcnl.common.datatypes.RuleType;
 import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
+import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckDatatypeProperties;
 import org.junit.Test;
 
 public class ConformanceCheckImplTest {
@@ -77,34 +79,22 @@ public class ConformanceCheckImplTest {
         actual.read(new FileReader(outputPath), "");
 
         // workaround: remove the checking date
+        DatatypeProperty hasCheckingDate =
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckDatatypeProperties.hasCheckingDate, expected);
         expected.getProperty(
                         ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(
                                 expected),
-                        ConformanceCheckOntologyClassesAndProperties.getDateProperty(expected))
+                        hasCheckingDate)
                 .remove();
+        hasCheckingDate =
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckDatatypeProperties.hasCheckingDate, actual);
         actual.getProperty(
                         ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(
                                 actual),
-                        ConformanceCheckOntologyClassesAndProperties.getDateProperty(actual))
+                        hasCheckingDate)
                 .remove();
-
-        System.out.println("IN EXPECTED BUT NOT IN ACTUAL:");
-        expected.listStatements()
-                .forEachRemaining(
-                        (s) -> {
-                            if (!actual.contains(s)) {
-                                System.out.println(s.toString());
-                            }
-                        });
-
-        System.out.println("IN ACTUAL BUT NOT IN EXPECTED:");
-        actual.listStatements()
-                .forEachRemaining(
-                        (s) -> {
-                            if (!expected.contains(s)) {
-                                System.out.println(s.toString());
-                            }
-                        });
 
         assertTrue(expected.isIsomorphicWith(actual));
     }

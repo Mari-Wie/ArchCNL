@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.common.datatypes.ConstraintViolation;
 import org.archcnl.common.datatypes.StatementTriple;
+import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckDatatypeProperties;
 import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckObjectProperties;
 
 public class ConformanceCheckOntology {
@@ -46,7 +47,8 @@ public class ConformanceCheckOntology {
         conformanceCheckIndividual =
                 ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(model);
         DatatypeProperty dateProperty =
-                ConformanceCheckOntologyClassesAndProperties.getDateProperty(model);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckDatatypeProperties.hasCheckingDate, model);
         conformanceCheckIndividual.addLiteral(
                 dateProperty, Calendar.getInstance().getTime().toString());
     }
@@ -59,7 +61,8 @@ public class ConformanceCheckOntology {
                         model, rule.getId());
 
         DatatypeProperty cnlRepresentationProperty =
-                ConformanceCheckOntologyClassesAndProperties.getCNLRepresentationProperty(model);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckDatatypeProperties.hasRuleRepresentation, model);
         architectureRuleIndividual.addLiteral(cnlRepresentationProperty, rule.getCnlSentence());
 
         ObjectProperty validatesProperty =
@@ -68,7 +71,8 @@ public class ConformanceCheckOntology {
         conformanceCheckIndividual.addProperty(validatesProperty, architectureRuleIndividual);
 
         DatatypeProperty hasRuleIDProperty =
-                ConformanceCheckOntologyClassesAndProperties.getHasRuleIDProperty(model);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckDatatypeProperties.hasRuleID, model);
         architectureRuleIndividual.addLiteral(hasRuleIDProperty, rule.getId());
         architectureRuleIndividualCache.put(rule.getId(), architectureRuleIndividual);
     }
@@ -129,7 +133,8 @@ public class ConformanceCheckOntology {
 
         String ruleType = rule.getType().toString();
         DatatypeProperty datatypeProperty =
-                ConformanceCheckOntologyClassesAndProperties.getHasRuleTypeProperty(model);
+                ConformanceCheckOntologyClassesAndProperties.get(
+                        ConformanceCheckDatatypeProperties.hasRuleType, model);
         architectureRuleIndividual.addLiteral(datatypeProperty, ruleType);
     }
 
