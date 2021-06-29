@@ -3,6 +3,7 @@ package org.archcnl.javaparser.visitors;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -46,6 +47,12 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
                         new Type(typeName, simpleName, false); // primitives types cannot be thrown
             } catch (UnsupportedOperationException e) {
                 LOG.error("Can not calculate type of " + throwExpression, e);
+            } catch (UnsolvedSymbolException e) {
+                LOG.error("Can not solve symbole of " + throwExpression, e);
+            } catch (RuntimeException e) {
+                LOG.error(
+                        "An exception was used that javaparser can not reach: " + throwExpression,
+                        e);
             }
         }
 

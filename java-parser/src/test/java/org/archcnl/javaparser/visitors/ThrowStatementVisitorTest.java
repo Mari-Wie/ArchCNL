@@ -17,6 +17,9 @@ public class ThrowStatementVisitorTest extends GenericVisitorTest<ThrowStatement
             GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
                     + "ExampleClassWithExceptions.java";
 
+    private String pathToTryCatchThrowClass =
+            GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "TryCatchThrow.java";
+
     @Test
     public void testFullyQualifiedNames()
             throws FileIsNotAJavaClassException, FileNotFoundException {
@@ -50,6 +53,17 @@ public class ThrowStatementVisitorTest extends GenericVisitorTest<ThrowStatement
         assertEquals(2, exceptions.size());
         assertTrue(exceptions.contains("IllegalArgumentException"));
         assertTrue(exceptions.contains("IllegalStateException"));
+    }
+
+    @Test
+    public void testTryCatchThrow() throws FileIsNotAJavaClassException, FileNotFoundException {
+        final CompilationUnit unit = CompilationUnitFactory.getFromPath(pathToTryCatchThrowClass);
+
+        unit.accept(visitor, null);
+
+        final List<Type> exceptions = visitor.getThrownExceptionType();
+
+        assertEquals(0, exceptions.size());
     }
 
     @Override
