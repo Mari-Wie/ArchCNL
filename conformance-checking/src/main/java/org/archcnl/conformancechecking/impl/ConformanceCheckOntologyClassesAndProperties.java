@@ -64,59 +64,57 @@ public class ConformanceCheckOntologyClassesAndProperties {
                     + this.name();
         }
     }
-
-    public static Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model) {
+    
+    public Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model) {
         return clazz.createIndividual(model);
     }
-
-    public static Individual createIndividual(
-            ConformanceCheckOntClasses clazz, OntModel model, int id) {
+    
+    public Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model, int id) {
         return clazz.createIndividual(model, Integer.toString(id));
     }
-
+    
     public enum ConformanceCheckOntClasses {
         ConformanceCheck,
-        ArchitectureRule,
-        ArchitectureViolation,
-        Proof,
-        AssertedStatement,
-        NotInferredStatement;
-
+    	ArchitectureRule,
+    	ArchitectureViolation,
+    	Proof,
+    	AssertedStatement,
+    	NotInferredStatement;
+    	
         public Individual createIndividual(OntModel model) {
             String id = getId();
             return createIndividual(model, id);
         }
-
+    	
         public Individual createIndividual(OntModel model, String id) {
-            return model.getOntClass(getUri()).createIndividual(getUri() + id);
+            return model.getOntClass(getUri()).createIndividual(getUri() + getId());
         }
-
+        
         public String getUri() {
-            return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
-                    + this.name();
+            return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()  + this.name();
         }
-
+        
         public String getId() {
-            String id;
-
-            switch (this) {
-                case ArchitectureViolation:
-                    id = Integer.toString(violationId++);
-                    break;
-                case Proof:
-                    id = Integer.toString(proofId++);
-                    break;
-                case AssertedStatement:
-                    id = Integer.toString(assertedId++);
-                    break;
-                case NotInferredStatement:
-                    id = Integer.toString(notInferredId++);
-                    break;
-                default:
-                    id = "";
-                    break;
-            }
-            return id;
+        	String id;
+        	
+        	switch(this) {
+        	case ArchitectureViolation:
+        		id = Integer.toString(violationId++);
+        		break;
+        	case Proof:
+        		id = Integer.toString(proofId++);
+        		break;
+        	case AssertedStatement:
+        		id = Integer.toString(assertedId++);
+        		break;
+        	case NotInferredStatement:
+        		id = Integer.toString(notInferredId++);
+        		break;
+        	default:
+        		id = "";
+        		break;
+        	}
+        	return id;
         }
     }
 }
