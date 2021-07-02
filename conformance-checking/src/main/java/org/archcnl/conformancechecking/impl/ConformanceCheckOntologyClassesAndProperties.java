@@ -65,11 +65,11 @@ public class ConformanceCheckOntologyClassesAndProperties {
         }
     }
     
-    public Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model) {
+    public static Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model) {
         return clazz.createIndividual(model);
     }
     
-    public Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model, int id) {
+    public static Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model, int id) {
         return clazz.createIndividual(model, Integer.toString(id));
     }
     
@@ -87,7 +87,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
         }
     	
         public Individual createIndividual(OntModel model, String id) {
-            return model.getOntClass(getUri()).createIndividual(getUri() + getId());
+            return model.getOntClass(getUri()).createIndividual(getUri() + id);
         }
         
         public String getUri() {
