@@ -84,16 +84,16 @@ public class ConformanceCheckImplTest {
                 ConformanceCheckOntologyClassesAndProperties.get(
                         ConformanceCheckDatatypeProperties.hasCheckingDate, expected);
         expected.getProperty(
-                        ConformanceCheckOntologyClassesAndProperties.createIndividual(ConformanceCheckOntClasses.ConformanceCheck,
-                                expected),
+                        ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                                ConformanceCheckOntClasses.ConformanceCheck, expected),
                         hasCheckingDate)
                 .remove();
         hasCheckingDate =
                 ConformanceCheckOntologyClassesAndProperties.get(
                         ConformanceCheckDatatypeProperties.hasCheckingDate, actual);
         actual.getProperty(
-                        ConformanceCheckOntologyClassesAndProperties.createIndividual(ConformanceCheckOntClasses.ConformanceCheck,
-                                actual),
+                        ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                                ConformanceCheckOntClasses.ConformanceCheck, actual),
                         hasCheckingDate)
                 .remove();
 
