@@ -18,39 +18,6 @@ public class ConformanceCheckOntologyClassesAndProperties {
         return NAMESPACE;
     }
 
-    public static Individual getConformanceCheckIndividual(OntModel model) {
-        OntClass conformanceClass = model.getOntClass(NAMESPACE + "ConformanceCheck");
-        return model.createIndividual(NAMESPACE + "ConformanceCheck", conformanceClass);
-    }
-
-    public static Individual getArchitectureRuleIndividual(OntModel model, int id) {
-        OntClass ruleClass = model.getOntClass(NAMESPACE + "ArchitectureRule");
-        return model.createIndividual(NAMESPACE + "ArchitectureRule" + id, ruleClass);
-    }
-
-    public static Individual getArchitectureViolationIndividual(OntModel model) {
-        OntClass violationClass = model.getOntClass(NAMESPACE + "ArchitectureViolation");
-        return model.createIndividual(
-                NAMESPACE + "ArchitectureViolation" + violationId++, violationClass);
-    }
-
-    public static Individual getProofIndividual(OntModel model) {
-        OntClass proofClass = model.getOntClass(NAMESPACE + "Proof");
-        return model.createIndividual(NAMESPACE + "Proof" + proofId++, proofClass);
-    }
-
-    public static Individual getAssertedStatement(OntModel model) {
-        OntClass statementClass = model.getOntClass(NAMESPACE + "AssertedStatement");
-        return model.createIndividual(
-                NAMESPACE + "AssertedStatement" + assertedId++, statementClass);
-    }
-
-    public static Individual getNotInferredStatement(OntModel model) {
-        OntClass statementClass = model.getOntClass(NAMESPACE + "NotInferredStatement");
-        return model.createIndividual(
-                NAMESPACE + "NotInferredStatement" + notInferredId++, statementClass);
-    }
-
     public static DatatypeProperty get(ConformanceCheckDatatypeProperties prop, OntModel model) {
         return prop.getProperty(model);
     }
@@ -96,6 +63,59 @@ public class ConformanceCheckOntologyClassesAndProperties {
         public String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
+        }
+    }
+    
+    public Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model) {
+        return clazz.createIndividual(model);
+    }
+    
+    public Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model, int id) {
+        return clazz.createIndividual(model, Integer.toString(id));
+    }
+    
+    public enum ConformanceCheckOntClasses {
+        ConformanceCheck,
+    	ArchitectureRule,
+    	ArchitectureViolation,
+    	Proof,
+    	AssertedStatement,
+    	NotInferredStatement;
+    	
+        public Individual createIndividual(OntModel model) {
+            String id = getId();
+            return createIndividual(model, id);
+        }
+    	
+        public Individual createIndividual(OntModel model, String id) {
+            return model.getOntClass(getUri()).createIndividual(getUri() + getId());
+        }
+        
+        public String getUri() {
+            return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()  + this.name();
+        }
+        
+        public String getId() {
+        	String id;
+        	
+        	switch(this) {
+        	case ArchitectureViolation:
+        		id = Integer.toString(violationId++);
+        		break;
+        	case Proof:
+        		id = Integer.toString(proofId++);
+        		break;
+        	case AssertedStatement:
+        		id = Integer.toString(assertedId++);
+        		break;
+        	case NotInferredStatement:
+        		id = Integer.toString(notInferredId++);
+        		break;
+        	default:
+        		id = "";
+        		break;
+        	}
+        	return id;
         }
     }
 }
