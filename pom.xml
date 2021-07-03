@@ -19,7 +19,7 @@
 		<apachejenaVersion>3.3.0</apachejenaVersion>
 		<owlapiVersion>5.1.0</owlapiVersion>
 		<junitVersion>4.12</junitVersion>
-		<surefireVersion>2.12.4</surefireVersion>
+		<surefireVersion>2.22.2</surefireVersion>
 		<spotlessVersion>2.9.0</spotlessVersion>
 		<antlr.version>4.9.2</antlr.version>
 		<buildHelperVersion>3.2.0</buildHelperVersion>
