@@ -48,7 +48,7 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
             } catch (UnsupportedOperationException e) {
                 LOG.error("Can not calculate type of " + throwExpression, e);
             } catch (UnsolvedSymbolException e) {
-                LOG.error("Can not solve symbole of " + throwExpression, e);
+                LOG.error("Can not solve symbol of " + throwExpression, e);
             } catch (RuntimeException e) {
                 LOG.error(
                         "An exception was used that javaparser can not reach: " + throwExpression,

@@ -55,6 +55,14 @@ public class ThrowStatementVisitorTest extends GenericVisitorTest<ThrowStatement
         assertTrue(exceptions.contains("IllegalStateException"));
     }
 
+    /*
+     * This test uses a specific class, where an external exception is thrown.
+     * An external exception is an exception, that is not inside the path analyzed by the javaparser.
+     * The javaparser fails with either a UnsolvedSymbolException or a RuntimeException,
+     *  depending on the type of usage.
+     * This test is to verify, that this error is logged but does not stop the execution.
+     * That is why it is expected, that no exceptions are found.
+     */
     @Test
     public void testTryCatchThrow() throws FileIsNotAJavaClassException, FileNotFoundException {
         final CompilationUnit unit = CompilationUnitFactory.getFromPath(pathToTryCatchThrowClass);
