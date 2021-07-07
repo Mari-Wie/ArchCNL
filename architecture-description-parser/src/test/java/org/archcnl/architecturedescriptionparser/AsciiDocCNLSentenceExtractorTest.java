@@ -17,16 +17,18 @@ public class AsciiDocCNLSentenceExtractorTest {
     }
 
     @Test
-    public void testArchitectureRuleExtraction() {
-        assertThat(
+    public void givenAsciiDocCNLSentenceExtractor_whenExtractArchitectureRules_thenArchitectureRulesExtracted() {
+        //given, when, then
+    	assertThat(
                 extractor.extractArchitectureRules(),
                 CoreMatchers.hasItems(
                         "Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne."));
     }
 
     @Test
-    public void testMappingRuleExtraction() {
-        assertThat(
+    public void givenAsciiDocCNLSentenceExtractor_whenExtractMappingRules_thenMappingRulesExtracted() {
+    	//given, when, then
+    	assertThat(
                 extractor.extractMappingRules(),
                 CoreMatchers.hasItems(
                         "useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?f rdf:type famix:Attribute) (?class famix:definesAttribute ?f) (?f famix:hasDeclaredType ?class2) -> (?class architecture:use ?class2)",
