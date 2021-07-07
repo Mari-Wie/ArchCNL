@@ -16,10 +16,15 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.common.datatypes.RuleType;
 import org.hamcrest.CoreMatchers;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class AsciiDocArc42ParserTest {
 
+	@Rule
+    public ExpectedException thrown = ExpectedException.none();
+	
     @Test
     public void givenAsciiDocParser_whenParseMappingRulesFromDocumentation_thenMappingIsCorrect() throws IOException {        
     	//given
@@ -49,22 +54,29 @@ public class AsciiDocArc42ParserTest {
                                 "No LayerTwo can use LayerOne.",
                                 RuleType.NEGATION,
                                 "./src/test/resources/architecture1.owl")));
+    }
 
+        @Test
+        public void givenConstraintFile_whenReadByOntologyModel_thenExpectedModelIsIsomorphicWithActualModel() throws IOException {
         // assert that the 1st rule's constraint file is correct
-        //given, when
-        Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        expected0.read("./src/test/resources/architecture0-expected.owl");
+        //given
+        Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);        
         Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        
+        //when
+        expected0.read("./src/test/resources/architecture0-expected.owl");
         actual0.read("./src/test/resources/architecture0.owl");        
         
         //then
         assertTrue(expected0.isIsomorphicWith(actual0));
 
         // assert that the 2nd rule's constraint file is correct
-        //given, when
+        //given
         Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        expected1.read("./src/test/resources/architecture1-expected.owl");
         Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        
+        //when
+        expected1.read("./src/test/resources/architecture1-expected.owl");
         actual1.read("./src/test/resources/architecture1.owl");
         
         //then
