@@ -18,74 +18,74 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.archcnl.common.datatypes.ArchitectureRule;
 import org.archcnl.common.datatypes.RuleType;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class ArchitectureToCodeMapperTest {
 
-    private ArchitectureToCodeMapper mapper;
-    private OntModel codeModel;
-    private Individual classA;
-    private Individual classB;
-    private OntModel ruleModel;
-    private ObjectProperty uses;
-    private final String ontology = "http://test.owl";
-    private final String namespace = ontology + "#";
+	private ArchitectureToCodeMapper mapper;
+	private OntModel codeModel;
+	private Individual classA;
+	private Individual classB;
+	private OntModel ruleModel;
+	private ObjectProperty uses;
+	private final String ontology = "http://test.owl";
+	private final String namespace = ontology + "#";
 
-    @Before
-    public void setUp() {
-        mapper = new ArchitectureToCodeMapper();
-        createCodeModel();
-        createRuleModel();
-    }
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
-    @Test
-    public void testMapping() throws IOException {
-        // Architecture model: classA must not use classB.
-        List<ArchitectureRule> architectureModel =
-                Arrays.asList(
-                        new ArchitectureRule(
-                                0, "No ClassA can use ClassB.", RuleType.NEGATION, ruleModel));
+	@Before
+	public void setUp() {
+		mapper = new ArchitectureToCodeMapper();
+		createCodeModel();
+		createRuleModel();
+	}
 
-        // Mapping: When some class imports another one, the former uses the latter.
-        BufferedReader reader =
-                new BufferedReader(
-                        new StringReader(
-                                "@prefix test: <"
-                                        + namespace
-                                        + ">\n"
-                                        + "[useMapping: (?class test:import ?class2) (?class rdf:type test:class) (?class2 rdf:type test:class) -> (?class test:use ?class2)]\n"));
+	private void createCodeModel() {
+		// Code model: The class classA imports the class classB.
+		codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		OntClass clazz = codeModel.createClass(namespace + "class");
+		classA = codeModel.createIndividual(namespace + "classA", clazz);
+		classB = codeModel.createIndividual(namespace + "classB", clazz);
+		ObjectProperty imports = codeModel.createObjectProperty(namespace + "import");
+		codeModel.add(classA, imports, classB);
+	}
 
-        Model mappedModel = mapper.executeMapping(codeModel, architectureModel, reader);
+	private void createRuleModel() {
+		// Create Rule model
+		ruleModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		ruleModel.createOntology(ontology);
 
-        assertTrue(mappedModel.containsAll(codeModel));
-        assertTrue(mappedModel.containsResource(uses));
-        assertTrue(mappedModel.contains(classA, uses, classB));
-    }
+		uses = ruleModel.createObjectProperty(namespace + "use");
+		OntClass ruleClassA = ruleModel.createClass(namespace + "ClassA");
+		OntClass ruleClassB = ruleModel.createClass(namespace + "ClassB");
 
-    private void createCodeModel() {
-        // Code model: The class classA imports the class classB.
-        codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        OntClass clazz = codeModel.createClass(namespace + "class");
-        classA = codeModel.createIndividual(namespace + "classA", clazz);
-        classB = codeModel.createIndividual(namespace + "classB", clazz);
-        ObjectProperty imports = codeModel.createObjectProperty(namespace + "import");
+		Restriction someValuesFrom = ruleModel.createSomeValuesFromRestriction(null, uses, ruleClassB);
+		OntClass complement = ruleModel.createComplementClass(null, someValuesFrom);
 
-        codeModel.add(classA, imports, classB);
-    }
+		ruleClassA.setSuperClass(complement);
+	}
 
-    private void createRuleModel() {
-        ruleModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+	@Test
+	public void givenArchitectureRules_whenExecuteMapping_thenModelContainsRules() throws IOException {
+		// given
+		// Architecture model: classA must not use classB.
+		List<ArchitectureRule> architectureModel = Arrays
+				.asList(new ArchitectureRule(0, "No ClassA can use ClassB.", RuleType.NEGATION, ruleModel));
 
-        ruleModel.createOntology(ontology);
+		// Mapping: When some class imports another one, the former uses the latter.
+		BufferedReader reader = new BufferedReader(new StringReader("@prefix test: <" + namespace + ">\n"
+				+ "[useMapping: (?class test:import ?class2) (?class rdf:type test:class) (?class2 rdf:type test:class) -> (?class test:use ?class2)]\n"));
 
-        uses = ruleModel.createObjectProperty(namespace + "use");
-        OntClass ruleClassA = ruleModel.createClass(namespace + "ClassA");
-        OntClass ruleClassB = ruleModel.createClass(namespace + "ClassB");
+		// when
+		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, reader);
 
-        Restriction someValuesFrom =
-                ruleModel.createSomeValuesFromRestriction(null, uses, ruleClassB);
-        OntClass complement = ruleModel.createComplementClass(null, someValuesFrom);
+		// then
+		assertTrue(mappedModel.containsAll(codeModel));
+		assertTrue(mappedModel.containsResource(uses));
+		assertTrue(mappedModel.contains(classA, uses, classB));
+	}
 
-        ruleClassA.setSuperClass(complement);
-    }
 }

@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class AsciiDocArc42ParserTest {
-
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
