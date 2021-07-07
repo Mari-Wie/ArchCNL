@@ -23,71 +23,62 @@ import org.junit.rules.ExpectedException;
 public class AsciiDocArc42ParserTest {
 
 	@Rule
-    public ExpectedException thrown = ExpectedException.none();
-	
-    @Test
-    public void givenAsciiDocParser_whenParseMappingRulesFromDocumentation_thenMappingIsCorrect() throws IOException {        
-    	//given
-    	Map<String, String> namespaces = new HashMap<>();
-        namespaces.put("architectureconformance", "http://arch-ont.org/ontologies/architectureconformance#");
-        namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
-        namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
-        AsciiDocArc42Parser parser = new AsciiDocArc42Parser(namespaces);
-        Path testRulesPath = Paths.get("./src/test/resources/rules.adoc");
-        List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(testRulesPath, "./src/test/resources");
-        
-        //when
-        parser.parseMappingRulesFromDocumentation(testRulesPath, "./src/test/resources/mapping.txt");
+	public ExpectedException thrown = ExpectedException.none();
 
-        //then
-        assertEquals(2, rules.size());
-        assertThat(
-                rules,
-                CoreMatchers.hasItems(
-                        new ArchitectureRule(
-                                0,
-                                "Only LayerOne can use LayerTwo.",
-                                RuleType.DOMAIN_RANGE,
-                                "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(
-                                1,
-                                "No LayerTwo can use LayerOne.",
-                                RuleType.NEGATION,
-                                "./src/test/resources/architecture1.owl")));
-    }
+	@Test
+	public void givenAsciiDocParser_whenParseMappingRulesFromDocumentation_thenMappingIsCorrect() throws IOException {
+		// given
+		Map<String, String> namespaces = new HashMap<>();
+		namespaces.put("architectureconformance", "http://arch-ont.org/ontologies/architectureconformance#");
+		namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
+		namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
+		AsciiDocArc42Parser parser = new AsciiDocArc42Parser(namespaces);
+		Path testRulesPath = Paths.get("./src/test/resources/rules.adoc");
+		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(testRulesPath, "./src/test/resources");
 
-        @Test
-        public void givenConstraintFile_whenReadByOntologyModel_thenExpectedModelIsIsomorphicWithActualModel() throws IOException {
-        // assert that the 1st rule's constraint file is correct
-        //given
-        Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);        
-        Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        
-        //when
-        expected0.read("./src/test/resources/architecture0-expected.owl");
-        actual0.read("./src/test/resources/architecture0.owl");        
-        
-        //then
-        assertTrue(expected0.isIsomorphicWith(actual0));
+		// when
+		parser.parseMappingRulesFromDocumentation(testRulesPath, "./src/test/resources/mapping.txt");
 
-        // assert that the 2nd rule's constraint file is correct
-        //given
-        Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        
-        //when
-        expected1.read("./src/test/resources/architecture1-expected.owl");
-        actual1.read("./src/test/resources/architecture1.owl");
-        
-        //then
-        assertTrue(expected1.isIsomorphicWith(actual1));
+		// then
+		assertEquals(2, rules.size());
+		assertThat(rules,
+				CoreMatchers.hasItems(
+						new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE,
+								"./src/test/resources/architecture0.owl"),
+						new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
+								"./src/test/resources/architecture1.owl")));
+	}
 
-        // assert that the mapping.txt is correct
-        //given, when, then
-        assertTrue(
-                FileUtils.contentEqualsIgnoreEOL(
-                        new File("./src/test/resources/mapping.txt"),
-                        new File("./src/test/resources/mapping-expected.txt"),
-                        "utf-8"));
-    }
+	@Test
+	public void givenConstraintFile_whenReadByOntologyModel_thenExpectedModelIsIsomorphicWithActualModel()
+			throws IOException {
+		// assert that the 1st rule's constraint file is correct
+		// given
+		Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+
+		// when
+		expected0.read("./src/test/resources/architecture0-expected.owl");
+		actual0.read("./src/test/resources/architecture0.owl");
+
+		// then
+		assertTrue(expected0.isIsomorphicWith(actual0));
+
+		// assert that the 2nd rule's constraint file is correct
+		// given
+		Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+
+		// when
+		expected1.read("./src/test/resources/architecture1-expected.owl");
+		actual1.read("./src/test/resources/architecture1.owl");
+
+		// then
+		assertTrue(expected1.isIsomorphicWith(actual1));
+
+		// assert that the mapping.txt is correct
+		// given, when, then
+		assertTrue(FileUtils.contentEqualsIgnoreEOL(new File("./src/test/resources/mapping.txt"),
+				new File("./src/test/resources/mapping-expected.txt"), "utf-8"));
+	}
 }
