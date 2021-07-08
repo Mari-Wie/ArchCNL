@@ -70,8 +70,8 @@ public class ConformanceCheckOntologyClassesAndProperties {
     }
 
     public static Individual createIndividual(
-            ConformanceCheckOntClasses clazz, OntModel model, int id) {
-        return clazz.createIndividual(model, Integer.toString(id));
+            ConformanceCheckOntClasses clazz, OntModel model, Integer id) {
+        return clazz.createIndividual(model, id);
     }
 
     public enum ConformanceCheckOntClasses {
@@ -83,37 +83,41 @@ public class ConformanceCheckOntologyClassesAndProperties {
         NotInferredStatement;
 
         public Individual createIndividual(OntModel model) {
-            String id = getId();
+            Integer id = getId();
             return createIndividual(model, id);
         }
 
-        public Individual createIndividual(OntModel model, String id) {
-            return model.getOntClass(getUri()).createIndividual(getUri() + id);
+        public Individual createIndividual(OntModel model, Integer id) {
+        	if(id == null) {
+        		return model.getOntClass(getUri()).createIndividual(getUri());
+        	} else {
+        		return model.getOntClass(getUri()).createIndividual(getUri() + id);        		
+        	}
         }
 
-        public String getUri() {
+        private String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
 
-        public String getId() {
-            String id;
+        private Integer getId() {
+            Integer id;
 
             switch (this) {
                 case ArchitectureViolation:
-                    id = Integer.toString(violationId++);
+                    id = violationId++;
                     break;
                 case Proof:
-                    id = Integer.toString(proofId++);
+                    id = proofId++;
                     break;
                 case AssertedStatement:
-                    id = Integer.toString(assertedId++);
+                    id = assertedId++;
                     break;
                 case NotInferredStatement:
-                    id = Integer.toString(notInferredId++);
+                    id = notInferredId++;
                     break;
                 default:
-                    id = "";
+                    id = null;
                     break;
             }
             return id;
