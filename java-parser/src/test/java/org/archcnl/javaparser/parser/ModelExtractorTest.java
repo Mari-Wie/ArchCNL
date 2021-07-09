@@ -35,15 +35,19 @@ public class ModelExtractorTest {
     final ModelExtractor extractor = new ModelExtractor(
         Arrays.asList(Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT)));
     final Project model = extractor.extractCodeModel();
-    // Check if project doesn't have unexpected files
-    Assert.assertEquals(6, model.getSourceFiles().size());
-    // assign the different source files, fail when an unexpected file is contained
     model.getSourceFiles().stream()
         .forEach(f -> projectUnits.put(f.getPath().getFileName().toString(), f));
   }
 
   @Test
-  public void givenValidIterfaceInJavaProject_whenModelExtract_thenInterfaceCorrectParsed() {
+  public void givenValidJavaProject_whenModelExtract_thenAllExpectedFilesFound() {
+    // given example java project, when extractor search and extract source files in setUp()
+    // then project shouldn't have any unexpected files
+    Assert.assertEquals(6, projectUnits.size());
+  }
+
+  @Test
+  public void givenValidInterfaceInJavaProject_whenModelExtract_thenInterfaceCorrectParsed() {
     // given, when
     final SourceFile interfaceUnderTest = projectUnits.get(ModelExtractorTest.INTERFACE);
     // then
