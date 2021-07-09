@@ -122,11 +122,14 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
     Assert.assertEquals("java.util.List", method4.getLocalVariables().get(0).getType().getName());
     Assert.assertFalse(method4.getLocalVariables().get(0).getType().isPrimitive());
     Assert.assertEquals(2, method4.getAnnotations().size());
-    final var deprecationAnnotationMethod4 = method4.getAnnotations().get(1);
-    Assert.assertEquals("Deprecated", deprecationAnnotationMethod4.getName());
-    final var sinceNeverValuePairMethod4 = deprecationAnnotationMethod4.getValues().get(0);
-    Assert.assertEquals("since", sinceNeverValuePairMethod4.getName());
-    Assert.assertEquals("\"never\"", sinceNeverValuePairMethod4.getValue());
+    final var multipleValueAnnotationMethod4 = method4.getAnnotations().get(1);
+    Assert.assertEquals("FictiveAnnotation", multipleValueAnnotationMethod4.getName());
+    final var intValuePairMethod4 = multipleValueAnnotationMethod4.getValues().get(0);
+    Assert.assertEquals("intValue", intValuePairMethod4.getName());
+    Assert.assertEquals("0", intValuePairMethod4.getValue());
+    final var doubleValuePairMethod4 = multipleValueAnnotationMethod4.getValues().get(1);
+    Assert.assertEquals("doubleValue", doubleValuePairMethod4.getName());
+    Assert.assertEquals("3.14", doubleValuePairMethod4.getValue());
   }
 
   @Override
