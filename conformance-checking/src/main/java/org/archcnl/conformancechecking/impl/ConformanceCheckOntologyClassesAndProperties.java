@@ -87,7 +87,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
         }
 
         public Individual createIndividual(OntModel model, int id) {
-        	//id == -1 indicates that no id counter exists
+            // id == -1 indicates that no id counter exists
             if (id == -1) {
                 return model.getOntClass(getUri()).createIndividual(getUri());
             } else {
@@ -102,21 +102,22 @@ public class ConformanceCheckOntologyClassesAndProperties {
 
         /**
          * Returns and increments the id counter for the given class
+         *
          * @return the current id counter of the class or -1 when no id counter exists
          */
         private int getId() {
-        	switch(this) {
-            case ArchitectureViolation:
-                return violationId++;
-            case Proof:
-            	return proofId++;
-            case AssertedStatement:
-            	return assertedId++;
-            case NotInferredStatement:
-                return notInferredId++;
-            default:
-                return -1;
-        	}
+            switch (this) {
+                case ArchitectureViolation:
+                    return violationId++;
+                case Proof:
+                    return proofId++;
+                case AssertedStatement:
+                    return assertedId++;
+                case NotInferredStatement:
+                    return notInferredId++;
+                default:
+                    return -1;
+            }
         }
     }
 }
