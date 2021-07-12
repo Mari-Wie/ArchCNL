@@ -30,7 +30,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
     }
 
     public static Individual createIndividual(
-            ConformanceCheckOntClasses clazz, OntModel model, Integer id) {
+            ConformanceCheckOntClasses clazz, OntModel model, int id) {
         return clazz.createIndividual(model, id);
     }
 
@@ -46,7 +46,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
             return model.getDatatypeProperty(getUri());
         }
 
-        public String getUri() {
+        private String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
@@ -68,7 +68,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
             return model.getObjectProperty(getUri());
         }
 
-        public String getUri() {
+        private String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
@@ -77,51 +77,46 @@ public class ConformanceCheckOntologyClassesAndProperties {
     public enum ConformanceCheckOntClasses {
         ConformanceCheck,
         ArchitectureRule,
-        ArchitectureViolation {
-            @Override
-            protected Integer getId() {
-                return violationId++;
-            }
-        },
-        Proof {
-            @Override
-            protected Integer getId() {
-                return proofId++;
-            }
-        },
-        AssertedStatement {
-            @Override
-            protected Integer getId() {
-                return assertedId++;
-            }
-        },
-        NotInferredStatement {
-            @Override
-            protected Integer getId() {
-                return notInferredId++;
-            }
-        };
+        ArchitectureViolation,
+        Proof,
+        AssertedStatement,
+        NotInferredStatement;
 
         public Individual createIndividual(OntModel model) {
-            Integer id = getId();
-            return createIndividual(model, id);
+            return createIndividual(model, getId());
         }
 
-        public Individual createIndividual(OntModel model, Integer id) {
-            if (id == null) {
+        public Individual createIndividual(OntModel model, int id) {
+        	//id == -1 indicates that no id counter exists
+            if (id == -1) {
                 return model.getOntClass(getUri()).createIndividual(getUri());
             } else {
                 return model.getOntClass(getUri()).createIndividual(getUri() + id);
             }
         }
 
-        public String getUri() {
+        private String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
 
-        protected Integer getId() {
-            return null;
+        /**
+         * Returns and increments the id counter for the given class
+         * @return the current id counter of the class or -1 when no id counter exists
+         */
+        private int getId() {
+        	switch(this) {
+            case ArchitectureViolation:
+                return violationId++;
+            case Proof:
+            	return proofId++;
+            case AssertedStatement:
+            	return assertedId++;
+            case NotInferredStatement:
+                return notInferredId++;
+            default:
+                return -1;
+        	}
         }
     }
 }
