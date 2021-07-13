@@ -46,7 +46,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
             return model.getDatatypeProperty(getUri());
         }
 
-        private String getUri() {
+        public String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
@@ -68,7 +68,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
             return model.getObjectProperty(getUri());
         }
 
-        private String getUri() {
+        public String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
@@ -95,7 +95,7 @@ public class ConformanceCheckOntologyClassesAndProperties {
             }
         }
 
-        private String getUri() {
+        public String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
         }
