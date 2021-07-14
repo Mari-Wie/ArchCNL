@@ -3,7 +3,6 @@ package org.archcnl.conformancechecking.impl;
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
-import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
 public class ConformanceCheckOntologyClassesAndProperties {
@@ -18,45 +17,21 @@ public class ConformanceCheckOntologyClassesAndProperties {
         return NAMESPACE;
     }
 
-    public static Individual getConformanceCheckIndividual(OntModel model) {
-        OntClass conformanceClass = model.getOntClass(NAMESPACE + "ConformanceCheck");
-        return model.createIndividual(NAMESPACE + "ConformanceCheck", conformanceClass);
-    }
-
-    public static Individual getArchitectureRuleIndividual(OntModel model, int id) {
-        OntClass ruleClass = model.getOntClass(NAMESPACE + "ArchitectureRule");
-        return model.createIndividual(NAMESPACE + "ArchitectureRule" + id, ruleClass);
-    }
-
-    public static Individual getArchitectureViolationIndividual(OntModel model) {
-        OntClass violationClass = model.getOntClass(NAMESPACE + "ArchitectureViolation");
-        return model.createIndividual(
-                NAMESPACE + "ArchitectureViolation" + violationId++, violationClass);
-    }
-
-    public static Individual getProofIndividual(OntModel model) {
-        OntClass proofClass = model.getOntClass(NAMESPACE + "Proof");
-        return model.createIndividual(NAMESPACE + "Proof" + proofId++, proofClass);
-    }
-
-    public static Individual getAssertedStatement(OntModel model) {
-        OntClass statementClass = model.getOntClass(NAMESPACE + "AssertedStatement");
-        return model.createIndividual(
-                NAMESPACE + "AssertedStatement" + assertedId++, statementClass);
-    }
-
-    public static Individual getNotInferredStatement(OntModel model) {
-        OntClass statementClass = model.getOntClass(NAMESPACE + "NotInferredStatement");
-        return model.createIndividual(
-                NAMESPACE + "NotInferredStatement" + notInferredId++, statementClass);
-    }
-
     public static DatatypeProperty get(ConformanceCheckDatatypeProperties prop, OntModel model) {
         return prop.getProperty(model);
     }
 
     public static ObjectProperty get(ConformanceCheckObjectProperties prop, OntModel model) {
         return prop.getProperty(model);
+    }
+
+    public static Individual createIndividual(ConformanceCheckOntClasses clazz, OntModel model) {
+        return clazz.createIndividual(model);
+    }
+
+    public static Individual createIndividual(
+            ConformanceCheckOntClasses clazz, OntModel model, int id) {
+        return clazz.createIndividual(model, id);
     }
 
     public enum ConformanceCheckDatatypeProperties {
@@ -96,6 +71,53 @@ public class ConformanceCheckOntologyClassesAndProperties {
         public String getUri() {
             return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
                     + this.name();
+        }
+    }
+
+    public enum ConformanceCheckOntClasses {
+        ConformanceCheck,
+        ArchitectureRule,
+        ArchitectureViolation,
+        Proof,
+        AssertedStatement,
+        NotInferredStatement;
+
+        public Individual createIndividual(OntModel model) {
+            return createIndividual(model, getId());
+        }
+
+        public Individual createIndividual(OntModel model, int id) {
+            // id == -1 indicates that no id counter exists
+            if (id == -1) {
+                return model.getOntClass(getUri()).createIndividual(getUri());
+            } else {
+                return model.getOntClass(getUri()).createIndividual(getUri() + id);
+            }
+        }
+
+        public String getUri() {
+            return ConformanceCheckOntologyClassesAndProperties.getOntologyNamespace()
+                    + this.name();
+        }
+
+        /**
+         * Returns and increments the id counter for the given class
+         *
+         * @return the current id counter of the class or -1 when no id counter exists
+         */
+        private int getId() {
+            switch (this) {
+                case ArchitectureViolation:
+                    return violationId++;
+                case Proof:
+                    return proofId++;
+                case AssertedStatement:
+                    return assertedId++;
+                case NotInferredStatement:
+                    return notInferredId++;
+                default:
+                    return -1;
+            }
         }
     }
 }

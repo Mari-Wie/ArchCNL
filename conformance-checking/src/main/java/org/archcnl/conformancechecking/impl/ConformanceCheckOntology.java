@@ -19,6 +19,7 @@ import org.archcnl.common.datatypes.ConstraintViolation;
 import org.archcnl.common.datatypes.StatementTriple;
 import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckDatatypeProperties;
 import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckObjectProperties;
+import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckOntClasses;
 
 public class ConformanceCheckOntology {
 
@@ -45,7 +46,8 @@ public class ConformanceCheckOntology {
     public void newConformanceCheck() {
         LOG.trace("Starting newConformanceCheck ...");
         conformanceCheckIndividual =
-                ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(model);
+                ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                        ConformanceCheckOntClasses.ConformanceCheck, model);
         DatatypeProperty dateProperty =
                 ConformanceCheckOntologyClassesAndProperties.get(
                         ConformanceCheckDatatypeProperties.hasCheckingDate, model);
@@ -57,8 +59,8 @@ public class ConformanceCheckOntology {
         LOG.trace("Starting storeArchitectureRule ...");
         LOG.debug("Storing architecture rule:" + rule.getCnlSentence());
         architectureRuleIndividual =
-                ConformanceCheckOntologyClassesAndProperties.getArchitectureRuleIndividual(
-                        model, rule.getId());
+                ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                        ConformanceCheckOntClasses.ArchitectureRule, model, rule.getId());
 
         DatatypeProperty cnlRepresentationProperty =
                 ConformanceCheckOntologyClassesAndProperties.get(
@@ -85,8 +87,8 @@ public class ConformanceCheckOntology {
                         + rule.getCnlSentence());
         LOG.debug("Creating ArchitectureViolation ...");
         architectureViolationIndividual =
-                ConformanceCheckOntologyClassesAndProperties.getArchitectureViolationIndividual(
-                        model);
+                ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                        ConformanceCheckOntClasses.ArchitectureViolation, model);
 
         conformanceCheckIndividual.addProperty(
                 ConformanceCheckOntologyClassesAndProperties.get(
@@ -119,7 +121,8 @@ public class ConformanceCheckOntology {
     private Individual addNewProof() {
         LOG.debug("Creating Proof ...");
         Individual proofIndividual =
-                ConformanceCheckOntologyClassesAndProperties.getProofIndividual(model);
+                ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                        ConformanceCheckOntClasses.Proof, model);
 
         proofIndividual.addProperty(
                 ConformanceCheckOntologyClassesAndProperties.get(
@@ -151,7 +154,8 @@ public class ConformanceCheckOntology {
                             + triple.getObject());
 
             Individual assertedStatement =
-                    ConformanceCheckOntologyClassesAndProperties.getAssertedStatement(model);
+                    ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                            ConformanceCheckOntClasses.AssertedStatement, model);
             addTripleToStatement(codeModel, triple, assertedStatement);
             proofIndividual.addProperty(
                     ConformanceCheckOntologyClassesAndProperties.get(
@@ -173,7 +177,8 @@ public class ConformanceCheckOntology {
                             + triple.getObject());
 
             Individual notInferredStatement =
-                    ConformanceCheckOntologyClassesAndProperties.getNotInferredStatement(model);
+                    ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                            ConformanceCheckOntClasses.NotInferredStatement, model);
             addTripleToStatement(codeModel, triple, notInferredStatement);
             proofIndividual.addProperty(
                     ConformanceCheckOntologyClassesAndProperties.get(

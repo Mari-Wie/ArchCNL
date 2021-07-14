@@ -17,6 +17,7 @@ import org.archcnl.common.datatypes.RuleType;
 import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckDatatypeProperties;
+import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties.ConformanceCheckOntClasses;
 import org.junit.Test;
 
 public class ConformanceCheckImplTest {
@@ -83,16 +84,16 @@ public class ConformanceCheckImplTest {
                 ConformanceCheckOntologyClassesAndProperties.get(
                         ConformanceCheckDatatypeProperties.hasCheckingDate, expected);
         expected.getProperty(
-                        ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(
-                                expected),
+                        ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                                ConformanceCheckOntClasses.ConformanceCheck, expected),
                         hasCheckingDate)
                 .remove();
         hasCheckingDate =
                 ConformanceCheckOntologyClassesAndProperties.get(
                         ConformanceCheckDatatypeProperties.hasCheckingDate, actual);
         actual.getProperty(
-                        ConformanceCheckOntologyClassesAndProperties.getConformanceCheckIndividual(
-                                actual),
+                        ConformanceCheckOntologyClassesAndProperties.createIndividual(
+                                ConformanceCheckOntClasses.ConformanceCheck, actual),
                         hasCheckingDate)
                 .remove();
 
