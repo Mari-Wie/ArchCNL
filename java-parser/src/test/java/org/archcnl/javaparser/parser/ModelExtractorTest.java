@@ -1,12 +1,9 @@
 package org.archcnl.javaparser.parser;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.archcnl.owlify.famix.codemodel.Annotation;
 import org.archcnl.owlify.famix.codemodel.ClassInterfaceEnum;
 import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
@@ -14,238 +11,251 @@ import org.archcnl.owlify.famix.codemodel.Method;
 import org.archcnl.owlify.famix.codemodel.Namespace;
 import org.archcnl.owlify.famix.codemodel.Project;
 import org.archcnl.owlify.famix.codemodel.SourceFile;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ModelExtractorTest {
 
-    private final Path pathToPackage = Path.of("./src/test/resources/examples/extractortest/");
+  private static final String PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT =
+      "./src/test/resources/examples/extractortest/";
+  private static final String SUBPACKAGE_NAME_IN_EXAMPLE_PROJECT = "/namespace/";
 
-    private SourceFile classA;
-    private SourceFile classB;
-    private SourceFile classC;
-    private SourceFile enumeration;
-    private SourceFile annotation;
-    private SourceFile interfacE;
+  private static final String CLASS_A = "ClassA.java";
+  private static final String CLASS_B = "ClassB.java";
+  private static final String CLASS_C = "ClassC.java";
+  private static final String ENUM = "Enumeration.java";
+  private static final String ANNOTATION = "Annotation.java";
+  private static final String INTERFACE = "Interface.java";
 
-    @Before
-    public void setUp() {
-        ModelExtractor extractor = new ModelExtractor(Arrays.asList(pathToPackage));
+  private Map<String, SourceFile> projectUnits = new HashMap<>();
 
-        Project model = extractor.extractCodeModel();
+  @Before
+  public void setUp() {
+    final ModelExtractor extractor = new ModelExtractor(
+        Arrays.asList(Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT)));
+    final Project model = extractor.extractCodeModel();
+    model.getSourceFiles().stream()
+        .forEach(f -> projectUnits.put(f.getPath().getFileName().toString(), f));
+  }
 
-        assertEquals(6, model.getSourceFiles().size());
+  @Test
+  public void givenValidJavaProject_whenModelExtract_thenAllExpectedFilesFound() {
+    // given example java project, when extractor search and extract source files in setUp()
+    // then project shouldn't have any unexpected files
+    Assert.assertEquals(6, projectUnits.size());
+  }
 
-        // assign the different source files, fail when an unexpected file is contained
-        for (SourceFile f : model.getSourceFiles()) {
-            switch (f.getPath().getFileName().toString()) {
-                case "ClassA.java":
-                    classA = f;
-                    break;
-                case "ClassB.java":
-                    classB = f;
-                    break;
-                case "ClassC.java":
-                    classC = f;
-                    break;
-                case "Annotation.java":
-                    annotation = f;
-                    break;
-                case "Enumeration.java":
-                    enumeration = f;
-                    break;
-                case "Interface.java":
-                    interfacE = f;
-                    break;
-                default:
-                    fail("Unexpected source file in code model: " + f.getPath());
-            }
-        }
-    }
+  @Test
+  public void givenValidInterfaceInJavaProject_whenModelExtract_thenInterfaceCorrectParsed() {
+    // given, when
+    final SourceFile interfaceUnderTest = projectUnits.get(ModelExtractorTest.INTERFACE);
+    // then
+    Assert.assertEquals(0, interfaceUnderTest.getImportedTypes().size());
+    Assert.assertEquals(Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT,
+        ModelExtractorTest.INTERFACE), interfaceUnderTest.getPath());
+    Assert.assertEquals(Namespace.TOP, interfaceUnderTest.getNamespace().getParent().getParent());
+    Assert.assertEquals("examples.extractortest", interfaceUnderTest.getNamespace().getName());
+    Assert.assertEquals("examples", interfaceUnderTest.getNamespace().getParent().getName());
+    Assert.assertEquals(1, interfaceUnderTest.getDefinedTypes().size());
+    Assert.assertTrue(interfaceUnderTest.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-    @Test
-    public void testInterface() {
-        assertEquals(0, interfacE.getImportedTypes().size());
-        assertEquals(Path.of(pathToPackage + "/Interface.java"), interfacE.getPath());
-        assertEquals(Namespace.TOP, interfacE.getNamespace().getParent().getParent());
-        assertEquals("examples.extractortest", interfacE.getNamespace().getName());
-        assertEquals("examples", interfacE.getNamespace().getParent().getName());
+    final ClassOrInterface type = (ClassOrInterface) interfaceUnderTest.getDefinedTypes().get(0);
+    Assert.assertEquals(0, type.getSupertypes().size());
+    Assert.assertEquals(1, type.getMethods().size());
 
-        assertEquals(1, interfacE.getDefinedTypes().size());
-        assertTrue(interfacE.getDefinedTypes().get(0) instanceof ClassOrInterface);
+    final Method method = type.getMethods().get(0);
+    Assert.assertEquals("someMethod", method.getName());
+    Assert.assertEquals(0, method.getAnnotations().size());
+    Assert.assertEquals(0, method.getLocalVariables().size());
+    Assert.assertFalse(method.isConstructor());
+    Assert.assertEquals(1, method.getDeclaredExceptions().size());
+    Assert.assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
+  }
 
-        ClassOrInterface type = (ClassOrInterface) interfacE.getDefinedTypes().get(0);
+  @Test
+  public void givenValidClassInRootPackage_whenModelExtract_thenClassCorrectParsed() {
+    // given, when
+    final SourceFile classUnderTest = projectUnits.get(ModelExtractorTest.CLASS_A);
+    // then
+    Assert.assertEquals(3, classUnderTest.getImportedTypes().size());
+    Assert.assertEquals(Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT,
+        ModelExtractorTest.CLASS_A), classUnderTest.getPath());
+    Assert.assertEquals(Namespace.TOP, classUnderTest.getNamespace().getParent().getParent());
+    Assert.assertEquals("examples.extractortest", classUnderTest.getNamespace().getName());
+    Assert.assertEquals("examples", classUnderTest.getNamespace().getParent().getName());
+    Assert.assertEquals(1, classUnderTest.getDefinedTypes().size());
+    Assert.assertTrue(classUnderTest.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-        assertEquals(0, type.getSupertypes().size());
-        assertEquals(1, type.getMethods().size());
+    final ClassOrInterface type = (ClassOrInterface) classUnderTest.getDefinedTypes().get(0);
+    Assert.assertEquals(2, type.getFields().size());
+    Assert.assertEquals(1, type.getSupertypes().size());
+  }
 
-        Method method = type.getMethods().get(0);
+  @Test
+  public void givenValidClassInSubpackage_whenModelExtract_thenClassCorrectParsed() {
+    // given, when
+    final SourceFile classUnderTest = projectUnits.get(ModelExtractorTest.CLASS_B);
+    // then
+    Assert.assertEquals(0, classUnderTest.getImportedTypes().size());
+    Assert.assertEquals(
+        Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT,
+            ModelExtractorTest.SUBPACKAGE_NAME_IN_EXAMPLE_PROJECT, ModelExtractorTest.CLASS_B),
+        classUnderTest.getPath());
+    Assert.assertEquals(Namespace.TOP,
+        classUnderTest.getNamespace().getParent().getParent().getParent());
+    Assert.assertEquals("examples.extractortest.namespace",
+        classUnderTest.getNamespace().getName());
+    Assert.assertEquals("examples.extractortest",
+        classUnderTest.getNamespace().getParent().getName());
+    Assert.assertEquals("examples",
+        classUnderTest.getNamespace().getParent().getParent().getName());
 
-        assertEquals("someMethod", method.getName());
-        assertEquals(0, method.getAnnotations().size());
-        assertEquals(0, method.getLocalVariables().size());
-        assertFalse(method.isConstructor());
-        assertEquals(1, method.getDeclaredExceptions().size());
-        assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
-    }
+    Assert.assertEquals(1, classUnderTest.getDefinedTypes().size());
+    Assert.assertTrue(classUnderTest.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-    @Test
-    public void testClassA() {
-        assertEquals(3, classA.getImportedTypes().size());
-        assertEquals(Path.of(pathToPackage + "/ClassA.java"), classA.getPath());
-        assertEquals(Namespace.TOP, classA.getNamespace().getParent().getParent());
-        assertEquals("examples.extractortest", classA.getNamespace().getName());
-        assertEquals("examples", classA.getNamespace().getParent().getName());
+    final ClassOrInterface type = (ClassOrInterface) classUnderTest.getDefinedTypes().get(0);
+    Assert.assertEquals(1, type.getFields().size());
+    Assert.assertEquals(0, type.getSupertypes().size());
+    Assert.assertEquals(2, type.getMethods().size());
 
-        assertEquals(1, classA.getDefinedTypes().size());
-        assertTrue(classA.getDefinedTypes().get(0) instanceof ClassOrInterface);
+    final Method method1 = type.getMethods().get(0);
+    Assert.assertEquals("ClassB", method1.getName());
+    Assert.assertEquals(0, method1.getAnnotations().size());
+    Assert.assertEquals(0, method1.getLocalVariables().size());
+    Assert.assertTrue(method1.isConstructor());
+    Assert.assertEquals(0, method1.getDeclaredExceptions().size());
+    Assert.assertEquals(0, method1.getThrownExceptions().size());
+    Assert.assertEquals(1, method1.getParameters().size());
+    Assert.assertEquals("b", method1.getParameters().get(0).getName());
+    Assert.assertEquals("int", method1.getParameters().get(0).getType().getName());
+    Assert.assertEquals(1, method1.getModifiers().size());
+    Assert.assertEquals("public", method1.getModifiers().get(0).getName());
 
-        ClassOrInterface type = (ClassOrInterface) classA.getDefinedTypes().get(0);
+    final Method method2 = type.getMethods().get(1);
+    Assert.assertEquals("ClassB", method2.getName());
+    Assert.assertEquals(1, method2.getAnnotations().size());
+    Assert.assertEquals("Deprecated", method2.getAnnotations().get(0).getName());
+    Assert.assertEquals(0, method2.getAnnotations().get(0).getValues().size());
+    Assert.assertEquals(1, method2.getLocalVariables().size());
+    Assert.assertEquals("int", method2.getLocalVariables().get(0).getType().getName());
+    Assert.assertEquals("local", method2.getLocalVariables().get(0).getName());
+    Assert.assertTrue(method2.isConstructor());
+    Assert.assertEquals(0, method2.getDeclaredExceptions().size());
+    Assert.assertEquals(0, method2.getThrownExceptions().size());
+    Assert.assertEquals(1, method2.getParameters().size());
+    Assert.assertEquals("b", method2.getParameters().get(0).getName());
+    Assert.assertEquals("Integer", method2.getParameters().get(0).getType().getSimpleName());
+    Assert.assertEquals(1, method2.getModifiers().size());
+    Assert.assertEquals("public", method2.getModifiers().get(0).getName());
+  }
 
-        assertEquals(2, type.getFields().size());
-        assertEquals(1, type.getSupertypes().size());
-    }
+  @Test
+  public void givenValidClassInSubpackageWithStaticMethod_whenModelExtract_thenClassCorrectParsed() {
+    // given, when
+    final SourceFile classUnderTest = projectUnits.get(ModelExtractorTest.CLASS_C);
+    // then
+    Assert.assertEquals(2, classUnderTest.getImportedTypes().size());
+    Assert.assertEquals(
+        Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT,
+            ModelExtractorTest.SUBPACKAGE_NAME_IN_EXAMPLE_PROJECT, ModelExtractorTest.CLASS_C),
+        classUnderTest.getPath());
+    Assert.assertEquals(Namespace.TOP,
+        classUnderTest.getNamespace().getParent().getParent().getParent());
+    Assert.assertEquals("examples.extractortest.namespace",
+        classUnderTest.getNamespace().getName());
+    Assert.assertEquals("examples.extractortest",
+        classUnderTest.getNamespace().getParent().getName());
+    Assert.assertEquals("examples",
+        classUnderTest.getNamespace().getParent().getParent().getName());
 
-    @Test
-    public void testClassB() {
-        assertEquals(0, classB.getImportedTypes().size());
-        assertEquals(Path.of(pathToPackage + "/namespace/ClassB.java"), classB.getPath());
-        assertEquals(Namespace.TOP, classB.getNamespace().getParent().getParent().getParent());
-        assertEquals("examples.extractortest.namespace", classB.getNamespace().getName());
-        assertEquals("examples.extractortest", classB.getNamespace().getParent().getName());
-        assertEquals("examples", classB.getNamespace().getParent().getParent().getName());
+    Assert.assertEquals(1, classUnderTest.getDefinedTypes().size());
+    Assert.assertTrue(classUnderTest.getDefinedTypes().get(0) instanceof ClassOrInterface);
 
-        assertEquals(1, classB.getDefinedTypes().size());
-        assertTrue(classB.getDefinedTypes().get(0) instanceof ClassOrInterface);
+    final ClassOrInterface type = (ClassOrInterface) classUnderTest.getDefinedTypes().get(0);
+    Assert.assertEquals(0, type.getFields().size());
+    Assert.assertEquals(0, type.getSupertypes().size());
+    Assert.assertEquals(1, type.getMethods().size());
 
-        ClassOrInterface type = (ClassOrInterface) classB.getDefinedTypes().get(0);
+    final Method method = type.getMethods().get(0);
+    Assert.assertEquals("staticMethod", method.getName());
+    Assert.assertEquals(0, method.getAnnotations().size());
+    Assert.assertEquals(1, method.getLocalVariables().size());
+    Assert.assertEquals("localVariable", method.getLocalVariables().get(0).getName());
+    Assert.assertFalse(method.isConstructor());
+    Assert.assertEquals(1, method.getDeclaredExceptions().size());
+    Assert.assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
+    Assert.assertEquals(1, method.getCaughtExceptions().size());
+    Assert.assertEquals("java.lang.NullPointerException",
+        method.getCaughtExceptions().get(0).getName());
+    Assert.assertEquals(1, method.getParameters().size());
+    Assert.assertEquals("items", method.getParameters().get(0).getName());
+    Assert.assertEquals(2, method.getModifiers().size());
+    Assert.assertEquals("public", method.getModifiers().get(0).getName());
+    Assert.assertEquals("static", method.getModifiers().get(1).getName());
+  }
 
-        assertEquals(1, type.getFields().size());
-        assertEquals(0, type.getSupertypes().size());
-        assertEquals(2, type.getMethods().size());
+  @Test
+  public void givenValidAnnotationInJavaProject_whenModelExtract_thenAnnotationCorrectParsed() {
+    // given, when
+    final SourceFile annotationUnderTest = projectUnits.get(ModelExtractorTest.ANNOTATION);
+    // then
+    Assert.assertEquals(0, annotationUnderTest.getImportedTypes().size());
+    Assert.assertEquals(
+        Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT,
+            ModelExtractorTest.SUBPACKAGE_NAME_IN_EXAMPLE_PROJECT, ModelExtractorTest.ANNOTATION),
+        annotationUnderTest.getPath());
+    Assert.assertEquals(Namespace.TOP,
+        annotationUnderTest.getNamespace().getParent().getParent().getParent());
+    Assert.assertEquals("examples.extractortest.namespace",
+        annotationUnderTest.getNamespace().getName());
+    Assert.assertEquals("examples.extractortest",
+        annotationUnderTest.getNamespace().getParent().getName());
+    Assert.assertEquals("examples",
+        annotationUnderTest.getNamespace().getParent().getParent().getName());
+    Assert.assertEquals(1, annotationUnderTest.getDefinedTypes().size());
+    Assert.assertTrue(annotationUnderTest.getDefinedTypes().get(0) instanceof Annotation);
 
-        Method method1 = type.getMethods().get(0);
+    final Annotation type = (Annotation) annotationUnderTest.getDefinedTypes().get(0);
+    Assert.assertEquals(1, type.getAttributes().size());
+    Assert.assertEquals("description", type.getAttributes().get(0).getName());
+    Assert.assertEquals("String", type.getAttributes().get(0).getType().getSimpleName());
+  }
 
-        assertEquals("ClassB", method1.getName());
-        assertEquals(0, method1.getAnnotations().size());
-        assertEquals(0, method1.getLocalVariables().size());
-        assertTrue(method1.isConstructor());
-        assertEquals(0, method1.getDeclaredExceptions().size());
-        assertEquals(0, method1.getThrownExceptions().size());
-        assertEquals(1, method1.getParameters().size());
-        assertEquals("b", method1.getParameters().get(0).getName());
-        assertEquals("int", method1.getParameters().get(0).getType().getName());
-        assertEquals(1, method1.getModifiers().size());
-        assertEquals("public", method1.getModifiers().get(0).getName());
+  @Test
+  public void givenValidEnumInJavaProject_whenModelExtract_thenEnumCorrectParsed() {
+    // given, when
+    final SourceFile enumUnderTest = projectUnits.get(ModelExtractorTest.ENUM);
+    // then
+    Assert.assertEquals(0, enumUnderTest.getImportedTypes().size());
+    Assert.assertEquals(Path.of(ModelExtractorTest.PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT,
+        ModelExtractorTest.ENUM), enumUnderTest.getPath());
+    Assert.assertEquals(Namespace.TOP, enumUnderTest.getNamespace().getParent().getParent());
+    Assert.assertEquals("examples.extractortest", enumUnderTest.getNamespace().getName());
+    Assert.assertEquals("examples", enumUnderTest.getNamespace().getParent().getName());
+    Assert.assertEquals(1, enumUnderTest.getDefinedTypes().size());
+    Assert.assertTrue(enumUnderTest.getDefinedTypes().get(0) instanceof ClassInterfaceEnum);
 
-        Method method2 = type.getMethods().get(1);
+    final ClassInterfaceEnum type = (ClassInterfaceEnum) enumUnderTest.getDefinedTypes().get(0);
+    Assert.assertEquals(0, type.getNestedTypes().size());
+    Assert.assertEquals(1, type.getMethods().size());
+    Assert.assertEquals(1, type.getFields().size());
+    Assert.assertEquals(0, type.getFields().get(0).getAnnotations().size());
+    Assert.assertEquals(1, type.getFields().get(0).getModifiers().size());
+    Assert.assertEquals("private", type.getFields().get(0).getModifiers().get(0).getName());
+    Assert.assertEquals("String", type.getFields().get(0).getType().getSimpleName());
+    Assert.assertEquals("field", type.getFields().get(0).getName());
 
-        assertEquals("ClassB", method2.getName());
-        assertEquals(1, method2.getAnnotations().size());
-        assertEquals("Deprecated", method2.getAnnotations().get(0).getName());
-        assertEquals(0, method2.getAnnotations().get(0).getValues().size());
-        assertEquals(1, method2.getLocalVariables().size());
-        assertEquals("int", method2.getLocalVariables().get(0).getType().getName());
-        assertEquals("local", method2.getLocalVariables().get(0).getName());
-        assertTrue(method2.isConstructor());
-        assertEquals(0, method2.getDeclaredExceptions().size());
-        assertEquals(0, method2.getThrownExceptions().size());
-        assertEquals(1, method2.getParameters().size());
-        assertEquals("b", method2.getParameters().get(0).getName());
-        assertEquals("Integer", method2.getParameters().get(0).getType().getSimpleName());
-        assertEquals(1, method2.getModifiers().size());
-        assertEquals("public", method2.getModifiers().get(0).getName());
-    }
-
-    @Test
-    public void testClassC() {
-        assertEquals(2, classC.getImportedTypes().size());
-        assertEquals(Path.of(pathToPackage + "/namespace/ClassC.java"), classC.getPath());
-        assertEquals(Namespace.TOP, classC.getNamespace().getParent().getParent().getParent());
-        assertEquals("examples.extractortest.namespace", classC.getNamespace().getName());
-        assertEquals("examples.extractortest", classC.getNamespace().getParent().getName());
-        assertEquals("examples", classC.getNamespace().getParent().getParent().getName());
-
-        assertEquals(1, classC.getDefinedTypes().size());
-        assertTrue(classC.getDefinedTypes().get(0) instanceof ClassOrInterface);
-
-        ClassOrInterface type = (ClassOrInterface) classC.getDefinedTypes().get(0);
-
-        assertEquals(0, type.getFields().size());
-        assertEquals(0, type.getSupertypes().size());
-        assertEquals(1, type.getMethods().size());
-
-        Method method = type.getMethods().get(0);
-
-        assertEquals("staticMethod", method.getName());
-        assertEquals(0, method.getAnnotations().size());
-        assertEquals(1, method.getLocalVariables().size());
-        assertEquals("localVariable", method.getLocalVariables().get(0).getName());
-        assertFalse(method.isConstructor());
-        assertEquals(1, method.getDeclaredExceptions().size());
-        assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
-        assertEquals(1, method.getCaughtExceptions().size());
-        assertEquals(
-                "java.lang.NullPointerException", method.getCaughtExceptions().get(0).getName());
-        assertEquals(1, method.getParameters().size());
-        assertEquals("items", method.getParameters().get(0).getName());
-        assertEquals(2, method.getModifiers().size());
-        assertEquals("public", method.getModifiers().get(0).getName());
-        assertEquals("static", method.getModifiers().get(1).getName());
-    }
-
-    @Test
-    public void testAnnotation() {
-        assertEquals(0, annotation.getImportedTypes().size());
-        assertEquals(Path.of(pathToPackage + "/namespace/Annotation.java"), annotation.getPath());
-        assertEquals(Namespace.TOP, annotation.getNamespace().getParent().getParent().getParent());
-        assertEquals("examples.extractortest.namespace", annotation.getNamespace().getName());
-        assertEquals("examples.extractortest", annotation.getNamespace().getParent().getName());
-        assertEquals("examples", annotation.getNamespace().getParent().getParent().getName());
-
-        assertEquals(1, annotation.getDefinedTypes().size());
-        assertTrue(annotation.getDefinedTypes().get(0) instanceof Annotation);
-
-        Annotation type = (Annotation) annotation.getDefinedTypes().get(0);
-
-        assertEquals(1, type.getAttributes().size());
-        assertEquals("description", type.getAttributes().get(0).getName());
-        assertEquals("String", type.getAttributes().get(0).getType().getSimpleName());
-    }
-
-    @Test
-    public void testEnumeration() {
-        assertEquals(0, enumeration.getImportedTypes().size());
-        assertEquals(Path.of(pathToPackage + "/Enumeration.java"), enumeration.getPath());
-        assertEquals(Namespace.TOP, enumeration.getNamespace().getParent().getParent());
-        assertEquals("examples.extractortest", enumeration.getNamespace().getName());
-        assertEquals("examples", enumeration.getNamespace().getParent().getName());
-
-        assertEquals(1, enumeration.getDefinedTypes().size());
-        assertTrue(enumeration.getDefinedTypes().get(0) instanceof ClassInterfaceEnum);
-
-        ClassInterfaceEnum type = (ClassInterfaceEnum) enumeration.getDefinedTypes().get(0);
-
-        assertEquals(0, type.getNestedTypes().size());
-        assertEquals(1, type.getMethods().size());
-        assertEquals(1, type.getFields().size());
-        assertEquals(0, type.getFields().get(0).getAnnotations().size());
-        assertEquals(1, type.getFields().get(0).getModifiers().size());
-        assertEquals("private", type.getFields().get(0).getModifiers().get(0).getName());
-        assertEquals("String", type.getFields().get(0).getType().getSimpleName());
-        assertEquals("field", type.getFields().get(0).getName());
-
-        Method method = type.getMethods().get(0);
-
-        assertEquals("isOtherValue", method.getName());
-        assertEquals(0, method.getAnnotations().size());
-        assertEquals(0, method.getLocalVariables().size());
-        assertFalse(method.isConstructor());
-        assertEquals(0, method.getDeclaredExceptions().size());
-        assertEquals(0, method.getThrownExceptions().size());
-        assertEquals(0, method.getParameters().size());
-        assertEquals(1, method.getModifiers().size());
-        assertEquals("public", method.getModifiers().get(0).getName());
-        assertEquals("boolean", method.getReturnType().getName());
-    }
+    final Method method = type.getMethods().get(0);
+    Assert.assertEquals("isOtherValue", method.getName());
+    Assert.assertEquals(0, method.getAnnotations().size());
+    Assert.assertEquals(0, method.getLocalVariables().size());
+    Assert.assertFalse(method.isConstructor());
+    Assert.assertEquals(0, method.getDeclaredExceptions().size());
+    Assert.assertEquals(0, method.getThrownExceptions().size());
+    Assert.assertEquals(0, method.getParameters().size());
+    Assert.assertEquals(1, method.getModifiers().size());
+    Assert.assertEquals("public", method.getModifiers().get(0).getName());
+    Assert.assertEquals("boolean", method.getReturnType().getName());
+  }
 }

@@ -1,147 +1,149 @@
 package org.archcnl.kotlinparser.visitor;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
 import org.archcnl.owlify.famix.codemodel.ClassOrInterface;
 import org.archcnl.owlify.famix.codemodel.DefinedType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class KotlinTypeVisitorTest {
-    @Test
-    void testKotlinTypeOfComplexClass() throws IOException {
-        var namedFileContext = TestHelper.getKotlinFileContextFromFile("ComplexClass.kt");
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
-        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+  @Test
+  void givenKotlinClass_whenKotlinTypeVisitorVisit_thenTypeFound() throws IOException {
+    // given
+    final var namedFileContext = TestHelper.getKotlinFileContextFromFile(TestHelper.COMPLEX_CLASS);
+    final var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+    // when
+    kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+    // then
+    Assertions.assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
 
-        assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
+    final DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
+    Assertions.assertEquals("ComplexClass", definedType.getSimpleName());
+    Assertions.assertEquals("example.ComplexClass", definedType.getName());
+    Assertions.assertTrue(definedType instanceof ClassOrInterface);
 
-        DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
+    final ClassOrInterface definedClass = (ClassOrInterface) definedType;
+    Assertions.assertFalse(definedClass.isInterface());
 
-        assertEquals("ComplexClass", definedType.getSimpleName());
-        assertEquals("example.ComplexClass", definedType.getName());
+    final var methodsOfDefinedClass = definedClass.getMethods();
+    Assertions.assertEquals(4, methodsOfDefinedClass.size());
 
-        assertTrue(definedType instanceof ClassOrInterface);
+    final var calculateAreaMethod = methodsOfDefinedClass.get(0);
+    Assertions.assertEquals("calculateArea()", calculateAreaMethod.getSignature());
 
-        ClassOrInterface definedClass = (ClassOrInterface) definedType;
+    final var stringMethod = methodsOfDefinedClass.get(1);
+    Assertions.assertEquals("stringMethod()", stringMethod.getSignature());
 
-        assertFalse(definedClass.isInterface());
+    final var referenceMethod = methodsOfDefinedClass.get(2);
+    Assertions.assertEquals("referenceMethod(ClassInSubpackage?)", referenceMethod.getSignature());
 
-        var methodsOfDefinedClass = definedClass.getMethods();
-        assertEquals(4, methodsOfDefinedClass.size());
+    final var primitiveMethod = methodsOfDefinedClass.get(3);
+    Assertions.assertEquals("primitiveMethod(Boolean)", primitiveMethod.getSignature());
 
-        var calculateAreaMethod = methodsOfDefinedClass.get(0);
-        assertEquals("calculateArea()", calculateAreaMethod.getSignature());
+    final var deprecatedAnnotationOfFirstMethod =
+        methodsOfDefinedClass.get(0).getAnnotations().get(0);
+    Assertions.assertNotNull(deprecatedAnnotationOfFirstMethod);
+    Assertions.assertEquals("Deprecated", deprecatedAnnotationOfFirstMethod.getName());
 
-        var stringMethod = methodsOfDefinedClass.get(1);
-        assertEquals("stringMethod()", stringMethod.getSignature());
+    final var deprecatedAnnotationValues = deprecatedAnnotationOfFirstMethod.getValues();
+    Assertions.assertEquals(1, deprecatedAnnotationValues.size());
+    Assertions.assertEquals("message", deprecatedAnnotationValues.get(0).getName());
+    Assertions.assertEquals("\"nicht mehr verwenden\"",
+        deprecatedAnnotationValues.get(0).getValue());
+  }
 
-        var referenceMethod = methodsOfDefinedClass.get(2);
-        assertEquals("referenceMethod(ClassInSubpackage?)", referenceMethod.getSignature());
+  @Test
+  void givenKotlinClassInSubpackage_whenKotlinTypeVisitorVisit_thenTypeFound() throws IOException {
+    // given
+    final var namedFileContext = TestHelper.getKotlinFileContextFromFile(TestHelper.SUBPACKAGE,
+        TestHelper.CLASS_IN_SUBPACKAGE);
+    final var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+    // when
+    kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+    // then
+    Assertions.assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
 
-        var primitiveMethod = methodsOfDefinedClass.get(3);
-        assertEquals("primitiveMethod(Boolean)", primitiveMethod.getSignature());
+    final DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
+    Assertions.assertEquals("ClassInSubpackage", definedType.getSimpleName());
+    Assertions.assertEquals("example.subpackage.ClassInSubpackage", definedType.getName());
+  }
 
-        var deprecatedAnnotationOfFirstMethod =
-                methodsOfDefinedClass.get(0).getAnnotations().get(0);
-        assertNotNull(deprecatedAnnotationOfFirstMethod);
-        assertEquals("Deprecated", deprecatedAnnotationOfFirstMethod.getName());
-        var deprecatedAnnotationValues = deprecatedAnnotationOfFirstMethod.getValues();
-        assertEquals(1, deprecatedAnnotationValues.size());
-        assertEquals("message", deprecatedAnnotationValues.get(0).getName());
-        assertEquals("\"nicht mehr verwenden\"", deprecatedAnnotationValues.get(0).getValue());
-    }
+  @Test
+  void givenKotlinClassWithInnerClass_whenKotlinTypeVisitorVisit_thenAllTypesFound()
+      throws IOException {
+    // given
+    final var namedFileContext =
+        TestHelper.getKotlinFileContextFromFile(TestHelper.CLASS_WITH_INNER_CLASS);
+    final var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+    // when
+    kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+    // then
+    Assertions.assertEquals(3, kotlinTypeVisitor.getDefinedTypes().size());
 
-    @Test
-    void testKotlinTypeOfClassInSubpackage() throws IOException {
-        var namedFileContext =
-                TestHelper.getKotlinFileContextFromFile("subpackage", "ClassInSubpackage.kt");
+    final DefinedType outerClass = kotlinTypeVisitor.getDefinedTypes().get(0);
+    Assertions.assertEquals("ClassWithInnerClass", outerClass.getSimpleName());
+    Assertions.assertEquals("example.ClassWithInnerClass", outerClass.getName());
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
-        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+    final DefinedType innerClass = kotlinTypeVisitor.getDefinedTypes().get(1);
+    Assertions.assertEquals("InnerClass", innerClass.getSimpleName());
+    Assertions.assertEquals("example.ClassWithInnerClass.InnerClass", innerClass.getName());
 
-        assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
+    final DefinedType insideClass = kotlinTypeVisitor.getDefinedTypes().get(2);
+    Assertions.assertEquals("InsideClass", insideClass.getSimpleName());
+    Assertions.assertEquals("example.ClassWithInnerClass.InnerClass.InsideClass",
+        insideClass.getName());
+  }
 
-        DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
+  @Test
+  void givenKotlinInterface_whenKotlinTypeVisitorVisit_thenTypeFound() throws IOException {
+    // given
+    final var namedFileContext = TestHelper.getKotlinFileContextFromFile(TestHelper.INTERFACE);
+    final var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
+    // when
+    kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+    // then
+    Assertions.assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
 
-        assertEquals("ClassInSubpackage", definedType.getSimpleName());
-        assertEquals("example.subpackage.ClassInSubpackage", definedType.getName());
-    }
+    final DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
+    Assertions.assertEquals("Interface", definedType.getSimpleName());
+    Assertions.assertEquals("example.Interface", definedType.getName());
+    Assertions.assertTrue(definedType instanceof ClassOrInterface);
 
-    @Test
-    void testKotlinTypeOfClassWithInnerClass() throws IOException {
-        var namedFileContext = TestHelper.getKotlinFileContextFromFile("ClassWithInnerClass.kt");
+    final ClassOrInterface definedClass = (ClassOrInterface) definedType;
+    Assertions.assertTrue(definedClass.isInterface());
 
-        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
-        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
+    final var methodsOfInterface = definedClass.getMethods();
+    Assertions.assertEquals(5, methodsOfInterface.size());
 
-        assertEquals(3, kotlinTypeVisitor.getDefinedTypes().size());
+    final var annotationsOfFirstMethod = methodsOfInterface.get(0).getAnnotations();
+    Assertions.assertEquals(0, annotationsOfFirstMethod.size());
 
-        DefinedType outerClass = kotlinTypeVisitor.getDefinedTypes().get(0);
-        DefinedType innerClass = kotlinTypeVisitor.getDefinedTypes().get(1);
-        DefinedType insideClass = kotlinTypeVisitor.getDefinedTypes().get(2);
+    final var annotationsOfSecondMethod = methodsOfInterface.get(1).getAnnotations();
+    Assertions.assertEquals(0, annotationsOfSecondMethod.size());
 
-        assertEquals("ClassWithInnerClass", outerClass.getSimpleName());
-        assertEquals("example.ClassWithInnerClass", outerClass.getName());
+    final var annotationsOfThirdMethod = methodsOfInterface.get(2).getAnnotations();
+    Assertions.assertEquals(0, annotationsOfThirdMethod.size());
 
-        assertEquals("InnerClass", innerClass.getSimpleName());
-        assertEquals("example.ClassWithInnerClass.InnerClass", innerClass.getName());
+    final var annotationsOfFourthMethod = methodsOfInterface.get(3).getAnnotations();
+    Assertions.assertEquals(1, annotationsOfFourthMethod.size());
+    final var getAnnotationFourthMethod = annotationsOfFourthMethod.get(0);
+    Assertions.assertEquals("GET", getAnnotationFourthMethod.getName());
+    final var annotationValuesFourthMethod = getAnnotationFourthMethod.getValues();
+    Assertions.assertEquals(1, annotationValuesFourthMethod.size());
+    final var firstNameValuePairFourthMethod = annotationValuesFourthMethod.get(0);
+    Assertions.assertEquals("", firstNameValuePairFourthMethod.getName());
+    Assertions.assertEquals("\"/some/url/stuff\"", firstNameValuePairFourthMethod.getValue());
 
-        assertEquals("InsideClass", insideClass.getSimpleName());
-        assertEquals("example.ClassWithInnerClass.InnerClass.InsideClass", insideClass.getName());
-    }
-
-    @Test
-    void testKotlinTypeOfInterface() throws IOException {
-        var namedFileContext = TestHelper.getKotlinFileContextFromFile("Interface.kt");
-
-        var kotlinTypeVisitor = new KotlinTypeVisitor(namedFileContext.getRulesNames());
-        kotlinTypeVisitor.visit(namedFileContext.getFileContext());
-
-        assertEquals(1, kotlinTypeVisitor.getDefinedTypes().size());
-
-        DefinedType definedType = kotlinTypeVisitor.getDefinedTypes().get(0);
-
-        assertEquals("Interface", definedType.getSimpleName());
-        assertEquals("example.Interface", definedType.getName());
-
-        assertTrue(definedType instanceof ClassOrInterface);
-
-        ClassOrInterface definedClass = (ClassOrInterface) definedType;
-
-        assertTrue(definedClass.isInterface());
-
-        var methodsOfInterface = definedClass.getMethods();
-        assertEquals(5, methodsOfInterface.size());
-
-        var annotationsOfFirstMethod = methodsOfInterface.get(0).getAnnotations();
-        assertEquals(0, annotationsOfFirstMethod.size());
-
-        var annotationsOfSecondMethod = methodsOfInterface.get(1).getAnnotations();
-        assertEquals(0, annotationsOfSecondMethod.size());
-
-        var annotationsOfThirdMethod = methodsOfInterface.get(2).getAnnotations();
-        assertEquals(0, annotationsOfThirdMethod.size());
-
-        var annotationsOfFourthMethod = methodsOfInterface.get(3).getAnnotations();
-        assertEquals(1, annotationsOfFourthMethod.size());
-        var getAnnotationFourthMethod = annotationsOfFourthMethod.get(0);
-        assertEquals("GET", getAnnotationFourthMethod.getName());
-        var annotationValuesFourthMethod = getAnnotationFourthMethod.getValues();
-        assertEquals(1, annotationValuesFourthMethod.size());
-        var firstNameValuePairFourthMethod = annotationValuesFourthMethod.get(0);
-        assertEquals("", firstNameValuePairFourthMethod.getName());
-        assertEquals("\"/some/url/stuff\"", firstNameValuePairFourthMethod.getValue());
-
-        var annotationsOfFifthMethod = methodsOfInterface.get(4).getAnnotations();
-        assertEquals(1, annotationsOfFifthMethod.size());
-        var getAnnotationFifthMethod = annotationsOfFifthMethod.get(0);
-        assertEquals("GET", getAnnotationFifthMethod.getName());
-        var annotationValuesFifthMethod = getAnnotationFifthMethod.getValues();
-        assertEquals(1, annotationValuesFifthMethod.size());
-        var firstNameValuePairFifthMethod = annotationValuesFifthMethod.get(0);
-        assertEquals("", firstNameValuePairFifthMethod.getName());
-        assertEquals("\"/some/url/otherStuff/{id}\"", firstNameValuePairFifthMethod.getValue());
-    }
+    final var annotationsOfFifthMethod = methodsOfInterface.get(4).getAnnotations();
+    Assertions.assertEquals(1, annotationsOfFifthMethod.size());
+    final var getAnnotationFifthMethod = annotationsOfFifthMethod.get(0);
+    Assertions.assertEquals("GET", getAnnotationFifthMethod.getName());
+    final var annotationValuesFifthMethod = getAnnotationFifthMethod.getValues();
+    Assertions.assertEquals(1, annotationValuesFifthMethod.size());
+    final var firstNameValuePairFifthMethod = annotationValuesFifthMethod.get(0);
+    Assertions.assertEquals("", firstNameValuePairFifthMethod.getName());
+    Assertions.assertEquals("\"/some/url/otherStuff/{id}\"",
+        firstNameValuePairFifthMethod.getValue());
+  }
 }
