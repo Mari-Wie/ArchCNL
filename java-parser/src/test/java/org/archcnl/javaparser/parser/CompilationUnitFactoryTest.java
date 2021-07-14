@@ -1,40 +1,39 @@
 package org.archcnl.javaparser.parser;
 
-import static org.junit.Assert.assertNotNull;
-
-import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
-import org.junit.Before;
+import org.archcnl.javaparser.visitors.GenericVisitorTest;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import com.github.javaparser.ast.CompilationUnit;
 
 public class CompilationUnitFactoryTest {
 
-    private String path;
-    private String pathToNonJavaFile;
+  private final String pathToExampleJavaClass =
+      GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + GenericVisitorTest.SIMPLE_CLASS;
+  private final String pathToExampleNonJavaClass =
+      GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "test.xml";
 
-    @Rule public ExpectedException thrown = ExpectedException.none();
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-    @Before
-    public void initialize() {
-        path = "./src/test/resources/examples/SimpleClass.java";
-        pathToNonJavaFile = "./src/test/resources/examples/test.xml";
-    }
+  @Test
+  public void givenValidJavaClass_whenConvertToCompilationUnit_thenReturnValidCompilationUnit()
+      throws FileIsNotAJavaClassException, FileNotFoundException {
+    // given, when
+    final CompilationUnit unit = CompilationUnitFactory.getFromPath(pathToExampleJavaClass);
+    // then
+    Assert.assertNotNull(unit);
+  }
 
-    @Test
-    public void testDelegatorReturnCompilationUnitThatIsNotNull()
-            throws FileIsNotAJavaClassException, FileNotFoundException {
-
-        CompilationUnit unit = CompilationUnitFactory.getFromPath(path);
-        assertNotNull(unit);
-    }
-
-    @Test
-    public void testDelegatorThrowsExceptionForNonJavaFiles()
-            throws FileIsNotAJavaClassException, FileNotFoundException {
-        thrown.expect(FileIsNotAJavaClassException.class);
-        CompilationUnitFactory.getFromPath(pathToNonJavaFile);
-    }
+  @Test
+  public void givenInvalidNonJavaClass_whenConvertToCompilationUnit_thenFileIsNotAJavaClassExceptionThrown()
+      throws FileIsNotAJavaClassException, FileNotFoundException {
+    // given
+    thrown.expect(FileIsNotAJavaClassException.class);
+    // when, then
+    CompilationUnitFactory.getFromPath(pathToExampleNonJavaClass);
+  }
 }
