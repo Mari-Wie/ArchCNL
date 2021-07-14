@@ -13,7 +13,7 @@ import org.archcnl.common.datatypes.ArchitectureRule;
 public class AsciiDocArc42Parser {
     private static final Logger LOG = LogManager.getLogger(AsciiDocArc42Parser.class);
 
-    private final String ONTOLOGY_PREFIXES_FOR_MAPPING;
+    private final Map<String, String> ONTOLOGY_PREFIXES_FOR_MAPPING;
 
     /**
      * Constructor.
@@ -23,22 +23,7 @@ public class AsciiDocArc42Parser {
      *     files.
      */
     public AsciiDocArc42Parser(Map<String, String> ontologyNamespaces) {
-        ONTOLOGY_PREFIXES_FOR_MAPPING = generatePrefix(ontologyNamespaces);
-    }
-
-    private String generatePrefix(Map<String, String> ontologyNamespaces) {
-        StringBuilder builder = new StringBuilder();
-
-        for (String abbreviation : ontologyNamespaces.keySet()) {
-            builder.append("@prefix ");
-            builder.append(abbreviation);
-            builder.append(": <");
-            builder.append(ontologyNamespaces.get(abbreviation));
-            builder.append(">\n");
-        }
-
-        String res = builder.toString();
-        return res;
+        ONTOLOGY_PREFIXES_FOR_MAPPING = ontologyNamespaces;
     }
 
     /**

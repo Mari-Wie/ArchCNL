@@ -1,5 +1,6 @@
 package org.archcnl.architecturereasoning.impl;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -26,40 +27,118 @@ public class ArchitectureToCodeMapperTest {
     private OntModel codeModel;
     private Individual classA;
     private Individual classB;
+    private Individual classC;
+    private Individual classD;
     private OntModel ruleModel;
     private ObjectProperty uses;
     private final String ontology = "http://test.owl";
     private final String namespace = ontology + "#";
+    private List<ArchitectureRule> architectureModel;
+    private BufferedReader nonTransitiveMapping;
+    private BufferedReader transitiveMapping;
 
     @Before
     public void setUp() {
         mapper = new ArchitectureToCodeMapper();
         createCodeModel();
         createRuleModel();
-    }
 
-    @Test
-    public void testMapping() throws IOException {
         // Architecture model: classA must not use classB.
-        List<ArchitectureRule> architectureModel =
+        architectureModel =
                 Arrays.asList(
                         new ArchitectureRule(
                                 0, "No ClassA can use ClassB.", RuleType.NEGATION, ruleModel));
 
         // Mapping: When some class imports another one, the former uses the latter.
-        BufferedReader reader =
+        nonTransitiveMapping =
                 new BufferedReader(
                         new StringReader(
                                 "@prefix test: <"
                                         + namespace
                                         + ">\n"
                                         + "[useMapping: (?class test:import ?class2) (?class rdf:type test:class) (?class2 rdf:type test:class) -> (?class test:use ?class2)]\n"));
+        // Mapping: When some class imports another one, the former uses the latter.
+        // Also, construct the transitive closure of the property use.
+        transitiveMapping =
+                new BufferedReader(
+                        new StringReader(
+                                "@prefix test: <"
+                                        + namespace
+                                        + ">\n"
+                                        + "[useMapping: (?class test:import ?class2) (?class rdf:type test:class) (?class2 rdf:type test:class) -> (?class test:use ?class2)]\n"
+                                        + "[useMapping: (?class1 test:use ?class2) (?class2 test:use ?class3) -> (?class1 test:use ?class3)]\n"));
+    }
 
-        Model mappedModel = mapper.executeMapping(codeModel, architectureModel, reader);
+    @Test
+    public void testCodeModelIsIncluded() throws IOException {
+        Model mappedModel =
+                mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
 
         assertTrue(mappedModel.containsAll(codeModel));
+    }
+
+    @Test
+    public void testPropertyIsDeduced() throws IOException {
+        Model mappedModel =
+                mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
+
         assertTrue(mappedModel.containsResource(uses));
+
         assertTrue(mappedModel.contains(classA, uses, classB));
+        assertTrue(mappedModel.contains(classB, uses, classC));
+
+        assertFalse(mappedModel.contains(classA, uses, classC));
+        assertFalse(mappedModel.contains(classC, uses, classA));
+        assertFalse(mappedModel.contains(classC, uses, classB));
+        assertFalse(mappedModel.contains(classB, uses, classA));
+    }
+
+    @Test
+    public void testTransitivePropertyIsDeduced() throws IOException {
+        Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
+
+        assertTrue(mappedModel.containsResource(uses));
+
+        assertTrue(mappedModel.contains(classA, uses, classB));
+        assertTrue(mappedModel.contains(classB, uses, classC));
+        assertTrue(mappedModel.contains(classA, uses, classC));
+
+        assertFalse(mappedModel.contains(classC, uses, classA));
+        assertFalse(mappedModel.contains(classC, uses, classB));
+        assertFalse(mappedModel.contains(classB, uses, classA));
+    }
+
+    @Test
+    public void testTransitivePropertyTwoHops() throws IOException {
+        Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
+
+        assertTrue(mappedModel.containsResource(uses));
+
+        assertTrue(mappedModel.contains(classA, uses, classB));
+        assertTrue(mappedModel.contains(classB, uses, classC));
+        assertTrue(mappedModel.contains(classC, uses, classD));
+        assertTrue(mappedModel.contains(classA, uses, classC));
+        assertTrue(mappedModel.contains(classA, uses, classD));
+        assertTrue(mappedModel.contains(classB, uses, classD));
+    }
+
+    @Test
+    public void testPropertyIsNotReflexive() throws IOException {
+        Model mappedModel =
+                mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
+
+        assertFalse(mappedModel.contains(classA, uses, classA));
+        assertFalse(mappedModel.contains(classB, uses, classB));
+        assertFalse(mappedModel.contains(classC, uses, classC));
+    }
+
+    @Test
+    public void testTransitivePropertyIsNotReflexive() throws IOException {
+        Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
+
+        assertFalse(mappedModel.contains(classA, uses, classA));
+        assertFalse(mappedModel.contains(classB, uses, classB));
+        assertFalse(mappedModel.contains(classC, uses, classC));
     }
 
     private void createCodeModel() {
@@ -68,9 +147,15 @@ public class ArchitectureToCodeMapperTest {
         OntClass clazz = codeModel.createClass(namespace + "class");
         classA = codeModel.createIndividual(namespace + "classA", clazz);
         classB = codeModel.createIndividual(namespace + "classB", clazz);
+        classC = codeModel.createIndividual(namespace + "classC", clazz);
+        classD = codeModel.createIndividual(namespace + "classD", clazz);
         ObjectProperty imports = codeModel.createObjectProperty(namespace + "import");
+        ObjectProperty calls = codeModel.createObjectProperty(namespace + "call");
 
         codeModel.add(classA, imports, classB);
+        codeModel.add(classB, imports, classC);
+        codeModel.add(classC, imports, classD);
+        codeModel.add(classA, calls, classC);
     }
 
     private void createRuleModel() {
