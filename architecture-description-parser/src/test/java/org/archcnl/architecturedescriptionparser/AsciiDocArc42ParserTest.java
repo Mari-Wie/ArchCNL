@@ -21,9 +21,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class AsciiDocArc42ParserTest {
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-
 	@Test
 	public void givenAsciiDocParser_whenParseMappingRulesFromDocumentation_thenMappingIsCorrect() throws IOException {
 		// given

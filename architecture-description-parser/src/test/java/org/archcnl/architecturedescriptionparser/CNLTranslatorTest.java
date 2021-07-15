@@ -13,7 +13,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 public class CNLTranslatorTest {
-
 	@Test
 	public void givenCNLSentences_whenTranslateToArchitectureRules_thenRulesCorrectlyTranslated() {
 		// given
