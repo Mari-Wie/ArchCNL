@@ -34,26 +34,24 @@ public class CNLTranslatorTest {
 	@Test
 	public void givenConstraintFile_whenReadByOntologyModel_thenExpectedModelIsIsomorphicWithActualModel() {
 		// assert that the 1. constraint files is correct:
-		// given
+		// given, when
 		Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-
-		// when
 		expected0.read("./src/test/resources/architecture0-expected.owl");
+		
+		Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		actual0.read("./src/test/resources/architecture0.owl");
-
+	
 		// then
 		assertTrue(expected0.isIsomorphicWith(actual0));
 
 		// assert that the 2. constraint files is correct:
-		// given
+		// given, when
 		Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-
-		// when
 		expected1.read("./src/test/resources/architecture1-expected.owl");
+		
+		Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		actual1.read("./src/test/resources/architecture1.owl");
-
+		
 		// then
 		assertTrue(expected1.isIsomorphicWith(actual1));
 	}
