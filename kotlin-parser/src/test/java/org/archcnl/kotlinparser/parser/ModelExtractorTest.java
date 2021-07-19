@@ -27,14 +27,12 @@ public class ModelExtractorTest {
 
   private final String baseNamespace = "example";
 
-  private ModelExtractor classUnderTest;
-
   @Test
   void givenExampleKotlinProject_whenModelExtractorVisitProject_thenAllSourceFilesFound() {
     // given
-    classUnderTest = new ModelExtractor(Arrays.asList(pathToPackage));
+    final ModelExtractor modelExtractor = new ModelExtractor(Arrays.asList(pathToPackage));
     // when
-    final Project project = classUnderTest.extractCodeModel();
+    final Project project = modelExtractor.extractCodeModel();
     // then
     final List<SourceFile> sourceFiles = project.getSourceFiles();
     Assert.assertNotNull(sourceFiles);
@@ -72,9 +70,10 @@ public class ModelExtractorTest {
   @Test
   void givenInvalidKotlinProject_whenModelExtractorVisitProject_thenNoTypesFound() {
     // given
-    classUnderTest = new ModelExtractor(Arrays.asList(pathToPackageWithInvalidProject));
+    final ModelExtractor modelExtractor =
+        new ModelExtractor(Arrays.asList(pathToPackageWithInvalidProject));
     // when
-    final Project project = classUnderTest.extractCodeModel();
+    final Project project = modelExtractor.extractCodeModel();
     // then
     final List<SourceFile> sourceFiles = project.getSourceFiles();
     Assert.assertNotNull(sourceFiles);
