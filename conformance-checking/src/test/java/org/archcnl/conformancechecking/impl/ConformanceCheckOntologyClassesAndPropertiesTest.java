@@ -15,7 +15,7 @@ import org.junit.Test;
 public class ConformanceCheckOntologyClassesAndPropertiesTest {
 
     @Test
-    public void allConformanceCheckClassesAndPropertiesShouldHaveURIsInOntologyFile()
+    public void givenOntModel_whenConformanceOwlFileIsRead_thenAllConformanceCheckClassesAndPropertiesHaveURIsInOntologyFile()
             throws FileNotFoundException {
         // given
         OntModel baseOnt = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
