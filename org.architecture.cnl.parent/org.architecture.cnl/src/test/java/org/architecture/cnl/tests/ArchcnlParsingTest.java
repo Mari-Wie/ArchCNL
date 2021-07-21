@@ -22,20 +22,26 @@ public class ArchcnlParsingTest {
     @Inject private ParseHelper<Model> parseHelper;
 
     @Test
-    public void testErrorDetected() throws Exception {
+    public void givenRuleWithInvalidSyntax_whenAddingRule_thenNoRulesPresent() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("This is not valid ArchCNL because the syntax is not complied with.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNull(result);
     }
 
     @Test
-    public void testEveryRule() throws Exception {
+    public void givenMustRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Every Observer must observe an Observable.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -50,11 +56,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testEveryMustBeRule() throws Exception {
+    public void givenSubConceptRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Every LayerAbove must be a Layer.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then 
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -69,11 +78,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testEveryCanOnlyRule() throws Exception {
+    public void givenCanOnlyRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Every LayerBelow can-only import Common.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -88,11 +100,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testOnlyCanRule() throws Exception {
+    public void givenOnlyCanRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Only LayerAbove can use LayerBelow.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -107,11 +122,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testConditionalRule() throws Exception {
+    public void givenConditionalRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("If Class creates Resource, then it must destroy this Resource.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -126,11 +144,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testConditionalRuleDataPropertiesNotAllowed() throws Exception {
+    public void givenInvalidCanOnlyRule_whenAddingRule_thenRuleIsNotAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("If Class defines Resource, then it must define equal-to this Resource.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -139,11 +160,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testNegationRule() throws Exception {
+    public void givenNegationRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("No LayerBelow can use LayerAbove.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -158,11 +182,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testRelativeClauseRule() throws Exception {
+    public void givenNegationRuleWithRelativeClause_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("No Class that (belongsTo FancyComponent) can use UglyPackage.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -177,11 +204,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testCardinalityRule() throws Exception {
+    public void givenCardinalityRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Only a BadClass can import at-least 100 Package.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -196,11 +226,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testDataRule() throws Exception {
+    public void givenDataRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Only a BadClass can haveMethod equal-to 100.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -215,11 +248,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testFactConceptAssertion() throws Exception {
+    public void givenFactStatementRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyClass is a Class .");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -234,11 +270,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testFactObjectPropertyAssertion() throws Exception {
+    public void givenFactStatementRuleWithObjectProperty_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyClass defines FancyAttribute.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -253,11 +292,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testFactObjectDatatypePropertyAssertionInt() throws Exception {
+    public void givenFactStatementRuleWithIntProperty_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyAttribute hasArrayElements equal-to 42.");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -272,11 +314,14 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void testFactObjectDatatypePropertyAssertionString() throws Exception {
+    public void givenFactStatementRuleWithStringProperty_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+    	// given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyAttribute hasName equal-to \"fancyArray\".");
         _builder.newLine();
+        // when
         final Model result = this.parseHelper.parse(_builder);
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();

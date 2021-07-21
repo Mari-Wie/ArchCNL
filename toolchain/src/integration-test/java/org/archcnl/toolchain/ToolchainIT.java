@@ -1,6 +1,5 @@
 package org.archcnl.toolchain;
 
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -19,6 +18,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
 import org.junit.Test;
+import org.junit.Assert;
 
 public class ToolchainIT {
 
@@ -36,7 +36,8 @@ public class ToolchainIT {
     private final List<String> enabledParsers = Arrays.asList("java");
     
     @Test
-    public void testArchcnl() throws IOException {
+    public void givenArchitecture_whenRunningToolchain_thenRuleResultsAreCorrect() throws IOException {
+    	// given, when
         CNLToolchain.runToolchain(database,
                 server,
                 context,
@@ -52,9 +53,9 @@ public class ToolchainIT {
         writeResultToFile();
         
         OntModel result = loadResult();
-
-        assertTrue(isFirstRuleViolated(result));
-        assertTrue(isSecondRuleViolated(result));
+        // then
+        Assert.assertTrue(isFirstRuleViolated(result));
+        Assert.assertTrue(isSecondRuleViolated(result));
     }
 
     private OntModel loadResult() throws IOException {
@@ -63,7 +64,7 @@ public class ToolchainIT {
         // is lost. All data stored in result is an unnamed graph.
         // Thus, "GRAPH ?g {}" must not be included in the SPARQL queries executed on result.
         // WHERE {GRAPH ?g { ... }} works only on named graphs, while WHERE { ... } works only
-        // on the default graph. Thus, the queries in the SPARQL-queries directory (which are suppposed to
+        // on the default graph. Thus, the queries in the SPARQL-queries directory (which are supposed to
         // be executed on the DB directly) use GRAPH and the queries used by this test do not.
         OntModel result = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         result.read(resultPath);

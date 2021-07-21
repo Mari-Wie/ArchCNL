@@ -8,11 +8,12 @@ import org.junit.Test;
 public class RuleTypeStorageSingletonTest {
 
     @Test
-    public void test() {
+    public void givenRuleTypeStorage_whenStoringRule_thenRulePresent() {
+    	// given
         RuleTypeStorageSingleton instance = RuleTypeStorageSingleton.getInstance();
-
+        // when
         instance.storeTypeOfRule(0, RuleType.EXISTENTIAL);
-
+        // then
         assertEquals(RuleType.EXISTENTIAL, instance.retrieveTypeOfRule(0));
     }
 }
