@@ -1,10 +1,9 @@
 package org.archcnl.owlcreator.impl;
 
-import static org.junit.Assert.*;
-
 import org.archcnl.owlcreator.api.OntologyAPI;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLProperty;
@@ -26,88 +25,93 @@ public class OWLAPIImplTest {
     }
 
     @Test
-    public void testGetClass() {
+    public void givenName_whenCreatingOWLClass_thenReturnValidOWLClassWithNameAsEndingOfIRI() {
+    	// given
         final String className = "Foo";
+        // when
         OWLClass c = api.createOWLClass(IRI_PATH, className);
+        // then
+        Assert.assertEquals(IRI_PATH + "#" + className, c.getIRI().toString());
 
-        assertEquals(IRI_PATH + "#" + className, c.getIRI().toString());
+        Assert.assertTrue(c.isOWLClass());
+        Assert.assertTrue(c.isClassExpressionLiteral());
 
-        assertTrue(c.isOWLClass());
-        assertTrue(c.isClassExpressionLiteral());
-
-        assertFalse(c.isAnonymous());
-        assertFalse(c.isAxiom());
-        assertFalse(c.isBuiltIn());
-        assertFalse(c.isIndividual());
-        assertFalse(c.isIRI());
-        assertFalse(c.isOntology());
-        assertFalse(c.isOWLAnnotationProperty());
-        assertFalse(c.isOWLDataProperty());
-        assertFalse(c.isOWLDatatype());
-        assertFalse(c.isOWLObjectProperty());
+        Assert.assertFalse(c.isAnonymous());
+        Assert.assertFalse(c.isAxiom());
+        Assert.assertFalse(c.isBuiltIn());
+        Assert.assertFalse(c.isIndividual());
+        Assert.assertFalse(c.isIRI());
+        Assert.assertFalse(c.isOntology());
+        Assert.assertFalse(c.isOWLAnnotationProperty());
+        Assert.assertFalse(c.isOWLDataProperty());
+        Assert.assertFalse(c.isOWLDatatype());
+        Assert.assertFalse(c.isOWLObjectProperty());
     }
 
     @Test
-    public void testGetObjectProperty() {
+    public void givenName_whenCreatingOWLObjectProperty_thenReturnValidOWLObjectPropertyWithNameAsEndingOfIRI() {
+    	// given
         final String roleName = "develops";
         final String roleNameLemmatized = "develop";
+        // when
         OWLProperty c = api.createOWLObjectProperty(IRI_PATH, roleName);
+        // then
+        Assert.assertEquals(IRI_PATH + "#" + roleNameLemmatized, c.getIRI().toString());
 
-        assertEquals(IRI_PATH + "#" + roleNameLemmatized, c.getIRI().toString());
+        Assert.assertTrue(c.isOWLObjectProperty());
 
-        assertTrue(c.isOWLObjectProperty());
-
-        assertFalse(c.isOWLDataProperty());
-        assertFalse(c.isOWLClass());
-        assertFalse(c.isAnonymous());
-        assertFalse(c.isAxiom());
-        assertFalse(c.isBuiltIn());
-        assertFalse(c.isIndividual());
-        assertFalse(c.isIRI());
-        assertFalse(c.isOntology());
-        assertFalse(c.isOWLAnnotationProperty());
-        assertFalse(c.isOWLDatatype());
+        Assert.assertFalse(c.isOWLDataProperty());
+        Assert.assertFalse(c.isOWLClass());
+        Assert.assertFalse(c.isAnonymous());
+        Assert.assertFalse(c.isAxiom());
+        Assert.assertFalse(c.isBuiltIn());
+        Assert.assertFalse(c.isIndividual());
+        Assert.assertFalse(c.isIRI());
+        Assert.assertFalse(c.isOntology());
+        Assert.assertFalse(c.isOWLAnnotationProperty());
+        Assert.assertFalse(c.isOWLDatatype());
     }
 
     @Test
-    public void testGetDatatypeProperty() {
+    public void givenName_whenCreatingOWLDatatypeProperty_thenReturnValidOWLDatatypePropertyWithNameAsEndingOfIRI() {
         final String roleName = "develops";
         OWLProperty c = api.createOWLDatatypeProperty(IRI_PATH, roleName);
 
-        assertEquals(IRI_PATH + "#" + roleName, c.getIRI().toString());
-        assertTrue(c.isOWLDataProperty());
+        Assert.assertEquals(IRI_PATH + "#" + roleName, c.getIRI().toString());
+        Assert.assertTrue(c.isOWLDataProperty());
 
-        assertFalse(c.isOWLObjectProperty());
-        assertFalse(c.isOWLClass());
-        assertFalse(c.isAnonymous());
-        assertFalse(c.isAxiom());
-        assertFalse(c.isBuiltIn());
-        assertFalse(c.isIndividual());
-        assertFalse(c.isIRI());
-        assertFalse(c.isOntology());
-        assertFalse(c.isOWLAnnotationProperty());
-        assertFalse(c.isOWLDatatype());
+        Assert.assertFalse(c.isOWLObjectProperty());
+        Assert.assertFalse(c.isOWLClass());
+        Assert.assertFalse(c.isAnonymous());
+        Assert.assertFalse(c.isAxiom());
+        Assert.assertFalse(c.isBuiltIn());
+        Assert.assertFalse(c.isIndividual());
+        Assert.assertFalse(c.isIRI());
+        Assert.assertFalse(c.isOntology());
+        Assert.assertFalse(c.isOWLAnnotationProperty());
+        Assert.assertFalse(c.isOWLDatatype());
     }
 
     @Test
-    public void testGetTopClass() {
+    public void whenRetrievingTopmostOWLClass_thenReturnTheOWLClassThing() {
+    	// given, when
         OWLClassExpression c = api.getOWLTop();
+        // then
+        Assert.assertTrue(c.isOWLClass());
+        Assert.assertTrue(c.isClassExpressionLiteral());
 
-        assertTrue(c.isOWLClass());
-        assertTrue(c.isClassExpressionLiteral());
+        Assert.assertEquals("http://www.w3.org/2002/07/owl#Thing", c.asOWLClass().getIRI().toString());
 
-        assertEquals("http://www.w3.org/2002/07/owl#Thing", c.asOWLClass().getIRI().toString());
+        Assert.assertTrue(c.asOWLClass().isBuiltIn());
 
-        assertTrue(c.asOWLClass().isBuiltIn());
-
-        assertFalse(c.isAnonymous());
-        assertFalse(c.isAxiom());
-        assertFalse(c.isIndividual());
-        assertFalse(c.isIRI());
-        assertFalse(c.isOntology());
-        assertFalse(c.asOWLClass().isOWLAnnotationProperty());
-        assertFalse(c.asOWLClass().isOWLDataProperty());
-        assertFalse(c.asOWLClass().isOWLDatatype());
-        assertFalse(c.asOWLClass().isOWLObjectProperty());
+        Assert.assertFalse(c.isAnonymous());
+        Assert.assertFalse(c.isAxiom());
+        Assert.assertFalse(c.isIndividual());
+        Assert.assertFalse(c.isIRI());
+        Assert.assertFalse(c.isOntology());
+        Assert.assertFalse(c.asOWLClass().isOWLAnnotationProperty());
+        Assert.assertFalse(c.asOWLClass().isOWLDataProperty());
+        Assert.assertFalse(c.asOWLClass().isOWLDatatype());
+        Assert.assertFalse(c.asOWLClass().isOWLObjectProperty());
     }
 }
