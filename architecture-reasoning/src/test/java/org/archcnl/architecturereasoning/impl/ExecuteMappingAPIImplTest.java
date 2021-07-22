@@ -16,35 +16,31 @@ import org.junit.Test;
 
 public class ExecuteMappingAPIImplTest {
 
-    @Before
-    public void setUp() throws Exception {}
+	@Before
+	public void setUp() throws Exception {
+	}
 
-    @Test
-    public void testEntireModule() throws IOException {
-        List<ArchitectureRule> architectureModel =
-                Arrays.asList(
-                        new ArchitectureRule(
-                                0,
-                                "Only LayerOne can use LayerTwo.",
-                                RuleType.DOMAIN_RANGE,
-                                "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(
-                                1,
-                                "No LayerTwo can use LayerOne.",
-                                RuleType.NEGATION,
-                                "./src/test/resources/architecture1.owl"));
+	@Test
+	public void givenArchitectureAndCodeModel_whenMappingIsExecuted_thenMappingIsIsomorphicWithExpectedModel() throws IOException {
+		// given
+		List<ArchitectureRule> architectureModel = Arrays.asList(
+				new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE,
+						"./src/test/resources/architecture0.owl"),
+				new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
+						"./src/test/resources/architecture1.owl"));
 
-        ExecuteMappingAPI e = new ExecuteMappingAPIImpl();
+		ExecuteMappingAPI e = new ExecuteMappingAPIImpl();
 
-        Model codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        codeModel.read("src/test/resources/results.owl");
+		Model codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		codeModel.read("src/test/resources/results.owl");
 
-        Model actual =
-                e.executeMapping(codeModel, architectureModel, "src/test/resources/mapping.txt");
+		// when
+		Model actual = e.executeMapping(codeModel, architectureModel, "src/test/resources/mapping.txt");
 
-        Model expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        expected.read("mapped-expected.owl");
+		Model expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		expected.read("mapped-expected.owl");
 
-        assertTrue(expected.isIsomorphicWith(actual));
-    }
+		// then
+		assertTrue(expected.isIsomorphicWith(actual));
+	}
 }
