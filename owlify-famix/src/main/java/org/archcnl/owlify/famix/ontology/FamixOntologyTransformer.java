@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.jena.rdf.model.Model;
 import org.archcnl.owlify.core.OwlifyComponent;
 import org.archcnl.owlify.famix.codemodel.Project;
@@ -19,7 +18,7 @@ public abstract class FamixOntologyTransformer implements OwlifyComponent {
     }
 
     protected abstract Project extractCodeModel(List<Path> sourcePaths);
-    
+
     @Override
     public Model transform(List<Path> sourcePaths) {
         Project analyzedProject = extractCodeModel(sourcePaths);

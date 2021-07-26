@@ -9,7 +9,7 @@ public class RuleTypeStorageSingletonTest {
 
     @Test
     public void givenRuleTypeStorage_whenStoringRule_thenRulePresent() {
-    	// given
+        // given
         RuleTypeStorageSingleton instance = RuleTypeStorageSingleton.getInstance();
         // when
         instance.storeTypeOfRule(0, RuleType.EXISTENTIAL);

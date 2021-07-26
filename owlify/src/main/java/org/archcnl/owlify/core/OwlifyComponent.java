@@ -11,9 +11,8 @@ import org.apache.jena.rdf.model.Model;
  */
 public interface OwlifyComponent {
     /**
-     * This method performs the parsing step.
-     * The inputs will be read and the
-     * resulting output ontology will be returned.
+     * This method performs the parsing step. The inputs will be read and the resulting output
+     * ontology will be returned.
      */
     public Model transform(List<Path> sourcePaths);
 

@@ -74,7 +74,11 @@ public class MethodTest {
         annotation = new AnnotationInstance("Deprecated", new ArrayList<>());
         thrownException = new Type("namespace.MyError", "MyError", false);
         caughtException = new Type("java.lang.Exception", "Exception", false);
-        localVariable = new LocalVariable(new Type("namespace.C", "C", false), "variable",  Arrays.asList(new Modifier("public")));
+        localVariable =
+                new LocalVariable(
+                        new Type("namespace.C", "C", false),
+                        "variable",
+                        Arrays.asList(new Modifier("public")));
         returnType = new Type("namespace.B", "B", false);
     }
 
