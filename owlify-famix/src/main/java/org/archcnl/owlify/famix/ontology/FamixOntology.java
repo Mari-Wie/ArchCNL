@@ -98,6 +98,8 @@ public class FamixOntology {
         private String replaceSpecialCharacters(String name) {
             // uses percent-notation, replaces spaces by '-'
             return name.replace(" ", "-")
+                    .replace("\n","")
+                    .replace("\r","")
                     .replace("%", "%25") // must be before the replacements using %
                     .replace("!", "%21")
                     .replace("#", "%23")
