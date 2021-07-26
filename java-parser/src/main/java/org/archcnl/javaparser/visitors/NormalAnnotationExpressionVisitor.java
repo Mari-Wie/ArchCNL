@@ -1,5 +1,10 @@
 package org.archcnl.javaparser.visitors;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
+import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -7,88 +12,78 @@ import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.annotation.Nullable;
-import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
-import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 
 /** Visits a normal annotation expression. */
 public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
-    private AnnotationInstance annotationInstance;
+  private AnnotationInstance annotationInstance;
 
-    @Override
-    public void visit(NormalAnnotationExpr n, Void arg) {
-        List<AnnotationMemberValuePair> values =
-                n.getPairs().stream()
-                        .map(pair -> createAnnotationPairFromPair(pair, n))
-                        .collect(Collectors.toList());
+  @Override
+  public void visit(final NormalAnnotationExpr n, final Void arg) {
+    final List<AnnotationMemberValuePair> values = n.getPairs().stream()
+        .map(pair -> createAnnotationPairFromPair(pair, n)).collect(Collectors.toList());
 
-        annotationInstance = new AnnotationInstance(n.getName().asString(), values);
+    annotationInstance = new AnnotationInstance(n.getName().asString(), values);
+  }
+
+  /** @return the parsed annotation instance */
+  public AnnotationInstance getAnnotationInstance() {
+    return annotationInstance;
+  }
+
+  private AnnotationMemberValuePair createAnnotationPairFromPair(
+      final MemberValuePair annotationMemberValuePair, final NormalAnnotationExpr n) {
+    final var name = annotationMemberValuePair.getNameAsString();
+    final var valueExpression = annotationMemberValuePair.getValue();
+    var value = valueExpression.toString();
+
+    if (!(valueExpression instanceof StringLiteralExpr)) {
+      final var possibleValue = findFieldValueInParentClass(valueExpression, n);
+      if (possibleValue != null) {
+        value = possibleValue;
+      }
     }
 
-    /** @return the parsed annotation instance */
-    public AnnotationInstance getAnnotationInstance() {
-        return annotationInstance;
-    }
+    return new AnnotationMemberValuePair(name, value);
+  }
 
-    private AnnotationMemberValuePair createAnnotationPairFromPair(
-            MemberValuePair annotationMemberValuePair, NormalAnnotationExpr n) {
-        var name = annotationMemberValuePair.getNameAsString();
-        var valueExpression = annotationMemberValuePair.getValue();
-        var value = valueExpression.toString();
+  private @Nullable String findFieldValueInParentClass(final Expression valueExpression,
+      final Node currentNode) {
+    final var parentClass = findClassOrInterfaceDeclaration(currentNode);
 
-        if (!(valueExpression instanceof StringLiteralExpr)) {
-            var possibleValue = findFieldValueInParentClass(valueExpression, n);
-            if (possibleValue != null) {
-                value = possibleValue;
-            }
+    if (parentClass != null) {
+      final var field = parentClass.getFieldByName(valueExpression.toString());
+
+      if (field.isPresent()) {
+        final var fieldWithValue = field.get();
+        final var fieldVariableInitializer = fieldWithValue.getVariable(0).getInitializer();
+        if (fieldVariableInitializer.isPresent()) {
+          return fieldVariableInitializer.get().toString();
         }
-
-        return new AnnotationMemberValuePair(name, value);
+      }
     }
 
-    private @Nullable String findFieldValueInParentClass(
-            Expression valueExpression, Node currentNode) {
-        var parentClass = findClassOrInterfaceDeclaration(currentNode);
+    return null;
+  }
 
-        if (parentClass != null) {
-            var field = parentClass.getFieldByName(valueExpression.toString());
+  private @Nullable ClassOrInterfaceDeclaration findClassOrInterfaceDeclaration(
+      final Node startingPoint) {
+    var parent = startingPoint;
+    var parentIsClass = parent instanceof ClassOrInterfaceDeclaration;
 
-            if (field.isPresent()) {
-                var fieldWithValue = field.get();
-                if (fieldWithValue.getVariables().size() > 0) {
-                    var fieldVariableInitializer = fieldWithValue.getVariable(0).getInitializer();
-                    if (fieldVariableInitializer.isPresent()) {
-                        return fieldVariableInitializer.get().toString();
-                    }
-                }
-            }
-        }
-
-        return null;
+    while (!parentIsClass) {
+      final var parentOfTheParent = parent.getParentNode();
+      if (parentOfTheParent.isPresent()) {
+        parent = parentOfTheParent.get();
+        parentIsClass = parent instanceof ClassOrInterfaceDeclaration;
+      } else {
+        break;
+      }
     }
 
-    private @Nullable ClassOrInterfaceDeclaration findClassOrInterfaceDeclaration(
-            Node startingPoint) {
-        var parent = startingPoint;
-        var parentIsClass = parent instanceof ClassOrInterfaceDeclaration;
-
-        while (!parentIsClass) {
-            var parentOfTheParent = parent.getParentNode();
-            if (parentOfTheParent.isPresent()) {
-                parent = parentOfTheParent.get();
-                parentIsClass = parent instanceof ClassOrInterfaceDeclaration;
-            } else {
-                break;
-            }
-        }
-
-        if (parentIsClass) {
-            return (ClassOrInterfaceDeclaration) parent;
-        } else {
-            return null;
-        }
+    if (parentIsClass) {
+      return (ClassOrInterfaceDeclaration) parent;
     }
+    return null;
+  }
 }

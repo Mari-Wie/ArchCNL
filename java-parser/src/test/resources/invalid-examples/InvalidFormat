@@ -1,0 +1,6 @@
+package org.invalid-example;
+
+public class InvalidFormat {
+
+	public InvalidFormat() {}
+}

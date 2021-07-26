@@ -13,10 +13,11 @@ import com.github.javaparser.ast.CompilationUnit;
 public class ThrowStatementVisitorTest extends GenericVisitorTest<ThrowStatementVisitor> {
 
   private String pathToExampleClassWithExceptions =
-      GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES + "ExampleClassWithExceptions.java";
+      GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+          + GenericVisitorTest.CLASS_WITH_EXCEPTIONS;
 
   @Test
-  public void givenClassWithExceptions_whenNThrowStatementVisitorVisit_thenThrowsFound()
+  public void givenClassWithExceptions_whenThrowStatementVisitorVisit_thenThrowsFound()
       throws FileIsNotAJavaClassException, FileNotFoundException {
     // given
     final CompilationUnit unit =
@@ -26,13 +27,14 @@ public class ThrowStatementVisitorTest extends GenericVisitorTest<ThrowStatement
     // then
     final List<String> exceptions =
         visitor.getThrownExceptionType().stream().map(Type::getName).collect(Collectors.toList());
-    Assert.assertEquals(2, exceptions.size());
+    Assert.assertEquals(3, exceptions.size());
     Assert.assertTrue(exceptions.contains("java.lang.IllegalArgumentException"));
     Assert.assertTrue(exceptions.contains("java.lang.IllegalStateException"));
+    Assert.assertTrue(exceptions.contains("examples.CustomException"));
   }
 
   @Test
-  public void givenClassWithExceptions_whenNThrowStatementVisitorVisit_thenThrowsAsSimpleNamesFound()
+  public void givenClassWithExceptions_whenThrowStatementVisitorVisit_thenThrowsAsSimpleNamesFound()
       throws FileIsNotAJavaClassException, FileNotFoundException {
     // given
     final CompilationUnit unit =
@@ -42,9 +44,10 @@ public class ThrowStatementVisitorTest extends GenericVisitorTest<ThrowStatement
     // then
     final List<String> exceptions = visitor.getThrownExceptionType().stream()
         .map(Type::getSimpleName).collect(Collectors.toList());
-    Assert.assertEquals(2, exceptions.size());
+    Assert.assertEquals(3, exceptions.size());
     Assert.assertTrue(exceptions.contains("IllegalArgumentException"));
     Assert.assertTrue(exceptions.contains("IllegalStateException"));
+    Assert.assertTrue(exceptions.contains("CustomException"));
   }
 
   @Override

@@ -7,6 +7,7 @@ import java.util.List;
 @Deprecated(since = "today")
 public class ComplexClass extends EmptyClass implements Interface {
     public static final String NEVER = "neverEver";
+    public static final String NULL_CONSTANT;
 
     private static final double PI = 3.141;
 
@@ -41,6 +42,11 @@ public class ComplexClass extends EmptyClass implements Interface {
     public SimpleClass referenceMethod(ClassInSubpackage parameter) {
         // some important comment
         return null;
+    }
+    
+    @AnnotationWithNullConstant(key = NULL_CONSTANT)
+    private double returnNull() {
+      return null;
     }
 
     @Override
