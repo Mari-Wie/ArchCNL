@@ -1,7 +1,9 @@
 package org.archcnl.owlify.famix.ontology;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
@@ -16,11 +18,11 @@ public abstract class FamixOntologyTransformer extends AbstractOwlifyComponent {
         return res;
     }
 
-    protected abstract Project extractCodeModel();
+    protected abstract Project extractCodeModel(List<Path> sourcePaths);
     
     @Override
-    public Model transform() {
-        Project analyzedProject = extractCodeModel();
+    public Model transform(List<Path> sourcePaths) {
+        Project analyzedProject = extractCodeModel(sourcePaths);
 
         InputStream famixOntology = getClass().getResourceAsStream("/ontologies/famix.owl");
         InputStream mainOntology = getClass().getResourceAsStream("/ontologies/main.owl");

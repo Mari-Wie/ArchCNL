@@ -312,15 +312,9 @@ public class CNLToolchain {
     private Model buildCodeModel(List<Path> sourceCodePaths) {
         LOG.info("Creating the code model ...");
         LOG.info("Starting famix transformation ...");
-        // source code transformation
-        for (var sourceCodePath : sourceCodePaths) {
-            for (var transformer : transformers) {
-                transformer.addSourcePath(sourceCodePath);
-            }
-        }
         var model =
                 transformers.stream()
-                        .map(transformer -> transformer.transform())
+                        .map(transformer -> transformer.transform(sourceCodePaths))
                         .reduce(
                                 null,
                                 (modelA, modelB) -> modelA == null ? modelB : modelA.union(modelB));
