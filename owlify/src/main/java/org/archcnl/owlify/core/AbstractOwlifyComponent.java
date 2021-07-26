@@ -31,9 +31,6 @@ public abstract class AbstractOwlifyComponent implements OwlifyComponent {
         return sourcePaths;
     }
 
-    // implement this method in your parser
-    public abstract Model transform();
-
     //    public String getResultPath() {
     //
     //        return this.resultPath;
