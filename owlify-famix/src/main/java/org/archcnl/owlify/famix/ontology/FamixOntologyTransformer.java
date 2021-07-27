@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
-import org.archcnl.owlify.core.AbstractOwlifyComponent;
+import org.archcnl.owlify.core.OwlifyComponent;
 import org.archcnl.owlify.famix.codemodel.Project;
 
-public abstract class FamixOntologyTransformer extends AbstractOwlifyComponent {
+public abstract class FamixOntologyTransformer implements OwlifyComponent {
     @Override
     public Map<String, String> getProvidedNamespaces() {
         Map<String, String> res = new HashMap<>();

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.jena.rdf.model.Model;
-import org.archcnl.owlify.core.AbstractOwlifyComponent;
 import org.archcnl.owlify.famix.codemodel.Project;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntologyTransformer;
