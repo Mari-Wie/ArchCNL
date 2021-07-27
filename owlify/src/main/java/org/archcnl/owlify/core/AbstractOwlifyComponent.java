@@ -11,15 +11,11 @@ import org.apache.jena.rdf.model.Model;
  */
 public abstract class AbstractOwlifyComponent implements OwlifyComponent {
 
-    // path of the output file
-    //    private String resultPath;
-
     // list of input paths
     private List<Path> sourcePaths;
 
     /** Constructor. */
     protected AbstractOwlifyComponent() {
-        //        this.resultPath = resultPath;
         this.sourcePaths = new ArrayList<Path>();
     }
 
@@ -30,9 +26,4 @@ public abstract class AbstractOwlifyComponent implements OwlifyComponent {
     public List<Path> getSourcePaths() {
         return sourcePaths;
     }
-
-    //    public String getResultPath() {
-    //
-    //        return this.resultPath;
-    //    }
 }
