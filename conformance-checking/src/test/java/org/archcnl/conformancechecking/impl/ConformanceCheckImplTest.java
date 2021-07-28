@@ -30,10 +30,10 @@ public class ConformanceCheckImplTest {
         IConformanceCheck check = new ConformanceCheckImpl();
         check.createNewConformanceCheck();
 
-		ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE,
-				"architecture0.owl");
-		ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
-				"architecture1.owl");
+		ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
+				RuleType.DOMAIN_RANGE, "architecture0.owl");
+		ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.",
+				RuleType.NEGATION, "architecture1.owl");
 
 		List<ConstraintViolation> violations1 = new ArrayList<>();
 		ConstraintViolationBuilder violation = new ConstraintViolationBuilder();

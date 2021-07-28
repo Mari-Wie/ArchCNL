@@ -21,27 +21,31 @@ import org.junit.Test;
 public class AsciiDocArc42ParserTest {
 
 	@Test
-	public void givenArchitectureRules_whenParsedByAsciiDocParser_thenRulesExtractedCorrectly() throws IOException {
+	public void givenArchitectureRules_whenParsedByAsciiDocParser_thenRulesExtractedCorrectly()
+			throws IOException {
 		// given
 		Map<String, String> namespaces = new HashMap<>();
 
-		namespaces.put("architectureconformance", "http://arch-ont.org/ontologies/architectureconformance#");
+		namespaces.put("architectureconformance",
+				"http://arch-ont.org/ontologies/architectureconformance#");
 		namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
 		namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
 		AsciiDocArc42Parser parser = new AsciiDocArc42Parser(namespaces);
 
 		Path testRulesPath = Paths.get("./src/test/resources/rules.adoc");
 		// when
-		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(testRulesPath, "./src/test/resources");
-		parser.parseMappingRulesFromDocumentation(testRulesPath, "./src/test/resources/mapping.txt");
+		List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(testRulesPath,
+				"./src/test/resources");
+		parser.parseMappingRulesFromDocumentation(testRulesPath,
+				"./src/test/resources/mapping.txt");
 
 		// then (assert that the extracted rules are correct)
 		assertEquals(2, rules.size());
 
 		assertThat(rules,
 				CoreMatchers.hasItems(
-						new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE,
-								"./src/test/resources/architecture0.owl"),
+						new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
+								RuleType.DOMAIN_RANGE, "./src/test/resources/architecture0.owl"),
 						new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
 								"./src/test/resources/architecture1.owl")));
 
