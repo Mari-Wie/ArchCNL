@@ -21,6 +21,7 @@ import org.archcnl.architecturedescriptionparser.AsciiDocArc42Parser;
 import org.archcnl.architecturereasoning.api.ExecuteMappingAPI;
 import org.archcnl.architecturereasoning.api.ExecuteMappingAPIFactory;
 import org.archcnl.common.datatypes.ArchitectureRule;
+import org.archcnl.common.datatypes.ConstraintViolation;
 import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckImpl;
@@ -66,12 +67,6 @@ public class CNLToolchain {
                         .map(name -> createTransformer(name))
                         .collect(Collectors.toList());
         this.check = new ConformanceCheckImpl();
-    }
-
-    private OwlifyComponent createTransformer(String name) {
-        var factory = transformerFactories.get(name);
-        if (factory == null) throw new RuntimeException("Unknown parser '" + name + "'");
-        return factory.get();
     }
 
     /**
@@ -152,6 +147,23 @@ public class CNLToolchain {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd__'at'__HH-mm-ss_z");
         return dateFormat.format(date);
+    }
+
+    /*
+     * Match the databaseName to a regex provided by Stardog
+     *
+     * @see <a href="https://docs.stardog.com/operating-stardog/database-administration/database-configuration#databasename">Stardog Documentation</a>
+     */
+    private static boolean isDatabaseNameValid(String databaseName) {
+        var pattern = Pattern.compile("[A-Za-z]{1}[A-Za-z0-9_-]*");
+        var matcher = pattern.matcher(databaseName);
+        return matcher.matches();
+    }
+
+    private OwlifyComponent createTransformer(String name) {
+        var factory = transformerFactories.get(name);
+        if (factory == null) throw new RuntimeException("Unknown parser '" + name + "'");
+        return factory.get();
     }
 
     /**
@@ -255,8 +267,15 @@ public class CNLToolchain {
         check.createNewConformanceCheck();
         int ruleIndex = 0;
         for (ArchitectureRule rule : sucessfulRules) {
+            List<ConstraintViolation> violationsForRule;
+            if (ruleIndex < violations.size()) {
+                violationsForRule = violations.get(ruleIndex).getViolationList();
+            } else {
+                LOG.info("ruleIndex is greater than violation list size");
+                violationsForRule = new ArrayList<>();
+            }
 
-            CheckedRule vr = new CheckedRule(rule, violations.get(ruleIndex).getViolationList());
+            CheckedRule vr = new CheckedRule(rule, violationsForRule);
 
             if (!vr.getViolations().isEmpty()) {
                 LOG.info("The following rule is violated: " + vr.getRule().getCnlSentence());
@@ -293,15 +312,9 @@ public class CNLToolchain {
     private Model buildCodeModel(List<Path> sourceCodePaths) {
         LOG.info("Creating the code model ...");
         LOG.info("Starting famix transformation ...");
-        // source code transformation
-        for (var sourceCodePath : sourceCodePaths) {
-            for (var transformer : transformers) {
-                transformer.addSourcePath(sourceCodePath);
-            }
-        }
         var model =
                 transformers.stream()
-                        .map(transformer -> transformer.transform())
+                        .map(transformer -> transformer.transform(sourceCodePaths))
                         .reduce(
                                 null,
                                 (modelA, modelB) -> modelA == null ? modelB : modelA.union(modelB));
@@ -329,16 +342,5 @@ public class CNLToolchain {
         supportedOWLNamespaces.put(
                 "architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
         return supportedOWLNamespaces;
-    }
-
-    /*
-     * Match the databaseName to a regex provided by Stardog
-     *
-     * @see <a href="https://docs.stardog.com/operating-stardog/database-administration/database-configuration#databasename">Stardog Documentation</a>
-     */
-    private static boolean isDatabaseNameValid(String databaseName) {
-        var pattern = Pattern.compile("[A-Za-z]{1}[A-Za-z0-9_-]*");
-        var matcher = pattern.matcher(databaseName);
-        return matcher.matches();
     }
 }

@@ -150,6 +150,11 @@
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
 			<version>${jacocoVersion}</version>
+			<configuration>
+				<excludes>
+					<exclude>org/archcnl/kotlinparser/grammar/KotlinParser*.*</exclude>
+				</excludes>
+			</configuration>
 			<executions>
 				<execution>
 					<goals>
