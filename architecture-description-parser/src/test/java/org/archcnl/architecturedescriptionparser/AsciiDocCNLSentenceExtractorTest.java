@@ -15,8 +15,8 @@ public class AsciiDocCNLSentenceExtractorTest {
 		// given, when
 		extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/rules.adoc"));
 		// then
-		assertThat(extractor.extractArchitectureRules(),
-				CoreMatchers.hasItems("Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne."));
+		assertThat(extractor.extractArchitectureRules(), CoreMatchers
+				.hasItems("Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne."));
 	}
 
 	@Test
@@ -33,7 +33,8 @@ public class AsciiDocCNLSentenceExtractorTest {
 	@Test
 	public void givenEmptyArchitectureRules_whenGivenToSentenceExtractor_thenExtractedRulesIsEmpty() {
 		// given, when
-		extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/emptyrules.adoc"));
+		extractor = new AsciiDocCNLSentenceExtractor(
+				Paths.get("./src/test/resources/emptyrules.adoc"));
 		// then
 		assertTrue(extractor.extractArchitectureRules().isEmpty());
 	}
@@ -41,7 +42,8 @@ public class AsciiDocCNLSentenceExtractorTest {
 	@Test
 	public void givenEmptyMappingsRules_whenGivenToSentenceExtractor_thenExtractedRulesIsEmpty() {
 		// given, when
-		extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/emptyrules.adoc"));
+		extractor = new AsciiDocCNLSentenceExtractor(
+				Paths.get("./src/test/resources/emptyrules.adoc"));
 		// then
 		assertTrue(extractor.extractMappingRules().isEmpty());
 	}
@@ -49,7 +51,8 @@ public class AsciiDocCNLSentenceExtractorTest {
 	@Test
 	public void givenNonAsciidocFile_whenGivenToSentenceExtractor_thenExtractorIsEmpty() {
 		// given, when
-		extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/mapping-expected.txt"));
+		extractor = new AsciiDocCNLSentenceExtractor(
+				Paths.get("./src/test/resources/mapping-expected.txt"));
 		// then
 		assertTrue(extractor.extractArchitectureRules().isEmpty());
 		assertTrue(extractor.extractMappingRules().isEmpty());
