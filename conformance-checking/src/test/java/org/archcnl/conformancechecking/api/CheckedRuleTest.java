@@ -24,7 +24,8 @@ public class CheckedRuleTest {
 	public void givenRulesAndViolations_whenCreatingNewCheckedRule_thenCheckedRuleIsCorrect() {
 		// given
 		Model emptyModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		ArchitectureRule rule = new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE, emptyModel);
+		ArchitectureRule rule = new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE,
+				emptyModel);
 
 		ConstraintViolationBuilder violationBuilder = new ConstraintViolationBuilder();
 		violationBuilder.addViolation("subject", "predicate", "object");

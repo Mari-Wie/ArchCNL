@@ -22,15 +22,16 @@ import org.junit.Test;
 
 public class ConformanceCheckImplTest {
 	@Test
-	public void givenRulesAndViolations_whenCreatingOntModel_thenModelIsIsomorphicWithExpectedModel() throws FileNotFoundException {
+	public void givenRulesAndViolations_whenCreatingOntModel_thenModelIsIsomorphicWithExpectedModel()
+			throws FileNotFoundException {
 		// given (setup:)
 		IConformanceCheck check = new ConformanceCheckImpl();
 		check.createNewConformanceCheck();
 
-		ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE,
-				"architecture0.owl");
-		ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
-				"architecture1.owl");
+		ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
+				RuleType.DOMAIN_RANGE, "architecture0.owl");
+		ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.",
+				RuleType.NEGATION, "architecture1.owl");
 
 		List<ConstraintViolation> violations1 = new ArrayList<>();
 		ConstraintViolationBuilder violation = new ConstraintViolationBuilder();
@@ -73,12 +74,12 @@ public class ConformanceCheckImplTest {
 		// workaround: remove the checking date
 		DatatypeProperty hasCheckingDate = ConformanceCheckOntologyClassesAndProperties
 				.get(ConformanceCheckDatatypeProperties.hasCheckingDate, expected);
-		expected.getProperty(ConformanceCheckOntologyClassesAndProperties
-				.createIndividual(ConformanceCheckOntClasses.ConformanceCheck, expected), hasCheckingDate).remove();
+		expected.getProperty(ConformanceCheckOntologyClassesAndProperties.createIndividual(
+				ConformanceCheckOntClasses.ConformanceCheck, expected), hasCheckingDate).remove();
 		hasCheckingDate = ConformanceCheckOntologyClassesAndProperties
 				.get(ConformanceCheckDatatypeProperties.hasCheckingDate, actual);
-		actual.getProperty(ConformanceCheckOntologyClassesAndProperties
-				.createIndividual(ConformanceCheckOntClasses.ConformanceCheck, actual), hasCheckingDate).remove();
+		actual.getProperty(ConformanceCheckOntologyClassesAndProperties.createIndividual(
+				ConformanceCheckOntClasses.ConformanceCheck, actual), hasCheckingDate).remove();
 
 		// then
 		assertTrue(expected.isIsomorphicWith(actual));

@@ -13,10 +13,13 @@ import org.junit.Test;
 public class ConformanceCheckOntologyClassesAndPropertiesTest {
 
 	@Test
-	public void givenOntModel_whenItReadsOwlFile_thenURIsMatchOntologyFile() throws FileNotFoundException {
+	public void givenOntModel_whenItReadsOwlFile_thenURIsMatchOntologyFile()
+			throws FileNotFoundException {
 		// given, when
 		OntModel baseOnt = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		baseOnt.read(new FileInputStream("src/main/resources/ontologies/architectureconformance.owl"), null);
+		baseOnt.read(
+				new FileInputStream("src/main/resources/ontologies/architectureconformance.owl"),
+				null);
 
 		// TODO: uncomment tests when refactoring issues are done
 

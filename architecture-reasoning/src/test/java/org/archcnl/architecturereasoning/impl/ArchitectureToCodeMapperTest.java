@@ -44,32 +44,38 @@ public class ArchitectureToCodeMapperTest {
 		createRuleModel();
 
 		// Architecture model: classA must not use classB.
-		architectureModel = Arrays
-				.asList(new ArchitectureRule(0, "No ClassA can use ClassB.", RuleType.NEGATION, ruleModel));
+		architectureModel = Arrays.asList(
+				new ArchitectureRule(0, "No ClassA can use ClassB.", RuleType.NEGATION, ruleModel));
 
 		// Mapping: When some class imports another one, the former uses the latter.
-		nonTransitiveMapping = new BufferedReader(new StringReader("@prefix test: <" + namespace + ">\n"
+		nonTransitiveMapping = new BufferedReader(new StringReader("@prefix test: <" + namespace
+				+ ">\n"
 				+ "[useMapping: (?class test:import ?class2) (?class rdf:type test:class) (?class2 rdf:type test:class) -> (?class test:use ?class2)]\n"));
 		// Mapping: When some class imports another one, the former uses the latter.
 		// Also, construct the transitive closure of the property use.
-		transitiveMapping = new BufferedReader(new StringReader("@prefix test: <" + namespace + ">\n"
+		transitiveMapping = new BufferedReader(new StringReader("@prefix test: <" + namespace
+				+ ">\n"
 				+ "[useMapping: (?class test:import ?class2) (?class rdf:type test:class) (?class2 rdf:type test:class) -> (?class test:use ?class2)]\n"
 				+ "[useMapping: (?class1 test:use ?class2) (?class2 test:use ?class3) -> (?class1 test:use ?class3)]\n"));
 	}
 
 	@Test
-	public void givenCodeModelWithRulesAndMapping_whenMappingIsExecuted_thenMappedModelContainsAllOfCodeModel() throws IOException {
+	public void givenCodeModelWithRulesAndMapping_whenMappingIsExecuted_thenMappedModelContainsAllOfCodeModel()
+			throws IOException {
 		// given, when
-		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
+		Model mappedModel = mapper.executeMapping(codeModel, architectureModel,
+				nonTransitiveMapping);
 
 		// then
 		assertTrue(mappedModel.containsAll(codeModel));
 	}
 
 	@Test
-	public void givenNonTransitiveMapping_whenMappingIsExecuted_thenNonTransitivePropertiesAreDeduced() throws IOException {
+	public void givenNonTransitiveMapping_whenMappingIsExecuted_thenNonTransitivePropertiesAreDeduced()
+			throws IOException {
 		// given, when
-		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
+		Model mappedModel = mapper.executeMapping(codeModel, architectureModel,
+				nonTransitiveMapping);
 
 		// then
 		assertTrue(mappedModel.containsResource(uses));
@@ -82,7 +88,8 @@ public class ArchitectureToCodeMapperTest {
 	}
 
 	@Test
-	public void givenTransitiveMapping_whenMappingIsExecuted_thenTransitivePropertiesAreDeduced() throws IOException {
+	public void givenTransitiveMapping_whenMappingIsExecuted_thenTransitivePropertiesAreDeduced()
+			throws IOException {
 		// given, when
 		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
 
@@ -97,7 +104,8 @@ public class ArchitectureToCodeMapperTest {
 	}
 
 	@Test
-	public void givenTransitiveMapping_whenMappingIsExecuted_then2HopTransitivePropertiesAreCorrectlyDeduced() throws IOException {
+	public void givenTransitiveMapping_whenMappingIsExecuted_then2HopTransitivePropertiesAreCorrectlyDeduced()
+			throws IOException {
 		// given, when
 		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
 
@@ -112,9 +120,11 @@ public class ArchitectureToCodeMapperTest {
 	}
 
 	@Test
-	public void givenNonTransitiveMapping_whenMappingIsExecuted_thenNonTransitivePropertyIsNotReflexive() throws IOException {
+	public void givenNonTransitiveMapping_whenMappingIsExecuted_thenNonTransitivePropertyIsNotReflexive()
+			throws IOException {
 		// given, when
-		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
+		Model mappedModel = mapper.executeMapping(codeModel, architectureModel,
+				nonTransitiveMapping);
 
 		// then
 		assertFalse(mappedModel.contains(classA, uses, classA));
@@ -123,7 +133,8 @@ public class ArchitectureToCodeMapperTest {
 	}
 
 	@Test
-	public void givenTransitiveMapping_whenMappingIsExecuted_thenTransitivePropertyIsNotReflexive() throws IOException {
+	public void givenTransitiveMapping_whenMappingIsExecuted_thenTransitivePropertyIsNotReflexive()
+			throws IOException {
 		// given, when
 		Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
 
@@ -159,7 +170,8 @@ public class ArchitectureToCodeMapperTest {
 		OntClass ruleClassA = ruleModel.createClass(namespace + "ClassA");
 		OntClass ruleClassB = ruleModel.createClass(namespace + "ClassB");
 
-		Restriction someValuesFrom = ruleModel.createSomeValuesFromRestriction(null, uses, ruleClassB);
+		Restriction someValuesFrom = ruleModel.createSomeValuesFromRestriction(null, uses,
+				ruleClassB);
 		OntClass complement = ruleModel.createComplementClass(null, someValuesFrom);
 
 		ruleClassA.setSuperClass(complement);
