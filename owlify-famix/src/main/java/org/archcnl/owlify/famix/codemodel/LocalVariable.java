@@ -5,7 +5,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
 import java.util.List;
-
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
@@ -19,13 +18,13 @@ public class LocalVariable {
     private final Type type;
     private final String name;
     private List<Modifier> modifiers;
-    
+
     /**
      * Constructor.
      *
      * @param type Declared type of the variable.
      * @param name The name of the variable.
-     * @param modifiers A list of variable modifers (e.g. "static", "private" , etc.) 
+     * @param modifiers A list of variable modifers (e.g. "static", "private" , etc.)
      */
     public LocalVariable(Type type, String name, List<Modifier> modifiers) {
         super();
@@ -43,10 +42,10 @@ public class LocalVariable {
     public String getName() {
         return name;
     }
-    
+
     /** @return the list of modifiers */
     public List<Modifier> getModifiers() {
-    	return modifiers;
+        return modifiers;
     }
 
     /**
@@ -61,9 +60,9 @@ public class LocalVariable {
         Individual individual = ontology.createIndividual(FamixClasses.LocalVariable, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
-        
+
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
-        
+
         method.addProperty(ontology.get(definesVariable), individual);
     }
 }

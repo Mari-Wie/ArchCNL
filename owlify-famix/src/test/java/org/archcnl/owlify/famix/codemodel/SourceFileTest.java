@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.rdf.model.Property;
 import org.archcnl.owlify.core.MainOntology;
@@ -66,10 +65,13 @@ public class SourceFileTest {
                 ontology.mainModel()
                         .getOntology()
                         .getIndividual(
-                                MainOntology.namespace + MainOntology.MainOntClasses.SoftwareArtifactFile.name()
+                                MainOntology.namespace
+                                        + MainOntology.MainOntClasses.SoftwareArtifactFile.name()
                                         + "/"
                                         + path);
-        Property fileContains = MainOntology.MainObjectProperties.containsArtifact.get(ontology.mainModel().getOntology());
+        Property fileContains =
+                MainOntology.MainObjectProperties.containsArtifact.get(
+                        ontology.mainModel().getOntology());
 
         assertNotNull(individual);
         assertTrue(ontology.mainModel().getOntology().contains(individual, fileContains, type));

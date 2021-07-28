@@ -1,9 +1,9 @@
 package org.archcnl.owlcreator.impl;
 
 import org.archcnl.owlcreator.api.OntologyAPI;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLProperty;
@@ -26,7 +26,7 @@ public class OWLAPIImplTest {
 
     @Test
     public void givenName_whenCreatingOWLClass_thenReturnValidOWLClassWithNameAsEndingOfIRI() {
-    	// given
+        // given
         final String className = "Foo";
         // when
         OWLClass c = api.createOWLClass(IRI_PATH, className);
@@ -49,8 +49,9 @@ public class OWLAPIImplTest {
     }
 
     @Test
-    public void givenName_whenCreatingOWLObjectProperty_thenReturnValidOWLObjectPropertyWithNameAsEndingOfIRI() {
-    	// given
+    public void
+            givenName_whenCreatingOWLObjectProperty_thenReturnValidOWLObjectPropertyWithNameAsEndingOfIRI() {
+        // given
         final String roleName = "develops";
         final String roleNameLemmatized = "develop";
         // when
@@ -73,7 +74,8 @@ public class OWLAPIImplTest {
     }
 
     @Test
-    public void givenName_whenCreatingOWLDatatypeProperty_thenReturnValidOWLDatatypePropertyWithNameAsEndingOfIRI() {
+    public void
+            givenName_whenCreatingOWLDatatypeProperty_thenReturnValidOWLDatatypePropertyWithNameAsEndingOfIRI() {
         final String roleName = "develops";
         OWLProperty c = api.createOWLDatatypeProperty(IRI_PATH, roleName);
 
@@ -94,13 +96,14 @@ public class OWLAPIImplTest {
 
     @Test
     public void whenRetrievingTopmostOWLClass_thenReturnTheOWLClassThing() {
-    	// given, when
+        // given, when
         OWLClassExpression c = api.getOWLTop();
         // then
         Assert.assertTrue(c.isOWLClass());
         Assert.assertTrue(c.isClassExpressionLiteral());
 
-        Assert.assertEquals("http://www.w3.org/2002/07/owl#Thing", c.asOWLClass().getIRI().toString());
+        Assert.assertEquals(
+                "http://www.w3.org/2002/07/owl#Thing", c.asOWLClass().getIRI().toString());
 
         Assert.assertTrue(c.asOWLClass().isBuiltIn());
 

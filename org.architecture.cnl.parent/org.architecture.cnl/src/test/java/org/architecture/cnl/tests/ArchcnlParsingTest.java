@@ -23,7 +23,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenRuleWithInvalidSyntax_whenAddingRule_thenNoRulesPresent() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("This is not valid ArchCNL because the syntax is not complied with.");
         _builder.newLine();
@@ -35,7 +35,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenMustRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Every Observer must observe an Observable.");
         _builder.newLine();
@@ -57,13 +57,13 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenSubConceptRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Every LayerAbove must be a Layer.");
         _builder.newLine();
         // when
         final Model result = this.parseHelper.parse(_builder);
-        // then 
+        // then
         Assert.assertNotNull(result);
         final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -79,7 +79,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenCanOnlyRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Every LayerBelow can-only import Common.");
         _builder.newLine();
@@ -101,7 +101,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenOnlyCanRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Only LayerAbove can use LayerBelow.");
         _builder.newLine();
@@ -123,7 +123,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenConditionalRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("If Class creates Resource, then it must destroy this Resource.");
         _builder.newLine();
@@ -145,7 +145,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenInvalidCanOnlyRule_whenAddingRule_thenRuleIsNotAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("If Class defines Resource, then it must define equal-to this Resource.");
         _builder.newLine();
@@ -161,7 +161,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenNegationRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("No LayerBelow can use LayerAbove.");
         _builder.newLine();
@@ -182,8 +182,9 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void givenNegationRuleWithRelativeClause_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+    public void givenNegationRuleWithRelativeClause_whenAddingRule_thenCorrectRuleAdded()
+            throws Exception {
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("No Class that (belongsTo FancyComponent) can use UglyPackage.");
         _builder.newLine();
@@ -205,7 +206,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenCardinalityRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Only a BadClass can import at-least 100 Package.");
         _builder.newLine();
@@ -227,7 +228,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenDataRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Only a BadClass can haveMethod equal-to 100.");
         _builder.newLine();
@@ -249,7 +250,7 @@ public class ArchcnlParsingTest {
 
     @Test
     public void givenFactStatementRule_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyClass is a Class .");
         _builder.newLine();
@@ -270,8 +271,9 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void givenFactStatementRuleWithObjectProperty_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+    public void givenFactStatementRuleWithObjectProperty_whenAddingRule_thenCorrectRuleAdded()
+            throws Exception {
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyClass defines FancyAttribute.");
         _builder.newLine();
@@ -292,8 +294,9 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void givenFactStatementRuleWithIntProperty_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+    public void givenFactStatementRuleWithIntProperty_whenAddingRule_thenCorrectRuleAdded()
+            throws Exception {
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyAttribute hasArrayElements equal-to 42.");
         _builder.newLine();
@@ -314,8 +317,9 @@ public class ArchcnlParsingTest {
     }
 
     @Test
-    public void givenFactStatementRuleWithStringProperty_whenAddingRule_thenCorrectRuleAdded() throws Exception {
-    	// given
+    public void givenFactStatementRuleWithStringProperty_whenAddingRule_thenCorrectRuleAdded()
+            throws Exception {
+        // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyAttribute hasName equal-to \"fancyArray\".");
         _builder.newLine();
