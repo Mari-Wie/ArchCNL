@@ -46,8 +46,10 @@ public class MainOntologyTest {
 		mainOnt.modelSoftwareArtifactFile(path, Arrays.asList(content1, content2));
 
 		OntModel main = mainOnt.getOntology();
-		Individual artifact = main.getIndividual(MainOntClasses.SoftwareArtifactFile.uri() + "/" + path);
-		ObjectProperty contains = main.getObjectProperty(MainObjectProperties.containsArtifact.uri());
+		Individual artifact = main
+				.getIndividual(MainOntClasses.SoftwareArtifactFile.uri() + "/" + path);
+		ObjectProperty contains = main
+				.getObjectProperty(MainObjectProperties.containsArtifact.uri());
 		DatatypeProperty hasPath = main.getDatatypeProperty(MainDatatypeProperties.hasPath.uri());
 
 		// then
@@ -63,8 +65,10 @@ public class MainOntologyTest {
 		mainOnt.modelSoftwareArtifactFile(path, new ArrayList<Individual>());
 
 		OntModel main = mainOnt.getOntology();
-		Individual artifact = main.getIndividual(MainOntClasses.SoftwareArtifactFile.uri() + "/" + path);
-		ObjectProperty contains = main.getObjectProperty(MainObjectProperties.containsArtifact.uri());
+		Individual artifact = main
+				.getIndividual(MainOntClasses.SoftwareArtifactFile.uri() + "/" + path);
+		ObjectProperty contains = main
+				.getObjectProperty(MainObjectProperties.containsArtifact.uri());
 		DatatypeProperty hasPath = main.getDatatypeProperty(MainDatatypeProperties.hasPath.uri());
 
 		// then
@@ -75,24 +79,28 @@ public class MainOntologyTest {
 	}
 
 	@Test
-	public void givenOntModel_whenReadingOwlFile_thenOntModelURIsMatchURIsFromOntologyFile() throws FileNotFoundException {
+	public void givenOntModel_whenReadingOwlFile_thenOntModelURIsMatchURIsFromOntologyFile()
+			throws FileNotFoundException {
 		// given, when
 		OntModel baseOnt = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		baseOnt.read(new FileInputStream("src/main/resources/ontologies/main.owl"), null);
 
 		// then
 		for (MainOntClasses ontClass : MainOntClasses.values()) {
-			assertNotNull(ontClass.name() + " from MainOntClasses has no associated class in main.owl.",
+			assertNotNull(
+					ontClass.name() + " from MainOntClasses has no associated class in main.owl.",
 					baseOnt.getOntClass(ontClass.uri()));
 		}
 
 		for (MainObjectProperties prop : MainObjectProperties.values()) {
-			assertNotNull(prop.name() + " from MainObjectProperties has no associated object property in main.owl.",
+			assertNotNull(prop.name()
+					+ " from MainObjectProperties has no associated object property in main.owl.",
 					baseOnt.getObjectProperty(prop.uri()));
 		}
 
 		for (MainDatatypeProperties prop : MainDatatypeProperties.values()) {
-			assertNotNull(prop.name() + " from MainDatatypeProperties has no associated datatype property in main.owl.",
+			assertNotNull(prop.name()
+					+ " from MainDatatypeProperties has no associated datatype property in main.owl.",
 					baseOnt.getDatatypeProperty(prop.uri()));
 		}
 	}
