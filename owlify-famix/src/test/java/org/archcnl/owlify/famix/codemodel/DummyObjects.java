@@ -64,7 +64,8 @@ public class DummyObjects {
     }
 
     public static LocalVariable localVariable() {
-        return new LocalVariable(primitiveType(), "dummyVariable", Arrays.asList(new Modifier("public")));
+        return new LocalVariable(
+                primitiveType(), "dummyVariable", Arrays.asList(new Modifier("public")));
     }
 
     public static Parameter parameter() {

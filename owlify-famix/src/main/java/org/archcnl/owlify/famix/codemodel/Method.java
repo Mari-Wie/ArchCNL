@@ -139,7 +139,7 @@ public class Method {
      */
     public void modelIn(FamixOntology ontology, String parentName, Individual parent) {
         final String uri = parentName + "." + signature;
-        
+
         Individual m = ontology.createIndividual(FamixClasses.Method, uri);
 
         m.addLiteral(ontology.get(hasName), name);

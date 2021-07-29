@@ -72,6 +72,10 @@
 					<include>*.xml</include>
 					<include>.gitignore</include>
 					</includes>
+					<excludes>
+					<!-- Automatically generated file needs no formatting -->
+					<exclude>dependency-reduced-pom.xml</exclude>
+					</excludes>
 					<trimTrailingWhitespace/>
 					<endWithNewline/>
 					<indent>

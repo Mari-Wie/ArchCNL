@@ -11,21 +11,10 @@ import org.apache.jena.rdf.model.Model;
  */
 public interface OwlifyComponent {
     /**
-     * This method performs the parsing step. Make sure that all input files have been added before
-     * calling this method (via {@link #addSourcePath(String)}). The inputs will be read and the
-     * resulting output ontology will be returned.
+     * This method performs the parsing step. The inputs will be read and the resulting output
+     * ontology will be returned.
      */
-    public Model transform();
-
-    /** Returns a list of input file/directory path's which have been added in the past. */
-    public List<Path> getSourcePaths();
-
-    /**
-     * Adds a file (or directory) to this parser's inputs.
-     *
-     * @param path the path of the file/directory to add
-     */
-    public void addSourcePath(Path path);
+    public Model transform(List<Path> sourcePaths);
 
     /**
      * @return Returns a map which contains all OWL namespaces which are provided by the component.
