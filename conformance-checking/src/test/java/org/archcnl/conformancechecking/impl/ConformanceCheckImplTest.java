@@ -22,8 +22,8 @@ import org.junit.Test;
 
 public class ConformanceCheckImplTest {
     @Test
-    public void testCoarse() throws FileNotFoundException {
-        // setup:
+    public void givenExpectedConformanceCheckResult_whenCheckingWithConformanceCheckImpl_thenMatchesExpectedResult() throws FileNotFoundException {
+        // given
         IConformanceCheck check = new ConformanceCheckImpl();
         check.createNewConformanceCheck();
 
@@ -68,11 +68,12 @@ public class ConformanceCheckImplTest {
 
         CheckedRule r0 = new CheckedRule(rule0, violations1);
         CheckedRule r1 = new CheckedRule(rule1, violations2);
-
+        // when
         final String outputPath = "src/test/resources/check.owl";
         check.validateRule(r0, "./src/test/resources/mapped.owl", outputPath);
         check.validateRule(r1, "./src/test/resources/mapped.owl", outputPath);
 
+        System.out.println("validatedrules");
         OntModel expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected.read(new FileReader("./src/test/resources/check-expected.owl"), "");
 
@@ -96,7 +97,7 @@ public class ConformanceCheckImplTest {
                                 ConformanceCheckOntClasses.ConformanceCheck, actual),
                         hasCheckingDate)
                 .remove();
-
+        // then
         assertTrue(expected.isIsomorphicWith(actual));
     }
 }
