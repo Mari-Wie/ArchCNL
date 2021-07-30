@@ -22,7 +22,9 @@ import org.junit.Test;
 
 public class ConformanceCheckImplTest {
     @Test
-    public void givenExpectedConformanceCheckResult_whenCheckingWithConformanceCheckImpl_thenMatchesExpectedResult() throws FileNotFoundException {
+    public void
+            givenExpectedConformanceCheckResult_whenCheckingWithConformanceCheckImpl_thenMatchesExpectedResult()
+                    throws FileNotFoundException {
         // given
         IConformanceCheck check = new ConformanceCheckImpl();
         check.createNewConformanceCheck();

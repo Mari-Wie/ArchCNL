@@ -20,8 +20,9 @@ public class CheckedRuleTest {
     public void setUp() throws Exception {}
 
     @Test
-    public void givenArchitectureRuleAndViolation_whenCreatingCheckedRuleWithIt_thenCheckedRuleContainsThese() {
-    	// given
+    public void
+            givenArchitectureRuleAndViolation_whenCreatingCheckedRuleWithIt_thenCheckedRuleContainsThese() {
+        // given
         Model emptyModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         ArchitectureRule rule =
                 new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE, emptyModel);
