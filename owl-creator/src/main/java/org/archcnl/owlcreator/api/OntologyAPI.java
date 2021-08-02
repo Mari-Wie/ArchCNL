@@ -1,5 +1,6 @@
 package org.archcnl.owlcreator.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -19,8 +20,9 @@ public interface OntologyAPI {
      *
      * @param filePath The path to the file in which the ontology will be stored (in XML format).
      * @param iriPath The IRI (international resource modifier) path/prefix of this ontology.
+     * @throws IOException
      */
-    public void createOntology(String filePath, String iriPath);
+    public void createOntology(String filePath, String iriPath) throws IOException;
 
     /**
      * The current ontology cannot be added after calling this method. This method is also closing

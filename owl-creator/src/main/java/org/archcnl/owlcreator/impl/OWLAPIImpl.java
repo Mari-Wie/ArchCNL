@@ -1,6 +1,7 @@
 package org.archcnl.owlcreator.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +43,7 @@ public class OWLAPIImpl implements OntologyAPI {
     public OWLAPIImpl() {}
 
     @Override
-    public void createOntology(String filePath, String iriPath) {
+    public void createOntology(String filePath, String iriPath) throws IOException {
         LOG.trace(
                 "creating ontology with filePath \""
                         + filePath
@@ -65,12 +66,10 @@ public class OWLAPIImpl implements OntologyAPI {
             manager.saveOntology(currentOntology, documentIRI2);
         } catch (OWLOntologyCreationException e) {
             LOG.error("Creating an ontology failed.");
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new IOException("Creating an ontology failed", e);
         } catch (OWLOntologyStorageException e) {
             LOG.error("Saving an ontology failed.");
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new IOException("Saving an ontology failed.", e);
         }
     }
 

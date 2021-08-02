@@ -1,6 +1,8 @@
 package org.architecture.cnl;
 
 import com.google.inject.Injector;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,8 +31,9 @@ public class CNL2OWLGenerator {
      * @param path The path of the file to transform.
      * @param outputPath The path of the output file.
      * @return The RuleType of the parsed rule or null when something went wrong.
+     * @throws IOException
      */
-    public RuleType transformCNLFile(String path, String outputPath) {
+    public RuleType transformCNLFile(String path, String outputPath) throws IOException {
 
         LOG.trace("transforming CNL file with path: " + path);
 
@@ -61,7 +64,11 @@ public class CNL2OWLGenerator {
         InMemoryFileSystemAccess fsa = new InMemoryFileSystemAccess();
 
         LOG.trace("resource: " + resource);
-        generator.doGenerate(resource, fsa);
+        try {
+            generator.doGenerate(resource, fsa);
+        } catch (UncheckedIOException e) {
+            throw new IOException("Failure while generating", e);
+        }
 
         RuleType ruleType = RuleTypeStorageSingleton.getInstance().retrieveTypeOfRule(id);
 

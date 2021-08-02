@@ -58,7 +58,8 @@ public class CNLTranslator {
             int index,
             String rulePath,
             String ontologyPath,
-            List<ArchitectureRule> rules) {
+            List<ArchitectureRule> rules)
+            throws IOException {
         LOG.debug("Transforming the rule from CNL to an OWL constraint ...");
         RuleType typeOfParsedRule = generator.transformCNLFile(rulePath, ontologyPath);
 
