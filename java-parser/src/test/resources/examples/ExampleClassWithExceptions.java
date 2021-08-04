@@ -15,4 +15,8 @@ public class ExampleClassWithExceptions {
         IllegalStateException e = new IllegalStateException();
         throw e;
     }
+    
+    public void doThrowCustomException() throws CustomException {
+        throw new CustomException();
+    }
 }

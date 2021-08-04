@@ -42,7 +42,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals("getIndex", method.getName());
         Assert.assertEquals("int", method.getReturnType().getName());
         Assert.assertTrue(method.getReturnType().isPrimitive());
-        Assert.assertEquals(0, method.getAnnotations().size());
+        Assert.assertEquals(1, method.getAnnotations().size());
         Assert.assertEquals(0, method.getDeclaredExceptions().size());
         Assert.assertEquals(0, method.getThrownExceptions().size());
         Assert.assertEquals(0, method.getLocalVariables().size());
@@ -96,7 +96,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         // when
         unit.accept(visitor, null);
         // then
-        Assert.assertEquals(4, visitor.getMethods().size());
+        Assert.assertEquals(5, visitor.getMethods().size());
 
         final Method method1 = visitor.getMethods().get(0);
         Assert.assertEquals("calculateArea()", method1.getSignature());
@@ -126,21 +126,30 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals("\"neverEver\"", sinceNeverValuePairMethod3.getValue());
 
         final Method method4 = visitor.getMethods().get(3);
-        Assert.assertEquals("primitiveMethod(boolean)", method4.getSignature());
-        Assert.assertEquals(1, method4.getLocalVariables().size());
-        Assert.assertEquals("characters", method4.getLocalVariables().get(0).getName());
+        Assert.assertEquals("returnNull()", method4.getSignature());
+        Assert.assertEquals(1, method4.getAnnotations().size());
+        final var multipleValueAnnotationMethod4 = method4.getAnnotations().get(0);
+        Assert.assertEquals("AnnotationWithNullConstant", multipleValueAnnotationMethod4.getName());
+        final var valuePairMethod4 = multipleValueAnnotationMethod4.getValues().get(0);
+        Assert.assertEquals("key", valuePairMethod4.getName());
+        Assert.assertEquals("NULL_CONSTANT", valuePairMethod4.getValue());
+
+        final Method method5 = visitor.getMethods().get(4);
+        Assert.assertEquals("primitiveMethod(boolean)", method5.getSignature());
+        Assert.assertEquals(1, method5.getLocalVariables().size());
+        Assert.assertEquals("characters", method5.getLocalVariables().get(0).getName());
         Assert.assertEquals(
-                "java.util.List", method4.getLocalVariables().get(0).getType().getName());
-        Assert.assertFalse(method4.getLocalVariables().get(0).getType().isPrimitive());
-        Assert.assertEquals(2, method4.getAnnotations().size());
-        final var multipleValueAnnotationMethod4 = method4.getAnnotations().get(1);
-        Assert.assertEquals("FictiveAnnotation", multipleValueAnnotationMethod4.getName());
-        final var intValuePairMethod4 = multipleValueAnnotationMethod4.getValues().get(0);
-        Assert.assertEquals("intValue", intValuePairMethod4.getName());
-        Assert.assertEquals("0", intValuePairMethod4.getValue());
-        final var doubleValuePairMethod4 = multipleValueAnnotationMethod4.getValues().get(1);
-        Assert.assertEquals("doubleValue", doubleValuePairMethod4.getName());
-        Assert.assertEquals("3.14", doubleValuePairMethod4.getValue());
+                "java.util.List", method5.getLocalVariables().get(0).getType().getName());
+        Assert.assertFalse(method5.getLocalVariables().get(0).getType().isPrimitive());
+        Assert.assertEquals(2, method5.getAnnotations().size());
+        final var multipleValueAnnotationMethod5 = method5.getAnnotations().get(1);
+        Assert.assertEquals("FictiveAnnotation", multipleValueAnnotationMethod5.getName());
+        final var intValuePairMethod5 = multipleValueAnnotationMethod5.getValues().get(0);
+        Assert.assertEquals("intValue", intValuePairMethod5.getName());
+        Assert.assertEquals("0", intValuePairMethod5.getValue());
+        final var doubleValuePairMethod5 = multipleValueAnnotationMethod5.getValues().get(1);
+        Assert.assertEquals("doubleValue", doubleValuePairMethod5.getName());
+        Assert.assertEquals("3.14", doubleValuePairMethod5.getValue());
     }
 
     @Override

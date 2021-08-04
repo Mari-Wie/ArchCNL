@@ -12,9 +12,10 @@ public class ObjectCreationExpressionVisitor extends VoidVisitorAdapter<Void> {
     public ObjectCreationExpressionVisitor() {}
 
     @Override
-    public void visit(ObjectCreationExpr n, Void arg) {
-        DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
+    public void visit(final ObjectCreationExpr n, final Void arg) {
+        final DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
         n.accept(visitor, null);
+        typeOfCreatedObject = visitor.getType();
     }
 
     /** @return the declared type of the created object */

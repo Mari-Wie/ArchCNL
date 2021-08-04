@@ -22,35 +22,36 @@ public class ThrowStatementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public void visit(ThrowStmt n, Void arg) {
-        ObjectCreationExpressionVisitor typeOfCreatedObjectVisitor =
+    public void visit(final ThrowStmt n, final Void arg) {
+        final ObjectCreationExpressionVisitor typeOfCreatedObjectVisitor =
                 new ObjectCreationExpressionVisitor();
         n.getExpression().accept(typeOfCreatedObjectVisitor, null);
 
         Type thrownException = typeOfCreatedObjectVisitor.getTypeOfCreatedObject();
 
         if (thrownException == null) {
-            LOG.debug(
+            ThrowStatementVisitor.LOG.debug(
                     "Throw statement does not match \"throw new X()\", using fall back solution: "
                             + n);
 
-            Expression throwExpression = n.getExpression();
+            final Expression throwExpression = n.getExpression();
 
             try {
-                String typeName =
+                final String typeName =
                         throwExpression
                                 .calculateResolvedType()
                                 .asReferenceType()
                                 .getQualifiedName();
-                String simpleName = typeName.substring(typeName.lastIndexOf(".") + 1);
+                final String simpleName = typeName.substring(typeName.lastIndexOf(".") + 1);
                 thrownException =
-                        new Type(typeName, simpleName, false); // primitives types cannot be thrown
-            } catch (UnsupportedOperationException e) {
-                LOG.error("Can not calculate type of " + throwExpression, e);
-            } catch (UnsolvedSymbolException e) {
-                LOG.error("Can not solve symbol of " + throwExpression, e);
-            } catch (RuntimeException e) {
-                LOG.error(
+                        new Type(typeName, simpleName, false); // primitives types cannot be
+                // thrown
+            } catch (final UnsupportedOperationException e) {
+                ThrowStatementVisitor.LOG.error("Can not calculate type of " + throwExpression, e);
+            } catch (final UnsolvedSymbolException e) {
+                ThrowStatementVisitor.LOG.error("Can not solve symbol of " + throwExpression, e);
+            } catch (final RuntimeException e) {
+                ThrowStatementVisitor.LOG.error(
                         "An exception was used that javaparser can not reach: " + throwExpression,
                         e);
             }

@@ -19,8 +19,8 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
     private AnnotationInstance annotationInstance;
 
     @Override
-    public void visit(NormalAnnotationExpr n, Void arg) {
-        List<AnnotationMemberValuePair> values =
+    public void visit(final NormalAnnotationExpr n, final Void arg) {
+        final List<AnnotationMemberValuePair> values =
                 n.getPairs().stream()
                         .map(pair -> createAnnotationPairFromPair(pair, n))
                         .collect(Collectors.toList());
@@ -34,13 +34,13 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
     }
 
     private AnnotationMemberValuePair createAnnotationPairFromPair(
-            MemberValuePair annotationMemberValuePair, NormalAnnotationExpr n) {
-        var name = annotationMemberValuePair.getNameAsString();
-        var valueExpression = annotationMemberValuePair.getValue();
+            final MemberValuePair annotationMemberValuePair, final NormalAnnotationExpr n) {
+        final var name = annotationMemberValuePair.getNameAsString();
+        final var valueExpression = annotationMemberValuePair.getValue();
         var value = valueExpression.toString();
 
         if (!(valueExpression instanceof StringLiteralExpr)) {
-            var possibleValue = findFieldValueInParentClass(valueExpression, n);
+            final var possibleValue = findFieldValueInParentClass(valueExpression, n);
             if (possibleValue != null) {
                 value = possibleValue;
             }
@@ -50,19 +50,17 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
     }
 
     private @Nullable String findFieldValueInParentClass(
-            Expression valueExpression, Node currentNode) {
-        var parentClass = findClassOrInterfaceDeclaration(currentNode);
+            final Expression valueExpression, final Node currentNode) {
+        final var parentClass = findClassOrInterfaceDeclaration(currentNode);
 
         if (parentClass != null) {
-            var field = parentClass.getFieldByName(valueExpression.toString());
+            final var field = parentClass.getFieldByName(valueExpression.toString());
 
             if (field.isPresent()) {
-                var fieldWithValue = field.get();
-                if (fieldWithValue.getVariables().size() > 0) {
-                    var fieldVariableInitializer = fieldWithValue.getVariable(0).getInitializer();
-                    if (fieldVariableInitializer.isPresent()) {
-                        return fieldVariableInitializer.get().toString();
-                    }
+                final var fieldWithValue = field.get();
+                final var fieldVariableInitializer = fieldWithValue.getVariable(0).getInitializer();
+                if (fieldVariableInitializer.isPresent()) {
+                    return fieldVariableInitializer.get().toString();
                 }
             }
         }
@@ -71,12 +69,12 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
     }
 
     private @Nullable ClassOrInterfaceDeclaration findClassOrInterfaceDeclaration(
-            Node startingPoint) {
+            final Node startingPoint) {
         var parent = startingPoint;
         var parentIsClass = parent instanceof ClassOrInterfaceDeclaration;
 
         while (!parentIsClass) {
-            var parentOfTheParent = parent.getParentNode();
+            final var parentOfTheParent = parent.getParentNode();
             if (parentOfTheParent.isPresent()) {
                 parent = parentOfTheParent.get();
                 parentIsClass = parent instanceof ClassOrInterfaceDeclaration;
@@ -87,8 +85,7 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
 
         if (parentIsClass) {
             return (ClassOrInterfaceDeclaration) parent;
-        } else {
-            return null;
         }
+        return null;
     }
 }

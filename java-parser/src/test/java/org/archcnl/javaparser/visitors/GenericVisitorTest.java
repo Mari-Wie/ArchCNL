@@ -29,6 +29,7 @@ public abstract class GenericVisitorTest<E extends VoidVisitorAdapter<Void>> {
     public static final String INTERFACE = "Interface.java";
     public static final String ANNOTATION = "Annotation.java";
     public static final String TWO_CLASSES = "TwoTopLevelClasses.java";
+    public static final String CLASS_WITH_EXCEPTIONS = "ExampleClassWithExceptions.java";
 
     protected E visitor;
 
