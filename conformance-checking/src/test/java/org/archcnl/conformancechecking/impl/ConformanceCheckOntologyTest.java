@@ -61,12 +61,6 @@ public class ConformanceCheckOntologyTest {
                                                 .getUri()),
                         cnlSentence1));
 
-        /**
-         * try { File file = new File("src/test/resources/architecture-rule-expected.owl");
-         * ontology.getModel().write(new FileOutputStream(file)); System.out.println("NoError"); }
-         * catch (FileNotFoundException e) { System.out.println("Error: " + e); e.printStackTrace();
-         * }
-         */
         OntModel expectedModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         try {
             expectedModel.read(

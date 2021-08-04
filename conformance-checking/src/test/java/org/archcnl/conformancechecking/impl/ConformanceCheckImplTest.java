@@ -75,7 +75,6 @@ public class ConformanceCheckImplTest {
         check.validateRule(r0, "./src/test/resources/mapped.owl", outputPath);
         check.validateRule(r1, "./src/test/resources/mapped.owl", outputPath);
 
-        System.out.println("validatedrules");
         OntModel expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected.read(new FileReader("./src/test/resources/check-expected.owl"), "");
 
