@@ -30,34 +30,34 @@ public class ConformanceCheckImplTest {
         IConformanceCheck check = new ConformanceCheckImpl();
         check.createNewConformanceCheck();
 
-		ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
-				RuleType.DOMAIN_RANGE, "architecture0.owl");
-		ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.",
-				RuleType.NEGATION, "architecture1.owl");
+    ArchitectureRule rule0 = new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
+        RuleType.DOMAIN_RANGE, "architecture0.owl");
+    ArchitectureRule rule1 = new ArchitectureRule(1, "No LayerTwo can use LayerOne.",
+        RuleType.NEGATION, "architecture1.owl");
 
-		List<ConstraintViolation> violations1 = new ArrayList<>();
-		ConstraintViolationBuilder violation = new ConstraintViolationBuilder();
-		violation.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1",
-				"http://www.arch-ont.org/ontologies/architecture.owl#use",
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
+    List<ConstraintViolation> violations1 = new ArrayList<>();
+    ConstraintViolationBuilder violation = new ConstraintViolationBuilder();
+    violation.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1",
+        "http://www.arch-ont.org/ontologies/architecture.owl#use",
+        "http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
 
-		violation.addNotInferredStatement("http://arch-ont.org/ontologies/famix.owl#TestLayerOne0",
-				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-				"http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
-		violations1.add(violation.build());
+    violation.addNotInferredStatement("http://arch-ont.org/ontologies/famix.owl#TestLayerOne0",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
+    violations1.add(violation.build());
 
-		List<ConstraintViolation> violations2 = new ArrayList<>();
-		ConstraintViolationBuilder violation2 = new ConstraintViolationBuilder();
-		violation2.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1",
-				"http://www.arch-ont.org/ontologies/architecture.owl#use",
-				"http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
-		violation2.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerOne0",
-				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-				"http://www.arch-ont.org/ontologies/architecture.owl#LayerOne");
-		violation2.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1",
-				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-				"http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
-		violations2.add(violation2.build());
+    List<ConstraintViolation> violations2 = new ArrayList<>();
+    ConstraintViolationBuilder violation2 = new ConstraintViolationBuilder();
+    violation2.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1",
+        "http://www.arch-ont.org/ontologies/architecture.owl#use",
+        "http://arch-ont.org/ontologies/famix.owl#TestLayerOne0");
+    violation2.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerOne0",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "http://www.arch-ont.org/ontologies/architecture.owl#LayerOne");
+    violation2.addViolation("http://arch-ont.org/ontologies/famix.owl#TestLayerTwo1",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "http://www.arch-ont.org/ontologies/architecture.owl#LayerTwo");
+    violations2.add(violation2.build());
 
         CheckedRule r0 = new CheckedRule(rule0, violations1);
         CheckedRule r1 = new CheckedRule(rule1, violations2);
@@ -66,12 +66,12 @@ public class ConformanceCheckImplTest {
         check.validateRule(r0, "./src/test/resources/mapped.owl", outputPath);
         check.validateRule(r1, "./src/test/resources/mapped.owl", outputPath);
 
-		// when
-		OntModel expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		expected.read(new FileReader("./src/test/resources/check-expected.owl"), "");
+    // when
+    OntModel expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+    expected.read(new FileReader("./src/test/resources/check-expected.owl"), "");
 
-		OntModel actual = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		actual.read(new FileReader(outputPath), "");
+    OntModel actual = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+    actual.read(new FileReader(outputPath), "");
 
         // workaround: remove the checking date
         DatatypeProperty hasCheckingDate =
