@@ -16,26 +16,27 @@ import org.junit.Test;
 
 public class CheckedRuleTest {
 
-  @Before
-  public void setUp() throws Exception {}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-  @Test
-  public void givenRulesAndViolations_whenCreatingNewCheckedRule_thenCheckedRuleIsCorrect() {
-    // given
-    Model emptyModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-    ArchitectureRule rule =
-        new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE, emptyModel);
+    @Test
+    public void givenRulesAndViolations_whenCreatingNewCheckedRule_thenCheckedRuleIsCorrect() {
+        // given
+        Model emptyModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        ArchitectureRule rule = new ArchitectureRule(0, "Only A can use B.", RuleType.DOMAIN_RANGE,
+                emptyModel);
 
-    ConstraintViolationBuilder violationBuilder = new ConstraintViolationBuilder();
-    violationBuilder.addViolation("subject", "predicate", "object");
-    List<ConstraintViolation> violations = new ArrayList<>();
-    violations.add(violationBuilder.build());
+        ConstraintViolationBuilder violationBuilder = new ConstraintViolationBuilder();
+        violationBuilder.addViolation("subject", "predicate", "object");
+        List<ConstraintViolation> violations = new ArrayList<>();
+        violations.add(violationBuilder.build());
 
-    // when
-    CheckedRule r = new CheckedRule(rule, violations);
+        // when
+        CheckedRule r = new CheckedRule(rule, violations);
 
-    // then
-    assertEquals(r.getRule(), rule);
-    assertEquals(r.getViolations(), violations);
-  }
+        // then
+        assertEquals(r.getRule(), rule);
+        assertEquals(r.getViolations(), violations);
+    }
 }

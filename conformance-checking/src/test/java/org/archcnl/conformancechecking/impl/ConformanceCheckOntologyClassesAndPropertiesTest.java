@@ -12,35 +12,36 @@ import org.junit.Test;
 
 public class ConformanceCheckOntologyClassesAndPropertiesTest {
 
-  @Test
-  public void givenOntModel_whenItReadsOwlFile_thenURIsMatchOntologyFile()
-      throws FileNotFoundException {
-    // given, when
-    OntModel baseOnt = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-    baseOnt.read(new FileInputStream("src/main/resources/ontologies/architectureconformance.owl"),
-        null);
+    @Test
+    public void givenOntModel_whenItReadsOwlFile_thenURIsMatchOntologyFile()
+            throws FileNotFoundException {
+        // given, when
+        OntModel baseOnt = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+        baseOnt.read(
+                new FileInputStream("src/main/resources/ontologies/architectureconformance.owl"),
+                null);
 
-    // TODO: uncomment tests when refactoring issues are done
+        // TODO: uncomment tests when refactoring issues are done
 
-    // for (ConformanceCheckClassesProperties ontClass :
-    // ConformanceCheckClassesProperties.values()) {
-    // assertNotNull(ontClass.name() + " from ConformanceCheckClassesProperties has
-    // no associated class in architectureconformance.owl.",
-    // baseOnt.getOntClass(ontClass.getUri()));
-    // }
+        // for (ConformanceCheckClassesProperties ontClass :
+        // ConformanceCheckClassesProperties.values()) {
+        // assertNotNull(ontClass.name() + " from ConformanceCheckClassesProperties has
+        // no associated class in architectureconformance.owl.",
+        // baseOnt.getOntClass(ontClass.getUri()));
+        // }
 
-    // then
-    for (ConformanceCheckObjectProperties prop : ConformanceCheckObjectProperties.values()) {
-      assertNotNull(prop.name()
-          + " from ConformanceCheckObjectProperties has no associated object property in architectureconformance.owl.",
-          baseOnt.getObjectProperty(prop.getUri()));
+        // then
+        for (ConformanceCheckObjectProperties prop : ConformanceCheckObjectProperties.values()) {
+            assertNotNull(prop.name()
+                    + " from ConformanceCheckObjectProperties has no associated object property in architectureconformance.owl.",
+                    baseOnt.getObjectProperty(prop.getUri()));
+        }
+
+        // for (ConformanceCheckDatatypeProperties prop :
+        // ConformanceCheckDatatypeProperties.values()) {
+        // assertNotNull(prop.name() + " from ConformanceCheckDatatypeProperties has no
+        // associated datatype property in architectureconformance.owl.",
+        // baseOnt.getDatatypeProperty(prop.getUri()));
+        // }
     }
-
-    // for (ConformanceCheckDatatypeProperties prop :
-    // ConformanceCheckDatatypeProperties.values()) {
-    // assertNotNull(prop.name() + " from ConformanceCheckDatatypeProperties has no
-    // associated datatype property in architectureconformance.owl.",
-    // baseOnt.getDatatypeProperty(prop.getUri()));
-    // }
-  }
 }
