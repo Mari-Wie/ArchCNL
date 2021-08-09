@@ -17,18 +17,25 @@ import org.junit.Test;
 public class ExecuteMappingAPIImplTest {
 
     @Before
-    public void setUp() throws Exception {
-    }
+    public void setUp() throws Exception {}
 
     @Test
-    public void givenArchitectureAndCodeModel_whenMappingIsExecuted_thenMappingIsIsomorphicWithExpectedModel()
-            throws IOException {
+    public void
+            givenArchitectureAndCodeModel_whenMappingIsExecuted_thenMappingIsIsomorphicWithExpectedModel()
+                    throws IOException {
         // given
-        List<ArchitectureRule> architectureModel = Arrays.asList(
-                new ArchitectureRule(0, "Only LayerOne can use LayerTwo.", RuleType.DOMAIN_RANGE,
-                        "./src/test/resources/architecture0.owl"),
-                new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
-                        "./src/test/resources/architecture1.owl"));
+        List<ArchitectureRule> architectureModel =
+                Arrays.asList(
+                        new ArchitectureRule(
+                                0,
+                                "Only LayerOne can use LayerTwo.",
+                                RuleType.DOMAIN_RANGE,
+                                "./src/test/resources/architecture0.owl"),
+                        new ArchitectureRule(
+                                1,
+                                "No LayerTwo can use LayerOne.",
+                                RuleType.NEGATION,
+                                "./src/test/resources/architecture1.owl"));
 
         ExecuteMappingAPI e = new ExecuteMappingAPIImpl();
 
@@ -36,8 +43,8 @@ public class ExecuteMappingAPIImplTest {
         codeModel.read("src/test/resources/results.owl");
 
         // when
-        Model actual = e.executeMapping(codeModel, architectureModel,
-                "src/test/resources/mapping.txt");
+        Model actual =
+                e.executeMapping(codeModel, architectureModel, "src/test/resources/mapping.txt");
 
         Model expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected.read("mapped-expected.owl");

@@ -18,18 +18,25 @@ public class CNLTranslatorTest {
     public void givenCNLSentences_whenTranslatedbyTranslator_thenRulesAreCorrectlyTranslated() {
         // given
         CNLTranslator translator = new CNLTranslator();
-        List<String> cnlSentences = Arrays.asList("Only LayerOne can use LayerTwo.",
-                "No LayerTwo can use LayerOne.");
+        List<String> cnlSentences =
+                Arrays.asList("Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne.");
 
         // when
         List<ArchitectureRule> rules = translator.translate(cnlSentences, "./src/test/resources");
 
         // then
-        assertThat(rules,
+        assertThat(
+                rules,
                 CoreMatchers.hasItems(
-                        new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
-                                RuleType.DOMAIN_RANGE, "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
+                        new ArchitectureRule(
+                                0,
+                                "Only LayerOne can use LayerTwo.",
+                                RuleType.DOMAIN_RANGE,
+                                "./src/test/resources/architecture0.owl"),
+                        new ArchitectureRule(
+                                1,
+                                "No LayerTwo can use LayerOne.",
+                                RuleType.NEGATION,
                                 "./src/test/resources/architecture1.owl")));
 
         // assert that 1st constraint files is correct:

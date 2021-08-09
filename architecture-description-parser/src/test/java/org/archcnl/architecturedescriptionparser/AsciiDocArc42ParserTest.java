@@ -26,7 +26,8 @@ public class AsciiDocArc42ParserTest {
         // given
         Map<String, String> namespaces = new HashMap<>();
 
-        namespaces.put("architectureconformance",
+        namespaces.put(
+                "architectureconformance",
                 "http://arch-ont.org/ontologies/architectureconformance#");
         namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
         namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
@@ -34,19 +35,26 @@ public class AsciiDocArc42ParserTest {
 
         Path testRulesPath = Paths.get("./src/test/resources/rules.adoc");
         // when
-        List<ArchitectureRule> rules = parser.parseRulesFromDocumentation(testRulesPath,
-                "./src/test/resources");
-        parser.parseMappingRulesFromDocumentation(testRulesPath,
-                "./src/test/resources/mapping.txt");
+        List<ArchitectureRule> rules =
+                parser.parseRulesFromDocumentation(testRulesPath, "./src/test/resources");
+        parser.parseMappingRulesFromDocumentation(
+                testRulesPath, "./src/test/resources/mapping.txt");
 
         // then (assert that the extracted rules are correct)
         assertEquals(2, rules.size());
 
-        assertThat(rules,
+        assertThat(
+                rules,
                 CoreMatchers.hasItems(
-                        new ArchitectureRule(0, "Only LayerOne can use LayerTwo.",
-                                RuleType.DOMAIN_RANGE, "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(1, "No LayerTwo can use LayerOne.", RuleType.NEGATION,
+                        new ArchitectureRule(
+                                0,
+                                "Only LayerOne can use LayerTwo.",
+                                RuleType.DOMAIN_RANGE,
+                                "./src/test/resources/architecture0.owl"),
+                        new ArchitectureRule(
+                                1,
+                                "No LayerTwo can use LayerOne.",
+                                RuleType.NEGATION,
                                 "./src/test/resources/architecture1.owl")));
 
         // assert that the 1st rule's constraint file is correct
@@ -72,7 +80,10 @@ public class AsciiDocArc42ParserTest {
         assertTrue(expected1.isIsomorphicWith(actual1));
 
         // assert that the mapping.txt is correct
-        assertTrue(FileUtils.contentEqualsIgnoreEOL(new File("./src/test/resources/mapping.txt"),
-                new File("./src/test/resources/mapping-expected.txt"), "utf-8"));
+        assertTrue(
+                FileUtils.contentEqualsIgnoreEOL(
+                        new File("./src/test/resources/mapping.txt"),
+                        new File("./src/test/resources/mapping-expected.txt"),
+                        "utf-8"));
     }
 }

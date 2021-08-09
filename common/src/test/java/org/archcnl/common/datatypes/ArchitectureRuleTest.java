@@ -11,11 +11,11 @@ import org.junit.Test;
 public class ArchitectureRuleTest {
 
     @Before
-    public void setUp() throws Exception {
-    }
+    public void setUp() throws Exception {}
 
     @Test
-    public void givenArchitectureRules_whenCompared_thenIdenticalRulesAreEqualAndHaveSameHashCode() {
+    public void
+            givenArchitectureRules_whenCompared_thenIdenticalRulesAreEqualAndHaveSameHashCode() {
         // given, when
         Model model1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         Model model2 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
