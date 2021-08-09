@@ -77,6 +77,7 @@ public class ConformanceCheckImplTest {
         check.validateRule(r0, "./src/test/resources/mapped.owl", outputPath);
         check.validateRule(r1, "./src/test/resources/mapped.owl", outputPath);
 
+        // when
         OntModel expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected.read(new FileReader("./src/test/resources/check-expected.owl"), "");
 
@@ -100,7 +101,7 @@ public class ConformanceCheckImplTest {
                                 ConformanceCheckOntClasses.ConformanceCheck, actual),
                         hasCheckingDate)
                 .remove();
-        
+
         // then
         assertTrue(expected.isIsomorphicWith(actual));
     }
