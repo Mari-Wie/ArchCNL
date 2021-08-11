@@ -202,9 +202,12 @@ public class CNLToolchain {
         }
 
         createTemporaryDirectory();
-
-        List<ArchitectureRule> rules = parseRuleFile(docPath);
-
+        List<ArchitectureRule> rules;
+        try {
+            rules = parseRuleFile(docPath);
+        } catch (IOException e) {
+            throw new IOException("Rules could not be parsed", e);
+        }
         Model codeModel = buildCodeModel(sourceCodePaths);
 
         combineArchitectureAndCodeModels(rules, codeModel);

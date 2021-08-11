@@ -2,6 +2,8 @@ package org.architecture.cnl.generator;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +54,11 @@ public class ArchcnlGenerator extends AbstractGenerator {
         this.namespace = "http://www.arch-ont.org/ontologies/architecture.owl";
         final String filename = RuleTypeStorageSingleton.getInstance().getOutputFile();
         this.api = APIFactory.get();
-        this.api.createOntology(filename, this.namespace);
+        try {
+            this.api.createOntology(filename, this.namespace);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Error while creating an ontology", e);
+        }
         Iterable<EObject> resourceIterable =
                 IteratorExtensions.toIterable(resource.getAllContents());
         Iterable<Sentence> sentenceIterable = Iterables.filter(resourceIterable, Sentence.class);
