@@ -38,27 +38,37 @@ public class ArchitectureToCodeMappingTest {
     }
 
     @Test
-    public void testAsSWRL() throws IOException {
+    public void
+            givenArchitectureToCodeMapping_whenMappingIsReturnedAsSWRL_thenMappingEqualsExpectationString()
+                    throws IOException {
+        // given, when
         mapping = new ArchitectureToCodeMapping(prefixMapping, Arrays.asList(rule1, rule2));
+        // then
         assertEquals(expectation, mapping.asSWRL());
     }
 
     @Test
-    public void testEmptyMapping() throws IOException {
+    public void givenEmptyArchitectureToCodeMapping_whenMappingIsReturned_thenMappingEqualsPrefix()
+            throws IOException {
+        // given, when
         StringWriter writer = new StringWriter();
         mapping = new ArchitectureToCodeMapping(prefixMapping, new ArrayList<String>());
         mapping.write(writer);
-
+        // then
         assertEquals(prefix, mapping.asSWRL());
         assertEquals(prefix, writer.toString());
     }
 
     @Test
-    public void testWrite() throws IOException {
+    public void
+            givenArchitectureToCodeMapping_whenMappingIsWrittenToStringWriter_thenStringWriterToStringEqualsExpectationString()
+                    throws IOException {
+        // given
         mapping = new ArchitectureToCodeMapping(prefixMapping, Arrays.asList(rule1, rule2));
         StringWriter writer = new StringWriter();
+        // when
         mapping.write(writer);
-
+        // then
         assertEquals(expectation, writer.toString());
     }
 }

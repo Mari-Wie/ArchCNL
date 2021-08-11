@@ -11,8 +11,11 @@ public class AsciiDocCNLSentenceExtractorTest {
     private AsciiDocCNLSentenceExtractor extractor;
 
     @Test
-    public void testArchitectureRuleExtraction() {
+    public void
+            givenArchitectureRules_whenGivenToSentenceExtractor_thenRulesAreExtractedCorrectly() {
+        // given, when
         extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/rules.adoc"));
+        // then
         assertThat(
                 extractor.extractArchitectureRules(),
                 CoreMatchers.hasItems(
@@ -20,8 +23,10 @@ public class AsciiDocCNLSentenceExtractorTest {
     }
 
     @Test
-    public void testMappingRuleExtraction() {
+    public void givenMappingRules_whenGivenToSentenceExtractor_thenMappingsAreExtractedCorrectly() {
+        // given, when
         extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/rules.adoc"));
+        // then
         assertThat(
                 extractor.extractMappingRules(),
                 CoreMatchers.hasItems(
@@ -31,24 +36,31 @@ public class AsciiDocCNLSentenceExtractorTest {
     }
 
     @Test
-    public void testEmptyArchitectureRule() {
+    public void
+            givenEmptyArchitectureRules_whenGivenToSentenceExtractor_thenExtractedRulesIsEmpty() {
+        // given, when
         extractor =
                 new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/emptyrules.adoc"));
+        // then
         assertTrue(extractor.extractArchitectureRules().isEmpty());
     }
 
     @Test
-    public void testEmptyMappingRule() {
+    public void givenEmptyMappingsRules_whenGivenToSentenceExtractor_thenExtractedRulesIsEmpty() {
+        // given, when
         extractor =
                 new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/emptyrules.adoc"));
+        // then
         assertTrue(extractor.extractMappingRules().isEmpty());
     }
 
     @Test
-    public void testNoAsciidocFile() {
+    public void givenNonAsciidocFile_whenGivenToSentenceExtractor_thenExtractorIsEmpty() {
+        // given, when
         extractor =
                 new AsciiDocCNLSentenceExtractor(
                         Paths.get("./src/test/resources/mapping-expected.txt"));
+        // then
         assertTrue(extractor.extractArchitectureRules().isEmpty());
         assertTrue(extractor.extractMappingRules().isEmpty());
     }

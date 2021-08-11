@@ -70,23 +70,29 @@ public class ArchitectureToCodeMapperTest {
     }
 
     @Test
-    public void testCodeModelIsIncluded() throws IOException {
+    public void
+            givenCodeModelWithRulesAndMapping_whenMappingIsExecuted_thenMappedModelContainsAllOfCodeModel()
+                    throws IOException {
+        // given, when
         Model mappedModel =
                 mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
 
+        // then
         assertTrue(mappedModel.containsAll(codeModel));
     }
 
     @Test
-    public void testPropertyIsDeduced() throws IOException {
+    public void
+            givenNonTransitiveMapping_whenMappingIsExecuted_thenNonTransitivePropertiesAreDeduced()
+                    throws IOException {
+        // given, when
         Model mappedModel =
                 mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
 
+        // then
         assertTrue(mappedModel.containsResource(uses));
-
         assertTrue(mappedModel.contains(classA, uses, classB));
         assertTrue(mappedModel.contains(classB, uses, classC));
-
         assertFalse(mappedModel.contains(classA, uses, classC));
         assertFalse(mappedModel.contains(classC, uses, classA));
         assertFalse(mappedModel.contains(classC, uses, classB));
@@ -94,26 +100,30 @@ public class ArchitectureToCodeMapperTest {
     }
 
     @Test
-    public void testTransitivePropertyIsDeduced() throws IOException {
+    public void givenTransitiveMapping_whenMappingIsExecuted_thenTransitivePropertiesAreDeduced()
+            throws IOException {
+        // given, when
         Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
 
+        // then
         assertTrue(mappedModel.containsResource(uses));
-
         assertTrue(mappedModel.contains(classA, uses, classB));
         assertTrue(mappedModel.contains(classB, uses, classC));
         assertTrue(mappedModel.contains(classA, uses, classC));
-
         assertFalse(mappedModel.contains(classC, uses, classA));
         assertFalse(mappedModel.contains(classC, uses, classB));
         assertFalse(mappedModel.contains(classB, uses, classA));
     }
 
     @Test
-    public void testTransitivePropertyTwoHops() throws IOException {
+    public void
+            givenTransitiveMapping_whenMappingIsExecuted_then2HopTransitivePropertiesAreCorrectlyDeduced()
+                    throws IOException {
+        // given, when
         Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
 
+        // then
         assertTrue(mappedModel.containsResource(uses));
-
         assertTrue(mappedModel.contains(classA, uses, classB));
         assertTrue(mappedModel.contains(classB, uses, classC));
         assertTrue(mappedModel.contains(classC, uses, classD));
@@ -123,19 +133,26 @@ public class ArchitectureToCodeMapperTest {
     }
 
     @Test
-    public void testPropertyIsNotReflexive() throws IOException {
+    public void
+            givenNonTransitiveMapping_whenMappingIsExecuted_thenNonTransitivePropertyIsNotReflexive()
+                    throws IOException {
+        // given, when
         Model mappedModel =
                 mapper.executeMapping(codeModel, architectureModel, nonTransitiveMapping);
 
+        // then
         assertFalse(mappedModel.contains(classA, uses, classA));
         assertFalse(mappedModel.contains(classB, uses, classB));
         assertFalse(mappedModel.contains(classC, uses, classC));
     }
 
     @Test
-    public void testTransitivePropertyIsNotReflexive() throws IOException {
+    public void givenTransitiveMapping_whenMappingIsExecuted_thenTransitivePropertyIsNotReflexive()
+            throws IOException {
+        // given, when
         Model mappedModel = mapper.executeMapping(codeModel, architectureModel, transitiveMapping);
 
+        // then
         assertFalse(mappedModel.contains(classA, uses, classA));
         assertFalse(mappedModel.contains(classB, uses, classB));
         assertFalse(mappedModel.contains(classC, uses, classC));

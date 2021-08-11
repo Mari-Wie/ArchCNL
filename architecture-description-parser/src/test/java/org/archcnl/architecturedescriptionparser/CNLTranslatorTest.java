@@ -15,13 +15,16 @@ import org.junit.Test;
 public class CNLTranslatorTest {
 
     @Test
-    public void testCNLTranslation() {
+    public void givenCNLSentences_whenTranslatedbyTranslator_thenRulesAreCorrectlyTranslated() {
+        // given
         CNLTranslator translator = new CNLTranslator();
-
         List<String> cnlSentences =
                 Arrays.asList("Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne.");
+
+        // when
         List<ArchitectureRule> rules = translator.translate(cnlSentences, "./src/test/resources");
 
+        // then
         assertThat(
                 rules,
                 CoreMatchers.hasItems(
@@ -36,24 +39,26 @@ public class CNLTranslatorTest {
                                 RuleType.NEGATION,
                                 "./src/test/resources/architecture1.owl")));
 
-        // assert that the constraint files are correct:
-
-        // 1st one
+        // assert that 1st constraint files is correct:
+        // given, when
         Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected0.read("./src/test/resources/architecture0-expected.owl");
 
         Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         actual0.read("./src/test/resources/architecture0.owl");
 
+        // then
         assertTrue(expected0.isIsomorphicWith(actual0));
 
-        // 2nd one
+        // assert that 2nd constraint files is correct:
+        // given, when
         Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected1.read("./src/test/resources/architecture1-expected.owl");
 
         Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         actual1.read("./src/test/resources/architecture1.owl");
 
+        // then
         assertTrue(expected1.isIsomorphicWith(actual1));
     }
 }

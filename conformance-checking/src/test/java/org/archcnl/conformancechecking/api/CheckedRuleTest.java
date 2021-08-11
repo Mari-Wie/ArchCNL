@@ -31,8 +31,10 @@ public class CheckedRuleTest {
         violationBuilder.addViolation("subject", "predicate", "object");
         List<ConstraintViolation> violations = new ArrayList<>();
         violations.add(violationBuilder.build());
+
         // when
         CheckedRule r = new CheckedRule(rule, violations);
+
         // then
         assertEquals(r.getRule(), rule);
         assertEquals(r.getViolations(), violations);

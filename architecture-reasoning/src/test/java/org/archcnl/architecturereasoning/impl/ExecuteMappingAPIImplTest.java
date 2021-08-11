@@ -20,7 +20,10 @@ public class ExecuteMappingAPIImplTest {
     public void setUp() throws Exception {}
 
     @Test
-    public void testEntireModule() throws IOException {
+    public void
+            givenArchitectureAndCodeModel_whenMappingIsExecuted_thenMappingIsIsomorphicWithExpectedModel()
+                    throws IOException {
+        // given
         List<ArchitectureRule> architectureModel =
                 Arrays.asList(
                         new ArchitectureRule(
@@ -39,12 +42,14 @@ public class ExecuteMappingAPIImplTest {
         Model codeModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         codeModel.read("src/test/resources/results.owl");
 
+        // when
         Model actual =
                 e.executeMapping(codeModel, architectureModel, "src/test/resources/mapping.txt");
 
         Model expected = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected.read("mapped-expected.owl");
 
+        // then
         assertTrue(expected.isIsomorphicWith(actual));
     }
 }

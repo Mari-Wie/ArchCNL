@@ -21,7 +21,9 @@ import org.junit.Test;
 public class AsciiDocArc42ParserTest {
 
     @Test
-    public void testCoarse() throws IOException {
+    public void givenArchitectureRules_whenParsedByAsciiDocParser_thenRulesExtractedCorrectly()
+            throws IOException {
+        // given
         Map<String, String> namespaces = new HashMap<>();
 
         namespaces.put(
@@ -32,12 +34,13 @@ public class AsciiDocArc42ParserTest {
         AsciiDocArc42Parser parser = new AsciiDocArc42Parser(namespaces);
 
         Path testRulesPath = Paths.get("./src/test/resources/rules.adoc");
+        // when
         List<ArchitectureRule> rules =
                 parser.parseRulesFromDocumentation(testRulesPath, "./src/test/resources");
         parser.parseMappingRulesFromDocumentation(
                 testRulesPath, "./src/test/resources/mapping.txt");
 
-        // assert that the extracted rules are correct
+        // then (assert that the extracted rules are correct)
         assertEquals(2, rules.size());
 
         assertThat(
@@ -55,21 +58,25 @@ public class AsciiDocArc42ParserTest {
                                 "./src/test/resources/architecture1.owl")));
 
         // assert that the 1st rule's constraint file is correct
+        // given, when
         Model expected0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected0.read("./src/test/resources/architecture0-expected.owl");
 
         Model actual0 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         actual0.read("./src/test/resources/architecture0.owl");
 
+        // then
         assertTrue(expected0.isIsomorphicWith(actual0));
 
-        // 2nd rule
+        // assert that the 2nd rule's constraint file is correct
+        // given, when
         Model expected1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         expected1.read("./src/test/resources/architecture1-expected.owl");
 
         Model actual1 = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
         actual1.read("./src/test/resources/architecture1.owl");
 
+        // then
         assertTrue(expected1.isIsomorphicWith(actual1));
 
         // assert that the mapping.txt is correct
