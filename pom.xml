@@ -199,6 +199,7 @@
 	</build>
 
 	<modules>
+		<module>web-ui-vaadin</module>
 		<module>architecture-description-parser</module>
 		<module>architecture-reasoning</module>
 		<module>common</module>

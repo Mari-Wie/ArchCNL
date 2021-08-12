@@ -1,0 +1,107 @@
+package org.archcnl.vaadin;
+
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.ThreadContext;
+
+import java.util.List;
+
+import javax.servlet.annotation.WebServlet;
+
+import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Button;
+
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.shared.ui.ValueChangeMode;
+import com.vaadin.ui.themes.ValoTheme;
+
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.BrowserWindowOpener;
+//import com.vaadin.ui.TextArea;
+
+//import org.archcnl.stardogwrapper.api.stardogapifactory;
+//import org.archcnl.stardogwrapper.api.stardogdatabaseapi;
+//import org.archcnl.stardogwrapper.api.stardogicvapi;
+//import org.archcnl.stardogwrapper.impl.stardogdatabase;
+
+
+/**
+ * This UI is the application entry point. A UI may either represent a browser window
+ * (or tab) or some part of a html page where a Vaadin application is embedded.
+ * <p>
+ * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be
+ * overridden to add component to the user interface and initialize non-component functionality.
+ */
+@Theme("mytheme")
+public class MyUI extends UI {
+
+    //private static final Logger LOG = LogManager.getLogger(MyUI.class);
+    private CustomerService service = CustomerService.getInstance();
+    private Grid<Customer> grid = new Grid<>(Customer.class);
+    private TextField filterText = new TextField();
+    //private StardogDatabaseAPI db;
+    //private StardogICVAPI icvAPI;
+
+    @Override
+    protected void init(VaadinRequest vaadinRequest) {
+        String username = "admin";
+        String password = "admin";
+        String databaseName = "testfileDB";
+        String server = "http://localhost:5820";
+
+        //this.db = new StardogDatabase(server, databaseName, username, password);
+        //this.icvAPI = StardogAPIFactory.getICVAPI(db);
+
+        //db.connect(false);
+
+        final VerticalLayout layout = new VerticalLayout();
+
+        grid.setColumns("firstName", "lastName", "email");
+
+        // add Grid to the layout
+        layout.addComponents(grid);
+
+        //TextArea sample = new TextArea();
+        //sample.setValue("The quick brown fox jumps over the lazy dog.");
+
+        filterText.setPlaceholder("filter by name...");
+        filterText.addValueChangeListener(e -> updateList());
+        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+
+        Button clearFilterTextBtn = new Button(FontAwesome.TIMES);
+        clearFilterTextBtn.setDescription("Clear the current filter");
+        clearFilterTextBtn.addClickListener(e -> filterText.clear());
+
+        CssLayout filtering = new CssLayout();
+        filtering.addComponents(filterText, clearFilterTextBtn);
+        filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+
+        layout.addComponents(filtering, grid);
+        // fetch list of Customers from service and assign it to Grid
+        updateList();
+
+        setContent(layout);
+        // Create an opener extension
+        BrowserWindowOpener opener =
+            new BrowserWindowOpener(MyUI.class);
+        opener.setFeatures("height=200,width=300,resizable");
+    }
+
+    public void updateList() {
+        List<Customer> customers = service.findAll(filterText.getValue());
+        grid.setItems(customers);
+    }
+
+    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
+    public static class MyUIServlet extends VaadinServlet {
+    }
+}
