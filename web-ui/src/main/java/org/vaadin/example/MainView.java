@@ -10,9 +10,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 
-/**
- * The main view contains a button and a click listener.
- */
+/** The main view contains a button and a click listener. */
 @Route("")
 @PWA(name = "Project Base for Vaadin", shortName = "Project Base", enableInstallPrompt = false)
 @CssImport("./styles/shared-styles.css")
@@ -26,8 +24,10 @@ public class MainView extends VerticalLayout {
 
         // Button click listeners can be defined as lambda expressions
         GreetService greetService = new GreetService();
-        Button button = new Button("Say hello",
-                e -> Notification.show(greetService.greet(textField.getValue())));
+        Button button =
+                new Button(
+                        "Say hello",
+                        e -> Notification.show(greetService.greet(textField.getValue())));
 
         // Theme variants give you predefined extra styles for components.
         // Example: Primary button is more prominent look.
