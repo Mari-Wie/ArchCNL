@@ -1,19 +1,24 @@
 package org.archcnl.stardogwrapper.impl;
 
+import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.api.ConnectionPool;
 import com.complexible.stardog.api.ConnectionPoolConfig;
+import com.complexible.stardog.api.SelectQuery;
 import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 import com.stardog.stark.Resource;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
+import com.stardog.stark.query.SelectQueryResult;
+import com.stardog.stark.query.io.QueryResultWriters;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
@@ -157,5 +162,20 @@ public class StardogDatabase implements StardogDatabaseAPI {
         // and commit the change
         connection.commit();
         LOG.info("Change committed.");
+    }
+
+    @Override
+    public void executeSelectQuery(String query) {
+        SelectQuery stardogSelectQuery = connection.select(query);
+        try (SelectQueryResult queryResults = stardogSelectQuery.execute()) {
+            System.out.println("The first ten results...");
+
+            try {
+                QueryResultWriters.write(
+                        queryResults, System.out, TextTableQueryResultWriter.FORMAT);
+            } catch (IOException e) {
+                LOG.error("Failed to write results from query");
+            }
+        }
     }
 }

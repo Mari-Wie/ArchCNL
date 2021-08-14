@@ -15,6 +15,9 @@ public interface StardogDatabaseAPI {
      */
     void connect(boolean deletePreviousDatabases);
 
+    /** PROTOTYPE Executes a stardog select query on the open connection\ */
+    void executeSelectQuery(String query);
+
     /** Disconnects from the database. */
     void closeConnectionToServer();
 
