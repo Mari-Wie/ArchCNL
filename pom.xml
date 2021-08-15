@@ -25,6 +25,8 @@
 		<buildHelperVersion>3.2.0</buildHelperVersion>
 		<failsafeVersion>2.22.0</failsafeVersion>
 		<jacocoVersion>0.8.7</jacocoVersion>
+		<vaadin.version>14.6.8</vaadin.version>
+		<jetty.version>9.4.31.v20200723</jetty.version>
 	</properties>
 
 	<profiles>
@@ -211,6 +213,7 @@
 		<module>toolchain</module>
 		<module>java-parser</module>
 		<module>kotlin-parser</module>
+		<module>web-ui</module>
 	</modules>
 
 	<dependencies>

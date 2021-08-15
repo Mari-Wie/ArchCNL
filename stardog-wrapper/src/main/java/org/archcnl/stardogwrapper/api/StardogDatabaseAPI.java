@@ -18,6 +18,9 @@ public interface StardogDatabaseAPI {
     /** Disconnects from the database. */
     void closeConnectionToServer();
 
+    /** PROTOTYPE Executes a stardog select query on the open connection\ */
+    void executeSelectQuery(String query);
+
     /**
      * Retrieves an ontology from the database which matches the given RDF context. The ontology is
      * written to the specified file as an OWL file in XML format.
