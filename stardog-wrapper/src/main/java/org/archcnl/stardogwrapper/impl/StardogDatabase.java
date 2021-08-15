@@ -6,9 +6,9 @@ import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.api.ConnectionPool;
 import com.complexible.stardog.api.ConnectionPoolConfig;
+import com.complexible.stardog.api.SelectQuery;
 import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
-import com.complexible.stardog.api.SelectQuery;
 import com.stardog.stark.Resource;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
@@ -163,6 +163,7 @@ public class StardogDatabase implements StardogDatabaseAPI {
         connection.commit();
         LOG.info("Change committed.");
     }
+
     @Override
     public void executeSelectQuery(String query) {
         SelectQuery stardogSelectQuery = connection.select(query);
