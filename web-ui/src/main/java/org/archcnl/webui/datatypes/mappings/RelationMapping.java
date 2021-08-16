@@ -3,7 +3,6 @@ package org.archcnl.webui.datatypes.mappings;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.RecursiveRelationException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;

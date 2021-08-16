@@ -1,7 +1,6 @@
 package org.archcnl.webui.datatypes.mappings;
 
 import java.util.List;
-
 import org.archcnl.webui.datatypes.mappings.Concept.ConceptType;
 import org.archcnl.webui.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.webui.exceptions.RelationCannotRelateToObjectException;

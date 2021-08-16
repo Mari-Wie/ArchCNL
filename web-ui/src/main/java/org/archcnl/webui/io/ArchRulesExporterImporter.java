@@ -1,7 +1,6 @@
 package org.archcnl.webui.io;
 
 import java.io.File;
-
 import org.archcnl.webui.datatypes.RulesAndMappings;
 
 public interface ArchRulesExporterImporter {
