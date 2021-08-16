@@ -1,12 +1,13 @@
-package org.archcnl.webui.mappings;
+package org.archcnl.webui.datatypes.mappings;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.RecursiveRelationException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
 import org.archcnl.webui.exceptions.VariableDoesNotExistException;
-import org.archcnl.webui.mappings.Relation.RelationType;
 
 public class RelationMapping extends Mapping {
 

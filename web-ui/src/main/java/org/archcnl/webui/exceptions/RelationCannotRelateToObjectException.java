@@ -1,7 +1,7 @@
 package org.archcnl.webui.exceptions;
 
-import org.archcnl.webui.mappings.Concept;
-import org.archcnl.webui.mappings.Relation;
+import org.archcnl.webui.datatypes.mappings.Concept;
+import org.archcnl.webui.datatypes.mappings.Relation;
 
 public class RelationCannotRelateToObjectException extends Exception {
 

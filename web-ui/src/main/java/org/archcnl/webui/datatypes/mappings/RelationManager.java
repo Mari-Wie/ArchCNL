@@ -1,11 +1,12 @@
-package org.archcnl.webui.mappings;
+package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
 import org.archcnl.webui.exceptions.RelationDoesNotExistException;
-import org.archcnl.webui.mappings.Relation.RelationType;
 
 public class RelationManager {
 

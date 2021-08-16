@@ -1,4 +1,4 @@
-package org.archcnl.webui.mappings;
+package org.archcnl.webui.datatypes.mappings;
 
 public class Concept {
 

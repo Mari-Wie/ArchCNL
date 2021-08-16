@@ -1,10 +1,11 @@
-package org.archcnl.webui.mappings;
+package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.archcnl.webui.datatypes.mappings.Concept.ConceptType;
 import org.archcnl.webui.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
-import org.archcnl.webui.mappings.Concept.ConceptType;
 
 public class ConceptManager {
 
