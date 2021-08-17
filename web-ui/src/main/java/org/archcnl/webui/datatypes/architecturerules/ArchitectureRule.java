@@ -8,7 +8,7 @@ public class ArchitectureRule {
         this.rule = rule;
     }
 
-    public String toString() {
+    public String toStringRepresentation() {
         return rule;
     }
 }

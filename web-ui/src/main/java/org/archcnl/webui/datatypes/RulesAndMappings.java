@@ -1,9 +1,11 @@
 package org.archcnl.webui.datatypes;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.webui.datatypes.architecturerules.ArchitectureRule;
 import org.archcnl.webui.datatypes.mappings.ConceptMapping;
+import org.archcnl.webui.datatypes.mappings.Mapping;
 import org.archcnl.webui.datatypes.mappings.RelationMapping;
 
 public class RulesAndMappings {
@@ -19,9 +21,9 @@ public class RulesAndMappings {
     }
 
     public RulesAndMappings(
+            List<ArchitectureRule> architectureRules,
             List<ConceptMapping> conceptMappings,
-            List<RelationMapping> relationMappings,
-            List<ArchitectureRule> architectureRules) {
+            List<RelationMapping> relationMappings) {
         this.conceptMappings = conceptMappings;
         this.relationMappings = relationMappings;
         this.architectureRules = architectureRules;
@@ -49,5 +51,11 @@ public class RulesAndMappings {
 
     public List<ArchitectureRule> getArchitectureRules() {
         return architectureRules;
+    }
+
+    public List<Mapping> getMappings() {
+        List<Mapping> mappings = new ArrayList<>(getConceptMappings());
+        mappings.addAll(getRelationMappings());
+        return mappings;
     }
 }
