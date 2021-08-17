@@ -19,7 +19,7 @@ public class Concept {
         return name;
     }
 
-    public String toString() {
+    public String toStringRepresentation() {
         return type.toString() + ":" + name;
     }
 }

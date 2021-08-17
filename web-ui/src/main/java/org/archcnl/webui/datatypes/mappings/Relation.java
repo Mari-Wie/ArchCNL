@@ -5,11 +5,13 @@ import java.util.List;
 import org.archcnl.webui.exceptions.AllConceptsSupportedException;
 
 public class Relation {
+    // TODO properly allow the relation to non concepts
 
     public enum RelationType {
         rdf,
         famix,
-        architecture
+        architecture,
+        matches
     }
 
     // The name used in the UI
@@ -20,10 +22,11 @@ public class Relation {
     // The object types this relation relates to
     // Can be empty if the relation supports all concepts as objects
     private List<Concept> concepts;
+    private boolean canRelateToString;
 
     /**
-     * Constructs a relation that relates to the given concept. RelationType.rdf should only be used
-     * if absolutely necessary. Concepts can be empty if relation supports all concepts as objects
+     * Constructs a relation that relates to the given concept. Concepts can be empty if relation
+     * supports all concepts as objects.
      *
      * @param name The name of the relation used in the UI and in written files
      * @param relationType The type of the relation
@@ -34,6 +37,22 @@ public class Relation {
         this.realName = name;
         this.type = relationType;
         this.concepts = concepts;
+        this.canRelateToString = false;
+    }
+
+    /**
+     * Constructs a relation that relates to the given concept. Concepts can be empty if relation
+     * supports all concepts as objects.
+     *
+     * @param name The name of the relation used in the UI and in written files
+     * @param relationType The type of the relation
+     */
+    public Relation(String name, RelationType relationType) {
+        this.name = name;
+        this.realName = name;
+        this.type = relationType;
+        this.concepts = null;
+        this.canRelateToString = true;
     }
 
     /**
@@ -48,9 +67,10 @@ public class Relation {
         this.realName = realName;
         this.type = RelationType.rdf;
         this.concepts = new LinkedList<>();
+        this.canRelateToString = false;
     }
 
-    public String toString() {
+    public String toStringRepresentation() {
         return type.toString() + ":" + realName;
     }
 
@@ -63,7 +83,7 @@ public class Relation {
     }
 
     public List<Concept> getRelatedConcepts() throws AllConceptsSupportedException {
-        if (concepts.isEmpty()) {
+        if (!concepts.isEmpty()) {
             return concepts;
         }
         throw new AllConceptsSupportedException(name);
@@ -79,5 +99,9 @@ public class Relation {
 
     public List<Concept> getConcepts() {
         return concepts;
+    }
+
+    public boolean canRelateToString() {
+        return canRelateToString;
     }
 }

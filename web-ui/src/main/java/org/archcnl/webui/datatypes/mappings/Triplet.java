@@ -1,59 +1,89 @@
 package org.archcnl.webui.datatypes.mappings;
 
-import org.archcnl.webui.exceptions.ObjectIsNotAConceptException;
-import org.archcnl.webui.exceptions.ObjectIsNotAVariableException;
+import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.RecursiveRelationException;
-import org.archcnl.webui.exceptions.RelationCannotRelateToObjectException;
+import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
 
 public class Triplet {
 
     private Variable subject;
     private Relation predicate;
-    private Concept conceptObject;
-    private Variable variableObject;
+    private ObjectFromTriplet object;
+
+    public Triplet(Variable subject, Relation predicate, String object)
+            throws UnsupportedObjectTypeInTriplet {
+        this.setSubject(subject);
+        this.setPredicate(predicate);
+        this.setObject(object);
+    }
 
     public Triplet(Variable subject, Relation predicate, Concept object)
-            throws RelationCannotRelateToObjectException {
-        if (!doPredicateAndObjectMatch(predicate, object)) {
-            throw new RelationCannotRelateToObjectException(predicate, object);
-        }
+            throws UnsupportedObjectTypeInTriplet {
         this.setSubject(subject);
         this.setPredicate(predicate);
         this.setObject(object);
     }
 
     public Triplet(Variable subject, Relation predicate, Variable object)
-            throws RecursiveRelationException {
+            throws RecursiveRelationException, UnsupportedObjectTypeInTriplet {
         this.setSubject(subject);
         this.setPredicate(predicate);
         this.setObject(object);
     }
 
-    public void setObject(Concept object) {
-        variableObject = null;
-        conceptObject = object;
+    public void setObject(String object) throws UnsupportedObjectTypeInTriplet {
+        if (!doPredicateAndObjectMatch(object)) {
+            throw new UnsupportedObjectTypeInTriplet();
+        }
+        this.object = new ObjectFromTriplet(object);
     }
 
-    public void setObject(Variable object) throws RecursiveRelationException {
+    public void setObject(Concept object) throws UnsupportedObjectTypeInTriplet {
+        if (!doPredicateAndObjectMatch(object)) {
+            throw new UnsupportedObjectTypeInTriplet();
+        }
+        this.object = new ObjectFromTriplet(object);
+    }
+
+    public void setObject(Variable object)
+            throws RecursiveRelationException, UnsupportedObjectTypeInTriplet {
         if (subject.sameNameAs(object)) {
             throw new RecursiveRelationException();
         }
-        variableObject = object;
-        conceptObject = null;
+        if (!doPredicateAndObjectMatch(object)) {
+            throw new UnsupportedObjectTypeInTriplet();
+        }
+        this.object = new ObjectFromTriplet(object);
     }
 
-    public Concept getConceptObject() throws ObjectIsNotAConceptException {
-        if (conceptObject == null) {
-            throw new ObjectIsNotAConceptException();
-        }
-        return conceptObject;
+    /**
+     * Return value can be null. Exactly one of the three object getters will return something not
+     * equal to zero.
+     *
+     * @return The string value of this object
+     */
+    public String getStringObject() {
+        return object.getValue();
     }
 
-    public Variable getVariableObject() throws ObjectIsNotAVariableException {
-        if (variableObject == null) {
-            throw new ObjectIsNotAVariableException();
-        }
-        return variableObject;
+    /**
+     * Return value can be null. Exactly one of the three object getters will return something not
+     * equal to zero.
+     *
+     * @return The variable of this object
+     */
+    public Variable getVariableObject() {
+        return object.getVariable();
+    }
+
+    /**
+     * Return value can be null. Exactly one of the three object getters will return something not
+     * equal to zero.
+     *
+     * @return The concept of this object
+     */
+    public Concept getConceptObject() {
+        return object.getConcept();
     }
 
     public Variable getSubject() {
@@ -70,9 +100,39 @@ public class Triplet {
 
     public void setPredicate(Relation predicate) {
         this.predicate = predicate;
+        this.object = null;
     }
 
-    private boolean doPredicateAndObjectMatch(Relation predicate, Concept object) {
+    private boolean doPredicateAndObjectMatch(Concept object) {
         return predicate.canRelateToConcept(object);
+    }
+
+    private boolean doPredicateAndObjectMatch(Variable object) {
+        // TODO implement variable type matching
+        return true;
+    }
+
+    private boolean doPredicateAndObjectMatch(String object) {
+        // TODO implement value type matching
+        return true;
+    }
+
+    public String toStringRepresentation() {
+        StringBuilder builder = new StringBuilder();
+        if (predicate.getRelationType() == RelationType.matches) {
+            builder.append("regex(");
+            builder.append(subject.toStringRepresentation() + ", ");
+            // A regex always needs a pattern as object
+            // so there is no check for variableObject here
+            builder.append(object.toStringRepresentation());
+            builder.append(")");
+        } else {
+            builder.append("(");
+            builder.append(subject.toStringRepresentation() + " ");
+            builder.append(predicate.toStringRepresentation() + " ");
+            builder.append(object.toStringRepresentation());
+            builder.append(")");
+        }
+        return builder.toString();
     }
 }

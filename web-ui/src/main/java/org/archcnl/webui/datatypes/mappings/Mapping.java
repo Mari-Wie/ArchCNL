@@ -1,5 +1,6 @@
 package org.archcnl.webui.datatypes.mappings;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Mapping {
@@ -32,11 +33,23 @@ public abstract class Mapping {
 
     public abstract Triplet getThenTriplet();
 
+    public abstract String getMappingNameRepresentation();
+
     public RelationManager getRelationManager() {
         return relationManager;
     }
 
     public ConceptManager getConceptManager() {
         return conceptManager;
+    }
+
+    public List<String> toStringRepresentation() {
+        List<String> result = new LinkedList<>();
+        for (AndTriplets andTriplets : orStatements) {
+            result.add(
+                    andTriplets.toStringRepresentation(
+                            getMappingNameRepresentation(), getThenTriplet()));
+        }
+        return result;
     }
 }

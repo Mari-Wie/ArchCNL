@@ -44,7 +44,7 @@ public class ConceptManager {
 
     private void initializeConcepts() {
         concepts.add(new Concept("FamixClass", ConceptType.famix));
-        concepts.add(new Concept("NameSpace", ConceptType.famix));
+        concepts.add(new Concept("Namespace", ConceptType.famix));
         concepts.add(new Concept("Enum", ConceptType.famix));
         concepts.add(new Concept("AnnotationType", ConceptType.famix));
         concepts.add(new Concept("Method", ConceptType.famix));

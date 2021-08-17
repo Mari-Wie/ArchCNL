@@ -3,8 +3,9 @@ package org.archcnl.webui.datatypes.mappings;
 import java.util.List;
 import org.archcnl.webui.datatypes.mappings.Concept.ConceptType;
 import org.archcnl.webui.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.webui.exceptions.RelationCannotRelateToObjectException;
 import org.archcnl.webui.exceptions.RelationDoesNotExistException;
+import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
 import org.archcnl.webui.exceptions.VariableDoesNotExistException;
 
 public class ConceptMapping extends Mapping {
@@ -12,17 +13,18 @@ public class ConceptMapping extends Mapping {
     private Triplet thenTriplet;
     private String name;
 
-    protected ConceptMapping(
+    public ConceptMapping(
             String name,
             Variable thenVariable,
             List<AndTriplets> whenTriplets,
             ConceptManager conceptManager,
             RelationManager relationManager)
             throws ConceptAlreadyExistsException, RelationDoesNotExistException,
-                    RelationCannotRelateToObjectException {
+                    VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
         super(whenTriplets, conceptManager, relationManager);
 
         this.name = name;
+        getVariableManager().addVariable(thenVariable);
         Relation typeRelation = getRelationManager().getRelationByName("is-of-type");
         Concept thisConcept = new Concept(name, ConceptType.architecture);
         getConceptManager().addConcept(thisConcept);
@@ -42,7 +44,8 @@ public class ConceptMapping extends Mapping {
         return thenTriplet;
     }
 
-    public void updateName(String newName) throws ConceptAlreadyExistsException {
+    public void updateName(String newName)
+            throws ConceptAlreadyExistsException, UnsupportedObjectTypeInTriplet {
         Concept newObject = new Concept(newName, ConceptType.architecture);
         getConceptManager().addConcept(newObject);
         name = newName;
@@ -52,5 +55,10 @@ public class ConceptMapping extends Mapping {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getMappingNameRepresentation() {
+        return "is" + name;
     }
 }

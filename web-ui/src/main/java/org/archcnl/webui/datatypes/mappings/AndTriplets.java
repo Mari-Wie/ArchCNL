@@ -23,4 +23,15 @@ public class AndTriplets {
     public void addTriplet(Triplet triplet) {
         triplets.add(triplet);
     }
+
+    public String toStringRepresentation(String mappingName, Triplet thenTriplet) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(mappingName + ": ");
+        for (Triplet triplet : triplets) {
+            stringBuilder.append(triplet.toStringRepresentation() + " ");
+        }
+        stringBuilder.append("-> ");
+        stringBuilder.append(thenTriplet.toStringRepresentation());
+        return stringBuilder.toString();
+    }
 }

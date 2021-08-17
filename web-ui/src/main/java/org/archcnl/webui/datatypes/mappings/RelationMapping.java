@@ -6,6 +6,8 @@ import java.util.List;
 import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.RecursiveRelationException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
+import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
 import org.archcnl.webui.exceptions.VariableDoesNotExistException;
 
 public class RelationMapping extends Mapping {
@@ -16,15 +18,18 @@ public class RelationMapping extends Mapping {
     public RelationMapping(
             String name,
             Variable subjectVariable,
-            Concept typeOfObjectVariable,
             Variable objectVariable,
+            Concept typeOfObjectVariable,
             List<AndTriplets> whenTriplets,
             ConceptManager conceptManager,
             RelationManager relationManager)
-            throws RecursiveRelationException, RelationAlreadyExistsException {
+            throws RecursiveRelationException, RelationAlreadyExistsException,
+                    VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
         super(whenTriplets, conceptManager, relationManager);
 
         this.name = name;
+        getVariableManager().addVariable(subjectVariable);
+        getVariableManager().addVariable(objectVariable);
         List<Concept> concepts = new LinkedList<>(Arrays.asList(typeOfObjectVariable));
         Relation thisRelation = new Relation(name, RelationType.architecture, concepts);
         getRelationManager().addRelation(thisRelation);
@@ -41,7 +46,8 @@ public class RelationMapping extends Mapping {
     }
 
     public void updateObjectInThenTriplet(Variable newObject)
-            throws VariableDoesNotExistException, RecursiveRelationException {
+            throws VariableDoesNotExistException, RecursiveRelationException,
+                    UnsupportedObjectTypeInTriplet {
         if (getVariableManager().doesVariableExist(newObject)) {
             thenTriplet.setObject(newObject);
         } else {
@@ -65,5 +71,10 @@ public class RelationMapping extends Mapping {
     @Override
     public Triplet getThenTriplet() {
         return thenTriplet;
+    }
+
+    @Override
+    public String getMappingNameRepresentation() {
+        return name + "Mapping";
     }
 }

@@ -17,7 +17,7 @@ public class Variable {
         return name;
     }
 
-    public String toString() {
+    public String toStringRepresentation() {
         return "?" + name;
     }
 

@@ -48,6 +48,9 @@ public class RelationManager {
         // Type relation
         relations.add(new Relation("is-of-type", "type"));
 
+        // Regex relations
+        relations.add(new Relation("matches", RelationType.matches));
+
         // String relations
         List<Concept> stringConcept = new LinkedList<>();
         stringConcept.add(conceptManager.getConceptByName("string"));
@@ -137,7 +140,7 @@ public class RelationManager {
 
         // Type + NameSpace relations
         List<Concept> namespaceContainsConcepts = new LinkedList<>();
-        namespaceContainsConcepts.add(conceptManager.getConceptByName("NameSpace"));
+        namespaceContainsConcepts.add(conceptManager.getConceptByName("Namespace"));
         namespaceContainsConcepts.add(conceptManager.getConceptByName("FamixClass"));
         namespaceContainsConcepts.add(conceptManager.getConceptByName("Enum"));
         namespaceContainsConcepts.add(conceptManager.getConceptByName("AnnotationType"));
