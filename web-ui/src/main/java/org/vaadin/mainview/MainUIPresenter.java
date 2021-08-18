@@ -5,11 +5,11 @@ import com.vaadin.flow.component.Component;
 public class MainUIPresenter {
     
     private MainUI view;
-    private Component ruleView, resultView;
+    private Component resultView, ruleView;
     
     public MainUIPresenter()
     {
-        
+        ruleView = new TestView();
     }
     
     public void setView(MainUI view)

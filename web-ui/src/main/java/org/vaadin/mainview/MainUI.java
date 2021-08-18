@@ -1,12 +1,17 @@
 package org.vaadin.mainview;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 
@@ -20,15 +25,37 @@ import com.vaadin.flow.server.PWA;
 @CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
 public class MainUI extends VerticalLayout {
 
-    private Component header, content, footer;
+    private Component header, footer;
+    Component content;
     private MainUIPresenter presenter;
     
     public MainUI()
-    {
-        header = createHeader();       
-        content = presenter.getArchitectureRuleView();
-        footer = createFooter();
-        add(header, content, footer);
+    {            
+        presenter = new MainUIPresenter();
+        
+        HorizontalLayout headerBox = new HorizontalLayout();
+        headerBox.setHeight(10, Unit.PERCENTAGE);
+        headerBox.add(createHeader());
+        
+        VerticalLayout contentBox = new VerticalLayout();
+        contentBox.setAlignItems(Alignment.CENTER);
+//        contentBox.setSizeFull();
+//        contentBox.setWidthFull();
+//        contentBox.setHeightFull();
+//        contentBox.setHeight("800px");
+//        contentBox.setHeight(80, Unit.PERCENTAGE);
+//        contentBox.setDefaultHorizontalComponentAlignment(Alignment.END);
+        contentBox.add(presenter.getArchitectureRuleView());
+        
+        HorizontalLayout footerBox = new HorizontalLayout();
+        footerBox.setHeight(10, Unit.PERCENTAGE);
+        footerBox.add(createFooter());
+        
+        add(headerBox, contentBox, footerBox);    
+        contentBox.setHeight(80, Unit.PERCENTAGE);
+        footerBox.setHeight(10, Unit.PERCENTAGE);
+        headerBox.setHeight(10, Unit.PERCENTAGE);
+        contentBox.setSizeFull();
     }
     
     private Component createHeader()
@@ -43,7 +70,15 @@ public class MainUI extends VerticalLayout {
                 rules.getSubMenu().addItem("Export Rules", e-> presenter.exportRules());
             menuBar.addItem("View", e -> presenter.View());
             menuBar.addItem("Help", e -> presenter.Help());       
+        menuBar.getStyle().set("border-style", "solid");
         return menuBar;
+    }
+    
+    private Component createContent()
+    {
+        VerticalLayout vbox = new VerticalLayout();
+        vbox.setHeightFull();
+        return vbox;
     }
     
     private Component createFooter()
@@ -55,7 +90,10 @@ public class MainUI extends VerticalLayout {
                 menuBar.addItem("Wiki", e -> presenter.wiki());
                 menuBar.addItem("Project Site", e -> presenter.projectSite());
         footerHbox.add(copyright, menuBar);
-        
+        //footerHbox.getStyle().set("background-color", "#3458eb");
+        footerHbox.getStyle().set("border-style", "solid");
+        footerHbox.setAlignItems(Alignment.END);//puts button in horizontal  center
+
         return footerHbox;            
     }
     
