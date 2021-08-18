@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.archcnl.webui.datatypes.mappings.AndTriplets;
 import org.archcnl.webui.datatypes.mappings.ConceptManager;
 import org.archcnl.webui.datatypes.mappings.RelationManager;
@@ -117,9 +118,7 @@ public class RelationMappingTest {
                         classVariable,
                         packageVariable,
                         conceptManager.getConceptByName("Namespace"),
-                        resideInWhenTriplets,
-                        conceptManager,
-                        relationManager);
+                        resideInWhenTriplets);
         List<String> resideInMappingStrings = resideInMapping.toStringRepresentation();
 
         RelationMapping useMapping =
@@ -128,9 +127,7 @@ public class RelationMappingTest {
                         classVariable,
                         class2Variable,
                         conceptManager.getConceptByName("FamixClass"),
-                        useWhenTriplets,
-                        conceptManager,
-                        relationManager);
+                        useWhenTriplets);
         List<String> useMappingStrings = useMapping.toStringRepresentation();
 
         // then

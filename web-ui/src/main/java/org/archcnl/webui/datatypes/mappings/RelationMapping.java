@@ -3,6 +3,7 @@ package org.archcnl.webui.datatypes.mappings;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.RecursiveRelationException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
@@ -20,19 +21,34 @@ public class RelationMapping extends Mapping {
             Variable subjectVariable,
             Variable objectVariable,
             Concept typeOfObjectVariable,
-            List<AndTriplets> whenTriplets,
-            ConceptManager conceptManager,
-            RelationManager relationManager)
-            throws RecursiveRelationException, RelationAlreadyExistsException,
+            List<AndTriplets> whenTriplets)
+            throws RecursiveRelationException,
                     VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
-        super(whenTriplets, conceptManager, relationManager);
+        super(whenTriplets);
 
         this.name = name;
         getVariableManager().addVariable(subjectVariable);
         getVariableManager().addVariable(objectVariable);
         List<Concept> concepts = new LinkedList<>(Arrays.asList(typeOfObjectVariable));
         Relation thisRelation = new Relation(name, RelationType.architecture, concepts);
-        getRelationManager().addRelation(thisRelation);
+        thenTriplet = new Triplet(subjectVariable, thisRelation, objectVariable);
+    }
+
+    public RelationMapping(
+            String name,
+            Variable subjectVariable,
+            Variable objectVariable,
+            List<AndTriplets> whenTriplets)
+            throws RecursiveRelationException,
+                    VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
+        super(whenTriplets);
+
+        this.name = name;
+        getVariableManager().addVariable(subjectVariable);
+        getVariableManager().addVariable(objectVariable);
+        List<Concept> concepts =
+                new LinkedList<>(); // Here is the difference between the constructors
+        Relation thisRelation = new Relation(name, RelationType.architecture, concepts);
         thenTriplet = new Triplet(subjectVariable, thisRelation, objectVariable);
     }
 
@@ -63,7 +79,6 @@ public class RelationMapping extends Mapping {
     public void updateName(String newName) throws RelationAlreadyExistsException {
         List<Concept> concepts = thenTriplet.getPredicate().getConcepts();
         Relation newRelation = new Relation(newName, RelationType.architecture, concepts);
-        getRelationManager().addRelation(newRelation);
         name = newName;
         thenTriplet.setPredicate(newRelation);
     }

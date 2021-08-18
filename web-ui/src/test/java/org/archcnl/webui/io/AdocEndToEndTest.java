@@ -11,18 +11,12 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.webui.datatypes.RulesAndMappings;
 import org.archcnl.webui.datatypes.mappings.ConceptManager;
 import org.archcnl.webui.datatypes.mappings.RelationManager;
-import org.archcnl.webui.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
-import org.archcnl.webui.exceptions.InvalidVariableNameException;
-import org.archcnl.webui.exceptions.RecursiveRelationException;
-import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
 import org.archcnl.webui.exceptions.RelationDoesNotExistException;
-import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ArchRuleToAdocWriterTest {
+public class AdocEndToEndTest {
 
     private RelationManager relationManager;
     private ConceptManager conceptManager;
@@ -34,24 +28,24 @@ public class ArchRuleToAdocWriterTest {
     }
 
     @Test
-    public void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
-            throws IOException, UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
-                    ConceptDoesNotExistException, RecursiveRelationException,
-                    InvalidVariableNameException, ConceptAlreadyExistsException,
-                    VariableAlreadyExistsException, RelationAlreadyExistsException {
+    public void givenOnionRuleFile_whenImportingAndExportingFile_thenWrittenFileIsAsExpected()
+            throws IOException, RelationDoesNotExistException {
         // given
-        RulesAndMappings rulesAndMappings = TestUtils.prepareModel(conceptManager, relationManager);
+        final File ruleFile = new File("src/test/resources/architecture-documentation-onion.adoc");
 
         // when
-        final File file = new File("src/test/resources/onionWriterTest.adoc");
+        ArchRulesFromAdocReader archRulesFromAdocReader = new ArchRulesFromAdocReader();
+        RulesAndMappings rulesAndMappings =
+                archRulesFromAdocReader.readArchitectureRules(
+                        ruleFile, relationManager.getRelationByName("is-of-type"));
+
+        final File writtenFile = new File("src/test/resources/onionDemoEndToEndTest.adoc");
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
-        archRulesToAdocWriter.writeArchitectureRules(file, rulesAndMappings);
+        archRulesToAdocWriter.writeArchitectureRules(writtenFile, rulesAndMappings);
 
         // then
-        String actualContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-        final File expectedFile =
-                new File("src/test/resources/architecture-documentation-onion.adoc");
-        String expectedContent = FileUtils.readFileToString(expectedFile, StandardCharsets.UTF_8);
+        String expectedContent = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
+        String actualContent = FileUtils.readFileToString(writtenFile, StandardCharsets.UTF_8);
 
         assertEquals(
                 TestUtils.numberOfMatches(

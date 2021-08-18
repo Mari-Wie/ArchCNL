@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.archcnl.webui.datatypes.mappings.AndTriplets;
 import org.archcnl.webui.datatypes.mappings.ConceptManager;
 import org.archcnl.webui.datatypes.mappings.ConceptMapping;
@@ -110,8 +111,7 @@ public class ConceptMappingTest {
                         "Aggregate",
                         classVariable,
                         aggregateWhenTriplets,
-                        conceptManager,
-                        relationManager);
+                        relationManager.getRelationByName("is-of-type"));
         List<String> aggregateMappingStrings = aggregateMapping.toStringRepresentation();
 
         ConceptMapping applicationServiceMapping =
@@ -119,8 +119,7 @@ public class ConceptMappingTest {
                         "ApplicationService",
                         classVariable,
                         applicationServiceWhenTriplets,
-                        conceptManager,
-                        relationManager);
+                        relationManager.getRelationByName("is-of-type"));
         List<String> applicationServiceMappingMappingStrings =
                 applicationServiceMapping.toStringRepresentation();
 
@@ -129,8 +128,7 @@ public class ConceptMappingTest {
                         "DomainRing",
                         packageVariable,
                         domainRingWhenTriplets,
-                        conceptManager,
-                        relationManager);
+                        relationManager.getRelationByName("is-of-type"));
         List<String> domainRingMappingMappingStrings = domainRingMapping.toStringRepresentation();
 
         // then

@@ -2,22 +2,16 @@ package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Mapping {
 
     // The "when" part
     private List<AndTriplets> orStatements;
     private VariableManager variableManager;
-    private RelationManager relationManager;
-    private ConceptManager conceptManager;
 
-    protected Mapping(
-            List<AndTriplets> whenTriplets,
-            ConceptManager conceptManager,
-            RelationManager relationManager) {
+    protected Mapping(List<AndTriplets> whenTriplets) {
         this.orStatements = whenTriplets;
-        this.relationManager = relationManager;
-        this.conceptManager = conceptManager;
         this.variableManager = new VariableManager();
     }
 
@@ -35,14 +29,6 @@ public abstract class Mapping {
 
     public abstract String getMappingNameRepresentation();
 
-    public RelationManager getRelationManager() {
-        return relationManager;
-    }
-
-    public ConceptManager getConceptManager() {
-        return conceptManager;
-    }
-
     public List<String> toStringRepresentation() {
         List<String> result = new LinkedList<>();
         for (AndTriplets andTriplets : orStatements) {
@@ -51,5 +37,20 @@ public abstract class Mapping {
                             getMappingNameRepresentation(), getThenTriplet()));
         }
         return result;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Mapping)) {
+            return false;
+        }
+        Mapping otherMapping = (Mapping) o;
+        return toStringRepresentation().equals(otherMapping.toStringRepresentation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toStringRepresentation());
     }
 }

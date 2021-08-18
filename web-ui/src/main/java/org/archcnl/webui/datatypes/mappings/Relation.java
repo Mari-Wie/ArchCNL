@@ -2,6 +2,7 @@ package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.archcnl.webui.exceptions.AllConceptsSupportedException;
 
 public class Relation {
@@ -41,8 +42,7 @@ public class Relation {
     }
 
     /**
-     * Constructs a relation that relates to the given concept. Concepts can be empty if relation
-     * supports all concepts as objects.
+     * Constructs a relation that can relate to all concepts
      *
      * @param name The name of the relation used in the UI and in written files
      * @param relationType The type of the relation
@@ -51,7 +51,7 @@ public class Relation {
         this.name = name;
         this.realName = name;
         this.type = relationType;
-        this.concepts = null;
+        this.concepts = new LinkedList<>();
         this.canRelateToString = true;
     }
 
