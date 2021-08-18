@@ -17,16 +17,16 @@ import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
 import org.archcnl.webui.exceptions.RelationDoesNotExistException;
 import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class RelationMappingTest {
 
-    private RelationManager relationManager;
-    private ConceptManager conceptManager;
+    private static RelationManager relationManager;
+    private static ConceptManager conceptManager;
 
-    @Before
-    public void setUp() throws ConceptDoesNotExistException {
+    @BeforeAll
+    public static void setUp() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
     }
