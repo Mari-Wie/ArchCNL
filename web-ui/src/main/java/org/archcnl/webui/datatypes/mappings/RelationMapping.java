@@ -3,7 +3,6 @@ package org.archcnl.webui.datatypes.mappings;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.RecursiveRelationException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
@@ -22,8 +21,8 @@ public class RelationMapping extends Mapping {
             Variable objectVariable,
             Concept typeOfObjectVariable,
             List<AndTriplets> whenTriplets)
-            throws RecursiveRelationException,
-                    VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
+            throws RecursiveRelationException, VariableAlreadyExistsException,
+                    UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
 
         this.name = name;
@@ -39,8 +38,8 @@ public class RelationMapping extends Mapping {
             Variable subjectVariable,
             Variable objectVariable,
             List<AndTriplets> whenTriplets)
-            throws RecursiveRelationException,
-                    VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
+            throws RecursiveRelationException, VariableAlreadyExistsException,
+                    UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
 
         this.name = name;

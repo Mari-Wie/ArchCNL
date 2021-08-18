@@ -1,5 +1,5 @@
 [role="rule"]
-Every Aggregate must residein a DomainRing.
+Every Aggregate must resideIn a DomainRing.
 
 [role="rule"]
 No Aggregate can use an ApplicationService.

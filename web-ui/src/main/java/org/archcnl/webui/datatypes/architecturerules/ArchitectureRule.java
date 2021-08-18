@@ -13,7 +13,7 @@ public class ArchitectureRule {
     public String toStringRepresentation() {
         return ruleString;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

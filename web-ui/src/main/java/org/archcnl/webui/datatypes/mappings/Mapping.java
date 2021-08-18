@@ -38,7 +38,15 @@ public abstract class Mapping {
         }
         return result;
     }
-    
+
+    public void addAndTriplets(AndTriplets andTriplets) {
+        orStatements.add(andTriplets);
+    }
+
+    public void addAllAndTriplets(List<AndTriplets> andTripletsList) {
+        orStatements.addAll(andTripletsList);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
@@ -46,7 +54,15 @@ public abstract class Mapping {
             return false;
         }
         Mapping otherMapping = (Mapping) o;
-        return toStringRepresentation().equals(otherMapping.toStringRepresentation());
+        if (toStringRepresentation().size() != otherMapping.toStringRepresentation().size()) {
+            return false;
+        }
+        for (String s : toStringRepresentation()) {
+            if (!otherMapping.toStringRepresentation().contains(s)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

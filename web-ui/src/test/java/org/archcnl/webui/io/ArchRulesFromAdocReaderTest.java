@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.archcnl.webui.datatypes.RulesAndMappings;
 import org.archcnl.webui.datatypes.architecturerules.ArchitectureRule;
 import org.archcnl.webui.datatypes.mappings.ConceptManager;
@@ -39,7 +38,7 @@ public class ArchRulesFromAdocReaderTest {
                     ConceptDoesNotExistException, RecursiveRelationException,
                     InvalidVariableNameException, ConceptAlreadyExistsException,
                     VariableAlreadyExistsException, RelationAlreadyExistsException {
-    	
+
         // given
         final File ruleFile = new File("src/test/resources/architecture-documentation-onion.adoc");
 
@@ -47,23 +46,28 @@ public class ArchRulesFromAdocReaderTest {
         ArchRulesFromAdocReader archRulesFromAdocReader = new ArchRulesFromAdocReader();
         RulesAndMappings actualModel =
                 archRulesFromAdocReader.readArchitectureRules(
-                        ruleFile, relationManager.getRelationByName("is-of-type"));
+                        ruleFile,
+                        relationManager.getRelationByName("is-of-type"),
+                        relationManager.getRelationByName("matches"));
 
-        // then        
+        // then
         ConceptManager expectedConceptManager = new ConceptManager();
         RelationManager expectedRelationManager = new RelationManager(expectedConceptManager);
-        RulesAndMappings expectedModel = TestUtils.prepareModel(expectedConceptManager, expectedRelationManager);
-        
+        RulesAndMappings expectedModel =
+                TestUtils.prepareModel(expectedConceptManager, expectedRelationManager);
+
         // Check if architecture rules were correctly imported
-        assertEquals(expectedModel.getArchitectureRules().size(), actualModel.getArchitectureRules().size());
+        assertEquals(
+                expectedModel.getArchitectureRules().size(),
+                actualModel.getArchitectureRules().size());
         for (ArchitectureRule rule : actualModel.getArchitectureRules()) {
-        	assertTrue(expectedModel.getArchitectureRules().contains(rule));
+            assertTrue(expectedModel.getArchitectureRules().contains(rule));
         }
-        
+
         // Check if mappings were correctly imported
         assertEquals(expectedModel.getMappings().size(), actualModel.getMappings().size());
         for (Mapping mapping : actualModel.getMappings()) {
-        	assertTrue(expectedModel.getMappings().contains(mapping));
+            assertTrue(expectedModel.getMappings().contains(mapping));
         }
     }
 }

@@ -2,7 +2,6 @@ package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.webui.exceptions.AllConceptsSupportedException;
 
 public class Relation {

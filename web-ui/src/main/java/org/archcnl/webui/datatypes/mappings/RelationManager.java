@@ -2,7 +2,6 @@ package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.webui.datatypes.mappings.Relation.RelationType;
 import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
 import org.archcnl.webui.exceptions.RelationAlreadyExistsException;
@@ -160,7 +159,7 @@ public class RelationManager {
                 new Relation("hasDeclaredType", RelationType.famix, typeAndprimitiveConcepts));
     }
 
-	public List<Relation> getRelations() {
-		return relations;
-	}
+    public List<Relation> getRelations() {
+        return relations;
+    }
 }

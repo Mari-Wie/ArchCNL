@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.archcnl.webui.datatypes.RulesAndMappings;
 import org.archcnl.webui.datatypes.architecturerules.ArchitectureRule;
 import org.archcnl.webui.datatypes.mappings.AndTriplets;
@@ -22,10 +21,10 @@ import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
 
 public class TestUtils {
-	
-	private TestUtils() {
-	    throw new IllegalStateException("Utility class");
-	  }
+
+    private TestUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static long numberOfMatches(Pattern regex, String text) {
         return regex.matcher(text).results().count();
@@ -47,8 +46,7 @@ public class TestUtils {
             ConceptManager conceptManager, RelationManager relationManager)
             throws UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
                     ConceptDoesNotExistException, RecursiveRelationException,
-                    InvalidVariableNameException,
-                    VariableAlreadyExistsException {
+                    InvalidVariableNameException, VariableAlreadyExistsException {
 
         // prepare model with rules and mappings from OnionArchitectureDemo example
 

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.webui.datatypes.mappings.AndTriplets;
 import org.archcnl.webui.datatypes.mappings.ConceptManager;
 import org.archcnl.webui.datatypes.mappings.RelationManager;

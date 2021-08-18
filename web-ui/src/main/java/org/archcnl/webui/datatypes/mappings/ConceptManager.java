@@ -2,7 +2,6 @@ package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.webui.datatypes.mappings.Concept.ConceptType;
 import org.archcnl.webui.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
@@ -60,7 +59,7 @@ public class ConceptManager {
         concepts.add(new Concept("bool", ConceptType.famix));
     }
 
-	public List<Concept> getConcepts() {
-		return concepts;
-	}
+    public List<Concept> getConcepts() {
+        return concepts;
+    }
 }
