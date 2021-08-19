@@ -146,12 +146,12 @@ public class QueryView extends HorizontalLayout {
 
         String query;
 
-        //TODO Extract into interface
+        // TODO Extract into interface
         StardogICVAPI icvAPI;
         StardogDatabaseAPI db;
 
         QueryResults() {
-            //TODO move these stuff somewhere usefull also dont have it hardcoded somewhere
+            // TODO move these stuff somewhere usefull also dont have it hardcoded somewhere
             String username = "admin";
             String password = "admin";
             String databaseName = "archcnl_it_db";
