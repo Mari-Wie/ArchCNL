@@ -146,6 +146,7 @@ public class QueryView extends HorizontalLayout {
 
         String query;
 
+        //TODO Extract into interface
         StardogICVAPI icvAPI;
         StardogDatabaseAPI db;
 
