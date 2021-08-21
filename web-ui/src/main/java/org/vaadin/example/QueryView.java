@@ -1,6 +1,8 @@
 package org.vaadin.example;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
@@ -14,6 +16,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,14 +43,14 @@ public class QueryView extends HorizontalLayout {
         }
     }
 
-    private class SelectLayout extends HorizontalLayout {
+    private class SelectLayout extends VerticalLayout {
         private TextField selectTextField = new TextField();
         private String selectString = "";
 
         SelectLayout() {
 
+            setAlignItems(Alignment.START);
             selectTextField.setPlaceholder("selectField");
-            selectTextField.setLabel("Select");
             selectTextField.addValueChangeListener(e -> updateSelect());
             selectTextField.setValueChangeMode(ValueChangeMode.LAZY);
             add(selectTextField);
@@ -60,6 +63,7 @@ public class QueryView extends HorizontalLayout {
         String getValue() {
             return selectString;
         }
+
     }
 
     private class WhereTextBoxesLayout extends HorizontalLayout {
@@ -92,13 +96,13 @@ public class QueryView extends HorizontalLayout {
                 String placeHolder,
                 TextField textField,
                 HasValue.ValueChangeListener<
-                                ? super AbstractField.ComponentValueChangeEvent<TextField, String>>
-                        listener) {
+                ? super AbstractField.ComponentValueChangeEvent<TextField, String>>
+                listener) {
             textField.setPlaceholder(placeHolder);
             textField.addValueChangeListener(listener);
             textField.setValueChangeMode(ValueChangeMode.LAZY);
             add(textField);
-        }
+                }
 
         public List<String> getObjSubPraedString() {
             return Arrays.asList(
@@ -134,13 +138,22 @@ public class QueryView extends HorizontalLayout {
         }
     }
 
+    public class ResultUpdateEvent extends ComponentEvent<QueryResults>{
+        public ResultUpdateEvent(QueryResults source, boolean fromClient){
+            super(source, fromClient);
+            System.out.println("Result Fired");
+        }
+    }
+
     private class QueryResults extends VerticalLayout {
 
+        private Label selectLabel = new Label("Select");
         private SelectLayout selectLayout = new SelectLayout();
         private Label whereLabel = new Label("Where");
-        private WhereLayout whereLayout = new WhereLayout();
-        private Button queryButton = new Button("Apply", e -> updateGrid());
-        private Button clearButton = new Button("Clear", e -> clearQuery());
+        private WhereLayout whereLayout;
+        //private Button queryButton = new Button("Apply", e -> updateGrid());
+        private Button queryButton = new Button("Apply");
+        private Button clearButton;
         private GridView gridView = new GridView();
         private TextArea queryTextArea = new TextArea("test");
 
@@ -149,6 +162,11 @@ public class QueryView extends HorizontalLayout {
         // TODO Extract into interface
         StardogICVAPI icvAPI;
         StardogDatabaseAPI db;
+
+        public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
+                ComponentEventListener<T> listener) {
+            return getEventBus().addListener(eventType, listener);
+        }
 
         QueryResults() {
             // TODO move these stuff somewhere usefull also dont have it hardcoded somewhere
@@ -159,9 +177,15 @@ public class QueryView extends HorizontalLayout {
 
             this.db = new StardogDatabase(server, databaseName, username, password);
             this.icvAPI = StardogAPIFactory.getICVAPI(db);
+            WhereLayout whereLayout = new WhereLayout();
+            clearButton = new Button("Clear", e -> whereLayout.clear());
+
+            queryButton.addClickListener(e -> {fireEvent(new ResultUpdateEvent(this,false));});
+
 
             queryTextArea.setWidth(100, Unit.PERCENTAGE);
             add(
+                    selectLabel,
                     selectLayout,
                     whereLabel,
                     whereLayout,
@@ -172,10 +196,6 @@ public class QueryView extends HorizontalLayout {
 
         public void updateQueryString() {
             // TODO
-        }
-
-        public void clearQuery() {
-            whereLayout.clear();
         }
 
         void updateGrid() {
@@ -257,7 +277,7 @@ public class QueryView extends HorizontalLayout {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            add(grid);
+            addAndExpand(grid);
         }
 
         public void update() {
@@ -275,10 +295,13 @@ public class QueryView extends HorizontalLayout {
     SideBar sideBar = new SideBar();
     QueryResults queryResults = new QueryResults();
 
+    Registration reg = queryResults.addListener(ResultUpdateEvent.class, e-> {System.out.println("Event Received");});
+
     public QueryView() {
         setWidth(100, Unit.PERCENTAGE);
         sideBar.setWidth(20, Unit.PERCENTAGE);
         queryResults.setWidth(80, Unit.PERCENTAGE);
         add(sideBar, queryResults);
     }
+
 }
