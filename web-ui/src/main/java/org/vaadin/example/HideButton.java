@@ -6,21 +6,24 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-class HideableLayout extends HorizontalLayout {
+class HideButton extends Button {
     private Component mainLayout;
     private VaadinIcon icons[] = new VaadinIcon[] {VaadinIcon.EYE, VaadinIcon.EYE_SLASH};
-    private int currentIcon = 0;
-    private Button toggleButton = new Button();
+    private int currentIcon = 1;
 
-    HideableLayout(Component mainLayout) {
-        this.mainLayout = mainLayout;
-        toggleButton.addClickListener(
+    HideButton(Component mainLayout) {
+        if(mainLayout != null){
+            this.mainLayout = mainLayout;
+        }
+        else{
+            //TODO Add error handling 
+        }
+        addClickListener(
                 e -> {
-                    mainLayout.setVisible(!mainLayout.isVisible());
+                    this.mainLayout.setVisible(!this.mainLayout.isVisible());
                     e.getSource().setIcon(getNextIcon());
                 });
-        toggleButton.setIcon(getNextIcon());
-        add(mainLayout, toggleButton);
+        setIcon(getNextIcon());
     }
 
     private Icon getNextIcon() {
