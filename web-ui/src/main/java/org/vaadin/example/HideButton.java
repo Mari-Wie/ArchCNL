@@ -4,7 +4,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 class HideButton extends Button {
     private Component mainLayout;
@@ -12,11 +11,10 @@ class HideButton extends Button {
     private int currentIcon = 1;
 
     HideButton(Component mainLayout) {
-        if(mainLayout != null){
+        if (mainLayout != null) {
             this.mainLayout = mainLayout;
-        }
-        else{
-            //TODO Add error handling 
+        } else {
+            // TODO Add error handling
         }
         addClickListener(
                 e -> {
