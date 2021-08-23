@@ -9,7 +9,6 @@ import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
-
 import org.vaadin.example.common.SideBarLayout;
 
 /**
