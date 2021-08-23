@@ -30,21 +30,18 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
                 subjectTextField,
                 e -> {
                     // TODO do something useful with this
-                    System.out.println(subjectTextField.getValue());
                 });
         addTextField(
                 "Object",
                 objectTextField,
                 e -> {
                     // TODO do something useful with this
-                    System.out.println(objectTextField.getValue());
                 });
         addTextField(
                 "Predicate",
                 predicateTextField,
                 e -> {
                     // TODO do something useful with this
-                    System.out.println(predicateTextField.getValue());
                 });
 
         addButton.addClickListener(
