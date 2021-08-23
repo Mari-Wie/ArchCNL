@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.queryview;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -10,7 +10,7 @@ class HideButton extends Button {
     private VaadinIcon icons[] = new VaadinIcon[] {VaadinIcon.EYE, VaadinIcon.EYE_SLASH};
     private int currentIcon = 1;
 
-    HideButton(Component mainLayout) {
+    public HideButton(Component mainLayout) {
         if (mainLayout != null) {
             this.mainLayout = mainLayout;
         } else {

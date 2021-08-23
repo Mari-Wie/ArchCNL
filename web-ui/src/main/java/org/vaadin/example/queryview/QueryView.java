@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.queryview;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -9,6 +9,8 @@ import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
+
+import org.vaadin.example.common.SideBarLayout;
 
 /**
  * A sample Vaadin view class.

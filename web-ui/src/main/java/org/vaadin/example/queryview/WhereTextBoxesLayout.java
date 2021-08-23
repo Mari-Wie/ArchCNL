@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.queryview;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ComponentEvent;
@@ -24,7 +24,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private boolean isEnabled = true;
     private boolean isLast = false;
 
-    WhereTextBoxesLayout() {
+    public WhereTextBoxesLayout() {
         addTextField(
                 "Subject",
                 subjectTextField,

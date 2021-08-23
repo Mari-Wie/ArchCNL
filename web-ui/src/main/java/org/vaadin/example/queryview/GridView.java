@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.queryview;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,7 +10,7 @@ public class GridView extends VerticalLayout {
     private ArrayList<Violation> violationList = new ArrayList<>();
     private Grid<Violation> grid = new Grid<>(Violation.class);
 
-    GridView() {
+    public GridView() {
         grid.setHeightByRows(true);
         add(grid);
     }

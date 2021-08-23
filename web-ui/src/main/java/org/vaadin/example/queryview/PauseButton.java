@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.queryview;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -10,7 +10,7 @@ class PauseButton extends Button {
     private VaadinIcon icons[] = new VaadinIcon[] {VaadinIcon.PLAY_CIRCLE, VaadinIcon.PAUSE};
     private int currentIcon = 1;
 
-    PauseButton(Component mainLayout) {
+    public PauseButton(Component mainLayout) {
         addClickListener(
                 e -> {
                     e.getSource().setIcon(getNextIcon());

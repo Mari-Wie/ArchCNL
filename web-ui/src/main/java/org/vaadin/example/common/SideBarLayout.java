@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.common;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 

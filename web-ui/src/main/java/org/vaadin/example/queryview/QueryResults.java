@@ -1,4 +1,4 @@
-package org.vaadin.example;
+package org.vaadin.example.queryview;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -35,7 +35,7 @@ public class QueryResults extends VerticalLayout {
         return getEventBus().addListener(eventType, listener);
     }
 
-    QueryResults() {
+    public QueryResults() {
 
         queryButton.addClickListener(
                 e -> {
