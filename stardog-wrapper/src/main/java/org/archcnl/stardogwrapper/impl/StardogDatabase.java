@@ -10,8 +10,10 @@ import com.complexible.stardog.api.SelectQuery;
 import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 import com.stardog.stark.Resource;
+import com.stardog.stark.Value;
 import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
+import com.stardog.stark.query.BindingSet;
 import com.stardog.stark.query.SelectQueryResult;
 import com.stardog.stark.query.io.QueryResultWriters;
 import java.io.File;
@@ -19,6 +21,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
@@ -164,18 +169,57 @@ public class StardogDatabase implements StardogDatabaseAPI {
         LOG.info("Change committed.");
     }
 
-    @Override
-    public void executeSelectQuery(String query) {
+    private Result extractResults(String query) {
+        SelectQuery stardogSelectQuery = connection.select(query);
+        // Try block should close the connection
+        try (SelectQueryResult queryResults = stardogSelectQuery.execute()) {
+
+            List<String> variables = queryResults.variables();
+            Result queryResult = new Result(variables);
+
+            while (queryResults.hasNext()) {
+
+                // Here we get the result from the query
+                BindingSet stardogResult = queryResults.next();
+
+                ArrayList<String> singleResult = new ArrayList<String>();
+                for (String variableName : variables) {
+                    // Extracting a String from the stardog result BindingSet
+                    singleResult.add(Value.lex(stardogResult.get(variableName)));
+                }
+                queryResult.add(singleResult);
+            }
+            return queryResult;
+        }
+    }
+
+    private void printToConsole(SelectQueryResult results) {
+        try {
+            QueryResultWriters.write(results, System.out, TextTableQueryResultWriter.FORMAT);
+        } catch (IOException e) {
+            LOG.error("Failed to write results from query to Console");
+        }
+    }
+
+    private void selectQuery(String query) {
         SelectQuery stardogSelectQuery = connection.select(query);
         try (SelectQueryResult queryResults = stardogSelectQuery.execute()) {
             System.out.println("The first ten results...");
+            printToConsole(queryResults);
+        }
+    }
 
-            try {
-                QueryResultWriters.write(
-                        queryResults, System.out, TextTableQueryResultWriter.FORMAT);
-            } catch (IOException e) {
-                LOG.error("Failed to write results from query");
-            }
+    @Override
+    public Optional<Result> executeSelectQuery(String query) {
+        if (query.length() == 0) {
+            // TODO Discuss how to handle errors that would need to be handled in the UI
+            return Optional.empty();
+        }
+        Result res = extractResults(query);
+        if (!res.isEmpty()) {
+            return Optional.of(res);
+        } else {
+            return Optional.empty();
         }
     }
 }
