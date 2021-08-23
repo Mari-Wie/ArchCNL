@@ -1,8 +1,8 @@
 package org.vaadin.example;
 
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
-import com.vaadin.flow.component.grid.Grid;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 
 public class GridView extends VerticalLayout {

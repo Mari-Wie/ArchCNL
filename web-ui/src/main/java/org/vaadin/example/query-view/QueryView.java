@@ -5,8 +5,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
+import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
 
@@ -19,10 +19,6 @@ import org.archcnl.stardogwrapper.impl.StardogDatabase;
  *
  * <p>A new instance of this class is created for every new user and every browser tab/window.
  */
-
-
-
-
 @Route("QueryView")
 public class QueryView extends HorizontalLayout {
 
@@ -48,25 +44,25 @@ public class QueryView extends HorizontalLayout {
         queryResults.setWidth(80, Unit.PERCENTAGE);
         addAndExpand(sideBar, queryResults);
         Registration reg =
-            queryResults.addListener(
-                    ResultUpdateEvent.class,
-                    e -> {
-                        Optional<StardogDatabaseAPI.Result> res = Optional.empty();
-                        System.out.println("Event Received");
-                        String q = queryResults.getQuery();
-                        try {
-                            db.connect(false);
-                            res = db.executeSelectQuery(q);
-                            db.closeConnectionToServer();
-                        } catch (Exception lol) {
-                            System.out.println("Exception Caught, fix this later");
-                            lol.printStackTrace();
-                        }
-                        if (res.isPresent()) {
-                            queryResults.updateGrid(res.get());
-                        } else {
-                            // TODO Decide what to do with errors or wrong queries
-                        }
-                    });
+                queryResults.addListener(
+                        ResultUpdateEvent.class,
+                        e -> {
+                            Optional<StardogDatabaseAPI.Result> res = Optional.empty();
+                            System.out.println("Event Received");
+                            String q = queryResults.getQuery();
+                            try {
+                                db.connect(false);
+                                res = db.executeSelectQuery(q);
+                                db.closeConnectionToServer();
+                            } catch (Exception lol) {
+                                System.out.println("Exception Caught, fix this later");
+                                lol.printStackTrace();
+                            }
+                            if (res.isPresent()) {
+                                queryResults.updateGrid(res.get());
+                            } else {
+                                // TODO Decide what to do with errors or wrong queries
+                            }
+                        });
     }
 }

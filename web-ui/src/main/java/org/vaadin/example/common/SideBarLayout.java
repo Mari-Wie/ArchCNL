@@ -1,4 +1,5 @@
 package org.vaadin.example;
+
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class SideBarLayout extends VerticalLayout {

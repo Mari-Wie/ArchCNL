@@ -1,4 +1,5 @@
 package org.vaadin.example;
+
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 
@@ -26,16 +27,16 @@ public class WhereLayout extends VerticalLayout {
         addComponentAtIndex(newPosition, newLayout);
 
         Registration regAdd =
-            newLayout.addListener(
-                    AddWhereLayoutRequestEvent.class,
-                    e -> {
-                        addWhereTextLayout(indexOf(e.getSource()));
-                    });
+                newLayout.addListener(
+                        AddWhereLayoutRequestEvent.class,
+                        e -> {
+                            addWhereTextLayout(indexOf(e.getSource()));
+                        });
         Registration regMinus =
-            newLayout.addListener(
-                    RemoveWhereLayoutRequestEvent.class,
-                    e -> {
-                        removeRow(e.getSource());
-                    });
+                newLayout.addListener(
+                        RemoveWhereLayoutRequestEvent.class,
+                        e -> {
+                            removeRow(e.getSource());
+                        });
     }
 }

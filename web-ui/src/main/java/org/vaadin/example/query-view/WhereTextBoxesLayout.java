@@ -1,18 +1,18 @@
 package org.vaadin.example;
 
-import java.util.List;
-import java.util.Arrays;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.shared.Registration;
+import java.util.Arrays;
+import java.util.List;
 
 public class WhereTextBoxesLayout extends HorizontalLayout {
     private TextField subjectTextField = new TextField();
@@ -68,13 +68,13 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
             String placeHolder,
             TextField textField,
             HasValue.ValueChangeListener<
-            ? super AbstractField.ComponentValueChangeEvent<TextField, String>>
-            listener) {
+                            ? super AbstractField.ComponentValueChangeEvent<TextField, String>>
+                    listener) {
         textField.setPlaceholder(placeHolder);
         textField.addValueChangeListener(listener);
         textField.setValueChangeMode(ValueChangeMode.LAZY);
         add(textField);
-            }
+    }
 
     public List<String> getObjSubPraedString() {
         return Arrays.asList(
@@ -86,5 +86,5 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     public <T extends ComponentEvent<?>> Registration addListener(
             Class<T> eventType, ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-            }
+    }
 }

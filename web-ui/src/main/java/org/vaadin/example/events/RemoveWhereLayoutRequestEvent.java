@@ -1,4 +1,5 @@
 package org.vaadin.example;
+
 import com.vaadin.flow.component.ComponentEvent;
 
 public class RemoveWhereLayoutRequestEvent extends ComponentEvent<WhereTextBoxesLayout> {

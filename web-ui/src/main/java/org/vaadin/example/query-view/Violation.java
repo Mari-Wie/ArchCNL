@@ -1,8 +1,8 @@
 package org.vaadin.example;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
-import java.util.TreeMap;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 public class Violation {
     TreeMap<String, String> violation = new TreeMap<String, String>();

@@ -1,6 +1,6 @@
 package org.vaadin.example;
-import com.vaadin.flow.component.ComponentEvent;
 
+import com.vaadin.flow.component.ComponentEvent;
 
 public class AddWhereLayoutRequestEvent extends ComponentEvent<WhereTextBoxesLayout> {
     public AddWhereLayoutRequestEvent(WhereTextBoxesLayout source, boolean fromClient) {
@@ -8,4 +8,3 @@ public class AddWhereLayoutRequestEvent extends ComponentEvent<WhereTextBoxesLay
         System.out.println("addWhereLayoutRequestEvent Fired");
     }
 }
-
