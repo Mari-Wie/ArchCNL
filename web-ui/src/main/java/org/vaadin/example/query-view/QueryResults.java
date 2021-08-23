@@ -64,11 +64,6 @@ public class QueryResults extends VerticalLayout {
         gridView.update(res);
     }
 
-    public void updateViolationList() {
-        // TODO
-
-    }
-
     public String getQuery() {
         return queryTextArea.getValue();
     }
