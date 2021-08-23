@@ -48,14 +48,14 @@ public class QueryView extends HorizontalLayout {
                         ResultUpdateEvent.class,
                         e -> {
                             Optional<StardogDatabaseAPI.Result> res = Optional.empty();
-                            //TODO add logger for event received
+                            // TODO add logger for event received
                             String q = queryResults.getQuery();
                             try {
                                 db.connect(false);
                                 res = db.executeSelectQuery(q);
                                 db.closeConnectionToServer();
                             } catch (Exception ex) {
-                                //TODO add logger for exception case
+                                // TODO add logger for exception case
                                 ex.printStackTrace();
                             }
                             if (res.isPresent()) {
