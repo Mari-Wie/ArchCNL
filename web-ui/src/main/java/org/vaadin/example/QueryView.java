@@ -266,7 +266,7 @@ public class QueryView extends HorizontalLayout {
     }
 
     public class Violation {
-        TreeMap<String, String> violation = new TreeMap<String,String>();
+        TreeMap<String, String> violation = new TreeMap<String, String>();
 
         Violation(List<String> vars, ArrayList<String> values) {
             for (int i = 0; i < vars.size(); i++) {
