@@ -73,7 +73,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         add(textField);
     }
 
-    public List<String> getObjSubPraedString() {
+    public List<String> getObjSubPredString() {
         return Arrays.asList(
                 subjectTextField.getValue(),
                 objectTextField.getValue(),
