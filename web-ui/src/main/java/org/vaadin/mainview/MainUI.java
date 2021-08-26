@@ -39,39 +39,40 @@ public class MainUI extends VerticalLayout {
     private Component createHeader() {
         HorizontalLayout headerBox = new HorizontalLayout();
 
+        Label projectTitelLabel = new Label("ARCHCNL");
+        projectTitelLabel.getStyle().set("color", "White");
+        projectTitelLabel.getStyle().set("padding-left", "10px");
+        projectTitelLabel.getStyle().set("padding-right", "10px");
+        projectTitelLabel.getStyle().set("font-size", "large");
+        projectTitelLabel.getStyle().set("font-family", "Montserrat");
+
         Button backButton = new Button("Back", e -> presenter.Back());
-        backButton.getStyle().set("background-color", "#76d0f1");
-        backButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        backButton.getStyle().set("color", "Black");
+        setButtonStyle(backButton);
 
         Button forwardButton = new Button("Forward", e -> presenter.Forward());
-        forwardButton.getStyle().set("background-color", "#76d0f1");
-        forwardButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        forwardButton.getStyle().set("color", "Black");
+        setButtonStyle(forwardButton);
 
         Button projectButton = new Button("Project", e -> presenter.importProject());
-        projectButton.getStyle().set("background-color", "#76d0f1");
-        projectButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        projectButton.getStyle().set("padding-right", "10px");
-        projectButton.getStyle().set("color", "Black");
+        setButtonStyle(projectButton);
 
         Button rulesButton = new Button("Rules", e -> presenter.importRules());
-        rulesButton.getStyle().set("background-color", "#76d0f1");
-        rulesButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        rulesButton.getStyle().set("color", "Black");
+        setButtonStyle(rulesButton);
 
         Button viewButton = new Button("View", e -> presenter.view());
-        viewButton.getStyle().set("background-color", "#76d0f1");
-        viewButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        viewButton.getStyle().set("color", "Black");
+        setButtonStyle(viewButton);
 
         Button helpButton = new Button("Help", e -> presenter.help());
-        helpButton.getStyle().set("background-color", "#76d0f1");
-        helpButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        helpButton.getStyle().set("color", "Black");
+        setButtonStyle(helpButton);
 
         headerBox.add(
-                backButton, forwardButton, projectButton, rulesButton, viewButton, helpButton);
+                projectTitelLabel,
+                backButton,
+                forwardButton,
+                projectButton,
+                rulesButton,
+                viewButton,
+                helpButton);
+        headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         headerBox.setSpacing(false);
         headerBox.getThemeList().add("spacing-xs");
 
@@ -96,20 +97,14 @@ public class MainUI extends VerticalLayout {
         copyright.getStyle().set("padding-left", "10px");
 
         Button contactButton = new Button("Contact", e -> presenter.contact());
-        contactButton.getStyle().set("background-color", "#76d0f1");
-        contactButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        contactButton.getStyle().set("color", "Black");
+        setButtonStyle(contactButton);
 
         Button wikiButton = new Button("Wiki", e -> presenter.wiki());
-        wikiButton.getStyle().set("background-color", "#76d0f1");
-        wikiButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        wikiButton.getStyle().set("color", "Black");
+        setButtonStyle(wikiButton);
 
         Button siteButton = new Button("Project Site", e -> presenter.projectSite());
-        siteButton.getStyle().set("background-color", "#76d0f1");
-        siteButton.addThemeVariants(ButtonVariant.LUMO_ICON);
+        setButtonStyle(siteButton);
         siteButton.getStyle().set("padding-right", "10px");
-        siteButton.getStyle().set("color", "Black");
 
         footerHbox.add(copyright, contactButton, wikiButton, siteButton);
         footerHbox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -129,5 +124,12 @@ public class MainUI extends VerticalLayout {
 
     public void setPresenter(MainUIPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    public void setButtonStyle(Button but) {
+        but.getStyle().set("background-color", "#76d0f1");
+        but.addThemeVariants(ButtonVariant.LUMO_ICON);
+        but.getStyle().set("color", "Black");
+        but.getStyle().set("font-family", "Montserrat");
     }
 }
