@@ -21,6 +21,8 @@ public class ConceptAndRelationView extends VerticalLayout {
         createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
         createNewRelationLayout.setHeight(50, Unit.PERCENTAGE);
 
+        setUpBottomBar();
+
         add(createNewConceptLayout);
         add(createNewRelationLayout);
         add(bottomBarLayout);
