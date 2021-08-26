@@ -100,16 +100,20 @@ public class FamixOntology {
         private String replaceSpecialCharacters(String name) {
             try {
                 var url = URLEncoder.encode(name, "UTF-8");
-                // The URLEncoder does not encode '*' because in an URL it is not a reserved character.
-                // However, we are generating an URI and technically '*' is a reserved character there.
+                // The URLEncoder does not encode '*' because in an URL it is not a reserved
+                // character.
+                // However, we are generating an URI and technically '*' is a reserved character
+                // there.
                 // See RFC3986 page 12-13
                 return url.replace("*", "%2A");
             } catch (UnsupportedEncodingException ex) {
                 // It is very unlikely that a system does not support UTF-8.
                 // Even if it does not, we cannot do anything against it.
-                throw new RuntimeException("System does not support UTF-8 encoding, cannot encode URIs");
+                throw new RuntimeException(
+                        "System does not support UTF-8 encoding, cannot encode URIs");
             }
         }
+
         public String uri() {
             return PREFIX + this.name();
         }
