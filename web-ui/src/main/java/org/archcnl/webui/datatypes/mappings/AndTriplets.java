@@ -12,7 +12,6 @@ public class AndTriplets {
     }
 
     public AndTriplets(List<Triplet> triplets) {
-        this();
         this.triplets = triplets;
     }
 
