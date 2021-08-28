@@ -1,10 +1,40 @@
 package org.archcnl.stardogwrapper.api;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.archcnl.stardogwrapper.api.exceptions.NoConnectionToStardogServerException;
 
 public interface StardogDatabaseAPI {
+    public class Result {
+        List<String> vars = new ArrayList<String>();
+        ArrayList<ArrayList<String>> violations = new ArrayList<ArrayList<String>>();
 
+        public Result(List<String> variables) {
+            vars = variables;
+        }
+
+        public ArrayList<ArrayList<String>> getViolations() {
+            return violations;
+        }
+
+        public List<String> getVars() {
+            return vars;
+        }
+
+        public void add(ArrayList<String> violation) {
+            violations.add(violation);
+        }
+
+        public int getNumberOfViolations() {
+            return violations.size();
+        }
+
+        public boolean isEmpty() {
+            return violations.isEmpty();
+        }
+    }
     /**
      * Connects to the database using an admin connection if not already connected. Uses the server,
      * database, user name, and password returned by <code>getServer()</code>, <code>
@@ -19,7 +49,7 @@ public interface StardogDatabaseAPI {
     void closeConnectionToServer();
 
     /** PROTOTYPE Executes a stardog select query on the open connection\ */
-    void executeSelectQuery(String query);
+    Optional<Result> executeSelectQuery(String query);
 
     /**
      * Retrieves an ontology from the database which matches the given RDF context. The ontology is
