@@ -1,5 +1,6 @@
 package org.archcnl.output.model.query;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -26,10 +27,16 @@ public class Query implements FormattedDomainObject {
   @Override
   public String asFormattedString() {
     final StringBuffer sb = new StringBuffer();
+    addNamespaces(sb);
     sb.append(selectClause.asFormattedString());
     sb.append(System.lineSeparator());
     sb.append(whereClause.asFormattedString());
     return sb.toString();
+  }
+
+  private void addNamespaces(final StringBuffer sb) {
+    Arrays.asList(QueryNamesapace.values()).stream()
+        .forEach(n -> sb.append(n.asFormattedString() + System.lineSeparator()));
   }
 
   @Override
