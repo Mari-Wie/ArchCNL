@@ -3,7 +3,7 @@ package org.archcnl.output.model.query;
 /**
  * Representation of standard for ArchCNL namespaces in SPARQL query.
  */
-public enum QueryNamesapace implements FormattedDomainObject {
+public enum QueryNamesapace implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
   RDF("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#"),
 
@@ -44,5 +44,10 @@ public enum QueryNamesapace implements FormattedDomainObject {
     sb.append(getUri());
     sb.append(">");
     return sb.toString();
+  }
+
+  @Override
+  public String asFormattedQuery() {
+    return asFormattedString();
   }
 }

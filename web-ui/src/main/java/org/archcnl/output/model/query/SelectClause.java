@@ -8,7 +8,7 @@ import org.archcnl.output.model.query.attribute.QueryField;
 /**
  * Representation of SPARQL SELECT clause
  */
-public class SelectClause implements FormattedDomainObject {
+public class SelectClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
   public static final String SELECT = "SELECT";
 
@@ -49,6 +49,15 @@ public class SelectClause implements FormattedDomainObject {
     sb.append(SelectClause.SELECT);
     sb.append(" ");
     objects.stream().forEach(o -> sb.append(o.asFormattedString() + " "));
+    return sb.toString();
+  }
+
+  @Override
+  public String asFormattedQuery() {
+    final StringBuffer sb = new StringBuffer();
+    sb.append(SelectClause.SELECT);
+    sb.append(" ");
+    objects.stream().forEach(o -> sb.append(o.asFormattedQuery() + " "));
     return sb.toString();
   }
 }

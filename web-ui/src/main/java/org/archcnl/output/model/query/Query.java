@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Representation of query to database.
  */
-public class Query implements FormattedDomainObject {
+public class Query implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
   private SelectClause selectClause;
   private WhereClause whereClause;
@@ -27,16 +27,30 @@ public class Query implements FormattedDomainObject {
   @Override
   public String asFormattedString() {
     final StringBuffer sb = new StringBuffer();
-    addNamespaces(sb);
+    addNamespacesAsFormattedString(sb);
     sb.append(selectClause.asFormattedString());
     sb.append(System.lineSeparator());
     sb.append(whereClause.asFormattedString());
     return sb.toString();
   }
 
-  private void addNamespaces(final StringBuffer sb) {
+  private void addNamespacesAsFormattedString(final StringBuffer sb) {
     Arrays.asList(QueryNamesapace.values()).stream()
         .forEach(n -> sb.append(n.asFormattedString() + System.lineSeparator()));
+  }
+
+  @Override
+  public String asFormattedQuery() {
+    final StringBuffer sb = new StringBuffer();
+    addNamespacesAsFormattedQuery(sb);
+    sb.append(selectClause.asFormattedQuery());
+    sb.append(whereClause.asFormattedQuery());
+    return sb.toString();
+  }
+
+  private void addNamespacesAsFormattedQuery(final StringBuffer sb) {
+    Arrays.asList(QueryNamesapace.values()).stream()
+        .forEach(n -> sb.append(n.asFormattedString() + " "));
   }
 
   @Override

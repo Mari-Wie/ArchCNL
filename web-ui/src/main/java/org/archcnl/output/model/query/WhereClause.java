@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Representation of SPARQL WHERE clause
  */
-public class WhereClause implements FormattedDomainObject {
+public class WhereClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
   public static final String WHERE = "WHERE";
   public static final String GRAPH = "GRAPH";
@@ -62,7 +62,7 @@ public class WhereClause implements FormattedDomainObject {
     sb.append(" ");
     sb.append(WhereClause.OPEN_BRACKET);
     sb.append(WhereClause.NEW_LINE);
-    addTriplesToFormattedWhereClause(sb);
+    addTriplesToFormattedStringWhereClause(sb);
     sb.append(WhereClause.TAB);
     sb.append(WhereClause.CLOSE_BRACKET);
     sb.append(WhereClause.NEW_LINE);
@@ -70,8 +70,31 @@ public class WhereClause implements FormattedDomainObject {
     return sb.toString();
   }
 
-  private void addTriplesToFormattedWhereClause(final StringBuffer sb) {
+  private void addTriplesToFormattedStringWhereClause(final StringBuffer sb) {
     triples.stream().forEach(t -> sb.append(
         WhereClause.TAB + WhereClause.TAB + t.asFormattedString() + "." + WhereClause.NEW_LINE));
+  }
+
+  @Override
+  public String asFormattedQuery() {
+    final StringBuffer sb = new StringBuffer();
+    sb.append(WhereClause.WHERE);
+    sb.append(" ");
+    sb.append(WhereClause.OPEN_BRACKET);
+    sb.append(" ");
+    sb.append(WhereClause.GRAPH);
+    sb.append(" ");
+    sb.append(WhereClause.GRAPH_FIELD);
+    sb.append(" ");
+    sb.append(WhereClause.OPEN_BRACKET);
+    addTriplesToFormattedQueryWhereClause(sb);
+    sb.append(" ");
+    sb.append(WhereClause.CLOSE_BRACKET);
+    sb.append(WhereClause.CLOSE_BRACKET);
+    return sb.toString();
+  }
+
+  private void addTriplesToFormattedQueryWhereClause(final StringBuffer sb) {
+    triples.stream().forEach(t -> sb.append(" " + t.asFormattedQuery() + "."));
   }
 }

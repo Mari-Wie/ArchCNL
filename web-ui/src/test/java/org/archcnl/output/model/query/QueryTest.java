@@ -36,7 +36,8 @@ public class QueryTest {
     final String queryAsString = query.asFormattedString();
 
     // then
-    Assert.assertEquals(getDefaultNamespaces() + "\n" + expectedQueryString, queryAsString);
+    Assert.assertEquals(getDefaultNamespacesAsFormattedString() + "\n" + expectedQueryString,
+        queryAsString);
   }
 
   @Test
@@ -93,16 +94,55 @@ public class QueryTest {
     final String queryAsString = query.asFormattedString();
 
     // then
-    Assert.assertEquals(getDefaultNamespaces() + "\n" + expectedQueryString, queryAsString);
+    Assert.assertEquals(getDefaultNamespacesAsFormattedString() + "\n" + expectedQueryString,
+        queryAsString);
   }
 
-  private String getDefaultNamespaces() {
+  @Test
+  public void givenSimpleQuery_whenCallAsFormattedQuery_thenReturnFormattedQueryString() {
+    // given
+    final QueryField field = new QueryField("name");
+    final Set<QueryField> objects = new LinkedHashSet<>(Arrays.asList(field));
+    final SelectClause selectClause = new SelectClause(objects);
+    final WhereTriple triple1 = new WhereTriple(new QueryField("aggregate"),
+        new QueryPredicate(QueryNamesapace.RDF, "type"),
+        new QueryObject("architecture:Aggregate", QueryObjectType.PROPERTY));
+    final WhereTriple triple2 = new WhereTriple(new QueryField("aggregate"),
+        new QueryPredicate(QueryNamesapace.FAMIX, "hasName"),
+        new QueryObject("name", QueryObjectType.FIELD));
+    final Set<WhereTriple> triples = new LinkedHashSet<>(Arrays.asList(triple1, triple2));
+    final WhereClause whereClause = new WhereClause(triples);
+    final Query query = new Query(selectClause, whereClause);
+
+    final String expectedQueryString =
+        "SELECT ?name " + "WHERE { GRAPH ?g { ?aggregate rdf:type architecture:Aggregate. "
+            + "?aggregate famix:hasName ?name. }}";
+
+    // when
+    final String queryAsString = query.asFormattedQuery();
+
+    // then
+    Assert.assertEquals(getDefaultNamespacesAsFormattedQuery() + " " + expectedQueryString,
+        queryAsString);
+  }
+
+  private String getDefaultNamespacesAsFormattedString() {
     return "PREFIX rdf <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
         + "PREFIX owl <http://www.w3.org/2002/07/owl#>\n"
         + "PREFIX rdfs <http://www.w3.org/2000/01/rdf-schema#>\n"
         + "PREFIX xsd <http://www.w3.org/2001/XMLSchema#>\n"
         + "PREFIX conformance <http://arch-ont.org/ontologies/architectureconformance#>\n"
         + "PREFIX famix <http://arch-ont.org/ontologies/famix.owl#>\n"
+        + "PREFIX architecture <http://www.arch-ont.org/ontologies/architecture.owl#>";
+  }
+
+  private String getDefaultNamespacesAsFormattedQuery() {
+    return "PREFIX rdf <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+        + "PREFIX owl <http://www.w3.org/2002/07/owl#> "
+        + "PREFIX rdfs <http://www.w3.org/2000/01/rdf-schema#> "
+        + "PREFIX xsd <http://www.w3.org/2001/XMLSchema#> "
+        + "PREFIX conformance <http://arch-ont.org/ontologies/architectureconformance#> "
+        + "PREFIX famix <http://arch-ont.org/ontologies/famix.owl#> "
         + "PREFIX architecture <http://www.arch-ont.org/ontologies/architecture.owl#>";
   }
 }

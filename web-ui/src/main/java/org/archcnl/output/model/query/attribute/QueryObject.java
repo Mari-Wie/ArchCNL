@@ -3,13 +3,14 @@ package org.archcnl.output.model.query.attribute;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.archcnl.output.model.query.FormattedDomainObject;
+import org.archcnl.output.model.query.FormattedQueryDomainObject;
+import org.archcnl.output.model.query.FormattedViewDomainObject;
 
 /**
  * Representation of SPARQL object from triple. SPARQL object can be a field, type or primitive
  * value.
  */
-public class QueryObject implements FormattedDomainObject {
+public class QueryObject implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
   private static final String RX_DOUBLE = "[-+]?[0-9]*\\.[0-9]+([eE][-+]?[0-9]+)?";
   private static final String RX_INT = "^-?\\d+$";
@@ -50,6 +51,11 @@ public class QueryObject implements FormattedDomainObject {
         sb.append("?" + value);
     }
     return sb.toString();
+  }
+
+  @Override
+  public String asFormattedQuery() {
+    return asFormattedString();
   }
 
   @Override

@@ -9,7 +9,7 @@ import org.archcnl.output.model.query.attribute.QueryPredicate;
  * Representation of triple from SPARQL subject-predicate-object, for example: ?aggregate rdf:type
  * architecture:Aggregate
  */
-public class WhereTriple implements FormattedDomainObject {
+public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
   private QueryField subject;
   private QueryPredicate predicate;
@@ -42,6 +42,17 @@ public class WhereTriple implements FormattedDomainObject {
     sb.append(predicate.asFormattedString());
     sb.append(" ");
     sb.append(object.asFormattedString());
+    return sb.toString();
+  }
+
+  @Override
+  public String asFormattedQuery() {
+    final StringBuffer sb = new StringBuffer();
+    sb.append(subject.asFormattedQuery());
+    sb.append(" ");
+    sb.append(predicate.asFormattedQuery());
+    sb.append(" ");
+    sb.append(object.asFormattedQuery());
     return sb.toString();
   }
 
