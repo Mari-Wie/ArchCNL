@@ -1,5 +1,7 @@
 package org.archcnl.ui.queryview;
 
+import java.util.Arrays;
+import java.util.List;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -11,10 +13,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
-import java.util.Arrays;
-import java.util.List;
 
 public class WhereTextBoxesLayout extends HorizontalLayout {
+
+    private static final long serialVersionUID = 1L;
+
     private TextField subjectTextField = new TextField();
     private TextField objectTextField = new TextField();
     private TextField predicateTextField = new TextField();
@@ -22,51 +25,34 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private Button minusButton = new Button(new Icon(VaadinIcon.MINUS));
     private PauseButton pauseButton = new PauseButton(new Icon(VaadinIcon.PAUSE));
     private boolean isEnabled = true;
-    private boolean isLast = false;
 
     public WhereTextBoxesLayout() {
-        addTextField(
-                "Subject",
-                subjectTextField,
-                e -> {
-                    // TODO do something useful with this
-                });
-        addTextField(
-                "Object",
-                objectTextField,
-                e -> {
-                    // TODO do something useful with this
-                });
-        addTextField(
-                "Predicate",
-                predicateTextField,
-                e -> {
-                    // TODO do something useful with this
-                });
+        addTextField("Subject", subjectTextField, e -> {
+            // TODO do something useful with this
+        });
+        addTextField("Object", objectTextField, e -> {
+            // TODO do something useful with this
+        });
+        addTextField("Predicate", predicateTextField, e -> {
+            // TODO do something useful with this
+        });
 
-        addButton.addClickListener(
-                e -> {
-                    fireEvent(new AddWhereLayoutRequestEvent(this, false));
-                });
-        minusButton.addClickListener(
-                e -> {
-                    fireEvent(new RemoveWhereLayoutRequestEvent(this, false));
-                });
-        pauseButton.addClickListener(
-                e -> {
-                    isEnabled = !isEnabled;
-                });
+        addButton.addClickListener(e -> {
+            fireEvent(new AddWhereLayoutRequestEvent(this, false));
+        });
+        minusButton.addClickListener(e -> {
+            fireEvent(new RemoveWhereLayoutRequestEvent(this, false));
+        });
+        pauseButton.addClickListener(e -> {
+            isEnabled = !isEnabled;
+        });
         add(addButton);
         add(minusButton);
         add(pauseButton);
     }
 
-    void addTextField(
-            String placeHolder,
-            TextField textField,
-            HasValue.ValueChangeListener<
-                            ? super AbstractField.ComponentValueChangeEvent<TextField, String>>
-                    listener) {
+    void addTextField(final String placeHolder, final TextField textField,
+            final HasValue.ValueChangeListener<? super AbstractField.ComponentValueChangeEvent<TextField, String>> listener) {
         textField.setPlaceholder(placeHolder);
         textField.addValueChangeListener(listener);
         textField.setValueChangeMode(ValueChangeMode.LAZY);
@@ -74,14 +60,12 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     }
 
     public List<String> getObjSubPredString() {
-        return Arrays.asList(
-                subjectTextField.getValue(),
-                objectTextField.getValue(),
+        return Arrays.asList(subjectTextField.getValue(), objectTextField.getValue(),
                 predicateTextField.getValue());
     }
 
-    public <T extends ComponentEvent<?>> Registration addListener(
-            Class<T> eventType, ComponentEventListener<T> listener) {
+    public <T extends ComponentEvent<?>> Registration addListener(final Class<T> eventType,
+            final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 }

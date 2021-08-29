@@ -1,5 +1,6 @@
 package org.archcnl.ui.queryview;
 
+import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
@@ -9,9 +10,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 
 public class QueryResults extends VerticalLayout {
+
+    private static final long serialVersionUID = 1L;
 
     private WhereLayout whereLayout = new WhereLayout();
     private SelectLayout selectLayout = new SelectLayout();
@@ -30,37 +32,30 @@ public class QueryResults extends VerticalLayout {
     private TextArea queryTextArea = new TextArea("SPARQL Query");
     private HideButton hideQueryTextArea = new HideButton(queryTextArea);
 
-    public <T extends ComponentEvent<?>> Registration addListener(
-            Class<T> eventType, ComponentEventListener<T> listener) {
+    public <T extends ComponentEvent<?>> Registration addListener(final Class<T> eventType,
+            final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 
     public QueryResults() {
 
-        queryButton.addClickListener(
-                e -> {
-                    fireEvent(new ResultUpdateEvent(this, false));
-                });
+        queryButton.addClickListener(e -> {
+            fireEvent(new ResultUpdateEvent(this, false));
+        });
 
         queryTextArea.setValue(exampleQuery);
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
         whereLabel.setHeight(100, Unit.PERCENTAGE);
-        add(
-                selectLabelLayout,
-                selectLayout,
-                whereLabelLayout,
-                whereLayout,
-                new HorizontalLayout(queryButton, clearButton, hideButton),
-                gridView,
-                hideQueryTextArea,
-                queryTextArea);
+        add(selectLabelLayout, selectLayout, whereLabelLayout, whereLayout,
+                new HorizontalLayout(queryButton, clearButton, hideButton), gridView,
+                hideQueryTextArea, queryTextArea);
     }
 
     public void updateQueryString() {
         // TODO
     }
 
-    void updateGrid(StardogDatabaseAPI.Result res) {
+    void updateGrid(final StardogDatabaseAPI.Result res) {
         gridView.update(res);
     }
 

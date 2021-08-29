@@ -5,12 +5,12 @@ package org.archcnl.output.model.query;
  */
 public interface FormattedQueryDomainObject {
 
-  /**
-   * Return prepared for query string representation of an SPARQL element.
-   * 
-   * For example: PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-   * 
-   * @return prepared string representation for query of an SPARQL element
-   */
-  public String asFormattedQuery();
+    /**
+     * Return prepared for query string representation of an SPARQL element.
+     * 
+     * For example: PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+     * 
+     * @return prepared string representation for query of an SPARQL element
+     */
+    public String asFormattedQuery();
 }

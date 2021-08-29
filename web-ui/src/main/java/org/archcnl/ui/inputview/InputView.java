@@ -4,6 +4,9 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class InputView extends HorizontalLayout {
+
+    private static final long serialVersionUID = 1L;
+
     ArchitectureRulesLayout architectureRulesLayout = new ArchitectureRulesLayout();
     ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView();
 

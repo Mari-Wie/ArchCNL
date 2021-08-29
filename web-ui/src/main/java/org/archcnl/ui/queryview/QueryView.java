@@ -1,27 +1,31 @@
 package org.archcnl.ui.queryview;
 
-import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogICVAPI;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
 import org.archcnl.ui.common.SideBarLayout;
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 
 /**
  * A sample Vaadin view class.
  *
- * <p>To implement a Vaadin view just extend any Vaadin component and use @Route annotation to
- * announce it in a URL as a Spring managed bean. Use the @PWA annotation make the application
- * installable on phones, tablets and some desktop browsers.
+ * <p>
+ * To implement a Vaadin view just extend any Vaadin component and use @Route annotation to announce
+ * it in a URL as a Spring managed bean. Use the @PWA annotation make the application installable on
+ * phones, tablets and some desktop browsers.
  *
- * <p>A new instance of this class is created for every new user and every browser tab/window.
+ * <p>
+ * A new instance of this class is created for every new user and every browser tab/window.
  */
 @Route("QueryView")
 public class QueryView extends HorizontalLayout {
+
+    private static final long serialVersionUID = 1L;
 
     SideBarLayout sideBar = new SideBarLayout();
     QueryResults queryResults = new QueryResults();
@@ -44,26 +48,23 @@ public class QueryView extends HorizontalLayout {
         sideBar.setWidth(20, Unit.PERCENTAGE);
         queryResults.setWidth(80, Unit.PERCENTAGE);
         addAndExpand(sideBar, queryResults);
-        Registration reg =
-                queryResults.addListener(
-                        ResultUpdateEvent.class,
-                        e -> {
-                            Optional<StardogDatabaseAPI.Result> res = Optional.empty();
-                            // TODO add logger for event received
-                            String q = queryResults.getQuery();
-                            try {
-                                db.connect(false);
-                                res = db.executeSelectQuery(q);
-                                db.closeConnectionToServer();
-                            } catch (Exception ex) {
-                                // TODO add logger for exception case
-                                ex.printStackTrace();
-                            }
-                            if (res.isPresent()) {
-                                queryResults.updateGrid(res.get());
-                            } else {
-                                // TODO Decide what to do with errors or wrong queries
-                            }
-                        });
+        final Registration reg = queryResults.addListener(ResultUpdateEvent.class, e -> {
+            Optional<StardogDatabaseAPI.Result> res = Optional.empty();
+            // TODO add logger for event received
+            final String q = queryResults.getQuery();
+            try {
+                db.connect(false);
+                res = db.executeSelectQuery(q);
+                db.closeConnectionToServer();
+            } catch (final Exception ex) {
+                // TODO add logger for exception case
+                ex.printStackTrace();
+            }
+            if (res.isPresent()) {
+                queryResults.updateGrid(res.get());
+            } else {
+                // TODO Decide what to do with errors or wrong queries
+            }
+        });
     }
 }

@@ -6,14 +6,17 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class ConceptAndRelationView extends VerticalLayout {
+
+    private static final long serialVersionUID = 1L;
+
     CreateNewLayout createNewConceptLayout = new CreateNewLayout("Concepts", "Create new concept");
     CreateNewLayout createNewRelationLayout =
             new CreateNewLayout("Relations", "Create new relation");
     HorizontalLayout bottomBarLayout = new HorizontalLayout();
 
     public void setUpBottomBar() {
-        Button saveButton = new Button("Save");
-        Button checkButton = new Button("Check");
+        final Button saveButton = new Button("Save");
+        final Button checkButton = new Button("Check");
         bottomBarLayout.add(saveButton, checkButton);
     }
 

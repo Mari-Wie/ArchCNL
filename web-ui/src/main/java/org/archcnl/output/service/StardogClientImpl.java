@@ -8,24 +8,24 @@ import org.archcnl.stardogwrapper.impl.StardogDatabase;
 
 public class StardogClientImpl implements StardogClient {
 
-  private StardogDatabaseAPI db;
+    private StardogDatabaseAPI db;
 
-  /**
-   * Constructor stardog client.
-   * 
-   * @param url Full host url. For example: http://localhost:5820
-   * @param dbName DB name.
-   * @param username DB username.
-   * @param password DB password.
-   */
-  public StardogClientImpl(final String url, final String dbName, final String username,
-      final String password) {
-    this.db = new StardogDatabase(url, dbName, username, password);
-    db.connect(false);
-  }
+    /**
+     * Constructor stardog client.
+     * 
+     * @param url Full host url. For example: http://localhost:5820
+     * @param dbName DB name.
+     * @param username DB username.
+     * @param password DB password.
+     */
+    public StardogClientImpl(final String url, final String dbName, final String username,
+            final String password) {
+        this.db = new StardogDatabase(url, dbName, username, password);
+        db.connect(false);
+    }
 
-  @Override
-  public Optional<Result> executeNativeSelectQuery(final Query query) {
-    return db.executeSelectQuery(query.asFormattedString());
-  }
+    @Override
+    public Optional<Result> executeNativeSelectQuery(final Query query) {
+        return db.executeSelectQuery(query.asFormattedString());
+    }
 }

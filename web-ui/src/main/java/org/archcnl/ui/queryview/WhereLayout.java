@@ -4,11 +4,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 
 public class WhereLayout extends VerticalLayout {
+
+    private static final long serialVersionUID = 1L;
+
     public WhereLayout() {
         addWhereTextLayout(0);
     }
 
-    public void removeRow(WhereTextBoxesLayout layout) {
+    public void removeRow(final WhereTextBoxesLayout layout) {
         remove(layout);
     }
 
@@ -17,8 +20,8 @@ public class WhereLayout extends VerticalLayout {
         addWhereTextLayout(0);
     }
 
-    public void addWhereTextLayout(int position) {
-        WhereTextBoxesLayout newLayout = new WhereTextBoxesLayout();
+    public void addWhereTextLayout(final int position) {
+        final WhereTextBoxesLayout newLayout = new WhereTextBoxesLayout();
         int newPosition = position;
         if (newPosition < getComponentCount()) {
             newPosition += 1;
@@ -26,17 +29,9 @@ public class WhereLayout extends VerticalLayout {
 
         addComponentAtIndex(newPosition, newLayout);
 
-        Registration regAdd =
-                newLayout.addListener(
-                        AddWhereLayoutRequestEvent.class,
-                        e -> {
-                            addWhereTextLayout(indexOf(e.getSource()));
-                        });
-        Registration regMinus =
-                newLayout.addListener(
-                        RemoveWhereLayoutRequestEvent.class,
-                        e -> {
-                            removeRow(e.getSource());
-                        });
+        final Registration regAdd = newLayout.addListener(AddWhereLayoutRequestEvent.class,
+                e -> addWhereTextLayout(indexOf(e.getSource())));
+        final Registration regMinus = newLayout.addListener(RemoveWhereLayoutRequestEvent.class,
+                e -> removeRow(e.getSource()));
     }
 }
