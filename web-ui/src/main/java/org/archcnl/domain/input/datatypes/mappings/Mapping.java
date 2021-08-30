@@ -23,8 +23,6 @@ public abstract class Mapping {
         return variableManager;
     }
 
-    public abstract String getName();
-
     public abstract Triplet getThenTriplet();
 
     public abstract String getMappingNameRepresentation();

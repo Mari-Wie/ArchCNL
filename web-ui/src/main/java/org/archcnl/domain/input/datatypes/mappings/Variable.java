@@ -2,7 +2,7 @@ package org.archcnl.domain.input.datatypes.mappings;
 
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 
-public class Variable {
+public class Variable extends ObjectType {
 
     private String name;
 
@@ -13,15 +13,13 @@ public class Variable {
         this.name = name;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String toStringRepresentation() {
         return "?" + name;
-    }
-
-    public boolean sameNameAs(Variable variable) {
-        return name.equals(variable.getName());
     }
 }
