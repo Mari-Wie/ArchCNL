@@ -2,8 +2,8 @@ package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.archcnl.webui.exceptions.InvalidVariableNameException;
-import org.archcnl.webui.exceptions.RecursiveRelationException;
 import org.archcnl.webui.exceptions.UnrelatedMappingException;
 import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
@@ -15,7 +15,7 @@ public class CustomRelation extends Relation {
     private RelationMapping mapping;
 
     public CustomRelation(String name, List<ObjectType> relatableObjectTypes)
-            throws RecursiveRelationException, VariableAlreadyExistsException,
+            throws VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         super(name, relatableObjectTypes);
         // TODO: Allow for thenVariables to be null
