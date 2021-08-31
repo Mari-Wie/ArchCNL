@@ -23,26 +23,30 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private PauseButton pauseButton = new PauseButton(new Icon(VaadinIcon.PAUSE));
     private boolean isEnabled = true;
     private boolean isLast = false;
+    private TextField subjectTextfield, objectTextfield, predicateTextfield;
 
     public WhereTextBoxesLayout() {
-        addTextField(
-                "Subject",
-                subjectTextField,
-                e -> {
-                    // TODO do something useful with this
-                });
-        addTextField(
-                "Object",
-                objectTextField,
-                e -> {
-                    // TODO do something useful with this
-                });
-        addTextField(
-                "Predicate",
-                predicateTextField,
-                e -> {
-                    // TODO do something useful with this
-                });
+        subjectTextfield =
+                addTextField(
+                        "Subject",
+                        subjectTextField,
+                        e -> {
+                            // TODO do something useful with this
+                        });
+        objectTextfield =
+                addTextField(
+                        "Object",
+                        objectTextField,
+                        e -> {
+                            // TODO do something useful with this
+                        });
+        predicateTextfield =
+                addTextField(
+                        "Predicate",
+                        predicateTextField,
+                        e -> {
+                            // TODO do something useful with this
+                        });
 
         addButton.addClickListener(
                 e -> {
@@ -54,14 +58,27 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
                 });
         pauseButton.addClickListener(
                 e -> {
-                    isEnabled = !isEnabled;
+                    pauseRow();
                 });
+        pauseButton.getElement().setProperty("title", "Pauses (Disables) this row of queries");
         add(addButton);
         add(minusButton);
         add(pauseButton);
     }
 
-    void addTextField(
+    void pauseRow() {
+        isEnabled = !isEnabled;
+        subjectTextfield.setEnabled(isEnabled);
+        objectTextfield.setEnabled(isEnabled);
+        predicateTextfield.setEnabled(isEnabled);
+        if (isEnabled) {
+            pauseButton.getElement().setProperty("title", "Pauses (Disables) this row of queries");
+        } else {
+            pauseButton.getElement().setProperty("title", "Unpauses this row of queries");
+        }
+    }
+
+    TextField addTextField(
             String placeHolder,
             TextField textField,
             HasValue.ValueChangeListener<
@@ -71,6 +88,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         textField.addValueChangeListener(listener);
         textField.setValueChangeMode(ValueChangeMode.LAZY);
         add(textField);
+        return textField;
     }
 
     public List<String> getObjSubPredString() {
