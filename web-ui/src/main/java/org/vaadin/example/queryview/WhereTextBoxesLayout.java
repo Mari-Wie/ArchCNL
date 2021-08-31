@@ -71,6 +71,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         subjectTextfield.setEnabled(isEnabled);
         objectTextfield.setEnabled(isEnabled);
         predicateTextfield.setEnabled(isEnabled);
+        minusButton.setEnabled(isEnabled);
         if (isEnabled) {
             pauseButton.getElement().setProperty("title", "Pauses (Disables) this row of queries");
         } else {
