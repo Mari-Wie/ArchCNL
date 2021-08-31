@@ -75,7 +75,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         }
     }
 
-    TextField addTextField(
+    void addTextField(
             String placeHolder,
             TextField textField,
             HasValue.ValueChangeListener<
@@ -85,7 +85,6 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         textField.addValueChangeListener(listener);
         textField.setValueChangeMode(ValueChangeMode.LAZY);
         add(textField);
-        return textField;
     }
 
     public List<String> getObjSubPredString() {
