@@ -22,4 +22,16 @@ public class Variable extends ObjectType {
     public String toStringRepresentation() {
         return "?" + name;
     }
+    
+    @Override
+    /** Warning: Not a real equals method! Only checks if o is instance of this class. */
+    public boolean equals(Object o) {
+        return o instanceof Variable;
+    }
+
+    @Override
+    /** Warning: Not a real hasCode method! Will always return 0. */
+    public int hashCode() {
+        return 0;
+    }
 }

@@ -4,13 +4,20 @@ import java.util.List;
 
 public class SpecialRelation extends Relation {
 
-	public SpecialRelation(String name, List<ObjectType> relatableObjectTypes) {
+	private String realName;
+
+	public SpecialRelation(String name, String realName, List<ObjectType> relatableObjectTypes) {
 		super(name, relatableObjectTypes);
+		this.realName = realName;
 	}
 
 	@Override
 	public String toStringRepresentation() {
-		return getName();
+		return getRealName();
+	}
+
+	public String getRealName() {
+		return realName;
 	}
 
 }

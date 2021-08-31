@@ -12,7 +12,7 @@ public class UnsupportedObjectTypeInTriplet extends Exception {
                 "The predicate \""
                         + predicate.getName()
                         + "\" of this triplet does not support the object type \""
-                        + object.getClass().getName()
+                        + object.getClass().getSimpleName()
                         + "\".");
     }
 }

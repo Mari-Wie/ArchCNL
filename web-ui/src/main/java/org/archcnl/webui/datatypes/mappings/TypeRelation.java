@@ -32,7 +32,7 @@ public class TypeRelation extends Relation {
         return Collections.<ObjectType>unmodifiableList(RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts());
     }
 
-    private String getRealName() {
+    public String getRealName() {
         return realName;
     }
 }

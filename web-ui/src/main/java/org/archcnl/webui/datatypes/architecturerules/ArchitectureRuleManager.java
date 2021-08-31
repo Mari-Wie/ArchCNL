@@ -15,6 +15,12 @@ public class ArchitectureRuleManager {
         architectureRules.add(architectureRule);
     }
 	
+	public void addAllArchitectureRules(List<ArchitectureRule> architectureRules) {
+		for (ArchitectureRule rule : architectureRules) {
+			addArchitectureRule(rule);
+		}
+	}
+	
 	public void deleteArchitectureRule(ArchitectureRule architectureRule) {
         architectureRules.remove(architectureRule);
     }

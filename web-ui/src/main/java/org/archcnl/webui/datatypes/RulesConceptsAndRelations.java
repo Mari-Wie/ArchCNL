@@ -5,13 +5,16 @@ import org.archcnl.webui.datatypes.mappings.ConceptManager;
 import org.archcnl.webui.datatypes.mappings.RelationManager;
 import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
 
+import com.google.common.annotations.VisibleForTesting;
+
 public class RulesConceptsAndRelations {
 	
 	private static final RulesConceptsAndRelations INSTANCE;
 	static {
 		try {
 			INSTANCE = new RulesConceptsAndRelations();
-		} catch (ConceptDoesNotExistException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ExceptionInInitializerError(e);
 		}
 	}
@@ -20,10 +23,11 @@ public class RulesConceptsAndRelations {
     private ConceptManager conceptManager;
     private RelationManager relationManager;
 
-    private RulesConceptsAndRelations() throws ConceptDoesNotExistException {
+    @VisibleForTesting
+    public RulesConceptsAndRelations() throws ConceptDoesNotExistException {
     	architectureRuleManager = new ArchitectureRuleManager();
     	conceptManager = new ConceptManager();
-    	relationManager = new RelationManager();
+		relationManager = new RelationManager(conceptManager);
     }
 
 	public ArchitectureRuleManager getArchitectureRuleManager() {

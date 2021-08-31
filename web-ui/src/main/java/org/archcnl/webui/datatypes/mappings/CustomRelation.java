@@ -1,7 +1,6 @@
 package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import org.archcnl.webui.exceptions.InvalidVariableNameException;
 import org.archcnl.webui.exceptions.UnrelatedMappingException;
@@ -14,10 +13,10 @@ public class CustomRelation extends Relation {
 
     private RelationMapping mapping;
 
-    public CustomRelation(String name, List<ObjectType> relatableObjectTypes)
+    public CustomRelation(String name)
             throws VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
-        super(name, relatableObjectTypes);
+        super(name, new LinkedList<>());
         // TODO: Allow for thenVariables to be null
         mapping =
                 new RelationMapping(
@@ -27,21 +26,15 @@ public class CustomRelation extends Relation {
                         this);
     }
 
-    public CustomRelation(
-            String name, List<ObjectType> relatableObjectTypes, RelationMapping mapping)
-            throws UnrelatedMappingException {
-        super(name, relatableObjectTypes);
-        setMapping(mapping);
-    }
-
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getPredicate())) {
             this.mapping = mapping;
+            addRelatableObjectType(mapping.getThenTriplet().getObject());
         } else {
             throw new UnrelatedMappingException(
                     getName(), mapping.getThenTriplet().getPredicate().getName());
         }
-    }
+    }   
 
     public RelationMapping getMapping() {
         return mapping;

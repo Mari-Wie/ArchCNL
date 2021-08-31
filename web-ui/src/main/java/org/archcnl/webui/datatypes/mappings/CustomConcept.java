@@ -1,6 +1,7 @@
 package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
+
 import org.archcnl.webui.exceptions.InvalidVariableNameException;
 import org.archcnl.webui.exceptions.RelationDoesNotExistException;
 import org.archcnl.webui.exceptions.UnrelatedMappingException;
@@ -19,11 +20,6 @@ public class CustomConcept extends Concept {
         super(name);
         // TODO: Allow for thenVariable to be null
         mapping = new ConceptMapping(new Variable("placeholder"), new LinkedList<>(), this);
-    }
-
-    public CustomConcept(String name, ConceptMapping mapping) throws UnrelatedMappingException {
-        super(name);
-        setMapping(mapping);
     }
 
     public void setMapping(ConceptMapping mapping) throws UnrelatedMappingException {
