@@ -25,7 +25,7 @@ public class StringValue extends ObjectType {
     public String getName() {
         return getValue();
     }
-    
+
     @Override
     /** Warning: Not a real equals method! Only checks if o is instance of this class. */
     public boolean equals(Object o) {

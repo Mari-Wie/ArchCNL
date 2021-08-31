@@ -22,7 +22,7 @@ public class Variable extends ObjectType {
     public String toStringRepresentation() {
         return "?" + name;
     }
-    
+
     @Override
     /** Warning: Not a real equals method! Only checks if o is instance of this class. */
     public boolean equals(Object o) {

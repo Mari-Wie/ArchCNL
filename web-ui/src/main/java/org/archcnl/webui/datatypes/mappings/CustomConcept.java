@@ -1,7 +1,6 @@
 package org.archcnl.webui.datatypes.mappings;
 
 import java.util.LinkedList;
-
 import org.archcnl.webui.exceptions.InvalidVariableNameException;
 import org.archcnl.webui.exceptions.RelationDoesNotExistException;
 import org.archcnl.webui.exceptions.UnrelatedMappingException;
