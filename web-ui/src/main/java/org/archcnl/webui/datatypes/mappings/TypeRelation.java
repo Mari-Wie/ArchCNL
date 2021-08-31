@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.archcnl.webui.datatypes.RulesConceptsAndRelations;
+
 public class TypeRelation extends Relation {
 
     private static final String RELATION_TYPE = "rdf";
@@ -27,7 +29,7 @@ public class TypeRelation extends Relation {
 
     @Override
     public List<ObjectType> getRelatableObjectTypes() {
-        return Collections.<ObjectType>unmodifiableList(ConceptManager.getInstance().getConcepts());
+        return Collections.<ObjectType>unmodifiableList(RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts());
     }
 
     private String getRealName() {
