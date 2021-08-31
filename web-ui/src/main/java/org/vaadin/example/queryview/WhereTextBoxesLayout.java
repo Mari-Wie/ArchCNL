@@ -23,30 +23,26 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private PauseButton pauseButton = new PauseButton(new Icon(VaadinIcon.PAUSE));
     private boolean isEnabled = true;
     private boolean isLast = false;
-    private TextField subjectTextfield, objectTextfield, predicateTextfield;
 
     public WhereTextBoxesLayout() {
-        subjectTextfield =
-                addTextField(
-                        "Subject",
-                        subjectTextField,
-                        e -> {
-                            // TODO do something useful with this
-                        });
-        objectTextfield =
-                addTextField(
-                        "Object",
-                        objectTextField,
-                        e -> {
-                            // TODO do something useful with this
-                        });
-        predicateTextfield =
-                addTextField(
-                        "Predicate",
-                        predicateTextField,
-                        e -> {
-                            // TODO do something useful with this
-                        });
+        addTextField(
+                "Subject",
+                subjectTextField,
+                e -> {
+                    // TODO do something useful with this
+                });
+        addTextField(
+                "Object",
+                objectTextField,
+                e -> {
+                    // TODO do something useful with this
+                });
+        addTextField(
+                "Predicate",
+                predicateTextField,
+                e -> {
+                    // TODO do something useful with this
+                });
 
         addButton.addClickListener(
                 e -> {
@@ -68,9 +64,9 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
 
     void pauseRow() {
         isEnabled = !isEnabled;
-        subjectTextfield.setEnabled(isEnabled);
-        objectTextfield.setEnabled(isEnabled);
-        predicateTextfield.setEnabled(isEnabled);
+        subjectTextField.setEnabled(isEnabled);
+        objectTextField.setEnabled(isEnabled);
+        predicateTextField.setEnabled(isEnabled);
         minusButton.setEnabled(isEnabled);
         if (isEnabled) {
             pauseButton.getElement().setProperty("title", "Pauses (Disables) this row of queries");
