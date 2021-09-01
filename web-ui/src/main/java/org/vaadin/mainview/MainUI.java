@@ -57,7 +57,6 @@ public class MainUI extends VerticalLayout {
                 viewButton,
                 helpButton);
         headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-
         headerBox.setWidthFull();
         return headerBox;
     }
