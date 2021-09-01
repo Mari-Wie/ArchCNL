@@ -23,6 +23,10 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private PauseButton pauseButton = new PauseButton(new Icon(VaadinIcon.PAUSE));
     private boolean isEnabled = true;
     private boolean isLast = false;
+    private String tooltipMessageDisable =
+            "Pauses (disables) this row of triplets (subject, predicate, and object)";
+    private String tooltipMessageEnable =
+            "Unpauses (activates) this row of triplets (subject, predicate, and object)";
 
     public WhereTextBoxesLayout() {
         addTextField(
@@ -56,7 +60,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
                 e -> {
                     pauseRow();
                 });
-        pauseButton.getElement().setProperty("title", "Pauses (Disables) this row of queries");
+        pauseButton.getElement().setProperty("title", tooltipMessageDisable);
         add(addButton);
         add(minusButton);
         add(pauseButton);
@@ -69,9 +73,9 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         predicateTextField.setEnabled(isEnabled);
         minusButton.setEnabled(isEnabled);
         if (isEnabled) {
-            pauseButton.getElement().setProperty("title", "Pauses (Disables) this row of queries");
+            pauseButton.getElement().setProperty("title", tooltipMessageDisable);
         } else {
-            pauseButton.getElement().setProperty("title", "Unpauses this row of queries");
+            pauseButton.getElement().setProperty("title", tooltipMessageEnable);
         }
     }
 
