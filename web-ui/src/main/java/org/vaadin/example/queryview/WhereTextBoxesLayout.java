@@ -23,10 +23,8 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private PauseButton pauseButton = new PauseButton(new Icon(VaadinIcon.PAUSE));
     private boolean isEnabled = true;
     private boolean isLast = false;
-    private String tooltipMessageEnabled =
-            "Disables this row of subject, predicate, and object";
-    private String tooltipMessageDisabled =
-            "Enables this row of subject, predicate, and object)";
+    private String tooltipMessageEnabled = "Disables this row of subject, predicate, and object";
+    private String tooltipMessageDisabled = "Enables this row of subject, predicate, and object)";
 
     public WhereTextBoxesLayout() {
         addTextField(
