@@ -1,0 +1,20 @@
+vaadin-button {
+  background-color: #76d0f1;
+  font-family: Montserrat;
+  color: Black;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+  variant: icon;
+}
+
+label {
+	font-family: Montserrat;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+vaadin-horizontal-layout {
+	background-color: #2596be;
+}

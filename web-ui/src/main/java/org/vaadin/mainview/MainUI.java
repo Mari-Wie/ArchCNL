@@ -1,10 +1,8 @@
 package org.vaadin.mainview;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,7 +15,7 @@ import com.vaadin.flow.server.PWA;
         shortName = "Vaadin App",
         description = "This is an example Vaadin application.",
         enableInstallPrompt = false)
-@HtmlImport("./styles/main-style-module.html")
+@CssImport("./styles/vaadin-button-styles.css")
 public class MainUI extends VerticalLayout {
 
     private Component header, oldContent, footer;
@@ -41,28 +39,14 @@ public class MainUI extends VerticalLayout {
 
         Label projectTitelLabel = new Label("ARCHCNL");
         projectTitelLabel.getStyle().set("color", "White");
-        projectTitelLabel.getStyle().set("padding-left", "10px");
-        projectTitelLabel.getStyle().set("padding-right", "10px");
         projectTitelLabel.getStyle().set("font-size", "large");
-        projectTitelLabel.getStyle().set("font-family", "Montserrat");
 
         Button backButton = new Button("Back", e -> presenter.Back());
-        setButtonStyle(backButton);
-
         Button forwardButton = new Button("Forward", e -> presenter.Forward());
-        setButtonStyle(forwardButton);
-
         Button projectButton = new Button("Project", e -> presenter.importProject());
-        setButtonStyle(projectButton);
-
         Button rulesButton = new Button("Rules", e -> presenter.importRules());
-        setButtonStyle(rulesButton);
-
         Button viewButton = new Button("View", e -> presenter.view());
-        setButtonStyle(viewButton);
-
         Button helpButton = new Button("Help", e -> presenter.help());
-        setButtonStyle(helpButton);
 
         headerBox.add(
                 projectTitelLabel,
@@ -73,10 +57,7 @@ public class MainUI extends VerticalLayout {
                 viewButton,
                 helpButton);
         headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-        headerBox.setSpacing(false);
-        headerBox.getThemeList().add("spacing-xs");
 
-        headerBox.getStyle().set("background-color", "#2596be");
         headerBox.setWidthFull();
         return headerBox;
     }
@@ -92,27 +73,18 @@ public class MainUI extends VerticalLayout {
         HorizontalLayout footerHbox = new HorizontalLayout();
 
         Label copyright = new Label("© 2021 University of Hamburg. All rights reserved");
-        copyright.setWidth(87, Unit.PERCENTAGE);
-        copyright.getStyle().set("font-family", "Montserrat");
-        copyright.getStyle().set("padding-left", "10px");
 
+        HorizontalLayout buttonHBox = new HorizontalLayout();
         Button contactButton = new Button("Contact", e -> presenter.contact());
-        setButtonStyle(contactButton);
-
         Button wikiButton = new Button("Wiki", e -> presenter.wiki());
-        setButtonStyle(wikiButton);
-
         Button siteButton = new Button("Project Site", e -> presenter.projectSite());
-        setButtonStyle(siteButton);
-        siteButton.getStyle().set("padding-right", "10px");
+        buttonHBox.add(copyright, contactButton, wikiButton, siteButton);
 
-        footerHbox.add(copyright, contactButton, wikiButton, siteButton);
         footerHbox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-        footerHbox.setSpacing(false);
-        footerHbox.getThemeList().add("spacing-xs");
-
-        footerHbox.getStyle().set("background-color", "#2596be");
+        footerHbox.addAndExpand(copyright);
+        footerHbox.add(buttonHBox);
         footerHbox.setWidthFull();
+
         return footerHbox;
     }
 
@@ -124,12 +96,5 @@ public class MainUI extends VerticalLayout {
 
     public void setPresenter(MainUIPresenter presenter) {
         this.presenter = presenter;
-    }
-
-    public void setButtonStyle(Button but) {
-        but.getStyle().set("background-color", "#76d0f1");
-        but.addThemeVariants(ButtonVariant.LUMO_ICON);
-        but.getStyle().set("color", "Black");
-        but.getStyle().set("font-family", "Montserrat");
     }
 }
