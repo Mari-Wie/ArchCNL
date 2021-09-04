@@ -1,0 +1,19 @@
+package org.archcnl.ui.output.component;
+
+public class QueryResultsUiComponent extends AbstractQueryResults {
+
+    private static final long serialVersionUID = 1L;
+
+    GeneralInfoLayout generalInfoLayout;
+
+    public QueryResultsUiComponent() {
+        generalInfoLayout = new GeneralInfoLayout();
+        gridView.update(exampleQuery);
+        registerEventListeners();
+        addComponents();
+    }
+
+    protected void addComponents() {
+        add(generalInfoLayout, gridView, queryTextArea);
+    }
+}

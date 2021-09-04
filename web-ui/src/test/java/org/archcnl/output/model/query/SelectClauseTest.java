@@ -3,7 +3,8 @@ package org.archcnl.output.model.query;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.archcnl.output.model.query.attribute.QueryField;
+import org.archcnl.domain.output.model.query.SelectClause;
+import org.archcnl.domain.output.model.query.attribute.QueryField;
 import org.junit.Assert;
 import org.junit.Test;
 

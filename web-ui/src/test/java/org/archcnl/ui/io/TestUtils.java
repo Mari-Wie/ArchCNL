@@ -4,21 +4,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.archcnl.input.datatypes.RulesAndMappings;
-import org.archcnl.input.datatypes.architecturerules.ArchitectureRule;
-import org.archcnl.input.datatypes.mappings.AndTriplets;
-import org.archcnl.input.datatypes.mappings.ConceptManager;
-import org.archcnl.input.datatypes.mappings.ConceptMapping;
-import org.archcnl.input.datatypes.mappings.RelationManager;
-import org.archcnl.input.datatypes.mappings.RelationMapping;
-import org.archcnl.input.datatypes.mappings.Triplet;
-import org.archcnl.input.datatypes.mappings.Variable;
-import org.archcnl.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.input.exceptions.InvalidVariableNameException;
-import org.archcnl.input.exceptions.RecursiveRelationException;
-import org.archcnl.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.input.datatypes.RulesAndMappings;
+import org.archcnl.domain.input.datatypes.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.datatypes.mappings.AndTriplets;
+import org.archcnl.domain.input.datatypes.mappings.ConceptManager;
+import org.archcnl.domain.input.datatypes.mappings.ConceptMapping;
+import org.archcnl.domain.input.datatypes.mappings.RelationManager;
+import org.archcnl.domain.input.datatypes.mappings.RelationMapping;
+import org.archcnl.domain.input.datatypes.mappings.Triplet;
+import org.archcnl.domain.input.datatypes.mappings.Variable;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RecursiveRelationException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class TestUtils {
 

@@ -3,10 +3,12 @@ package org.archcnl.output.model.query;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.archcnl.output.model.query.attribute.QueryField;
-import org.archcnl.output.model.query.attribute.QueryObject;
-import org.archcnl.output.model.query.attribute.QueryObjectType;
-import org.archcnl.output.model.query.attribute.QueryPredicate;
+import org.archcnl.domain.output.model.query.WhereClause;
+import org.archcnl.domain.output.model.query.WhereTriple;
+import org.archcnl.domain.output.model.query.attribute.QueryField;
+import org.archcnl.domain.output.model.query.attribute.QueryObject;
+import org.archcnl.domain.output.model.query.attribute.QueryObjectType;
+import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 import org.junit.Assert;
 import org.junit.Test;
 
