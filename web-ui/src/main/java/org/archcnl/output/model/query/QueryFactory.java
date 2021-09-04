@@ -37,7 +37,7 @@ public class QueryFactory {
         return new QueryField(subjectString);
     }
 
-        //TODO relpace get methods with clear indication where which part is in the LIst
+    // TODO relpace get methods with clear indication where which part is in the LIst
     private WhereTriple createWhereTriplet(List<String> subObjPradList) {
         QueryField subject = createQuerySubject(subObjPradList.get(0));
         QueryPredicate predicate = createQueryPredicate(subObjPradList.get(1));
