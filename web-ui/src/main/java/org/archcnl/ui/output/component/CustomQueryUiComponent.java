@@ -1,10 +1,10 @@
 package org.archcnl.ui.output.component;
 
-import org.archcnl.ui.output.events.ResultUpdateEvent;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.ui.output.events.ResultUpdateEvent;
 
 public class CustomQueryUiComponent extends AbstractQueryResults {
 
@@ -30,8 +30,14 @@ public class CustomQueryUiComponent extends AbstractQueryResults {
     }
 
     protected void addComponents() {
-        add(selectLabelLayout, selectLayout, whereLabelLayout, whereLayout,
-                new HorizontalLayout(queryButton, clearButton, hideButton), gridView,
-                hideQueryTextArea, queryTextArea);
+        add(
+                selectLabelLayout,
+                selectLayout,
+                whereLabelLayout,
+                whereLayout,
+                new HorizontalLayout(queryButton, clearButton, hideButton),
+                gridView,
+                hideQueryTextArea,
+                queryTextArea);
     }
 }

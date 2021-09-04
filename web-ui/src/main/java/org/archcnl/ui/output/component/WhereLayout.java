@@ -1,10 +1,10 @@
 package org.archcnl.ui.output.component;
 
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.ui.output.events.AddWhereLayoutRequestEvent;
 import org.archcnl.ui.output.events.RemoveWhereLayoutRequestEvent;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class WhereLayout extends VerticalLayout {
 
@@ -24,9 +24,11 @@ public class WhereLayout extends VerticalLayout {
     }
 
     public List<List<String>> collect() {
-        return getChildren().filter(child -> child.getClass() == WhereTextBoxesLayout.class)
+        return getChildren()
+                .filter(child -> child.getClass() == WhereTextBoxesLayout.class)
                 .map(WhereTextBoxesLayout.class::cast)
-                .map(WhereTextBoxesLayout::getObjSubPredString).collect(Collectors.toList());
+                .map(WhereTextBoxesLayout::getObjSubPredString)
+                .collect(Collectors.toList());
     }
 
     public void addWhereTextLayout(final int position) {
@@ -36,8 +38,8 @@ public class WhereLayout extends VerticalLayout {
             newPosition += 1;
         }
         addComponentAtIndex(newPosition, newLayout);
-        newLayout.addListener(AddWhereLayoutRequestEvent.class,
-                e -> addWhereTextLayout(indexOf(e.getSource())));
+        newLayout.addListener(
+                AddWhereLayoutRequestEvent.class, e -> addWhereTextLayout(indexOf(e.getSource())));
         newLayout.addListener(RemoveWhereLayoutRequestEvent.class, e -> removeRow(e.getSource()));
     }
 }

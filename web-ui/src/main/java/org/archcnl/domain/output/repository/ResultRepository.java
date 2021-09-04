@@ -10,8 +10,7 @@ public interface ResultRepository {
     /**
      * Execute native SELECT query, for example:
      *
-     * <p>
-     * SELECT ?field WHERE { ?field rdf:type 'Value'^^^xsd:string. }
+     * <p>SELECT ?field WHERE { ?field rdf:type 'Value'^^^xsd:string. }
      *
      * @param query Query as domain object.
      * @return Result or Optional.empty when nothing found

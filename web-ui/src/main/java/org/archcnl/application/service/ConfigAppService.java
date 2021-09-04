@@ -27,7 +27,8 @@ public class ConfigAppService {
     /** @return DB Name from property file */
     public static String getDbName() throws PropertyNotFoundException {
         return ConfigAppService.checkIfPropertyPresent(
-                ConfigAppService.getDbPropertyByName(ConfigAppService.DB_NAME), ConfigAppService.DB_NAME);
+                ConfigAppService.getDbPropertyByName(ConfigAppService.DB_NAME),
+                ConfigAppService.DB_NAME);
     }
 
     /** @return DB name from property file */
@@ -47,7 +48,8 @@ public class ConfigAppService {
     /** @return DB URL from property file */
     public static String getDbUrl() throws PropertyNotFoundException {
         return ConfigAppService.checkIfPropertyPresent(
-                ConfigAppService.getDbPropertyByName(ConfigAppService.DB_URL), ConfigAppService.DB_URL);
+                ConfigAppService.getDbPropertyByName(ConfigAppService.DB_URL),
+                ConfigAppService.DB_URL);
     }
 
     private static String checkIfPropertyPresent(

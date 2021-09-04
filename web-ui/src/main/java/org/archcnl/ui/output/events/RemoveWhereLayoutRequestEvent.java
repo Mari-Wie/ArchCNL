@@ -1,7 +1,7 @@
 package org.archcnl.ui.output.events;
 
-import org.archcnl.ui.output.component.WhereTextBoxesLayout;
 import com.vaadin.flow.component.ComponentEvent;
+import org.archcnl.ui.output.component.WhereTextBoxesLayout;
 
 public class RemoveWhereLayoutRequestEvent extends ComponentEvent<WhereTextBoxesLayout> {
 

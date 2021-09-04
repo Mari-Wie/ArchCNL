@@ -30,7 +30,10 @@ class GeneralInfoLayout extends HorizontalLayout {
         addAndExpand(mainLayout);
     }
 
-    public void updateInfo(final int numVio, final int numPackages, final int numTypes,
+    public void updateInfo(
+            final int numVio,
+            final int numPackages,
+            final int numTypes,
             final int numRelationships) {
         numberOfViolationsValue.setText(String.valueOf(numVio));
         numberOfPackagesValue.setText(String.valueOf(numPackages));

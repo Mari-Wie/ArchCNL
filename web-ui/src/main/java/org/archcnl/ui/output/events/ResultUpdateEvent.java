@@ -1,7 +1,7 @@
 package org.archcnl.ui.output.events;
 
-import org.archcnl.ui.output.component.CustomQueryUiComponent;
 import com.vaadin.flow.component.ComponentEvent;
+import org.archcnl.ui.output.component.CustomQueryUiComponent;
 
 public class ResultUpdateEvent extends ComponentEvent<CustomQueryUiComponent> {
 
