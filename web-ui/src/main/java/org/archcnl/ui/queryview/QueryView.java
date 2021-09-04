@@ -3,13 +3,7 @@ package org.archcnl.ui.queryview;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
-import java.util.Optional;
-import org.archcnl.stardogwrapper.api.StardogAPIFactory;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
-import org.archcnl.stardogwrapper.api.StardogICVAPI;
-import org.archcnl.stardogwrapper.impl.StardogDatabase;
-import org.archcnl.ui.common.SideBarLayout;
+import org.vaadin.example.common.SideBarLayout;
 
 /**
  * A sample Vaadin view class.
@@ -23,49 +17,25 @@ import org.archcnl.ui.common.SideBarLayout;
 @Route("QueryView")
 public class QueryView extends HorizontalLayout {
 
-    private static final long serialVersionUID = 1L;
-
-    SideBarLayout sideBar = new SideBarLayout();
-    QueryResults queryResults = new QueryResults();
+    AbstractQueryResults queryResults = new QueryResults();
+    AbstractQueryResults customQueryResults = new CustomQueryResults();
+    SideBarLayout sideBar = new SideBarLayout(this);
 
     // TODO Extract into interface
     //
-    String username = "admin";
-    String password = "admin";
-    String databaseName = "archcnl_it_db";
-    String server = "http://localhost:5820";
-    StardogICVAPI icvAPI;
-    StardogDatabaseAPI db;
+    public void switchToQueryView() {
+        replace(customQueryResults, queryResults);
+    }
+
+    public void switchToCustomQueryView() {
+        replace(queryResults, customQueryResults);
+    }
 
     public QueryView() {
-        this.db = new StardogDatabase(server, databaseName, username, password);
-        this.icvAPI = StardogAPIFactory.getICVAPI(db);
-
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         sideBar.setWidth(20, Unit.PERCENTAGE);
         queryResults.setWidth(80, Unit.PERCENTAGE);
         addAndExpand(sideBar, queryResults);
-        final Registration reg =
-                queryResults.addListener(
-                        ResultUpdateEvent.class,
-                        e -> {
-                            Optional<StardogDatabaseAPI.Result> res = Optional.empty();
-                            // TODO add logger for event received
-                            final String q = queryResults.getQuery();
-                            try {
-                                db.connect(false);
-                                res = db.executeSelectQuery(q);
-                                db.closeConnectionToServer();
-                            } catch (final Exception ex) {
-                                // TODO add logger for exception case
-                                ex.printStackTrace();
-                            }
-                            if (res.isPresent()) {
-                                queryResults.updateGrid(res.get());
-                            } else {
-                                // TODO Decide what to do with errors or wrong queries
-                            }
-                        });
     }
 }
