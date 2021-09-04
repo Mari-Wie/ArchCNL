@@ -1,13 +1,13 @@
 package org.archcnl.ui.output.component;
 
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
 import org.archcnl.ui.output.Violation;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class GridView extends VerticalLayout {
 

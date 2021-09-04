@@ -16,8 +16,8 @@ import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 
 public class QueryFactory {
 
-    public Query createQuery(final Set<String> selectSet,
-            final List<List<String>> whereClauseStringList) {
+    public Query createQuery(
+            final Set<String> selectSet, final List<List<String>> whereClauseStringList) {
         final Set<QueryNamespace> namespaces = temporary_function_get_namespaces();
         final Set<QueryField> queryFieldSet =
                 selectSet.stream().map(QueryField::new).collect(Collectors.toSet());
@@ -60,17 +60,20 @@ public class QueryFactory {
     private Set<QueryNamespace> temporary_function_get_namespaces() {
         final Set<QueryNamespace> namespaceSet = new HashSet<QueryNamespace>();
 
-        namespaceSet
-                .add(new QueryNamespace("rdf", "<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"));
+        namespaceSet.add(
+                new QueryNamespace("rdf", "<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"));
         namespaceSet.add(new QueryNamespace("owl", "<http://www.w3.org/2002/07/owl#>"));
         namespaceSet.add(new QueryNamespace("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>"));
         namespaceSet.add(new QueryNamespace("xsd", "<http://www.w3.org/2001/XMLSchema#>"));
-        namespaceSet.add(new QueryNamespace("conformance",
-                "<http://arch-ont.org/ontologies/architectureconformance#>"));
-        namespaceSet
-                .add(new QueryNamespace("famix", "<http://arch-ont.org/ontologies/famix.owl#>"));
-        namespaceSet.add(new QueryNamespace("architecture",
-                "<http://www.arch-ont.org/ontologies/architecture.owl#>"));
+        namespaceSet.add(
+                new QueryNamespace(
+                        "conformance",
+                        "<http://arch-ont.org/ontologies/architectureconformance#>"));
+        namespaceSet.add(
+                new QueryNamespace("famix", "<http://arch-ont.org/ontologies/famix.owl#>"));
+        namespaceSet.add(
+                new QueryNamespace(
+                        "architecture", "<http://www.arch-ont.org/ontologies/architecture.owl#>"));
 
         return namespaceSet;
     }

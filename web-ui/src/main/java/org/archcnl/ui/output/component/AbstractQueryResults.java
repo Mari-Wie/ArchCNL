@@ -1,12 +1,12 @@
 package org.archcnl.ui.output.component;
 
-import org.archcnl.ui.output.events.ResultUpdateEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.output.events.ResultUpdateEvent;
 
 abstract class AbstractQueryResults extends VerticalLayout {
 
@@ -35,8 +35,8 @@ abstract class AbstractQueryResults extends VerticalLayout {
     }
 
     @Override
-    protected <T extends ComponentEvent<?>> Registration addListener(final Class<T> eventType,
-            final ComponentEventListener<T> listener) {
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 

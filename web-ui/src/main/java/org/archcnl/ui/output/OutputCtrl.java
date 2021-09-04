@@ -15,13 +15,15 @@ public class OutputCtrl {
 
     public OutputCtrl() {
         try {
-            this.repository = new ResultRepositoryImpl(ConfigAppService.getDbUrl(),
-                    ConfigAppService.getDbName(), ConfigAppService.getDbUsername(),
-                    ConfigAppService.getDbPassword());
+            this.repository =
+                    new ResultRepositoryImpl(
+                            ConfigAppService.getDbUrl(),
+                            ConfigAppService.getDbName(),
+                            ConfigAppService.getDbUsername(),
+                            ConfigAppService.getDbPassword());
         } catch (final PropertyNotFoundException e) {
             OutputCtrl.LOG.error(e.getMessage() + " Output controller can not be initialized.");
             e.printStackTrace();
         }
     }
-
 }
