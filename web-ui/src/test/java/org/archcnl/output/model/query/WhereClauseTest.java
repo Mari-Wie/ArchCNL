@@ -18,12 +18,12 @@ public class WhereClauseTest {
         final WhereTriple triple1 =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.RDF, "type"),
+                        new QueryPredicate("rdf", "type"),
                         new QueryObject("architecture:Aggregate", QueryObjectType.PROPERTY));
         final WhereTriple triple2 =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.FAMIX, "hasName"),
+                        new QueryPredicate("famix", "hasName"),
                         new QueryObject("name", QueryObjectType.FIELD));
         final Set<WhereTriple> triples = new LinkedHashSet<>(Arrays.asList(triple1, triple2));
         final WhereClause whereClause = new WhereClause(triples);
@@ -47,32 +47,32 @@ public class WhereClauseTest {
         final WhereTriple triple1 =
                 new WhereTriple(
                         new QueryField("rule"),
-                        new QueryPredicate(QueryNamesapace.RDF, "type"),
+                        new QueryPredicate("rdf", "type"),
                         new QueryObject("conformance:ArchitectureRule", QueryObjectType.PROPERTY));
         final WhereTriple triple2 =
                 new WhereTriple(
                         new QueryField("rule"),
-                        new QueryPredicate(QueryNamesapace.CONFORMANCE, "hasRuleRepresentation"),
+                        new QueryPredicate("conformance", "hasRuleRepresentation"),
                         new QueryObject("1", QueryObjectType.PRIMITIVE_VALUE));
         final WhereTriple triple3 =
                 new WhereTriple(
                         new QueryField("rule"),
-                        new QueryPredicate(QueryNamesapace.CONFORMANCE, "hasRuleRepresentation"),
+                        new QueryPredicate("conformance", "hasRuleRepresentation"),
                         new QueryObject("cnl", QueryObjectType.FIELD));
         final WhereTriple triple4 =
                 new WhereTriple(
                         new QueryField("violation"),
-                        new QueryPredicate(QueryNamesapace.CONFORMANCE, "violates"),
+                        new QueryPredicate("conformance", "violates"),
                         new QueryObject("rule", QueryObjectType.FIELD));
         final WhereTriple triple5 =
                 new WhereTriple(
                         new QueryField("proof"),
-                        new QueryPredicate(QueryNamesapace.CONFORMANCE, "proofs"),
+                        new QueryPredicate("conformance", "proofs"),
                         new QueryObject("violation", QueryObjectType.FIELD));
         final WhereTriple triple6 =
                 new WhereTriple(
                         new QueryField("proof"),
-                        new QueryPredicate(QueryNamesapace.CONFORMANCE, "hasNotInferredStatement"),
+                        new QueryPredicate("conformance", "hasNotInferredStatement"),
                         new QueryObject("1.1", QueryObjectType.PRIMITIVE_VALUE));
         final Set<WhereTriple> triples =
                 new LinkedHashSet<>(

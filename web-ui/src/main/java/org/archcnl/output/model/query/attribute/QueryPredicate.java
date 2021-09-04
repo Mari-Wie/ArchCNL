@@ -3,21 +3,20 @@ package org.archcnl.output.model.query.attribute;
 import java.util.Objects;
 import org.archcnl.output.model.query.FormattedQueryDomainObject;
 import org.archcnl.output.model.query.FormattedViewDomainObject;
-import org.archcnl.output.model.query.QueryNamesapace;
 
 /** Representation of predicate from SPARQL triple. */
 public class QueryPredicate implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
-    private QueryNamesapace namespace;
+    private String namespaceAlias;
     private String value;
 
-    public QueryPredicate(final QueryNamesapace namespace, final String value) {
-        this.namespace = namespace;
+    public QueryPredicate(final String namespaceAlias, final String value) {
+        this.namespaceAlias = namespaceAlias;
         this.value = value;
     }
 
-    public QueryNamesapace getNamespace() {
-        return namespace;
+    public String getNamespaceAlias() {
+        return namespaceAlias;
     }
 
     public String getValue() {
@@ -26,7 +25,7 @@ public class QueryPredicate implements FormattedQueryDomainObject, FormattedView
 
     @Override
     public String asFormattedString() {
-        return namespace.getAlias() + ":" + value;
+        return namespaceAlias + ":" + value;
     }
 
     @Override
@@ -36,14 +35,14 @@ public class QueryPredicate implements FormattedQueryDomainObject, FormattedView
 
     @Override
     public int hashCode() {
-        return Objects.hash(namespace, value);
+        return Objects.hash(namespaceAlias, value);
     }
 
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof QueryPredicate) {
             final QueryPredicate that = (QueryPredicate) obj;
-            return Objects.equals(this.namespace, that.namespace)
+            return Objects.equals(this.namespaceAlias, that.namespaceAlias)
                     && Objects.equals(this.value, that.value);
         }
         return false;

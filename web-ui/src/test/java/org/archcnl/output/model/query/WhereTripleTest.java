@@ -15,7 +15,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.FAMIX, "hasName"),
+                        new QueryPredicate("famix", "hasName"),
                         new QueryObject("name", QueryObjectType.FIELD));
 
         final String expectedString = "?aggregate famix:hasName ?name";
@@ -34,7 +34,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.XSD, "hasName"),
+                        new QueryPredicate("xsd", "hasName"),
                         new QueryObject("Some string value", QueryObjectType.PRIMITIVE_VALUE));
 
         final String expectedString = "?aggregate xsd:hasName \"Some string value\"^^xsd:string";
@@ -53,7 +53,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.OWL, "hasName"),
+                        new QueryPredicate("owl", "hasName"),
                         new QueryObject("-1", QueryObjectType.PRIMITIVE_VALUE));
 
         final String expectedString = "?aggregate owl:hasName \"-1\"^^xsd:integer";
@@ -72,7 +72,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.XSD, "hasName"),
+                        new QueryPredicate("xsd", "hasName"),
                         new QueryObject("-1.0", QueryObjectType.PRIMITIVE_VALUE));
 
         final String expectedString = "?aggregate xsd:hasName \"-1.0\"^^xsd:double";
@@ -91,7 +91,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.XSD, "hasName"),
+                        new QueryPredicate("xsd", "hasName"),
                         new QueryObject("true", QueryObjectType.PRIMITIVE_VALUE));
 
         final String expectedString = "?aggregate xsd:hasName \"true\"^^xsd:boolean";
@@ -110,7 +110,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.XSD, "hasName"),
+                        new QueryPredicate("xsd", "hasName"),
                         new QueryObject("2020-08-28T21:12:00", QueryObjectType.PRIMITIVE_VALUE));
 
         final String expectedString =
@@ -129,7 +129,7 @@ public class WhereTripleTest {
         final WhereTriple triple =
                 new WhereTriple(
                         new QueryField("aggregate"),
-                        new QueryPredicate(QueryNamesapace.XSD, "hasName"),
+                        new QueryPredicate("xsd", "hasName"),
                         new QueryObject("conformance:ArchitectureRule", QueryObjectType.PROPERTY));
 
         final String expectedString = "?aggregate xsd:hasName conformance:ArchitectureRule";

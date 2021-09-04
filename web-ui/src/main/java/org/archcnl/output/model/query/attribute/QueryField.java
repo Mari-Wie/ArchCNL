@@ -25,7 +25,7 @@ public class QueryField implements FormattedQueryDomainObject, FormattedViewDoma
 
     @Override
     public String asFormattedString() {
-        return QueryField.PREFIX + value;
+        return value.startsWith(QueryField.PREFIX) ? value : QueryField.PREFIX + value;
     }
 
     @Override
