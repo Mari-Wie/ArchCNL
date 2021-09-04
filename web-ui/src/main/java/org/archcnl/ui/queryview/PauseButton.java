@@ -14,9 +14,10 @@ class PauseButton extends Button {
     private int currentIcon = 1;
 
     public PauseButton(final Component mainLayout) {
-        addClickListener(e -> {
-            e.getSource().setIcon(getNextIcon());
-        });
+        addClickListener(
+                e -> {
+                    e.getSource().setIcon(getNextIcon());
+                });
         setIcon(getNextIcon());
     }
 

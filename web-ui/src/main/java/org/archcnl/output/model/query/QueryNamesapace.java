@@ -1,10 +1,7 @@
 package org.archcnl.output.model.query;
 
-/**
- * Representation of standard for ArchCNL namespaces in SPARQL query.
- */
+/** Representation of standard for ArchCNL namespaces in SPARQL query. */
 public enum QueryNamesapace implements FormattedQueryDomainObject, FormattedViewDomainObject {
-
     RDF("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#"),
 
     OWL("owl", "http://www.w3.org/2002/07/owl#"),

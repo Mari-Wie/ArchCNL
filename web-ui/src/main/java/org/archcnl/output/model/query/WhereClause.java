@@ -4,9 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Representation of SPARQL WHERE clause
- */
+/** Representation of SPARQL WHERE clause */
 public class WhereClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     public static final String WHERE = "WHERE";
@@ -71,8 +69,15 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     private void addTriplesToFormattedStringWhereClause(final StringBuffer sb) {
-        triples.stream().forEach(t -> sb.append(WhereClause.TAB + WhereClause.TAB
-                + t.asFormattedString() + "." + WhereClause.NEW_LINE));
+        triples.stream()
+                .forEach(
+                        t ->
+                                sb.append(
+                                        WhereClause.TAB
+                                                + WhereClause.TAB
+                                                + t.asFormattedString()
+                                                + "."
+                                                + WhereClause.NEW_LINE));
     }
 
     @Override

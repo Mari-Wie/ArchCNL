@@ -6,8 +6,8 @@ public class RemoveWhereLayoutRequestEvent extends ComponentEvent<WhereTextBoxes
 
     private static final long serialVersionUID = 1L;
 
-    public RemoveWhereLayoutRequestEvent(final WhereTextBoxesLayout source,
-            final boolean fromClient) {
+    public RemoveWhereLayoutRequestEvent(
+            final WhereTextBoxesLayout source, final boolean fromClient) {
         super(source, fromClient);
         // TODO add logger call for event creation
     }

@@ -12,14 +12,14 @@ public class StardogClientImpl implements StardogClient {
 
     /**
      * Constructor stardog client.
-     * 
+     *
      * @param url Full host url. For example: http://localhost:5820
      * @param dbName DB name.
      * @param username DB username.
      * @param password DB password.
      */
-    public StardogClientImpl(final String url, final String dbName, final String username,
-            final String password) {
+    public StardogClientImpl(
+            final String url, final String dbName, final String username, final String password) {
         this.db = new StardogDatabase(url, dbName, username, password);
         db.connect(false);
     }

@@ -29,9 +29,12 @@ public class WhereLayout extends VerticalLayout {
 
         addComponentAtIndex(newPosition, newLayout);
 
-        final Registration regAdd = newLayout.addListener(AddWhereLayoutRequestEvent.class,
-                e -> addWhereTextLayout(indexOf(e.getSource())));
-        final Registration regMinus = newLayout.addListener(RemoveWhereLayoutRequestEvent.class,
-                e -> removeRow(e.getSource()));
+        final Registration regAdd =
+                newLayout.addListener(
+                        AddWhereLayoutRequestEvent.class,
+                        e -> addWhereTextLayout(indexOf(e.getSource())));
+        final Registration regMinus =
+                newLayout.addListener(
+                        RemoveWhereLayoutRequestEvent.class, e -> removeRow(e.getSource()));
     }
 }

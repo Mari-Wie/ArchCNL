@@ -1,8 +1,6 @@
 package org.archcnl.output.model.query.attribute;
 
-/**
- * Type of object.
- */
+/** Type of object. */
 public enum QueryObjectType {
     /** Like a SPARQL query field, for example: ?name */
     FIELD,

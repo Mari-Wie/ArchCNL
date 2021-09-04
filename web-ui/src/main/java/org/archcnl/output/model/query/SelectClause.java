@@ -5,9 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.archcnl.output.model.query.attribute.QueryField;
 
-/**
- * Representation of SPARQL SELECT clause
- */
+/** Representation of SPARQL SELECT clause */
 public class SelectClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     public static final String SELECT = "SELECT";

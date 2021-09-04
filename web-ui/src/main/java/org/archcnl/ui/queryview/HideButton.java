@@ -19,10 +19,11 @@ class HideButton extends Button {
         } else {
             // TODO Add error handling
         }
-        addClickListener(e -> {
-            this.mainLayout.setVisible(!this.mainLayout.isVisible());
-            e.getSource().setIcon(getNextIcon());
-        });
+        addClickListener(
+                e -> {
+                    this.mainLayout.setVisible(!this.mainLayout.isVisible());
+                    e.getSource().setIcon(getNextIcon());
+                });
         setIcon(getNextIcon());
     }
 

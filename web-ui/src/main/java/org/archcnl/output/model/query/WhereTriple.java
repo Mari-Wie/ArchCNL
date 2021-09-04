@@ -15,8 +15,8 @@ public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDom
     private QueryPredicate predicate;
     private QueryObject object;
 
-    public WhereTriple(final QueryField subject, final QueryPredicate predicate,
-            final QueryObject object) {
+    public WhereTriple(
+            final QueryField subject, final QueryPredicate predicate, final QueryObject object) {
         this.subject = subject;
         this.predicate = predicate;
         this.object = object;

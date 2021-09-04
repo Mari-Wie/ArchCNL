@@ -4,9 +4,7 @@ import java.util.Objects;
 import org.archcnl.output.model.query.FormattedQueryDomainObject;
 import org.archcnl.output.model.query.FormattedViewDomainObject;
 
-/**
- * Representation of SPARQL field.
- */
+/** Representation of SPARQL field. */
 public class QueryField implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     public static final String PREFIX = "?";

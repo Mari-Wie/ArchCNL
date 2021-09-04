@@ -5,9 +5,7 @@ import org.archcnl.output.model.query.FormattedQueryDomainObject;
 import org.archcnl.output.model.query.FormattedViewDomainObject;
 import org.archcnl.output.model.query.QueryNamesapace;
 
-/**
- * Representation of predicate from SPARQL triple.
- */
+/** Representation of predicate from SPARQL triple. */
 public class QueryPredicate implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     private QueryNamesapace namespace;

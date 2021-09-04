@@ -1,9 +1,9 @@
 package org.archcnl.ui.queryview;
 
-import java.util.ArrayList;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import java.util.ArrayList;
+import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 
 public class GridView extends VerticalLayout {
 

@@ -3,9 +3,7 @@ package org.archcnl.output.model.query;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * Representation of query to database.
- */
+/** Representation of query to database. */
 public class Query implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     private SelectClause selectClause;
