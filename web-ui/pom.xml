@@ -6,7 +6,6 @@
 	<artifactId>web-ui</artifactId>
 	<name>Web UI</name>
 	<description>Web UI for ArchCNL</description>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<parent>
