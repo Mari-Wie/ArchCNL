@@ -2,6 +2,8 @@ package org.archcnl.ui.queryview;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class WhereLayout extends VerticalLayout {
 
@@ -18,6 +20,14 @@ public class WhereLayout extends VerticalLayout {
     public void clear() {
         removeAll();
         addWhereTextLayout(0);
+    }
+
+    public List<List<String>> collect() {
+        return getChildren()
+                .filter(child -> child.getClass() == WhereTextBoxesLayout.class)
+                .map(WhereTextBoxesLayout.class::cast)
+                .map(WhereTextBoxesLayout::getObjSubPredString)
+                .collect(Collectors.toList());
     }
 
     public void addWhereTextLayout(final int position) {
