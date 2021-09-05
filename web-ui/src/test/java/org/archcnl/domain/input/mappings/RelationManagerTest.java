@@ -1,4 +1,4 @@
-package org.archcnl.webui.mappings;
+package org.archcnl.domain.input.mappings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
