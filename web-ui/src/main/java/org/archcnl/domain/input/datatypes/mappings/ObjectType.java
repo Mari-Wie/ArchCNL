@@ -2,7 +2,6 @@ package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
-
 import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;

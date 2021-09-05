@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.LinkedList;
-
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;

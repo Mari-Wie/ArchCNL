@@ -3,7 +3,6 @@ package org.archcnl.domain.input.datatypes.mappings;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 
 public class TypeRelation extends Relation {

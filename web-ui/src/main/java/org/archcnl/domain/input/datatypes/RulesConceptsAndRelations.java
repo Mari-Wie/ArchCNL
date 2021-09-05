@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.datatypes;
 
 import com.google.common.annotations.VisibleForTesting;
-
 import org.archcnl.domain.input.datatypes.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.datatypes.mappings.ConceptManager;
 import org.archcnl.domain.input.datatypes.mappings.RelationManager;

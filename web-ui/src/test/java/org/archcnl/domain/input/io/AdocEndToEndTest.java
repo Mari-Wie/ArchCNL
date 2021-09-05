@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.input.TestUtils;
 import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;

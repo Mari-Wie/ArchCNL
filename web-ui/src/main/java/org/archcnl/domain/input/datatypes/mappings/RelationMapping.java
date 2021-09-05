@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.List;
-
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 

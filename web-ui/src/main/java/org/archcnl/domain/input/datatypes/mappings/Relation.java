@@ -3,7 +3,6 @@ package org.archcnl.domain.input.datatypes.mappings;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-
 import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoRelationException;

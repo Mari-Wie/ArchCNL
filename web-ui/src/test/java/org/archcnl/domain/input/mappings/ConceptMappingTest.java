@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.domain.input.TestUtils;
 import org.archcnl.domain.input.datatypes.mappings.ConceptMapping;
 import org.archcnl.domain.input.datatypes.mappings.CustomConcept;
