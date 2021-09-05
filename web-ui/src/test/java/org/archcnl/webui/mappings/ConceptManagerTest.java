@@ -7,21 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.archcnl.webui.datatypes.RulesConceptsAndRelations;
-import org.archcnl.webui.datatypes.mappings.AndTriplets;
-import org.archcnl.webui.datatypes.mappings.ConceptManager;
-import org.archcnl.webui.datatypes.mappings.ConceptMapping;
-import org.archcnl.webui.datatypes.mappings.CustomConcept;
-import org.archcnl.webui.datatypes.mappings.DefaultConcept;
-import org.archcnl.webui.datatypes.mappings.Triplet;
-import org.archcnl.webui.datatypes.mappings.Variable;
-import org.archcnl.webui.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
-import org.archcnl.webui.exceptions.InvalidVariableNameException;
-import org.archcnl.webui.exceptions.RelationDoesNotExistException;
-import org.archcnl.webui.exceptions.UnrelatedMappingException;
-import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
+
+import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
+import org.archcnl.domain.input.datatypes.mappings.AndTriplets;
+import org.archcnl.domain.input.datatypes.mappings.ConceptManager;
+import org.archcnl.domain.input.datatypes.mappings.ConceptMapping;
+import org.archcnl.domain.input.datatypes.mappings.CustomConcept;
+import org.archcnl.domain.input.datatypes.mappings.DefaultConcept;
+import org.archcnl.domain.input.datatypes.mappings.Triplet;
+import org.archcnl.domain.input.datatypes.mappings.Variable;
+import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package org.archcnl.webui.datatypes.architecturerules;
+package org.archcnl.domain.input.datatypes.architecturerules;
 
 import java.util.LinkedList;
 import java.util.List;

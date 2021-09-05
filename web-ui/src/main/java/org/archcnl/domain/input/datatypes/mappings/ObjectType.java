@@ -1,11 +1,12 @@
-package org.archcnl.webui.datatypes.mappings;
+package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.archcnl.webui.datatypes.RulesConceptsAndRelations;
-import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
-import org.archcnl.webui.exceptions.NoObjectTypeException;
-import org.archcnl.webui.io.AdocIoUtils;
+
+import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.exceptions.NoObjectTypeException;
+import org.archcnl.domain.input.io.AdocIoUtils;
 
 public abstract class ObjectType {
 

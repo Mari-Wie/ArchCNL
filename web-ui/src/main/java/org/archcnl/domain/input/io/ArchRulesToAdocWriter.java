@@ -3,20 +3,42 @@ package org.archcnl.domain.input.io;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
-import org.archcnl.domain.input.datatypes.RulesAndMappings;
+import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.datatypes.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.datatypes.mappings.CustomConcept;
+import org.archcnl.domain.input.datatypes.mappings.CustomRelation;
 import org.archcnl.domain.input.datatypes.mappings.Mapping;
 
 public class ArchRulesToAdocWriter implements ArchRulesExporter {
 
     @Override
-    public void writeArchitectureRules(File file, RulesAndMappings rulesAndMappings)
-            throws IOException {
-        String rulesString = constructArchRuleString(rulesAndMappings.getArchitectureRules());
-        String mappingsString = constructMappingString(rulesAndMappings.getMappings());
-        FileUtils.writeStringToFile(file, rulesString + mappingsString, StandardCharsets.UTF_8);
+    public void writeArchitectureRules(
+            File file, RulesConceptsAndRelations rulesConceptsAndRelations) throws IOException {
+        String rulesString =
+                constructArchRuleString(
+                        rulesConceptsAndRelations
+                                .getArchitectureRuleManager()
+                                .getArchitectureRules());
+
+        List<CustomConcept> customConcepts =
+                rulesConceptsAndRelations.getConceptManager().getCustomConcepts();
+        List<Mapping> conceptMappings = new LinkedList<>();
+        customConcepts.forEach((concept) -> conceptMappings.add(concept.getMapping()));
+        String conceptMappingsString = constructMappingString(conceptMappings);
+
+        List<CustomRelation> customRelations =
+                rulesConceptsAndRelations.getRelationManager().getCustomRelations();
+        List<Mapping> relationMappings = new LinkedList<>();
+        customRelations.forEach((relation) -> relationMappings.add(relation.getMapping()));
+        String relationMappingsString = constructMappingString(relationMappings);
+
+        FileUtils.writeStringToFile(
+                file,
+                rulesString + conceptMappingsString + relationMappingsString,
+                StandardCharsets.UTF_8);
     }
 
     private String constructArchRuleString(List<ArchitectureRule> rules) {

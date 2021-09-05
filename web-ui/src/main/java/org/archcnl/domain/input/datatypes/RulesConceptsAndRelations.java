@@ -1,10 +1,11 @@
-package org.archcnl.webui.datatypes;
+package org.archcnl.domain.input.datatypes;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.archcnl.webui.datatypes.architecturerules.ArchitectureRuleManager;
-import org.archcnl.webui.datatypes.mappings.ConceptManager;
-import org.archcnl.webui.datatypes.mappings.RelationManager;
-import org.archcnl.webui.exceptions.ConceptDoesNotExistException;
+
+import org.archcnl.domain.input.datatypes.architecturerules.ArchitectureRuleManager;
+import org.archcnl.domain.input.datatypes.mappings.ConceptManager;
+import org.archcnl.domain.input.datatypes.mappings.RelationManager;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 
 public class RulesConceptsAndRelations {
 

@@ -1,37 +1,47 @@
 package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.List;
-import org.archcnl.domain.input.datatypes.mappings.Concept.ConceptType;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+
+import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
 
 public class ConceptMapping extends Mapping {
 
     private Triplet thenTriplet;
-    private String name;
+
+    private CustomConcept thisConcept;
 
     public ConceptMapping(
-            String name,
-            Variable thenVariable,
-            List<AndTriplets> whenTriplets,
-            Relation typeRelation)
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
+            Variable thenVariable, List<AndTriplets> whenTriplets, CustomConcept thisConcept)
+            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
+                    RelationDoesNotExistException {
         super(whenTriplets);
-
-        this.name = name;
         getVariableManager().addVariable(thenVariable);
-        Concept thisConcept = new Concept(name, ConceptType.architecture);
-        thenTriplet = new Triplet(thenVariable, typeRelation, thisConcept);
+        this.thisConcept = thisConcept;
+        thenTriplet =
+                new Triplet(
+                        thenVariable,
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("is-of-type"),
+                        thisConcept);
     }
 
-    public void updateThenTriplet(Variable subject) throws VariableDoesNotExistException {
-        if (getVariableManager().doesVariableExist(subject)) {
-            thenTriplet.setSubject(subject);
-        } else {
-            throw new VariableDoesNotExistException(subject.getName());
+    public void updateThenTriplet(Variable subject) {
+        if (!getVariableManager().doesVariableExist(subject)) {
+            try {
+                getVariableManager().addVariable(subject);
+            } catch (VariableAlreadyExistsException e) {
+                // Cannot occur
+                throw new RuntimeException(
+                        "Unexpected error during creation of variable \""
+                                + subject.getName()
+                                + "\".");
+            }
         }
+        thenTriplet.setSubject(subject);
     }
 
     @Override
@@ -39,20 +49,8 @@ public class ConceptMapping extends Mapping {
         return thenTriplet;
     }
 
-    public void updateName(String newName)
-            throws ConceptAlreadyExistsException, UnsupportedObjectTypeInTriplet {
-        Concept newObject = new Concept(newName, ConceptType.architecture);
-        name = newName;
-        thenTriplet.setObject(newObject);
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
     @Override
     public String getMappingNameRepresentation() {
-        return "is" + name;
+        return "is" + thisConcept.getName();
     }
 }

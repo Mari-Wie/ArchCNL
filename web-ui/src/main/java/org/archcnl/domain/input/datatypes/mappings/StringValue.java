@@ -1,4 +1,4 @@
-package org.archcnl.webui.datatypes.mappings;
+package org.archcnl.domain.input.datatypes.mappings;
 
 public class StringValue extends ObjectType {
 

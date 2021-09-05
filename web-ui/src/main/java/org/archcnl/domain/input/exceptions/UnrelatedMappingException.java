@@ -1,4 +1,4 @@
-package org.archcnl.webui.exceptions;
+package org.archcnl.domain.input.exceptions;
 
 public class UnrelatedMappingException extends Exception {
 

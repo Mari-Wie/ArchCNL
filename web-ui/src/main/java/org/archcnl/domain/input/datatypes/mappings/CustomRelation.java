@@ -1,10 +1,11 @@
-package org.archcnl.webui.datatypes.mappings;
+package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.LinkedList;
-import org.archcnl.webui.exceptions.InvalidVariableNameException;
-import org.archcnl.webui.exceptions.UnrelatedMappingException;
-import org.archcnl.webui.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.webui.exceptions.VariableAlreadyExistsException;
+
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class CustomRelation extends Relation {
 
