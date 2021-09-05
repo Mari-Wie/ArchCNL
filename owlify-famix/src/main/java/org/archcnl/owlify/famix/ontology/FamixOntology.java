@@ -1,6 +1,8 @@
 package org.archcnl.owlify.famix.ontology;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
@@ -96,29 +98,20 @@ public class FamixOntology {
         }
 
         private String replaceSpecialCharacters(String name) {
-            // uses percent-notation, replaces spaces by '-'
-            return name.replace(" ", "-")
-                    .replace("%", "%25") // must be before the replacements using %
-                    .replace("!", "%21")
-                    .replace("#", "%23")
-                    .replace("$", "%24")
-                    .replace("&", "%26")
-                    .replace("'", "%27")
-                    .replace("(", "%28")
-                    .replace(")", "%29")
-                    .replace("*", "%2A")
-                    .replace("+", "%2B")
-                    .replace(",", "%2C")
-                    .replace("/", "%2F")
-                    .replace(":", "%3A")
-                    .replace(";", "%3B")
-                    .replace("<", "%3C")
-                    .replace("=", "%3D")
-                    .replace(">", "%3E")
-                    .replace("?", "%3F")
-                    .replace("@", "%40")
-                    .replace("[", "%5B")
-                    .replace("]", "%5D");
+            try {
+                var url = URLEncoder.encode(name, "UTF-8");
+                // The URLEncoder does not encode '*' because in an URL it is not a reserved
+                // character.
+                // However, we are generating an URI and technically '*' is a reserved character
+                // there.
+                // See RFC3986 page 12-13
+                return url.replace("*", "%2A");
+            } catch (UnsupportedEncodingException ex) {
+                // It is very unlikely that a system does not support UTF-8.
+                // Even if it does not, we cannot do anything against it.
+                throw new RuntimeException(
+                        "System does not support UTF-8 encoding, cannot encode URIs");
+            }
         }
 
         public String uri() {

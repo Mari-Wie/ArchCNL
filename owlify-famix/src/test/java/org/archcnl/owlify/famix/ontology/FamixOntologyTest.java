@@ -29,7 +29,7 @@ public class FamixOntologyTest {
     @Test
     public void testNameGenerationSpaces() {
         String actual = clazz.individualUri("The next string is pretty weird");
-        String expected = prefix + "The-next-string-is-pretty-weird";
+        String expected = prefix + "The+next+string+is+pretty+weird";
 
         assertEquals(expected, actual);
     }
