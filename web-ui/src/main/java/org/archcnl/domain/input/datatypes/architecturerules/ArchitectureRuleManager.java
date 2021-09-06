@@ -16,9 +16,7 @@ public class ArchitectureRuleManager {
     }
 
     public void addAllArchitectureRules(List<ArchitectureRule> architectureRules) {
-        for (ArchitectureRule rule : architectureRules) {
-            addArchitectureRule(rule);
-        }
+        architectureRules.stream().forEach(this::addArchitectureRule);
     }
 
     public void deleteArchitectureRule(ArchitectureRule architectureRule) {

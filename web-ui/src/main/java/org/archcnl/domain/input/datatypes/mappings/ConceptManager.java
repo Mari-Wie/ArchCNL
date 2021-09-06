@@ -2,6 +2,7 @@ package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 
@@ -45,21 +46,15 @@ public class ConceptManager {
     }
 
     public Concept getConceptByName(String name) throws ConceptDoesNotExistException {
-        for (Concept concept : concepts) {
-            if (name.equals(concept.getName())) {
-                return concept;
-            }
-        }
-        throw new ConceptDoesNotExistException(name);
+        return concepts.stream()
+                .filter(concept -> name.equals(concept.getName()))
+                .findAny()
+                .orElseThrow(() -> new ConceptDoesNotExistException(name));
     }
 
     public boolean doesConceptExist(Concept concept) {
-        for (Concept existingConcept : concepts) {
-            if (concept.getName().equals(existingConcept.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return concepts.stream()
+                .anyMatch(existingConcept -> concept.getName().equals(existingConcept.getName()));
     }
 
     private void initializeConcepts() {
@@ -82,12 +77,9 @@ public class ConceptManager {
     }
 
     public List<CustomConcept> getCustomConcepts() {
-        List<CustomConcept> customConcepts = new LinkedList<>();
-        for (Concept concept : getConcepts()) {
-            if (concept instanceof CustomConcept) {
-                customConcepts.add((CustomConcept) concept);
-            }
-        }
-        return customConcepts;
+        return getConcepts().stream()
+                .filter(CustomConcept.class::isInstance)
+                .map(CustomConcept.class::cast)
+                .collect(Collectors.toList());
     }
 }

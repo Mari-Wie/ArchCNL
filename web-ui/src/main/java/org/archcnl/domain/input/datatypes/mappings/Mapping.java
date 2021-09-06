@@ -1,8 +1,8 @@
 package org.archcnl.domain.input.datatypes.mappings;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class Mapping {
 
@@ -28,13 +28,12 @@ public abstract class Mapping {
     public abstract String getMappingNameRepresentation();
 
     public List<String> toStringRepresentation() {
-        List<String> result = new LinkedList<>();
-        for (AndTriplets andTriplets : orStatements) {
-            result.add(
-                    andTriplets.toStringRepresentation(
-                            getMappingNameRepresentation(), getThenTriplet()));
-        }
-        return result;
+        return orStatements.stream()
+                .map(
+                        andTriplets ->
+                                andTriplets.toStringRepresentation(
+                                        getMappingNameRepresentation(), getThenTriplet()))
+                .collect(Collectors.toList());
     }
 
     public void addAndTriplets(AndTriplets andTriplets) {
@@ -55,12 +54,8 @@ public abstract class Mapping {
         if (toStringRepresentation().size() != otherMapping.toStringRepresentation().size()) {
             return false;
         }
-        for (String s : toStringRepresentation()) {
-            if (!otherMapping.toStringRepresentation().contains(s)) {
-                return false;
-            }
-        }
-        return true;
+        return toStringRepresentation().stream()
+                .allMatch(s -> otherMapping.toStringRepresentation().contains(s));
     }
 
     @Override

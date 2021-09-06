@@ -2,6 +2,7 @@ package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
@@ -50,12 +51,10 @@ public class RelationManager {
     }
 
     public Relation getRelationByName(String name) throws RelationDoesNotExistException {
-        for (Relation relation : relations) {
-            if (name.equals(relation.getName())) {
-                return relation;
-            }
-        }
-        throw new RelationDoesNotExistException(name);
+        return relations.stream()
+                .filter(relation -> name.equals(relation.getName()))
+                .findAny()
+                .orElseThrow(() -> new RelationDoesNotExistException(name));
     }
 
     public Relation getRelationByRealName(String realName) throws RelationDoesNotExistException {
@@ -76,12 +75,9 @@ public class RelationManager {
     }
 
     public boolean doesRelationExist(Relation relation) {
-        for (Relation existingRelation : relations) {
-            if (relation.getName().equals(existingRelation.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return relations.stream()
+                .anyMatch(
+                        existingRelation -> relation.getName().equals(existingRelation.getName()));
     }
 
     private void initializeSpecialRelations() {
@@ -199,12 +195,9 @@ public class RelationManager {
     }
 
     public List<CustomRelation> getCustomRelations() {
-        List<CustomRelation> customRelations = new LinkedList<>();
-        for (Relation relation : getRelations()) {
-            if (relation instanceof CustomRelation) {
-                customRelations.add((CustomRelation) relation);
-            }
-        }
-        return customRelations;
+        return getRelations().stream()
+                .filter(CustomRelation.class::isInstance)
+                .map(CustomRelation.class::cast)
+                .collect(Collectors.toList());
     }
 }

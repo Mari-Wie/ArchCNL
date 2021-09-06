@@ -1,8 +1,8 @@
 package org.archcnl.domain.input.datatypes.mappings;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 
 public class TypeRelation extends Relation {
@@ -28,8 +28,9 @@ public class TypeRelation extends Relation {
 
     @Override
     public List<ObjectType> getRelatableObjectTypes() {
-        return Collections.<ObjectType>unmodifiableList(
-                RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts());
+        return RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts().stream()
+                .map(ObjectType.class::cast)
+                .collect(Collectors.toList());
     }
 
     public String getRealName() {

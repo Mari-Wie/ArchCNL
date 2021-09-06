@@ -21,9 +21,14 @@ import org.archcnl.domain.input.datatypes.mappings.Relation;
 import org.archcnl.domain.input.datatypes.mappings.RelationMapping;
 import org.archcnl.domain.input.datatypes.mappings.Triplet;
 import org.archcnl.domain.input.datatypes.mappings.Variable;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.exceptions.NoMappingException;
 import org.archcnl.domain.input.exceptions.NoTripletException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
@@ -53,44 +58,59 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
         // Extract and add architecture rules
-        List<ArchitectureRule> archRules = new LinkedList<>();
-        List<String> potentialRules = AdocIoUtils.getAllMatches(RULE_PATTERN, fileContent);
-        for (String potentialRule : potentialRules) {
-            try {
-                archRules.add(parseArchitectureRule(potentialRule));
-            } catch (NoArchitectureRuleException e) {
-                LOG.warn(e.getMessage());
-            }
-        }
-        rulesConceptsAndRelations.getArchitectureRuleManager().addAllArchitectureRules(archRules);
+        AdocIoUtils.getAllMatches(RULE_PATTERN, fileContent).stream()
+                .forEach(
+                        potentialRule -> {
+                            try {
+                                rulesConceptsAndRelations
+                                        .getArchitectureRuleManager()
+                                        .addArchitectureRule(parseArchitectureRule(potentialRule));
+                            } catch (NoArchitectureRuleException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
 
-        List<String> potentialConceptMappings =
-                AdocIoUtils.getAllMatches(CONCEPT_MAPPING_PATTERN, fileContent);
-        for (String potentialConceptMapping : potentialConceptMappings) {
-            try {
-                String name =
-                        AdocIoUtils.getFirstMatch(CONCEPT_MAPPING_NAME, potentialConceptMapping);
-                CustomConcept concept = new CustomConcept(name);
-                concept.setMapping(parseMapping(potentialConceptMapping, concept));
-                rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
-            } catch (Exception e) {
-                LOG.warn(e.getMessage());
-            }
-        }
+        AdocIoUtils.getAllMatches(CONCEPT_MAPPING_PATTERN, fileContent).stream()
+                .forEach(
+                        potentialConceptMapping -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_MAPPING_NAME, potentialConceptMapping);
+                                CustomConcept concept = new CustomConcept(name);
+                                concept.setMapping(parseMapping(potentialConceptMapping, concept));
+                                rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
+                            } catch (UnrelatedMappingException
+                                    | NoMappingException
+                                    | VariableAlreadyExistsException
+                                    | UnsupportedObjectTypeInTriplet
+                                    | RelationDoesNotExistException
+                                    | InvalidVariableNameException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
 
-        List<String> potentialRelationMappings =
-                AdocIoUtils.getAllMatches(RELATION_MAPPING_PATTERN, fileContent);
-        for (String potentialRelationMapping : potentialRelationMappings) {
-            try {
-                String name =
-                        AdocIoUtils.getFirstMatch(RELATION_MAPPING_NAME, potentialRelationMapping);
-                CustomRelation relation = new CustomRelation(name);
-                relation.setMapping(parseMapping(potentialRelationMapping, relation));
-                rulesConceptsAndRelations.getRelationManager().addOrAppend(relation);
-            } catch (Exception e) {
-                LOG.warn(e.getMessage());
-            }
-        }
+        AdocIoUtils.getAllMatches(RELATION_MAPPING_PATTERN, fileContent).stream()
+                .forEach(
+                        potentialRelationMapping -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_MAPPING_NAME, potentialRelationMapping);
+                                CustomRelation relation = new CustomRelation(name);
+                                relation.setMapping(
+                                        parseMapping(potentialRelationMapping, relation));
+                                rulesConceptsAndRelations
+                                        .getRelationManager()
+                                        .addOrAppend(relation);
+                            } catch (UnrelatedMappingException
+                                    | NoMappingException
+                                    | VariableAlreadyExistsException
+                                    | UnsupportedObjectTypeInTriplet
+                                    | InvalidVariableNameException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
     }
 
     private ConceptMapping parseMapping(String potentialMapping, CustomConcept thisConcept)
