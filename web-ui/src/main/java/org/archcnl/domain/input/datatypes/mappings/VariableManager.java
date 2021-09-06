@@ -22,21 +22,16 @@ public class VariableManager {
     }
 
     public Variable getVariableByName(String name) throws VariableDoesNotExistException {
-        for (Variable variable : variables) {
-            if (name.equals(variable.getName())) {
-                return variable;
-            }
-        }
-        throw new VariableDoesNotExistException(name);
+        return variables.stream()
+                .filter(variable -> name.equals(variable.getName()))
+                .findAny()
+                .orElseThrow(() -> new VariableDoesNotExistException(name));
     }
 
     public boolean doesVariableExist(Variable variable) {
-        for (Variable existingVariable : variables) {
-            if (variable.getName().equals(existingVariable.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return variables.stream()
+                .anyMatch(
+                        existingVariable -> variable.getName().equals(existingVariable.getName()));
     }
 
     public List<Variable> getVariables() {

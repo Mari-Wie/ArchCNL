@@ -1,4 +1,4 @@
-package org.archcnl.ui.io;
+package org.archcnl.domain.input.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,52 +7,39 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
-import org.archcnl.domain.input.datatypes.RulesAndMappings;
-import org.archcnl.domain.input.datatypes.mappings.ConceptManager;
-import org.archcnl.domain.input.datatypes.mappings.RelationManager;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.input.TestUtils;
+import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RecursiveRelationException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.domain.input.io.ArchRulesFromAdocReader;
-import org.archcnl.domain.input.io.ArchRulesToAdocWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ArchRuleToAdocWriterTest {
+class AdocEndToEndTest {
 
-    private RelationManager relationManager;
-    private ConceptManager conceptManager;
+    private RulesConceptsAndRelations rulesConceptsAndRelations;
 
     @BeforeEach
-    public void setUp() throws ConceptDoesNotExistException {
-        conceptManager = new ConceptManager();
-        relationManager = new RelationManager(conceptManager);
+    private void setup() throws ConceptDoesNotExistException {
+        rulesConceptsAndRelations = new RulesConceptsAndRelations();
     }
 
     @Test
-    public void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
-            throws IOException, UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
-                    ConceptDoesNotExistException, RecursiveRelationException,
-                    InvalidVariableNameException, ConceptAlreadyExistsException,
-                    VariableAlreadyExistsException, RelationAlreadyExistsException {
+    void givenOnionRuleFile_whenImportingAndExportingFile_thenWrittenFileIsAsExpected()
+            throws IOException, RelationDoesNotExistException {
         // given
-        RulesAndMappings rulesAndMappings = TestUtils.prepareModel(conceptManager, relationManager);
+        final File ruleFile = new File("src/test/resources/architecture-documentation-onion.adoc");
 
         // when
-        final File file = new File("src/test/resources/onionWriterTest.adoc");
+        ArchRulesFromAdocReader archRulesFromAdocReader = new ArchRulesFromAdocReader();
+        archRulesFromAdocReader.readArchitectureRules(ruleFile, rulesConceptsAndRelations);
+
+        final File writtenFile = new File("src/test/resources/onionDemoEndToEndTest.adoc");
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
-        archRulesToAdocWriter.writeArchitectureRules(file, rulesAndMappings);
+        archRulesToAdocWriter.writeArchitectureRules(writtenFile, rulesConceptsAndRelations);
 
         // then
-        String actualContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-        final File expectedFile =
-                new File("src/test/resources/architecture-documentation-onion.adoc");
-        String expectedContent = FileUtils.readFileToString(expectedFile, StandardCharsets.UTF_8);
+        String expectedContent = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
+        String actualContent = FileUtils.readFileToString(writtenFile, StandardCharsets.UTF_8);
 
         assertEquals(
                 TestUtils.numberOfMatches(

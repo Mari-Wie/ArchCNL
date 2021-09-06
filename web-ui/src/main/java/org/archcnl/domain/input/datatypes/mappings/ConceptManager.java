@@ -2,7 +2,7 @@ package org.archcnl.domain.input.datatypes.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.archcnl.domain.input.datatypes.mappings.Concept.ConceptType;
+import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 
@@ -12,7 +12,6 @@ public class ConceptManager {
 
     public ConceptManager() {
         concepts = new LinkedList<>();
-
         initializeConcepts();
     }
 
@@ -24,42 +23,63 @@ public class ConceptManager {
         }
     }
 
-    public Concept getConceptByName(String name) throws ConceptDoesNotExistException {
-        for (Concept concept : concepts) {
-            if (name.equals(concept.getName())) {
-                return concept;
+    public void addOrAppend(CustomConcept concept) {
+        try {
+            if (!doesConceptExist(concept)) {
+                addConcept(concept);
+            } else {
+                Concept existingConcept = getConceptByName(concept.getName());
+                if (existingConcept instanceof CustomConcept) {
+                    CustomConcept existingCustomConcept = (CustomConcept) existingConcept;
+                    existingCustomConcept
+                            .getMapping()
+                            .addAllAndTriplets(concept.getMapping().getWhenTriplets());
+                }
             }
+        } catch (ConceptAlreadyExistsException | ConceptDoesNotExistException e) {
+            // cannot occur
+            throw new RuntimeException(
+                    "Adding and appending of mapping \""
+                            + concept.getName()
+                            + "\" failed unexpectedly.");
         }
-        throw new ConceptDoesNotExistException(name);
+    }
+
+    public Concept getConceptByName(String name) throws ConceptDoesNotExistException {
+        return concepts.stream()
+                .filter(concept -> name.equals(concept.getName()))
+                .findAny()
+                .orElseThrow(() -> new ConceptDoesNotExistException(name));
     }
 
     public boolean doesConceptExist(Concept concept) {
-        for (Concept existingConcept : concepts) {
-            if (concept.getName().equals(existingConcept.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return concepts.stream()
+                .anyMatch(existingConcept -> concept.getName().equals(existingConcept.getName()));
     }
 
     private void initializeConcepts() {
-        concepts.add(new Concept("FamixClass", ConceptType.famix));
-        concepts.add(new Concept("Namespace", ConceptType.famix));
-        concepts.add(new Concept("Enum", ConceptType.famix));
-        concepts.add(new Concept("AnnotationType", ConceptType.famix));
-        concepts.add(new Concept("Method", ConceptType.famix));
-        concepts.add(new Concept("Attribute", ConceptType.famix));
-        concepts.add(new Concept("Inheritance", ConceptType.famix));
-        concepts.add(new Concept("AnnotationInstance", ConceptType.famix));
-        concepts.add(new Concept("AnnotationTypeAttribute", ConceptType.famix));
-        concepts.add(new Concept("AnnotationInstanceAttribute", ConceptType.famix));
-        concepts.add(new Concept("Parameter", ConceptType.famix));
-        concepts.add(new Concept("LocalVariable", ConceptType.famix));
-        concepts.add(new Concept("string", ConceptType.famix));
-        concepts.add(new Concept("bool", ConceptType.famix));
+        concepts.add(new DefaultConcept("FamixClass"));
+        concepts.add(new DefaultConcept("Namespace"));
+        concepts.add(new DefaultConcept("Enum"));
+        concepts.add(new DefaultConcept("AnnotationType"));
+        concepts.add(new DefaultConcept("Method"));
+        concepts.add(new DefaultConcept("Attribute"));
+        concepts.add(new DefaultConcept("Inheritance"));
+        concepts.add(new DefaultConcept("AnnotationInstance"));
+        concepts.add(new DefaultConcept("AnnotationTypeAttribute"));
+        concepts.add(new DefaultConcept("AnnotationInstanceAttribute"));
+        concepts.add(new DefaultConcept("Parameter"));
+        concepts.add(new DefaultConcept("LocalVariable"));
     }
 
     public List<Concept> getConcepts() {
         return concepts;
+    }
+
+    public List<CustomConcept> getCustomConcepts() {
+        return getConcepts().stream()
+                .filter(CustomConcept.class::isInstance)
+                .map(CustomConcept.class::cast)
+                .collect(Collectors.toList());
     }
 }

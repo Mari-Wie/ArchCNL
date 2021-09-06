@@ -1,25 +1,32 @@
 package org.archcnl.domain.input.datatypes.mappings;
 
-public class Concept {
+import java.util.Objects;
 
-    public enum ConceptType {
-        famix,
-        architecture
-    }
+public abstract class Concept extends ObjectType {
 
     private String name;
-    private ConceptType type;
 
-    public Concept(String name, ConceptType conceptType) {
+    protected Concept(String name) {
         this.name = name;
-        this.type = conceptType;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
-    public String toStringRepresentation() {
-        return type.toString() + ":" + name;
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Concept)) {
+            return false;
+        }
+        Concept otherConcept = (Concept) o;
+        return name.equals(otherConcept.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
