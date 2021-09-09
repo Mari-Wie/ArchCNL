@@ -1,35 +1,35 @@
-package org.archcnl.domain.input.datatypes.mappings;
+package org.archcnl.domain.input.model.mappings;
 
-public class BooleanValue extends ObjectType {
+public class StringValue extends ObjectType {
 
-    private boolean value;
+    private String value;
 
-    public BooleanValue(boolean value) {
+    public StringValue(String value) {
         this.setValue(value);
     }
 
     @Override
     public String toStringRepresentation() {
-        return "'" + value + "'" + "^^xsd:boolean";
+        return "'" + value + "'";
     }
 
-    public boolean getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(boolean value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
     @Override
     public String getName() {
-        return String.valueOf(getValue());
+        return getValue();
     }
 
     @Override
     /** Warning: Not a real equals method! Only checks if o is instance of this class. */
     public boolean equals(Object o) {
-        return o instanceof BooleanValue;
+        return o instanceof StringValue;
     }
 
     @Override

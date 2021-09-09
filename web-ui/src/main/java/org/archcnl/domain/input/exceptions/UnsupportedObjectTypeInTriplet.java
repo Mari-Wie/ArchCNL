@@ -1,7 +1,7 @@
 package org.archcnl.domain.input.exceptions;
 
-import org.archcnl.domain.input.datatypes.mappings.ObjectType;
-import org.archcnl.domain.input.datatypes.mappings.Relation;
+import org.archcnl.domain.input.model.mappings.ObjectType;
+import org.archcnl.domain.input.model.mappings.Relation;
 
 public class UnsupportedObjectTypeInTriplet extends Exception {
 

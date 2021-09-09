@@ -1,13 +1,14 @@
-package org.archcnl.domain.input.datatypes.mappings;
+package org.archcnl.domain.input.model.mappings;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
+
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.io.AdocIoUtils;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class Relation {
 

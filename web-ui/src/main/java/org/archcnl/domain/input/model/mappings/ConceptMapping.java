@@ -1,10 +1,11 @@
-package org.archcnl.domain.input.datatypes.mappings;
+package org.archcnl.domain.input.model.mappings;
 
 import java.util.List;
-import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
+
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public class ConceptMapping extends Mapping {
 

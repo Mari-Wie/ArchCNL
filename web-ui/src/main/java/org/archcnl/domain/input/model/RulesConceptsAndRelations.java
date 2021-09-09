@@ -1,10 +1,11 @@
-package org.archcnl.domain.input.datatypes;
+package org.archcnl.domain.input.model;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.archcnl.domain.input.datatypes.architecturerules.ArchitectureRuleManager;
-import org.archcnl.domain.input.datatypes.mappings.ConceptManager;
-import org.archcnl.domain.input.datatypes.mappings.RelationManager;
+
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
+import org.archcnl.domain.input.model.mappings.ConceptManager;
+import org.archcnl.domain.input.model.mappings.RelationManager;
 
 public class RulesConceptsAndRelations {
 

@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.datatypes.mappings;
+package org.archcnl.domain.input.model.mappings;
 
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 
