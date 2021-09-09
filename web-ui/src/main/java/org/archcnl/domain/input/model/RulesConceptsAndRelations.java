@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.model;
 
 import com.google.common.annotations.VisibleForTesting;
-
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptManager;
