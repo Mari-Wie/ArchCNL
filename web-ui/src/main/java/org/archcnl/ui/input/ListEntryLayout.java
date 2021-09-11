@@ -13,17 +13,20 @@ public class ListEntryLayout<T> extends HorizontalLayout {
 	
 	private final String EDIT_TEXT = "Edit";
 	private final String DELETE_TEXT = "Delete";
+	private Button editButton;
+	private Button deleteButton;
 	
 	public ListEntryLayout(ListEntry<T> entry) {
-		//super(createSpan(), createEditButton(), createDeleteButton());
 		this.entry = entry;
 		
 		Span text = new Span(entry.toString());
 		text.setWidth("100%");
 		addAndExpand(text);
 		if(entry.isLeaf()) {
-			add(new Button(EDIT_TEXT));
-			add(new Button(DELETE_TEXT));
+			editButton = new Button(EDIT_TEXT);
+			deleteButton = new Button(DELETE_TEXT);
+			add(editButton);
+			add(deleteButton);
 		}
 	}
 
