@@ -1,8 +1,7 @@
 package org.vaadin.mainview;
 
-import org.archcnl.ui.input.InputView;
-
 import com.vaadin.flow.component.Component;
+import org.archcnl.ui.input.InputView;
 
 public class MainUIPresenter {
 
