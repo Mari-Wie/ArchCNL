@@ -15,7 +15,6 @@ public class ListEntry<T> {
 	private boolean isLeaf;
 	
 	public ListEntry(String name, List<T> children) {
-		//super(createSpan(), createEditButton(), createDeleteButton());
 		this.children = children;
 		this.name = name;
 		isLeaf = false;
@@ -37,6 +36,7 @@ public class ListEntry<T> {
 		return hierarchicalChildren;
 	}
 	
+	// temporal solution, ideally Concept and Relation should have these methods as the toString method
 	@Override
 	public String toString() {
 		if(getContent() instanceof Concept) {

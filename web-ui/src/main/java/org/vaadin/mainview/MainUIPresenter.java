@@ -21,7 +21,7 @@ public class MainUIPresenter {
     }
 
     public Component getArchitectureRuleView() {
-        return ruleView;
+        return inputView;
     }
 
     public Component getResultView() {
