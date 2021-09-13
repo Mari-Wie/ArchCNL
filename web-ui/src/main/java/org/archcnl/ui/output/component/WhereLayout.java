@@ -16,6 +16,9 @@ public class WhereLayout extends VerticalLayout {
 
     public void removeRow(final WhereTextBoxesLayout layout) {
         remove(layout);
+        if (collect().size() <= 0) {
+            addWhereTextLayout(0);
+        }
     }
 
     public void clear() {
