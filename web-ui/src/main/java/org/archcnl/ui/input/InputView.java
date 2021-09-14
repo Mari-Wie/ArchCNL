@@ -6,17 +6,38 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 public class InputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
+    private static final float GOLDEN_RATIO = 61.8f;
 
-    ArchitectureRulesLayout architectureRulesLayout = new ArchitectureRulesLayout();
-    ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView();
+    private ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView(this);
+    private RulesOrMappingCreationLayout architectureRulesLayout = new ArchitectureRulesLayout();
+    private RulesOrMappingCreationLayout conceptCreationLayout = new ConceptCreationLayout();
+    private RulesOrMappingCreationLayout relationCreationLayout = new RelationCreationLayout();
+    private RulesOrMappingCreationLayout currentlyShownLayout;
 
     public InputView() {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
-        // golden ratio??
-        architectureRulesLayout.setWidth(61.8f, Unit.PERCENTAGE);
-        conceptAndRelationView.setWidth(100.0f - 61.8f, Unit.PERCENTAGE);
+        conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
 
-        addAndExpand(architectureRulesLayout, conceptAndRelationView);
+        changeCurrentlyShownLayout(architectureRulesLayout);
+        addAndExpand(currentlyShownLayout, conceptAndRelationView);
+    }
+
+    public void switchToConceptCreationLayout() {
+        changeCurrentlyShownLayout(conceptCreationLayout);
+    }
+
+    public void switchToRelationCreationLayout() {
+        changeCurrentlyShownLayout(relationCreationLayout);
+    }
+
+    public void switchToArchitectureRulesLayout() {
+        changeCurrentlyShownLayout(architectureRulesLayout);
+    }
+
+    private void changeCurrentlyShownLayout(RulesOrMappingCreationLayout newLayout) {
+        newLayout.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
+        replace(currentlyShownLayout, newLayout);
+        currentlyShownLayout = newLayout;
     }
 }
