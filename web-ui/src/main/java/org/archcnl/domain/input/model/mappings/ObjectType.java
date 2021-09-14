@@ -1,11 +1,11 @@
-package org.archcnl.domain.input.datatypes.mappings;
+package org.archcnl.domain.input.model.mappings;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
 import org.archcnl.domain.input.io.AdocIoUtils;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class ObjectType {
 

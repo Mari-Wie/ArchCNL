@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.input.TestUtils;
-import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -17,6 +16,7 @@ import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.junit.jupiter.api.Test;
 
 class ArchRuleToAdocWriterTest {

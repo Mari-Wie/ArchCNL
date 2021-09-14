@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.input.TestUtils;
-import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

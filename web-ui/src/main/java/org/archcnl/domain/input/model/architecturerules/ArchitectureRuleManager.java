@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.datatypes.architecturerules;
+package org.archcnl.domain.input.model.architecturerules;
 
 import java.util.LinkedList;
 import java.util.List;
