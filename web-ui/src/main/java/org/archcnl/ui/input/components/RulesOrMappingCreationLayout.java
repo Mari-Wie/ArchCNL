@@ -1,4 +1,4 @@
-package org.archcnl.ui.input;
+package org.archcnl.ui.input.components;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 

@@ -1,4 +1,4 @@
-package org.archcnl.ui.input;
+package org.archcnl.ui.input.components;
 
 public class RelationCreationLayout extends MappingCreationView {
 
