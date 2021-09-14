@@ -1,11 +1,10 @@
 package org.archcnl.ui.input;
 
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.ui.input.components.ConceptCreationLayout;
 import org.archcnl.ui.input.components.RelationCreationLayout;
 import org.archcnl.ui.input.components.RulesOrMappingCreationLayout;
-
-import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class InputView extends HorizontalLayout {
 
@@ -14,8 +13,8 @@ public class InputView extends HorizontalLayout {
 
     private ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView(this);
     private RulesOrMappingCreationLayout architectureRulesLayout = new ArchitectureRulesLayout();
-    private RulesOrMappingCreationLayout conceptCreationLayout = new ConceptCreationLayout();
-    private RulesOrMappingCreationLayout relationCreationLayout = new RelationCreationLayout();
+    private RulesOrMappingCreationLayout conceptCreationLayout = new ConceptCreationLayout(this);
+    private RulesOrMappingCreationLayout relationCreationLayout = new RelationCreationLayout(this);
     private RulesOrMappingCreationLayout currentlyShownLayout;
 
     public InputView() {
