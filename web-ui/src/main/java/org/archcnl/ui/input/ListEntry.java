@@ -7,20 +7,20 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.Relation;
 
-public class TreeGridListEntry<T> {
+public class ListEntry<T> {
 
     private List<T> children;
     private String name;
     private T content;
     private boolean isLeaf;
 
-    public TreeGridListEntry(String name, List<T> children) {
+    public ListEntry(String name, List<T> children) {
         this.children = children;
         this.name = name;
         isLeaf = false;
     }
 
-    public TreeGridListEntry(String name, T content) {
+    public ListEntry(String name, T content) {
         this.name = name;
         this.content = content;
         children = Collections.<T>emptyList();
@@ -31,13 +31,10 @@ public class TreeGridListEntry<T> {
         return content;
     }
 
-    public List<TreeGridListEntry<T>> getHierarchicalChildren() {
-        List<TreeGridListEntry<T>> hierarchicalChildren =
+    public List<ListEntry<T>> getHierarchicalChildren() {
+        List<ListEntry<T>> hierarchicalChildren =
                 children.stream()
-                        .map(
-                                entry ->
-                                        (TreeGridListEntry<T>)
-                                                new TreeGridListEntry<>(entry.toString(), entry))
+                        .map(entry -> (ListEntry<T>) new ListEntry<>(entry.toString(), entry))
                         .collect(Collectors.toList());
         return hierarchicalChildren;
     }
@@ -47,9 +44,9 @@ public class TreeGridListEntry<T> {
     @Override
     public String toString() {
         if (getContent() instanceof Concept) {
-            return ((Concept) getContent()).getName();
+            return ((Concept) getContent()).toStringRepresentation();
         } else if (getContent() instanceof Relation) {
-            return ((Relation) getContent()).getName();
+            return ((Relation) getContent()).toStringRepresentation();
         } else {
             return name;
         }
@@ -57,11 +54,5 @@ public class TreeGridListEntry<T> {
 
     public boolean isLeaf() {
         return isLeaf;
-    }
-
-    // change this to return false for default entries when these can be differentiated from other
-    // entries
-    public boolean isAlterable() {
-        return true;
     }
 }

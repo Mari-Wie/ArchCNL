@@ -7,9 +7,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import java.util.LinkedList;
 import java.util.List;
-import org.archcnl.domain.input.datatypes.RulesConceptsAndRelations;
-import org.archcnl.domain.input.datatypes.mappings.Concept;
-import org.archcnl.domain.input.datatypes.mappings.Relation;
+
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.mappings.Concept;
+import org.archcnl.domain.input.model.mappings.Relation;
 
 public class ConceptAndRelationView extends VerticalLayout {
 
@@ -19,8 +20,8 @@ public class ConceptAndRelationView extends VerticalLayout {
     CreateNewLayout createNewRelationLayout =
             new CreateNewLayout("Relations", "Create new relation");
     HorizontalLayout bottomBarLayout = new HorizontalLayout();
-    TreeGrid<TreeGridListEntry<Concept>> conceptTreeGrid = new TreeGrid<>();
-    TreeGrid<TreeGridListEntry<Relation>> relationTreeGrid = new TreeGrid<>();
+    TreeGridListLayout<Concept> conceptTreeGrid;
+    TreeGridListLayout<Relation> relationTreeGrid;
 
     public ConceptAndRelationView() {
         createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
@@ -58,6 +59,5 @@ public class ConceptAndRelationView extends VerticalLayout {
     public void setUpBottomBar() {
         final Button saveButton = new Button("Save");
         final Button checkButton = new Button("Check");
-        bottomBarLayout.add(saveButton, checkButton);
-    }
+        bottomBarLayout.add(saveButton, checkButton);    }
 }
