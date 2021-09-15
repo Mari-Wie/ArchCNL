@@ -43,9 +43,9 @@ public class TreeGridListEntry<T> {
     @Override
     public String toString() {
         if (getContent() instanceof Concept) {
-            return ((Concept) getContent()).toStringRepresentation();
+            return ((Concept) getContent()).getName();
         } else if (getContent() instanceof Relation) {
-            return ((Relation) getContent()).toStringRepresentation();
+            return ((Relation) getContent()).getName();
         } else {
             return name;
         }
@@ -53,5 +53,10 @@ public class TreeGridListEntry<T> {
 
     public boolean isLeaf() {
         return isLeaf;
+    }
+    
+    // change this to return false for default entries when these can be differentiated from other entries
+    public boolean isAlterable() {
+    	return true;
     }
 }

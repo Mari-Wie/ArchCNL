@@ -21,7 +21,7 @@ public class TreeGridListEntryLayout<T> extends HorizontalLayout {
         Span text = new Span(entry.toString());
         text.setWidth("100%");
         addAndExpand(text);
-        if (entry.isLeaf()) {
+        if (entry.isLeaf() && entry.isAlterable()) {
             editButton = new Button(EDIT_TEXT);
             deleteButton = new Button(DELETE_TEXT);
             add(editButton);

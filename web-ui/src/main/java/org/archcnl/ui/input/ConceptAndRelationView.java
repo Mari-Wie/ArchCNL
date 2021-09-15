@@ -48,10 +48,10 @@ public class ConceptAndRelationView extends VerticalLayout {
     public void setUpConceptView() {
         conceptTreeGrid = new TreeGrid<>();
 
-        List<Concept> manager = RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
+        List<Concept> concepts = RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
 
         List<TreeGridListEntry<Concept>> data = new LinkedList<>();
-        TreeGridListEntry<Concept> defaultConceptsStub = new TreeGridListEntry<>("Default Concepts", manager);
+        TreeGridListEntry<Concept> defaultConceptsStub = new TreeGridListEntry<>("Default Concepts", concepts);
         data.add(defaultConceptsStub);
 
         conceptTreeGrid.setItems(data, TreeGridListEntry::getHierarchicalChildren);
@@ -66,11 +66,11 @@ public class ConceptAndRelationView extends VerticalLayout {
     private void setUpRelationView() {
         relationTreeGrid = new TreeGrid<>();
 
-        List<Relation> manager = RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
+        List<Relation> relations = RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
 
         // no data hierarchy in relations yet
         List<TreeGridListEntry<Relation>> data = new LinkedList<>();
-        TreeGridListEntry<Relation> defaultConceptsStub = new TreeGridListEntry<>("Default Relations", manager);
+        TreeGridListEntry<Relation> defaultConceptsStub = new TreeGridListEntry<>("Default Relations", relations);
         data.add(defaultConceptsStub);
 
         relationTreeGrid.setItems(data, TreeGridListEntry::getHierarchicalChildren);
