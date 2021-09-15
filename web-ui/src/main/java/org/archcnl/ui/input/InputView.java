@@ -1,11 +1,10 @@
 package org.archcnl.ui.input;
 
-import org.archcnl.ui.input.mappingeditor.ConceptCreationLayout;
-import org.archcnl.ui.input.mappingeditor.RelationCreationLayout;
-import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationLayout;
-
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.ui.input.mappingeditor.ConceptCreationView;
+import org.archcnl.ui.input.mappingeditor.RelationCreationView;
+import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationView;
 
 public class InputView extends HorizontalLayout {
 
@@ -13,35 +12,35 @@ public class InputView extends HorizontalLayout {
     private static final float GOLDEN_RATIO = 61.8f;
 
     private ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView(this);
-    private RulesOrMappingCreationLayout architectureRulesLayout = new ArchitectureRulesLayout();
-    private RulesOrMappingCreationLayout conceptCreationLayout = new ConceptCreationLayout(this);
-    private RulesOrMappingCreationLayout relationCreationLayout = new RelationCreationLayout(this);
-    private RulesOrMappingCreationLayout currentlyShownLayout;
+    private RulesOrMappingCreationView architectureRulesView = new ArchitectureRulesLayout();
+    private RulesOrMappingCreationView conceptCreationView = new ConceptCreationView(this);
+    private RulesOrMappingCreationView relationCreationView = new RelationCreationView(this);
+    private RulesOrMappingCreationView currentlyShownView;
 
     public InputView() {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
 
-        changeCurrentlyShownLayout(architectureRulesLayout);
-        addAndExpand(currentlyShownLayout, conceptAndRelationView);
+        changeCurrentlyShownLayout(architectureRulesView);
+        addAndExpand(currentlyShownView, conceptAndRelationView);
     }
 
     public void switchToConceptCreationLayout() {
-        changeCurrentlyShownLayout(conceptCreationLayout);
+        changeCurrentlyShownLayout(conceptCreationView);
     }
 
     public void switchToRelationCreationLayout() {
-        changeCurrentlyShownLayout(relationCreationLayout);
+        changeCurrentlyShownLayout(relationCreationView);
     }
 
     public void switchToArchitectureRulesLayout() {
-        changeCurrentlyShownLayout(architectureRulesLayout);
+        changeCurrentlyShownLayout(architectureRulesView);
     }
 
-    private void changeCurrentlyShownLayout(RulesOrMappingCreationLayout newLayout) {
-        newLayout.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
-        replace(currentlyShownLayout, newLayout);
-        currentlyShownLayout = newLayout;
+    private void changeCurrentlyShownLayout(RulesOrMappingCreationView newView) {
+        newView.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
+        replace(currentlyShownView, newView);
+        currentlyShownView = newView;
     }
 }

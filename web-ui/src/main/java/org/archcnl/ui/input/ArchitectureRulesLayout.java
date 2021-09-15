@@ -1,10 +1,9 @@
 package org.archcnl.ui.input;
 
-import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationLayout;
-
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationView;
 
-public class ArchitectureRulesLayout extends RulesOrMappingCreationLayout {
+public class ArchitectureRulesLayout extends RulesOrMappingCreationView {
 
     private static final long serialVersionUID = 1L;
 

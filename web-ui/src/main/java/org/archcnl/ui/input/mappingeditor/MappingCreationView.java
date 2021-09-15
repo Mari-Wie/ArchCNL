@@ -1,15 +1,14 @@
 package org.archcnl.ui.input.mappingeditor;
 
-import org.archcnl.ui.input.InputView;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import org.archcnl.ui.input.InputView;
 
-public abstract class MappingCreationView extends RulesOrMappingCreationLayout {
+public abstract class MappingCreationView extends RulesOrMappingCreationView {
 
     private static final long serialVersionUID = 156879235315976468L;
 
