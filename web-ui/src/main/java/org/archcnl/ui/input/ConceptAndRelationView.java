@@ -4,10 +4,8 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.treegrid.TreeGrid;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.Relation;
@@ -59,5 +57,6 @@ public class ConceptAndRelationView extends VerticalLayout {
     public void setUpBottomBar() {
         final Button saveButton = new Button("Save");
         final Button checkButton = new Button("Check");
-        bottomBarLayout.add(saveButton, checkButton);    }
+        bottomBarLayout.add(saveButton, checkButton);
+    }
 }

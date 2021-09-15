@@ -3,7 +3,6 @@ package org.archcnl.ui.input;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.Relation;
 
