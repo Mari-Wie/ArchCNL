@@ -19,8 +19,8 @@ public class ConceptAndRelationView extends VerticalLayout {
     CreateNewLayout createNewRelationLayout =
             new CreateNewLayout("Relations", "Create new relation");
     HorizontalLayout bottomBarLayout = new HorizontalLayout();
-    TreeGrid<ListEntry<Concept>> conceptTreeGrid = new TreeGrid<>();
-    TreeGrid<ListEntry<Relation>> relationTreeGrid = new TreeGrid<>();
+    TreeGrid<TreeGridListEntry<Concept>> conceptTreeGrid = new TreeGrid<>();
+    TreeGrid<TreeGridListEntry<Relation>> relationTreeGrid = new TreeGrid<>();
 
     public ConceptAndRelationView() {
         createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
@@ -48,17 +48,16 @@ public class ConceptAndRelationView extends VerticalLayout {
     public void setUpConceptView() {
         conceptTreeGrid = new TreeGrid<>();
 
-        RulesConceptsAndRelations car = RulesConceptsAndRelations.getInstance();
-        List<Concept> manager = car.getConceptManager().getConcepts();
+        List<Concept> manager = RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
 
-        List<ListEntry<Concept>> data = new LinkedList<>();
-        ListEntry<Concept> defaultConceptsStub = new ListEntry<>("Default Concepts", manager);
+        List<TreeGridListEntry<Concept>> data = new LinkedList<>();
+        TreeGridListEntry<Concept> defaultConceptsStub = new TreeGridListEntry<>("Default Concepts", manager);
         data.add(defaultConceptsStub);
 
-        conceptTreeGrid.setItems(data, ListEntry::getHierarchicalChildren);
+        conceptTreeGrid.setItems(data, TreeGridListEntry::getHierarchicalChildren);
         conceptTreeGrid.addComponentHierarchyColumn(
                 entry -> {
-                    ListEntryLayout<Concept> entryLayout = new ListEntryLayout<>(entry);
+                    TreeGridListEntryLayout<Concept> entryLayout = new TreeGridListEntryLayout<>(entry);
                     entryLayout.setSizeFull();
                     return entryLayout;
                 });
@@ -67,18 +66,17 @@ public class ConceptAndRelationView extends VerticalLayout {
     private void setUpRelationView() {
         relationTreeGrid = new TreeGrid<>();
 
-        RulesConceptsAndRelations car = RulesConceptsAndRelations.getInstance();
-        List<Relation> manager = car.getRelationManager().getRelations();
+        List<Relation> manager = RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
 
         // no data hierarchy in relations yet
-        List<ListEntry<Relation>> data = new LinkedList<>();
-        ListEntry<Relation> defaultConceptsStub = new ListEntry<>("Default Relations", manager);
+        List<TreeGridListEntry<Relation>> data = new LinkedList<>();
+        TreeGridListEntry<Relation> defaultConceptsStub = new TreeGridListEntry<>("Default Relations", manager);
         data.add(defaultConceptsStub);
 
-        relationTreeGrid.setItems(data, ListEntry::getHierarchicalChildren);
+        relationTreeGrid.setItems(data, TreeGridListEntry::getHierarchicalChildren);
         relationTreeGrid.addComponentHierarchyColumn(
                 entry -> {
-                    ListEntryLayout<Relation> entryLayout = new ListEntryLayout<>(entry);
+                    TreeGridListEntryLayout<Relation> entryLayout = new TreeGridListEntryLayout<>(entry);
                     entryLayout.setSizeFull();
                     return entryLayout;
                 });
