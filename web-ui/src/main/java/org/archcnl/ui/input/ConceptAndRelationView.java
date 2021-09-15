@@ -25,10 +25,22 @@ public class ConceptAndRelationView extends VerticalLayout {
     public ConceptAndRelationView() {
         createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
         createNewRelationLayout.setHeight(50, Unit.PERCENTAGE);
-
+        
+        List<Concept> concepts = RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
+        List<TreeGridListEntry<Concept>> conceptData = new LinkedList<>();
+        TreeGridListEntry<Concept> defaultConceptsStub = new TreeGridListEntry<>("Default Concepts", concepts);
+        conceptData.add(defaultConceptsStub);
+        
+        conceptTreeGrid = new TreeGridLayout<Concept>(conceptData);
+        
+        List<Relation> relations = RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
+        List<TreeGridListEntry<Relation>> relationData = new LinkedList<>();
+        TreeGridListEntry<Relation> defaultRelationsStub = new TreeGridListEntry<>("Default Relations", relations);
+        relationData.add(defaultRelationsStub);
+        
+        relationTreeGrid = new TreeGridLayout<Relation>(relationData);
+        
         setUpBottomBar();
-        setUpConceptView();
-        setUpRelationView();
 
         add(createNewConceptLayout);
         add(createNewRelationLayout);
@@ -43,42 +55,5 @@ public class ConceptAndRelationView extends VerticalLayout {
         final Button saveButton = new Button("Save");
         final Button checkButton = new Button("Check");
         bottomBarLayout.add(saveButton, checkButton);
-    }
-
-    public void setUpConceptView() {
-        conceptTreeGrid = new TreeGrid<>();
-
-        List<Concept> concepts = RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
-
-        List<TreeGridListEntry<Concept>> data = new LinkedList<>();
-        TreeGridListEntry<Concept> defaultConceptsStub = new TreeGridListEntry<>("Default Concepts", concepts);
-        data.add(defaultConceptsStub);
-
-        conceptTreeGrid.setItems(data, TreeGridListEntry::getHierarchicalChildren);
-        conceptTreeGrid.addComponentHierarchyColumn(
-                entry -> {
-                    TreeGridListEntryLayout<Concept> entryLayout = new TreeGridListEntryLayout<>(entry);
-                    entryLayout.setSizeFull();
-                    return entryLayout;
-                });
-    }
-
-    private void setUpRelationView() {
-        relationTreeGrid = new TreeGrid<>();
-
-        List<Relation> relations = RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
-
-        // no data hierarchy in relations yet
-        List<TreeGridListEntry<Relation>> data = new LinkedList<>();
-        TreeGridListEntry<Relation> defaultConceptsStub = new TreeGridListEntry<>("Default Relations", relations);
-        data.add(defaultConceptsStub);
-
-        relationTreeGrid.setItems(data, TreeGridListEntry::getHierarchicalChildren);
-        relationTreeGrid.addComponentHierarchyColumn(
-                entry -> {
-                    TreeGridListEntryLayout<Relation> entryLayout = new TreeGridListEntryLayout<>(entry);
-                    entryLayout.setSizeFull();
-                    return entryLayout;
-                });
     }
 }
