@@ -33,7 +33,10 @@ public class TreeGridListEntry<T> {
     public List<TreeGridListEntry<T>> getHierarchicalChildren() {
         List<TreeGridListEntry<T>> hierarchicalChildren =
                 children.stream()
-                        .map(entry -> (TreeGridListEntry<T>) new TreeGridListEntry<>(entry.toString(), entry))
+                        .map(
+                                entry ->
+                                        (TreeGridListEntry<T>)
+                                                new TreeGridListEntry<>(entry.toString(), entry))
                         .collect(Collectors.toList());
         return hierarchicalChildren;
     }
@@ -54,9 +57,10 @@ public class TreeGridListEntry<T> {
     public boolean isLeaf() {
         return isLeaf;
     }
-    
-    // change this to return false for default entries when these can be differentiated from other entries
+
+    // change this to return false for default entries when these can be differentiated from other
+    // entries
     public boolean isAlterable() {
-    	return true;
+        return true;
     }
 }

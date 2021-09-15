@@ -25,21 +25,25 @@ public class ConceptAndRelationView extends VerticalLayout {
     public ConceptAndRelationView() {
         createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
         createNewRelationLayout.setHeight(50, Unit.PERCENTAGE);
-        
-        List<Concept> concepts = RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
+
+        List<Concept> concepts =
+                RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
         List<TreeGridListEntry<Concept>> conceptData = new LinkedList<>();
-        TreeGridListEntry<Concept> defaultConceptsStub = new TreeGridListEntry<>("Default Concepts", concepts);
+        TreeGridListEntry<Concept> defaultConceptsStub =
+                new TreeGridListEntry<>("Default Concepts", concepts);
         conceptData.add(defaultConceptsStub);
-        
-        conceptTreeGrid = new TreeGridLayout<Concept>(conceptData);
-        
-        List<Relation> relations = RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
+
+        conceptTreeGrid = new TreeGridListLayout<Concept>(conceptData);
+
+        List<Relation> relations =
+                RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
         List<TreeGridListEntry<Relation>> relationData = new LinkedList<>();
-        TreeGridListEntry<Relation> defaultRelationsStub = new TreeGridListEntry<>("Default Relations", relations);
+        TreeGridListEntry<Relation> defaultRelationsStub =
+                new TreeGridListEntry<>("Default Relations", relations);
         relationData.add(defaultRelationsStub);
-        
-        relationTreeGrid = new TreeGridLayout<Relation>(relationData);
-        
+
+        relationTreeGrid = new TreeGridListLayout<Relation>(relationData);
+
         setUpBottomBar();
 
         add(createNewConceptLayout);
