@@ -1,10 +1,11 @@
 package org.archcnl.ui.input;
 
+import org.archcnl.ui.input.mappingeditor.ConceptCreationLayout;
+import org.archcnl.ui.input.mappingeditor.RelationCreationLayout;
+import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationLayout;
+
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.ui.input.components.ConceptCreationLayout;
-import org.archcnl.ui.input.components.RelationCreationLayout;
-import org.archcnl.ui.input.components.RulesOrMappingCreationLayout;
 
 public class InputView extends HorizontalLayout {
 

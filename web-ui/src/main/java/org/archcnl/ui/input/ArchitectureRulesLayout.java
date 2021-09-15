@@ -1,7 +1,8 @@
 package org.archcnl.ui.input;
 
+import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationLayout;
+
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.archcnl.ui.input.components.RulesOrMappingCreationLayout;
 
 public class ArchitectureRulesLayout extends RulesOrMappingCreationLayout {
 
