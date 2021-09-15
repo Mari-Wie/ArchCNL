@@ -23,9 +23,8 @@ public class ConceptAndRelationView extends VerticalLayout {
 
     public ConceptAndRelationView(InputView parent) {
         this.parent = parent;
-        ButtonClickResponder conceptCreationClickResponder = parent::switchToConceptCreationLayout;
-        ButtonClickResponder relationCreationClickResponder =
-                parent::switchToRelationCreationLayout;
+        ButtonClickResponder conceptCreationClickResponder = parent::switchToConceptCreationView;
+        ButtonClickResponder relationCreationClickResponder = parent::switchToRelationCreationView;
         createNewConceptLayout =
                 new CreateNewLayout(
                         "Concepts", "Create new concept", conceptCreationClickResponder);
@@ -73,10 +72,10 @@ public class ConceptAndRelationView extends VerticalLayout {
     }
 
     public void switchToConceptCreationLayout() {
-        parent.switchToConceptCreationLayout();
+        parent.switchToConceptCreationView();
     }
 
     public void switchToRelationCreationLayout() {
-        parent.switchToRelationCreationLayout();
+        parent.switchToRelationCreationView();
     }
 }

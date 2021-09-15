@@ -8,9 +8,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.ui.input.InputView;
 
-public abstract class MappingCreationView extends RulesOrMappingCreationView {
+public abstract class MappingCreationView extends RulesOrMappingCreationView
+        implements MappingCreationContract.View<MappingCreationContract.Presenter> {
 
     private static final long serialVersionUID = 156879235315976468L;
+
+    private MappingCreationContract.Presenter presenter;
 
     protected TextField mappingName;
 
@@ -19,7 +22,7 @@ public abstract class MappingCreationView extends RulesOrMappingCreationView {
         Button closeButton =
                 new Button(
                         new Icon(VaadinIcon.CLOSE),
-                        click -> parent.switchToArchitectureRulesLayout());
+                        click -> parent.switchToArchitectureRulesView());
         HorizontalLayout titleBar = new HorizontalLayout(title, closeButton);
         titleBar.setWidthFull();
         title.setWidthFull();
@@ -39,5 +42,10 @@ public abstract class MappingCreationView extends RulesOrMappingCreationView {
                         "title",
                         "Is necessary to find the code elements that correspond to this Concept/Relation");
         add(mappingHeadline);
+    }
+
+    @Override
+    public void setPresenter(MappingCreationContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 }

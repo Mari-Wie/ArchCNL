@@ -3,6 +3,8 @@ package org.archcnl.ui.input;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.ui.input.mappingeditor.ConceptCreationView;
+import org.archcnl.ui.input.mappingeditor.MappingCreationPresenter;
+import org.archcnl.ui.input.mappingeditor.MappingCreationView;
 import org.archcnl.ui.input.mappingeditor.RelationCreationView;
 import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationView;
 
@@ -13,8 +15,6 @@ public class InputView extends HorizontalLayout {
 
     private ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView(this);
     private RulesOrMappingCreationView architectureRulesView = new ArchitectureRulesLayout();
-    private RulesOrMappingCreationView conceptCreationView = new ConceptCreationView(this);
-    private RulesOrMappingCreationView relationCreationView = new RelationCreationView(this);
     private RulesOrMappingCreationView currentlyShownView;
 
     public InputView() {
@@ -22,23 +22,27 @@ public class InputView extends HorizontalLayout {
         setHeight(100, Unit.PERCENTAGE);
         conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
 
-        changeCurrentlyShownLayout(architectureRulesView);
+        changeCurrentlyShownView(architectureRulesView);
         addAndExpand(currentlyShownView, conceptAndRelationView);
     }
 
-    public void switchToConceptCreationLayout() {
-        changeCurrentlyShownLayout(conceptCreationView);
+    public void switchToConceptCreationView() {
+        MappingCreationView view = new ConceptCreationView(this);
+        new MappingCreationPresenter(view);
+        changeCurrentlyShownView(view);
     }
 
-    public void switchToRelationCreationLayout() {
-        changeCurrentlyShownLayout(relationCreationView);
+    public void switchToRelationCreationView() {
+        MappingCreationView view = new RelationCreationView(this);
+        new MappingCreationPresenter(view);
+        changeCurrentlyShownView(view);
     }
 
-    public void switchToArchitectureRulesLayout() {
-        changeCurrentlyShownLayout(architectureRulesView);
+    public void switchToArchitectureRulesView() {
+        changeCurrentlyShownView(architectureRulesView);
     }
 
-    private void changeCurrentlyShownLayout(RulesOrMappingCreationView newView) {
+    private void changeCurrentlyShownView(RulesOrMappingCreationView newView) {
         newView.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
         replace(currentlyShownView, newView);
         currentlyShownView = newView;
