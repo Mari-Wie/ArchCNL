@@ -1,16 +1,15 @@
 package org.archcnl.ui.input.mappingeditor;
 
-import org.archcnl.ui.input.InputView;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
+import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView
         implements MappingEditorContract.View {
@@ -21,10 +20,11 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
 
     protected TextField mappingName;
 
-    protected MappingEditorView(MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
-    	this.presenter = presenter;
-    	this.presenter.setView(this);
-    	
+    protected MappingEditorView(
+            MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
+        this.presenter = presenter;
+        this.presenter.setView(this);
+
         Label title = new Label("Create or edit a " + mappingType);
         Button closeButton =
                 new Button(
@@ -47,9 +47,10 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                 .getElement()
                 .setProperty(
                         "title",
-                        "Is necessary to find the code elements that correspond to this" + mappingType);
+                        "Is necessary to find the code elements that correspond to this"
+                                + mappingType);
         add(mappingHeadline);
-        
+
         TripletPresenter tripletPresenter = new TripletPresenter();
         add(new TripletView(tripletPresenter, presenter));
     }

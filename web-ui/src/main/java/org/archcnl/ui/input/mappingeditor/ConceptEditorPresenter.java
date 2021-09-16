@@ -10,20 +10,21 @@ import org.archcnl.domain.input.model.mappings.Variable;
 
 public class ConceptEditorPresenter extends MappingEditorPresenter {
 
-	private static final long serialVersionUID = 1636256374259524105L;
-	private ConceptMapping mapping;
+    private static final long serialVersionUID = 1636256374259524105L;
+    private ConceptMapping mapping;
 
-	public ConceptEditorPresenter() throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet, RelationDoesNotExistException, InvalidVariableNameException {
-		this.mapping =  new ConceptMapping(new Variable("Test"), null, null);
-	}
-	
-	public ConceptEditorPresenter(ConceptMapping mapping) {
-		this.mapping = mapping;
-	}
+    public ConceptEditorPresenter()
+            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
+                    RelationDoesNotExistException, InvalidVariableNameException {
+        this.mapping = new ConceptMapping(new Variable("Test"), null, null);
+    }
 
-	@Override
-	public Mapping getMapping() {
-		return mapping;
-	}
+    public ConceptEditorPresenter(ConceptMapping mapping) {
+        this.mapping = mapping;
+    }
 
+    @Override
+    public Mapping getMapping() {
+        return mapping;
+    }
 }

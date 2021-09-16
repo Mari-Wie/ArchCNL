@@ -1,5 +1,7 @@
 package org.archcnl.ui.input;
 
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
@@ -10,9 +12,6 @@ import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
 import org.archcnl.ui.input.mappingeditor.RulesOrMappingEditorView;
-
-import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class InputView extends HorizontalLayout {
 
@@ -33,26 +32,30 @@ public class InputView extends HorizontalLayout {
     }
 
     public void switchToConceptEditorView() {
-		try {
-			ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
-			MappingEditorView view = new ConceptEditorView(conceptEditorPresenter, this);
-	        changeCurrentlyShownView(view);
-		} catch (VariableAlreadyExistsException | UnsupportedObjectTypeInTriplet | RelationDoesNotExistException
-				| InvalidVariableNameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
+            MappingEditorView view = new ConceptEditorView(conceptEditorPresenter, this);
+            changeCurrentlyShownView(view);
+        } catch (VariableAlreadyExistsException
+                | UnsupportedObjectTypeInTriplet
+                | RelationDoesNotExistException
+                | InvalidVariableNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void switchToRelationEditorView() {
-		try {
-			RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
-			MappingEditorView view = new RelationEditorView(relationEditorPresenter, this);
-	        changeCurrentlyShownView(view);
-		} catch (VariableAlreadyExistsException | UnsupportedObjectTypeInTriplet | InvalidVariableNameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
+            MappingEditorView view = new RelationEditorView(relationEditorPresenter, this);
+            changeCurrentlyShownView(view);
+        } catch (VariableAlreadyExistsException
+                | UnsupportedObjectTypeInTriplet
+                | InvalidVariableNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void switchToArchitectureRulesView() {

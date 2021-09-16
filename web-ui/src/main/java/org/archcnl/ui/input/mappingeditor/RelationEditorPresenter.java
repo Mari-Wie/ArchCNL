@@ -9,22 +9,21 @@ import org.archcnl.domain.input.model.mappings.Variable;
 
 public class RelationEditorPresenter extends MappingEditorPresenter {
 
-	private static final long serialVersionUID = -8403313455385623145L;
-	private RelationMapping mapping;
-	
-	public RelationEditorPresenter() throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
-		this.mapping = new RelationMapping(
-				new Variable("Test"),
-				null, null, null);
-	}
+    private static final long serialVersionUID = -8403313455385623145L;
+    private RelationMapping mapping;
 
-	public RelationEditorPresenter(RelationMapping mapping) {
-		this.mapping = mapping;
-	}
+    public RelationEditorPresenter()
+            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
+                    InvalidVariableNameException {
+        this.mapping = new RelationMapping(new Variable("Test"), null, null, null);
+    }
 
-	@Override
-	protected Mapping getMapping() {
-		return mapping;
-	}
+    public RelationEditorPresenter(RelationMapping mapping) {
+        this.mapping = mapping;
+    }
 
+    @Override
+    protected Mapping getMapping() {
+        return mapping;
+    }
 }

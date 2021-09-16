@@ -6,24 +6,23 @@ import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 
 public abstract class MappingEditorPresenter implements MappingEditorContract.Presenter<View> {
 
-	private static final long serialVersionUID = -9123529250149326943L;
-	private View view;
+    private static final long serialVersionUID = -9123529250149326943L;
+    private View view;
 
     @Override
     public void nameHasChanged(String newName) {
         System.out.println(newName);
     }
-    
+
     @Override
     public VariableManager getVariableManager() {
-    	return getMapping().getVariableManager();
+        return getMapping().getVariableManager();
     }
-    
+
     @Override
     public void setView(View view) {
-    	this.view = view;
+        this.view = view;
     }
-    
+
     protected abstract Mapping getMapping();
-	
 }
