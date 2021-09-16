@@ -1,12 +1,12 @@
 package org.archcnl.ui.input.mappingeditor;
 
-import org.archcnl.ui.input.mappingeditor.MappingCreationContract.Presenter;
+import org.archcnl.ui.input.mappingeditor.MappingEditorContract.Presenter;
 
-public abstract class MappingCreationPresenter implements MappingCreationContract.Presenter {
+public abstract class MappingEditorPresenter implements MappingEditorContract.Presenter {
 
 	private static final long serialVersionUID = -9123529250149326943L;
 
-	public MappingCreationPresenter(MappingCreationContract.View<Presenter> view) {
+	public MappingEditorPresenter(MappingEditorContract.View<Presenter> view) {
         view.setPresenter(this);
     }
 

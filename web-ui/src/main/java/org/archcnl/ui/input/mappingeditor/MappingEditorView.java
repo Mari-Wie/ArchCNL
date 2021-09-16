@@ -9,16 +9,16 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
-public abstract class MappingCreationView extends RulesOrMappingCreationView
-        implements MappingCreationContract.View<MappingCreationContract.Presenter> {
+public abstract class MappingEditorView extends RulesOrMappingEditorView
+        implements MappingEditorContract.View<MappingEditorContract.Presenter> {
 
     private static final long serialVersionUID = 156879235315976468L;
 
-    private MappingCreationContract.Presenter presenter;
+    private MappingEditorContract.Presenter presenter;
 
     protected TextField mappingName;
 
-    protected MappingCreationView(InputView parent, String headline) {
+    protected MappingEditorView(InputView parent, String headline) {
         Label title = new Label(headline);
         Button closeButton =
                 new Button(
@@ -48,7 +48,7 @@ public abstract class MappingCreationView extends RulesOrMappingCreationView
     }
 
     @Override
-    public void setPresenter(MappingCreationContract.Presenter presenter) {
+    public void setPresenter(MappingEditorContract.Presenter presenter) {
         this.presenter = presenter;
     }
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.archcnl.domain.input.model.mappings.VariableManager;
 
-public interface MappingCreationContract {
+public interface MappingEditorContract {
 
     public interface View<T extends Presenter> {
 

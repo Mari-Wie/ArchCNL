@@ -1,14 +1,16 @@
 package org.archcnl.ui.input;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.mappings.Concept;
+import org.archcnl.domain.input.model.mappings.Relation;
+
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import java.util.LinkedList;
-import java.util.List;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.mappings.Concept;
-import org.archcnl.domain.input.model.mappings.Relation;
 
 public class ConceptAndRelationView extends VerticalLayout {
 
@@ -23,8 +25,8 @@ public class ConceptAndRelationView extends VerticalLayout {
 
     public ConceptAndRelationView(InputView parent) {
         this.parent = parent;
-        ButtonClickResponder conceptCreationClickResponder = parent::switchToConceptCreationView;
-        ButtonClickResponder relationCreationClickResponder = parent::switchToRelationCreationView;
+        ButtonClickResponder conceptCreationClickResponder = this::switchToConceptEditorView;
+        ButtonClickResponder relationCreationClickResponder = this::switchToRelationEditorView;
         createNewConceptLayout =
                 new CreateNewLayout(
                         "Concepts", "Create new concept", conceptCreationClickResponder);
@@ -71,11 +73,11 @@ public class ConceptAndRelationView extends VerticalLayout {
         bottomBarLayout.add(saveButton, checkButton);
     }
 
-    public void switchToConceptCreationLayout() {
-        parent.switchToConceptCreationView();
+    public void switchToConceptEditorView() {
+        parent.switchToConceptEditorView();
     }
 
-    public void switchToRelationCreationLayout() {
-        parent.switchToRelationCreationView();
+    public void switchToRelationEditorView() {
+        parent.switchToRelationEditorView();
     }
 }

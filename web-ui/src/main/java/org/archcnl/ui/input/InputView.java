@@ -1,12 +1,13 @@
 package org.archcnl.ui.input;
 
+import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
+import org.archcnl.ui.input.mappingeditor.MappingEditorPresenter;
+import org.archcnl.ui.input.mappingeditor.MappingEditorView;
+import org.archcnl.ui.input.mappingeditor.RelationEditorView;
+import org.archcnl.ui.input.mappingeditor.RulesOrMappingEditorView;
+
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.ui.input.mappingeditor.ConceptCreationView;
-import org.archcnl.ui.input.mappingeditor.MappingCreationPresenter;
-import org.archcnl.ui.input.mappingeditor.MappingCreationView;
-import org.archcnl.ui.input.mappingeditor.RelationCreationView;
-import org.archcnl.ui.input.mappingeditor.RulesOrMappingCreationView;
 
 public class InputView extends HorizontalLayout {
 
@@ -14,8 +15,8 @@ public class InputView extends HorizontalLayout {
     private static final float GOLDEN_RATIO = 61.8f;
 
     private ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView(this);
-    private RulesOrMappingCreationView architectureRulesView = new ArchitectureRulesLayout();
-    private RulesOrMappingCreationView currentlyShownView;
+    private RulesOrMappingEditorView architectureRulesView = new ArchitectureRulesLayout();
+    private RulesOrMappingEditorView currentlyShownView;
 
     public InputView() {
         setWidth(100, Unit.PERCENTAGE);
@@ -26,15 +27,15 @@ public class InputView extends HorizontalLayout {
         addAndExpand(currentlyShownView, conceptAndRelationView);
     }
 
-    public void switchToConceptCreationView() {
-        MappingCreationView view = new ConceptCreationView(this);
-        new MappingCreationPresenter(view);
+    public void switchToConceptEditorView() {
+        MappingEditorView view = new ConceptEditorView(this);
+        new MappingEditorPresenter(view);
         changeCurrentlyShownView(view);
     }
 
-    public void switchToRelationCreationView() {
-        MappingCreationView view = new RelationCreationView(this);
-        new MappingCreationPresenter(view);
+    public void switchToRelationEditorView() {
+        MappingEditorView view = new RelationEditorView(this);
+        new MappingEditorPresenter(view);
         changeCurrentlyShownView(view);
     }
 
@@ -42,7 +43,7 @@ public class InputView extends HorizontalLayout {
         changeCurrentlyShownView(architectureRulesView);
     }
 
-    private void changeCurrentlyShownView(RulesOrMappingCreationView newView) {
+    private void changeCurrentlyShownView(RulesOrMappingEditorView newView) {
         newView.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
         replace(currentlyShownView, newView);
         currentlyShownView = newView;
