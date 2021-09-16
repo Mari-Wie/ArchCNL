@@ -3,16 +3,16 @@ package org.archcnl.ui.input;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import java.util.List;
 
-public class MappingListLayout<T> extends TreeGrid<MappingListEntry<T>> {
+public class MappingListLayout extends TreeGrid<MappingListEntry> {
 
     private static final long serialVersionUID = 3L;
 
-    public MappingListLayout(List<MappingListEntry<T>> entries) {
+    public MappingListLayout(List<MappingListEntry> entries) {
         super();
-        setItems(entries, MappingListEntry::getHierarchicalChildren);
+        setItems(entries, MappingListEntry::getChildren);
         addComponentHierarchyColumn(
                 entry -> {
-                    MappingListEntryLayout<T> entryLayout = new MappingListEntryLayout<T>(entry);
+                    MappingListEntryLayout entryLayout = new MappingListEntryLayout(entry);
                     return entryLayout;
                 });
     }

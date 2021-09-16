@@ -4,18 +4,18 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-public class MappingListEntryLayout<T> extends HorizontalLayout {
+public class MappingListEntryLayout extends HorizontalLayout {
 
     private static final long serialVersionUID = 2L;
 
-    private MappingListEntry<T> entry;
+    private MappingListEntry entry;
 
     private final String EDIT_TEXT = "Edit";
     private final String DELETE_TEXT = "Delete";
     private Button editButton;
     private Button deleteButton;
 
-    public MappingListEntryLayout(MappingListEntry<T> entry) {
+    public MappingListEntryLayout(MappingListEntry entry) {
         this.entry = entry;
 
         Span text = new Span(entry.toString());
@@ -29,7 +29,7 @@ public class MappingListEntryLayout<T> extends HorizontalLayout {
         }
     }
 
-    public MappingListEntry<T> getListEntry() {
+    public MappingListEntry getListEntry() {
         return entry;
     }
 }
