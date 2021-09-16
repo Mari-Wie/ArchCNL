@@ -40,8 +40,6 @@ public class ConceptListEntry implements MappingListEntry {
     	return children;
     }
 
-    // temporal solution, ideally Concept and Relation should have these methods as the toString
-    // method
     @Override
     public String toString() {
         if (isLeaf()) {
