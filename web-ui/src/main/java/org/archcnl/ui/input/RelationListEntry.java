@@ -13,7 +13,6 @@ public class RelationListEntry implements MappingListEntry {
     private boolean isLeaf;
 
     public RelationListEntry(String name, List<Relation> list) {
-    	System.out.println("list constructor");
     	children =
                 list.stream()
                         .map(
@@ -25,7 +24,6 @@ public class RelationListEntry implements MappingListEntry {
     }
 
     public RelationListEntry(String name, Relation content) {
-    	System.out.println("object constructor");
         this.name = name;
         this.content = content;
         children = Collections.<MappingListEntry>emptyList();

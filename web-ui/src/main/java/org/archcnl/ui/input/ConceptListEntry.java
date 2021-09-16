@@ -13,7 +13,6 @@ public class ConceptListEntry implements MappingListEntry {
     private boolean isLeaf;
 
     public ConceptListEntry(String name, List<Concept> list) {
-    	System.out.println("list constructor");
     	children =
                 list.stream()
                         .map(
@@ -25,7 +24,6 @@ public class ConceptListEntry implements MappingListEntry {
     }
 
     public ConceptListEntry(String name, Concept content) {
-    	System.out.println("object constructor");
         this.name = name;
         this.content = content;
         children = Collections.<MappingListEntry>emptyList();
