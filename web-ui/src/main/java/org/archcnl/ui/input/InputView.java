@@ -1,8 +1,13 @@
 package org.archcnl.ui.input;
 
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.ui.input.mappingeditor.ConceptEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
-import org.archcnl.ui.input.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.MappingEditorView;
+import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
 import org.archcnl.ui.input.mappingeditor.RulesOrMappingEditorView;
 
@@ -28,15 +33,26 @@ public class InputView extends HorizontalLayout {
     }
 
     public void switchToConceptEditorView() {
-        MappingEditorView view = new ConceptEditorView(this);
-        new MappingEditorPresenter(view);
-        changeCurrentlyShownView(view);
+		try {
+			ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
+			MappingEditorView view = new ConceptEditorView(conceptEditorPresenter, this);
+	        changeCurrentlyShownView(view);
+		} catch (VariableAlreadyExistsException | UnsupportedObjectTypeInTriplet | RelationDoesNotExistException
+				| InvalidVariableNameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public void switchToRelationEditorView() {
-        MappingEditorView view = new RelationEditorView(this);
-        new MappingEditorPresenter(view);
-        changeCurrentlyShownView(view);
+		try {
+			RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
+			MappingEditorView view = new RelationEditorView(relationEditorPresenter, this);
+	        changeCurrentlyShownView(view);
+		} catch (VariableAlreadyExistsException | UnsupportedObjectTypeInTriplet | InvalidVariableNameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public void switchToArchitectureRulesView() {

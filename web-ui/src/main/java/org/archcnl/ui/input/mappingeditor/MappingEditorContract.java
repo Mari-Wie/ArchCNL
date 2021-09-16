@@ -6,12 +6,13 @@ import org.archcnl.domain.input.model.mappings.VariableManager;
 
 public interface MappingEditorContract {
 
-    public interface View<T extends Presenter> {
+    public interface View {
 
-        public void setPresenter(T presenter);
     }
 
-    public interface Presenter extends Serializable {
+    public interface Presenter<T extends View> extends Serializable {
+    	
+    	public void setView(T view);
 
         public void nameHasChanged(String newName);
         

@@ -1,6 +1,9 @@
 package org.archcnl.ui.input.mappingeditor;
 
 import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
+import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
@@ -10,16 +13,19 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView
-        implements MappingEditorContract.View<MappingEditorContract.Presenter> {
+        implements MappingEditorContract.View {
 
     private static final long serialVersionUID = 156879235315976468L;
 
-    private MappingEditorContract.Presenter presenter;
+    protected MappingEditorContract.Presenter<View> presenter;
 
     protected TextField mappingName;
 
-    protected MappingEditorView(InputView parent, String headline) {
-        Label title = new Label(headline);
+    protected MappingEditorView(MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
+    	this.presenter = presenter;
+    	this.presenter.setView(this);
+    	
+        Label title = new Label("Create or edit a " + mappingType);
         Button closeButton =
                 new Button(
                         new Icon(VaadinIcon.CLOSE),
@@ -31,7 +37,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         add(titleBar);
 
         mappingName = new TextField("Name");
-        mappingName.setPlaceholder("Choose a unique name");
+        mappingName.setPlaceholder("Unique name");
         add(mappingName);
 
         // TODO: add used in and description functionality
@@ -41,14 +47,10 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                 .getElement()
                 .setProperty(
                         "title",
-                        "Is necessary to find the code elements that correspond to this Concept/Relation");
+                        "Is necessary to find the code elements that correspond to this" + mappingType);
         add(mappingHeadline);
         
-        //add(new TripletView());
-    }
-
-    @Override
-    public void setPresenter(MappingEditorContract.Presenter presenter) {
-        this.presenter = presenter;
+        TripletPresenter tripletPresenter = new TripletPresenter();
+        add(new TripletView(tripletPresenter, presenter));
     }
 }
