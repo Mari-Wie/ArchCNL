@@ -4,14 +4,13 @@ import java.util.List;
 
 public interface MappingListEntry {
 
-	public Object getContent();
-	
-	public List<MappingListEntry> getChildren();
+    public Object getContent();
 
-	public String toString();
+    public List<MappingListEntry> getChildren();
 
-	boolean isLeaf();
+    public String toString();
 
-	boolean isAlterable();
-	
+    boolean isLeaf();
+
+    boolean isAlterable();
 }

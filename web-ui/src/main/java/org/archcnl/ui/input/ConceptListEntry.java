@@ -13,11 +13,9 @@ public class ConceptListEntry implements MappingListEntry {
     private boolean isLeaf;
 
     public ConceptListEntry(String name, List<Concept> list) {
-    	children =
+        children =
                 list.stream()
-                        .map(
-                                entry ->
-                                                new ConceptListEntry(entry.toString(), entry))
+                        .map(entry -> new ConceptListEntry(entry.toString(), entry))
                         .collect(Collectors.toList());
         this.name = name;
         isLeaf = false;
@@ -33,9 +31,9 @@ public class ConceptListEntry implements MappingListEntry {
     public Concept getContent() {
         return content;
     }
-    
+
     public List<MappingListEntry> getChildren() {
-    	return children;
+        return children;
     }
 
     @Override

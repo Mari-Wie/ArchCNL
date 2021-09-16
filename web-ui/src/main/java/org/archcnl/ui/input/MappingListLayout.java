@@ -14,18 +14,19 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
         addComponentHierarchyColumn(
                 entry -> {
                     MappingListEntryLayout entryLayout = new MappingListEntryLayout(entry);
-                    
-                    if(entry.isLeaf()) {
-                    	DragSource<MappingListEntryLayout> dragSource = DragSource.create(entryLayout);
-                    	dragSource.addDragStartListener(event -> {
-                    	});
-                    	// TODO: Change this to the desired behavior
-                    	dragSource.setDragData(entry.getContent().toString());
-                    	dragSource.addDragEndListener(event -> {
-            			System.out.println(dragSource.getDragData());
-            		});
+
+                    if (entry.isLeaf()) {
+                        DragSource<MappingListEntryLayout> dragSource =
+                                DragSource.create(entryLayout);
+                        dragSource.addDragStartListener(event -> {});
+                        // TODO: Change this to the desired behavior
+                        dragSource.setDragData(entry.getContent().toString());
+                        dragSource.addDragEndListener(
+                                event -> {
+                                    System.out.println(dragSource.getDragData());
+                                });
                     }
-            		
+
                     return entryLayout;
                 });
     }

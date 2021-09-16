@@ -13,11 +13,9 @@ public class RelationListEntry implements MappingListEntry {
     private boolean isLeaf;
 
     public RelationListEntry(String name, List<Relation> list) {
-    	children =
+        children =
                 list.stream()
-                        .map(
-                                entry ->
-                                                new RelationListEntry(entry.toString(), entry))
+                        .map(entry -> new RelationListEntry(entry.toString(), entry))
                         .collect(Collectors.toList());
         this.name = name;
         isLeaf = false;
@@ -33,9 +31,9 @@ public class RelationListEntry implements MappingListEntry {
     public Relation getContent() {
         return content;
     }
-    
+
     public List<MappingListEntry> getChildren() {
-    	return children;
+        return children;
     }
 
     @Override
