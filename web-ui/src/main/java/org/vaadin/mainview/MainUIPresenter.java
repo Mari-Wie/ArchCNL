@@ -1,16 +1,18 @@
 package org.vaadin.mainview;
 
 import com.vaadin.flow.component.Component;
+import org.archcnl.ui.input.InputView;
 
 public class MainUIPresenter {
 
     private MainUI view;
-    private Component resultView, ruleView;
+    private Component resultView, ruleView, inputView;
 
     public MainUIPresenter(MainUI view) {
         this.view = view;
         ruleView = new TestView(this);
         resultView = new TestView2(this);
+        inputView = new InputView();
     }
 
     public void setView(MainUI view) {
@@ -18,7 +20,7 @@ public class MainUIPresenter {
     }
 
     public Component getArchitectureRuleView() {
-        return ruleView;
+        return inputView;
     }
 
     public Component getResultView() {
@@ -26,7 +28,7 @@ public class MainUIPresenter {
     }
 
     public void setArchitectureRuleView() {
-        view.setContent(ruleView);
+        view.setContent(inputView);
         System.out.println("setArchitectureRuleView()");
     }
 
