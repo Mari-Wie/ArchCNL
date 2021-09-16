@@ -6,20 +6,20 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.Relation;
 
-public class TreeGridListEntry<T> {
+public class MappingListEntry<T> {
 
     private List<T> children;
     private String name;
     private T content;
     private boolean isLeaf;
 
-    public TreeGridListEntry(String name, List<T> children) {
+    public MappingListEntry(String name, List<T> children) {
         this.children = children;
         this.name = name;
         isLeaf = false;
     }
 
-    public TreeGridListEntry(String name, T content) {
+    public MappingListEntry(String name, T content) {
         this.name = name;
         this.content = content;
         children = Collections.<T>emptyList();
@@ -30,13 +30,13 @@ public class TreeGridListEntry<T> {
         return content;
     }
 
-    public List<TreeGridListEntry<T>> getHierarchicalChildren() {
-        List<TreeGridListEntry<T>> hierarchicalChildren =
+    public List<MappingListEntry<T>> getHierarchicalChildren() {
+        List<MappingListEntry<T>> hierarchicalChildren =
                 children.stream()
                         .map(
                                 entry ->
-                                        (TreeGridListEntry<T>)
-                                                new TreeGridListEntry<>(entry.toString(), entry))
+                                        (MappingListEntry<T>)
+                                                new MappingListEntry<>(entry.toString(), entry))
                         .collect(Collectors.toList());
         return hierarchicalChildren;
     }

@@ -18,8 +18,8 @@ public class ConceptAndRelationView extends VerticalLayout {
     CreateNewLayout createNewRelationLayout =
             new CreateNewLayout("Relations", "Create new relation");
     HorizontalLayout bottomBarLayout = new HorizontalLayout();
-    TreeGridListLayout<Concept> conceptTreeGrid;
-    TreeGridListLayout<Relation> relationTreeGrid;
+    MappingListLayout<Concept> conceptTreeGrid;
+    MappingListLayout<Relation> relationTreeGrid;
 
     public ConceptAndRelationView() {
         createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
@@ -27,21 +27,21 @@ public class ConceptAndRelationView extends VerticalLayout {
 
         List<Concept> concepts =
                 RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
-        List<TreeGridListEntry<Concept>> conceptData = new LinkedList<>();
-        TreeGridListEntry<Concept> defaultConceptsStub =
-                new TreeGridListEntry<>("Default Concepts", concepts);
+        List<MappingListEntry<Concept>> conceptData = new LinkedList<>();
+        MappingListEntry<Concept> defaultConceptsStub =
+                new MappingListEntry<>("Default Concepts", concepts);
         conceptData.add(defaultConceptsStub);
 
-        conceptTreeGrid = new TreeGridListLayout<Concept>(conceptData);
+        conceptTreeGrid = new MappingListLayout<Concept>(conceptData);
 
         List<Relation> relations =
                 RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
-        List<TreeGridListEntry<Relation>> relationData = new LinkedList<>();
-        TreeGridListEntry<Relation> defaultRelationsStub =
-                new TreeGridListEntry<>("Default Relations", relations);
+        List<MappingListEntry<Relation>> relationData = new LinkedList<>();
+        MappingListEntry<Relation> defaultRelationsStub =
+                new MappingListEntry<>("Default Relations", relations);
         relationData.add(defaultRelationsStub);
 
-        relationTreeGrid = new TreeGridListLayout<Relation>(relationData);
+        relationTreeGrid = new MappingListLayout<Relation>(relationData);
 
         setUpBottomBar();
 
