@@ -1,12 +1,13 @@
 package org.archcnl.ui.input.mappingeditor;
 
+import org.archcnl.ui.input.InputView;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import org.archcnl.ui.input.InputView;
 
 public abstract class MappingCreationView extends RulesOrMappingCreationView
         implements MappingCreationContract.View<MappingCreationContract.Presenter> {
@@ -42,6 +43,8 @@ public abstract class MappingCreationView extends RulesOrMappingCreationView
                         "title",
                         "Is necessary to find the code elements that correspond to this Concept/Relation");
         add(mappingHeadline);
+        
+        //add(new TripletView());
     }
 
     @Override

@@ -1,8 +1,12 @@
 package org.archcnl.ui.input.mappingeditor;
 
-public class MappingCreationPresenter implements MappingCreationContract.Presenter {
+import org.archcnl.ui.input.mappingeditor.MappingCreationContract.Presenter;
 
-    public MappingCreationPresenter(MappingCreationView view) {
+public abstract class MappingCreationPresenter implements MappingCreationContract.Presenter {
+
+	private static final long serialVersionUID = -9123529250149326943L;
+
+	public MappingCreationPresenter(MappingCreationContract.View<Presenter> view) {
         view.setPresenter(this);
     }
 
@@ -10,4 +14,5 @@ public class MappingCreationPresenter implements MappingCreationContract.Present
     public void nameHasChanged(String newName) {
         System.out.println(newName);
     }
+	
 }
