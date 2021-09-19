@@ -9,7 +9,6 @@ public class BooleanSelectionView extends ComboBox<String> {
 
     public BooleanSelectionView() {
         setLabel("Object");
-        setPlaceholder("Boolean");
         String[] items = {"True", "False"};
         setItems(items);
         setValue("False");

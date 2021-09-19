@@ -18,9 +18,9 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
         SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
         presenter.setSubjectPresenter(subjectPresenter);
         SubjectView subjectView = new SubjectView(subjectPresenter);
-        ObjectPresenter objectPresenter = new ObjectPresenter();
+        ObjectPresenter objectPresenter = new ObjectPresenter(variableManager);
         presenter.setObjectPresenter(objectPresenter);
-        ObjectView objectView = new ObjectView(objectPresenter, variableManager);
+        ObjectView objectView = new ObjectView(objectPresenter);
         PredicatePresenter predicatePresenter = new PredicatePresenter(objectPresenter);
         presenter.setPredicatePresenter(predicatePresenter);
         PredicateView predicateView = new PredicateView(predicatePresenter);

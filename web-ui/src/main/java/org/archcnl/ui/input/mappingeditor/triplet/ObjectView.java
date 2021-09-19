@@ -15,24 +15,16 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
     private static final long serialVersionUID = -1105253743414019620L;
     private Presenter<View> presenter;
     private ConceptSelectionView conceptSelectionView;
-    private BooleanSelectionView booleanSelectionView;
-    private StringSelectionView stringSelectionView;
-    private VariableSelectionView variableSelectionView;
-    private VariableSelectionPresenter variableSelectionPresenter;
-    private VariableManager variableManager;
+    private VariableStringBoolSelectionView variableStringBoolSelectionView;
 
-    public ObjectView(ObjectContract.Presenter<View> presenter, VariableManager variableManager) {
+    public ObjectView(ObjectContract.Presenter<View> presenter) {
         this.presenter = presenter;
         this.presenter.setView(this);
-        this.variableManager = variableManager;
     }
 
     private void resetViews() {
         conceptSelectionView = null;
-        booleanSelectionView = null;
-        stringSelectionView = null;
-        variableSelectionView = null;
-        variableSelectionPresenter = null;
+        variableStringBoolSelectionView = null;
     }
 
     @Override
@@ -49,25 +41,13 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
     }
 
     @Override
-    public void switchToVariableView() {
+    public void switchToVariableStringBooleanView(
+            VariableManager variableManager, boolean stringsAllowed, boolean booleansAllowed) {
         clearView();
-        variableSelectionPresenter = new VariableSelectionPresenter(variableManager);
-        variableSelectionView = new VariableSelectionView(variableSelectionPresenter);
-        add(variableSelectionView);
-    }
-
-    @Override
-    public void switchToBooleanView() {
-        clearView();
-        booleanSelectionView = new BooleanSelectionView();
-        add(booleanSelectionView);
-    }
-
-    @Override
-    public void switchToStringView() {
-        clearView();
-        stringSelectionView = new StringSelectionView();
-        add(stringSelectionView);
+        variableStringBoolSelectionView =
+                new VariableStringBoolSelectionView(
+                        variableManager, stringsAllowed, booleansAllowed);
+        add(variableStringBoolSelectionView);
     }
 
     @Override
@@ -77,15 +57,8 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         ObjectType object;
         if (conceptSelectionView != null) {
             object = conceptSelectionView.getObject();
-        } else if (booleanSelectionView != null) {
-            object = booleanSelectionView.getObject();
-        } else if (stringSelectionView != null) {
-            object = stringSelectionView.getObject();
-        } else if (variableSelectionView != null && variableSelectionPresenter != null) {
-            object = variableSelectionPresenter.getSelectedVariable();
         } else {
-            // should never happen
-            throw new RuntimeException("ObjectView implementation is faulty.");
+            object = variableStringBoolSelectionView.getObject();
         }
         return object;
     }

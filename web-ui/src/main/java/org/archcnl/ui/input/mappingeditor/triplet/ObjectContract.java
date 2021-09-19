@@ -4,6 +4,7 @@ import java.io.Serializable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
 import org.archcnl.domain.input.model.mappings.ObjectType;
+import org.archcnl.domain.input.model.mappings.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
 
@@ -19,11 +20,8 @@ public interface ObjectContract {
 
         public void switchToConceptView();
 
-        public void switchToVariableView();
-
-        public void switchToBooleanView();
-
-        public void switchToStringView();
+        public void switchToVariableStringBooleanView(
+                VariableManager variableManager, boolean stringsAllowed, boolean booleansAllowed);
     }
 
     public interface Presenter<T extends View> extends Serializable {
