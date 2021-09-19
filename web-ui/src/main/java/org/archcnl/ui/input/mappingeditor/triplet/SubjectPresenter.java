@@ -52,4 +52,14 @@ public class SubjectPresenter implements Presenter<View> {
             view.showErrorMessage("Variable already exists");
         }
     }
+
+    @Override
+    public boolean doesVariableExist(String variableName) {
+        try {
+            superPresenter.getVariableManager().getVariableByName(variableName);
+            return true;
+        } catch (VariableDoesNotExistException e) {
+            return false;
+        }
+    }
 }

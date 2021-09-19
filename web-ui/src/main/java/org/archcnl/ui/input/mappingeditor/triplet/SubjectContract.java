@@ -24,5 +24,7 @@ public interface SubjectContract {
         public List<String> getVariableNames();
 
         public void addCustomValue(String variableName);
+
+        public boolean doesVariableExist(String variableName);
     }
 }
