@@ -23,7 +23,7 @@ public class PredicateView extends ComboBox<String>
 
         addValueChangeListener(
                 event -> {
-                    // Check is relation can relate to object
+                    presenter.valueHasChanged();
                     setInvalid(false);
                 });
         addDropListener(event -> event.getDragData().ifPresent(presenter::handleDropEvent));

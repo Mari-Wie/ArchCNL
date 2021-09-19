@@ -1,11 +1,15 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.mappings.Concept;
-import org.archcnl.ui.input.mappingeditor.exceptions.ConceptNotDefinedException;
+import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
+import org.archcnl.domain.input.model.mappings.BooleanValue;
+import org.archcnl.domain.input.model.mappings.ObjectType;
+import org.archcnl.domain.input.model.mappings.Relation;
+import org.archcnl.domain.input.model.mappings.StringValue;
+import org.archcnl.domain.input.model.mappings.TypeRelation;
+import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.View;
 
 public class ObjectPresenter implements ObjectContract.Presenter<View> {
@@ -18,17 +22,32 @@ public class ObjectPresenter implements ObjectContract.Presenter<View> {
         this.view = view;
     }
 
-    @Override
-    public List<String> getConceptNames() {
-        return RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts().stream()
-                .map(Concept::getName)
-                .collect(Collectors.toList());
+    public ObjectType getObject()
+            throws ConceptDoesNotExistException, ObjectNotDefinedException,
+                    VariableDoesNotExistException, SubjectNotDefinedException {
+        return view.getObject();
     }
 
-    public Concept getObject() throws ConceptDoesNotExistException, ConceptNotDefinedException {
-        String conceptName = view.getSelectedItem().orElseThrow(ConceptNotDefinedException::new);
-        return RulesConceptsAndRelations.getInstance()
-                .getConceptManager()
-                .getConceptByName(conceptName);
+    public void predicateHasChanged(Optional<Relation> relationOptional) {
+        if (relationOptional.isEmpty()) {
+            view.clearView();
+        } else {
+            Relation relation = relationOptional.orElseThrow();
+            if (relation instanceof TypeRelation) {
+                view.switchToConceptView();
+            } else if (relation.canRelateToObjectType(new StringValue(""))) {
+                // only works correctly under the assumption that a relation that can relate to a
+                // string cannot relate to any other ObjectType
+                view.switchToStringView();
+            } else if (relation.canRelateToObjectType(new BooleanValue(false))) {
+                // only works correctly under the assumption that a relation that can relate to a
+                // boolean cannot relate to any other ObjectType
+                view.switchToBooleanView();
+            } else {
+                // only works correctly under the assumption that a relation that can relate to a
+                // concept cannot relate to any other ObjectType
+                view.switchToVariableView();
+            }
+        }
     }
 }

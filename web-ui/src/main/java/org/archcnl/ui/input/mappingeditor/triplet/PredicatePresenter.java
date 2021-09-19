@@ -1,6 +1,8 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
@@ -13,6 +15,11 @@ public class PredicatePresenter implements Presenter<View> {
 
     private static final long serialVersionUID = 6266956055576570360L;
     private View view;
+    private ObjectPresenter objectPresenter;
+
+    public PredicatePresenter(ObjectPresenter objectPresenter) {
+        this.objectPresenter = objectPresenter;
+    }
 
     @Override
     public void setView(View view) {
@@ -42,5 +49,20 @@ public class PredicatePresenter implements Presenter<View> {
         } else {
             view.showErrorMessage("Not a Relation");
         }
+    }
+
+    @Override
+    public void valueHasChanged() {
+        Relation relation = null;
+        try {
+            String newValue = view.getSelectedItem().orElseThrow(NoSuchElementException::new);
+            relation =
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .getRelationByName(newValue);
+        } catch (RelationDoesNotExistException | NoSuchElementException e) {
+            // leave relation == null
+        }
+        objectPresenter.predicateHasChanged(Optional.ofNullable(relation));
     }
 }

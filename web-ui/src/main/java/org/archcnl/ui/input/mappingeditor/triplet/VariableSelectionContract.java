@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface SubjectContract {
+public class VariableSelectionContract {
 
     public interface View {
 

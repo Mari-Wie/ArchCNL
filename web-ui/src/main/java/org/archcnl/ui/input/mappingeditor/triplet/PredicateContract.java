@@ -24,5 +24,7 @@ public interface PredicateContract {
         public List<String> getRelationNames();
 
         public void handleDropEvent(Object data);
+
+        public void valueHasChanged();
     }
 }
