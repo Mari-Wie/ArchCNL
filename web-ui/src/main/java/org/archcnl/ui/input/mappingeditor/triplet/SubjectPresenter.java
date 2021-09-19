@@ -60,4 +60,14 @@ public class SubjectPresenter implements Presenter<View> {
             return false;
         }
     }
+
+    @Override
+    public void handleDropEvent(Object data) {
+        if (data instanceof Variable) {
+            Variable variable = (Variable) data;
+            view.setItem(variable.getName());
+        } else {
+            view.showErrorMessage("Not a Variable");
+        }
+    }
 }

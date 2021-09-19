@@ -1,12 +1,14 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dnd.DropTarget;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.ui.input.mappingeditor.triplet.SubjectContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.triplet.SubjectContract.View;
 
-public class SubjectView extends ComboBox<String> implements SubjectContract.View {
+public class SubjectView extends ComboBox<String>
+        implements SubjectContract.View, DropTarget<SubjectView> {
 
     private static final long serialVersionUID = 3452412403240444015L;
 
@@ -17,6 +19,7 @@ public class SubjectView extends ComboBox<String> implements SubjectContract.Vie
     public SubjectView(SubjectContract.Presenter<View> presenter) {
         this.presenter = presenter;
         this.presenter.setView(this);
+        setActive(true);
         setLabel("Subject");
         setPlaceholder("Variable");
         updateItems();
@@ -38,6 +41,7 @@ public class SubjectView extends ComboBox<String> implements SubjectContract.Vie
                     }
                     setInvalid(false);
                 });
+        addDropListener(event -> event.getDragData().ifPresent(presenter::handleDropEvent));
     }
 
     private void addCreateItem(String currentFilter) {

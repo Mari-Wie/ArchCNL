@@ -26,5 +26,7 @@ public interface SubjectContract {
         public void addCustomValue(String variableName);
 
         public boolean doesVariableExist(String variableName);
+
+        public void handleDropEvent(Object data);
     }
 }

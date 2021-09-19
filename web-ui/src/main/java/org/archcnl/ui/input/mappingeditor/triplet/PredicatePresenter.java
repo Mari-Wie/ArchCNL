@@ -39,6 +39,8 @@ public class PredicatePresenter implements Presenter<View> {
         if (data instanceof Relation) {
             Relation relation = (Relation) data;
             view.setItem(relation.getName());
+        } else {
+            view.showErrorMessage("Not a Relation");
         }
     }
 }
