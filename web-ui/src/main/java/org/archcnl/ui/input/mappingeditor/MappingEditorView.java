@@ -52,6 +52,6 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         add(mappingHeadline);
 
         TripletPresenter tripletPresenter = new TripletPresenter();
-        add(new TripletView(tripletPresenter, presenter));
+        add(new TripletView(tripletPresenter, presenter.getVariableManager()));
     }
 }

@@ -1,7 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract;
+import org.archcnl.domain.input.model.mappings.VariableManager;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
 
@@ -11,13 +11,11 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
 
     private Presenter<View> presenter;
 
-    public TripletView(
-            Presenter<View> presenter,
-            MappingEditorContract.Presenter<MappingEditorContract.View> superPresenter) {
+    public TripletView(Presenter<View> presenter, VariableManager variableManager) {
         this.presenter = presenter;
         this.presenter.setView(this);
 
-        SubjectPresenter subjectPresenter = new SubjectPresenter(superPresenter);
+        SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
         presenter.setSubjectPresenter(subjectPresenter);
         SubjectView subjectView = new SubjectView(subjectPresenter);
         PredicatePresenter predicatePresenter = new PredicatePresenter();
