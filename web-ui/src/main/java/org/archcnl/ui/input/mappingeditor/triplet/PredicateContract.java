@@ -13,6 +13,8 @@ public interface PredicateContract {
         public void showErrorMessage(String message);
 
         public Optional<String> getSelectedItem();
+
+        public void setItem(String relationName);
     }
 
     public interface Presenter<T extends View> extends Serializable {
@@ -20,5 +22,7 @@ public interface PredicateContract {
         public void setView(T view);
 
         public List<String> getRelationNames();
+
+        public void handleDropEvent(Object data);
     }
 }

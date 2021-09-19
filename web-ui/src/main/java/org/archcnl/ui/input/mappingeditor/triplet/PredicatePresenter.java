@@ -33,4 +33,12 @@ public class PredicatePresenter implements Presenter<View> {
                 .getRelationManager()
                 .getRelationByName(relationName);
     }
+
+    @Override
+    public void handleDropEvent(Object data) {
+        if (data instanceof Relation) {
+            Relation relation = (Relation) data;
+            view.setItem(relation.getName());
+        }
+    }
 }
