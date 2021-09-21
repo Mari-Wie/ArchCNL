@@ -20,6 +20,7 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
     public ObjectView(ObjectContract.Presenter<View> presenter) {
         this.presenter = presenter;
         this.presenter.setView(this);
+        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
     }
 
     private void resetViews() {

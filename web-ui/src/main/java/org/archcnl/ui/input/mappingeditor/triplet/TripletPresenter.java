@@ -60,4 +60,14 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
         }
         return new Triplet(subject, predicate, object);
     }
+
+    @Override
+    public void mouseEnter() {
+        view.setAddButtonVisible(true);
+    }
+
+    @Override
+    public void mouseLeave() {
+        view.setAddButtonVisible(false);
+    }
 }
