@@ -40,10 +40,11 @@ public class TripletView extends VerticalLayout implements TripletContract.View 
         triplet.add(predicateView);
         triplet.add(objectView);
         mainRow.add(triplet);
-        mainRow.add(new Button(new Icon(VaadinIcon.TRASH)));
+        mainRow.add(
+                new Button(new Icon(VaadinIcon.TRASH), click -> presenter.deleteButtonPressed()));
 
         add(mainRow);
-        addButton = new Button(new Icon(VaadinIcon.PLUS));
+        addButton = new Button(new Icon(VaadinIcon.PLUS), click -> presenter.addButtonPressed());
         addButton.setWidthFull();
 
         getElement().addEventListener("mouseover", e -> presenter.mouseEnter());
@@ -57,5 +58,9 @@ public class TripletView extends VerticalLayout implements TripletContract.View 
         } else {
             remove(addButton);
         }
+    }
+
+    public Presenter<View> getPresenter() {
+        return presenter;
     }
 }

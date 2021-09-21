@@ -8,6 +8,7 @@ import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.domain.input.model.mappings.Variable;
+import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
@@ -21,6 +22,14 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     private PredicatePresenter predicatePresenter;
     private ObjectPresenter objectPresenter;
     private View view;
+    private AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
+            andTripletsEditorPresenter;
+
+    public TripletPresenter(
+            AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
+                    andTripletsEditorPresenter) {
+        this.andTripletsEditorPresenter = andTripletsEditorPresenter;
+    }
 
     @Override
     public void setSubjectPresenter(SubjectPresenter subjectPresenter) {
@@ -69,5 +78,15 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     @Override
     public void mouseLeave() {
         view.setAddButtonVisible(false);
+    }
+
+    @Override
+    public void deleteButtonPressed() {
+        andTripletsEditorPresenter.deleteTripletView(view);
+    }
+
+    @Override
+    public void addButtonPressed() {
+        andTripletsEditorPresenter.addNewTripletViewAfter(view);
     }
 }

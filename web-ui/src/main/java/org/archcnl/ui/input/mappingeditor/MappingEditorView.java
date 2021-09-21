@@ -8,8 +8,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView
         implements MappingEditorContract.View {
@@ -51,7 +49,8 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                                 + mappingType);
         add(mappingHeadline);
 
-        TripletPresenter tripletPresenter = new TripletPresenter();
-        add(new TripletView(tripletPresenter, presenter.getVariableManager()));
+        AndTripletsEditorPresenter andTripletsEditorPresenter =
+                new AndTripletsEditorPresenter(presenter.getVariableManager());
+        add(new AndTripletsEditorView(andTripletsEditorPresenter));
     }
 }

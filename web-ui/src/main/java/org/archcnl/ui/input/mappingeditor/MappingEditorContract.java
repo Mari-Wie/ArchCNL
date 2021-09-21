@@ -14,8 +14,5 @@ public interface MappingEditorContract {
         public void nameHasChanged(String newName);
 
         public VariableManager getVariableManager();
-
-        // public void saveMapping();
-
     }
 }

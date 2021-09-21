@@ -22,5 +22,9 @@ public interface TripletContract {
         public void mouseEnter();
 
         public void mouseLeave();
+
+        public void deleteButtonPressed();
+
+        public void addButtonPressed();
     }
 }
