@@ -1,8 +1,8 @@
 package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -25,9 +25,10 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         this.presenter = presenter;
         this.presenter.setView(this);
 
+        setPadding(false);
         content = new VerticalLayout();
         content.getStyle().set("border", "1px solid black");
-        content.add(new Text("AndBlock: All rows in this block are \"AND\" connected"));
+        content.add(new Label("AndBlock: All rows in this block are \"AND\" connected"));
         content.add(createTripletView());
         add(content);
 

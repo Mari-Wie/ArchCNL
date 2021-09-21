@@ -20,6 +20,7 @@ public class TripletView extends VerticalLayout implements TripletContract.View 
         this.presenter = presenter;
         this.presenter.setView(this);
 
+        setPadding(false);
         SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
         presenter.setSubjectPresenter(subjectPresenter);
         SubjectView subjectView = new SubjectView(subjectPresenter);

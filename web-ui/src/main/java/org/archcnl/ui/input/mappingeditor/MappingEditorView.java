@@ -39,19 +39,15 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
 
         mappingName = new TextField("Name");
         mappingName.setPlaceholder("Unique name");
+        mappingName.addValueChangeListener(event -> presenter.nameHasChanged(event.getValue()));
         add(mappingName);
 
         // TODO: add used in and description functionality
 
-        Label mappingHeadline = new Label("Architecture to Code Mapping");
-        mappingHeadline
-                .getElement()
-                .setProperty(
-                        "title",
-                        "Is necessary to find the code elements that correspond to this"
-                                + mappingType);
-        add(mappingHeadline);
+        add(new Label("When"));
         add(createAndTripletsView());
+        add(new Label("Then"));
+        addThenTripletView();
     }
 
     @Override
@@ -79,9 +75,16 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void updateNameField(String newName) {
+        mappingName.setValue(newName);
+    }
+
     private AndTripletsEditorView createAndTripletsView() {
         AndTripletsEditorPresenter andTripletsEditorPresenter =
                 new AndTripletsEditorPresenter(presenter.getVariableManager(), presenter);
         return new AndTripletsEditorView(andTripletsEditorPresenter);
     }
+
+    protected abstract void addThenTripletView();
 }

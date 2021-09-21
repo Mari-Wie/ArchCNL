@@ -5,7 +5,6 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.domain.input.model.mappings.Variable;
 
 public class RelationEditorPresenter extends MappingEditorPresenter {
 
@@ -15,7 +14,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     public RelationEditorPresenter()
             throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
                     InvalidVariableNameException {
-        this.mapping = new RelationMapping(new Variable("Test"), null, null, null);
+        super();
     }
 
     public RelationEditorPresenter(RelationMapping mapping) {

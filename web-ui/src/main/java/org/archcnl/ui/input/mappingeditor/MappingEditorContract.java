@@ -13,6 +13,10 @@ public interface MappingEditorContract {
         public void deleteAndTripletsView(AndTripletsEditorContract.View andTripletsView);
 
         public List<AndTripletsEditorPresenter> getAndTripletsPresenters();
+
+        public void updateNameField(String newName);
+
+        public void updateNameFieldInThenTriplet(String newName);
     }
 
     public interface Presenter<T extends View> extends Serializable {

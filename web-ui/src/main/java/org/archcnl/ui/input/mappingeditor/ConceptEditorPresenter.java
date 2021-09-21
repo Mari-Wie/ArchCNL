@@ -6,7 +6,6 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.Mapping;
-import org.archcnl.domain.input.model.mappings.Variable;
 
 public class ConceptEditorPresenter extends MappingEditorPresenter {
 
@@ -16,7 +15,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     public ConceptEditorPresenter()
             throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
                     RelationDoesNotExistException, InvalidVariableNameException {
-        this.mapping = new ConceptMapping(new Variable("Test"), null, null);
+        super();
     }
 
     public ConceptEditorPresenter(ConceptMapping mapping) {

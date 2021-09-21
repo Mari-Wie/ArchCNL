@@ -11,15 +11,21 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
 
     private static final long serialVersionUID = -9123529250149326943L;
     private View view;
+    private VariableManager variableManager;
+
+    public MappingEditorPresenter() {
+        this.variableManager = new VariableManager();
+    }
 
     @Override
     public void nameHasChanged(String newName) {
-        System.out.println(newName);
+        view.updateNameField(newName);
+        view.updateNameFieldInThenTriplet(newName);
     }
 
     @Override
     public VariableManager getVariableManager() {
-        return getMapping().getVariableManager();
+        return variableManager;
     }
 
     @Override
