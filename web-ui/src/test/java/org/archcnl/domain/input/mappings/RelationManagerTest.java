@@ -216,7 +216,7 @@ class RelationManagerTest {
         assertEquals(30, relationManager.getRelations().size());
         CustomRelation XYZ_extracted =
                 (CustomRelation) relationManager.getRelationByName("withMapping");
-        assertEquals(1, XYZ_extracted.getMapping().getWhenTriplets().size());
+        assertEquals(1, XYZ_extracted.getMapping().get().getWhenTriplets().size());
 
         CustomRelation XYZ2 = new CustomRelation("withMapping");
         List<AndTriplets> when2 = new LinkedList<>();
@@ -237,6 +237,6 @@ class RelationManagerTest {
         relationManager.addOrAppend(XYZ2);
         assertEquals(30, relationManager.getRelations().size());
         XYZ_extracted = (CustomRelation) relationManager.getRelationByName("withMapping");
-        assertEquals(2, XYZ_extracted.getMapping().getWhenTriplets().size());
+        assertEquals(2, XYZ_extracted.getMapping().get().getWhenTriplets().size());
     }
 }

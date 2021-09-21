@@ -2,10 +2,12 @@ package org.archcnl.domain.input.model.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 
 public class RelationManager {
 
@@ -28,7 +30,7 @@ public class RelationManager {
         }
     }
 
-    public void addOrAppend(CustomRelation relation) {
+    public void addOrAppend(CustomRelation relation) throws UnrelatedMappingException {
         try {
             if (!doesRelationExist(relation)) {
                 addRelation(relation);
@@ -36,9 +38,13 @@ public class RelationManager {
                 Relation existingRelation = getRelationByName(relation.getName());
                 if (existingRelation instanceof CustomRelation) {
                     CustomRelation existingCustomRelation = (CustomRelation) existingRelation;
-                    existingCustomRelation
-                            .getMapping()
-                            .addAllAndTriplets(relation.getMapping().getWhenTriplets());
+                    Optional<RelationMapping> existingMapping = existingCustomRelation.getMapping();
+                    Optional<RelationMapping> newMapping = relation.getMapping();
+                    if (existingMapping.isPresent() && newMapping.isPresent()) {
+                        existingMapping.get().addAllAndTriplets(newMapping.get().getWhenTriplets());
+                    } else if (existingMapping.isEmpty() && newMapping.isPresent()) {
+                        existingCustomRelation.setMapping(newMapping.get());
+                    }
                 }
             }
         } catch (RelationAlreadyExistsException | RelationDoesNotExistException e) {

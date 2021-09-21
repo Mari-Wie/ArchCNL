@@ -123,7 +123,7 @@ class ConceptManagerTest {
         assertEquals(15, conceptManager.getConcepts().size());
         CustomConcept XYZ_extracted =
                 (CustomConcept) conceptManager.getConceptByName("WithMapping");
-        assertEquals(1, XYZ_extracted.getMapping().getWhenTriplets().size());
+        assertEquals(1, XYZ_extracted.getMapping().get().getWhenTriplets().size());
 
         CustomConcept XYZ2 = new CustomConcept("WithMapping");
         List<AndTriplets> when2 = new LinkedList<>();
@@ -143,6 +143,6 @@ class ConceptManagerTest {
         conceptManager.addOrAppend(XYZ2);
         assertEquals(15, conceptManager.getConcepts().size());
         XYZ_extracted = (CustomConcept) conceptManager.getConceptByName("WithMapping");
-        assertEquals(2, XYZ_extracted.getMapping().getWhenTriplets().size());
+        assertEquals(2, XYZ_extracted.getMapping().get().getWhenTriplets().size());
     }
 }

@@ -1,11 +1,7 @@
 package org.archcnl.domain.input.model.mappings;
 
-import java.util.LinkedList;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class CustomConcept extends Concept {
 
@@ -13,12 +9,8 @@ public class CustomConcept extends Concept {
 
     private ConceptMapping mapping;
 
-    public CustomConcept(String name)
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, InvalidVariableNameException {
+    public CustomConcept(String name) {
         super(name);
-        // TODO: Allow for thenVariable to be null
-        mapping = new ConceptMapping(new Variable("placeholder"), new LinkedList<>(), this);
     }
 
     public void setMapping(ConceptMapping mapping) throws UnrelatedMappingException {
@@ -30,8 +22,8 @@ public class CustomConcept extends Concept {
         }
     }
 
-    public ConceptMapping getMapping() {
-        return mapping;
+    public Optional<ConceptMapping> getMapping() {
+        return Optional.ofNullable(mapping);
     }
 
     @Override

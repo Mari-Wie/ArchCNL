@@ -2,9 +2,11 @@ package org.archcnl.domain.input.model.mappings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 
 public class ConceptManager {
 
@@ -23,7 +25,7 @@ public class ConceptManager {
         }
     }
 
-    public void addOrAppend(CustomConcept concept) {
+    public void addOrAppend(CustomConcept concept) throws UnrelatedMappingException {
         try {
             if (!doesConceptExist(concept)) {
                 addConcept(concept);
@@ -31,9 +33,13 @@ public class ConceptManager {
                 Concept existingConcept = getConceptByName(concept.getName());
                 if (existingConcept instanceof CustomConcept) {
                     CustomConcept existingCustomConcept = (CustomConcept) existingConcept;
-                    existingCustomConcept
-                            .getMapping()
-                            .addAllAndTriplets(concept.getMapping().getWhenTriplets());
+                    Optional<ConceptMapping> existingMapping = existingCustomConcept.getMapping();
+                    Optional<ConceptMapping> newMapping = concept.getMapping();
+                    if (existingMapping.isPresent() && newMapping.isPresent()) {
+                        existingMapping.get().addAllAndTriplets(newMapping.get().getWhenTriplets());
+                    } else if (existingMapping.isEmpty() && newMapping.isPresent()) {
+                        existingCustomConcept.setMapping(newMapping.get());
+                    }
                 }
             }
         } catch (ConceptAlreadyExistsException | ConceptDoesNotExistException e) {
