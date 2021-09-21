@@ -17,7 +17,6 @@ public class ConceptMapping extends Mapping {
             throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
                     RelationDoesNotExistException {
         super(whenTriplets);
-        getVariableManager().addVariable(thenVariable);
         this.thisConcept = thisConcept;
         thenTriplet =
                 new Triplet(
@@ -29,17 +28,6 @@ public class ConceptMapping extends Mapping {
     }
 
     public void updateThenTriplet(Variable subject) {
-        if (!getVariableManager().doesVariableExist(subject)) {
-            try {
-                getVariableManager().addVariable(subject);
-            } catch (VariableAlreadyExistsException e) {
-                // Cannot occur
-                throw new RuntimeException(
-                        "Unexpected error during creation of variable \""
-                                + subject.getName()
-                                + "\".");
-            }
-        }
         thenTriplet.setSubject(subject);
     }
 

@@ -1,9 +1,10 @@
-package org.archcnl.domain.input.model.mappings;
+package org.archcnl.ui.input.mappingeditor;
 
 import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
+import org.archcnl.domain.input.model.mappings.Variable;
 
 public class VariableManager {
 

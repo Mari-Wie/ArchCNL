@@ -18,18 +18,10 @@ public class RelationMapping extends Mapping {
             throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
         this.thisRelation = thisRelation;
-        getVariableManager().addVariable(subject);
         thenTriplet = new Triplet(subject, thisRelation, object);
     }
 
     public void updateSubjectInThenTriplet(Variable subject) {
-        if (!getVariableManager().doesVariableExist(subject)) {
-            try {
-                getVariableManager().addVariable(subject);
-            } catch (VariableAlreadyExistsException e) {
-                // Cannot occur
-            }
-        }
         thenTriplet.setSubject(subject);
     }
 
