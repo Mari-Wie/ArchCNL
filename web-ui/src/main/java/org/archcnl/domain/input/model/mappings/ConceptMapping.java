@@ -3,7 +3,6 @@ package org.archcnl.domain.input.model.mappings;
 import java.util.List;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public class ConceptMapping extends Mapping {
@@ -14,8 +13,7 @@ public class ConceptMapping extends Mapping {
 
     public ConceptMapping(
             Variable thenVariable, List<AndTriplets> whenTriplets, CustomConcept thisConcept)
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException {
+            throws UnsupportedObjectTypeInTriplet, RelationDoesNotExistException {
         super(whenTriplets);
         this.thisConcept = thisConcept;
         thenTriplet =

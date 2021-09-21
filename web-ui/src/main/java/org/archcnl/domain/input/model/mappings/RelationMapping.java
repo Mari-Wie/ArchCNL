@@ -2,7 +2,6 @@ package org.archcnl.domain.input.model.mappings;
 
 import java.util.List;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class RelationMapping extends Mapping {
 
@@ -15,7 +14,7 @@ public class RelationMapping extends Mapping {
             ObjectType object,
             List<AndTriplets> whenTriplets,
             CustomRelation thisRelation)
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet {
+            throws UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
         this.thisRelation = thisRelation;
         thenTriplet = new Triplet(subject, thisRelation, object);
