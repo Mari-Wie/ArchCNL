@@ -15,6 +15,8 @@ public interface AndTripletsEditorContract {
         public void deleteTripletView(TripletContract.View tripletView);
 
         public List<TripletPresenter> getTripletPresenters();
+
+        public void setAddButtonVisible(boolean visible);
     }
 
     public interface Presenter<T extends View> extends Serializable {
@@ -26,5 +28,15 @@ public interface AndTripletsEditorContract {
         public void addNewTripletViewAfter(TripletContract.View tripletView);
 
         public void deleteTripletView(TripletContract.View view);
+
+        public void mouseEnter();
+
+        public void mouseLeave();
+
+        public void addButtonPressed();
+
+        public boolean isLastAndTripletsEditor();
+
+        public void delete();
     }
 }

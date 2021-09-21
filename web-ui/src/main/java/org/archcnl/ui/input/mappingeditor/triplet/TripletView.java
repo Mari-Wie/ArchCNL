@@ -44,7 +44,11 @@ public class TripletView extends VerticalLayout implements TripletContract.View 
                 new Button(new Icon(VaadinIcon.TRASH), click -> presenter.deleteButtonPressed()));
 
         add(mainRow);
-        addButton = new Button(new Icon(VaadinIcon.PLUS), click -> presenter.addButtonPressed());
+        addButton =
+                new Button(
+                        "Add new row",
+                        new Icon(VaadinIcon.PLUS),
+                        click -> presenter.addButtonPressed());
         addButton.setWidthFull();
 
         getElement().addEventListener("mouseover", e -> presenter.mouseEnter());

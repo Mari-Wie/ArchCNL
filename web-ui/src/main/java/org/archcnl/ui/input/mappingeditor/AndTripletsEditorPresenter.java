@@ -16,9 +16,13 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
     private static final long serialVersionUID = 5409700467865922127L;
     private View view;
     private VariableManager variableManager;
+    private MappingEditorContract.Presenter<MappingEditorContract.View> mappingEditorPresenter;
 
-    public AndTripletsEditorPresenter(VariableManager variableManager) {
+    public AndTripletsEditorPresenter(
+            VariableManager variableManager,
+            MappingEditorContract.Presenter<MappingEditorContract.View> mappingEditorPresenter) {
         this.variableManager = variableManager;
+        this.mappingEditorPresenter = mappingEditorPresenter;
     }
 
     @Override
@@ -56,5 +60,30 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
                                 })
                         .collect(Collectors.toList());
         return new AndTriplets(triplets);
+    }
+
+    @Override
+    public void mouseEnter() {
+        view.setAddButtonVisible(true);
+    }
+
+    @Override
+    public void mouseLeave() {
+        view.setAddButtonVisible(false);
+    }
+
+    @Override
+    public void addButtonPressed() {
+        mappingEditorPresenter.addNewAndTripletsViewAfter(view);
+    }
+
+    @Override
+    public boolean isLastAndTripletsEditor() {
+        return mappingEditorPresenter.numberOfAndTriplets() == 1;
+    }
+
+    @Override
+    public void delete() {
+        mappingEditorPresenter.deleteAndTripletsView(view);
     }
 }
