@@ -2,11 +2,11 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.io.Serializable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.ObjectType;
-import org.archcnl.domain.input.model.mappings.VariableManager;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public interface ObjectContract {
 
@@ -14,7 +14,7 @@ public interface ObjectContract {
 
         public ObjectType getObject()
                 throws ConceptDoesNotExistException, ObjectNotDefinedException,
-                        VariableDoesNotExistException, SubjectNotDefinedException;
+                        SubjectOrObjectNotDefinedException, InvalidVariableNameException;
 
         public void clearView();
 

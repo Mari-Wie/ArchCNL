@@ -2,10 +2,6 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorView;
@@ -32,30 +28,15 @@ public class InputView extends HorizontalLayout {
     }
 
     public void switchToConceptEditorView() {
-        try {
-            ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
-            MappingEditorView view = new ConceptEditorView(conceptEditorPresenter, this);
-            changeCurrentlyShownView(view);
-        } catch (VariableAlreadyExistsException
-                | UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | InvalidVariableNameException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
+        MappingEditorView view = new ConceptEditorView(conceptEditorPresenter, this);
+        changeCurrentlyShownView(view);
     }
 
     public void switchToRelationEditorView() {
-        try {
-            RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
-            MappingEditorView view = new RelationEditorView(relationEditorPresenter, this);
-            changeCurrentlyShownView(view);
-        } catch (VariableAlreadyExistsException
-                | UnsupportedObjectTypeInTriplet
-                | InvalidVariableNameException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
+        MappingEditorView view = new RelationEditorView(relationEditorPresenter, this);
+        changeCurrentlyShownView(view);
     }
 
     public void switchToArchitectureRulesView() {

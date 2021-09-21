@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.Triplet;
-import org.archcnl.domain.input.model.mappings.VariableManager;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;

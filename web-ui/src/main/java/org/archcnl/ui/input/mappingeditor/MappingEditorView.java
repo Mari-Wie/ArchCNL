@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
@@ -39,7 +40,11 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
 
         mappingName = new TextField("Name");
         mappingName.setPlaceholder("Unique name");
-        mappingName.addValueChangeListener(event -> presenter.nameHasChanged(event.getValue()));
+        mappingName.addValueChangeListener(
+                event -> {
+                    mappingName.setInvalid(false);
+                    presenter.nameHasChanged(event.getValue());
+                });
         add(mappingName);
 
         // TODO: add used in and description functionality
@@ -48,6 +53,13 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         add(createAndTripletsView());
         add(new Label("Then"));
         addThenTripletView();
+
+        HorizontalLayout buttonRow = new HorizontalLayout();
+        buttonRow.setWidthFull();
+        buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonRow.add(new Button("Done", click -> presenter.doneButtonClicked(parent)));
+        buttonRow.add(new Button("Cancel", click -> parent.switchToArchitectureRulesView()));
+        add(buttonRow);
     }
 
     @Override
@@ -78,6 +90,12 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     @Override
     public void updateNameField(String newName) {
         mappingName.setValue(newName);
+    }
+
+    @Override
+    public void showNameFieldErrorMessage(String message) {
+        mappingName.setErrorMessage(message);
+        mappingName.setInvalid(true);
     }
 
     private AndTripletsEditorView createAndTripletsView() {

@@ -2,18 +2,18 @@ package org.archcnl.ui.input.mappingeditor;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
-import org.archcnl.domain.input.model.mappings.Mapping;
-import org.archcnl.domain.input.model.mappings.VariableManager;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 
 public abstract class MappingEditorPresenter implements MappingEditorContract.Presenter<View> {
 
     private static final long serialVersionUID = -9123529250149326943L;
-    private View view;
+    protected View view;
     private VariableManager variableManager;
 
-    public MappingEditorPresenter() {
+    protected MappingEditorPresenter() {
         this.variableManager = new VariableManager();
     }
 
@@ -21,6 +21,11 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
     public void nameHasChanged(String newName) {
         view.updateNameField(newName);
         view.updateNameFieldInThenTriplet(newName);
+        try {
+            updateMappingName(newName);
+        } catch (ConceptAlreadyExistsException | RelationAlreadyExistsException e) {
+            view.showNameFieldErrorMessage("The name is already taken");
+        }
     }
 
     @Override
@@ -54,5 +59,6 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
                 .collect(Collectors.toList());
     }
 
-    protected abstract Mapping getMapping();
+    protected abstract void updateMappingName(String newName)
+            throws ConceptAlreadyExistsException, RelationAlreadyExistsException;
 }

@@ -4,10 +4,10 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.LinkedList;
 import java.util.List;
-import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.ObjectType;
-import org.archcnl.domain.input.model.mappings.VariableManager;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {
 
@@ -60,7 +60,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                 });
     }
 
-    public ObjectType getObject() throws VariableDoesNotExistException, SubjectNotDefinedException {
+    public ObjectType getObject()
+            throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
         if (booleanSelectionView != null) {
             object = booleanSelectionView.getObject();
@@ -73,6 +74,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
         }
         return object;
+    }
+
+    public void showErrorMessage(String message) {
+        variableSelectionView.showErrorMessage(message);
     }
 
     private void removeAllSecondaryViews() {

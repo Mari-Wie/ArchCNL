@@ -29,6 +29,7 @@ public class VariableSelectionView extends ComboBox<String>
         addFilterChangeListener(event -> addCreateItem(event.getFilter()));
         addCustomValueSetListener(
                 event -> {
+                    setInvalid(false);
                     if (!presenter.doesVariableExist(event.getDetail())) {
                         presenter.addCustomValue(event.getDetail());
                     }

@@ -1,9 +1,9 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
-import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.Variable;
-import org.archcnl.domain.input.model.mappings.VariableManager;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class SubjectPresenter extends VariableSelectionPresenter {
 
@@ -13,7 +13,8 @@ public class SubjectPresenter extends VariableSelectionPresenter {
         super(variableManager);
     }
 
-    public Variable getSubject() throws VariableDoesNotExistException, SubjectNotDefinedException {
+    public Variable getSubject()
+            throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         return getSelectedVariable();
     }
 }

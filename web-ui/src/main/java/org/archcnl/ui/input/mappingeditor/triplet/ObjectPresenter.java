@@ -2,15 +2,15 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.BooleanValue;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.domain.input.model.mappings.StringValue;
 import org.archcnl.domain.input.model.mappings.TypeRelation;
-import org.archcnl.domain.input.model.mappings.VariableManager;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.View;
 
 public class ObjectPresenter implements ObjectContract.Presenter<View> {
@@ -30,7 +30,7 @@ public class ObjectPresenter implements ObjectContract.Presenter<View> {
 
     public ObjectType getObject()
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
-                    VariableDoesNotExistException, SubjectNotDefinedException {
+                    InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         return view.getObject();
     }
 

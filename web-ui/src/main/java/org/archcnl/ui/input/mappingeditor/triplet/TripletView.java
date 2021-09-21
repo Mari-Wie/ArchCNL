@@ -5,7 +5,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.archcnl.domain.input.model.mappings.VariableManager;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
 

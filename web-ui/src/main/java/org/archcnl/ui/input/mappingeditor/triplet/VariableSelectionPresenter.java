@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
 import org.archcnl.domain.input.model.mappings.Variable;
-import org.archcnl.domain.input.model.mappings.VariableManager;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionContract.View;
 
 public class VariableSelectionPresenter implements VariableSelectionContract.Presenter<View> {
@@ -20,10 +19,11 @@ public class VariableSelectionPresenter implements VariableSelectionContract.Pre
         this.variableManager = variableManager;
     }
 
-    public Variable getSelectedVariable()
-            throws VariableDoesNotExistException, SubjectNotDefinedException {
-        String variableName = view.getSelectedItem().orElseThrow(SubjectNotDefinedException::new);
-        return variableManager.getVariableByName(variableName);
+    protected Variable getSelectedVariable()
+            throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
+        String variableName =
+                view.getSelectedItem().orElseThrow(SubjectOrObjectNotDefinedException::new);
+        return new Variable(variableName);
     }
 
     @Override

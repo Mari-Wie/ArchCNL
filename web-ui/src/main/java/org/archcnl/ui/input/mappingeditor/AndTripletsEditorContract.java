@@ -2,7 +2,6 @@ package org.archcnl.ui.input.mappingeditor;
 
 import java.io.Serializable;
 import java.util.List;
-import org.archcnl.domain.input.model.mappings.VariableManager;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
 
