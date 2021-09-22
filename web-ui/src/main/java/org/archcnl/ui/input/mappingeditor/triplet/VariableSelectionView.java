@@ -55,7 +55,9 @@ public class VariableSelectionView extends ComboBox<String>
 
     @Override
     public void updateItems() {
+        String value = getValue();
         setItems(presenter.getVariableNames());
+        setValue(value);
     }
 
     @Override

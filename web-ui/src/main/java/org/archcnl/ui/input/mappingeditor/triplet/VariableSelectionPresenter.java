@@ -1,5 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -9,7 +11,8 @@ import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionContract.View;
 
-public class VariableSelectionPresenter implements VariableSelectionContract.Presenter<View> {
+public class VariableSelectionPresenter
+        implements VariableSelectionContract.Presenter<View>, PropertyChangeListener {
 
     private static final long serialVersionUID = -7216588985374428140L;
     private VariableManager variableManager;
@@ -17,6 +20,7 @@ public class VariableSelectionPresenter implements VariableSelectionContract.Pre
 
     public VariableSelectionPresenter(VariableManager variableManager) {
         this.variableManager = variableManager;
+        this.variableManager.addPropertyChangeListener(this);
     }
 
     protected Variable getSelectedVariable()
@@ -69,5 +73,10 @@ public class VariableSelectionPresenter implements VariableSelectionContract.Pre
         } else {
             view.showErrorMessage("Not a Variable");
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        view.updateItems();
     }
 }
