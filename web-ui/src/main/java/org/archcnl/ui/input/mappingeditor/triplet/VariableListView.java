@@ -1,6 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -42,6 +43,9 @@ public class VariableListView extends VerticalLayout implements View {
         Div card = new Div();
         card.add(new Text(variable.getName()));
         card.getStyle().set("border", "1px solid black");
+        DragSource<Div> cardDragSource = DragSource.configure(card);
+        cardDragSource.setDragData(variable);
+        cardDragSource.setDraggable(true);
         return card;
     }
 }
