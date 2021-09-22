@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.triplet.VariableListPresenter;
+import org.archcnl.ui.input.mappingeditor.triplet.VariableListView;
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView
         implements MappingEditorContract.View {
@@ -48,6 +50,9 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         add(mappingName);
 
         // TODO: add used in and description functionality
+        VariableListPresenter variableListPresenter =
+                new VariableListPresenter(presenter.getVariableManager());
+        add(new VariableListView(variableListPresenter));
 
         add(new Label("When"));
         add(createAndTripletsView());
