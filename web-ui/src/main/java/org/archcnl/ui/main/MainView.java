@@ -8,6 +8,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
+import org.archcnl.ui.main.MainContract.Presenter;
+import org.archcnl.ui.main.MainContract.View;
 
 @Route
 @PWA(
@@ -16,16 +18,20 @@ import com.vaadin.flow.server.PWA;
         description = "This is an example Vaadin application.",
         enableInstallPrompt = false)
 @CssImport("./styles/vaadin-button-styles.css")
-public class MainView extends VerticalLayout {
+public class MainView extends VerticalLayout implements MainContract.View {
 
-    private Component header, oldContent, footer;
-    private VerticalLayout content;
-    private MainPresenter presenter;
+    private static final long serialVersionUID = -4807002363716724924L;
+    private Component header;
+    private Component footer;
+    private Component content;
+    private Presenter<View> presenter;
 
     public MainView() {
-        presenter = new MainPresenter(this);
+        presenter = new MainPresenter();
+        presenter.setView(this);
         header = createHeader();
-        content = createContent();
+        // initializes content field
+        presenter.showArchitectureRuleView();
         footer = createFooter();
         setPadding(false);
 
@@ -34,19 +40,25 @@ public class MainView extends VerticalLayout {
         add(footer);
     }
 
-    private Component createHeader() {
+    @Override
+    public void setContent(Component newContent) {
+        replace(content, newContent);
+        content = newContent;
+    }
+
+    private HorizontalLayout createHeader() {
         HorizontalLayout headerBox = new HorizontalLayout();
 
         Label projectTitelLabel = new Label("ARCHCNL");
         projectTitelLabel.getStyle().set("color", "White");
         projectTitelLabel.getStyle().set("font-size", "large");
 
-        Button backButton = new Button("Back", e -> presenter.Back());
-        Button forwardButton = new Button("Forward", e -> presenter.Forward());
-        Button projectButton = new Button("Project", e -> presenter.importProject());
-        Button rulesButton = new Button("Rules", e -> presenter.importRules());
-        Button viewButton = new Button("View", e -> presenter.view());
-        Button helpButton = new Button("Help", e -> presenter.help());
+        Button backButton = new Button("Back", e -> presenter.undo());
+        Button forwardButton = new Button("Forward", e -> presenter.redo());
+        Button projectButton = new Button("Project", e -> presenter.showImportProject());
+        Button rulesButton = new Button("Rules", e -> presenter.showImportRules());
+        Button viewButton = new Button("View", e -> presenter.showView());
+        Button helpButton = new Button("Help", e -> presenter.showHelp());
 
         headerBox.add(
                 projectTitelLabel,
@@ -61,22 +73,15 @@ public class MainView extends VerticalLayout {
         return headerBox;
     }
 
-    private VerticalLayout createContent() {
-        VerticalLayout vbox = new VerticalLayout();
-        oldContent = presenter.getArchitectureRuleView();
-        vbox.add(oldContent);
-        return vbox;
-    }
-
-    private Component createFooter() {
+    private HorizontalLayout createFooter() {
         HorizontalLayout footerHbox = new HorizontalLayout();
 
         Label copyright = new Label("© 2021 University of Hamburg. All rights reserved");
 
         HorizontalLayout buttonHBox = new HorizontalLayout();
-        Button contactButton = new Button("Contact", e -> presenter.contact());
-        Button wikiButton = new Button("Wiki", e -> presenter.wiki());
-        Button siteButton = new Button("Project Site", e -> presenter.projectSite());
+        Button contactButton = new Button("Contact", e -> presenter.showContact());
+        Button wikiButton = new Button("Wiki", e -> presenter.showWiki());
+        Button siteButton = new Button("Project Site", e -> presenter.showProjectSite());
         buttonHBox.add(copyright, contactButton, wikiButton, siteButton);
 
         footerHbox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -85,15 +90,5 @@ public class MainView extends VerticalLayout {
         footerHbox.setWidthFull();
 
         return footerHbox;
-    }
-
-    public void setContent(Component view) {
-        content.remove(oldContent);
-        content.add(view);
-        oldContent = view;
-    }
-
-    public void setPresenter(MainPresenter presenter) {
-        this.presenter = presenter;
     }
 }

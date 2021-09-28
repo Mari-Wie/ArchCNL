@@ -2,86 +2,97 @@ package org.archcnl.ui.main;
 
 import com.vaadin.flow.component.Component;
 import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.main.MainContract.View;
+import org.archcnl.ui.output.component.QueryView;
 
-public class MainPresenter {
+public class MainPresenter implements MainContract.Presenter<MainContract.View> {
 
-    private MainView view;
-    private Component resultView, inputView;
+    private static final long serialVersionUID = 2859025859553864862L;
+    private View view;
+    private Component resultView;
+    private Component inputView;
 
-    public MainPresenter(MainView view) {
-        this.view = view;
+    public MainPresenter() {
         inputView = new InputView();
+        resultView = new QueryView();
     }
 
     public void setView(MainView view) {
         this.view = view;
     }
 
-    public Component getArchitectureRuleView() {
-        return inputView;
+    @Override
+    public void setView(View view) {
+        this.view = view;
     }
 
-    public Component getResultView() {
-        return resultView;
-    }
-
-    public void setArchitectureRuleView() {
+    @Override
+    public void showArchitectureRuleView() {
         view.setContent(inputView);
-        System.out.println("setArchitectureRuleView()");
     }
 
-    public void setResultView() {
+    @Override
+    public void showResultView() {
         view.setContent(resultView);
-        System.out.println("setResultView()");
     }
 
-    public void Back() {
+    @Override
+    public void undo() {
         // Undo Action
-        System.out.println("Back()");
+        System.out.println("undo()");
     }
 
-    public void Forward() {
+    @Override
+    public void redo() {
         // Redo Action
-        System.out.println("Forward()");
+        System.out.println("redo()");
     }
 
-    public void view() {
+    @Override
+    public void showView() {
         // Open View Option Popup
-        System.out.println("view()");
+        System.out.println("showView()");
     }
 
-    public void help() {
+    @Override
+    public void showHelp() {
         // Open Help Popup
-        System.out.println("help()");
+        System.out.println("showHelp()");
     }
 
-    public void importProject() {
+    @Override
+    public void showImportProject() {
         // Open File Browser Popup
-        System.out.println("importProject()");
+        System.out.println("showImportProject()");
     }
 
-    public void importRules() {
+    @Override
+    public void showImportRules() {
         // Open File Browser Popup
-        System.out.println("importRules()");
+        System.out.println("showImportRules()");
     }
 
-    public void exportRules() {
+    @Override
+    public void showExportRules() {
         // Open File Browser Popup (select save location)
-        System.out.println("exportRules()");
+        System.out.println("showExportRules()");
     }
 
-    public void contact() {
+    @Override
+    public void showContact() {
         // Open Contact Popup
-        System.out.println("contact()");
+        System.out.println("showContact()");
     }
 
-    public void wiki() {
+    @Override
+    public void showWiki() {
         // Open Wiki Webpage
-        System.out.println("wiki()");
+        System.out.println("showWiki()");
     }
 
-    public void projectSite() {
+    @Override
+    public void showProjectSite() {
         // Open ProjectSite Webpage
-        System.out.println("projectSite()");
+        System.out.println("showProjectSite()");
     }
 }
