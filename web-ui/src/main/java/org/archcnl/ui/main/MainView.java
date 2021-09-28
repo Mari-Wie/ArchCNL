@@ -64,17 +64,17 @@ public class MainView extends VerticalLayout implements MainContract.View {
         menuBar.addItem("Help", e -> presenter.showHelp());
 
         SubMenu projectSubMenu = project.getSubMenu();
-        projectSubMenu.addItem("Open", e -> {});
-        projectSubMenu.addItem("Save", e -> {});
-        projectSubMenu.addItem("Close", e -> {});
+        projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
+        projectSubMenu.addItem("Save Project", e -> {});
+        projectSubMenu.addItem("New Project", e -> {});
 
         SubMenu editSubMenu = edit.getSubMenu();
         editSubMenu.addItem("Undo", e -> presenter.undo());
         editSubMenu.addItem("Redo", e -> presenter.redo());
 
         SubMenu rulesSubMenu = rules.getSubMenu();
-        rulesSubMenu.addItem("Import from file", e -> presenter.showImportRulesFromFile());
-        rulesSubMenu.addItem("Import rule presets", e -> presenter.showImportRulePresets());
+        rulesSubMenu.addItem("Import from File", e -> presenter.showImportRulesFromFile());
+        rulesSubMenu.addItem("Import Rule Presets", e -> presenter.showImportRulePresets());
 
         headerBox.add(title, menuBar);
         headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
