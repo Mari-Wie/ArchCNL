@@ -16,14 +16,14 @@ import com.vaadin.flow.server.PWA;
         description = "This is an example Vaadin application.",
         enableInstallPrompt = false)
 @CssImport("./styles/vaadin-button-styles.css")
-public class MainUI extends VerticalLayout {
+public class MainView extends VerticalLayout {
 
     private Component header, oldContent, footer;
     private VerticalLayout content;
-    private MainUIPresenter presenter;
+    private MainPresenter presenter;
 
-    public MainUI() {
-        presenter = new MainUIPresenter(this);
+    public MainView() {
+        presenter = new MainPresenter(this);
         header = createHeader();
         content = createContent();
         footer = createFooter();
@@ -93,7 +93,7 @@ public class MainUI extends VerticalLayout {
         oldContent = view;
     }
 
-    public void setPresenter(MainUIPresenter presenter) {
+    public void setPresenter(MainPresenter presenter) {
         this.presenter = presenter;
     }
 }

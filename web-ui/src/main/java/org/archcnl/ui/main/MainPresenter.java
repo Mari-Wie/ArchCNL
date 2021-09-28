@@ -3,17 +3,17 @@ package org.archcnl.ui.main;
 import com.vaadin.flow.component.Component;
 import org.archcnl.ui.input.InputView;
 
-public class MainUIPresenter {
+public class MainPresenter {
 
-    private MainUI view;
+    private MainView view;
     private Component resultView, inputView;
 
-    public MainUIPresenter(MainUI view) {
+    public MainPresenter(MainView view) {
         this.view = view;
         inputView = new InputView();
     }
 
-    public void setView(MainUI view) {
+    public void setView(MainView view) {
         this.view = view;
     }
 
