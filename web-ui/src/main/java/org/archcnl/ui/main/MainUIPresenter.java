@@ -1,4 +1,4 @@
-package org.vaadin.mainview;
+package org.archcnl.ui.main;
 
 import com.vaadin.flow.component.Component;
 import org.archcnl.ui.input.InputView;
