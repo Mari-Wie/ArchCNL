@@ -6,12 +6,10 @@ import org.archcnl.ui.input.InputView;
 public class MainUIPresenter {
 
     private MainUI view;
-    private Component resultView, ruleView, inputView;
+    private Component resultView, inputView;
 
     public MainUIPresenter(MainUI view) {
         this.view = view;
-        ruleView = new TestView(this);
-        resultView = new TestView2(this);
         inputView = new InputView();
     }
 
