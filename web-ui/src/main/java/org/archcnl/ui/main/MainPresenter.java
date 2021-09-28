@@ -95,4 +95,14 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
         // Open ProjectSite Webpage
         System.out.println("showProjectSite()");
     }
+
+    @Override
+    public void showImportRulesFromFile() {
+        System.out.println("showImportRulesFromFile()");
+    }
+
+    @Override
+    public void showImportRulePresets() {
+        System.out.println("showImportRulePresets()");
+    }
 }

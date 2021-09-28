@@ -37,5 +37,9 @@ public interface MainContract {
         public void showWiki();
 
         public void showProjectSite();
+
+        public void showImportRulesFromFile();
+
+        public void showImportRulePresets();
     }
 }

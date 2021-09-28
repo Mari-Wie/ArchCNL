@@ -2,8 +2,11 @@ package org.archcnl.ui.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -49,25 +52,31 @@ public class MainView extends VerticalLayout implements MainContract.View {
     private HorizontalLayout createHeader() {
         HorizontalLayout headerBox = new HorizontalLayout();
 
-        Label projectTitelLabel = new Label("ARCHCNL");
-        projectTitelLabel.getStyle().set("color", "White");
-        projectTitelLabel.getStyle().set("font-size", "large");
+        Label title = new Label("ArchCNL");
+        title.getStyle().set("color", "White");
+        title.getStyle().set("font-size", "large");
 
-        Button backButton = new Button("Back", e -> presenter.undo());
-        Button forwardButton = new Button("Forward", e -> presenter.redo());
-        Button projectButton = new Button("Project", e -> presenter.showImportProject());
-        Button rulesButton = new Button("Rules", e -> presenter.showImportRules());
-        Button viewButton = new Button("View", e -> presenter.showView());
-        Button helpButton = new Button("Help", e -> presenter.showHelp());
+        MenuBar menuBar = new MenuBar();
+        MenuItem project = menuBar.addItem("Project");
+        MenuItem edit = menuBar.addItem("Edit");
+        MenuItem rules = menuBar.addItem("Rules");
+        menuBar.addItem("View", e -> presenter.showView());
+        menuBar.addItem("Help", e -> presenter.showHelp());
 
-        headerBox.add(
-                projectTitelLabel,
-                backButton,
-                forwardButton,
-                projectButton,
-                rulesButton,
-                viewButton,
-                helpButton);
+        SubMenu projectSubMenu = project.getSubMenu();
+        projectSubMenu.addItem("Open", e -> {});
+        projectSubMenu.addItem("Save", e -> {});
+        projectSubMenu.addItem("Close", e -> {});
+
+        SubMenu editSubMenu = edit.getSubMenu();
+        editSubMenu.addItem("Undo", e -> presenter.undo());
+        editSubMenu.addItem("Redo", e -> presenter.redo());
+
+        SubMenu rulesSubMenu = rules.getSubMenu();
+        rulesSubMenu.addItem("Import from file", e -> presenter.showImportRulesFromFile());
+        rulesSubMenu.addItem("Import rule presets", e -> presenter.showImportRulePresets());
+
+        headerBox.add(title, menuBar);
         headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         headerBox.setWidthFull();
         return headerBox;
