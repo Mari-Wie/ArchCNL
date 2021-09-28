@@ -3,7 +3,6 @@ package org.archcnl.ui.output.component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
-import org.archcnl.ui.main.SideBarLayout;
 
 /**
  * A sample Vaadin view class.
