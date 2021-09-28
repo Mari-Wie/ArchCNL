@@ -76,7 +76,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
     private HorizontalLayout createFooter() {
         HorizontalLayout footerHbox = new HorizontalLayout();
 
-        Label copyright = new Label("© 2021 University of Hamburg. All rights reserved");
+        Label copyright = new Label("Developed at the University of Hamburg.");
 
         HorizontalLayout buttonHBox = new HorizontalLayout();
         Button contactButton = new Button("Contact", e -> presenter.showContact());
