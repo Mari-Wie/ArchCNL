@@ -100,4 +100,10 @@ public class MainView extends VerticalLayout implements MainContract.View {
 
         return footerHbox;
     }
+
+    @Override
+    public void showOpenProjectDialog() {
+        OpenProjectDialog dialog = new OpenProjectDialog();
+        dialog.open();
+    }
 }

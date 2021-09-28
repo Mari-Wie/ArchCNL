@@ -105,4 +105,9 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
     public void showImportRulePresets() {
         System.out.println("showImportRulePresets()");
     }
+
+    @Override
+    public void showOpenProject() {
+        view.showOpenProjectDialog();
+    }
 }
