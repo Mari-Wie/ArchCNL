@@ -10,6 +10,8 @@ public interface MainContract {
         public void setContent(Component newContent);
 
         public void showOpenProjectDialog();
+
+        public void showNewTab();
     }
 
     public interface Presenter<T extends View> extends Serializable {
@@ -45,5 +47,7 @@ public interface MainContract {
         public void showImportRulePresets();
 
         public void showOpenProject();
+
+        public void showNewTab();
     }
 }

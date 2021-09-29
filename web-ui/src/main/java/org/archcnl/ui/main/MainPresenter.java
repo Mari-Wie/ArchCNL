@@ -110,4 +110,9 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
     public void showOpenProject() {
         view.showOpenProjectDialog();
     }
+
+    @Override
+    public void showNewTab() {
+        view.showNewTab();
+    }
 }

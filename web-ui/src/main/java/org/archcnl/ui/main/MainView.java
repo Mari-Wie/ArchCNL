@@ -1,16 +1,23 @@
 package org.archcnl.ui.main;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
 import org.archcnl.ui.main.MainContract.Presenter;
 import org.archcnl.ui.main.MainContract.View;
 
@@ -66,7 +73,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
         SubMenu projectSubMenu = project.getSubMenu();
         projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
         projectSubMenu.addItem("Save Project", e -> {});
-        projectSubMenu.addItem("New Project", e -> {});
+        projectSubMenu.addItem("New Project", e -> presenter.showNewTab());
 
         SubMenu editSubMenu = edit.getSubMenu();
         editSubMenu.addItem("Undo", e -> presenter.undo());
@@ -105,5 +112,22 @@ public class MainView extends VerticalLayout implements MainContract.View {
     public void showOpenProjectDialog() {
         OpenProjectDialog dialog = new OpenProjectDialog();
         dialog.open();
+    }
+
+    @Override
+    public void showNewTab() {
+        VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
+        URI uri;
+        try {
+            uri = new URI(req.getRequestURL().toString());
+            getUI().get().getPage().open(uri.toString(), null);
+        } catch (URISyntaxException | NoSuchElementException e) {
+            Notification notification = new Notification();
+            Text errorMessage = new Text("Opening a new tab failed unexpectedly. Try again later.");
+            Button okButton = new Button("OK", click -> notification.close());
+            notification.add(errorMessage, okButton);
+            notification.setPosition(Notification.Position.MIDDLE);
+            notification.open();
+        }
     }
 }
