@@ -120,7 +120,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
         URI uri;
         try {
             uri = new URI(req.getRequestURL().toString());
-            getUI().get().getPage().open(uri.toString(), null);
+            getUI().get().getPage().open(uri.toString(), "ArchCNL");
         } catch (URISyntaxException | NoSuchElementException e) {
             Notification notification = new Notification();
             Text errorMessage = new Text("Opening a new tab failed unexpectedly. Try again later.");
