@@ -2,6 +2,7 @@ package org.archcnl.ui.main.io;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.treegrid.TreeGrid;
 import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
@@ -50,6 +51,11 @@ public class FileSelectionComponent extends VerticalLayout {
 
     private FileSelect createFileSelect(File rootFile) {
         FileSelect newFileSelect = new FileSelect(rootFile, "adoc");
+        newFileSelect
+                .getChildren()
+                .filter(TreeGrid.class::isInstance)
+                .map(TreeGrid.class::cast)
+                .forEach(treeGrid -> treeGrid.expand(treeGrid.getTreeData().getRootItems()));
         newFileSelect.addValueChangeListener(
                 event -> {
                     Optional<File> file = newFileSelect.getOptionalValue();
