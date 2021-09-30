@@ -3,6 +3,8 @@ package org.archcnl.ui.main.io;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
@@ -12,15 +14,18 @@ import org.vaadin.filesystemdataprovider.FileSelect;
 public class FileSelectionComponent extends VerticalLayout {
 
     private static final long serialVersionUID = -1340341590751453530L;
+    private PropertyChangeSupport propertyChangeSupport;
     private final File defaultRootFile;
     private FileSelect fileSelect;
     private Optional<File> selectedFile = Optional.empty();
+    private TextField pathField;
 
     public FileSelectionComponent() {
+        propertyChangeSupport = new PropertyChangeSupport(this);
         defaultRootFile = Paths.get(System.getProperty("user.home")).getRoot().toFile();
         fileSelect = createFileSelect(defaultRootFile);
 
-        TextField pathField = new TextField("Enter a path to change the directory.");
+        pathField = new TextField("Enter a path to change the directory.");
         pathField.setPlaceholder(defaultRootFile.getAbsolutePath());
         pathField.setClearButtonVisible(true);
         pathField.setWidthFull();
@@ -72,16 +77,30 @@ public class FileSelectionComponent extends VerticalLayout {
         return newFileSelect;
     }
 
+    private void setFileSelectInvalid(boolean invalid) {
+        propertyChangeSupport.firePropertyChange(
+                "isPathFieldInvalid", pathField.isInvalid(), invalid);
+        fileSelect.setInvalid(invalid);
+    }
+
     public void showErrorMessage(String errorMessage) {
         fileSelect.setErrorMessage(errorMessage);
-        fileSelect.setInvalid(true);
+        setFileSelectInvalid(true);
     }
 
     public void hideErrorMessage() {
-        fileSelect.setInvalid(false);
+        setFileSelectInvalid(false);
     }
 
     public Optional<File> getSelectedFile() {
         return selectedFile;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 }
