@@ -1,11 +1,15 @@
 package org.archcnl.ui.main;
 
 import com.vaadin.flow.component.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.main.MainContract.View;
 import org.archcnl.ui.output.component.QueryView;
 
-public class MainPresenter implements MainContract.Presenter<MainContract.View> {
+public class MainPresenter
+        implements MainContract.Presenter<MainContract.View>, PropertyChangeListener {
 
     private static final long serialVersionUID = 2859025859553864862L;
     private View view;
@@ -15,6 +19,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
     public MainPresenter() {
         inputView = new InputView();
         resultView = new QueryView();
+        ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 
     public void setView(MainView view) {
@@ -112,7 +117,17 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
     }
 
     @Override
+    public void showSaveProject() {
+        view.showSaveProjectDialog();
+    }
+
+    @Override
     public void showNewTab() {
         view.showNewTab();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        view.setSaveProjectMenuItemEnabled(true);
     }
 }

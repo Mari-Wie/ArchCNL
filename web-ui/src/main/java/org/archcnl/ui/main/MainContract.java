@@ -11,7 +11,11 @@ public interface MainContract {
 
         public void showOpenProjectDialog();
 
+        public void showSaveProjectDialog();
+
         public void showNewTab();
+
+        public void setSaveProjectMenuItemEnabled(boolean enabled);
     }
 
     public interface Presenter<T extends View> extends Serializable {
@@ -47,6 +51,8 @@ public interface MainContract {
         public void showImportRulePresets();
 
         public void showOpenProject();
+
+        public void showSaveProject();
 
         public void showNewTab();
     }

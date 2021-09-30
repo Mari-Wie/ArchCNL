@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
 import org.archcnl.ui.main.MainContract.Presenter;
 import org.archcnl.ui.main.MainContract.View;
+import org.archcnl.ui.main.io.OpenProjectDialog;
 
 @Route
 @PWA(
@@ -35,6 +36,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
     private Component footer;
     private Component content;
     private Presenter<View> presenter;
+    private MenuItem saveProjectMenuItem;
 
     public MainView() {
         presenter = new MainPresenter();
@@ -71,9 +73,11 @@ public class MainView extends VerticalLayout implements MainContract.View {
         menuBar.addItem("Help", e -> presenter.showHelp());
 
         SubMenu projectSubMenu = project.getSubMenu();
-        projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
-        projectSubMenu.addItem("Save Project", e -> {});
         projectSubMenu.addItem("New Project", e -> presenter.showNewTab());
+        projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
+        saveProjectMenuItem = projectSubMenu.addItem("Save", e -> presenter.showSaveProject());
+        saveProjectMenuItem.setEnabled(false);
+        projectSubMenu.addItem("Save As", e -> presenter.showSaveProject());
 
         SubMenu editSubMenu = edit.getSubMenu();
         editSubMenu.addItem("Undo", e -> presenter.undo());
@@ -115,6 +119,9 @@ public class MainView extends VerticalLayout implements MainContract.View {
     }
 
     @Override
+    public void showSaveProjectDialog() {}
+
+    @Override
     public void showNewTab() {
         VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
         URI uri;
@@ -129,5 +136,10 @@ public class MainView extends VerticalLayout implements MainContract.View {
             notification.setPosition(Notification.Position.MIDDLE);
             notification.open();
         }
+    }
+
+    @Override
+    public void setSaveProjectMenuItemEnabled(boolean enabled) {
+        saveProjectMenuItem.setEnabled(enabled);
     }
 }
