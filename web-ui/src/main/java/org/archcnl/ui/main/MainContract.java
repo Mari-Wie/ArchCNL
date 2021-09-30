@@ -9,10 +9,6 @@ public interface MainContract {
 
         public void setContent(Component newContent);
 
-        public void showOpenProjectDialog();
-
-        public void showSaveProjectDialog();
-
         public void showNewTab();
 
         public void setSaveProjectMenuItemEnabled(boolean enabled);
@@ -53,6 +49,8 @@ public interface MainContract {
         public void showOpenProject();
 
         public void showSaveProject();
+
+        public void saveProject();
 
         public void showNewTab();
     }

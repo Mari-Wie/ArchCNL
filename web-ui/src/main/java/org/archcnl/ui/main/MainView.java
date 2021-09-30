@@ -20,7 +20,6 @@ import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
 import org.archcnl.ui.main.MainContract.Presenter;
 import org.archcnl.ui.main.MainContract.View;
-import org.archcnl.ui.main.io.OpenProjectDialog;
 
 @Route
 @PWA(
@@ -75,7 +74,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
         SubMenu projectSubMenu = project.getSubMenu();
         projectSubMenu.addItem("New Project", e -> presenter.showNewTab());
         projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
-        saveProjectMenuItem = projectSubMenu.addItem("Save", e -> presenter.showSaveProject());
+        saveProjectMenuItem = projectSubMenu.addItem("Save", e -> presenter.saveProject());
         saveProjectMenuItem.setEnabled(false);
         projectSubMenu.addItem("Save As", e -> presenter.showSaveProject());
 
@@ -111,15 +110,6 @@ public class MainView extends VerticalLayout implements MainContract.View {
 
         return footerHbox;
     }
-
-    @Override
-    public void showOpenProjectDialog() {
-        OpenProjectDialog dialog = new OpenProjectDialog();
-        dialog.open();
-    }
-
-    @Override
-    public void showSaveProjectDialog() {}
 
     @Override
     public void showNewTab() {

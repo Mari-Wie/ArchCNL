@@ -1,5 +1,7 @@
 package org.archcnl.ui.main.io;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
@@ -7,6 +9,7 @@ import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.vaadin.filesystemdataprovider.FileSelect;
 
 public class FileSelectionComponent extends VerticalLayout {
@@ -17,13 +20,16 @@ public class FileSelectionComponent extends VerticalLayout {
     private Optional<File> selectedFile = Optional.empty();
     private TextField pathField;
     private OpenSaveProjectDialog dialog;
+    private boolean selectDirectory;
+    private Label fileSelectErrorLabel;
 
-    public FileSelectionComponent(OpenSaveProjectDialog dialog) {
+    public FileSelectionComponent(OpenSaveProjectDialog dialog, boolean selectDirectory) {
         this.dialog = dialog;
+        this.selectDirectory = selectDirectory;
         defaultRootFile = Paths.get(System.getProperty("user.home")).getRoot().toFile();
         fileSelect = createFileSelect(defaultRootFile);
 
-        pathField = new TextField("Enter a path to change the directory.");
+        pathField = new TextField("Enter a path to change the directory");
         pathField.setPlaceholder(defaultRootFile.getAbsolutePath());
         pathField.setClearButtonVisible(true);
         pathField.setWidthFull();
@@ -49,7 +55,11 @@ public class FileSelectionComponent extends VerticalLayout {
                     }
                 });
 
-        add(pathField, fileSelect);
+        fileSelectErrorLabel = new Label();
+        fileSelectErrorLabel.setVisible(false);
+        fileSelectErrorLabel.getStyle().set("color", "red");
+
+        add(pathField, fileSelect, fileSelectErrorLabel);
     }
 
     private FileSelect createFileSelect(File rootFile) {
@@ -62,30 +72,59 @@ public class FileSelectionComponent extends VerticalLayout {
         newFileSelect.addValueChangeListener(
                 event -> {
                     Optional<File> file = newFileSelect.getOptionalValue();
-                    if (file.isPresent() && file.get().isFile()) {
-                        selectedFile = file;
-                        setFileSelectInvalid(false);
+                    if (selectDirectory) {
+                        handleDirectoryChange(file);
                     } else {
-                        selectedFile = Optional.empty();
-                        showErrorMessage("Please select a file.");
+                        if (file.isPresent() && file.get().isFile()) {
+                            selectedFile = file;
+                            dialog.setConfirmButtonEnabled(true);
+                            fileSelectErrorLabel.setVisible(false);
+                        } else {
+                            selectedFile = Optional.empty();
+                            showErrorMessage("Please select a file.");
+                        }
                     }
                 });
+
+        // ExpandListener is necessary as the ValueChangeListener is only activated when either a
+        // file
+        // or an empty directory is selected
+        if (selectDirectory) {
+            for (Component child : newFileSelect.getChildren().collect(Collectors.toList())) {
+                if (child instanceof TreeGrid) {
+                    TreeGrid<File> grid = (TreeGrid<File>) child;
+                    grid.addExpandListener(
+                            event -> {
+                                File file = event.getItems().iterator().next();
+                                handleDirectoryChange(Optional.of(file));
+                            });
+                }
+            }
+        }
+
         newFileSelect.setWidth("500px");
         newFileSelect.setHeight("500px");
         return newFileSelect;
     }
 
-    private void setFileSelectInvalid(boolean invalid) {
-        dialog.setConfirmButtonEnabled(!invalid);
-        fileSelect.setInvalid(invalid);
-    }
-
     public void showErrorMessage(String errorMessage) {
-        fileSelect.setErrorMessage(errorMessage);
-        setFileSelectInvalid(true);
+        fileSelectErrorLabel.setText(errorMessage);
+        dialog.setConfirmButtonEnabled(false);
+        fileSelectErrorLabel.setVisible(true);
     }
 
     public Optional<File> getSelectedFile() {
         return selectedFile;
+    }
+
+    private void handleDirectoryChange(Optional<File> file) {
+        if (file.isPresent() && file.get().isDirectory()) {
+            selectedFile = file;
+            dialog.setConfirmButtonEnabled(true);
+            fileSelectErrorLabel.setVisible(false);
+        } else {
+            selectedFile = Optional.empty();
+            showErrorMessage("Please select a directory.");
+        }
     }
 }

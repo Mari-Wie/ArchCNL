@@ -3,9 +3,13 @@ package org.archcnl.ui.main;
 import com.vaadin.flow.component.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.ui.common.ConfirmNotification;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.main.MainContract.View;
+import org.archcnl.ui.main.io.OpenProjectDialog;
+import org.archcnl.ui.main.io.SaveProjectDialog;
 import org.archcnl.ui.output.component.QueryView;
 
 public class MainPresenter
@@ -113,12 +117,12 @@ public class MainPresenter
 
     @Override
     public void showOpenProject() {
-        view.showOpenProjectDialog();
+        new OpenProjectDialog().open();
     }
 
     @Override
     public void showSaveProject() {
-        view.showSaveProjectDialog();
+        new SaveProjectDialog().open();
     }
 
     @Override
@@ -129,5 +133,14 @@ public class MainPresenter
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         view.setSaveProjectMenuItemEnabled(true);
+    }
+
+    @Override
+    public void saveProject() {
+        try {
+            ProjectManager.getInstance().saveProject();
+        } catch (IOException e) {
+            new ConfirmNotification("Project file could not be written.").open();
+        }
     }
 }

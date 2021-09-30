@@ -9,9 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import org.archcnl.domain.input.ProjectManager;
-import org.archcnl.domain.input.io.ArchRulesFromAdocReader;
-import org.archcnl.domain.input.io.ArchRulesImporter;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public class OpenProjectDialog extends Dialog implements OpenSaveProjectDialog {
 
@@ -22,13 +19,12 @@ public class OpenProjectDialog extends Dialog implements OpenSaveProjectDialog {
         setDraggable(true);
 
         Text title = new Text("Select project file to open)");
-        FileSelectionComponent fileSelectionComponent = new FileSelectionComponent(this);
+        FileSelectionComponent fileSelectionComponent = new FileSelectionComponent(this, false);
 
         confirmButton =
                 new Button(
                         "Open",
                         event -> {
-                            ArchRulesImporter importer = new ArchRulesFromAdocReader();
                             Optional<File> file = fileSelectionComponent.getSelectedFile();
                             if (file.isEmpty()) {
                                 // should not be possible as button should be disabled when this is
@@ -36,9 +32,7 @@ public class OpenProjectDialog extends Dialog implements OpenSaveProjectDialog {
                                 fileSelectionComponent.showErrorMessage("Please select a file.");
                             } else {
                                 try {
-                                    importer.readArchitectureRules(
-                                            file.get(), RulesConceptsAndRelations.getInstance());
-                                    ProjectManager.getInstance().setProjectFile(file.get());
+                                    ProjectManager.getInstance().openProject(file.get());
                                     close();
                                 } catch (IOException e) {
                                     fileSelectionComponent.showErrorMessage(
