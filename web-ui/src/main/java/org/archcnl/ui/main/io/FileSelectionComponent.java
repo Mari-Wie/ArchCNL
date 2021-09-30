@@ -16,9 +16,9 @@ public class FileSelectionComponent extends VerticalLayout {
     private FileSelect fileSelect;
     private Optional<File> selectedFile = Optional.empty();
     private TextField pathField;
-    private OpenProjectDialog dialog;
+    private OpenSaveProjectDialog dialog;
 
-    public FileSelectionComponent(OpenProjectDialog dialog) {
+    public FileSelectionComponent(OpenSaveProjectDialog dialog) {
         this.dialog = dialog;
         defaultRootFile = Paths.get(System.getProperty("user.home")).getRoot().toFile();
         fileSelect = createFileSelect(defaultRootFile);

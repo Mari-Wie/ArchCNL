@@ -13,7 +13,7 @@ import org.archcnl.domain.input.io.ArchRulesFromAdocReader;
 import org.archcnl.domain.input.io.ArchRulesImporter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public class OpenProjectDialog extends Dialog {
+public class OpenProjectDialog extends Dialog implements OpenSaveProjectDialog {
 
     private static final long serialVersionUID = 6550339926202761828L;
     private Button confirmButton;
@@ -55,6 +55,7 @@ public class OpenProjectDialog extends Dialog {
         add(title, fileSelectionComponent, buttonRow);
     }
 
+    @Override
     public void setConfirmButtonEnabled(boolean enabled) {
         confirmButton.setEnabled(enabled);
     }
