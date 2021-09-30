@@ -3,8 +3,6 @@ package org.archcnl.ui.main.io;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
@@ -14,14 +12,14 @@ import org.vaadin.filesystemdataprovider.FileSelect;
 public class FileSelectionComponent extends VerticalLayout {
 
     private static final long serialVersionUID = -1340341590751453530L;
-    private PropertyChangeSupport propertyChangeSupport;
     private final File defaultRootFile;
     private FileSelect fileSelect;
     private Optional<File> selectedFile = Optional.empty();
     private TextField pathField;
+    private OpenProjectDialog dialog;
 
-    public FileSelectionComponent() {
-        propertyChangeSupport = new PropertyChangeSupport(this);
+    public FileSelectionComponent(OpenProjectDialog dialog) {
+        this.dialog = dialog;
         defaultRootFile = Paths.get(System.getProperty("user.home")).getRoot().toFile();
         fileSelect = createFileSelect(defaultRootFile);
 
@@ -66,7 +64,7 @@ public class FileSelectionComponent extends VerticalLayout {
                     Optional<File> file = newFileSelect.getOptionalValue();
                     if (file.isPresent() && file.get().isFile()) {
                         selectedFile = file;
-                        hideErrorMessage();
+                        setFileSelectInvalid(false);
                     } else {
                         selectedFile = Optional.empty();
                         showErrorMessage("Please select a file.");
@@ -78,8 +76,7 @@ public class FileSelectionComponent extends VerticalLayout {
     }
 
     private void setFileSelectInvalid(boolean invalid) {
-        propertyChangeSupport.firePropertyChange(
-                "isPathFieldInvalid", pathField.isInvalid(), invalid);
+        dialog.setConfirmButtonEnabled(!invalid);
         fileSelect.setInvalid(invalid);
     }
 
@@ -88,19 +85,7 @@ public class FileSelectionComponent extends VerticalLayout {
         setFileSelectInvalid(true);
     }
 
-    public void hideErrorMessage() {
-        setFileSelectInvalid(false);
-    }
-
     public Optional<File> getSelectedFile() {
         return selectedFile;
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 }

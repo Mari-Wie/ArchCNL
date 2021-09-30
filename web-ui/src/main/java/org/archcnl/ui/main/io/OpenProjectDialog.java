@@ -5,16 +5,15 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.domain.input.io.ArchRulesFromAdocReader;
 import org.archcnl.domain.input.io.ArchRulesImporter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public class OpenProjectDialog extends Dialog implements PropertyChangeListener {
+public class OpenProjectDialog extends Dialog {
 
     private static final long serialVersionUID = 6550339926202761828L;
     private Button confirmButton;
@@ -23,8 +22,7 @@ public class OpenProjectDialog extends Dialog implements PropertyChangeListener 
         setDraggable(true);
 
         Text title = new Text("Select project file to open)");
-        FileSelectionComponent fileSelectionComponent = new FileSelectionComponent();
-        fileSelectionComponent.addPropertyChangeListener(this);
+        FileSelectionComponent fileSelectionComponent = new FileSelectionComponent(this);
 
         confirmButton =
                 new Button(
@@ -40,6 +38,7 @@ public class OpenProjectDialog extends Dialog implements PropertyChangeListener 
                                 try {
                                     importer.readArchitectureRules(
                                             file.get(), RulesConceptsAndRelations.getInstance());
+                                    ProjectManager.getInstance().setProjectFile(file.get());
                                     close();
                                 } catch (IOException e) {
                                     fileSelectionComponent.showErrorMessage(
@@ -56,8 +55,7 @@ public class OpenProjectDialog extends Dialog implements PropertyChangeListener 
         add(title, fileSelectionComponent, buttonRow);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        confirmButton.setEnabled((boolean) evt.getNewValue());
+    public void setConfirmButtonEnabled(boolean enabled) {
+        confirmButton.setEnabled(enabled);
     }
 }
