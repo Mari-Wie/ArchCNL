@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import org.archcnl.domain.input.ProjectManager;
 
-public class SaveProjectDialog extends Dialog implements OpenSaveProjectDialog {
+public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
 
     private static final long serialVersionUID = 6538573408820948553L;
     private Button confirmButton;

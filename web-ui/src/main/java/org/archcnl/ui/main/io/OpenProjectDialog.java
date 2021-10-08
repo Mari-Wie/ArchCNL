@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 import org.archcnl.domain.input.ProjectManager;
 
-public class OpenProjectDialog extends Dialog implements OpenSaveProjectDialog {
+public class OpenProjectDialog extends Dialog implements FileSelectionDialog {
 
     private static final long serialVersionUID = 6550339926202761828L;
     private Button confirmButton;

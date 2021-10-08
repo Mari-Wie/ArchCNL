@@ -1,6 +1,6 @@
 package org.archcnl.ui.main.io;
 
-public interface OpenSaveProjectDialog {
+public interface FileSelectionDialog {
 
     public void setConfirmButtonEnabled(boolean enabled);
 }
