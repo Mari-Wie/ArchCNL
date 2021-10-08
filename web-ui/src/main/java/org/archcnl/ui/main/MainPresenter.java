@@ -26,10 +26,6 @@ public class MainPresenter
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 
-    public void setView(MainView view) {
-        this.view = view;
-    }
-
     @Override
     public void setView(View view) {
         this.view = view;
