@@ -10,6 +10,7 @@ import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.Relation;
+import org.archcnl.ui.output.component.QueryView;
 
 public class ConceptAndRelationView extends VerticalLayout implements PropertyChangeListener {
 
@@ -33,7 +34,10 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
         add(createNewConceptLayout);
         add(createNewRelationLayout);
-        add(new Button("Check for violations"));
+        add(
+                new Button(
+                        "Check for violations",
+                        click -> getUI().ifPresent(ui -> ui.navigate(QueryView.class))));
         getStyle().set("border", "1px solid black");
     }
 
