@@ -2,7 +2,6 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,16 +33,8 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
         add(createNewConceptLayout);
         add(createNewRelationLayout);
-        add(createBottomBar());
+        add(new Button("Check for violations"));
         getStyle().set("border", "1px solid black");
-    }
-
-    public HorizontalLayout createBottomBar() {
-        HorizontalLayout bottomBarLayout = new HorizontalLayout();
-        final Button saveButton = new Button("Save");
-        final Button checkButton = new Button("Check");
-        bottomBarLayout.add(saveButton, checkButton);
-        return bottomBarLayout;
     }
 
     private void updateConceptView() {
