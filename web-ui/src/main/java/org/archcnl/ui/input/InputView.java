@@ -2,6 +2,7 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 
 public class InputView extends HorizontalLayout {
 
