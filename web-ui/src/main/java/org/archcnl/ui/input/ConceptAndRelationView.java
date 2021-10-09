@@ -1,14 +1,16 @@
 package org.archcnl.ui.input;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.mappings.Concept;
+import org.archcnl.domain.input.model.mappings.Relation;
+
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import java.util.LinkedList;
-import java.util.List;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.mappings.Concept;
-import org.archcnl.domain.input.model.mappings.Relation;
 
 public class ConceptAndRelationView extends VerticalLayout {
 
@@ -29,8 +31,6 @@ public class ConceptAndRelationView extends VerticalLayout {
                 RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
         List<MappingListEntry> conceptData = new LinkedList<>();
         ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
-        System.out.println("Children: " + defaultConceptsStub.getChildren().toString());
-        System.out.println("Concepts: " + concepts);
 
         conceptData.add(defaultConceptsStub);
 
