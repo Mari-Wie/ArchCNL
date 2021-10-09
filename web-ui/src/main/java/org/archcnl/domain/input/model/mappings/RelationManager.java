@@ -1,5 +1,7 @@
 package org.archcnl.domain.input.model.mappings;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +12,7 @@ import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 public class RelationManager {
 
     private List<Relation> relations;
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public RelationManager(ConceptManager conceptManager) throws ConceptDoesNotExistException {
         relations = new LinkedList<>();
@@ -23,6 +26,7 @@ public class RelationManager {
     public void addRelation(Relation relation) throws RelationAlreadyExistsException {
         if (!doesRelationExist(relation)) {
             relations.add(relation);
+            propertyChangeSupport.firePropertyChange("newRelation", null, relation);
         } else {
             throw new RelationAlreadyExistsException(relation.getName());
         }
@@ -199,5 +203,9 @@ public class RelationManager {
                 .filter(CustomRelation.class::isInstance)
                 .map(CustomRelation.class::cast)
                 .collect(Collectors.toList());
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 }
