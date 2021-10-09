@@ -2,15 +2,18 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.ui.main.MainPresenter;
 
 public class InputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    ArchitectureRulesLayout architectureRulesLayout = new ArchitectureRulesLayout();
-    ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView();
+    ArchitectureRulesLayout architectureRulesLayout;
+    ConceptAndRelationView conceptAndRelationView;
 
-    public InputView() {
+    public InputView(MainPresenter mainPresenter) {
+        architectureRulesLayout = new ArchitectureRulesLayout();
+        conceptAndRelationView = new ConceptAndRelationView(mainPresenter);
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         // golden ratio??
