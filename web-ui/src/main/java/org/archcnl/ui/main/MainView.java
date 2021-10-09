@@ -1,127 +1,135 @@
-// package org.vaadin.example;
-//
-// import com.vaadin.flow.component.button.Button;
-// import com.vaadin.flow.component.dependency.CssImport;
-// import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-// import com.vaadin.flow.component.textfield.TextArea;
-// import com.vaadin.flow.component.textfield.TextField;
-// import com.vaadin.flow.data.value.ValueChangeMode;
-// import com.vaadin.flow.router.Route;
-// import com.vaadin.flow.server.PWA;
-// import org.archcnl.stardogwrapper.api.StardogAPIFactory;
-// import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
-// import org.archcnl.stardogwrapper.api.StardogICVAPI;
-// import org.archcnl.stardogwrapper.impl.StardogDatabase;
-//
-/// **
-// * A sample Vaadin view class.
-// *
-// * <p>To implement a Vaadin view just extend any Vaadin component and use @Route annotation to
-// * announce it in a URL as a Spring managed bean. Use the @PWA annotation make the application
-// * installable on phones, tablets and some desktop browsers.
-// *
-// * <p>A new instance of this class is created for every new user and every browser tab/window.
-// */
-// @Route
-// @PWA(
-//        name = "Vaadin Application",
-//        shortName = "Vaadin App",
-//        description = "This is an example Vaadin application.",
-//        enableInstallPrompt = false)
-// @CssImport("./styles/shared-styles.css")
-// @CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
-// public class MainView extends VerticalLayout {
-//
-//    /**
-//     * Construct a new Vaadin view.
-//     *
-//     * <p>Build the initial UI state for the user accessing the application.
-//     *
-//     * @param service The message service. Automatically injected Spring managed bean.
-//     */
-//    String query = "nothing";
-//
-//    TextField selectField = new TextField();
-//    TextField subjectField = new TextField();
-//    TextField predicateField = new TextField();
-//    TextField objectField = new TextField();
-//    TextArea ta = new TextArea("test");
-//    StardogICVAPI icvAPI;
-//    StardogDatabaseAPI db;
-//
-//    public MainView() {
-//        String username = "admin";
-//        String password = "admin";
-//        String databaseName = "archcnl_it_db";
-//        String server = "http://localhost:5820";
-//
-//        this.db = new StardogDatabase(server, databaseName, username, password);
-//        this.icvAPI = StardogAPIFactory.getICVAPI(db);
-//
-//        db.connect(false);
-//        // Use TextField for standard text input
-//        TextField textField = new TextField("Your name");
-//        textField.addThemeName("bordered");
-//
-//        selectField.setPlaceholder("selectField");
-//        selectField.addValueChangeListener(e -> updateQuery());
-//        selectField.setValueChangeMode(ValueChangeMode.LAZY);
-//
-//        subjectField.setPlaceholder("subjectField");
-//        subjectField.addValueChangeListener(e -> updateQuery());
-//        subjectField.setValueChangeMode(ValueChangeMode.LAZY);
-//
-//        predicateField.setPlaceholder("predicate");
-//        predicateField.addValueChangeListener(e -> updateQuery());
-//        predicateField.setValueChangeMode(ValueChangeMode.LAZY);
-//
-//        objectField.setPlaceholder("object");
-//        objectField.addValueChangeListener(e -> updateQuery());
-//        objectField.setValueChangeMode(ValueChangeMode.LAZY);
-//        // Button click listeners can be defined as lambda expressions
-//
-//        // Use custom CSS classes to apply styling. This is defined in shared-styles.css.
-//        addClassName("centered-content");
-//
-//        Button queryButton = new Button("Apply", e -> printQuery());
-//
-//        add(textField);
-//        add(selectField, subjectField, predicateField, objectField);
-//        add(ta, queryButton);
-//    }
-//
-//    void updateNumberOfTypes() {}
-//
-//    void updateNumberOfPackages() {}
-//
-//    void updateNumberOfRelationships() {}
-//
-//    void updateNumberOfViolations() {}
-//
-//    public void updateQuery() {
-//        query =
-//                selectField.getValue()
-//                        + subjectField.getValue()
-//                        + predicateField.getValue()
-//                        + objectField.getValue();
-//    }
-//
-//    public void printQuery() {
-//        System.out.println(query);
-//        String q =
-//                " PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX owl:
-// <http://www.w3.org/2002/07/owl#> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX xsd:
-// <http://www.w3.org/2001/XMLSchema#> PREFIX conformance:
-// <http://arch-ont.org/ontologies/architectureconformance#> PREFIX famix:
-// <http://arch-ont.org/ontologies/famix.owl#> PREFIX architecture:
-// <http://www.arch-ont.org/ontologies/architecture.owl#> SELECT DISTINCT ?cnl ?violation WHERE {
-// GRAPH ?g { ?rule rdf:type conformance:ArchitectureRule.  ?rule conformance:hasRuleRepresentation
-// ?cnl.  ?violation conformance:violates ?rule.  } }";
-//        try {
-//            this.db.executeSelectQuery(ta.getValue());
-//        } catch (Exception e) {
-//            System.out.println("Exception Caught, fix this later");
-//            e.printStackTrace();
-//        }
-//    }
-// }
+package org.archcnl.ui.main;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
+import org.archcnl.ui.main.MainContract.Presenter;
+import org.archcnl.ui.main.MainContract.View;
+
+@Route
+@PWA(
+        name = "Vaadin Application",
+        shortName = "Vaadin App",
+        description = "This is an example Vaadin application.",
+        enableInstallPrompt = false)
+@CssImport("./styles/vaadin-button-styles.css")
+public class MainView extends VerticalLayout implements MainContract.View {
+
+    private static final long serialVersionUID = -4807002363716724924L;
+    private Component header;
+    private Component footer;
+    private Component content;
+    private Presenter<View> presenter;
+    private MenuItem saveProjectMenuItem;
+
+    public MainView() {
+        presenter = new MainPresenter();
+        presenter.setView(this);
+        header = createHeader();
+        // initializes content field
+        presenter.showArchitectureRuleView();
+        footer = createFooter();
+        setPadding(false);
+
+        add(header);
+        addAndExpand(content);
+        add(footer);
+    }
+
+    @Override
+    public void setContent(Component newContent) {
+        replace(content, newContent);
+        content = newContent;
+    }
+
+    private HorizontalLayout createHeader() {
+        HorizontalLayout headerBox = new HorizontalLayout();
+
+        Label title = new Label("ArchCNL");
+        title.getStyle().set("color", "White");
+        title.getStyle().set("font-size", "large");
+
+        MenuBar menuBar = new MenuBar();
+        MenuItem project = menuBar.addItem("Project");
+        MenuItem edit = menuBar.addItem("Edit");
+        MenuItem rules = menuBar.addItem("Rules");
+        menuBar.addItem("View", e -> presenter.showView());
+        menuBar.addItem("Help", e -> presenter.showHelp());
+
+        SubMenu projectSubMenu = project.getSubMenu();
+        projectSubMenu.addItem("New Project", e -> presenter.showNewTab());
+        projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
+        saveProjectMenuItem = projectSubMenu.addItem("Save", e -> presenter.saveProject());
+        saveProjectMenuItem.setEnabled(false);
+        projectSubMenu.addItem("Save As", e -> presenter.showSaveProject());
+
+        SubMenu editSubMenu = edit.getSubMenu();
+        editSubMenu.addItem("Undo", e -> presenter.undo());
+        editSubMenu.addItem("Redo", e -> presenter.redo());
+
+        SubMenu rulesSubMenu = rules.getSubMenu();
+        rulesSubMenu.addItem("Import from File", e -> presenter.showImportRulesFromFile());
+        rulesSubMenu.addItem("Import Rule Presets", e -> presenter.showImportRulePresets());
+
+        headerBox.add(title, menuBar);
+        headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        headerBox.setWidthFull();
+        return headerBox;
+    }
+
+    private HorizontalLayout createFooter() {
+        HorizontalLayout footerHbox = new HorizontalLayout();
+
+        Label copyright = new Label("Developed at the University of Hamburg.");
+
+        HorizontalLayout buttonHBox = new HorizontalLayout();
+        Button contactButton = new Button("Contact", e -> presenter.showContact());
+        Button wikiButton = new Button("Wiki", e -> presenter.showWiki());
+        Button siteButton = new Button("Project Site", e -> presenter.showProjectSite());
+        buttonHBox.add(copyright, contactButton, wikiButton, siteButton);
+
+        footerHbox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        footerHbox.addAndExpand(copyright);
+        footerHbox.add(buttonHBox);
+        footerHbox.setWidthFull();
+
+        return footerHbox;
+    }
+
+    @Override
+    public void showNewTab() {
+        VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
+        URI uri;
+        try {
+            uri = new URI(req.getRequestURL().toString());
+            getUI().get().getPage().open(uri.toString(), "ArchCNL");
+        } catch (URISyntaxException | NoSuchElementException e) {
+            Notification notification = new Notification();
+            Text errorMessage = new Text("Opening a new tab failed unexpectedly. Try again later.");
+            Button okButton = new Button("OK", click -> notification.close());
+            notification.add(errorMessage, okButton);
+            notification.setPosition(Notification.Position.MIDDLE);
+            notification.open();
+        }
+    }
+
+    @Override
+    public void setSaveProjectMenuItemEnabled(boolean enabled) {
+        saveProjectMenuItem.setEnabled(enabled);
+    }
+}

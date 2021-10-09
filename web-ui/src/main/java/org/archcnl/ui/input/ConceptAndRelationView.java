@@ -22,8 +22,8 @@ public class ConceptAndRelationView extends VerticalLayout {
     MappingListLayout relationTreeGrid;
 
     public ConceptAndRelationView() {
-        createNewConceptLayout.setHeight(50, Unit.PERCENTAGE);
-        createNewRelationLayout.setHeight(50, Unit.PERCENTAGE);
+        createNewConceptLayout.setHeight(46, Unit.PERCENTAGE);
+        createNewRelationLayout.setHeight(46, Unit.PERCENTAGE);
 
         List<Concept> concepts =
                 RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();

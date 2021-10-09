@@ -1,9 +1,8 @@
-package org.archcnl.ui.main;
+package org.archcnl.ui.output.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.archcnl.ui.output.component.QueryView;
 
 public class SideBarLayout extends VerticalLayout {
 
