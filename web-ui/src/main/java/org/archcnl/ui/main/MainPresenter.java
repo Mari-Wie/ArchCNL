@@ -22,7 +22,7 @@ public class MainPresenter
 
     public MainPresenter() {
         inputView = new InputView(this);
-        resultView = new QueryView();
+        resultView = new QueryView(this);
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 
