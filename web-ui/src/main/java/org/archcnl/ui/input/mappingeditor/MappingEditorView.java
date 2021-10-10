@@ -28,7 +28,6 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     protected MappingEditorView(
             MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
         this.presenter = presenter;
-        this.presenter.setView(this);
         setHeightFull();
         getStyle().set("overflow", "auto");
 
@@ -68,6 +67,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         buttonRow.add(new Button("Done", click -> presenter.doneButtonClicked(parent)));
         buttonRow.add(new Button("Cancel", click -> parent.switchToArchitectureRulesView()));
         add(buttonRow);
+        this.presenter.setView(this);
     }
 
     @Override
