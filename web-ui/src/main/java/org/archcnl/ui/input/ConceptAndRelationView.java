@@ -2,7 +2,6 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,6 +10,7 @@ import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.Relation;
+import org.archcnl.ui.main.MainPresenter;
 
 public class ConceptAndRelationView extends VerticalLayout implements PropertyChangeListener {
 
@@ -23,7 +23,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     MappingListLayout conceptTreeGrid;
     MappingListLayout relationTreeGrid;
 
-    public ConceptAndRelationView(InputView parent) {
+    public ConceptAndRelationView(MainPresenter mainPresenter) {
         this.parent = parent;
         ButtonClickResponder conceptCreationClickResponder = this::switchToConceptEditorView;
         ButtonClickResponder relationCreationClickResponder = this::switchToRelationEditorView;
@@ -33,6 +33,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         createNewRelationLayout =
                 new CreateNewLayout(
                         "Relations", "Create new relation", relationCreationClickResponder);
+    public ConceptAndRelationView(InputView parent) {
         RulesConceptsAndRelations.getInstance().getConceptManager().addPropertyChangeListener(this);
         RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
@@ -44,16 +45,8 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
         add(createNewConceptLayout);
         add(createNewRelationLayout);
-        add(createBottomBar());
+        add(new Button("Check for violations", click -> mainPresenter.showResultView()));
         getStyle().set("border", "1px solid black");
-    }
-
-    public HorizontalLayout createBottomBar() {
-        HorizontalLayout bottomBarLayout = new HorizontalLayout();
-        final Button saveButton = new Button("Save");
-        final Button checkButton = new Button("Check");
-        bottomBarLayout.add(saveButton, checkButton);
-        return bottomBarLayout;
     }
 
     private void updateConceptView() {

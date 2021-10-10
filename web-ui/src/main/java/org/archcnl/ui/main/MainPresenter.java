@@ -21,8 +21,8 @@ public class MainPresenter
     private Component inputView;
 
     public MainPresenter() {
-        inputView = new InputView();
-        resultView = new QueryView();
+        inputView = new InputView(this);
+        resultView = new QueryView(this);
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 

@@ -9,6 +9,7 @@ import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
 import org.archcnl.ui.input.mappingeditor.RulesOrMappingEditorView;
+import org.archcnl.ui.main.MainPresenter;
 
 public class InputView extends HorizontalLayout {
 
@@ -19,7 +20,9 @@ public class InputView extends HorizontalLayout {
     private RulesOrMappingEditorView architectureRulesView = new ArchitectureRulesLayout();
     private RulesOrMappingEditorView currentlyShownView;
 
-    public InputView() {
+    public InputView(MainPresenter mainPresenter) {
+        architectureRulesLayout = new ArchitectureRulesLayout();
+        conceptAndRelationView = new ConceptAndRelationView(mainPresenter);
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
