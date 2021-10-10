@@ -58,7 +58,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
         }
-        conceptTreeGrid = new MappingListLayout(conceptData);
+        conceptTreeGrid = new MappingListLayout(conceptData, parent);
         createNewConceptLayout.add(conceptTreeGrid);
     }
 
@@ -72,7 +72,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (relationTreeGrid != null) {
             createNewRelationLayout.remove(relationTreeGrid);
         }
-        relationTreeGrid = new MappingListLayout(relationData);
+        relationTreeGrid = new MappingListLayout(relationData, parent);
         createNewRelationLayout.add(relationTreeGrid);
     }
 
