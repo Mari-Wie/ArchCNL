@@ -28,6 +28,8 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
             MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
         this.presenter = presenter;
         this.presenter.setView(this);
+        setHeightFull();
+        getStyle().set("overflow", "auto");
 
         Label title = new Label("Create or edit a " + mappingType);
         Button closeButton =
