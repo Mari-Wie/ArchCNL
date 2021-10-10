@@ -2,6 +2,7 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorView;
