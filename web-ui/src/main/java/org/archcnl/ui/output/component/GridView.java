@@ -3,10 +3,10 @@ package org.archcnl.ui.output.component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
+import org.archcnl.ui.output.MockedRow;
 import org.archcnl.ui.output.Violation;
 
 public class GridView extends VerticalLayout {
@@ -25,38 +25,42 @@ public class GridView extends VerticalLayout {
     public GridView() {
         this.db = new StardogDatabase(server, databaseName, username, password);
         grid.setHeightByRows(true);
-        add(grid);
     }
 
     public void update(final String queryString) {
-        Optional<Result> res = Optional.empty();
-        try {
-            db.connect(false);
-            res = db.executeSelectQuery(queryString);
-            db.closeConnectionToServer();
-        } catch (final Exception ex) {
-            // TODO add logger for exception case
-            ex.printStackTrace();
-        }
-        if (res.isPresent()) {
-            final StardogDatabaseAPI.Result results = res.get();
-            try {
-                if (results.getNumberOfViolations() > 0) {
-                    for (final String varName : results.getVars()) {
-                        grid.addColumn(item -> item.getVal(varName)).setHeader(varName);
-                    }
-                }
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-            final ArrayList<ArrayList<String>> violations = results.getViolations();
-            for (final ArrayList<String> violation : violations) {
-                violationList.add(new Violation(results.getVars(), violation));
-            }
-        } else {
-            // TODO Decide what to do with errors or wrong queries
-        }
-
-        grid.setItems(violationList);
+        List<MockedRow> content = new ArrayList<>();
+        content.add(
+                new MockedRow(
+                        1,
+                        "Every Aggregate must resideIn a DomainRing.",
+                        "ValidationAggregate",
+                        "package api;",
+                        "1",
+                        "api.ValidationAggregate",
+                        "Thursday, 14-Oct-21 14:56:32 UTC"));
+        content.add(
+                new MockedRow(
+                        2,
+                        "No Aggregate can use an ApplicationService.",
+                        "UserAggregate",
+                        "import api.UserService;",
+                        "3",
+                        "domain.UserAggregate",
+                        "Thursday, 14-Oct-21 14:56:32 UTC"));
+        content.add(
+                new MockedRow(
+                        3,
+                        "No Aggregate can use an ApplicationService.",
+                        "UserAggregate",
+                        "private UserService userService;",
+                        "8",
+                        "domain.UserAggregate",
+                        "Thursday, 14-Oct-21 14:56:32 UTC"));
+        Grid<MockedRow> mockedGrid = new Grid<>(MockedRow.class);
+        mockedGrid.setHeightByRows(true);
+        mockedGrid.setItems(content);
+        mockedGrid.setColumns(
+                "index", "violates", "className", "line", "lineNumber", "fullName", "timeStamp");
+        add(mockedGrid);
     }
 }
