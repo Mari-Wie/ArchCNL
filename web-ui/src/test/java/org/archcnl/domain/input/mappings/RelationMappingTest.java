@@ -30,7 +30,8 @@ class RelationMappingTest {
 
         // when
         List<RelationMapping> actual = new LinkedList<>();
-        customRelations.forEach((relation) -> actual.add(relation.getMapping()));
+        customRelations.forEach(
+                relation -> relation.getMapping().ifPresent(mapping -> actual.add(mapping)));
 
         String expectedResideIn =
                 "resideInMapping: (?class rdf:type famix:FamixClass)"

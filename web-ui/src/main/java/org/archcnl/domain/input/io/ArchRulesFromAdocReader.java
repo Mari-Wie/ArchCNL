@@ -10,14 +10,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.exceptions.NoMappingException;
 import org.archcnl.domain.input.exceptions.NoTripletException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
@@ -80,12 +76,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 CustomConcept concept = new CustomConcept(name);
                                 concept.setMapping(parseMapping(potentialConceptMapping, concept));
                                 rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
-                            } catch (UnrelatedMappingException
-                                    | NoMappingException
-                                    | VariableAlreadyExistsException
-                                    | UnsupportedObjectTypeInTriplet
-                                    | RelationDoesNotExistException
-                                    | InvalidVariableNameException e) {
+                            } catch (UnrelatedMappingException | NoMappingException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });
@@ -103,11 +94,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 rulesConceptsAndRelations
                                         .getRelationManager()
                                         .addOrAppend(relation);
-                            } catch (UnrelatedMappingException
-                                    | NoMappingException
-                                    | VariableAlreadyExistsException
-                                    | UnsupportedObjectTypeInTriplet
-                                    | InvalidVariableNameException e) {
+                            } catch (UnrelatedMappingException | NoMappingException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });

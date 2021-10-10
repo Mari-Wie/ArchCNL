@@ -14,14 +14,23 @@ public class ConceptAndRelationView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    CreateNewLayout createNewConceptLayout = new CreateNewLayout("Concepts", "Create new concept");
-    CreateNewLayout createNewRelationLayout =
-            new CreateNewLayout("Relations", "Create new relation");
+    private InputView parent;
+    CreateNewLayout createNewConceptLayout;
+    CreateNewLayout createNewRelationLayout;
     HorizontalLayout bottomBarLayout = new HorizontalLayout();
     MappingListLayout conceptTreeGrid;
     MappingListLayout relationTreeGrid;
 
-    public ConceptAndRelationView() {
+    public ConceptAndRelationView(InputView parent) {
+        this.parent = parent;
+        ButtonClickResponder conceptCreationClickResponder = this::switchToConceptEditorView;
+        ButtonClickResponder relationCreationClickResponder = this::switchToRelationEditorView;
+        createNewConceptLayout =
+                new CreateNewLayout(
+                        "Concepts", "Create new concept", conceptCreationClickResponder);
+        createNewRelationLayout =
+                new CreateNewLayout(
+                        "Relations", "Create new relation", relationCreationClickResponder);
         createNewConceptLayout.setHeight(46, Unit.PERCENTAGE);
         createNewRelationLayout.setHeight(46, Unit.PERCENTAGE);
 
@@ -60,5 +69,13 @@ public class ConceptAndRelationView extends VerticalLayout {
         final Button saveButton = new Button("Save");
         final Button checkButton = new Button("Check");
         bottomBarLayout.add(saveButton, checkButton);
+    }
+
+    public void switchToConceptEditorView() {
+        parent.switchToConceptEditorView();
+    }
+
+    public void switchToRelationEditorView() {
+        parent.switchToRelationEditorView();
     }
 }

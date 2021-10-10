@@ -20,11 +20,7 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
                                 DragSource.create(entryLayout);
                         dragSource.addDragStartListener(event -> {});
                         // TODO: Change this to the desired behavior
-                        dragSource.setDragData(entry.getContent().toString());
-                        dragSource.addDragEndListener(
-                                event -> {
-                                    System.out.println(dragSource.getDragData());
-                                });
+                        dragSource.setDragData(entry.getContent());
                     }
 
                     return entryLayout;

@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
+import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
@@ -94,5 +95,15 @@ public abstract class Relation {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public void changeName(String newName) throws RelationAlreadyExistsException {
+        if (!RulesConceptsAndRelations.getInstance()
+                .getRelationManager()
+                .doesRelationExist(new CustomRelation(newName))) {
+            this.name = newName;
+        } else {
+            throw new RelationAlreadyExistsException(newName);
+        }
     }
 }

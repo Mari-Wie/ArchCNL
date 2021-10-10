@@ -8,19 +8,13 @@ public abstract class Mapping {
 
     // The "when" part
     private List<AndTriplets> orStatements;
-    private VariableManager variableManager;
 
     protected Mapping(List<AndTriplets> whenTriplets) {
         this.orStatements = whenTriplets;
-        this.variableManager = new VariableManager();
     }
 
     public List<AndTriplets> getWhenTriplets() {
         return orStatements;
-    }
-
-    public VariableManager getVariableManager() {
-        return variableManager;
     }
 
     public abstract Triplet getThenTriplet();

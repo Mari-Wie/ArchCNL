@@ -1,10 +1,8 @@
 package org.archcnl.domain.input.model.mappings;
 
 import java.util.LinkedList;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class CustomRelation extends Relation {
 
@@ -12,17 +10,8 @@ public class CustomRelation extends Relation {
 
     private RelationMapping mapping;
 
-    public CustomRelation(String name)
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
-                    InvalidVariableNameException {
+    public CustomRelation(String name) {
         super(name, new LinkedList<>());
-        // TODO: Allow for thenVariables to be null
-        mapping =
-                new RelationMapping(
-                        new Variable("placeholder1"),
-                        new Variable("placeholder2"),
-                        new LinkedList<>(),
-                        this);
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
@@ -35,8 +24,8 @@ public class CustomRelation extends Relation {
         }
     }
 
-    public RelationMapping getMapping() {
-        return mapping;
+    public Optional<RelationMapping> getMapping() {
+        return Optional.ofNullable(mapping);
     }
 
     @Override
