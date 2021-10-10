@@ -6,14 +6,23 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.ui.input.ButtonClickResponder;
 import org.archcnl.ui.input.CreateNewLayout;
+import org.archcnl.ui.input.RulesOrMappingEditorView;
 
-public class ArchitectureRulesLayout extends VerticalLayout implements PropertyChangeListener {
+public class ArchitectureRulesLayout extends RulesOrMappingEditorView
+        implements PropertyChangeListener {
 
     private static final long serialVersionUID = 1L;
 
     CreateNewLayout createNewRuleLayout =
-            new CreateNewLayout("Architecture Rules", "Create new Arch Rule");
+            new CreateNewLayout(
+                    "Architecture Rules",
+                    "Create new Arch Rule",
+                    new ButtonClickResponder() {
+                        @Override
+                        public void onButtonClick() {}
+                    });
     VerticalLayout rulesLayout = new VerticalLayout();
 
     public ArchitectureRulesLayout() {

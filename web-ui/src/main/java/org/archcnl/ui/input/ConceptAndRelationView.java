@@ -2,6 +2,7 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,7 +24,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     MappingListLayout conceptTreeGrid;
     MappingListLayout relationTreeGrid;
 
-    public ConceptAndRelationView(MainPresenter mainPresenter) {
+    public ConceptAndRelationView(InputView parent, MainPresenter mainPresenter) {
         this.parent = parent;
         ButtonClickResponder conceptCreationClickResponder = this::switchToConceptEditorView;
         ButtonClickResponder relationCreationClickResponder = this::switchToRelationEditorView;
@@ -33,7 +34,6 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         createNewRelationLayout =
                 new CreateNewLayout(
                         "Relations", "Create new relation", relationCreationClickResponder);
-    public ConceptAndRelationView(InputView parent) {
         RulesConceptsAndRelations.getInstance().getConceptManager().addPropertyChangeListener(this);
         RulesConceptsAndRelations.getInstance()
                 .getRelationManager()

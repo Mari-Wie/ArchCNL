@@ -2,13 +2,12 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
-import org.archcnl.ui.input.mappingeditor.RulesOrMappingEditorView;
+import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.main.MainPresenter;
 
 public class InputView extends HorizontalLayout {
@@ -16,13 +15,12 @@ public class InputView extends HorizontalLayout {
     private static final long serialVersionUID = 1L;
     private static final float GOLDEN_RATIO = 61.8f;
 
-    private ConceptAndRelationView conceptAndRelationView = new ConceptAndRelationView(this);
+    private ConceptAndRelationView conceptAndRelationView;
     private RulesOrMappingEditorView architectureRulesView = new ArchitectureRulesLayout();
     private RulesOrMappingEditorView currentlyShownView;
 
     public InputView(MainPresenter mainPresenter) {
-        architectureRulesLayout = new ArchitectureRulesLayout();
-        conceptAndRelationView = new ConceptAndRelationView(mainPresenter);
+        conceptAndRelationView = new ConceptAndRelationView(this, mainPresenter);
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
