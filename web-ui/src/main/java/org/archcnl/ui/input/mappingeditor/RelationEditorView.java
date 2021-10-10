@@ -76,4 +76,14 @@ public class RelationEditorView extends MappingEditorView {
             objectView.showErrorMessage(message);
         }
     }
+
+    @Override
+    public void setSubjectInThenTriplet(Variable subject) {
+        subjectPresenter.setSubject(subject);
+    }
+
+    @Override
+    public void setObjectInThenTriplet(ObjectType object) {
+        objectView.setObject(object);
+    }
 }

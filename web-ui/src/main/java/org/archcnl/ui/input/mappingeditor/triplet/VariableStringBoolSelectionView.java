@@ -5,7 +5,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.model.mappings.BooleanValue;
 import org.archcnl.domain.input.model.mappings.ObjectType;
+import org.archcnl.domain.input.model.mappings.StringValue;
+import org.archcnl.domain.input.model.mappings.Variable;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -74,6 +77,22 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
         }
         return object;
+    }
+
+    public void setObject(ObjectType object) {
+        if (object instanceof StringValue) {
+            showStringSelectionView();
+            stringSelectionView.setValue(((StringValue) object).getValue());
+        } else if (object instanceof BooleanValue) {
+            showBooleanSelectionView();
+            booleanSelectionView.setValue(String.valueOf(((BooleanValue) object).getValue()));
+        } else if (object instanceof Variable) {
+            showVariableSelectionView();
+            variableSelectionPresenter.setSelectedVariable((Variable) object);
+        } else {
+            // should never happen
+            throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
+        }
     }
 
     public void showErrorMessage(String message) {

@@ -34,6 +34,10 @@ public interface MappingEditorContract {
         public void showThenSubjectErrorMessage(String message);
 
         public void showThenSubjectOrObjectErrorMessage(String message);
+
+        public void setSubjectInThenTriplet(Variable subject);
+
+        public void setObjectInThenTriplet(ObjectType object);
     }
 
     public interface Presenter<T extends View> extends Serializable {

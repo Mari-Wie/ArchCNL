@@ -50,14 +50,16 @@ public class VariableSelectionView extends ComboBox<String>
             String createItem = CREATE_ITEM + "\"" + currentFilter + "\"";
             items.add(0, createItem);
         }
+        String value = getValue();
         setItems(items);
+        setItem(value);
     }
 
     @Override
     public void updateItems() {
         String value = getValue();
         setItems(presenter.getVariableNames());
-        setValue(value);
+        setItem(value);
     }
 
     @Override

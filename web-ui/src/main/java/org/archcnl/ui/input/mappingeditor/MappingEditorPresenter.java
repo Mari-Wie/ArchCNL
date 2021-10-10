@@ -2,10 +2,9 @@ package org.archcnl.ui.input.mappingeditor;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 
 public abstract class MappingEditorPresenter implements MappingEditorContract.Presenter<View> {
 
@@ -13,7 +12,7 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
     protected View view;
     private VariableManager variableManager;
 
-    protected MappingEditorPresenter() {
+    protected MappingEditorPresenter(List<AndTriplets> andTriplets) {
         this.variableManager = new VariableManager();
     }
 
@@ -23,7 +22,7 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
         view.updateNameFieldInThenTriplet(newName);
         try {
             updateMappingName(newName);
-        } catch (ConceptAlreadyExistsException | RelationAlreadyExistsException e) {
+        } catch (MappingAlreadyExistsException e) {
             view.showNameFieldErrorMessage("The name is already taken");
         }
     }
@@ -36,6 +35,7 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
     @Override
     public void setView(View view) {
         this.view = view;
+        initInfoFieldAndThenTriplet();
     }
 
     @Override
@@ -59,6 +59,7 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
                 .collect(Collectors.toList());
     }
 
-    protected abstract void updateMappingName(String newName)
-            throws ConceptAlreadyExistsException, RelationAlreadyExistsException;
+    protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
+
+    protected abstract void initInfoFieldAndThenTriplet();
 }
