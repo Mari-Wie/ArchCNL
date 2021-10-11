@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.mappings.Concept;
+import org.archcnl.domain.input.model.mappings.CustomConcept;
 
 public class ConceptListEntry implements MappingListEntry {
 
@@ -49,10 +50,7 @@ public class ConceptListEntry implements MappingListEntry {
         return isLeaf;
     }
 
-    // TODO:
-    // change this to return false for default entries when these can be differentiated from other
-    // entries
     public boolean isAlterable() {
-        return true;
+        return getContent() instanceof CustomConcept;
     }
 }

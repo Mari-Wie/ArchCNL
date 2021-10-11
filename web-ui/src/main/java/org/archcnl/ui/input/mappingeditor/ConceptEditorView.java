@@ -65,4 +65,15 @@ public class ConceptEditorView extends MappingEditorView {
     public void showThenSubjectOrObjectErrorMessage(String message) {
         showThenSubjectErrorMessage(message);
     }
+
+    @Override
+    public void setSubjectInThenTriplet(Variable subject) {
+        subjectPresenter.setSubject(subject);
+    }
+
+    @Override
+    public void setObjectInThenTriplet(ObjectType object) {
+        throw new UnsupportedOperationException(
+                "The object in the \"then\" part of a concept cannot be changed.");
+    }
 }

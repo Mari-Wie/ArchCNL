@@ -23,6 +23,19 @@ public class VariableSelectionPresenter
         this.variableManager.addPropertyChangeListener(this);
     }
 
+    protected void setSelectedVariable(Variable variable) {
+        if (!variableManager.doesVariableExist(variable)) {
+            try {
+                variableManager.addVariable(variable);
+                view.updateItems();
+            } catch (VariableAlreadyExistsException e) {
+                // cannot occur
+                e.printStackTrace();
+            }
+        }
+        view.setItem(variable.getName());
+    }
+
     protected Variable getSelectedVariable()
             throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
         String variableName =

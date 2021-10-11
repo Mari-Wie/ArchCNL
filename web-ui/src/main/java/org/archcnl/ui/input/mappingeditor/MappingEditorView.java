@@ -7,9 +7,11 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
@@ -20,17 +22,20 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         implements MappingEditorContract.View {
 
     private static final long serialVersionUID = 156879235315976468L;
-
+    private VerticalLayout content = new VerticalLayout();
     protected MappingEditorContract.Presenter<View> presenter;
-
     protected TextField mappingName;
 
     protected MappingEditorView(
             MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
         this.presenter = presenter;
-        this.presenter.setView(this);
         setHeightFull();
         getStyle().set("overflow", "auto");
+
+        AndTripletsEditorPresenter andTripletsEditorPresenter =
+                new AndTripletsEditorPresenter(
+                        presenter.getVariableManager(), presenter, new AndTriplets());
+        content.add(new AndTripletsEditorView(andTripletsEditorPresenter));
 
         Label title = new Label("Create or edit a " + mappingType);
         Button closeButton =
@@ -58,7 +63,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         add(new VariableListView(variableListPresenter));
 
         add(new Label("When"));
-        add(createAndTripletsView());
+        add(content);
         add(new Label("Then"));
         addThenTripletView();
 
@@ -68,25 +73,20 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         buttonRow.add(new Button("Done", click -> presenter.doneButtonClicked(parent)));
         buttonRow.add(new Button("Cancel", click -> parent.switchToArchitectureRulesView()));
         add(buttonRow);
-    }
-
-    @Override
-    public void addNewAndTripletsViewAfter(AndTripletsEditorContract.View andTripletsView) {
-        int previousIndex = indexOf((Component) andTripletsView);
-        addComponentAtIndex(previousIndex + 1, createAndTripletsView());
+        this.presenter.setView(this);
     }
 
     @Override
     public void deleteAndTripletsView(AndTripletsEditorContract.View andTripletsView) {
-        remove((Component) andTripletsView);
-        if (getComponentCount() == 0) {
-            add(createAndTripletsView());
+        content.remove((Component) andTripletsView);
+        if (content.getComponentCount() == 0) {
+            presenter.lastAndTripletsDeleted();
         }
     }
 
     @Override
     public List<AndTripletsEditorPresenter> getAndTripletsPresenters() {
-        return getChildren()
+        return content.getChildren()
                 .filter(AndTripletsEditorView.class::isInstance)
                 .map(AndTripletsEditorView.class::cast)
                 .map(AndTripletsEditorView::getPresenter)
@@ -106,10 +106,24 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         mappingName.setInvalid(true);
     }
 
-    private AndTripletsEditorView createAndTripletsView() {
-        AndTripletsEditorPresenter andTripletsEditorPresenter =
-                new AndTripletsEditorPresenter(presenter.getVariableManager(), presenter);
-        return new AndTripletsEditorView(andTripletsEditorPresenter);
+    @Override
+    public int getIndexOf(AndTripletsEditorContract.View andTripletsView) {
+        return content.indexOf((Component) andTripletsView);
+    }
+
+    @Override
+    public void addAndTripletsView(AndTripletsEditorView andTripletsView) {
+        content.add(andTripletsView);
+    }
+
+    @Override
+    public void addAndTripletsViewAtIndex(int index, AndTripletsEditorView andTripletsView) {
+        content.addComponentAtIndex(index, andTripletsView);
+    }
+
+    @Override
+    public void clearContent() {
+        content.removeAll();
     }
 
     protected abstract void addThenTripletView();

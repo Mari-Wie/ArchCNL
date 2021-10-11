@@ -54,15 +54,14 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
                 RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
         List<MappingListEntry> conceptData = new LinkedList<>();
         ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
+
         conceptData.add(defaultConceptsStub);
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
         }
-        conceptTreeGrid = new MappingListLayout(conceptData);
+        conceptTreeGrid = new MappingListLayout(conceptData, parent);
         createNewConceptLayout.add(conceptTreeGrid);
-    }
 
-    private void updateRelationView() {
         List<Relation> relations =
                 RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
         List<MappingListEntry> relationData = new LinkedList<>();
@@ -72,7 +71,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (relationTreeGrid != null) {
             createNewRelationLayout.remove(relationTreeGrid);
         }
-        relationTreeGrid = new MappingListLayout(relationData);
+        relationTreeGrid = new MappingListLayout(relationData, parent);
         createNewRelationLayout.add(relationTreeGrid);
     }
 

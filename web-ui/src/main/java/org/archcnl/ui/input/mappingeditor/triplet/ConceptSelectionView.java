@@ -45,6 +45,10 @@ public class ConceptSelectionView extends ComboBox<String>
         throw new ObjectNotDefinedException();
     }
 
+    public void setObject(Concept concept) {
+        setValue(concept.getName());
+    }
+
     private void handleDropEvent(Object data) {
         if (data instanceof Concept) {
             Concept concept = (Concept) data;
