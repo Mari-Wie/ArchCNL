@@ -3,9 +3,11 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.model.mappings.Concept;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.View;
@@ -62,5 +64,16 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
             object = variableStringBoolSelectionView.getObject();
         }
         return object;
+    }
+
+    @Override
+    public void setObject(ObjectType object) throws PredicateCannotRelateToObjectException {
+        if (conceptSelectionView != null && object instanceof Concept) {
+            conceptSelectionView.setObject((Concept) object);
+        } else if (variableStringBoolSelectionView != null) {
+            variableStringBoolSelectionView.setObject(object);
+        } else {
+            throw new PredicateCannotRelateToObjectException(object);
+        }
     }
 }

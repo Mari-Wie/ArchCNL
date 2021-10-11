@@ -13,8 +13,6 @@ public interface MappingEditorContract {
 
     public interface View {
 
-        public void addNewAndTripletsViewAfter(AndTripletsEditorContract.View andTripletsView);
-
         public void deleteAndTripletsView(AndTripletsEditorContract.View andTripletsView);
 
         public List<AndTripletsEditorPresenter> getAndTripletsPresenters();
@@ -38,6 +36,14 @@ public interface MappingEditorContract {
         public void setSubjectInThenTriplet(Variable subject);
 
         public void setObjectInThenTriplet(ObjectType object);
+
+        public int getIndexOf(AndTripletsEditorContract.View andTripletsView);
+
+        public void addAndTripletsViewAtIndex(int index, AndTripletsEditorView andTripletsView);
+
+        public void addAndTripletsView(AndTripletsEditorView andTripletsView);
+
+        public void clearContent();
     }
 
     public interface Presenter<T extends View> extends Serializable {
@@ -55,5 +61,9 @@ public interface MappingEditorContract {
         public int numberOfAndTriplets();
 
         public void doneButtonClicked(InputView parent);
+
+        public void lastAndTripletsDeleted();
+
+        public void showFirstAndTripletsView();
     }
 }

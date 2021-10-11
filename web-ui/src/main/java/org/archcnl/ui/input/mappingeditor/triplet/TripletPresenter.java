@@ -1,5 +1,6 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
@@ -10,6 +11,7 @@ import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.domain.input.model.mappings.Variable;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
@@ -24,11 +26,14 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     private View view;
     private AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
             andTripletsEditorPresenter;
+    private Optional<Triplet> triplet;
 
     public TripletPresenter(
             AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
-                    andTripletsEditorPresenter) {
+                    andTripletsEditorPresenter,
+            Optional<Triplet> triplet) {
         this.andTripletsEditorPresenter = andTripletsEditorPresenter;
+        this.triplet = triplet;
     }
 
     @Override
@@ -49,6 +54,19 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     @Override
     public void setView(View view) {
         this.view = view;
+        fillTriplet();
+    }
+
+    private void fillTriplet() {
+        if (triplet.isPresent()) {
+            subjectPresenter.setSubject(triplet.get().getSubject());
+            predicatePresenter.setPredicate(triplet.get().getPredicate());
+            try {
+                objectPresenter.setObject(triplet.get().getObject());
+            } catch (PredicateCannotRelateToObjectException e) {
+                // do not set the object
+            }
+        }
     }
 
     public Triplet getTriplet() throws TripletNotDefinedException, UnsupportedObjectTypeInTriplet {
