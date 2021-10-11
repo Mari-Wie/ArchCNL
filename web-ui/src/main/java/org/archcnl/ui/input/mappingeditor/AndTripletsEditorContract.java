@@ -9,6 +9,8 @@ public interface AndTripletsEditorContract {
 
     public interface View {
 
+        public void addNewTripletView(TripletPresenter tripletPresenter);
+
         public void addNewTripletViewAfter(TripletContract.View tripletView);
 
         public void deleteTripletView(TripletContract.View tripletView);
@@ -16,6 +18,8 @@ public interface AndTripletsEditorContract {
         public List<TripletPresenter> getTripletPresenters();
 
         public void setAddButtonVisible(boolean visible);
+
+        public void clearContent();
     }
 
     public interface Presenter<T extends View> extends Serializable {
