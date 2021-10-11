@@ -38,8 +38,6 @@ public class ConceptAndRelationView extends VerticalLayout {
                 RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
         List<MappingListEntry> conceptData = new LinkedList<>();
         ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
-        System.out.println("Children: " + defaultConceptsStub.getChildren().toString());
-        System.out.println("Concepts: " + concepts);
 
         conceptData.add(defaultConceptsStub);
         if (conceptTreeGrid != null) {
@@ -47,7 +45,6 @@ public class ConceptAndRelationView extends VerticalLayout {
         }
         conceptTreeGrid = new MappingListLayout(conceptData, parent);
         createNewConceptLayout.add(conceptTreeGrid);
-    }
 
         List<Relation> relations =
                 RulesConceptsAndRelations.getInstance().getRelationManager().getRelations();
