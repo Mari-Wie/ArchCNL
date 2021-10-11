@@ -7,6 +7,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
@@ -23,30 +24,32 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
 
     public AndTripletsEditorView(AndTripletsEditorContract.Presenter<View> presenter) {
         this.presenter = presenter;
-        this.presenter.setView(this);
 
         setPadding(false);
         content = new VerticalLayout();
         content.getStyle().set("border", "1px solid black");
-        content.add(new Label("AndBlock: All rows in this block are \"AND\" connected"));
-        content.add(createTripletView());
+        content.add(new Label("OR-Block: All rows in this block are AND connected"));
+        content.add(createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
         add(content);
 
         addButton =
                 new Button(
-                        "Add new AndBlock",
+                        "Add new OR-Block",
                         new Icon(VaadinIcon.PLUS),
                         click -> presenter.addButtonPressed());
         addButton.setWidthFull();
 
         getElement().addEventListener("mouseover", e -> presenter.mouseEnter());
         getElement().addEventListener("mouseout", e -> presenter.mouseLeave());
+        this.presenter.setView(this);
     }
 
     @Override
     public void addNewTripletViewAfter(TripletContract.View tripletView) {
         int previousIndex = content.indexOf((Component) tripletView);
-        content.addComponentAtIndex(previousIndex + 1, createTripletView());
+        content.addComponentAtIndex(
+                previousIndex + 1,
+                createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
     }
 
     @Override
@@ -54,7 +57,9 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         content.remove((Component) tripletView);
         if (getTripletPresenters().isEmpty()) {
             if (presenter.isLastAndTripletsEditor()) {
-                content.add(createTripletView());
+                content.add(
+                        createTripletView(
+                                new TripletPresenter(presenter, Optional.ofNullable(null))));
             } else {
                 presenter.delete();
             }
@@ -76,8 +81,7 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         return presenter;
     }
 
-    private TripletView createTripletView() {
-        TripletPresenter tripletPresenter = new TripletPresenter(presenter);
+    private TripletView createTripletView(TripletPresenter tripletPresenter) {
         return new TripletView(tripletPresenter, presenter.getVariableManager());
     }
 
@@ -88,5 +92,15 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         } else {
             remove(addButton);
         }
+    }
+
+    @Override
+    public void addNewTripletView(TripletPresenter tripletPresenter) {
+        content.add(new TripletView(tripletPresenter, presenter.getVariableManager()));
+    }
+
+    @Override
+    public void clearContent() {
+        content.removeAll();
     }
 }

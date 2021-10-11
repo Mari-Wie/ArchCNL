@@ -1,6 +1,6 @@
 package org.archcnl.ui.main;
 
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -17,12 +17,12 @@ public class MainPresenter
 
     private static final long serialVersionUID = 2859025859553864862L;
     private View view;
-    private Component resultView;
-    private Component inputView;
+    private HorizontalLayout resultView;
+    private HorizontalLayout inputView;
 
     public MainPresenter() {
-        inputView = new InputView();
-        resultView = new QueryView();
+        inputView = new InputView(this);
+        resultView = new QueryView(this);
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 

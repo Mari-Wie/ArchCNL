@@ -17,4 +17,8 @@ public class SubjectPresenter extends VariableSelectionPresenter {
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         return getSelectedVariable();
     }
+
+    public void setSubject(Variable subject) {
+        setSelectedVariable(subject);
+    }
 }
