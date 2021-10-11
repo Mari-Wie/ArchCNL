@@ -3,6 +3,7 @@ package org.archcnl.ui.input;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.archcnl.domain.input.model.mappings.CustomRelation;
 import org.archcnl.domain.input.model.mappings.Relation;
 
 public class RelationListEntry implements MappingListEntry {
@@ -49,10 +50,7 @@ public class RelationListEntry implements MappingListEntry {
         return isLeaf;
     }
 
-    // TODO:
-    // change this to return false for default entries when these can be differentiated from other
-    // entries
     public boolean isAlterable() {
-        return true;
+        return getContent() instanceof CustomRelation;
     }
 }
