@@ -31,6 +31,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         this.presenter = presenter;
         setHeightFull();
         getStyle().set("overflow", "auto");
+        getStyle().set("border", "1px solid black");
 
         AndTripletsEditorPresenter andTripletsEditorPresenter =
                 new AndTripletsEditorPresenter(
