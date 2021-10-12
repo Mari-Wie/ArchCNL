@@ -23,9 +23,9 @@ import org.archcnl.ui.main.MainContract.View;
 
 @Route
 @PWA(
-        name = "Vaadin Application",
-        shortName = "Vaadin App",
-        description = "This is an example Vaadin application.",
+        name = "ArchCNL",
+        shortName = "ArchCNL",
+        description = "Check your software projects for architecture violations.",
         enableInstallPrompt = false)
 @CssImport("./styles/vaadin-button-styles.css")
 public class MainView extends VerticalLayout implements MainContract.View {
