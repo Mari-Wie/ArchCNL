@@ -1,5 +1,12 @@
 package org.archcnl.ui.main;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
+
+import org.archcnl.ui.main.MainContract.Presenter;
+import org.archcnl.ui.main.MainContract.View;
+
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
@@ -15,11 +22,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.NoSuchElementException;
-import org.archcnl.ui.main.MainContract.Presenter;
-import org.archcnl.ui.main.MainContract.View;
 
 @Route
 @PWA(
@@ -64,8 +66,9 @@ public class MainView extends VerticalLayout implements MainContract.View {
         HorizontalLayout headerBox = new HorizontalLayout();
 
         Label title = new Label("ArchCNL");
-        title.getStyle().set("color", "White");
-        title.getStyle().set("font-size", "large");
+        title.getStyle().set("color", "#76d0f1");
+        title.getStyle().set("font-size", "x-large");
+        title.getStyle().set("font-weight", "bold");
 
         MenuBar menuBar = new MenuBar();
         MenuItem project = menuBar.addItem("Project");
