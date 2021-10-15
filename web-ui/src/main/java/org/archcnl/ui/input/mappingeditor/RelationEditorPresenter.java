@@ -27,7 +27,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
     public RelationEditorPresenter(CustomRelation relation) {
         super(extractAndTriplets(relation));
-        this.relation = Optional.ofNullable(relation);
+        this.relation = Optional.of(relation);
     }
 
     private static List<AndTriplets> extractAndTriplets(CustomRelation relation) {
