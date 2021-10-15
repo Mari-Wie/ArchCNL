@@ -3,6 +3,7 @@ package org.archcnl.ui.input.mappingeditor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.Optional;
+import org.apache.commons.lang.NotImplementedException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Variable;
@@ -52,7 +53,7 @@ public class ConceptEditorView extends MappingEditorView {
 
     @Override
     public Optional<ObjectType> getThenTripletObject() {
-        return Optional.ofNullable(null);
+        throw new NotImplementedException();
     }
 
     @Override
