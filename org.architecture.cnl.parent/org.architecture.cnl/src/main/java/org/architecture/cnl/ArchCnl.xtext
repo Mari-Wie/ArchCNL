@@ -99,7 +99,7 @@ DataStatement:
 ;
 
 FactStatement:
-	'Fact' ':' (assertion=ConceptAssertion | assertion=RoleAssertion) '.'
+	'Fact' ':' ('a'|'an')? (assertion=ConceptAssertion | assertion=RoleAssertion) '.'
 	
 ;
 

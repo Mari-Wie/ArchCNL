@@ -2,7 +2,15 @@
 package org.architecture.cnl.tests;
 
 import com.google.inject.Inject;
-import org.architecture.cnl.archcnl.*;
+import org.architecture.cnl.archcnl.CanOnlyRuleType;
+import org.architecture.cnl.archcnl.ConditionalRuleType;
+import org.architecture.cnl.archcnl.FactStatement;
+import org.architecture.cnl.archcnl.Model;
+import org.architecture.cnl.archcnl.MustRuleType;
+import org.architecture.cnl.archcnl.NegationRuleType;
+import org.architecture.cnl.archcnl.OnlyCanRuleType;
+import org.architecture.cnl.archcnl.Sentence;
+import org.architecture.cnl.archcnl.SubConceptRuleType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -253,6 +261,28 @@ public class ArchcnlParsingTest {
         // given
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Fact: FancyClass is a Class .");
+        _builder.newLine();
+        // when
+        final Model result = this.parseHelper.parse(_builder);
+        // then
+        Assert.assertNotNull(result);
+        final EList<Resource.Diagnostic> errors = result.eResource().getErrors();
+        StringConcatenation _builder_1 = new StringConcatenation();
+        _builder_1.append("Unexpected errors: ");
+        String _join = IterableExtensions.join(errors, ", ");
+        _builder_1.append(_join);
+        Assert.assertTrue(_builder_1.toString(), errors.isEmpty());
+        Assert.assertEquals(result.getSentence().size(), 1);
+        final Sentence sentence = result.getSentence().get(0);
+        EObject _ruletype = sentence.getRuletype();
+        Assert.assertTrue((_ruletype instanceof FactStatement));
+    }
+
+    @Test
+    public void givenFactStatementRuleWithA_whenAddingRule_thenCorrectRuleAdded() throws Exception {
+        // given
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("Fact: a FancyClass is a Class .");
         _builder.newLine();
         // when
         final Model result = this.parseHelper.parse(_builder);
