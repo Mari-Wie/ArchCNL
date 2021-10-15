@@ -22,7 +22,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     private Optional<CustomConcept> concept;
 
     public ConceptEditorPresenter() {
-        this(null);
+        super(extractAndTriplets(null));
+        this.concept = Optional.ofNullable(null);
     }
 
     public ConceptEditorPresenter(CustomConcept concept) {
