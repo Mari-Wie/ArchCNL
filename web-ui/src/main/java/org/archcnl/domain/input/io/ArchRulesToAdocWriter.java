@@ -26,13 +26,16 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         List<CustomConcept> customConcepts =
                 rulesConceptsAndRelations.getConceptManager().getCustomConcepts();
         List<Mapping> conceptMappings = new LinkedList<>();
-        customConcepts.forEach((concept) -> conceptMappings.add(concept.getMapping()));
+        customConcepts.forEach(
+                concept -> concept.getMapping().ifPresent(mapping -> conceptMappings.add(mapping)));
         String conceptMappingsString = constructMappingString(conceptMappings);
 
         List<CustomRelation> customRelations =
                 rulesConceptsAndRelations.getRelationManager().getCustomRelations();
         List<Mapping> relationMappings = new LinkedList<>();
-        customRelations.forEach((relation) -> relationMappings.add(relation.getMapping()));
+        customRelations.forEach(
+                relation ->
+                        relation.getMapping().ifPresent(mapping -> relationMappings.add(mapping)));
         String relationMappingsString = constructMappingString(relationMappings);
 
         FileUtils.writeStringToFile(

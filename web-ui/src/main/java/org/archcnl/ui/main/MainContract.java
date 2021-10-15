@@ -1,13 +1,13 @@
 package org.archcnl.ui.main;
 
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.io.Serializable;
 
 public interface MainContract {
 
     public interface View extends Serializable {
 
-        public void setContent(Component newContent);
+        public void setContent(HorizontalLayout newContent);
 
         public void showNewTab();
 

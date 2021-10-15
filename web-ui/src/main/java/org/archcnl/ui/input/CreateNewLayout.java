@@ -9,9 +9,13 @@ public class CreateNewLayout extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    public CreateNewLayout(final String labelText, final String buttonText) {
+    public CreateNewLayout(
+            final String labelText,
+            final String buttonText,
+            final ButtonClickResponder buttonClickResponder) {
         final Label archRulesLabel = new Label(labelText);
-        final Button createNewRuleButton = new Button(buttonText);
+        final Button createNewRuleButton =
+                new Button(buttonText, click -> buttonClickResponder.onButtonClick());
         add(new HorizontalLayout(archRulesLabel, createNewRuleButton));
         getStyle().set("border", "1px solid black");
     }

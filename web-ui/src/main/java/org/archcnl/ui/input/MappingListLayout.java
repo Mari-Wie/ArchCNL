@@ -8,23 +8,20 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
 
     private static final long serialVersionUID = 3L;
 
-    public MappingListLayout(List<MappingListEntry> entries) {
+    public MappingListLayout(List<MappingListEntry> entries, InputView inputView) {
         super();
         setItems(entries, MappingListEntry::getChildren);
         addComponentHierarchyColumn(
                 entry -> {
-                    MappingListEntryLayout entryLayout = new MappingListEntryLayout(entry);
+                    MappingListEntryLayout entryLayout =
+                            new MappingListEntryLayout(entry, inputView);
 
                     if (entry.isLeaf()) {
                         DragSource<MappingListEntryLayout> dragSource =
                                 DragSource.create(entryLayout);
                         dragSource.addDragStartListener(event -> {});
                         // TODO: Change this to the desired behavior
-                        dragSource.setDragData(entry.getContent().toString());
-                        dragSource.addDragEndListener(
-                                event -> {
-                                    System.out.println(dragSource.getDragData());
-                                });
+                        dragSource.setDragData(entry.getContent());
                     }
 
                     return entryLayout;

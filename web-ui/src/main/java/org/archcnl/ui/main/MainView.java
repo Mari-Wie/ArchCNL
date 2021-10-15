@@ -1,7 +1,7 @@
 package org.archcnl.ui.main;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
@@ -23,36 +23,39 @@ import org.archcnl.ui.main.MainContract.View;
 
 @Route
 @PWA(
-        name = "Vaadin Application",
-        shortName = "Vaadin App",
-        description = "This is an example Vaadin application.",
+        name = "ArchCNL",
+        shortName = "ArchCNL",
+        description = "Check your software projects for architecture violations.",
         enableInstallPrompt = false)
 @CssImport("./styles/vaadin-button-styles.css")
 public class MainView extends VerticalLayout implements MainContract.View {
 
     private static final long serialVersionUID = -4807002363716724924L;
-    private Component header;
-    private Component footer;
-    private Component content;
+    private HorizontalLayout header;
+    private HorizontalLayout footer;
+    private HorizontalLayout content;
     private Presenter<View> presenter;
     private MenuItem saveProjectMenuItem;
 
     public MainView() {
         presenter = new MainPresenter();
         presenter.setView(this);
+        setSizeFull();
         header = createHeader();
-        // initializes content field
-        presenter.showArchitectureRuleView();
         footer = createFooter();
+        header.setHeight(5.0f, Unit.PERCENTAGE);
+        footer.setHeight(5.0f, Unit.PERCENTAGE);
         setPadding(false);
 
         add(header);
-        addAndExpand(content);
+        // initializes content field
+        presenter.showArchitectureRuleView();
         add(footer);
     }
 
     @Override
-    public void setContent(Component newContent) {
+    public void setContent(HorizontalLayout newContent) {
+        newContent.setHeight(87.4f, Unit.PERCENTAGE);
         replace(content, newContent);
         content = newContent;
     }
@@ -61,8 +64,9 @@ public class MainView extends VerticalLayout implements MainContract.View {
         HorizontalLayout headerBox = new HorizontalLayout();
 
         Label title = new Label("ArchCNL");
-        title.getStyle().set("color", "White");
-        title.getStyle().set("font-size", "large");
+        title.getStyle().set("color", "#76d0f1");
+        title.getStyle().set("font-size", "x-large");
+        title.getStyle().set("font-weight", "bold");
 
         MenuBar menuBar = new MenuBar();
         MenuItem project = menuBar.addItem("Project");

@@ -31,7 +31,8 @@ class ConceptMappingTest {
 
         // when
         List<ConceptMapping> actual = new LinkedList<>();
-        customConcepts.forEach((concept) -> actual.add(concept.getMapping()));
+        customConcepts.forEach(
+                concept -> concept.getMapping().ifPresent(mapping -> actual.add(mapping)));
 
         String expectedAggregate =
                 "isAggregate: (?class rdf:type famix:FamixClass)"

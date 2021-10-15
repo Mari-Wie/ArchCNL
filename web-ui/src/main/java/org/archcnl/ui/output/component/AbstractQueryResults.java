@@ -19,6 +19,8 @@ abstract class AbstractQueryResults extends VerticalLayout {
     protected TextArea queryTextArea;
 
     public AbstractQueryResults() {
+        setHeightFull();
+        getStyle().set("overflow", "auto");
         gridView = new GridView();
         queryTextArea = new TextArea("SPARQL Query");
         queryTextArea.setValue(exampleQuery);
