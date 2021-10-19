@@ -7,25 +7,21 @@ public class RelationMapping extends Mapping {
 
     private Triplet thenTriplet;
 
-    private CustomRelation thisRelation;
-
-    public RelationMapping(
-            Variable subject,
-            ObjectType object,
-            List<AndTriplets> whenTriplets,
-            CustomRelation thisRelation)
+    public RelationMapping(Triplet triplet, List<AndTriplets> whenTriplets)
             throws UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
-        this.thisRelation = thisRelation;
-        thenTriplet = new Triplet(subject, thisRelation, object);
+        thenTriplet = triplet;
     }
 
-    public void updateSubjectInThenTriplet(Variable subject) {
-        thenTriplet.setSubject(subject);
+    public void updateSubjectInThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
+
+        this.thenTriplet =
+                new Triplet(subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
     public void updateObjectInThenTriplet(ObjectType object) throws UnsupportedObjectTypeInTriplet {
-        thenTriplet.setObject(object);
+        this.thenTriplet =
+                new Triplet(thenTriplet.getSubject(), thenTriplet.getPredicate(), object);
     }
 
     @Override
@@ -35,6 +31,6 @@ public class RelationMapping extends Mapping {
 
     @Override
     public String getMappingNameRepresentation() {
-        return thisRelation.getName() + "Mapping";
+        return thenTriplet.getPredicate().getName() + "Mapping";
     }
 }

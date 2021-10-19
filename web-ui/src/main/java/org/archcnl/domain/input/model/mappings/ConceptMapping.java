@@ -25,8 +25,10 @@ public class ConceptMapping extends Mapping {
                         thisConcept);
     }
 
-    public void updateThenTriplet(Variable subject) {
-        thenTriplet.setSubject(subject);
+    public void updateThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
+
+        this.thenTriplet =
+                new Triplet(subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
     @Override
