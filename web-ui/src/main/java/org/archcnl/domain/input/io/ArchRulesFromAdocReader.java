@@ -33,9 +33,11 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private static final Pattern RULE_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_MAPPING_PATTERN =
-            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n))is.+\\-\\> \\(.+ rdf:type .+\\)");
+            Pattern.compile(
+                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
     private static final Pattern RELATION_MAPPING_PATTERN =
-            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n)).+Mapping.+\\-\\> \\(.+\\)");
+            Pattern.compile(
+                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile("\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+)\\)");
     private static final Pattern SPECIAL_TRIPLET_PATTERN =
