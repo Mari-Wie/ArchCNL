@@ -31,14 +31,13 @@ class ArchRuleToAdocWriterTest {
         RulesConceptsAndRelations model = TestUtils.prepareModel();
 
         // when
-        final File file = new File("src/test/resources/onionWriterTest.adoc");
+        final File file = new File("src/test/resources/WriterTest.adoc");
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
         archRulesToAdocWriter.writeArchitectureRules(file, model);
 
         // then
         String actualContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-        final File expectedFile =
-                new File("src/test/resources/architecture-documentation-onion.adoc");
+        final File expectedFile = new File("src/test/resources/architecture-documentation.adoc");
         String expectedContent = FileUtils.readFileToString(expectedFile, StandardCharsets.UTF_8);
 
         assertEquals(

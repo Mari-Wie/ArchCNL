@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 class ConceptMappingTest {
 
     @Test
-    void givenOnionConcepts_whenToStringRepresentation_thenGetExpectedResult()
+    void givenConcepts_whenToStringRepresentation_thenGetExpectedResult()
             throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
                     RelationDoesNotExistException, ConceptDoesNotExistException,
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,

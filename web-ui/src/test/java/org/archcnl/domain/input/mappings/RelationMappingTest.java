@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 class RelationMappingTest {
 
     @Test
-    void givenOnionRelations_whenToStringRepresentation_thenGetExpectedResult()
+    void givenRelations_whenToStringRepresentation_thenGetExpectedResult()
             throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
                     RelationDoesNotExistException, ConceptDoesNotExistException,
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,

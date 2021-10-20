@@ -24,16 +24,16 @@ class AdocEndToEndTest {
     }
 
     @Test
-    void givenOnionRuleFile_whenImportingAndExportingFile_thenWrittenFileIsAsExpected()
+    void givenRuleFile_whenImportingAndExportingFile_thenWrittenFileIsAsExpected()
             throws IOException, RelationDoesNotExistException {
         // given
-        final File ruleFile = new File("src/test/resources/architecture-documentation-onion.adoc");
+        final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
 
         // when
         ArchRulesFromAdocReader archRulesFromAdocReader = new ArchRulesFromAdocReader();
         archRulesFromAdocReader.readArchitectureRules(ruleFile, rulesConceptsAndRelations);
 
-        final File writtenFile = new File("src/test/resources/onionDemoEndToEndTest.adoc");
+        final File writtenFile = new File("src/test/resources/EndToEndTest.adoc");
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
         archRulesToAdocWriter.writeArchitectureRules(writtenFile, rulesConceptsAndRelations);
 
