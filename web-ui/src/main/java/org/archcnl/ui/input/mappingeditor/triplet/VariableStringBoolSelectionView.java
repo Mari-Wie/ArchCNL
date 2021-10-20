@@ -4,11 +4,14 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.BooleanValue;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.StringValue;
 import org.archcnl.domain.input.model.mappings.Variable;
+import org.archcnl.ui.input.mappingeditor.MappingEditorContract.Presenter;
+import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -22,7 +25,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private VariableManager variableManager;
 
     public VariableStringBoolSelectionView(
-            VariableManager variableManager, boolean stringsAllowed, boolean booleanAllowed) {
+            VariableManager variableManager,
+            boolean stringsAllowed,
+            boolean booleanAllowed,
+            Optional<Presenter<View>> optional) {
         this.variableManager = variableManager;
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
 
@@ -58,6 +64,9 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                                 break;
                             default:
                                 // should never happen
+                        }
+                        if (optional.isPresent()) {
+                            optional.get().selectedObjectTypeHasChanged();
                         }
                     }
                 });
@@ -132,5 +141,24 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         variableSelectionPresenter = new VariableSelectionPresenter(variableManager);
         variableSelectionView = new VariableSelectionView(variableSelectionPresenter);
         add(variableSelectionView);
+    }
+
+    public ObjectType getSelectedObjectType() {
+        ObjectType object;
+        if (booleanSelectionView != null) {
+            object = new BooleanValue(false);
+        } else if (stringSelectionView != null) {
+            object = new StringValue("");
+        } else if (variableSelectionView != null && variableSelectionPresenter != null) {
+            try {
+                object = new Variable("placeholder");
+            } catch (InvalidVariableNameException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        } else {
+            // should never happen
+            throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
+        }
+        return object;
     }
 }

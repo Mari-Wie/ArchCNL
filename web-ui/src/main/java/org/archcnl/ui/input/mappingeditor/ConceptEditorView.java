@@ -76,4 +76,10 @@ public class ConceptEditorView extends MappingEditorView {
         throw new UnsupportedOperationException(
                 "The object in the \"then\" part of a concept cannot be changed.");
     }
+
+    @Override
+    public ObjectType getSelectedObjectTypeInThenTriplet() {
+        throw new UnsupportedOperationException(
+                "The selected ObjectType cannot change for a Concept.");
+    }
 }

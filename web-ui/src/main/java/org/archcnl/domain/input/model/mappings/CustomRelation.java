@@ -1,7 +1,9 @@
 package org.archcnl.domain.input.model.mappings;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 
 public class CustomRelation extends Relation {
@@ -10,8 +12,8 @@ public class CustomRelation extends Relation {
 
     private RelationMapping mapping;
 
-    public CustomRelation(String name) {
-        super(name, new LinkedList<>());
+    public CustomRelation(String name, List<ObjectType> relatableObjectTypes) {
+        super(name, relatableObjectTypes);
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
@@ -31,5 +33,17 @@ public class CustomRelation extends Relation {
     @Override
     public String toStringRepresentation() {
         return RELATION_TYPE + ":" + getName();
+    }
+
+    public void changeRelatableObjectTypes(ObjectType objectType) {
+        List<ObjectType> objectTypes = new LinkedList<>();
+        objectTypes.add(objectType);
+        // A relation can always relate to a variable
+        try {
+            objectTypes.add(new Variable("placeholder"));
+        } catch (InvalidVariableNameException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        setRelatableObjectType(objectTypes);
     }
 }

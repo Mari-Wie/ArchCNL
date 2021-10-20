@@ -213,12 +213,12 @@ public class TestUtils {
                 new ConceptMapping(packageVariable, domainRingWhenTriplets, domainRing);
         domainRing.setMapping(domainRingMapping);
 
-        CustomRelation resideIn = new CustomRelation("resideIn");
+        CustomRelation resideIn = new CustomRelation("resideIn", new LinkedList<>());
         RelationMapping resideInMapping =
                 new RelationMapping(classVariable, packageVariable, resideInWhenTriplets, resideIn);
         resideIn.setMapping(resideInMapping);
 
-        CustomRelation use = new CustomRelation("use");
+        CustomRelation use = new CustomRelation("use", new LinkedList<>());
         RelationMapping useMapping =
                 new RelationMapping(classVariable, class2Variable, useWhenTriplets, use);
         use.setMapping(useMapping);

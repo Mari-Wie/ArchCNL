@@ -88,7 +88,8 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 RELATION_MAPPING_NAME, potentialRelationMapping);
-                                CustomRelation relation = new CustomRelation(name);
+                                CustomRelation relation =
+                                        new CustomRelation(name, new LinkedList<>());
                                 relation.setMapping(
                                         parseMapping(potentialRelationMapping, relation));
                                 rulesConceptsAndRelations
@@ -124,6 +125,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
             Triplet thenTriplet = parseThenPart(thenPart);
+            thisRelation.changeRelatableObjectTypes(thenTriplet.getObject());
             return new RelationMapping(
                     thenTriplet.getSubject(), thenTriplet.getObject(), whenTriplets, thisRelation);
         } catch (Exception e) {

@@ -29,6 +29,8 @@ public interface MappingEditorContract {
         public Optional<ObjectType> getThenTripletObject()
                 throws SubjectOrObjectNotDefinedException, InvalidVariableNameException;
 
+        public ObjectType getSelectedObjectTypeInThenTriplet();
+
         public void showThenSubjectErrorMessage(String message);
 
         public void showThenSubjectOrObjectErrorMessage(String message);
@@ -65,5 +67,7 @@ public interface MappingEditorContract {
         public void lastAndTripletsDeleted();
 
         public void showFirstAndTripletsView();
+
+        public void selectedObjectTypeHasChanged();
     }
 }
