@@ -48,13 +48,18 @@ class ConceptMappingTest {
                 "isDomainRing: (?package rdf:type famix:Namespace)"
                         + " (?package famix:hasName ?name) regex(?name, 'domain')"
                         + " -> (?package rdf:type architecture:DomainRing)";
+
+        String expectedEmptyWhen =
+                "isEmptyWhenConcept: -> (?var rdf:type architecture:EmptyWhenConcept)";
+
         List<String> expected = new LinkedList<>();
         expected.add(expectedAggregate);
         expected.add(expectedApplicationService);
         expected.add(expectedDomainRing);
+        expected.add(expectedEmptyWhen);
 
         // then
-        assertEquals(3, actual.size());
+        assertEquals(4, actual.size());
         for (ConceptMapping mapping : actual) {
             assertEquals(1, mapping.toStringRepresentation().size());
             assertTrue(expected.contains(mapping.toStringRepresentation().get(0)));

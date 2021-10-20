@@ -37,3 +37,15 @@ useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClas
 
 [role="mapping"]
 useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+isEmptyWhenConcept: -> (?var rdf:type architecture:EmptyWhenConcept)
+
+[role="mapping"]
+emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'test string')
+
+[role="mapping"]
+emptyWhenRelationBooleanMapping: -> (?var architecture:emptyWhenRelationBoolean 'false'^^xsd:boolean)
+
+[role="mapping"]
+emptyWhenRelationVariableMapping: -> (?var architecture:emptyWhenRelationVariable ?test)

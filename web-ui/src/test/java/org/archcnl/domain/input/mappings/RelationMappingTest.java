@@ -47,12 +47,27 @@ class RelationMappingTest {
                         + " (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2)"
                         + " -> (?class architecture:use ?class2)";
 
+        String expectedEmptyStringMapping =
+                "emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'test string')";
+
+        String expectedEmptyBooleanMapping =
+                "emptyWhenRelationBooleanMapping: -> (?var architecture:emptyWhenRelationBoolean 'false'^^xsd:boolean)";
+
+        String expectedEmptyVariableMapping =
+                "emptyWhenRelationVariableMapping: -> (?var architecture:emptyWhenRelationVariable ?test)";
+
         // then
-        assertEquals(2, actual.size());
+        assertEquals(5, actual.size());
         assertEquals(1, actual.get(0).toStringRepresentation().size());
         assertEquals(expectedResideIn, actual.get(0).toStringRepresentation().get(0));
         assertEquals(2, actual.get(1).toStringRepresentation().size());
         assertEquals(expectedUse1, actual.get(1).toStringRepresentation().get(0));
         assertEquals(expectedUse2, actual.get(1).toStringRepresentation().get(1));
+        assertEquals(1, actual.get(2).toStringRepresentation().size());
+        assertEquals(expectedEmptyVariableMapping, actual.get(2).toStringRepresentation().get(0));
+        assertEquals(1, actual.get(3).toStringRepresentation().size());
+        assertEquals(expectedEmptyStringMapping, actual.get(3).toStringRepresentation().get(0));
+        assertEquals(1, actual.get(4).toStringRepresentation().size());
+        assertEquals(expectedEmptyBooleanMapping, actual.get(4).toStringRepresentation().get(0));
     }
 }

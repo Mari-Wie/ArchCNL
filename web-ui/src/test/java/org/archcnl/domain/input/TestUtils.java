@@ -15,9 +15,11 @@ import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
+import org.archcnl.domain.input.model.mappings.BooleanValue;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.CustomConcept;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
+import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.StringValue;
 import org.archcnl.domain.input.model.mappings.Triplet;
@@ -59,6 +61,7 @@ public class TestUtils {
         Variable nameVariable = new Variable("name");
         Variable packageVariable = new Variable("package");
         Variable attributeVariable = new Variable("f");
+        Variable varVariable = new Variable("var");
 
         // isAggregate Mapping
         List<Triplet> triplets = new LinkedList<>();
@@ -223,6 +226,45 @@ public class TestUtils {
                 new RelationMapping(classVariable, class2Variable, useWhenTriplets, use);
         use.setMapping(useMapping);
 
+        CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept");
+        ConceptMapping emptyWhenConceptMapping =
+                new ConceptMapping(varVariable, new LinkedList<>(), emptyWhenConcept);
+        emptyWhenConcept.setMapping(emptyWhenConceptMapping);
+
+        List<ObjectType> relatableObjectTypes = new LinkedList<>();
+        relatableObjectTypes.add(new StringValue(""));
+        CustomRelation emptyWhenRelationString =
+                new CustomRelation("emptyWhenRelationString", relatableObjectTypes);
+        RelationMapping emptyWhenRelationStringMapping =
+                new RelationMapping(
+                        varVariable,
+                        new StringValue("test string"),
+                        new LinkedList<>(),
+                        emptyWhenRelationString);
+        emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
+
+        relatableObjectTypes = new LinkedList<>();
+        relatableObjectTypes.add(new BooleanValue(false));
+        CustomRelation emptyWhenRelationBoolean =
+                new CustomRelation("emptyWhenRelationBoolean", relatableObjectTypes);
+        RelationMapping emptyWhenRelationBooleanMapping =
+                new RelationMapping(
+                        varVariable,
+                        new BooleanValue(false),
+                        new LinkedList<>(),
+                        emptyWhenRelationBoolean);
+        emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
+
+        CustomRelation emptyWhenRelationVariable =
+                new CustomRelation("emptyWhenRelationVariable", new LinkedList<>());
+        RelationMapping emptyWhenRelationVariableMapping =
+                new RelationMapping(
+                        varVariable,
+                        new Variable("test"),
+                        new LinkedList<>(),
+                        emptyWhenRelationVariable);
+        emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping);
+
         result.getArchitectureRuleManager()
                 .addArchitectureRule(
                         new ArchitectureRule("Every Aggregate must resideIn a DomainRing."));
@@ -232,8 +274,12 @@ public class TestUtils {
         result.getConceptManager().addConcept(aggregate);
         result.getConceptManager().addConcept(applicationService);
         result.getConceptManager().addConcept(domainRing);
+        result.getConceptManager().addConcept(emptyWhenConcept);
         result.getRelationManager().addRelation(resideIn);
         result.getRelationManager().addRelation(use);
+        result.getRelationManager().addRelation(emptyWhenRelationVariable);
+        result.getRelationManager().addRelation(emptyWhenRelationString);
+        result.getRelationManager().addRelation(emptyWhenRelationBoolean);
         return result;
     }
 
