@@ -1,6 +1,7 @@
 package org.archcnl.ui.input.mappingeditor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
@@ -64,6 +65,7 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
                                         return null;
                                     }
                                 })
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList());
         return new AndTriplets(triplets);
     }
@@ -96,12 +98,12 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
     private void showTriplets() {
         if (!andTriplets.getTriplets().isEmpty()) {
             view.clearContent();
+            andTriplets
+                    .getTriplets()
+                    .forEach(
+                            triplet ->
+                                    view.addNewTripletView(
+                                            new TripletPresenter(this, Optional.of(triplet))));
         }
-        andTriplets
-                .getTriplets()
-                .forEach(
-                        triplet ->
-                                view.addNewTripletView(
-                                        new TripletPresenter(this, Optional.of(triplet))));
     }
 }
