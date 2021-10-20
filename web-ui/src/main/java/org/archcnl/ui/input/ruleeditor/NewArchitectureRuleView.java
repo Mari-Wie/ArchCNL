@@ -3,6 +3,7 @@ package org.archcnl.ui.input.ruleeditor;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
+import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.input.InputView;
@@ -31,10 +32,24 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView {
 
     private void saveRule() {
         if (!archRuleTextArea.isEmpty()) {
-            RulesConceptsAndRelations.getInstance()
-                    .getArchitectureRuleManager()
-                    .addArchitectureRule(new ArchitectureRule(archRuleTextArea.getValue()));
+            try {
+                ArchitectureRule newRule = parseArchitectureRule(archRuleTextArea.getValue());
+                RulesConceptsAndRelations.getInstance()
+                        .getArchitectureRuleManager()
+                        .addArchitectureRule(newRule);
+            } catch (NoArchitectureRuleException e) {
+                e.printStackTrace();
+            }
         }
         parent.switchToArchitectureRulesView();
+    }
+
+    private ArchitectureRule parseArchitectureRule(String potentialRule)
+            throws NoArchitectureRuleException {
+        if (false) {
+            // TODO implement actual parsing
+            throw new NoArchitectureRuleException(potentialRule);
+        }
+        return new ArchitectureRule(potentialRule);
     }
 }
