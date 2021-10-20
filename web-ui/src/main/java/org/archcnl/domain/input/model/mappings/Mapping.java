@@ -1,5 +1,7 @@
 package org.archcnl.domain.input.model.mappings;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,12 +24,20 @@ public abstract class Mapping {
     public abstract String getMappingNameRepresentation();
 
     public List<String> toStringRepresentation() {
-        return orStatements.stream()
-                .map(
-                        andTriplets ->
-                                andTriplets.toStringRepresentation(
-                                        getMappingNameRepresentation(), getThenTriplet()))
-                .collect(Collectors.toList());
+        if (orStatements.isEmpty()) {
+            return new LinkedList<>(
+                    Arrays.asList(
+                            new AndTriplets()
+                                    .toStringRepresentation(
+                                            getMappingNameRepresentation(), getThenTriplet())));
+        } else {
+            return orStatements.stream()
+                    .map(
+                            andTriplets ->
+                                    andTriplets.toStringRepresentation(
+                                            getMappingNameRepresentation(), getThenTriplet()))
+                    .collect(Collectors.toList());
+        }
     }
 
     public void addAndTriplets(AndTriplets andTriplets) {
