@@ -18,7 +18,7 @@ public abstract class ObjectType {
 
     public static ObjectType parseObject(String potentialObject) throws NoObjectTypeException {
         try {
-            if (potentialObject.matches("'.+'")) {
+            if (potentialObject.matches("'.*'")) {
                 return new StringValue(potentialObject.substring(1, potentialObject.length() - 1));
             } else if (potentialObject.startsWith("?")) {
                 return new Variable(potentialObject.substring(1));
