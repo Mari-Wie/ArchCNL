@@ -28,8 +28,7 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
         add(saveButton);
     }
 
-    @Override
-    public void saveRule() {
+    private void saveRule() {
         if (!archRuleTextArea.isEmpty()) {
             presenter.saveArchitectureRule(archRuleTextArea.getValue());
         }
