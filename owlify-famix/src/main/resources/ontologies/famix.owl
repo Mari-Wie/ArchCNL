@@ -747,6 +747,11 @@
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
         <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">double</hasName>
     </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#float">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">float</hasName>
+    </owl:NamedIndividual>
 
     <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#char">
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
