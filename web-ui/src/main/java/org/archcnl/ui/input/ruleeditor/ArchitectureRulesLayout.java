@@ -6,11 +6,9 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.input.ButtonClickResponder;
 import org.archcnl.ui.input.CreateNewLayout;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
-import org.archcnl.ui.main.MainPresenter;
 
 public class ArchitectureRulesLayout extends RulesOrMappingEditorView
         implements PropertyChangeListener {
@@ -20,20 +18,19 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView
 
     VerticalLayout rulesLayout = new VerticalLayout();
 
-    public ArchitectureRulesLayout(InputView Parent, MainPresenter mainPresenter) {
+    public ArchitectureRulesLayout(InputView parent) {
         RulesConceptsAndRelations.getInstance()
                 .getArchitectureRuleManager()
                 .addPropertyChangeListener(this);
-        // Remove style property to makes no sense in this layout
-        // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
-
-        ButtonClickResponder ruleCreationClickResponder = this::switchToNewArchitectureRuleView;
-        parent = Parent;
-
+        this.parent = parent;
         CreateNewLayout createNewRuleLayout =
                 new CreateNewLayout(
-                        "Architecture Rules", "Create new Arch Rule", ruleCreationClickResponder);
+                        "Architecture Rules",
+                        "Create new Arch Rule",
+                        this::switchToNewArchitectureRuleView);
 
+        // Remove style property to makes no sense in this layout
+        // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
         createNewRuleLayout.getStyle().remove("border");
         add(createNewRuleLayout);
         add(rulesLayout);

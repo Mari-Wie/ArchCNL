@@ -24,7 +24,7 @@ public class InputView extends HorizontalLayout {
 
     public InputView(MainPresenter mainPresenter) {
         conceptAndRelationView = new ConceptAndRelationView(this, mainPresenter);
-        architectureRulesView = new ArchitectureRulesLayout(this, mainPresenter);
+        architectureRulesView = new ArchitectureRulesLayout(this);
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
