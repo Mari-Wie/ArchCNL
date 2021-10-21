@@ -24,6 +24,8 @@ import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.StringValue;
 import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.domain.input.model.mappings.Variable;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
+
 
 public class TestUtils {
 
@@ -66,17 +68,17 @@ public class TestUtils {
         // isAggregate Mapping
         List<Triplet> triplets = new LinkedList<>();
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("hasName"),
                         nameVariable));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         nameVariable,
                         result.getRelationManager().getRelationByName("matches"),
                         new StringValue("(\\\\w||\\\\W)*\\\\.(\\\\w||\\\\W)*Aggregate")));
@@ -86,27 +88,27 @@ public class TestUtils {
         // isApplicationService Mapping
         triplets = new LinkedList<>();
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("Namespace")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("hasName"),
                         nameVariable));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         nameVariable,
                         result.getRelationManager().getRelationByName("matches"),
                         new StringValue("api")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("namespaceContains"),
                         classVariable));
@@ -116,17 +118,17 @@ public class TestUtils {
         // isDomainRing Mapping
         triplets = new LinkedList<>();
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("Namespace")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("hasName"),
                         nameVariable));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         nameVariable,
                         result.getRelationManager().getRelationByName("matches"),
                         new StringValue("domain")));
@@ -136,17 +138,17 @@ public class TestUtils {
         // resideIn Mapping
         triplets = new LinkedList<>();
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("Namespace")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("namespaceContains"),
                         classVariable));
@@ -156,43 +158,43 @@ public class TestUtils {
         // use Mapping
         triplets = new LinkedList<>();
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         class2Variable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         attributeVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("Attribute")));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("definesAttribute"),
                         attributeVariable));
         triplets.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         attributeVariable,
                         result.getRelationManager().getRelationByName("hasDeclaredType"),
                         class2Variable));
         List<Triplet> triplets2 = new LinkedList<>();
         triplets2.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets2.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         class2Variable,
                         result.getRelationManager().getRelationByName("is-of-type"),
                         result.getConceptManager().getConceptByName("FamixClass")));
         triplets2.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("imports"),
                         class2Variable));
@@ -218,12 +220,12 @@ public class TestUtils {
 
         CustomRelation resideIn = new CustomRelation("resideIn", new LinkedList<>());
         RelationMapping resideInMapping =
-                new RelationMapping(classVariable, packageVariable, resideInWhenTriplets, resideIn);
+                new RelationMapping(TripletFactory.createTriplet(classVariable, resideIn, packageVariable), resideInWhenTriplets);
         resideIn.setMapping(resideInMapping);
 
         CustomRelation use = new CustomRelation("use", new LinkedList<>());
         RelationMapping useMapping =
-                new RelationMapping(classVariable, class2Variable, useWhenTriplets, use);
+                new RelationMapping(TripletFactory.createTriplet(classVariable,use, class2Variable), useWhenTriplets);
         use.setMapping(useMapping);
 
         CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept");
@@ -237,10 +239,11 @@ public class TestUtils {
                 new CustomRelation("emptyWhenRelationString", relatableObjectTypes);
         RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
+                        TripletFactory.createTriplet(
                         varVariable,
-                        new StringValue("test string"),
-                        new LinkedList<>(),
-                        emptyWhenRelationString);
+                        emptyWhenRelationString,
+                        new StringValue("test string")),
+                        new LinkedList<>());
         emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
 
         relatableObjectTypes = new LinkedList<>();
@@ -248,21 +251,21 @@ public class TestUtils {
         CustomRelation emptyWhenRelationBoolean =
                 new CustomRelation("emptyWhenRelationBoolean", relatableObjectTypes);
         RelationMapping emptyWhenRelationBooleanMapping =
-                new RelationMapping(
+                new RelationMapping(TripletFactory.createTriplet(
                         varVariable,
-                        new BooleanValue(false),
-                        new LinkedList<>(),
-                        emptyWhenRelationBoolean);
+                        emptyWhenRelationBoolean,
+                        new BooleanValue(false)),
+                        new LinkedList<>());
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
         CustomRelation emptyWhenRelationVariable =
                 new CustomRelation("emptyWhenRelationVariable", new LinkedList<>());
         RelationMapping emptyWhenRelationVariableMapping =
-                new RelationMapping(
+                new RelationMapping(TripletFactory.createTriplet(
                         varVariable,
-                        new Variable("test"),
-                        new LinkedList<>(),
-                        emptyWhenRelationVariable);
+                        emptyWhenRelationVariable,
+                        new Variable("test")),
+                        new LinkedList<>());
         emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping);
 
         result.getArchitectureRuleManager()

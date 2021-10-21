@@ -17,7 +17,7 @@ public class ConceptMapping extends Mapping {
         super(whenTriplets);
         this.thisConcept = thisConcept;
         thenTriplet =
-                new Triplet(
+                TripletFactory.createTriplet(
                         thenVariable,
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
@@ -28,7 +28,7 @@ public class ConceptMapping extends Mapping {
     public void updateThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
 
         this.thenTriplet =
-                new Triplet(subject, thenTriplet.getPredicate(), thenTriplet.getObject());
+                TripletFactory.createTriplet(subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
     @Override

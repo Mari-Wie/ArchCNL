@@ -27,6 +27,7 @@ import org.archcnl.domain.input.model.mappings.TypeRelation;
 import org.archcnl.domain.input.model.mappings.Variable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 class RelationManagerTest {
 
@@ -200,7 +201,7 @@ class RelationManagerTest {
         List<AndTriplets> when1 = new LinkedList<>();
         List<Triplet> and1 = new LinkedList<>();
         and1.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
@@ -210,7 +211,7 @@ class RelationManagerTest {
                                 .getConceptByName("FamixClass")));
         when1.add(new AndTriplets(and1));
         RelationMapping mapping1 =
-                new RelationMapping(new Variable("class"), new Variable("x"), when1, XYZ1);
+                new RelationMapping(TripletFactory.createTriplet(new Variable("class"), XYZ1, new Variable("x")),when1 );
         XYZ1.setMapping(mapping1);
         relationManager.addOrAppend(XYZ1);
         assertEquals(30, relationManager.getRelations().size());
@@ -222,7 +223,7 @@ class RelationManagerTest {
         List<AndTriplets> when2 = new LinkedList<>();
         List<Triplet> and2 = new LinkedList<>();
         and2.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
@@ -232,7 +233,7 @@ class RelationManagerTest {
                                 .getConceptByName("Enum")));
         when2.add(new AndTriplets(and2));
         RelationMapping mapping2 =
-                new RelationMapping(new Variable("class"), new Variable("x"), when2, XYZ2);
+                new RelationMapping(TripletFactory.createTriplet(new Variable("class"),XYZ2 , new Variable("x")), when2);
         XYZ2.setMapping(mapping2);
         relationManager.addOrAppend(XYZ2);
         assertEquals(30, relationManager.getRelations().size());
