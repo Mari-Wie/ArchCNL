@@ -2,21 +2,18 @@ package org.archcnl.ui.input.ruleeditor;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextArea;
-import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 
-public class NewArchitectureRuleView extends RulesOrMappingEditorView {
+public class NewArchitectureRuleView extends RulesOrMappingEditorView
+        implements ArchitectureRulesContract.View {
 
     private static final long serialVersionUID = -2966045554441002128L;
     private Button saveButton;
     private TextArea archRuleTextArea;
-    private InputView parent;
+    private NewArchitectureRulePresenter presenter;
 
-    public NewArchitectureRuleView(InputView parent) {
-        this.parent = parent;
+    public NewArchitectureRuleView(NewArchitectureRulePresenter presenter) {
+        this.presenter = presenter;
         getStyle().set("overflow", "auto");
         getStyle().set("border", "1px solid black");
 
@@ -31,23 +28,11 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView {
         add(saveButton);
     }
 
-    private void saveRule() {
+    @Override
+    public void saveRule() {
         if (!archRuleTextArea.isEmpty()) {
-            try {
-                ArchitectureRule newRule = parseArchitectureRule(archRuleTextArea.getValue());
-                RulesConceptsAndRelations.getInstance()
-                        .getArchitectureRuleManager()
-                        .addArchitectureRule(newRule);
-            } catch (NoArchitectureRuleException e) {
-                e.printStackTrace();
-            }
+            presenter.saveArchitectureRule(archRuleTextArea.getValue());
         }
-        parent.switchToArchitectureRulesView();
-    }
-
-    private ArchitectureRule parseArchitectureRule(String potentialRule)
-            throws NoArchitectureRuleException {
-        // TODO implement actual parsing
-        return new ArchitectureRule(potentialRule);
+        presenter.returnToRulesView();
     }
 }

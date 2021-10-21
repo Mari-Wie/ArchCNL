@@ -10,6 +10,7 @@ import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
 import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
+import org.archcnl.ui.input.ruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.input.ruleeditor.NewArchitectureRuleView;
 import org.archcnl.ui.main.MainPresenter;
 
@@ -62,7 +63,8 @@ public class InputView extends HorizontalLayout {
     }
 
     public void switchToNewArchitectureRuleView() {
-        NewArchitectureRuleView view = new NewArchitectureRuleView(this);
+        NewArchitectureRulePresenter presenter = new NewArchitectureRulePresenter(this);
+        NewArchitectureRuleView view = new NewArchitectureRuleView(presenter);
         changeCurrentlyShownView(view);
     }
 
