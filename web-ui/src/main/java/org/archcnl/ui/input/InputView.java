@@ -10,6 +10,8 @@ import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
 import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
+import org.archcnl.ui.input.ruleeditor.NewArchitectureRulePresenter;
+import org.archcnl.ui.input.ruleeditor.NewArchitectureRuleView;
 import org.archcnl.ui.main.MainPresenter;
 
 public class InputView extends HorizontalLayout {
@@ -18,11 +20,12 @@ public class InputView extends HorizontalLayout {
     private static final float GOLDEN_RATIO = 61.8f;
 
     private ConceptAndRelationView conceptAndRelationView;
-    private RulesOrMappingEditorView architectureRulesView = new ArchitectureRulesLayout();
+    private RulesOrMappingEditorView architectureRulesView;
     private RulesOrMappingEditorView currentlyShownView;
 
     public InputView(MainPresenter mainPresenter) {
         conceptAndRelationView = new ConceptAndRelationView(this, mainPresenter);
+        architectureRulesView = new ArchitectureRulesLayout(this);
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
@@ -57,6 +60,12 @@ public class InputView extends HorizontalLayout {
 
     public void switchToArchitectureRulesView() {
         changeCurrentlyShownView(architectureRulesView);
+    }
+
+    public void switchToNewArchitectureRuleView() {
+        NewArchitectureRulePresenter presenter = new NewArchitectureRulePresenter(this);
+        NewArchitectureRuleView view = new NewArchitectureRuleView(presenter);
+        changeCurrentlyShownView(view);
     }
 
     private void changeCurrentlyShownView(RulesOrMappingEditorView newView) {
