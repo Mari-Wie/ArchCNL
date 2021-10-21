@@ -14,6 +14,7 @@ import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 public class AndTripletsEditorView extends VerticalLayout implements View {
 

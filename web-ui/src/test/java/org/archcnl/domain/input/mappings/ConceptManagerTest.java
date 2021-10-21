@@ -24,6 +24,7 @@ import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.domain.input.model.mappings.Variable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 class ConceptManagerTest {
 
@@ -108,7 +109,7 @@ class ConceptManagerTest {
         List<AndTriplets> when1 = new LinkedList<>();
         List<Triplet> and1 = new LinkedList<>();
         and1.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
@@ -129,7 +130,7 @@ class ConceptManagerTest {
         List<AndTriplets> when2 = new LinkedList<>();
         List<Triplet> and2 = new LinkedList<>();
         and2.add(
-                new Triplet(
+                TripletFactory.createTriplet(
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()

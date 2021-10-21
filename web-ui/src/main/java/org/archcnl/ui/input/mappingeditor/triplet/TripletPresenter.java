@@ -16,6 +16,7 @@ import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 public class TripletPresenter implements TripletContract.Presenter<View> {
 
@@ -85,7 +86,7 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
                 | ObjectNotDefinedException e) {
             throw new TripletNotDefinedException();
         }
-        return new Triplet(subject, predicate, object);
+        return TripletFactory.createTriplet(subject, predicate, object);
     }
 
     @Override

@@ -17,6 +17,8 @@ import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
+
 
 public class RelationEditorPresenter extends MappingEditorPresenter {
 
@@ -63,7 +65,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         if (relation.isPresent()) {
             try {
                 Triplet newTriplet =
-                        new Triplet(
+                        TripletFactory.createTriplet(
                                 view.getThenTripletSubject(),
                                 relation.get(),
                                 view.getThenTripletObject().get());
