@@ -1,5 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesNestedType;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
@@ -65,6 +67,11 @@ public abstract class ClassInterfaceEnum extends DefinedType {
     protected void secondPassProcess(FamixOntology ontology, Individual individual) {
         fields.forEach(field -> field.modelIn(ontology, getName(), individual));
         methods.forEach(method -> method.modelIn(ontology, getName(), individual));
+        nestedTypes.forEach(
+                nestedType ->
+                        individual.addProperty(
+                                ontology.get(definesNestedType),
+                                ontology.typeCache().getIndividual(nestedType.getName())));
 
         // recursively call nested types
         nestedTypes.forEach(t -> t.secondPass(ontology));
