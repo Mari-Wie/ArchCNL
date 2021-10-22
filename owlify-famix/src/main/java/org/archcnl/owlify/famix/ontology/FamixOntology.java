@@ -161,8 +161,7 @@ public class FamixOntology {
         throwsException,
         definesVariable,
         hasSubClass,
-        hasSuperClass,
-        definesNestedType;
+        hasSuperClass;
 
         public ObjectProperty getProperty(OntModel model) {
             return model.getObjectProperty(uri());

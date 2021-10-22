@@ -48,12 +48,7 @@
         <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#Attribute"/>
     </owl:ObjectProperty>
 
-	<!-- http://arch-ont.org/ontologies/famix.owl#definesNestedType -->
 
-    <owl:ObjectProperty rdf:about="http://arch-ont.org/ontologies/famix.owl#definesNestedType">
-        <rdfs:domain rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
-        <rdfs:range rdf:resource="http://arch-ont.org/ontologies/famix.owl#FamixType"/>
-    </owl:ObjectProperty>
 
     <!-- http://arch-ont.org/ontologies/famix.owl#definesMethod -->
 
