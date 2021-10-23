@@ -2,7 +2,6 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,23 +16,22 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
     private static final long serialVersionUID = 1L;
 
-    private InputView parent;
-    CreateNewLayout createNewConceptLayout;
-    CreateNewLayout createNewRelationLayout;
-    HorizontalLayout bottomBarLayout = new HorizontalLayout();
-    MappingListLayout conceptTreeGrid;
-    MappingListLayout relationTreeGrid;
+    private InputContract.Remote inputRemote;
+    private CreateNewLayout createNewConceptLayout;
+    private CreateNewLayout createNewRelationLayout;
+    private MappingListLayout conceptTreeGrid;
+    private MappingListLayout relationTreeGrid;
 
-    public ConceptAndRelationView(InputView parent, MainPresenter mainPresenter) {
-        this.parent = parent;
-        ButtonClickResponder conceptCreationClickResponder = this::switchToConceptEditorView;
-        ButtonClickResponder relationCreationClickResponder = this::switchToRelationEditorView;
+    public ConceptAndRelationView(InputContract.Remote inputRemote, MainPresenter mainPresenter) {
+        this.inputRemote = inputRemote;
         createNewConceptLayout =
                 new CreateNewLayout(
-                        "Concepts", "Create new concept", conceptCreationClickResponder);
+                        "Concepts", "Create new concept", inputRemote::switchToConceptEditorView);
         createNewRelationLayout =
                 new CreateNewLayout(
-                        "Relations", "Create new relation", relationCreationClickResponder);
+                        "Relations",
+                        "Create new relation",
+                        inputRemote::switchToRelationEditorView);
         RulesConceptsAndRelations.getInstance().getConceptManager().addPropertyChangeListener(this);
         RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
@@ -58,7 +56,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
         }
-        conceptTreeGrid = new MappingListLayout(conceptData, parent);
+        conceptTreeGrid = new MappingListLayout(conceptData, inputRemote);
         createNewConceptLayout.add(conceptTreeGrid);
     }
 
@@ -72,7 +70,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (relationTreeGrid != null) {
             createNewRelationLayout.remove(relationTreeGrid);
         }
-        relationTreeGrid = new MappingListLayout(relationData, parent);
+        relationTreeGrid = new MappingListLayout(relationData, inputRemote);
         createNewRelationLayout.add(relationTreeGrid);
     }
 
@@ -80,13 +78,5 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     public void propertyChange(PropertyChangeEvent evt) {
         updateConceptView();
         updateRelationView();
-    }
-
-    public void switchToConceptEditorView() {
-        parent.switchToConceptEditorView();
-    }
-
-    public void switchToRelationEditorView() {
-        parent.switchToRelationEditorView();
     }
 }

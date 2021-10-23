@@ -8,13 +8,13 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
 
     private static final long serialVersionUID = 3L;
 
-    public MappingListLayout(List<MappingListEntry> entries, InputView inputView) {
+    public MappingListLayout(List<MappingListEntry> entries, InputContract.Remote inputRemote) {
         super();
         setItems(entries, MappingListEntry::getChildren);
         addComponentHierarchyColumn(
                 entry -> {
                     MappingListEntryLayout entryLayout =
-                            new MappingListEntryLayout(entry, inputView);
+                            new MappingListEntryLayout(entry, inputRemote);
 
                     if (entry.isLeaf()) {
                         DragSource<MappingListEntryLayout> dragSource =

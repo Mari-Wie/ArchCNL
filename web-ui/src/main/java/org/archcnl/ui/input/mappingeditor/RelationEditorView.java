@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Variable;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.SubjectPresenter;
@@ -21,8 +21,9 @@ public class RelationEditorView extends MappingEditorView {
     private SubjectView subjectView;
     private VariableStringBoolSelectionView objectView;
 
-    public RelationEditorView(MappingEditorContract.Presenter<View> presenter, InputView parent) {
-        super(presenter, parent, "Relation");
+    public RelationEditorView(
+            MappingEditorContract.Presenter<View> presenter, InputContract.Remote inputRemote) {
+        super(presenter, inputRemote, "Relation");
     }
 
     @Override

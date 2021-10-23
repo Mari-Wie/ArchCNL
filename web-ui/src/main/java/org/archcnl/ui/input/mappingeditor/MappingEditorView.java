@@ -12,7 +12,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableListPresenter;
@@ -27,7 +27,9 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     protected TextField mappingName;
 
     protected MappingEditorView(
-            MappingEditorContract.Presenter<View> presenter, InputView parent, String mappingType) {
+            MappingEditorContract.Presenter<View> presenter,
+            InputContract.Remote inputRemote,
+            String mappingType) {
         this.presenter = presenter;
         setHeightFull();
         getStyle().set("overflow", "auto");
@@ -42,7 +44,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         Button closeButton =
                 new Button(
                         new Icon(VaadinIcon.CLOSE),
-                        click -> parent.switchToArchitectureRulesView());
+                        click -> inputRemote.switchToArchitectureRulesView());
         HorizontalLayout titleBar = new HorizontalLayout(title, closeButton);
         titleBar.setWidthFull();
         title.setWidthFull();
@@ -71,8 +73,8 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         HorizontalLayout buttonRow = new HorizontalLayout();
         buttonRow.setWidthFull();
         buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        buttonRow.add(new Button("Done", click -> presenter.doneButtonClicked(parent)));
-        buttonRow.add(new Button("Cancel", click -> parent.switchToArchitectureRulesView()));
+        buttonRow.add(new Button("Done", click -> presenter.doneButtonClicked(inputRemote)));
+        buttonRow.add(new Button("Cancel", click -> inputRemote.switchToArchitectureRulesView()));
         add(buttonRow);
         this.presenter.setView(this);
     }

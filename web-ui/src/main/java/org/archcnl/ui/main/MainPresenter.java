@@ -6,8 +6,8 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.ui.common.ConfirmNotification;
+import org.archcnl.ui.input.InputPresenter;
 import org.archcnl.ui.input.InputView;
-import org.archcnl.ui.main.MainContract.View;
 import org.archcnl.ui.main.io.OpenProjectDialog;
 import org.archcnl.ui.main.io.SaveProjectDialog;
 import org.archcnl.ui.output.component.QueryView;
@@ -16,18 +16,19 @@ public class MainPresenter
         implements MainContract.Presenter<MainContract.View>, PropertyChangeListener {
 
     private static final long serialVersionUID = 2859025859553864862L;
-    private View view;
+    private MainContract.View view;
     private HorizontalLayout resultView;
     private HorizontalLayout inputView;
 
     public MainPresenter() {
-        inputView = new InputView(this);
+        InputPresenter inputPresenter = new InputPresenter(this);
+        inputView = new InputView(inputPresenter);
         resultView = new QueryView(this);
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 
     @Override
-    public void setView(View view) {
+    public void setView(MainContract.View view) {
         this.view = view;
     }
 

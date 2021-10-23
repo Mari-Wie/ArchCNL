@@ -7,22 +7,22 @@ import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.input.CreateNewLayout;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 
 public class ArchitectureRulesLayout extends RulesOrMappingEditorView
         implements PropertyChangeListener {
 
     private static final long serialVersionUID = 1L;
-    private InputView parent;
+    private InputContract.Remote inputRemote;
 
     VerticalLayout rulesLayout = new VerticalLayout();
 
-    public ArchitectureRulesLayout(InputView parent) {
+    public ArchitectureRulesLayout(InputContract.Remote inputRemote) {
         RulesConceptsAndRelations.getInstance()
                 .getArchitectureRuleManager()
                 .addPropertyChangeListener(this);
-        this.parent = parent;
+        this.inputRemote = inputRemote;
         CreateNewLayout createNewRuleLayout =
                 new CreateNewLayout(
                         "Architecture Rules",
@@ -50,7 +50,7 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView
     }
 
     public void switchToNewArchitectureRuleView() {
-        parent.switchToNewArchitectureRuleView();
+        inputRemote.switchToNewArchitectureRuleView();
     }
 
     @Override
