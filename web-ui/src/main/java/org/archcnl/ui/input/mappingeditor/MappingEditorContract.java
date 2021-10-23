@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Variable;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public interface MappingEditorContract {
@@ -60,7 +60,7 @@ public interface MappingEditorContract {
 
         public int numberOfAndTriplets();
 
-        public void doneButtonClicked(InputView parent);
+        public void doneButtonClicked(InputContract.Remote inputRemote);
 
         public void lastAndTripletsDeleted();
 

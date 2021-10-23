@@ -11,7 +11,7 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -54,7 +54,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void doneButtonClicked(InputView parent) {
+    public void doneButtonClicked(InputContract.Remote inputRemote) {
         if (relation.isPresent()) {
             try {
                 RelationMapping mapping =
@@ -71,7 +71,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                             .getRelationManager()
                             .addRelation(relation.get());
                 }
-                parent.switchToArchitectureRulesView();
+                inputRemote.switchToArchitectureRulesView();
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
                     | InvalidVariableNameException
