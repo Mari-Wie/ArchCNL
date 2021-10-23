@@ -182,6 +182,12 @@ public class RelationManager {
         typeConcepts.add(conceptManager.getConceptByName("AnnotationType"));
         relations.add(new DefaultRelation("imports", typeConcepts));
 
+        // Class and Enum relations
+        List<ObjectType> classEnumConcepts = new LinkedList<>();
+        classEnumConcepts.add(conceptManager.getConceptByName("FamixClass"));
+        classEnumConcepts.add(conceptManager.getConceptByName("Enum"));
+        relations.add(new DefaultRelation("definesNestedType", classEnumConcepts));
+
         // Type + NameSpace relations
         List<ObjectType> namespaceContainsConcepts = new LinkedList<>();
         namespaceContainsConcepts.add(conceptManager.getConceptByName("Namespace"));
