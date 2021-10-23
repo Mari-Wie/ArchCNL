@@ -16,8 +16,8 @@ public class ModifierTest {
     public void testModifierTransformation() throws FileNotFoundException {
         FamixOntology ontology =
                 new FamixOntology(
-                        new FileInputStream("./src/test/resources/ontologies/famix.owl"),
-                        new FileInputStream("./src/test/resources/ontologies/main.owl"));
+                        new FileInputStream("./src/main/resources/ontologies/famix.owl"),
+                        new FileInputStream("./src/main/resources/ontologies/main.owl"));
 
         Modifier mod = new Modifier("public");
         Individual clazz = ontology.createIndividual(FamixClass, "Test");
