@@ -1,13 +1,14 @@
 package org.archcnl.ui.output.component;
 
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
 import org.archcnl.ui.output.Violation;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class GridView extends VerticalLayout {
 
@@ -15,6 +16,7 @@ public class GridView extends VerticalLayout {
 
     private ArrayList<Violation> violationList = new ArrayList<>();
     private Grid<Violation> grid = new Grid<>(Violation.class);
+    private Button clearButton = new Button("Clear", e -> this.clearGrid());
 
     private String username = "admin";
     private String password = "admin";
@@ -25,7 +27,7 @@ public class GridView extends VerticalLayout {
     public GridView() {
         this.db = new StardogDatabase(server, databaseName, username, password);
         grid.setHeightByRows(true);
-        add(grid);
+        add(grid, clearButton);
     }
 
     public void update(final String queryString) {
@@ -58,5 +60,10 @@ public class GridView extends VerticalLayout {
         }
 
         grid.setItems(violationList);
+    }
+
+    public void clearGrid() {
+        violationList = new ArrayList<>();
+        grid.removeAllColumns();
     }
 }
