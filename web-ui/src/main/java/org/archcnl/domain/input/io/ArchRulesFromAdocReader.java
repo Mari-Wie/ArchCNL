@@ -10,10 +10,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.exceptions.NoMappingException;
+import org.archcnl.domain.input.exceptions.NoMatchFoundException;
+import org.archcnl.domain.input.exceptions.NoObjectTypeException;
+import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.NoTripletException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
@@ -33,11 +38,14 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private static final Pattern RULE_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_MAPPING_PATTERN =
-            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n))is.+\\-\\> \\(.+ rdf:type .+\\)");
+            Pattern.compile(
+                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
     private static final Pattern RELATION_MAPPING_PATTERN =
-            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n)).+Mapping.+\\-\\> \\(.+\\)");
+            Pattern.compile(
+                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
-            Pattern.compile("\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+)\\)");
+            Pattern.compile(
+                    "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
     private static final Pattern SPECIAL_TRIPLET_PATTERN =
             Pattern.compile("\\w+\\(\\?\\w+, '.+'\\)");
     private static final Pattern TRIPLET_PATTERN =
@@ -76,7 +84,9 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 CustomConcept concept = new CustomConcept(name);
                                 concept.setMapping(parseMapping(potentialConceptMapping, concept));
                                 rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
-                            } catch (UnrelatedMappingException | NoMappingException e) {
+                            } catch (UnrelatedMappingException
+                                    | NoMappingException
+                                    | NoMatchFoundException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });
@@ -88,13 +98,16 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 RELATION_MAPPING_NAME, potentialRelationMapping);
-                                CustomRelation relation = new CustomRelation(name);
+                                CustomRelation relation =
+                                        new CustomRelation(name, new LinkedList<>());
                                 relation.setMapping(
                                         parseMapping(potentialRelationMapping, relation));
                                 rulesConceptsAndRelations
                                         .getRelationManager()
                                         .addOrAppend(relation);
-                            } catch (UnrelatedMappingException | NoMappingException e) {
+                            } catch (UnrelatedMappingException
+                                    | NoMappingException
+                                    | NoMatchFoundException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });
@@ -124,9 +137,10 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
             Triplet thenTriplet = parseThenPart(thenPart);
+            thisRelation.changeRelatableObjectTypes(thenTriplet.getObject());
             return new RelationMapping(
                     thenTriplet.getSubject(), thenTriplet.getObject(), whenTriplets, thisRelation);
-        } catch (Exception e) {
+        } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
     }
@@ -135,17 +149,19 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
         AndTriplets andTriplets = new AndTriplets();
         List<String> potentialTriplets = AdocIoUtils.getAllMatches(TRIPLET_PATTERN, whenPart);
         for (String potentialTriplet : potentialTriplets) {
-            andTriplets.addTriplet(parseTriplet(potentialTriplet));
+            andTriplets.addTriplet(parseTriplet(potentialTriplet, false));
         }
         return andTriplets;
     }
 
-    private Triplet parseThenPart(String thenPart) throws NoTripletException {
+    private Triplet parseThenPart(String thenPart)
+            throws NoTripletException, NoMatchFoundException {
         String potentialThenTriplet = AdocIoUtils.getFirstMatch(TRIPLET_PATTERN, thenPart);
-        return parseTriplet(potentialThenTriplet);
+        return parseTriplet(potentialThenTriplet, true);
     }
 
-    private Triplet parseTriplet(String potentialTriplet) throws NoTripletException {
+    private Triplet parseTriplet(String potentialTriplet, boolean isThenTriplet)
+            throws NoTripletException {
         try {
             if (potentialTriplet.matches(SPECIAL_TRIPLET_PATTERN.toString())) {
                 return parseSpecialTriplet(potentialTriplet);
@@ -165,9 +181,18 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 Variable subject = new Variable(subjectString);
                 ObjectType object = ObjectType.parseObject(objectString);
                 Relation predicate = Relation.parsePredicate(predicateString);
+                if (isThenTriplet && predicate instanceof CustomRelation) {
+                    CustomRelation customRelation = (CustomRelation) predicate;
+                    customRelation.changeRelatableObjectTypes(object);
+                    predicate = customRelation;
+                }
                 return new Triplet(subject, predicate, object);
             }
-        } catch (Exception e) {
+        } catch (NoRelationException
+                | UnsupportedObjectTypeInTriplet
+                | NoObjectTypeException
+                | InvalidVariableNameException
+                | NoMatchFoundException e) {
             throw new NoTripletException(potentialTriplet);
         }
     }

@@ -10,6 +10,7 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
+import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
@@ -41,7 +42,9 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
         if (relation.isEmpty()) {
-            relation = Optional.of(new CustomRelation(newName));
+            List<ObjectType> relatableObjectTypes = new LinkedList<>();
+            relatableObjectTypes.add(view.getSelectedObjectTypeInThenTriplet());
+            relation = Optional.of(new CustomRelation(newName, relatableObjectTypes));
         } else {
             try {
                 relation.get().changeName(newName);
@@ -77,7 +80,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                     | InvalidVariableNameException
                     | RelationAlreadyExistsException e) {
                 // not possible/fatal
-                throw new RuntimeException();
+                throw new RuntimeException(e.getMessage());
             } catch (SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectOrObjectErrorMessage("Setting this is required");
             }
@@ -98,6 +101,12 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                                 view.setSubjectInThenTriplet(mapping.getThenTriplet().getSubject());
                                 view.setObjectInThenTriplet(mapping.getThenTriplet().getObject());
                             });
+        }
+    }
+
+    public void selectedObjectTypeHasChanged() {
+        if (relation.isPresent()) {
+            relation.get().changeRelatableObjectTypes(view.getSelectedObjectTypeInThenTriplet());
         }
     }
 }

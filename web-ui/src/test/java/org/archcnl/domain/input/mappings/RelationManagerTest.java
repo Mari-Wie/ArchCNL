@@ -162,7 +162,7 @@ class RelationManagerTest {
             throws RelationAlreadyExistsException, VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         assertEquals(0, relationManager.getCustomRelations().size());
-        relationManager.addRelation(new CustomRelation("test"));
+        relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
         relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
         assertEquals(1, relationManager.getCustomRelations().size());
     }
@@ -172,14 +172,14 @@ class RelationManagerTest {
             throws RelationAlreadyExistsException, VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         assertEquals(27, relationManager.getRelations().size());
-        relationManager.addRelation(new CustomRelation("test"));
+        relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
         relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
         relationManager.addRelation(new TypeRelation("xyz", "xyz"));
         relationManager.addRelation(new SpecialRelation("zhn", "kjh", new LinkedList<>()));
         assertThrows(
                 RelationAlreadyExistsException.class,
                 () -> {
-                    relationManager.addRelation(new CustomRelation("test"));
+                    relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
                 });
         assertEquals(31, relationManager.getRelations().size());
     }
@@ -191,12 +191,12 @@ class RelationManagerTest {
                     ConceptDoesNotExistException, RelationAlreadyExistsException,
                     UnrelatedMappingException {
         assertEquals(27, relationManager.getRelations().size());
-        relationManager.addOrAppend(new CustomRelation("test"));
-        relationManager.addOrAppend(new CustomRelation("abc"));
-        relationManager.addOrAppend(new CustomRelation("abc"));
+        relationManager.addOrAppend(new CustomRelation("test", new LinkedList<>()));
+        relationManager.addOrAppend(new CustomRelation("abc", new LinkedList<>()));
+        relationManager.addOrAppend(new CustomRelation("abc", new LinkedList<>()));
         assertEquals(29, relationManager.getRelations().size());
 
-        CustomRelation XYZ1 = new CustomRelation("withMapping");
+        CustomRelation XYZ1 = new CustomRelation("withMapping", new LinkedList<>());
         List<AndTriplets> when1 = new LinkedList<>();
         List<Triplet> and1 = new LinkedList<>();
         and1.add(
@@ -218,7 +218,7 @@ class RelationManagerTest {
                 (CustomRelation) relationManager.getRelationByName("withMapping");
         assertEquals(1, XYZ_extracted.getMapping().get().getWhenTriplets().size());
 
-        CustomRelation XYZ2 = new CustomRelation("withMapping");
+        CustomRelation XYZ2 = new CustomRelation("withMapping", new LinkedList<>());
         List<AndTriplets> when2 = new LinkedList<>();
         List<Triplet> and2 = new LinkedList<>();
         and2.add(

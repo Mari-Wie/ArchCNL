@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.model.mappings;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -48,6 +49,10 @@ public abstract class Relation {
         relatableObjectTypes.add(objectType);
     }
 
+    protected void setRelatableObjectType(List<ObjectType> objectTypes) {
+        relatableObjectTypes = objectTypes;
+    }
+
     public String getName() {
         return name;
     }
@@ -69,7 +74,7 @@ public abstract class Relation {
                                 .getRelationByRealName(predicateName);
                     }
                 } catch (RelationDoesNotExistException e1) {
-                    return new CustomRelation(predicateName);
+                    return new CustomRelation(predicateName, new LinkedList<>());
                 }
             } else {
                 // has to be a SpecialRelation
@@ -100,7 +105,7 @@ public abstract class Relation {
     public void changeName(String newName) throws RelationAlreadyExistsException {
         if (!RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
-                .doesRelationExist(new CustomRelation(newName))) {
+                .doesRelationExist(new CustomRelation(newName, new LinkedList<>()))) {
             this.name = newName;
         } else {
             throw new RelationAlreadyExistsException(newName);

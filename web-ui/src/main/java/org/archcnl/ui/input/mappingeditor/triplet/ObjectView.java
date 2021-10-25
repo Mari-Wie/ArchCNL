@@ -1,6 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.model.mappings.Concept;
@@ -49,7 +50,10 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         clearView();
         variableStringBoolSelectionView =
                 new VariableStringBoolSelectionView(
-                        variableManager, stringsAllowed, booleansAllowed);
+                        variableManager,
+                        stringsAllowed,
+                        booleansAllowed,
+                        Optional.ofNullable(null));
         add(variableStringBoolSelectionView);
     }
 

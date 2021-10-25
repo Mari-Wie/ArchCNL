@@ -31,14 +31,14 @@ class ArchRulesFromAdocReaderTest {
     }
 
     @Test
-    void givenOnionRuleFile_whenImportingIntoModel_thenModelIsLikeExpected()
+    void givenRuleFile_whenImportingIntoModel_thenModelIsLikeExpected()
             throws IOException, UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
                     ConceptDoesNotExistException, InvalidVariableNameException,
                     ConceptAlreadyExistsException, VariableAlreadyExistsException,
                     RelationAlreadyExistsException, UnrelatedMappingException {
 
         // given
-        final File ruleFile = new File("src/test/resources/architecture-documentation-onion.adoc");
+        final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
 
         // when
         ArchRulesFromAdocReader archRulesFromAdocReader = new ArchRulesFromAdocReader();

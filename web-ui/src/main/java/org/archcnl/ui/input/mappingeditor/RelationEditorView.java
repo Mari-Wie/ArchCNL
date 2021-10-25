@@ -36,7 +36,8 @@ public class RelationEditorView extends MappingEditorView {
         relationNameField.setReadOnly(true);
         thenTriplet.add(relationNameField);
         objectView =
-                new VariableStringBoolSelectionView(presenter.getVariableManager(), true, true);
+                new VariableStringBoolSelectionView(
+                        presenter.getVariableManager(), true, true, Optional.of(presenter));
         thenTriplet.add(objectView);
         add(thenTriplet);
     }
@@ -86,5 +87,10 @@ public class RelationEditorView extends MappingEditorView {
     @Override
     public void setObjectInThenTriplet(ObjectType object) {
         objectView.setObject(object);
+    }
+
+    @Override
+    public ObjectType getSelectedObjectTypeInThenTriplet() {
+        return objectView.getSelectedObjectType();
     }
 }

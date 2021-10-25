@@ -98,4 +98,10 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
             }
         }
     }
+
+    @Override
+    public void selectedObjectTypeHasChanged() {
+        throw new UnsupportedOperationException(
+                "The selected ObjectType cannot change for a Concept.");
+    }
 }
