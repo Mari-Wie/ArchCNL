@@ -139,6 +139,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
             Triplet thenTriplet = parseThenPart(thenPart);
+            thisRelation.changeRelatableObjectTypes(thenTriplet.getObject());
             Triplet mappingTriplet =
                     TripletFactory.createTriplet(thenTriplet.getSubject(), thisRelation, thenTriplet.getObject());
             return new RelationMapping(mappingTriplet, whenTriplets);

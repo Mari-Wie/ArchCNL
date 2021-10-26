@@ -105,7 +105,9 @@ class ConceptManagerTest {
         conceptManager.addOrAppend(new CustomConcept("ABC"));
         assertEquals(14, conceptManager.getConcepts().size());
 
-        CustomConcept XYZ1 = new CustomConcept("WithMapping");
+        String conceptName = "ConteptName";
+
+        CustomConcept concept1 = new CustomConcept(conceptName);
         List<AndTriplets> when1 = new LinkedList<>();
         List<Triplet> and1 = new LinkedList<>();
         and1.add(
@@ -118,15 +120,15 @@ class ConceptManagerTest {
                                 .getConceptManager()
                                 .getConceptByName("FamixClass")));
         when1.add(new AndTriplets(and1));
-        ConceptMapping mapping1 = new ConceptMapping(new Variable("class"), when1, XYZ1);
-        XYZ1.setMapping(mapping1);
-        conceptManager.addOrAppend(XYZ1);
+        ConceptMapping mapping1 = new ConceptMapping(new Variable("class"), when1, concept1);
+        concept1.setMapping(mapping1);
+        conceptManager.addOrAppend(concept1);
         assertEquals(15, conceptManager.getConcepts().size());
-        CustomConcept XYZ_extracted =
-                (CustomConcept) conceptManager.getConceptByName("WithMapping");
-        assertEquals(1, XYZ_extracted.getMapping().get().getWhenTriplets().size());
+        CustomConcept extractedConcept_extracted =
+                (CustomConcept) conceptManager.getConceptByName(conceptName);
+        assertEquals(1, extractedConcept_extracted.getMapping().get().getWhenTriplets().size());
 
-        CustomConcept XYZ2 = new CustomConcept("WithMapping");
+        CustomConcept concept2 = new CustomConcept(conceptName);
         List<AndTriplets> when2 = new LinkedList<>();
         List<Triplet> and2 = new LinkedList<>();
         and2.add(
@@ -139,11 +141,11 @@ class ConceptManagerTest {
                                 .getConceptManager()
                                 .getConceptByName("Enum")));
         when2.add(new AndTriplets(and2));
-        ConceptMapping mapping2 = new ConceptMapping(new Variable("class"), when2, XYZ2);
-        XYZ2.setMapping(mapping2);
-        conceptManager.addOrAppend(XYZ2);
+        ConceptMapping mapping2 = new ConceptMapping(new Variable("class"), when2, concept2);
+        concept2.setMapping(mapping2);
+        conceptManager.addOrAppend(concept2);
         assertEquals(15, conceptManager.getConcepts().size());
-        XYZ_extracted = (CustomConcept) conceptManager.getConceptByName("WithMapping");
-        assertEquals(2, XYZ_extracted.getMapping().get().getWhenTriplets().size());
+        extractedConcept_extracted = (CustomConcept) conceptManager.getConceptByName(conceptName);
+        assertEquals(2, extractedConcept_extracted.getMapping().get().getWhenTriplets().size());
     }
 }
