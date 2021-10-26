@@ -31,8 +31,8 @@ public class NamespaceTest {
     public void setUp() throws FileNotFoundException {
         ontology =
                 new FamixOntology(
-                        new FileInputStream("./src/test/resources/ontologies/famix.owl"),
-                        new FileInputStream("./src/test/resources/ontologies/main.owl"));
+                        new FileInputStream("./src/main/resources/ontologies/famix.owl"),
+                        new FileInputStream("./src/main/resources/ontologies/main.owl"));
 
         type1Individual = ontology.createIndividual(FamixClass, type1);
         type2Individual = ontology.createIndividual(FamixClass, type2);

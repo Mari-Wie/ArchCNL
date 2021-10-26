@@ -27,8 +27,8 @@ public class ProjectTest {
     public void setUp() throws FileNotFoundException {
         ontology =
                 new FamixOntology(
-                        new FileInputStream("./src/test/resources/ontologies/famix.owl"),
-                        new FileInputStream("./src/test/resources/ontologies/main.owl"));
+                        new FileInputStream("./src/main/resources/ontologies/famix.owl"),
+                        new FileInputStream("./src/main/resources/ontologies/main.owl"));
     }
 
     @Test

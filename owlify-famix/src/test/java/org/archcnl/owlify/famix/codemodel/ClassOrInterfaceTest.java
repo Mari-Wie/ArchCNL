@@ -9,6 +9,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isInterface;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesNestedType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasSubClass;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasSuperClass;
@@ -36,8 +37,8 @@ public class ClassOrInterfaceTest {
     public void setUp() throws FileNotFoundException {
         ontology =
                 new FamixOntology(
-                        new FileInputStream("./src/test/resources/ontologies/famix.owl"),
-                        new FileInputStream("./src/test/resources/ontologies/main.owl"));
+                        new FileInputStream("./src/main/resources/ontologies/famix.owl"),
+                        new FileInputStream("./src/main/resources/ontologies/main.owl"));
     }
 
     @Test
@@ -153,6 +154,8 @@ public class ClassOrInterfaceTest {
         assertNotNull(ontology.codeModel().getProperty(individual, ontology.get(hasModifier)));
         assertNotNull(
                 ontology.codeModel().getProperty(individual, ontology.get(hasAnnotationInstance)));
+        assertNotNull(
+                ontology.codeModel().getProperty(individual, ontology.get(definesNestedType)));
     }
 
     @Test
