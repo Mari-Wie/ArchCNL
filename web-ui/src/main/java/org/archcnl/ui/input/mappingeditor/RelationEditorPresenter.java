@@ -12,13 +12,11 @@ import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.ui.input.InputContract;
 import org.archcnl.domain.input.model.mappings.Triplet;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.domain.input.model.mappings.TripletFactory;
-
 
 public class RelationEditorPresenter extends MappingEditorPresenter {
 

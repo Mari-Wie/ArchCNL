@@ -23,11 +23,11 @@ import org.archcnl.domain.input.model.mappings.RelationManager;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.SpecialRelation;
 import org.archcnl.domain.input.model.mappings.Triplet;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.domain.input.model.mappings.TypeRelation;
 import org.archcnl.domain.input.model.mappings.Variable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 class RelationManagerTest {
 
@@ -213,7 +213,10 @@ class RelationManagerTest {
                                 .getConceptByName("FamixClass")));
         when1.add(new AndTriplets(and1));
         RelationMapping mapping1 =
-                new RelationMapping(TripletFactory.createTriplet(new Variable("class"), withRelation, new Variable("x")),when1 );
+                new RelationMapping(
+                        TripletFactory.createTriplet(
+                                new Variable("class"), withRelation, new Variable("x")),
+                        when1);
         withRelation.setMapping(mapping1);
         relationManager.addOrAppend(withRelation);
         assertEquals(30, relationManager.getRelations().size());
@@ -236,7 +239,10 @@ class RelationManagerTest {
                                 .getConceptByName("Enum")));
         when2.add(new AndTriplets(and2));
         RelationMapping mapping2 =
-                new RelationMapping(TripletFactory.createTriplet(new Variable("class"),otherWithRelation , new Variable("x")), when2);
+                new RelationMapping(
+                        TripletFactory.createTriplet(
+                                new Variable("class"), otherWithRelation, new Variable("x")),
+                        when2);
         otherWithRelation.setMapping(mapping2);
         relationManager.addOrAppend(otherWithRelation);
         assertEquals(30, relationManager.getRelations().size());

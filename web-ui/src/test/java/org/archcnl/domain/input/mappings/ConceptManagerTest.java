@@ -21,10 +21,10 @@ import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.CustomConcept;
 import org.archcnl.domain.input.model.mappings.DefaultConcept;
 import org.archcnl.domain.input.model.mappings.Triplet;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.domain.input.model.mappings.Variable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 class ConceptManagerTest {
 

@@ -16,12 +16,14 @@ public class RelationMapping extends Mapping {
     public void updateSubjectInThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
 
         this.thenTriplet =
-                TripletFactory.createTriplet(subject, thenTriplet.getPredicate(), thenTriplet.getObject());
+                TripletFactory.createTriplet(
+                        subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
     public void updateObjectInThenTriplet(ObjectType object) throws UnsupportedObjectTypeInTriplet {
         this.thenTriplet =
-                TripletFactory.createTriplet(thenTriplet.getSubject(), thenTriplet.getPredicate(), object);
+                TripletFactory.createTriplet(
+                        thenTriplet.getSubject(), thenTriplet.getPredicate(), object);
     }
 
     @Override

@@ -9,7 +9,6 @@ public class ConceptMapping extends Mapping {
 
     private Triplet thenTriplet;
 
-
     public ConceptMapping(
             Variable thenVariable, List<AndTriplets> whenTriplets, CustomConcept thisConcept)
             throws UnsupportedObjectTypeInTriplet, RelationDoesNotExistException {
@@ -26,7 +25,8 @@ public class ConceptMapping extends Mapping {
     public void updateThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
 
         this.thenTriplet =
-                TripletFactory.createTriplet(subject, thenTriplet.getPredicate(), thenTriplet.getObject());
+                TripletFactory.createTriplet(
+                        subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
     @Override
