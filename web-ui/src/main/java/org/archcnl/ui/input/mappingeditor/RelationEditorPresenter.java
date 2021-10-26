@@ -12,6 +12,8 @@ import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
+import org.archcnl.domain.input.model.mappings.Triplet;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
@@ -60,13 +62,16 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     public void doneButtonClicked(InputContract.Remote inputRemote) {
         if (relation.isPresent()) {
             try {
-                RelationMapping mapping =
-                        new RelationMapping(
+                Triplet newTriplet =
+                        TripletFactory.createTriplet(
                                 view.getThenTripletSubject(),
-                                view.getThenTripletObject().get(),
-                                getAndTriplets(),
-                                relation.get());
+                                relation.get(),
+                                view.getThenTripletObject().get());
+
+                RelationMapping mapping = new RelationMapping(newTriplet, getAndTriplets());
+
                 relation.get().setMapping(mapping);
+
                 if (!RulesConceptsAndRelations.getInstance()
                         .getRelationManager()
                         .doesRelationExist(relation.get())) {

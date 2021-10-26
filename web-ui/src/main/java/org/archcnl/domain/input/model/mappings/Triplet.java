@@ -1,18 +1,15 @@
 package org.archcnl.domain.input.model.mappings;
 
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-
 public class Triplet {
 
     private Variable subject;
     private Relation predicate;
     private ObjectType object;
 
-    public Triplet(Variable subject, Relation predicate, ObjectType object)
-            throws UnsupportedObjectTypeInTriplet {
-        setSubject(subject);
-        setPredicate(predicate);
-        setObject(object);
+    public Triplet(Variable subject, Relation predicate, ObjectType object) {
+        this.subject = subject;
+        this.predicate = predicate;
+        this.object = object;
     }
 
     public Variable getSubject() {
@@ -25,25 +22,6 @@ public class Triplet {
 
     public ObjectType getObject() {
         return object;
-    }
-
-    public void setSubject(Variable subject) {
-        this.subject = subject;
-    }
-
-    public void setPredicate(Relation predicate) {
-        this.predicate = predicate;
-        if (!predicate.canRelateToObjectType(object)) {
-            object = null;
-        }
-    }
-
-    public void setObject(ObjectType object) throws UnsupportedObjectTypeInTriplet {
-        if (predicate.canRelateToObjectType(object)) {
-            this.object = object;
-        } else {
-            throw new UnsupportedObjectTypeInTriplet(predicate, object);
-        }
     }
 
     public String toStringRepresentation() {

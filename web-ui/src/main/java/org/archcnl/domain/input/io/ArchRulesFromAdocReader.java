@@ -29,6 +29,7 @@ import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.Triplet;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.domain.input.model.mappings.Variable;
 
 public class ArchRulesFromAdocReader implements ArchRulesImporter {
@@ -138,8 +139,10 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             whenTriplets.add(andTriplets);
             Triplet thenTriplet = parseThenPart(thenPart);
             thisRelation.changeRelatableObjectTypes(thenTriplet.getObject());
-            return new RelationMapping(
-                    thenTriplet.getSubject(), thenTriplet.getObject(), whenTriplets, thisRelation);
+            Triplet mappingTriplet =
+                    TripletFactory.createTriplet(
+                            thenTriplet.getSubject(), thisRelation, thenTriplet.getObject());
+            return new RelationMapping(mappingTriplet, whenTriplets);
         } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
@@ -186,7 +189,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                     customRelation.changeRelatableObjectTypes(object);
                     predicate = customRelation;
                 }
-                return new Triplet(subject, predicate, object);
+                return TripletFactory.createTriplet(subject, predicate, object);
             }
         } catch (NoRelationException
                 | UnsupportedObjectTypeInTriplet
@@ -207,7 +210,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             String objectString =
                     AdocIoUtils.getFirstMatch(
                             Pattern.compile("(?<= )'.+'(?=\\))"), potentialTriplet);
-            return new Triplet(
+            return TripletFactory.createTriplet(
                     new Variable(subjectString),
                     Relation.parsePredicate(predicate),
                     ObjectType.parseObject(objectString));
