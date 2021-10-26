@@ -197,7 +197,9 @@ class RelationManagerTest {
         relationManager.addOrAppend(new CustomRelation("abc", new LinkedList<>()));
         assertEquals(29, relationManager.getRelations().size());
 
-        CustomRelation XYZ1 = new CustomRelation("withMapping", new LinkedList<>());
+        String relationName = "with";
+
+        CustomRelation withRelation = new CustomRelation(relationName, new LinkedList<>());
         List<AndTriplets> when1 = new LinkedList<>();
         List<Triplet> and1 = new LinkedList<>();
         and1.add(
@@ -211,15 +213,16 @@ class RelationManagerTest {
                                 .getConceptByName("FamixClass")));
         when1.add(new AndTriplets(and1));
         RelationMapping mapping1 =
-                new RelationMapping(TripletFactory.createTriplet(new Variable("class"), XYZ1, new Variable("x")),when1 );
-        XYZ1.setMapping(mapping1);
-        relationManager.addOrAppend(XYZ1);
+                new RelationMapping(TripletFactory.createTriplet(new Variable("class"), withRelation, new Variable("x")),when1 );
+        withRelation.setMapping(mapping1);
+        relationManager.addOrAppend(withRelation);
         assertEquals(30, relationManager.getRelations().size());
-        CustomRelation XYZ_extracted =
-                (CustomRelation) relationManager.getRelationByName("withMapping");
-        assertEquals(1, XYZ_extracted.getMapping().get().getWhenTriplets().size());
 
-        CustomRelation XYZ2 = new CustomRelation("withMapping", new LinkedList<>());
+        CustomRelation extractedWithRelation =
+                (CustomRelation) relationManager.getRelationByName(relationName);
+        assertEquals(1, extractedWithRelation.getMapping().get().getWhenTriplets().size());
+
+        CustomRelation otherWithRelation = new CustomRelation(relationName, new LinkedList<>());
         List<AndTriplets> when2 = new LinkedList<>();
         List<Triplet> and2 = new LinkedList<>();
         and2.add(
@@ -233,11 +236,11 @@ class RelationManagerTest {
                                 .getConceptByName("Enum")));
         when2.add(new AndTriplets(and2));
         RelationMapping mapping2 =
-                new RelationMapping(TripletFactory.createTriplet(new Variable("class"),XYZ2 , new Variable("x")), when2);
-        XYZ2.setMapping(mapping2);
-        relationManager.addOrAppend(XYZ2);
+                new RelationMapping(TripletFactory.createTriplet(new Variable("class"),otherWithRelation , new Variable("x")), when2);
+        otherWithRelation.setMapping(mapping2);
+        relationManager.addOrAppend(otherWithRelation);
         assertEquals(30, relationManager.getRelations().size());
-        XYZ_extracted = (CustomRelation) relationManager.getRelationByName("withMapping");
-        assertEquals(2, XYZ_extracted.getMapping().get().getWhenTriplets().size());
+        extractedWithRelation = (CustomRelation) relationManager.getRelationByName(relationName);
+        assertEquals(2, extractedWithRelation.getMapping().get().getWhenTriplets().size());
     }
 }
