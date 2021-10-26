@@ -143,7 +143,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             Triplet mappingTriplet =
                     TripletFactory.createTriplet(thenTriplet.getSubject(), thisRelation, thenTriplet.getObject());
             return new RelationMapping(mappingTriplet, whenTriplets);
-        } catch (Exception e) {
+        } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
     }

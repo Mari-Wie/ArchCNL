@@ -9,13 +9,11 @@ public class ConceptMapping extends Mapping {
 
     private Triplet thenTriplet;
 
-    private CustomConcept thisConcept;
 
     public ConceptMapping(
             Variable thenVariable, List<AndTriplets> whenTriplets, CustomConcept thisConcept)
             throws UnsupportedObjectTypeInTriplet, RelationDoesNotExistException {
         super(whenTriplets);
-        this.thisConcept = thisConcept;
         thenTriplet =
                 TripletFactory.createTriplet(
                         thenVariable,
@@ -38,6 +36,6 @@ public class ConceptMapping extends Mapping {
 
     @Override
     public String getMappingNameRepresentation() {
-        return "is" + thisConcept.getName();
+        return "is" + thenTriplet.getObject().getName();
     }
 }

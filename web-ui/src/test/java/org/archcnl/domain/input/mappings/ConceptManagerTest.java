@@ -105,7 +105,7 @@ class ConceptManagerTest {
         conceptManager.addOrAppend(new CustomConcept("ABC"));
         assertEquals(14, conceptManager.getConcepts().size());
 
-        String conceptName = "ConteptName";
+        String conceptName = "ConceptName";
 
         CustomConcept concept1 = new CustomConcept(conceptName);
         List<AndTriplets> when1 = new LinkedList<>();
