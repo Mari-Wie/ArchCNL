@@ -8,6 +8,7 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.domain.input.model.mappings.Triplet;
+import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.domain.input.model.mappings.Variable;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
@@ -16,7 +17,6 @@ import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
-import org.archcnl.domain.input.model.mappings.TripletFactory;
 
 public class TripletPresenter implements TripletContract.Presenter<View> {
 

@@ -23,9 +23,8 @@ import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.StringValue;
 import org.archcnl.domain.input.model.mappings.Triplet;
-import org.archcnl.domain.input.model.mappings.Variable;
 import org.archcnl.domain.input.model.mappings.TripletFactory;
-
+import org.archcnl.domain.input.model.mappings.Variable;
 
 public class TestUtils {
 
@@ -220,12 +219,16 @@ public class TestUtils {
 
         CustomRelation resideIn = new CustomRelation("resideIn", new LinkedList<>());
         RelationMapping resideInMapping =
-                new RelationMapping(TripletFactory.createTriplet(classVariable, resideIn, packageVariable), resideInWhenTriplets);
+                new RelationMapping(
+                        TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
+                        resideInWhenTriplets);
         resideIn.setMapping(resideInMapping);
 
         CustomRelation use = new CustomRelation("use", new LinkedList<>());
         RelationMapping useMapping =
-                new RelationMapping(TripletFactory.createTriplet(classVariable,use, class2Variable), useWhenTriplets);
+                new RelationMapping(
+                        TripletFactory.createTriplet(classVariable, use, class2Variable),
+                        useWhenTriplets);
         use.setMapping(useMapping);
 
         CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept");
@@ -240,9 +243,9 @@ public class TestUtils {
         RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
-                        varVariable,
-                        emptyWhenRelationString,
-                        new StringValue("test string")),
+                                varVariable,
+                                emptyWhenRelationString,
+                                new StringValue("test string")),
                         new LinkedList<>());
         emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
 
@@ -251,20 +254,18 @@ public class TestUtils {
         CustomRelation emptyWhenRelationBoolean =
                 new CustomRelation("emptyWhenRelationBoolean", relatableObjectTypes);
         RelationMapping emptyWhenRelationBooleanMapping =
-                new RelationMapping(TripletFactory.createTriplet(
-                        varVariable,
-                        emptyWhenRelationBoolean,
-                        new BooleanValue(false)),
+                new RelationMapping(
+                        TripletFactory.createTriplet(
+                                varVariable, emptyWhenRelationBoolean, new BooleanValue(false)),
                         new LinkedList<>());
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
         CustomRelation emptyWhenRelationVariable =
                 new CustomRelation("emptyWhenRelationVariable", new LinkedList<>());
         RelationMapping emptyWhenRelationVariableMapping =
-                new RelationMapping(TripletFactory.createTriplet(
-                        varVariable,
-                        emptyWhenRelationVariable,
-                        new Variable("test")),
+                new RelationMapping(
+                        TripletFactory.createTriplet(
+                                varVariable, emptyWhenRelationVariable, new Variable("test")),
                         new LinkedList<>());
         emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping);
 

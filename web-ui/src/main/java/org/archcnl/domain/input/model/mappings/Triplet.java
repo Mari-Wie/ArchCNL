@@ -6,7 +6,7 @@ public class Triplet {
     private Relation predicate;
     private ObjectType object;
 
-    public Triplet(Variable subject, Relation predicate, ObjectType object){
+    public Triplet(Variable subject, Relation predicate, ObjectType object) {
         this.subject = subject;
         this.predicate = predicate;
         this.object = object;

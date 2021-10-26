@@ -29,9 +29,8 @@ import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.Triplet;
-import org.archcnl.domain.input.model.mappings.Variable;
 import org.archcnl.domain.input.model.mappings.TripletFactory;
-
+import org.archcnl.domain.input.model.mappings.Variable;
 
 public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
@@ -141,7 +140,8 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             Triplet thenTriplet = parseThenPart(thenPart);
             thisRelation.changeRelatableObjectTypes(thenTriplet.getObject());
             Triplet mappingTriplet =
-                    TripletFactory.createTriplet(thenTriplet.getSubject(), thisRelation, thenTriplet.getObject());
+                    TripletFactory.createTriplet(
+                            thenTriplet.getSubject(), thisRelation, thenTriplet.getObject());
             return new RelationMapping(mappingTriplet, whenTriplets);
         } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
