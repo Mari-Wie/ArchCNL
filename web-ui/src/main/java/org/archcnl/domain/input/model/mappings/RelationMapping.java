@@ -7,10 +7,10 @@ public class RelationMapping extends Mapping {
 
     private Triplet thenTriplet;
 
-    public RelationMapping(Triplet triplet, List<AndTriplets> whenTriplets)
+    public RelationMapping(Triplet thenTriplet, List<AndTriplets> whenTriplets)
             throws UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
-        thenTriplet = triplet;
+        this.thenTriplet = thenTriplet;
     }
 
     public void updateSubjectInThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
