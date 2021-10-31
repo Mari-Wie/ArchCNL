@@ -57,9 +57,3 @@ useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClas
 
 [role="mapping"]
 inheritFromMapping: (?inheritance rdf:type famix:Inheritance) (?inheritance famix:hasSuperClass ?superClass) (?inheritance famix:hasSubClass ?subClass) -> (?subClass architecture:inheritFrom ?superClass)
-
-[role="mapping"]
-inheritFromRecursiveMapping: (?subClass architecture:inheritFrom ?superClass) -> (?subClass architecture:inheritFromRecursive ?superClass)
-// The recursive part is currently not working
-[role="mapping"]
-inheritFromRecursiveMapping: (?subClass architecture:inheritFromRecursive ?superClass) (?subsubClass architecture:inheritFrom ?subClass) -> (?subsubClass architecture:inheritFromRecursive ?superClass)
