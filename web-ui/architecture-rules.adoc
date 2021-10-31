@@ -2,14 +2,35 @@
 
 == MVP Pattern
 
-[role="mapping"]
-isGuiClass: (?class rdf:type famix:FamixClass) (?class architecture:inheritFromRecursive ?superClass) (?superClass famix:hasName ?name) regex(?name, 'Component') -> (?class rdf:type architecture:GuiClass)
+[role="rule"]
+No ModelClass can use a GuiClass.
+
+[role="rule"]
+No View can use a ModelClass.
+
+[role="rule"]
+Every View must have a Presenter.
+
+[role="rule"]
+Every Presenter must have a View.
+
+[role="rule"]
+Every View must inheritFrom a ContractView.
+
+[role="rule"]
+Every Presenter must inheritFrom a ContractPresenter.
 
 [role="mapping"]
-isView: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*View') -> (?class rdf:type architecture:View)
+isModelClass: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:namespaceContains ?class) (?package famix:hasName ?name) regex(?name, '.*\.domain\..*') -> (?class rdf:type architecture:ModelClass)
 
 [role="mapping"]
-isPresenter: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*Presenter') -> (?class rdf:type architecture:Presenter)
+isGuiClass: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:namespaceContains ?class) (?package famix:hasName ?name) regex(?name, '.*\.ui\..*') -> (?class rdf:type architecture:GuiClass)
+
+[role="mapping"]
+isView: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*View') (?class famix:isInterface 'false'^^xsd:boolean) -> (?class rdf:type architecture:View)
+
+[role="mapping"]
+isPresenter: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*Presenter') (?class famix:isInterface 'false'^^xsd:boolean) -> (?class rdf:type architecture:Presenter)
 
 [role="mapping"]
 isContract: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*Contract') -> (?class rdf:type architecture:Contract)
@@ -19,6 +40,9 @@ isContractView: (?contract rdf:type architecture:Contract) (?contract famix:defi
 
 [role="mapping"]
 isContractPresenter: (?contract rdf:type architecture:Contract) (?contract famix:definesNestedType ?nestedType) (?nestedType famix:hasName ?name) regex(?name, 'Presenter') -> (?nestedType rdf:type architecture:ContractPresenter)
+
+[role="mapping"]
+haveMapping: (?view rdf:type architecture:View) (?presenter rdf:type architecture:Presenter) (?view famix:hasName ?vName) (?presenter famix:hasName ?pName) regex(?vName, '(\\w*)(View|Presenter)', ?vPrefix) regex(?pName, '(\\w*)(View|Presenter)', ?pPrefix) regex(?vPrefix, ?pPrefix) -> (?view architecture:have ?presenter) (?presenter architecture:have ?view)
 
 === General
 
@@ -36,6 +60,6 @@ inheritFromMapping: (?inheritance rdf:type famix:Inheritance) (?inheritance fami
 
 [role="mapping"]
 inheritFromRecursiveMapping: (?subClass architecture:inheritFrom ?superClass) -> (?subClass architecture:inheritFromRecursive ?superClass)
-
+// The recursive part is currently not working
 [role="mapping"]
 inheritFromRecursiveMapping: (?subClass architecture:inheritFromRecursive ?superClass) (?subsubClass architecture:inheritFrom ?subClass) -> (?subsubClass architecture:inheritFromRecursive ?superClass)
