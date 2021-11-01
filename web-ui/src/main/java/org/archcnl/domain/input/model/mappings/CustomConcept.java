@@ -9,6 +9,10 @@ public class CustomConcept extends Concept {
 
     private ConceptMapping mapping;
 
+    public CustomConcept(String name, String description) {
+        super(name, description);
+    }
+    
     public CustomConcept(String name) {
         super(name);
     }

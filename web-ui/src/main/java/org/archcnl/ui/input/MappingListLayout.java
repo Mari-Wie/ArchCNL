@@ -1,7 +1,11 @@
 package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.dnd.DragSource;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.treegrid.TreeGrid;
+import com.vaadin.flow.data.selection.SelectionEvent;
+import com.vaadin.flow.data.selection.SelectionListener;
+
 import java.util.List;
 
 public class MappingListLayout extends TreeGrid<MappingListEntry> {
@@ -25,6 +29,18 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
                     }
 
                     return entryLayout;
-                });
+                });        
+        
+        addSelectionListener(new SelectionListener<Grid<MappingListEntry>, MappingListEntry>() {            
+            @Override
+            public void selectionChange(SelectionEvent<Grid<MappingListEntry>, MappingListEntry> event) {                
+                String tooltipString = event.getFirstSelectedItem().get().getDescription();
+                getElement().setAttribute("title", tooltipString);
+            }
+        });      
+
+        }
     }
-}
+    
+
+

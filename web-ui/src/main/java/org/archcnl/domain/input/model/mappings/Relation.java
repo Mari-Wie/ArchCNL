@@ -14,6 +14,7 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 public abstract class Relation {
 
     private String name;
+    private String description;
 
     // The object types this relation relates to
     private List<ObjectType> relatableObjectTypes;
@@ -110,5 +111,9 @@ public abstract class Relation {
         } else {
             throw new RelationAlreadyExistsException(newName);
         }
+    }
+    
+    public String getDescription() {
+        return name + " description";
     }
 }

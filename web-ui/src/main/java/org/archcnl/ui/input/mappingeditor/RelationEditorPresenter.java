@@ -40,7 +40,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
             return relation.getMapping().get().getWhenTriplets();
         }
     }
-
+    
+    //Stub
     @Override
     protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
         if (relation.isEmpty()) {

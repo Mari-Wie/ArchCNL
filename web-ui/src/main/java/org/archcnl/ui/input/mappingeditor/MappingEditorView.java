@@ -25,6 +25,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     private VerticalLayout content = new VerticalLayout();
     protected MappingEditorContract.Presenter<View> presenter;
     protected TextField mappingName;
+    protected TextField description;
 
     protected MappingEditorView(
             MappingEditorContract.Presenter<View> presenter,
@@ -59,6 +60,16 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                     presenter.nameHasChanged(event.getValue());
                 });
         add(mappingName);
+        
+        description = new TextField("Description");
+        description.setWidthFull();
+        description.setPlaceholder("Describe the Function");
+        description.addValueChangeListener(
+                event -> {
+//                    description.setInvalid(false);
+//                    presenter.nameHasChanged(event.getValue());
+                });
+        add(description);
 
         // TODO: add used in and description functionality
         VariableListPresenter variableListPresenter =
