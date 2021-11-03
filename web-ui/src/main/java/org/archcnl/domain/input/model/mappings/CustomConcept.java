@@ -12,7 +12,7 @@ public class CustomConcept extends Concept {
     public CustomConcept(String name, String description) {
         super(name, description);
     }
-    
+
     public CustomConcept(String name) {
         super(name);
     }

@@ -1,4 +1,3 @@
-
 package org.archcnl.domain.input.model.mappings;
 
 import java.util.Objects;
@@ -27,8 +26,7 @@ public abstract class Concept extends ObjectType {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
+        if (o == this) return true;
         if (!(o instanceof Concept)) {
             return false;
         }
@@ -53,5 +51,9 @@ public abstract class Concept extends ObjectType {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

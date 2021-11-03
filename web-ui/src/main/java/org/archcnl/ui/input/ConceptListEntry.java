@@ -58,6 +58,4 @@ public class ConceptListEntry implements MappingListEntry {
     public String getDescription() {
         return content.getDescription();
     }
-    
-    
 }

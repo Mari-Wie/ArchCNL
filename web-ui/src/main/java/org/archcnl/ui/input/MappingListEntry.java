@@ -9,11 +9,10 @@ public interface MappingListEntry {
     public List<MappingListEntry> getChildren();
 
     public String toString();
-    
+
     public String getDescription();
 
     boolean isLeaf();
 
     boolean isAlterable();
-    
 }

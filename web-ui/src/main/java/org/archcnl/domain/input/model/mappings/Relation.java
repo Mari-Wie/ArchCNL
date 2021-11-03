@@ -27,6 +27,19 @@ public abstract class Relation {
      */
     protected Relation(String name, List<ObjectType> relatableObjectTypes) {
         this.name = name;
+        this.description = name + ": Description Missing";
+        this.relatableObjectTypes = relatableObjectTypes;
+        // A relation can always relate to a variable
+        try {
+            addRelatableObjectType(new Variable("placeholder"));
+        } catch (InvalidVariableNameException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    protected Relation(String name, String description, List<ObjectType> relatableObjectTypes) {
+        this.name = name;
+        this.description = description;
         this.relatableObjectTypes = relatableObjectTypes;
         // A relation can always relate to a variable
         try {
@@ -112,8 +125,12 @@ public abstract class Relation {
             throw new RelationAlreadyExistsException(newName);
         }
     }
-    
+
     public String getDescription() {
-        return name + " description";
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

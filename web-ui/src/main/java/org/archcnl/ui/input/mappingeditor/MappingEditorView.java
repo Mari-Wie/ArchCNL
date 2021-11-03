@@ -60,18 +60,13 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                     presenter.nameHasChanged(event.getValue());
                 });
         add(mappingName);
-        
+
         description = new TextField("Description");
         description.setWidthFull();
-        description.setPlaceholder("Describe the Function");
-        description.addValueChangeListener(
-                event -> {
-//                    description.setInvalid(false);
-//                    presenter.nameHasChanged(event.getValue());
-                });
+        description.setPlaceholder("Describtion of the Concept/Relation");
         add(description);
 
-        // TODO: add used in and description functionality
+        // TODO: add used in functionality
         VariableListPresenter variableListPresenter =
                 new VariableListPresenter(presenter.getVariableManager());
         add(new VariableListView(variableListPresenter));
@@ -138,6 +133,16 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     @Override
     public void clearContent() {
         content.removeAll();
+    }
+
+    @Override
+    public void updateDescription(String newDescription) {
+        description.setValue(newDescription);
+    }
+
+    @Override
+    public String getDescription() {
+        return description.getValue();
     }
 
     protected abstract void addThenTripletView();

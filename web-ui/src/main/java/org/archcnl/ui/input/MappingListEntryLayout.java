@@ -19,6 +19,7 @@ public class MappingListEntryLayout extends HorizontalLayout {
     public MappingListEntryLayout(MappingListEntry entry, InputContract.Remote inputRemote) {
         this.entry = entry;
         this.inputRemote = inputRemote;
+        setWidthFull(); // TODO: Tooltip only works when hovering over the text or buttons
 
         Span text = new Span(entry.toString());
         text.setWidth("100%");
@@ -28,6 +29,7 @@ public class MappingListEntryLayout extends HorizontalLayout {
             deleteButton = new Button(DELETE_TEXT, click -> deleteButtonPressed());
             add(editButton);
             add(deleteButton);
+            getElement().setAttribute("title", entry.getDescription());
         }
     }
 
@@ -47,5 +49,9 @@ public class MappingListEntryLayout extends HorizontalLayout {
             RelationListEntry relationListEntry = (RelationListEntry) entry;
             inputRemote.switchToRelationEditorView((CustomRelation) relationListEntry.getContent());
         }
+    }
+
+    public void upDateDescription() {
+        getElement().setAttribute("title", entry.getDescription());
     }
 }
