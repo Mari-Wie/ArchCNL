@@ -2,6 +2,8 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.domain.input.model.mappings.CustomConcept;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
@@ -10,8 +12,6 @@ public class MappingListEntryLayout extends HorizontalLayout {
 
     private static final long serialVersionUID = 2L;
     private MappingListEntry entry;
-    private final String EDIT_TEXT = "Edit";
-    private final String DELETE_TEXT = "Delete";
     private Button editButton;
     private Button deleteButton;
     private InputContract.Remote inputRemote;
@@ -24,8 +24,8 @@ public class MappingListEntryLayout extends HorizontalLayout {
         text.setWidth("100%");
         addAndExpand(text);
         if (entry.isLeaf() && entry.isAlterable()) {
-            editButton = new Button(EDIT_TEXT, click -> editButtonPressed());
-            deleteButton = new Button(DELETE_TEXT, click -> deleteButtonPressed());
+            editButton = new Button(new Icon(VaadinIcon.PLUS), click -> editButtonPressed());
+            deleteButton = new Button(new Icon(VaadinIcon.TRASH), click -> deleteButtonPressed());
             add(editButton);
             add(deleteButton);
         }
