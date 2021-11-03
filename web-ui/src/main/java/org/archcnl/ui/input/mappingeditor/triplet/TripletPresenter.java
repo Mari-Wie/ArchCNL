@@ -90,20 +90,28 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     }
 
     public boolean isIncomplete() {
-        boolean incomplete = false;
+        boolean subjectMissing = false;
+        boolean predicateMissing = false;
+        boolean objectMissing = false;
         try {
             subjectPresenter.getSubject();
-            predicatePresenter.getPredicate();
-            objectPresenter.getObject();
-        } catch (InvalidVariableNameException
-                | SubjectOrObjectNotDefinedException
-                | RelationDoesNotExistException
-                | RelationNotDefinedException
-                | ConceptDoesNotExistException
-                | ObjectNotDefinedException e) {
-            incomplete = true;
+        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e1) {
+            subjectMissing = true;
         }
-        return incomplete;
+        try {
+            predicatePresenter.getPredicate();
+        } catch (RelationDoesNotExistException | RelationNotDefinedException e) {
+            predicateMissing = true;
+        }
+        try {
+            objectPresenter.getObject();
+        } catch (ConceptDoesNotExistException
+                | ObjectNotDefinedException
+                | InvalidVariableNameException
+                | SubjectOrObjectNotDefinedException e) {
+            objectMissing = true;
+        }
+        return !(subjectMissing == predicateMissing == objectMissing);
     }
 
     public void highlightIncompleteParts() {
