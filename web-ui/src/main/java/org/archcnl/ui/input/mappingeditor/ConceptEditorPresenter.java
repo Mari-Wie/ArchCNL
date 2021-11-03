@@ -12,7 +12,7 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.ui.input.InputContract.Remote;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -76,7 +76,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void createOrUpdateMapping(Remote inputRemote) {
+    protected void createOrUpdateMapping(InputContract.Remote inputRemote) {
         if (concept.isPresent()) {
             try {
                 ConceptMapping mapping =
