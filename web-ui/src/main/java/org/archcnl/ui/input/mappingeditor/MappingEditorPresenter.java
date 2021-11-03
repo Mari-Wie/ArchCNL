@@ -3,6 +3,9 @@ package org.archcnl.ui.input.mappingeditor;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
+import org.archcnl.ui.common.ButtonClickResponder;
+import org.archcnl.ui.common.OkCancelDialog;
+import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 
@@ -74,6 +77,15 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
         view.addAndTripletsView(createAndTripletsView(new AndTriplets()));
     }
 
+    @Override
+    public void doneButtonClicked(InputContract.Remote inputRemote) {
+        if (doIncompleteTripletsExist()) {
+            showIncompleteTripletsWarning(() -> createOrUpdateMapping(inputRemote));
+        } else {
+            createOrUpdateMapping(inputRemote);
+        }
+    }
+
     private AndTripletsEditorView createAndTripletsView(AndTriplets andTriplets) {
         AndTripletsEditorPresenter andTripletsEditorPresenter =
                 new AndTripletsEditorPresenter(getVariableManager(), this, andTriplets);
@@ -86,7 +98,27 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
                 .collect(Collectors.toList());
     }
 
+    private boolean doIncompleteTripletsExist() {
+        return view.getAndTripletsPresenters().stream()
+                .anyMatch(AndTripletsEditorPresenter::hasIncompleteTriplets);
+    }
+
+    private void showIncompleteTripletsWarning(ButtonClickResponder okResponse) {
+        new OkCancelDialog(
+                        "Warning: Incomplete rows will be lost",
+                        "The \"When\" part of this Concept/Relation contains incomplete rows."
+                                + "\nPressing \"OK\" will delete the incomplete rows."
+                                + "\nPressing \"Cancel\" will highlight the incomplete rows.",
+                        okResponse,
+                        this::hightlightIncompleteTriplets)
+                .open();
+    }
+
+    protected void hightlightIncompleteTriplets() {}
+
     protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
 
     protected abstract void initInfoFieldAndThenTriplet();
+
+    protected abstract void createOrUpdateMapping(InputContract.Remote inputRemote);
 }

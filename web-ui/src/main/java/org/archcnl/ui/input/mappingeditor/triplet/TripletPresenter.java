@@ -89,6 +89,23 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
         return TripletFactory.createTriplet(subject, predicate, object);
     }
 
+    public boolean isIncomplete() {
+        boolean incomplete = false;
+        try {
+            subjectPresenter.getSubject();
+            predicatePresenter.getPredicate();
+            objectPresenter.getObject();
+        } catch (InvalidVariableNameException
+                | SubjectOrObjectNotDefinedException
+                | RelationDoesNotExistException
+                | RelationNotDefinedException
+                | ConceptDoesNotExistException
+                | ObjectNotDefinedException e) {
+            incomplete = true;
+        }
+        return incomplete;
+    }
+
     @Override
     public void mouseEnter() {
         view.setAddButtonVisible(true);

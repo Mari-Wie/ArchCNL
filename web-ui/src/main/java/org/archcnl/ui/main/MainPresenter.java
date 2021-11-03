@@ -5,7 +5,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import org.archcnl.domain.input.ProjectManager;
-import org.archcnl.ui.common.ConfirmNotification;
+import org.archcnl.ui.common.ConfirmDialog;
 import org.archcnl.ui.input.InputPresenter;
 import org.archcnl.ui.input.InputView;
 import org.archcnl.ui.main.io.OpenProjectDialog;
@@ -137,7 +137,7 @@ public class MainPresenter
         try {
             ProjectManager.getInstance().saveProject();
         } catch (IOException e) {
-            new ConfirmNotification("Project file could not be written.").open();
+            new ConfirmDialog("Project file could not be written.").open();
         }
     }
 }

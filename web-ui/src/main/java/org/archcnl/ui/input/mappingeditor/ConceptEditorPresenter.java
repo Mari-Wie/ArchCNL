@@ -12,7 +12,7 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.ui.input.InputContract;
+import org.archcnl.ui.input.InputContract.Remote;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -55,7 +55,28 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void doneButtonClicked(InputContract.Remote inputRemote) {
+    protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
+        if (concept.isEmpty()) {
+            concept = Optional.of(new CustomConcept(newName));
+        } else {
+            try {
+                concept.get().changeName(newName);
+            } catch (ConceptAlreadyExistsException e) {
+                if (!newName.equals(concept.get().getName())) {
+                    throw new MappingAlreadyExistsException(e.getMessage());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void selectedObjectTypeHasChanged() {
+        throw new UnsupportedOperationException(
+                "The selected ObjectType cannot change for a Concept.");
+    }
+
+    @Override
+    protected void createOrUpdateMapping(Remote inputRemote) {
         if (concept.isPresent()) {
             try {
                 ConceptMapping mapping =
@@ -84,26 +105,5 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         } else {
             view.showNameFieldErrorMessage("A name is required");
         }
-    }
-
-    @Override
-    protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
-        if (concept.isEmpty()) {
-            concept = Optional.of(new CustomConcept(newName));
-        } else {
-            try {
-                concept.get().changeName(newName);
-            } catch (ConceptAlreadyExistsException e) {
-                if (!newName.equals(concept.get().getName())) {
-                    throw new MappingAlreadyExistsException(e.getMessage());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void selectedObjectTypeHasChanged() {
-        throw new UnsupportedOperationException(
-                "The selected ObjectType cannot change for a Concept.");
     }
 }

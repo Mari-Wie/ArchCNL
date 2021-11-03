@@ -60,7 +60,28 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void doneButtonClicked(InputContract.Remote inputRemote) {
+    protected void initInfoFieldAndThenTriplet() {
+        if (relation.isPresent()) {
+            view.updateNameField(relation.get().getName());
+            view.updateNameFieldInThenTriplet(relation.get().getName());
+            relation.get()
+                    .getMapping()
+                    .ifPresent(
+                            mapping -> {
+                                view.setSubjectInThenTriplet(mapping.getThenTriplet().getSubject());
+                                view.setObjectInThenTriplet(mapping.getThenTriplet().getObject());
+                            });
+        }
+    }
+
+    public void selectedObjectTypeHasChanged() {
+        if (relation.isPresent()) {
+            relation.get().changeRelatableObjectTypes(view.getSelectedObjectTypeInThenTriplet());
+        }
+    }
+
+    @Override
+    protected void createOrUpdateMapping(InputContract.Remote inputRemote) {
         if (relation.isPresent()) {
             try {
                 Triplet newTriplet =
@@ -92,28 +113,6 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
             }
         } else {
             view.showNameFieldErrorMessage("A name is required");
-        }
-    }
-
-    @Override
-    protected void initInfoFieldAndThenTriplet() {
-        if (relation.isPresent()) {
-            view.updateDescription(relation.get().getDescription());
-            view.updateNameField(relation.get().getName());
-            view.updateNameFieldInThenTriplet(relation.get().getName());
-            relation.get()
-                    .getMapping()
-                    .ifPresent(
-                            mapping -> {
-                                view.setSubjectInThenTriplet(mapping.getThenTriplet().getSubject());
-                                view.setObjectInThenTriplet(mapping.getThenTriplet().getObject());
-                            });
-        }
-    }
-
-    public void selectedObjectTypeHasChanged() {
-        if (relation.isPresent()) {
-            relation.get().changeRelatableObjectTypes(view.getSelectedObjectTypeInThenTriplet());
         }
     }
 }
