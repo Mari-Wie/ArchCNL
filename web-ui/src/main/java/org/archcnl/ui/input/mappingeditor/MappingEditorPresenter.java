@@ -114,7 +114,10 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
                 .open();
     }
 
-    protected void hightlightIncompleteTriplets() {}
+    protected void hightlightIncompleteTriplets() {
+        view.getAndTripletsPresenters().stream()
+                .forEach(AndTripletsEditorPresenter::highlightIncompleteTriplets);
+    }
 
     protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
 

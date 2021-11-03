@@ -16,7 +16,7 @@ public class VariableSelectionPresenter
 
     private static final long serialVersionUID = -7216588985374428140L;
     private VariableManager variableManager;
-    private View view;
+    protected View view;
 
     public VariableSelectionPresenter(VariableManager variableManager) {
         this.variableManager = variableManager;

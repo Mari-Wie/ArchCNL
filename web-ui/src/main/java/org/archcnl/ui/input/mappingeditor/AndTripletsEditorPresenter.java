@@ -110,4 +110,8 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
     public boolean hasIncompleteTriplets() {
         return view.getTripletPresenters().stream().anyMatch(TripletPresenter::isIncomplete);
     }
+
+    public void highlightIncompleteTriplets() {
+        view.getTripletPresenters().stream().forEach(TripletPresenter::highlightIncompleteParts);
+    }
 }

@@ -69,4 +69,14 @@ public class PredicatePresenter implements Presenter<View> {
         }
         objectPresenter.predicateHasChanged(Optional.ofNullable(relation));
     }
+
+    public void highlightWhenEmpty() {
+        try {
+            getPredicate();
+        } catch (RelationDoesNotExistException e) {
+            view.showErrorMessage("Relation does not exist");
+        } catch (RelationNotDefinedException e) {
+            view.showErrorMessage("Predicate not set");
+        }
+    }
 }

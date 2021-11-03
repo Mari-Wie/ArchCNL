@@ -106,6 +106,12 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
         return incomplete;
     }
 
+    public void highlightIncompleteParts() {
+        subjectPresenter.highlightWhenEmpty();
+        predicatePresenter.highlightWhenEmpty();
+        objectPresenter.highlightWhenEmpty();
+    }
+
     @Override
     public void mouseEnter() {
         view.setAddButtonVisible(true);
