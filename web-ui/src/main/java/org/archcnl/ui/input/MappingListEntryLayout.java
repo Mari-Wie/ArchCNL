@@ -51,7 +51,7 @@ public class MappingListEntryLayout extends HorizontalLayout {
         }
     }
 
-    public void upDateDescription() {
+    public void updateDescription() {
         getElement().setAttribute("title", entry.getDescription());
     }
 }

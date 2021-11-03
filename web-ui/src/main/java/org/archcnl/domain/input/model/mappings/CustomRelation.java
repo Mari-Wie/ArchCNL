@@ -12,6 +12,10 @@ public class CustomRelation extends Relation {
 
     private RelationMapping mapping;
 
+    public CustomRelation(String name, String description, List<ObjectType> relatableObjectTypes) {
+        super(name, description, relatableObjectTypes);
+    }
+    
     public CustomRelation(String name, List<ObjectType> relatableObjectTypes) {
         super(name, relatableObjectTypes);
     }
