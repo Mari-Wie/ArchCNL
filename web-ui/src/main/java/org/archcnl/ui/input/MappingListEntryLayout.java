@@ -24,7 +24,7 @@ public class MappingListEntryLayout extends HorizontalLayout {
         text.setWidth("100%");
         addAndExpand(text);
         if (entry.isLeaf() && entry.isAlterable()) {
-            editButton = new Button(new Icon(VaadinIcon.PLUS), click -> editButtonPressed());
+            editButton = new Button(new Icon(VaadinIcon.EDIT), click -> editButtonPressed());
             deleteButton = new Button(new Icon(VaadinIcon.TRASH), click -> deleteButtonPressed());
             add(editButton);
             add(deleteButton);
