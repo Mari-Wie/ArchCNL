@@ -15,6 +15,7 @@ import org.archcnl.ui.main.MainPresenter;
 public class ConceptAndRelationView extends VerticalLayout implements PropertyChangeListener {
 
     private static final long serialVersionUID = 1L;
+    private static final int DEFAULT_EXPANSION_DEPTH = 10;
 
     private InputContract.Remote inputRemote;
     private CreateNewLayout createNewConceptLayout;
@@ -57,6 +58,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
             createNewConceptLayout.remove(conceptTreeGrid);
         }
         conceptTreeGrid = new MappingListLayout(conceptData, inputRemote);
+        conceptTreeGrid.expandRecursively(conceptData, DEFAULT_EXPANSION_DEPTH);
         createNewConceptLayout.add(conceptTreeGrid);
     }
 
@@ -71,6 +73,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
             createNewRelationLayout.remove(relationTreeGrid);
         }
         relationTreeGrid = new MappingListLayout(relationData, inputRemote);
+        relationTreeGrid.expandRecursively(relationData, DEFAULT_EXPANSION_DEPTH);
         createNewRelationLayout.add(relationTreeGrid);
     }
 
