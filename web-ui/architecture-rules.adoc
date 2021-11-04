@@ -1,0 +1,59 @@
+
+
+== MVP Pattern
+
+[role="rule"]
+No ModelClass can use a GuiClass.
+
+[role="rule"]
+No View can use a ModelClass.
+
+[role="rule"]
+Every View must have a Presenter.
+
+[role="rule"]
+Every Presenter must have a View.
+
+[role="rule"]
+Every View must inheritFrom a ContractView.
+
+[role="rule"]
+Every Presenter must inheritFrom a ContractPresenter.
+
+[role="mapping"]
+isModelClass: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:namespaceContains ?class) (?package famix:hasName ?name) regex(?name, '.*\.domain\..*') -> (?class rdf:type architecture:ModelClass)
+
+[role="mapping"]
+isGuiClass: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:namespaceContains ?class) (?package famix:hasName ?name) regex(?name, '.*\.ui\..*') -> (?class rdf:type architecture:GuiClass)
+
+[role="mapping"]
+isView: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*View') (?class famix:isInterface 'false'^^xsd:boolean) -> (?class rdf:type architecture:View)
+
+[role="mapping"]
+isPresenter: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*Presenter') (?class famix:isInterface 'false'^^xsd:boolean) -> (?class rdf:type architecture:Presenter)
+
+[role="mapping"]
+isContract: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*Contract') -> (?class rdf:type architecture:Contract)
+
+[role="mapping"]
+isContractView: (?contract rdf:type architecture:Contract) (?contract famix:definesNestedType ?nestedType) (?nestedType famix:hasName ?name) regex(?name, 'View') -> (?nestedType rdf:type architecture:ContractView)
+
+[role="mapping"]
+isContractPresenter: (?contract rdf:type architecture:Contract) (?contract famix:definesNestedType ?nestedType) (?nestedType famix:hasName ?name) regex(?name, 'Presenter') -> (?nestedType rdf:type architecture:ContractPresenter)
+
+[role="mapping"]
+haveMapping: (?view rdf:type architecture:View) (?presenter rdf:type architecture:Presenter) (?view famix:hasName ?vName) (?presenter famix:hasName ?pName) regex(?vName, '(\\w*)View', ?vPrefix) regex(?pName, '(\\w*)Presenter', ?pPrefix) regex(?vPrefix, ?pPrefix) -> (?view architecture:have ?presenter) (?presenter architecture:have ?view)
+
+=== General
+
+[role="mapping"]
+resideInMapping: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:namespaceContains ?class) -> (?class architecture:residein ?package)
+
+[role="mapping"]
+useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?attribute rdf:type famix:Attribute) (?class famix:definesAttribute ?attribute) (?attribute famix:hasDeclaredType ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+inheritFromMapping: (?inheritance rdf:type famix:Inheritance) (?inheritance famix:hasSuperClass ?superClass) (?inheritance famix:hasSubClass ?subClass) -> (?subClass architecture:inheritFrom ?superClass)
