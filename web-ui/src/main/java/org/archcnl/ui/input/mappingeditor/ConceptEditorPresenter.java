@@ -76,21 +76,20 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void createOrUpdateMapping(InputContract.Remote inputRemote) {
+    protected void updateMapping(InputContract.Remote inputRemote) {
         if (concept.isPresent()) {
             try {
                 ConceptMapping mapping =
                         new ConceptMapping(
                                 view.getThenTripletSubject(), getAndTriplets(), concept.get());
                 concept.get().setMapping(mapping);
-                concept.get().setDescription(view.getDescription());
-                if (!RulesConceptsAndRelations.getInstance()
-                        .getConceptManager()
-                        .doesConceptExist(concept.get())) {
+
+                if (!doesConceptExist(concept.get())) {
                     RulesConceptsAndRelations.getInstance()
                             .getConceptManager()
                             .addConcept(concept.get());
                 }
+
                 inputRemote.switchToArchitectureRulesView();
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
@@ -105,5 +104,11 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         } else {
             view.showNameFieldErrorMessage("A name is required");
         }
+    }
+
+    private boolean doesConceptExist(CustomConcept concept) {
+        return RulesConceptsAndRelations.getInstance()
+                .getConceptManager()
+                .doesConceptExist(concept);
     }
 }

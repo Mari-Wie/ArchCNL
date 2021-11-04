@@ -80,9 +80,9 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
     @Override
     public void doneButtonClicked(InputContract.Remote inputRemote) {
         if (doIncompleteTripletsExist()) {
-            showIncompleteTripletsWarning(() -> createOrUpdateMapping(inputRemote));
+            showIncompleteTripletsWarning(() -> updateMapping(inputRemote));
         } else {
-            createOrUpdateMapping(inputRemote);
+            updateMapping(inputRemote);
         }
     }
 
@@ -123,5 +123,5 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
 
     protected abstract void initInfoFieldAndThenTriplet();
 
-    protected abstract void createOrUpdateMapping(InputContract.Remote inputRemote);
+    protected abstract void updateMapping(InputContract.Remote inputRemote);
 }

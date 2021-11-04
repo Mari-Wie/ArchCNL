@@ -81,7 +81,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void createOrUpdateMapping(InputContract.Remote inputRemote) {
+    protected void updateMapping(InputContract.Remote inputRemote) {
         if (relation.isPresent()) {
             try {
                 Triplet newTriplet =
@@ -93,14 +93,13 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 RelationMapping mapping = new RelationMapping(newTriplet, getAndTriplets());
 
                 relation.get().setMapping(mapping);
-                relation.get().setDescription(view.getDescription());
-                if (!RulesConceptsAndRelations.getInstance()
-                        .getRelationManager()
-                        .doesRelationExist(relation.get())) {
+
+                if (!doesRelationExist(relation.get())) {
                     RulesConceptsAndRelations.getInstance()
                             .getRelationManager()
                             .addRelation(relation.get());
                 }
+
                 inputRemote.switchToArchitectureRulesView();
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
@@ -114,5 +113,11 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         } else {
             view.showNameFieldErrorMessage("A name is required");
         }
+    }
+
+    private boolean doesRelationExist(CustomRelation relation) {
+        return RulesConceptsAndRelations.getInstance()
+                .getRelationManager()
+                .doesRelationExist(relation);
     }
 }
