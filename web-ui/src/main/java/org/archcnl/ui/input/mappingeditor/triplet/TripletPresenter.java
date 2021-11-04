@@ -111,7 +111,7 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
                 | SubjectOrObjectNotDefinedException e) {
             objectMissing = true;
         }
-        return !(subjectMissing == predicateMissing == objectMissing);
+        return !(subjectMissing == predicateMissing && predicateMissing == objectMissing);
     }
 
     public void highlightIncompleteParts() {
