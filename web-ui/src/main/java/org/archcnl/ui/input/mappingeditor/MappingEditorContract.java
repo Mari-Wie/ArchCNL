@@ -23,6 +23,10 @@ public interface MappingEditorContract {
 
         public void showNameFieldErrorMessage(String message);
 
+        public String getDescription();
+
+        public void updateDescription(String description);
+
         public Variable getThenTripletSubject()
                 throws SubjectOrObjectNotDefinedException, InvalidVariableNameException;
 

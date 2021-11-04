@@ -10,6 +10,8 @@ public interface MappingListEntry {
 
     public String toString();
 
+    public String getDescription();
+
     boolean isLeaf();
 
     boolean isAlterable();

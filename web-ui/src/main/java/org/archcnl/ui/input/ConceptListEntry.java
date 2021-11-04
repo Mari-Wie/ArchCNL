@@ -53,4 +53,9 @@ public class ConceptListEntry implements MappingListEntry {
     public boolean isAlterable() {
         return getContent() instanceof CustomConcept;
     }
+
+    @Override
+    public String getDescription() {
+        return content.getDescription();
+    }
 }

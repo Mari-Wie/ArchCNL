@@ -42,6 +42,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void initInfoFieldAndThenTriplet() {
         if (concept.isPresent()) {
+            view.updateDescription(concept.get().getDescription());
             view.updateNameField(concept.get().getName());
             view.updateNameFieldInThenTriplet(concept.get().getName());
             concept.get()
@@ -61,6 +62,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                         new ConceptMapping(
                                 view.getThenTripletSubject(), getAndTriplets(), concept.get());
                 concept.get().setMapping(mapping);
+                concept.get().setDescription(view.getDescription());
                 if (!RulesConceptsAndRelations.getInstance()
                         .getConceptManager()
                         .doesConceptExist(concept.get())) {

@@ -53,4 +53,9 @@ public class RelationListEntry implements MappingListEntry {
     public boolean isAlterable() {
         return getContent() instanceof CustomRelation;
     }
+
+    @Override
+    public String getDescription() {
+        return content.getDescription();
+    }
 }

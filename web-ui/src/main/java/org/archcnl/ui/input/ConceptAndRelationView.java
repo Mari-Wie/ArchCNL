@@ -44,6 +44,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
         add(createNewConceptLayout);
         add(createNewRelationLayout);
+
         add(new Button("Check for violations", click -> mainPresenter.showResultView()));
         getStyle().set("border", "1px solid black");
     }

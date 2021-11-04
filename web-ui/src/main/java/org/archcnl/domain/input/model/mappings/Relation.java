@@ -14,6 +14,7 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 public abstract class Relation {
 
     private String name;
+    private String description;
 
     // The object types this relation relates to
     private List<ObjectType> relatableObjectTypes;
@@ -26,6 +27,19 @@ public abstract class Relation {
      */
     protected Relation(String name, List<ObjectType> relatableObjectTypes) {
         this.name = name;
+        this.description = name + ": Description Missing";
+        this.relatableObjectTypes = relatableObjectTypes;
+        // A relation can always relate to a variable
+        try {
+            addRelatableObjectType(new Variable("placeholder"));
+        } catch (InvalidVariableNameException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    protected Relation(String name, String description, List<ObjectType> relatableObjectTypes) {
+        this.name = name;
+        this.description = description;
         this.relatableObjectTypes = relatableObjectTypes;
         // A relation can always relate to a variable
         try {
@@ -110,5 +124,13 @@ public abstract class Relation {
         } else {
             throw new RelationAlreadyExistsException(newName);
         }
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

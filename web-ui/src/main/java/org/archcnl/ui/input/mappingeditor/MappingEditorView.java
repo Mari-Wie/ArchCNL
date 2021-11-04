@@ -25,6 +25,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     private VerticalLayout content = new VerticalLayout();
     protected MappingEditorContract.Presenter<View> presenter;
     protected TextField mappingName;
+    protected TextField description;
 
     protected MappingEditorView(
             MappingEditorContract.Presenter<View> presenter,
@@ -60,7 +61,12 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                 });
         add(mappingName);
 
-        // TODO: add used in and description functionality
+        description = new TextField("Description");
+        description.setWidthFull();
+        description.setPlaceholder("Describtion of the Concept/Relation");
+        add(description);
+
+        // TODO: add used in functionality
         VariableListPresenter variableListPresenter =
                 new VariableListPresenter(presenter.getVariableManager());
         add(new VariableListView(variableListPresenter));
@@ -127,6 +133,16 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
     @Override
     public void clearContent() {
         content.removeAll();
+    }
+
+    @Override
+    public void updateDescription(String newDescription) {
+        description.setValue(newDescription);
+    }
+
+    @Override
+    public String getDescription() {
+        return description.getValue();
     }
 
     protected abstract void addThenTripletView();

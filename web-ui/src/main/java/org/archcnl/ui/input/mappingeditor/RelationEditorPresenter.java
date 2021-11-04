@@ -41,6 +41,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         }
     }
 
+    // Stub
     @Override
     protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
         if (relation.isEmpty()) {
@@ -71,7 +72,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 RelationMapping mapping = new RelationMapping(newTriplet, getAndTriplets());
 
                 relation.get().setMapping(mapping);
-
+                relation.get().setDescription(view.getDescription());
                 if (!RulesConceptsAndRelations.getInstance()
                         .getRelationManager()
                         .doesRelationExist(relation.get())) {
@@ -97,6 +98,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void initInfoFieldAndThenTriplet() {
         if (relation.isPresent()) {
+            view.updateDescription(relation.get().getDescription());
             view.updateNameField(relation.get().getName());
             view.updateNameFieldInThenTriplet(relation.get().getName());
             relation.get()

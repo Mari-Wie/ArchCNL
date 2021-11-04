@@ -23,7 +23,6 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
                         // TODO: Change this to the desired behavior
                         dragSource.setDragData(entry.getContent());
                     }
-
                     return entryLayout;
                 });
     }
