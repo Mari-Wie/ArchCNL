@@ -42,7 +42,7 @@ isContractView: (?contract rdf:type architecture:Contract) (?contract famix:defi
 isContractPresenter: (?contract rdf:type architecture:Contract) (?contract famix:definesNestedType ?nestedType) (?nestedType famix:hasName ?name) regex(?name, 'Presenter') -> (?nestedType rdf:type architecture:ContractPresenter)
 
 [role="mapping"]
-haveMapping: (?view rdf:type architecture:View) (?presenter rdf:type architecture:Presenter) (?view famix:hasName ?vName) (?presenter famix:hasName ?pName) regex(?vName, '(\\w*)(View|Presenter)', ?vPrefix) regex(?pName, '(\\w*)(View|Presenter)', ?pPrefix) regex(?vPrefix, ?pPrefix) -> (?view architecture:have ?presenter) (?presenter architecture:have ?view)
+haveMapping: (?view rdf:type architecture:View) (?presenter rdf:type architecture:Presenter) (?view famix:hasName ?vName) (?presenter famix:hasName ?pName) regex(?vName, '(\\w*)View', ?vPrefix) regex(?pName, '(\\w*)Presenter', ?pPrefix) regex(?vPrefix, ?pPrefix) -> (?view architecture:have ?presenter) (?presenter architecture:have ?view)
 
 === General
 
