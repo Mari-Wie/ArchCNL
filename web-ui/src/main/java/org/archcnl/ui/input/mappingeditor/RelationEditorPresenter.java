@@ -60,45 +60,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void doneButtonClicked(InputContract.Remote inputRemote) {
-        if (relation.isPresent()) {
-            try {
-                Triplet newTriplet =
-                        TripletFactory.createTriplet(
-                                view.getThenTripletSubject(),
-                                relation.get(),
-                                view.getThenTripletObject().get());
-
-                RelationMapping mapping = new RelationMapping(newTriplet, getAndTriplets());
-
-                relation.get().setMapping(mapping);
-                relation.get().setDescription(view.getDescription());
-                if (!RulesConceptsAndRelations.getInstance()
-                        .getRelationManager()
-                        .doesRelationExist(relation.get())) {
-                    RulesConceptsAndRelations.getInstance()
-                            .getRelationManager()
-                            .addRelation(relation.get());
-                }
-                inputRemote.switchToArchitectureRulesView();
-            } catch (UnrelatedMappingException
-                    | UnsupportedObjectTypeInTriplet
-                    | InvalidVariableNameException
-                    | RelationAlreadyExistsException e) {
-                // not possible/fatal
-                throw new RuntimeException(e.getMessage());
-            } catch (SubjectOrObjectNotDefinedException e) {
-                view.showThenSubjectOrObjectErrorMessage("Setting this is required");
-            }
-        } else {
-            view.showNameFieldErrorMessage("A name is required");
-        }
-    }
-
-    @Override
     protected void initInfoFieldAndThenTriplet() {
         if (relation.isPresent()) {
-            view.updateDescription(relation.get().getDescription());
             view.updateNameField(relation.get().getName());
             view.updateNameFieldInThenTriplet(relation.get().getName());
             relation.get()
@@ -115,5 +78,46 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         if (relation.isPresent()) {
             relation.get().changeRelatableObjectTypes(view.getSelectedObjectTypeInThenTriplet());
         }
+    }
+
+    @Override
+    protected void updateMapping(InputContract.Remote inputRemote) {
+        if (relation.isPresent()) {
+            try {
+                Triplet newTriplet =
+                        TripletFactory.createTriplet(
+                                view.getThenTripletSubject(),
+                                relation.get(),
+                                view.getThenTripletObject().get());
+
+                RelationMapping mapping = new RelationMapping(newTriplet, getAndTriplets());
+
+                relation.get().setMapping(mapping);
+
+                if (!doesRelationExist(relation.get())) {
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .addRelation(relation.get());
+                }
+
+                inputRemote.switchToArchitectureRulesView();
+            } catch (UnrelatedMappingException
+                    | UnsupportedObjectTypeInTriplet
+                    | InvalidVariableNameException
+                    | RelationAlreadyExistsException e) {
+                // not possible/fatal
+                throw new RuntimeException(e.getMessage());
+            } catch (SubjectOrObjectNotDefinedException e) {
+                view.showThenSubjectOrObjectErrorMessage("Setting this is required");
+            }
+        } else {
+            view.showNameFieldErrorMessage("A name is required");
+        }
+    }
+
+    private boolean doesRelationExist(CustomRelation relation) {
+        return RulesConceptsAndRelations.getInstance()
+                .getRelationManager()
+                .doesRelationExist(relation);
     }
 }

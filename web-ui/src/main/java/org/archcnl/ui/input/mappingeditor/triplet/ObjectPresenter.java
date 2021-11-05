@@ -54,4 +54,16 @@ public class ObjectPresenter implements ObjectContract.Presenter<View> {
             }
         }
     }
+
+    public void highlightWhenEmpty() {
+        try {
+            getObject();
+        } catch (ConceptDoesNotExistException e) {
+            view.showErrorMessage("Concept does not exist");
+        } catch (ObjectNotDefinedException | SubjectOrObjectNotDefinedException e) {
+            view.showErrorMessage("Object not set");
+        } catch (InvalidVariableNameException e) {
+            view.showErrorMessage("Invalid Variable name");
+        }
+    }
 }

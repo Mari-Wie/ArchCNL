@@ -55,38 +55,6 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void doneButtonClicked(InputContract.Remote inputRemote) {
-        if (concept.isPresent()) {
-            try {
-                ConceptMapping mapping =
-                        new ConceptMapping(
-                                view.getThenTripletSubject(), getAndTriplets(), concept.get());
-                concept.get().setMapping(mapping);
-                concept.get().setDescription(view.getDescription());
-                if (!RulesConceptsAndRelations.getInstance()
-                        .getConceptManager()
-                        .doesConceptExist(concept.get())) {
-                    RulesConceptsAndRelations.getInstance()
-                            .getConceptManager()
-                            .addConcept(concept.get());
-                }
-                inputRemote.switchToArchitectureRulesView();
-            } catch (UnrelatedMappingException
-                    | UnsupportedObjectTypeInTriplet
-                    | RelationDoesNotExistException
-                    | ConceptAlreadyExistsException
-                    | InvalidVariableNameException e) {
-                // not possible/fatal
-                throw new RuntimeException();
-            } catch (SubjectOrObjectNotDefinedException e) {
-                view.showThenSubjectErrorMessage("Setting a subject is required");
-            }
-        } else {
-            view.showNameFieldErrorMessage("A name is required");
-        }
-    }
-
-    @Override
     protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
         if (concept.isEmpty()) {
             concept = Optional.of(new CustomConcept(newName));
@@ -105,5 +73,42 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     public void selectedObjectTypeHasChanged() {
         throw new UnsupportedOperationException(
                 "The selected ObjectType cannot change for a Concept.");
+    }
+
+    @Override
+    protected void updateMapping(InputContract.Remote inputRemote) {
+        if (concept.isPresent()) {
+            try {
+                ConceptMapping mapping =
+                        new ConceptMapping(
+                                view.getThenTripletSubject(), getAndTriplets(), concept.get());
+                concept.get().setMapping(mapping);
+
+                if (!doesConceptExist(concept.get())) {
+                    RulesConceptsAndRelations.getInstance()
+                            .getConceptManager()
+                            .addConcept(concept.get());
+                }
+
+                inputRemote.switchToArchitectureRulesView();
+            } catch (UnrelatedMappingException
+                    | UnsupportedObjectTypeInTriplet
+                    | RelationDoesNotExistException
+                    | ConceptAlreadyExistsException
+                    | InvalidVariableNameException e) {
+                // not possible/fatal
+                throw new RuntimeException();
+            } catch (SubjectOrObjectNotDefinedException e) {
+                view.showThenSubjectErrorMessage("Setting a subject is required");
+            }
+        } else {
+            view.showNameFieldErrorMessage("A name is required");
+        }
+    }
+
+    private boolean doesConceptExist(CustomConcept concept) {
+        return RulesConceptsAndRelations.getInstance()
+                .getConceptManager()
+                .doesConceptExist(concept);
     }
 }

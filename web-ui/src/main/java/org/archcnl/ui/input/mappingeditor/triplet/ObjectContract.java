@@ -25,6 +25,8 @@ public interface ObjectContract {
 
         public void switchToVariableStringBooleanView(
                 VariableManager variableManager, boolean stringsAllowed, boolean booleansAllowed);
+
+        public void showErrorMessage(String errorMessage);
     }
 
     public interface Presenter<T extends View> extends Serializable {

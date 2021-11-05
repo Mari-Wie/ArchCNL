@@ -89,6 +89,37 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
         return TripletFactory.createTriplet(subject, predicate, object);
     }
 
+    public boolean isIncomplete() {
+        boolean subjectMissing = false;
+        boolean predicateMissing = false;
+        boolean objectMissing = false;
+        try {
+            subjectPresenter.getSubject();
+        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e1) {
+            subjectMissing = true;
+        }
+        try {
+            predicatePresenter.getPredicate();
+        } catch (RelationDoesNotExistException | RelationNotDefinedException e) {
+            predicateMissing = true;
+        }
+        try {
+            objectPresenter.getObject();
+        } catch (ConceptDoesNotExistException
+                | ObjectNotDefinedException
+                | InvalidVariableNameException
+                | SubjectOrObjectNotDefinedException e) {
+            objectMissing = true;
+        }
+        return !(subjectMissing == predicateMissing && predicateMissing == objectMissing);
+    }
+
+    public void highlightIncompleteParts() {
+        subjectPresenter.highlightWhenEmpty();
+        predicatePresenter.highlightWhenEmpty();
+        objectPresenter.highlightWhenEmpty();
+    }
+
     @Override
     public void mouseEnter() {
         view.setAddButtonVisible(true);

@@ -58,7 +58,7 @@ public class ConceptSelectionView extends ComboBox<String>
         }
     }
 
-    private void showErrorMessage(String message) {
+    protected void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
     }

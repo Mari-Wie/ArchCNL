@@ -18,7 +18,7 @@ public class OpenProjectDialog extends Dialog implements FileSelectionDialog {
     public OpenProjectDialog() {
         setDraggable(true);
 
-        Text title = new Text("Select project file to open)");
+        Text title = new Text("Select project file to open");
         FileSelectionComponent fileSelectionComponent = new FileSelectionComponent(this, false);
 
         confirmButton =

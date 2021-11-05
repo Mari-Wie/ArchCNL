@@ -21,4 +21,14 @@ public class SubjectPresenter extends VariableSelectionPresenter {
     public void setSubject(Variable subject) {
         setSelectedVariable(subject);
     }
+
+    public void highlightWhenEmpty() {
+        try {
+            getSubject();
+        } catch (InvalidVariableNameException e) {
+            view.showErrorMessage("Invalid Variable name");
+        } catch (SubjectOrObjectNotDefinedException e) {
+            view.showErrorMessage("Variable not set");
+        }
+    }
 }

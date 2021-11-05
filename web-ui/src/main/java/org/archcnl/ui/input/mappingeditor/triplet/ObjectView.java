@@ -64,8 +64,10 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         ObjectType object;
         if (conceptSelectionView != null) {
             object = conceptSelectionView.getObject();
-        } else {
+        } else if (variableStringBoolSelectionView != null) {
             object = variableStringBoolSelectionView.getObject();
+        } else {
+            throw new ObjectNotDefinedException();
         }
         return object;
     }
@@ -79,5 +81,17 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         } else {
             throw new PredicateCannotRelateToObjectException(object);
         }
+    }
+
+    @Override
+    public void showErrorMessage(String errorMessage) {
+        if (conceptSelectionView != null) {
+            conceptSelectionView.showErrorMessage(errorMessage);
+        } else if (variableStringBoolSelectionView != null) {
+            variableStringBoolSelectionView.showErrorMessage(errorMessage);
+        }
+        // there is no need to show the errorMessage when both views are null
+        // as in that case the predicate is not set and the actual error message
+        // is shown there
     }
 }
