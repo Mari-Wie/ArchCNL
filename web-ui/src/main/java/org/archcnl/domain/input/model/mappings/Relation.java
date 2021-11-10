@@ -121,6 +121,9 @@ public abstract class Relation {
                 .getRelationManager()
                 .doesRelationExist(new CustomRelation(newName, new LinkedList<>()))) {
             this.name = newName;
+            RulesConceptsAndRelations.getInstance()
+                    .getRelationManager()
+                    .relationHasBeenUpdated(this);
         } else {
             throw new RelationAlreadyExistsException(newName);
         }
@@ -132,5 +135,6 @@ public abstract class Relation {
 
     public void setDescription(String description) {
         this.description = description;
+        RulesConceptsAndRelations.getInstance().getRelationManager().relationHasBeenUpdated(this);
     }
 }

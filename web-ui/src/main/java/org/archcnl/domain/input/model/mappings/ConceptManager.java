@@ -29,6 +29,10 @@ public class ConceptManager {
         }
     }
 
+    public void conceptHasBeenUpdated(Concept concept) {
+        propertyChangeSupport.firePropertyChange("conceptUpdated", null, concept);
+    }
+
     public void addOrAppend(CustomConcept concept) throws UnrelatedMappingException {
         try {
             if (!doesConceptExist(concept)) {

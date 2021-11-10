@@ -111,4 +111,9 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 .getConceptManager()
                 .doesConceptExist(concept);
     }
+
+    @Override
+    public void descriptionHasChanged(String value) {
+        concept.get().setDescription(value);
+    }
 }

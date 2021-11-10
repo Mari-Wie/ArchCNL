@@ -64,6 +64,10 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         description = new TextField("Description");
         description.setWidthFull();
         description.setPlaceholder("Describtion of the Concept/Relation");
+        description.addValueChangeListener(
+                event -> {
+                    presenter.descriptionHasChanged(event.getValue());
+                });
         add(description);
 
         // TODO: add used in functionality
