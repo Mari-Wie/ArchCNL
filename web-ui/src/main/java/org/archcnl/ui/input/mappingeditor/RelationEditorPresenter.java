@@ -63,6 +63,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     protected void initInfoFieldAndThenTriplet() {
         if (relation.isPresent()) {
             view.updateNameField(relation.get().getName());
+            view.updateDescription(relation.get().getDescription());
             view.updateNameFieldInThenTriplet(relation.get().getName());
             relation.get()
                     .getMapping()
@@ -119,5 +120,10 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         return RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
                 .doesRelationExist(relation);
+    }
+
+    @Override
+    public void descriptionHasChanged(String value) {
+        relation.get().setDescription(value);
     }
 }

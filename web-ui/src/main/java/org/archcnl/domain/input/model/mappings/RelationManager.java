@@ -34,6 +34,10 @@ public class RelationManager {
         }
     }
 
+    public void relationHasBeenUpdated(Relation relation) {
+        propertyChangeSupport.firePropertyChange("relationUpdated", null, relation);
+    }
+
     public void addOrAppend(CustomRelation relation) throws UnrelatedMappingException {
         try {
             if (!doesRelationExist(relation)) {

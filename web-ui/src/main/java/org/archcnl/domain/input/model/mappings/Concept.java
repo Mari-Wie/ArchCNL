@@ -44,6 +44,7 @@ public abstract class Concept extends ObjectType {
                 .getConceptManager()
                 .doesConceptExist(new CustomConcept(newName))) {
             this.name = newName;
+            RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);
         } else {
             throw new ConceptAlreadyExistsException(newName);
         }
@@ -55,5 +56,6 @@ public abstract class Concept extends ObjectType {
 
     public void setDescription(String description) {
         this.description = description;
+        RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);
     }
 }
