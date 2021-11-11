@@ -47,6 +47,7 @@ Note: Try to keep issues fine-grained and small. This leads to fewer changes in 
 | master thesis | This issue is suitable for a master thesis* |
 | project management | The issue addresses an organizational problem |
 | restructuring/improvement | An **existing** feature should be improved (in quality)** |
+| no ticket | This Pull Request is not based on a ticket (e.g. a Jira ticket) |
 
 \*: ArchCNL is currently being developed by the SWK working group (https://www.inf.uni-hamburg.de/en/inst/ab/swk/home.html) of the department of informatics from the university of Hamburg, Germany. These labels are used for internal organization. Please do not use or change them if you are not a member of SWK.
 \*\*: Refactorings, reengineerings, and optimisations are typical examples.
