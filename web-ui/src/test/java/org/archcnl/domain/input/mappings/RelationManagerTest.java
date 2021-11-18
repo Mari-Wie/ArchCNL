@@ -21,7 +21,7 @@ import org.archcnl.domain.input.model.mappings.CustomRelation;
 import org.archcnl.domain.input.model.mappings.DefaultRelation;
 import org.archcnl.domain.input.model.mappings.RelationManager;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.domain.input.model.mappings.SpecialRelation;
+import org.archcnl.domain.input.model.mappings.JenaBuiltinRelation;
 import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.domain.input.model.mappings.TypeRelation;
@@ -45,7 +45,7 @@ class RelationManagerTest {
                 relationManager.doesRelationExist(new DefaultRelation("abc", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new SpecialRelation("matches", "regex", new LinkedList<>())));
+                        new JenaBuiltinRelation("matches", "regex", new LinkedList<>())));
         assertTrue(relationManager.doesRelationExist(new TypeRelation("is-of-type", "type")));
         assertTrue(
                 relationManager.doesRelationExist(
@@ -154,7 +154,7 @@ class RelationManagerTest {
                     relationManager.getRelationByRealName("hasName");
                 });
         assertEquals(
-                new SpecialRelation("matches", "regex", new LinkedList<>()),
+                new JenaBuiltinRelation("matches", "regex", new LinkedList<>()),
                 relationManager.getRelationByRealName("regex"));
         assertEquals(
                 new TypeRelation("is-of-type", "type"),
@@ -179,7 +179,7 @@ class RelationManagerTest {
         relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
         relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
         relationManager.addRelation(new TypeRelation("xyz", "xyz"));
-        relationManager.addRelation(new SpecialRelation("zhn", "kjh", new LinkedList<>()));
+        relationManager.addRelation(new JenaBuiltinRelation("zhn", "kjh", new LinkedList<>()));
         assertThrows(
                 RelationAlreadyExistsException.class,
                 () -> {

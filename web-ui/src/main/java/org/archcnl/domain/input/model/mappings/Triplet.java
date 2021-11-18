@@ -26,7 +26,7 @@ public class Triplet {
 
     public String toStringRepresentation() {
         StringBuilder builder = new StringBuilder();
-        if (predicate instanceof SpecialRelation) {
+        if (predicate instanceof JenaBuiltinRelation) {
             builder.append(predicate.toStringRepresentation());
             builder.append("(");
             builder.append(subject.toStringRepresentation() + ", ");

@@ -73,8 +73,8 @@ public class RelationManager {
 
     public Relation getRelationByRealName(String realName) throws RelationDoesNotExistException {
         for (Relation relation : relations) {
-            if (relation instanceof SpecialRelation) {
-                SpecialRelation specialRelation = (SpecialRelation) relation;
+            if (relation instanceof JenaBuiltinRelation) {
+                JenaBuiltinRelation specialRelation = (JenaBuiltinRelation) relation;
                 if (realName.equals(specialRelation.getRealName())) {
                     return specialRelation;
                 }
@@ -97,7 +97,7 @@ public class RelationManager {
     private void initializeSpecialRelations() {
         List<ObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));
-        relations.add(new SpecialRelation("matches", "regex", stringConcept));
+        relations.add(new JenaBuiltinRelation("matches", "regex", stringConcept));
     }
 
     private void initializeTypeRelation() {
