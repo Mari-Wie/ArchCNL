@@ -63,8 +63,7 @@ class ConceptManagerTest {
                 () -> {
                     conceptManager.getConceptByName("ABC");
                 });
-        assertEquals(
-                new FamixConcept("FamixClass"), conceptManager.getConceptByName("FamixClass"));
+        assertEquals(new FamixConcept("FamixClass"), conceptManager.getConceptByName("FamixClass"));
     }
 
     @Test
