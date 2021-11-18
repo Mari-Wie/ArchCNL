@@ -6,6 +6,7 @@ import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.common.TripletFactory;
 import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.common.ObjectType;
 
 
