@@ -6,7 +6,8 @@ public class JenaBuiltinRelation extends Relation {
 
     private String realName;
 
-    public JenaBuiltinRelation(String name, String realName, List<ObjectType> relatableObjectTypes) {
+    public JenaBuiltinRelation(
+            String name, String realName, List<ObjectType> relatableObjectTypes) {
         super(name, relatableObjectTypes);
         this.realName = realName;
     }
