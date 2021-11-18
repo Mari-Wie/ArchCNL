@@ -1,8 +1,8 @@
 package org.archcnl.domain.output.model.query.attribute;
 
 import java.util.Objects;
-import org.archcnl.domain.output.model.query.FormattedQueryDomainObject;
-import org.archcnl.domain.output.model.query.FormattedViewDomainObject;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 
 /** Representation of SPARQL field. */
 public class QueryField implements FormattedQueryDomainObject, FormattedViewDomainObject {
@@ -24,13 +24,13 @@ public class QueryField implements FormattedQueryDomainObject, FormattedViewDoma
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         return value.startsWith(QueryField.PREFIX) ? value : QueryField.PREFIX + value;
     }
 
     @Override
-    public String asFormattedQuery() {
-        return asFormattedString();
+    public String transformToSparqlQuery() {
+        return transformToGui();
     }
 
     @Override

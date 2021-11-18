@@ -1,6 +1,8 @@
 package org.archcnl.domain.output.model.query;
 
 import java.util.Objects;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.output.model.query.attribute.QueryField;
 import org.archcnl.domain.output.model.query.attribute.QueryObject;
 import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
@@ -35,24 +37,24 @@ public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(subject.asFormattedString());
+        sb.append(subject.transformToGui());
         sb.append(" ");
-        sb.append(predicate.asFormattedString());
+        sb.append(predicate.transformToGui());
         sb.append(" ");
-        sb.append(object.asFormattedString());
+        sb.append(object.transformToGui());
         return sb.toString();
     }
 
     @Override
-    public String asFormattedQuery() {
+    public String transformToSparqlQuery() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(subject.asFormattedQuery());
+        sb.append(subject.transformToSparqlQuery());
         sb.append(" ");
-        sb.append(predicate.asFormattedQuery());
+        sb.append(predicate.transformToSparqlQuery());
         sb.append(" ");
-        sb.append(object.asFormattedQuery());
+        sb.append(object.transformToSparqlQuery());
         return sb.toString();
     }
 

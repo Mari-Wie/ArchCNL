@@ -3,6 +3,8 @@ package org.archcnl.domain.output.model.query;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 
 /** Representation of SPARQL WHERE clause */
 public class WhereClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
@@ -47,7 +49,7 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         final StringBuffer sb = new StringBuffer();
         sb.append(WhereClause.WHERE);
         sb.append(" ");
@@ -75,13 +77,13 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
                                 sb.append(
                                         WhereClause.TAB
                                                 + WhereClause.TAB
-                                                + t.asFormattedString()
+                                                + t.transformToGui()
                                                 + "."
                                                 + WhereClause.NEW_LINE));
     }
 
     @Override
-    public String asFormattedQuery() {
+    public String transformToSparqlQuery() {
         final StringBuffer sb = new StringBuffer();
         sb.append(WhereClause.WHERE);
         sb.append(" ");
@@ -100,6 +102,6 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     private void addTriplesToFormattedQueryWhereClause(final StringBuffer sb) {
-        triples.stream().forEach(t -> sb.append(" " + t.asFormattedQuery() + "."));
+        triples.stream().forEach(t -> sb.append(" " + t.transformToSparqlQuery() + "."));
     }
 }

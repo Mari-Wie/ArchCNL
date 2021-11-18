@@ -1,4 +1,4 @@
-package org.archcnl.domain.output.model.query;
+package org.archcnl.domain.common;
 
 /** Domain object that has pretty representation for view. */
 public interface FormattedViewDomainObject {
@@ -10,5 +10,5 @@ public interface FormattedViewDomainObject {
      *
      * @return prepared string representation for view of an SPARQL element
      */
-    public String asFormattedString();
+    public String transformToGui();
 }

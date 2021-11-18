@@ -1,8 +1,8 @@
 package org.archcnl.domain.output.model.query.attribute;
 
 import java.util.Objects;
-import org.archcnl.domain.output.model.query.FormattedQueryDomainObject;
-import org.archcnl.domain.output.model.query.FormattedViewDomainObject;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 
 /** Representation of predicate from SPARQL triple. */
 public class QueryPredicate implements FormattedQueryDomainObject, FormattedViewDomainObject {
@@ -24,13 +24,13 @@ public class QueryPredicate implements FormattedQueryDomainObject, FormattedView
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         return namespaceAlias + ":" + value;
     }
 
     @Override
-    public String asFormattedQuery() {
-        return asFormattedString();
+    public String transformToSparqlQuery() {
+        return transformToGui();
     }
 
     @Override
