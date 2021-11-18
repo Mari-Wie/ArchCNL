@@ -3,7 +3,6 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
 import java.util.stream.Collectors;
-
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;

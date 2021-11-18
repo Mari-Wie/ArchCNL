@@ -1,7 +1,6 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.io.Serializable;
-
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;

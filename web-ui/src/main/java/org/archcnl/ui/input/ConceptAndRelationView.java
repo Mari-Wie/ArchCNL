@@ -7,7 +7,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;

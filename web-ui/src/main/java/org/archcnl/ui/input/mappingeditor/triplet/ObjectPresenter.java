@@ -1,7 +1,6 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.util.Optional;
-
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Relation;

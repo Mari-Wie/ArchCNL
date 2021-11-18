@@ -5,7 +5,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;

@@ -3,7 +3,6 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-
 import org.archcnl.domain.common.Variable;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableListContract.Presenter;

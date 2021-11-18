@@ -1,7 +1,6 @@
 package org.archcnl.ui.input;
 
 import java.io.Serializable;
-
 import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;

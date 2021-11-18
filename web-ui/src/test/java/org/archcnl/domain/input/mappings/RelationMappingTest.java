@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.domain.input.TestUtils;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;

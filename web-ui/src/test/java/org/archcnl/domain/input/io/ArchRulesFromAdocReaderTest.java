@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.TestUtils;

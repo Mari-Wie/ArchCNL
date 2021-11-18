@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.CustomRelation;

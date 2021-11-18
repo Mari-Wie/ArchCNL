@@ -2,7 +2,6 @@ package org.archcnl.ui.input.mappingeditor;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.ui.common.ButtonClickResponder;
 import org.archcnl.ui.common.OkCancelDialog;

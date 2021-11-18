@@ -3,7 +3,6 @@ package org.archcnl.ui.input.mappingeditor;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
