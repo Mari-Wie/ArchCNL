@@ -1,10 +1,10 @@
 package org.archcnl.domain.input.model.mappings;
 
-public class DefaultConcept extends Concept {
+public class FamixConcept extends Concept {
 
     private static final String CONCEPT_TYPE = "famix";
 
-    public DefaultConcept(String name) {
+    public FamixConcept(String name) {
         super(name);
     }
 

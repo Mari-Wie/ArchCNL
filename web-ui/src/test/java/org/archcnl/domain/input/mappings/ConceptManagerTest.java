@@ -19,7 +19,7 @@ import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.ConceptManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.domain.input.model.mappings.DefaultConcept;
+import org.archcnl.domain.input.model.mappings.FamixConcept;
 import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.domain.input.model.mappings.TripletFactory;
 import org.archcnl.domain.input.model.mappings.Variable;
@@ -39,20 +39,20 @@ class ConceptManagerTest {
     void givenConceptManager_whenCreated_thenExpectedConcepts()
             throws ConceptDoesNotExistException {
         assertEquals(12, conceptManager.getConcepts().size());
-        assertFalse(conceptManager.doesConceptExist(new DefaultConcept("ABC")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("FamixClass")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Namespace")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Enum")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationType")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Method")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Attribute")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Inheritance")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationInstance")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationTypeAttribute")));
+        assertFalse(conceptManager.doesConceptExist(new FamixConcept("ABC")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("FamixClass")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("Namespace")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("Enum")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("AnnotationType")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("Method")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("Attribute")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("Inheritance")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("AnnotationInstance")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("AnnotationTypeAttribute")));
         assertTrue(
-                conceptManager.doesConceptExist(new DefaultConcept("AnnotationInstanceAttribute")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Parameter")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("LocalVariable")));
+                conceptManager.doesConceptExist(new FamixConcept("AnnotationInstanceAttribute")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("Parameter")));
+        assertTrue(conceptManager.doesConceptExist(new FamixConcept("LocalVariable")));
     }
 
     @Test
@@ -64,7 +64,7 @@ class ConceptManagerTest {
                     conceptManager.getConceptByName("ABC");
                 });
         assertEquals(
-                new DefaultConcept("FamixClass"), conceptManager.getConceptByName("FamixClass"));
+                new FamixConcept("FamixClass"), conceptManager.getConceptByName("FamixClass"));
     }
 
     @Test
@@ -74,7 +74,7 @@ class ConceptManagerTest {
                     InvalidVariableNameException {
         assertEquals(0, conceptManager.getCustomConcepts().size());
         conceptManager.addConcept(new CustomConcept("Test"));
-        conceptManager.addConcept(new DefaultConcept("ABC"));
+        conceptManager.addConcept(new FamixConcept("ABC"));
         assertEquals(1, conceptManager.getCustomConcepts().size());
     }
 
@@ -85,11 +85,11 @@ class ConceptManagerTest {
                     InvalidVariableNameException {
         assertEquals(12, conceptManager.getConcepts().size());
         conceptManager.addConcept(new CustomConcept("Test"));
-        conceptManager.addConcept(new DefaultConcept("ABC"));
+        conceptManager.addConcept(new FamixConcept("ABC"));
         assertThrows(
                 ConceptAlreadyExistsException.class,
                 () -> {
-                    conceptManager.addConcept(new DefaultConcept("FamixClass"));
+                    conceptManager.addConcept(new FamixConcept("FamixClass"));
                 });
         assertEquals(14, conceptManager.getConcepts().size());
     }

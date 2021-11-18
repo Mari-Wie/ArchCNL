@@ -72,18 +72,18 @@ public class ConceptManager {
     }
 
     private void initializeConcepts() {
-        concepts.add(new DefaultConcept("FamixClass"));
-        concepts.add(new DefaultConcept("Namespace"));
-        concepts.add(new DefaultConcept("Enum"));
-        concepts.add(new DefaultConcept("AnnotationType"));
-        concepts.add(new DefaultConcept("Method"));
-        concepts.add(new DefaultConcept("Attribute"));
-        concepts.add(new DefaultConcept("Inheritance"));
-        concepts.add(new DefaultConcept("AnnotationInstance"));
-        concepts.add(new DefaultConcept("AnnotationTypeAttribute"));
-        concepts.add(new DefaultConcept("AnnotationInstanceAttribute"));
-        concepts.add(new DefaultConcept("Parameter"));
-        concepts.add(new DefaultConcept("LocalVariable"));
+        concepts.add(new FamixConcept("FamixClass"));
+        concepts.add(new FamixConcept("Namespace"));
+        concepts.add(new FamixConcept("Enum"));
+        concepts.add(new FamixConcept("AnnotationType"));
+        concepts.add(new FamixConcept("Method"));
+        concepts.add(new FamixConcept("Attribute"));
+        concepts.add(new FamixConcept("Inheritance"));
+        concepts.add(new FamixConcept("AnnotationInstance"));
+        concepts.add(new FamixConcept("AnnotationTypeAttribute"));
+        concepts.add(new FamixConcept("AnnotationInstanceAttribute"));
+        concepts.add(new FamixConcept("Parameter"));
+        concepts.add(new FamixConcept("LocalVariable"));
     }
 
     public List<Concept> getConcepts() {

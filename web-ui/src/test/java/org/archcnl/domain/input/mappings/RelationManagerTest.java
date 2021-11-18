@@ -18,7 +18,7 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.ConceptManager;
 import org.archcnl.domain.input.model.mappings.CustomRelation;
-import org.archcnl.domain.input.model.mappings.DefaultRelation;
+import org.archcnl.domain.input.model.mappings.FamixRelation;
 import org.archcnl.domain.input.model.mappings.RelationManager;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.model.mappings.SpecialRelation;
@@ -42,89 +42,89 @@ class RelationManagerTest {
     void givenRelationManager_whenCreated_thenExpectedRelations() {
         assertEquals(28, relationManager.getRelations().size());
         assertFalse(
-                relationManager.doesRelationExist(new DefaultRelation("abc", new LinkedList<>())));
+                relationManager.doesRelationExist(new FamixRelation("abc", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
                         new SpecialRelation("matches", "regex", new LinkedList<>())));
         assertTrue(relationManager.doesRelationExist(new TypeRelation("is-of-type", "type")));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasModifier", new LinkedList<>())));
+                        new FamixRelation("hasModifier", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasName", new LinkedList<>())));
+                        new FamixRelation("hasName", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasSignature", new LinkedList<>())));
+                        new FamixRelation("hasSignature", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasValue", new LinkedList<>())));
+                        new FamixRelation("hasValue", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasFullQualifiedName", new LinkedList<>())));
+                        new FamixRelation("hasFullQualifiedName", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("isConstructor", new LinkedList<>())));
+                        new FamixRelation("isConstructor", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("isExternal", new LinkedList<>())));
+                        new FamixRelation("isExternal", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("isInterface", new LinkedList<>())));
+                        new FamixRelation("isInterface", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasDefiningClass", new LinkedList<>())));
+                        new FamixRelation("hasDefiningClass", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasDeclaredException", new LinkedList<>())));
+                        new FamixRelation("hasDeclaredException", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasCaughtException", new LinkedList<>())));
+                        new FamixRelation("hasCaughtException", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("throwsException", new LinkedList<>())));
+                        new FamixRelation("throwsException", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasSubClass", new LinkedList<>())));
+                        new FamixRelation("hasSubClass", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasSuperClass", new LinkedList<>())));
+                        new FamixRelation("hasSuperClass", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesNestedType", new LinkedList<>())));
+                        new FamixRelation("definesNestedType", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesParameter", new LinkedList<>())));
+                        new FamixRelation("definesParameter", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesVariable", new LinkedList<>())));
+                        new FamixRelation("definesVariable", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationInstance", new LinkedList<>())));
+                        new FamixRelation("hasAnnotationInstance", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationType", new LinkedList<>())));
+                        new FamixRelation("hasAnnotationType", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationTypeAttribute", new LinkedList<>())));
+                        new FamixRelation("hasAnnotationTypeAttribute", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationInstanceAttribute", new LinkedList<>())));
+                        new FamixRelation("hasAnnotationInstanceAttribute", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesAttribute", new LinkedList<>())));
+                        new FamixRelation("definesAttribute", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesMethod", new LinkedList<>())));
+                        new FamixRelation("definesMethod", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("imports", new LinkedList<>())));
+                        new FamixRelation("imports", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("namespaceContains", new LinkedList<>())));
+                        new FamixRelation("namespaceContains", new LinkedList<>())));
         assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasDeclaredType", new LinkedList<>())));
+                        new FamixRelation("hasDeclaredType", new LinkedList<>())));
     }
 
     @Test
@@ -136,7 +136,7 @@ class RelationManagerTest {
                     relationManager.getRelationByName("abc");
                 });
         assertEquals(
-                new DefaultRelation("hasModifier", new LinkedList<>()),
+                new FamixRelation("hasModifier", new LinkedList<>()),
                 relationManager.getRelationByName("hasModifier"));
     }
 
@@ -167,7 +167,7 @@ class RelationManagerTest {
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         assertEquals(0, relationManager.getCustomRelations().size());
         relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
-        relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
+        relationManager.addRelation(new FamixRelation("abc", new LinkedList<>()));
         assertEquals(1, relationManager.getCustomRelations().size());
     }
 
@@ -177,7 +177,7 @@ class RelationManagerTest {
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         assertEquals(28, relationManager.getRelations().size());
         relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
-        relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
+        relationManager.addRelation(new FamixRelation("abc", new LinkedList<>()));
         relationManager.addRelation(new TypeRelation("xyz", "xyz"));
         relationManager.addRelation(new SpecialRelation("zhn", "kjh", new LinkedList<>()));
         assertThrows(
