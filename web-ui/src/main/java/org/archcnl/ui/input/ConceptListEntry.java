@@ -3,8 +3,9 @@ package org.archcnl.ui.input;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.input.model.mappings.Concept;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
+
+import org.archcnl.domain.common.Concept;
+import org.archcnl.domain.common.CustomConcept;
 
 public class ConceptListEntry implements MappingListEntry {
 

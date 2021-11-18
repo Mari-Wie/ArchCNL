@@ -2,10 +2,11 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.Optional;
+
+import org.archcnl.domain.common.Concept;
+import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.model.mappings.Concept;
-import org.archcnl.domain.input.model.mappings.ObjectType;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;

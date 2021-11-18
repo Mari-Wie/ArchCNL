@@ -1,12 +1,13 @@
 package org.archcnl.ui.input;
 
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.CustomRelation;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.domain.input.model.mappings.CustomRelation;
 
 public class MappingListEntryLayout extends HorizontalLayout {
 

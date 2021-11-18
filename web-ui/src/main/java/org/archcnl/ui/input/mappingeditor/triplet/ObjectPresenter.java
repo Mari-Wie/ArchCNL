@@ -1,13 +1,14 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.util.Optional;
+
+import org.archcnl.domain.common.BooleanValue;
+import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.StringValue;
+import org.archcnl.domain.common.TypeRelation;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.model.mappings.BooleanValue;
-import org.archcnl.domain.input.model.mappings.ObjectType;
-import org.archcnl.domain.input.model.mappings.Relation;
-import org.archcnl.domain.input.model.mappings.StringValue;
-import org.archcnl.domain.input.model.mappings.TypeRelation;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;

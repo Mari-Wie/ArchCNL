@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.PredicateContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.triplet.PredicateContract.View;

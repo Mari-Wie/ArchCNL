@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.model.mappings.AndTriplets;
-import org.archcnl.domain.input.model.mappings.Triplet;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;

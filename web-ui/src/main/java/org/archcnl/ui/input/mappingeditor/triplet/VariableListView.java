@@ -6,7 +6,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.archcnl.domain.input.model.mappings.Variable;
+
+import org.archcnl.domain.common.Variable;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableListContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableListContract.View;
 

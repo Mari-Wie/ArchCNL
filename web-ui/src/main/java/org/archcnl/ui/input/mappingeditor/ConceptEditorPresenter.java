@@ -3,15 +3,16 @@ package org.archcnl.ui.input.mappingeditor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;

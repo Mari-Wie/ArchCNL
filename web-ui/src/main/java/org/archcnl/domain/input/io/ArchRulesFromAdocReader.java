@@ -10,6 +10,14 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.CustomRelation;
+import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.TripletFactory;
+import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.exceptions.NoMappingException;
@@ -21,16 +29,8 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.domain.input.model.mappings.AndTriplets;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.domain.input.model.mappings.CustomRelation;
-import org.archcnl.domain.input.model.mappings.ObjectType;
-import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.domain.input.model.mappings.Triplet;
-import org.archcnl.domain.input.model.mappings.TripletFactory;
-import org.archcnl.domain.input.model.mappings.Variable;
 
 public class ArchRulesFromAdocReader implements ArchRulesImporter {
 

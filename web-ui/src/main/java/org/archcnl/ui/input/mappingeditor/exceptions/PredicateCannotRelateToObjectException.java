@@ -1,6 +1,6 @@
 package org.archcnl.ui.input.mappingeditor.exceptions;
 
-import org.archcnl.domain.input.model.mappings.ObjectType;
+import org.archcnl.domain.common.ObjectType;
 
 public class PredicateCannotRelateToObjectException extends Exception {
 
