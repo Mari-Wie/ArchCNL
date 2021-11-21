@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.model.mappings;
+package org.archcnl.domain.common;
 
 import java.util.Objects;
 import java.util.regex.Pattern;

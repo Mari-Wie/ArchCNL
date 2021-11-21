@@ -7,9 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
+import org.archcnl.domain.common.Concept;
+import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.mappings.Concept;
-import org.archcnl.domain.input.model.mappings.Relation;
 import org.archcnl.ui.main.MainPresenter;
 
 public class ConceptAndRelationView extends VerticalLayout implements PropertyChangeListener {

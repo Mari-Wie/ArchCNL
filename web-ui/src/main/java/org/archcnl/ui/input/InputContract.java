@@ -1,8 +1,8 @@
 package org.archcnl.ui.input;
 
 import java.io.Serializable;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.domain.input.model.mappings.CustomRelation;
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 
 public interface InputContract {
