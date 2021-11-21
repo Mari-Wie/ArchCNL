@@ -1,8 +1,8 @@
 package org.archcnl.domain.output.model.query.attribute;
 
 import java.util.Objects;
-import org.archcnl.domain.output.model.query.FormattedQueryDomainObject;
-import org.archcnl.domain.output.model.query.FormattedViewDomainObject;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 
 /** Representation of standard for ArchCNL namespaces in SPARQL query. */
 public class QueryNamespace implements FormattedQueryDomainObject, FormattedViewDomainObject {
@@ -24,7 +24,7 @@ public class QueryNamespace implements FormattedQueryDomainObject, FormattedView
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         final StringBuilder sb = new StringBuilder();
         sb.append("PREFIX ");
         sb.append(alias);
@@ -35,8 +35,8 @@ public class QueryNamespace implements FormattedQueryDomainObject, FormattedView
     }
 
     @Override
-    public String asFormattedQuery() {
-        return asFormattedString();
+    public String transformToSparqlQuery() {
+        return transformToGui();
     }
 
     @Override

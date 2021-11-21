@@ -1,7 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.textfield.TextField;
-import org.archcnl.domain.input.model.mappings.StringValue;
+import org.archcnl.domain.common.StringValue;
 
 public class StringSelectionView extends TextField {
 

@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.model.mappings;
+package org.archcnl.domain.common;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -10,6 +10,7 @@ import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.model.mappings.RelationMapping;
 
 public class RelationManager {
 

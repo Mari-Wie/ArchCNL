@@ -37,7 +37,7 @@ public class WhereClauseTest {
                         + "    ?aggregate famix:hasName ?name.\n  }\n}";
 
         // when
-        final String whereClauseAsString = whereClause.asFormattedString();
+        final String whereClauseAsString = whereClause.transformToGui();
 
         // then
         Assert.assertEquals(expectedQueryString, whereClauseAsString);
@@ -93,7 +93,7 @@ public class WhereClauseTest {
                         + "  }\n}";
 
         // when
-        final String whereClauseAsString = whereClause.asFormattedString();
+        final String whereClauseAsString = whereClause.transformToGui();
 
         // then
         Assert.assertEquals(expectedQueryString, whereClauseAsString);

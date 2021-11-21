@@ -1,15 +1,15 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.util.Optional;
+import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.TripletFactory;
+import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.model.mappings.ObjectType;
-import org.archcnl.domain.input.model.mappings.Relation;
-import org.archcnl.domain.input.model.mappings.Triplet;
-import org.archcnl.domain.input.model.mappings.TripletFactory;
-import org.archcnl.domain.input.model.mappings.Variable;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;

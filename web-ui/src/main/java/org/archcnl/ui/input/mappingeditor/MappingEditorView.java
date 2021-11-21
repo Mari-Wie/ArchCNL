@@ -11,7 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.input.model.mappings.AndTriplets;
+import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;

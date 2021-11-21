@@ -1,6 +1,11 @@
 package org.archcnl.domain.input.model.mappings;
 
 import java.util.List;
+import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.TripletFactory;
+import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 
 public class RelationMapping extends Mapping {

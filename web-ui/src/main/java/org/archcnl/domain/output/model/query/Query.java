@@ -2,6 +2,8 @@ package org.archcnl.domain.output.model.query;
 
 import java.util.Objects;
 import java.util.Set;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 
 /** Representation of query to database. */
@@ -33,22 +35,22 @@ public class Query implements FormattedQueryDomainObject, FormattedViewDomainObj
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         final StringBuffer sb = new StringBuffer();
         namespaces.stream()
-                .forEach(ns -> sb.append(ns.asFormattedQuery() + System.lineSeparator()));
-        sb.append(selectClause.asFormattedString());
+                .forEach(ns -> sb.append(ns.transformToSparqlQuery() + System.lineSeparator()));
+        sb.append(selectClause.transformToGui());
         sb.append(System.lineSeparator());
-        sb.append(whereClause.asFormattedString());
+        sb.append(whereClause.transformToGui());
         return sb.toString();
     }
 
     @Override
-    public String asFormattedQuery() {
+    public String transformToSparqlQuery() {
         final StringBuffer sb = new StringBuffer();
-        namespaces.stream().forEach(ns -> sb.append(ns.asFormattedQuery() + " "));
-        sb.append(selectClause.asFormattedQuery());
-        sb.append(whereClause.asFormattedQuery());
+        namespaces.stream().forEach(ns -> sb.append(ns.transformToSparqlQuery() + " "));
+        sb.append(selectClause.transformToSparqlQuery());
+        sb.append(whereClause.transformToSparqlQuery());
         return sb.toString();
     }
 

@@ -6,10 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.domain.input.model.mappings.CustomRelation;
 import org.archcnl.domain.input.model.mappings.Mapping;
 
 public class ArchRulesToAdocWriter implements ArchRulesExporter {

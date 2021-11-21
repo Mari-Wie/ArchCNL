@@ -1,7 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
 import java.io.Serializable;
-import org.archcnl.domain.input.model.mappings.Variable;
+import org.archcnl.domain.common.Variable;
 
 public interface VariableListContract {
 

@@ -5,8 +5,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.domain.input.model.mappings.CustomConcept;
-import org.archcnl.domain.input.model.mappings.CustomRelation;
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.CustomRelation;
 
 public class MappingListEntryLayout extends HorizontalLayout {
 
