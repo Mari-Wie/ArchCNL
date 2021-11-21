@@ -26,6 +26,6 @@ public class ResultRepositoryImpl implements ResultRepository {
 
     @Override
     public Optional<Result> executeNativeSelectQuery(final Query query) {
-        return db.executeSelectQuery(query.asFormattedString());
+        return db.executeSelectQuery(query.transformToGui());
     }
 }

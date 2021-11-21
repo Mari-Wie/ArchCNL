@@ -46,7 +46,7 @@ public class QueryTest {
                         + "    ?aggregate famix:hasName ?name.\n  }\n}";
 
         // when
-        final String queryAsString = query.asFormattedString();
+        final String queryAsString = query.transformToGui();
 
         // then
         Assert.assertEquals(
@@ -130,7 +130,7 @@ public class QueryTest {
                         + "}";
 
         // when
-        final String queryAsString = query.asFormattedString();
+        final String queryAsString = query.transformToGui();
 
         // then
         Assert.assertEquals(
@@ -164,7 +164,7 @@ public class QueryTest {
                         + "?aggregate famix:hasName ?name. }}";
 
         // when
-        final String queryAsString = query.asFormattedQuery();
+        final String queryAsString = query.transformToSparqlQuery();
 
         // then
         Assert.assertEquals(

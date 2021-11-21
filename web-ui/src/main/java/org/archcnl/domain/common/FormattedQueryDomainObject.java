@@ -1,4 +1,4 @@
-package org.archcnl.domain.output.model.query;
+package org.archcnl.domain.common;
 
 /** Domain object that has pretty representation for query to Stardog. */
 public interface FormattedQueryDomainObject {
@@ -10,5 +10,5 @@ public interface FormattedQueryDomainObject {
      *
      * @return prepared string representation for query of an SPARQL element
      */
-    public String asFormattedQuery();
+    public String transformToSparqlQuery();
 }

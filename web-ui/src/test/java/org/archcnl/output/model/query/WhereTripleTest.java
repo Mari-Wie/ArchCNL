@@ -22,7 +22,7 @@ public class WhereTripleTest {
         final String expectedString = "?aggregate famix:hasName ?name";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);
@@ -41,7 +41,7 @@ public class WhereTripleTest {
         final String expectedString = "?aggregate xsd:hasName \"Some string value\"^^xsd:string";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);
@@ -60,7 +60,7 @@ public class WhereTripleTest {
         final String expectedString = "?aggregate owl:hasName \"-1\"^^xsd:integer";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);
@@ -79,7 +79,7 @@ public class WhereTripleTest {
         final String expectedString = "?aggregate xsd:hasName \"-1.0\"^^xsd:double";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);
@@ -98,7 +98,7 @@ public class WhereTripleTest {
         final String expectedString = "?aggregate xsd:hasName \"true\"^^xsd:boolean";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);
@@ -118,7 +118,7 @@ public class WhereTripleTest {
                 "?aggregate xsd:hasName \"2020-08-28T21:12:00\"^^xsd:dateTime";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);
@@ -136,7 +136,7 @@ public class WhereTripleTest {
         final String expectedString = "?aggregate xsd:hasName conformance:ArchitectureRule";
 
         // when
-        final String tripleAsString = triple.asFormattedString();
+        final String tripleAsString = triple.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, tripleAsString);

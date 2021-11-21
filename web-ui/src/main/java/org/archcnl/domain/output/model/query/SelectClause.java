@@ -3,6 +3,8 @@ package org.archcnl.domain.output.model.query;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.output.model.query.attribute.QueryField;
 
 /** Representation of SPARQL SELECT clause */
@@ -42,20 +44,20 @@ public class SelectClause implements FormattedQueryDomainObject, FormattedViewDo
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         final StringBuffer sb = new StringBuffer();
         sb.append(SelectClause.SELECT);
         sb.append(" ");
-        objects.stream().forEach(o -> sb.append(o.asFormattedString() + " "));
+        objects.stream().forEach(o -> sb.append(o.transformToGui() + " "));
         return sb.toString();
     }
 
     @Override
-    public String asFormattedQuery() {
+    public String transformToSparqlQuery() {
         final StringBuffer sb = new StringBuffer();
         sb.append(SelectClause.SELECT);
         sb.append(" ");
-        objects.stream().forEach(o -> sb.append(o.asFormattedQuery() + " "));
+        objects.stream().forEach(o -> sb.append(o.transformToSparqlQuery() + " "));
         return sb.toString();
     }
 }

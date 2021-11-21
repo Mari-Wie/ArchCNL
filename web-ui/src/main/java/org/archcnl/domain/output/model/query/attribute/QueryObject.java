@@ -3,8 +3,8 @@ package org.archcnl.domain.output.model.query.attribute;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.archcnl.domain.output.model.query.FormattedQueryDomainObject;
-import org.archcnl.domain.output.model.query.FormattedViewDomainObject;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 
 /**
  * Representation of SPARQL object from triple. SPARQL object can be a field, type or primitive
@@ -35,7 +35,7 @@ public class QueryObject implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     @Override
-    public String asFormattedString() {
+    public String transformToGui() {
         final StringBuffer sb = new StringBuffer();
         switch (type) {
             case PRIMITIVE_VALUE:
@@ -54,8 +54,8 @@ public class QueryObject implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     @Override
-    public String asFormattedQuery() {
-        return asFormattedString();
+    public String transformToSparqlQuery() {
+        return transformToGui();
     }
 
     @Override
