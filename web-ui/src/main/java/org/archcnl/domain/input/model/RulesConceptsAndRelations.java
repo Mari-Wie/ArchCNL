@@ -1,10 +1,10 @@
 package org.archcnl.domain.input.model;
 
 import com.google.common.annotations.VisibleForTesting;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
-import org.archcnl.domain.input.model.mappings.ConceptManager;
-import org.archcnl.domain.input.model.mappings.RelationManager;
 
 public class RulesConceptsAndRelations {
 

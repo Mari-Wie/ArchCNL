@@ -24,7 +24,7 @@ public class SelectClauseTest {
         final String expectedString = "SELECT ?name ?cnl ?a ?b ";
 
         // when
-        final String selectClauseAsString = selectClause.asFormattedString();
+        final String selectClauseAsString = selectClause.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, selectClauseAsString);
@@ -40,7 +40,7 @@ public class SelectClauseTest {
         final String expectedString = "SELECT ?name ";
 
         // when
-        final String selectClauseAsString = selectClause.asFormattedString();
+        final String selectClauseAsString = selectClause.transformToGui();
 
         // then
         Assert.assertEquals(expectedString, selectClauseAsString);

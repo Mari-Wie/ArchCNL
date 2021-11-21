@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.model.mappings;
+package org.archcnl.domain.common;
 
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 

@@ -1,10 +1,11 @@
-package org.archcnl.domain.input.model.mappings;
+package org.archcnl.domain.common;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.model.mappings.RelationMapping;
 
 public class CustomRelation extends Relation {
 

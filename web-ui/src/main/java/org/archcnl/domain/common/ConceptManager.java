@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.model.mappings;
+package org.archcnl.domain.common;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class ConceptManager {
 
