@@ -1,6 +1,5 @@
 package org.archcnl.domain.common;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
@@ -32,7 +31,7 @@ public abstract class ObjectType implements FormattedDomainObject {
                             .getConceptManager()
                             .getConceptByName(objectName);
                 } catch (ConceptDoesNotExistException e) {
-                    return new CustomConcept(objectName);
+                    return new CustomConcept(objectName, "");
                 }
             } else {
                 throw new NoObjectTypeException(potentialObject);
@@ -43,17 +42,16 @@ public abstract class ObjectType implements FormattedDomainObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof ObjectType)) {
-            return false;
-        }
-        ObjectType otherObjectType = (ObjectType) o;
-        return toStringRepresentation().equals(otherObjectType.toStringRepresentation());
+    public boolean equals(Object obj) {
+        return requiredEqualsOverride(obj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(toStringRepresentation());
+        return requiredHashCodeOverride();
     }
+
+    protected abstract boolean requiredEqualsOverride(Object obj);
+
+    protected abstract int requiredHashCodeOverride();
 }

@@ -1,5 +1,7 @@
 package org.archcnl.domain.common;
 
+import java.util.Objects;
+
 public class StringValue extends ObjectType {
 
     private String value;
@@ -22,18 +24,6 @@ public class StringValue extends ObjectType {
     }
 
     @Override
-    /** Warning: Not a real equals method! Only checks if o is instance of this class. */
-    public boolean equals(Object o) {
-        return o instanceof StringValue;
-    }
-
-    @Override
-    /** Warning: Not a real hasCode method! Will always return 0. */
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
     public String transformToSparqlQuery() {
         return "\"" + value + "\"" + "^^xsd:string";
     }
@@ -46,5 +36,19 @@ public class StringValue extends ObjectType {
     @Override
     public String transformToAdoc() {
         return "'" + value + "'";
+    }
+
+    @Override
+    protected boolean requiredEqualsOverride(Object obj) {
+        if (obj instanceof StringValue) {
+            final StringValue that = (StringValue) obj;
+            return Objects.equals(this.getValue(), that.getValue());
+        }
+        return false;
+    }
+
+    @Override
+    protected int requiredHashCodeOverride() {
+        return Objects.hash(value);
     }
 }

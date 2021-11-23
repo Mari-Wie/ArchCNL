@@ -20,17 +20,16 @@ public abstract class Concept extends ObjectType {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Concept)) {
-            return false;
+    protected boolean requiredEqualsOverride(Object obj) {
+        if (obj instanceof Concept) {
+            final Concept that = (Concept) obj;
+            return Objects.equals(this.getName(), that.getName());
         }
-        Concept otherConcept = (Concept) o;
-        return name.equals(otherConcept.getName());
+        return false;
     }
 
     @Override
-    public int hashCode() {
+    protected int requiredHashCodeOverride() {
         return Objects.hash(name);
     }
 

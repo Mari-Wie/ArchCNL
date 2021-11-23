@@ -23,20 +23,6 @@ public class Variable extends ObjectType {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj instanceof Variable) {
-            final Variable that = (Variable) obj;
-            return Objects.equals(this.getName(), that.getName());
-        }
-        return false;
-    }
-
-    @Override
     public String transformToSparqlQuery() {
         return transformToAdoc();
     }
@@ -49,5 +35,19 @@ public class Variable extends ObjectType {
     @Override
     public String transformToAdoc() {
         return "?" + name;
+    }
+
+    @Override
+    protected boolean requiredEqualsOverride(Object obj) {
+        if (obj instanceof Variable) {
+            final Variable that = (Variable) obj;
+            return Objects.equals(this.getName(), that.getName());
+        }
+        return false;
+    }
+
+    @Override
+    protected int requiredHashCodeOverride() {
+        return Objects.hash(name);
     }
 }
