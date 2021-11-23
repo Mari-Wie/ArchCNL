@@ -14,10 +14,6 @@ public class CustomConcept extends Concept {
         super(name, description);
     }
 
-    public CustomConcept(String name) {
-        super(name);
-    }
-
     public void setMapping(ConceptMapping mapping) throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getObject())) {
             this.mapping = mapping;

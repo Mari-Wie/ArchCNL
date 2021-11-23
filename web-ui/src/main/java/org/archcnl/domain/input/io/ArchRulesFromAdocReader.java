@@ -82,7 +82,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 CONCEPT_MAPPING_NAME, potentialConceptMapping);
-                                CustomConcept concept = new CustomConcept(name);
+                                CustomConcept concept = new CustomConcept(name, "");
                                 concept.setMapping(parseMapping(potentialConceptMapping, concept));
                                 rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
                             } catch (UnrelatedMappingException

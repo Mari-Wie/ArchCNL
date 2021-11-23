@@ -201,18 +201,18 @@ public class TestUtils {
         useWhenTriplets.add(new AndTriplets(triplets));
         useWhenTriplets.add(new AndTriplets(triplets2));
 
-        CustomConcept aggregate = new CustomConcept("Aggregate");
+        CustomConcept aggregate = new CustomConcept("Aggregate", "");
         ConceptMapping aggregateMapping =
                 new ConceptMapping(classVariable, aggregateWhenTriplets, aggregate);
         aggregate.setMapping(aggregateMapping);
 
-        CustomConcept applicationService = new CustomConcept("ApplicationService");
+        CustomConcept applicationService = new CustomConcept("ApplicationService", "");
         ConceptMapping applicationServiceMapping =
                 new ConceptMapping(
                         classVariable, applicationServiceWhenTriplets, applicationService);
         applicationService.setMapping(applicationServiceMapping);
 
-        CustomConcept domainRing = new CustomConcept("DomainRing");
+        CustomConcept domainRing = new CustomConcept("DomainRing", "");
         ConceptMapping domainRingMapping =
                 new ConceptMapping(packageVariable, domainRingWhenTriplets, domainRing);
         domainRing.setMapping(domainRingMapping);
@@ -231,7 +231,7 @@ public class TestUtils {
                         useWhenTriplets);
         use.setMapping(useMapping);
 
-        CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept");
+        CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept", "");
         ConceptMapping emptyWhenConceptMapping =
                 new ConceptMapping(varVariable, new LinkedList<>(), emptyWhenConcept);
         emptyWhenConcept.setMapping(emptyWhenConceptMapping);

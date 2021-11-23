@@ -14,11 +14,6 @@ public abstract class Concept extends ObjectType {
         this.description = description;
     }
 
-    protected Concept(String name) {
-        this.name = name;
-        this.description = name + ": Description Missing";
-    }
-
     @Override
     public String getName() {
         return name;
@@ -42,7 +37,7 @@ public abstract class Concept extends ObjectType {
     public void changeName(String newName) throws ConceptAlreadyExistsException {
         if (!RulesConceptsAndRelations.getInstance()
                 .getConceptManager()
-                .doesConceptExist(new CustomConcept(newName))) {
+                .doesConceptExist(new CustomConcept(newName, ""))) {
             this.name = newName;
             RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);
         } else {

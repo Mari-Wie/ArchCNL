@@ -4,8 +4,8 @@ public class DefaultConcept extends Concept {
 
     private static final String CONCEPT_TYPE = "famix";
 
-    public DefaultConcept(String name) {
-        super(name);
+    public DefaultConcept(String name, String description) {
+        super(name, description);
     }
 
     @Override
