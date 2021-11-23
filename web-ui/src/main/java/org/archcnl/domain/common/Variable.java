@@ -3,7 +3,7 @@ package org.archcnl.domain.common;
 import java.util.Objects;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 
-public class Variable extends ObjectType {
+public class Variable extends ObjectType implements FormattedDomainObject {
 
     private String name;
 
@@ -49,5 +49,20 @@ public class Variable extends ObjectType {
     @Override
     protected int requiredHashCodeOverride() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return "?" + name;
     }
 }
