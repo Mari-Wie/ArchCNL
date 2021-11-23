@@ -7,12 +7,10 @@ import org.archcnl.domain.input.exceptions.NoObjectTypeException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class ObjectType {
+public abstract class ObjectType implements FormattedDomainObject {
 
     private static final Pattern CONCEPT_RELATION_PATTERN = Pattern.compile(".+:.+");
     private static final Pattern NAME_PATTERN = Pattern.compile("(?<=.+:).+");
-
-    public abstract String toStringRepresentation();
 
     public abstract String getName();
 

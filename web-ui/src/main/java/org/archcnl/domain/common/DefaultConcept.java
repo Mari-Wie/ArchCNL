@@ -9,7 +9,7 @@ public class DefaultConcept extends Concept {
     }
 
     @Override
-    public String toStringRepresentation() {
-        return CONCEPT_TYPE + ":" + getName();
+    protected String getConceptType() {
+        return CONCEPT_TYPE;
     }
 }

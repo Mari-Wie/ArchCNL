@@ -58,4 +58,21 @@ public abstract class Concept extends ObjectType {
         this.description = description;
         RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);
     }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return getConceptType() + ":" + getName();
+    }
+
+    protected abstract String getConceptType();
 }

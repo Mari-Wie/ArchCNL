@@ -8,11 +8,6 @@ public class StringValue extends ObjectType {
         this.setValue(value);
     }
 
-    @Override
-    public String toStringRepresentation() {
-        return "'" + value + "'";
-    }
-
     public String getValue() {
         return value;
     }
@@ -36,5 +31,20 @@ public class StringValue extends ObjectType {
     /** Warning: Not a real hasCode method! Will always return 0. */
     public int hashCode() {
         return 0;
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return "\"" + value + "\"" + "^^xsd:string";
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return "'" + value + "'";
     }
 }

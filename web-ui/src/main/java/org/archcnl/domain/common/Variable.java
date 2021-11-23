@@ -3,7 +3,7 @@ package org.archcnl.domain.common;
 import java.util.Objects;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 
-public class Variable extends ObjectType implements FormattedDomainObject {
+public class Variable extends ObjectType {
 
     private String name;
 

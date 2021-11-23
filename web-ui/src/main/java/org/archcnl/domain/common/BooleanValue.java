@@ -8,11 +8,6 @@ public class BooleanValue extends ObjectType {
         this.setValue(value);
     }
 
-    @Override
-    public String toStringRepresentation() {
-        return "'" + value + "'" + "^^xsd:boolean";
-    }
-
     public boolean getValue() {
         return value;
     }
@@ -36,5 +31,20 @@ public class BooleanValue extends ObjectType {
     /** Warning: Not a real hasCode method! Will always return 0. */
     public int hashCode() {
         return 0;
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return "\"" + value + "\"" + "^^xsd:boolean";
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return "'" + value + "'" + "^^xsd:boolean";
     }
 }
