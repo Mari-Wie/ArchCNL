@@ -27,10 +27,10 @@ public class AndTriplets {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(mappingName + ": ");
         for (Triplet triplet : triplets) {
-            stringBuilder.append(triplet.toStringRepresentation() + " ");
+            stringBuilder.append(triplet.transformToAdoc() + " ");
         }
         stringBuilder.append("-> ");
-        stringBuilder.append(thenTriplet.toStringRepresentation());
+        stringBuilder.append(thenTriplet.transformToAdoc());
         return stringBuilder.toString();
     }
 }

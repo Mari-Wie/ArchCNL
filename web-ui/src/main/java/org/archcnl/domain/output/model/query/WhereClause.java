@@ -78,7 +78,6 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
                                         WhereClause.TAB
                                                 + WhereClause.TAB
                                                 + t.transformToGui()
-                                                + "."
                                                 + WhereClause.NEW_LINE));
     }
 
@@ -102,6 +101,6 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
     }
 
     private void addTriplesToFormattedQueryWhereClause(final StringBuffer sb) {
-        triples.stream().forEach(t -> sb.append(" " + t.transformToSparqlQuery() + "."));
+        triples.stream().forEach(t -> sb.append(" " + t.transformToSparqlQuery()));
     }
 }
