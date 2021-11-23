@@ -67,4 +67,18 @@ public class BooleanValue extends ObjectType {
     public String transformToAdoc() {
         return "'" + value + "'" + "^^xsd:boolean";
     }
+
+    @Override
+    protected boolean requiredEqualsOverride(Object obj) {
+        if (obj instanceof BooleanValue) {
+            final BooleanValue that = (BooleanValue) obj;
+            return Objects.equals(this.getValue(), that.getValue());
+        }
+        return false;
+    }
+
+    @Override
+    protected int requiredHashCodeOverride() {
+        return Objects.hash(value);
+    }
 }
