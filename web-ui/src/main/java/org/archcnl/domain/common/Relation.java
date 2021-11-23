@@ -23,20 +23,9 @@ public abstract class Relation implements FormattedDomainObject {
      * Constructs a relation that can relate to the given object types
      *
      * @param name The name of the relation used in the UI and in written files
+     * @param description A description for this Relation
      * @param relatableObjectTypes The object types this relation can relate to
      */
-    protected Relation(String name, List<ObjectType> relatableObjectTypes) {
-        this.name = name;
-        this.description = name + ": Description Missing";
-        this.relatableObjectTypes = relatableObjectTypes;
-        // A relation can always relate to a variable
-        try {
-            addRelatableObjectType(new Variable("placeholder"));
-        } catch (InvalidVariableNameException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
     protected Relation(String name, String description, List<ObjectType> relatableObjectTypes) {
         this.name = name;
         this.description = description;
@@ -86,7 +75,7 @@ public abstract class Relation implements FormattedDomainObject {
                                 .getRelationByRealName(predicateName);
                     }
                 } catch (RelationDoesNotExistException e1) {
-                    return new CustomRelation(predicateName, new LinkedList<>());
+                    return new CustomRelation(predicateName, "", new LinkedList<>());
                 }
             } else {
                 // has to be a SpecialRelation
@@ -116,7 +105,7 @@ public abstract class Relation implements FormattedDomainObject {
     public void changeName(String newName) throws RelationAlreadyExistsException {
         if (!RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
-                .doesRelationExist(new CustomRelation(newName, new LinkedList<>()))) {
+                .doesRelationExist(new CustomRelation(newName, "", new LinkedList<>()))) {
             this.name = newName;
             RulesConceptsAndRelations.getInstance()
                     .getRelationManager()

@@ -6,8 +6,8 @@ public class DefaultRelation extends Relation {
 
     private static final String RELATION_TYPE = "famix";
 
-    public DefaultRelation(String name, List<ObjectType> relatableObjectTypes) {
-        super(name, relatableObjectTypes);
+    public DefaultRelation(String name, String description, List<ObjectType> relatableObjectTypes) {
+        super(name, description, relatableObjectTypes);
     }
 
     @Override

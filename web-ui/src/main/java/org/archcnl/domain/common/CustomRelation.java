@@ -17,10 +17,6 @@ public class CustomRelation extends Relation {
         super(name, description, relatableObjectTypes);
     }
 
-    public CustomRelation(String name, List<ObjectType> relatableObjectTypes) {
-        super(name, relatableObjectTypes);
-    }
-
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getPredicate())) {
             this.mapping = mapping;

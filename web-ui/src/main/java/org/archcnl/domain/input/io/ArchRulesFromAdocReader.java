@@ -100,7 +100,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                         AdocIoUtils.getFirstMatch(
                                                 RELATION_MAPPING_NAME, potentialRelationMapping);
                                 CustomRelation relation =
-                                        new CustomRelation(name, new LinkedList<>());
+                                        new CustomRelation(name, "", new LinkedList<>());
                                 relation.setMapping(
                                         parseMapping(potentialRelationMapping, relation));
                                 rulesConceptsAndRelations

@@ -98,29 +98,29 @@ public class RelationManager {
     private void initializeSpecialRelations() {
         List<ObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));
-        relations.add(new JenaBuiltinRelation("matches", "regex", stringConcept));
+        relations.add(new JenaBuiltinRelation("matches", "regex", "", stringConcept));
     }
 
     private void initializeTypeRelation() {
-        relations.add(new TypeRelation("is-of-type", "type"));
+        relations.add(new TypeRelation("is-of-type", "type", ""));
     }
 
     private void initializeStringRelations() {
         List<ObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));
-        relations.add(new DefaultRelation("hasModifier", stringConcept));
-        relations.add(new DefaultRelation("hasName", stringConcept));
-        relations.add(new DefaultRelation("hasSignature", stringConcept));
-        relations.add(new DefaultRelation("hasValue", stringConcept));
-        relations.add(new DefaultRelation("hasFullQualifiedName", stringConcept));
+        relations.add(new DefaultRelation("hasModifier", "", stringConcept));
+        relations.add(new DefaultRelation("hasName", "", stringConcept));
+        relations.add(new DefaultRelation("hasSignature", "", stringConcept));
+        relations.add(new DefaultRelation("hasValue", "", stringConcept));
+        relations.add(new DefaultRelation("hasFullQualifiedName", "", stringConcept));
     }
 
     private void initializeBoolRelations() {
         List<ObjectType> boolConcept = new LinkedList<>();
         boolConcept.add(new BooleanValue(false));
-        relations.add(new DefaultRelation("isConstructor", boolConcept));
-        relations.add(new DefaultRelation("isExternal", boolConcept));
-        relations.add(new DefaultRelation("isInterface", boolConcept));
+        relations.add(new DefaultRelation("isConstructor", "", boolConcept));
+        relations.add(new DefaultRelation("isExternal", "", boolConcept));
+        relations.add(new DefaultRelation("isInterface", "", boolConcept));
     }
 
     private void initializeObjectRelations(ConceptManager conceptManager)
@@ -128,39 +128,40 @@ public class RelationManager {
         // FamixClass relations
         List<ObjectType> famixClassConcept = new LinkedList<>();
         famixClassConcept.add(conceptManager.getConceptByName("FamixClass"));
-        relations.add(new DefaultRelation("hasDefiningClass", famixClassConcept));
-        relations.add(new DefaultRelation("hasDeclaredException", famixClassConcept));
-        relations.add(new DefaultRelation("hasCaughtException", famixClassConcept));
-        relations.add(new DefaultRelation("throwsException", famixClassConcept));
-        relations.add(new DefaultRelation("hasSubClass", famixClassConcept));
-        relations.add(new DefaultRelation("hasSuperClass", famixClassConcept));
+        relations.add(new DefaultRelation("hasDefiningClass", "", famixClassConcept));
+        relations.add(new DefaultRelation("hasDeclaredException", "", famixClassConcept));
+        relations.add(new DefaultRelation("hasCaughtException", "", famixClassConcept));
+        relations.add(new DefaultRelation("throwsException", "", famixClassConcept));
+        relations.add(new DefaultRelation("hasSubClass", "", famixClassConcept));
+        relations.add(new DefaultRelation("hasSuperClass", "", famixClassConcept));
 
         // Parameter relations
         List<ObjectType> parameterConcept = new LinkedList<>();
         parameterConcept.add(conceptManager.getConceptByName("Parameter"));
-        relations.add(new DefaultRelation("definesParameter", parameterConcept));
+        relations.add(new DefaultRelation("definesParameter", "", parameterConcept));
 
         // LocalVariable relations
         List<ObjectType> localVariableConcept = new LinkedList<>();
         localVariableConcept.add(conceptManager.getConceptByName("LocalVariable"));
-        relations.add(new DefaultRelation("definesVariable", localVariableConcept));
+        relations.add(new DefaultRelation("definesVariable", "", localVariableConcept));
 
         // AnnotationInstance relations
         List<ObjectType> annotationInstanceConcept = new LinkedList<>();
         annotationInstanceConcept.add(conceptManager.getConceptByName("AnnotationInstance"));
-        relations.add(new DefaultRelation("hasAnnotationInstance", annotationInstanceConcept));
+        relations.add(new DefaultRelation("hasAnnotationInstance", "", annotationInstanceConcept));
 
         // AnnotationType relations
         List<ObjectType> annotationTypeConcept = new LinkedList<>();
         annotationTypeConcept.add(conceptManager.getConceptByName("AnnotationType"));
-        relations.add(new DefaultRelation("hasAnnotationType", annotationTypeConcept));
+        relations.add(new DefaultRelation("hasAnnotationType", "", annotationTypeConcept));
 
         // AnnotationTypeAttribute relations
         List<ObjectType> annotationTypeAttributeConcept = new LinkedList<>();
         annotationTypeAttributeConcept.add(
                 conceptManager.getConceptByName("AnnotationTypeAttribute"));
         relations.add(
-                new DefaultRelation("hasAnnotationTypeAttribute", annotationTypeAttributeConcept));
+                new DefaultRelation(
+                        "hasAnnotationTypeAttribute", "", annotationTypeAttributeConcept));
 
         // AnnotationInstanceAttribute relations
         List<ObjectType> annotationInstanceAttributeConcept = new LinkedList<>();
@@ -168,30 +169,30 @@ public class RelationManager {
                 conceptManager.getConceptByName("AnnotationInstanceAttribute"));
         relations.add(
                 new DefaultRelation(
-                        "hasAnnotationInstanceAttribute", annotationInstanceAttributeConcept));
+                        "hasAnnotationInstanceAttribute", "", annotationInstanceAttributeConcept));
 
         // Attribute relations
         List<ObjectType> attributeConcept = new LinkedList<>();
         attributeConcept.add(conceptManager.getConceptByName("Attribute"));
-        relations.add(new DefaultRelation("definesAttribute", attributeConcept));
+        relations.add(new DefaultRelation("definesAttribute", "", attributeConcept));
 
         // Method relations
         List<ObjectType> methodConcept = new LinkedList<>();
         methodConcept.add(conceptManager.getConceptByName("Method"));
-        relations.add(new DefaultRelation("definesMethod", methodConcept));
+        relations.add(new DefaultRelation("definesMethod", "", methodConcept));
 
         // Type relations
         List<ObjectType> typeConcepts = new LinkedList<>();
         typeConcepts.add(conceptManager.getConceptByName("FamixClass"));
         typeConcepts.add(conceptManager.getConceptByName("Enum"));
         typeConcepts.add(conceptManager.getConceptByName("AnnotationType"));
-        relations.add(new DefaultRelation("imports", typeConcepts));
+        relations.add(new DefaultRelation("imports", "", typeConcepts));
 
         // Class and Enum relations
         List<ObjectType> classEnumConcepts = new LinkedList<>();
         classEnumConcepts.add(conceptManager.getConceptByName("FamixClass"));
         classEnumConcepts.add(conceptManager.getConceptByName("Enum"));
-        relations.add(new DefaultRelation("definesNestedType", classEnumConcepts));
+        relations.add(new DefaultRelation("definesNestedType", "", classEnumConcepts));
 
         // Type + NameSpace relations
         List<ObjectType> namespaceContainsConcepts = new LinkedList<>();
@@ -199,7 +200,7 @@ public class RelationManager {
         namespaceContainsConcepts.add(conceptManager.getConceptByName("FamixClass"));
         namespaceContainsConcepts.add(conceptManager.getConceptByName("Enum"));
         namespaceContainsConcepts.add(conceptManager.getConceptByName("AnnotationType"));
-        relations.add(new DefaultRelation("namespaceContains", namespaceContainsConcepts));
+        relations.add(new DefaultRelation("namespaceContains", "", namespaceContainsConcepts));
 
         // Type + Primitive relations
         List<ObjectType> typesAndprimitives = new LinkedList<>();
@@ -208,7 +209,7 @@ public class RelationManager {
         typesAndprimitives.add(conceptManager.getConceptByName("AnnotationType"));
         typesAndprimitives.add(new StringValue(""));
         typesAndprimitives.add(new BooleanValue(false));
-        relations.add(new DefaultRelation("hasDeclaredType", typesAndprimitives));
+        relations.add(new DefaultRelation("hasDeclaredType", "", typesAndprimitives));
     }
 
     public List<Relation> getRelations() {

@@ -38,90 +38,92 @@ class RelationManagerTest {
     void givenRelationManager_whenCreated_thenExpectedRelations() {
         Assertions.assertEquals(28, relationManager.getRelations().size());
         Assertions.assertFalse(
-                relationManager.doesRelationExist(new DefaultRelation("abc", new LinkedList<>())));
+                relationManager.doesRelationExist(
+                        new DefaultRelation("abc", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new JenaBuiltinRelation("matches", "regex", new LinkedList<>())));
+                        new JenaBuiltinRelation("matches", "regex", "", new LinkedList<>())));
         Assertions.assertTrue(
-                relationManager.doesRelationExist(new TypeRelation("is-of-type", "type")));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasModifier", new LinkedList<>())));
+                relationManager.doesRelationExist(new TypeRelation("is-of-type", "type", "")));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasName", new LinkedList<>())));
+                        new DefaultRelation("hasModifier", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasSignature", new LinkedList<>())));
+                        new DefaultRelation("hasName", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasValue", new LinkedList<>())));
+                        new DefaultRelation("hasSignature", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasFullQualifiedName", new LinkedList<>())));
+                        new DefaultRelation("hasValue", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("isConstructor", new LinkedList<>())));
+                        new DefaultRelation("hasFullQualifiedName", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("isExternal", new LinkedList<>())));
+                        new DefaultRelation("isConstructor", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("isInterface", new LinkedList<>())));
+                        new DefaultRelation("isExternal", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasDefiningClass", new LinkedList<>())));
+                        new DefaultRelation("isInterface", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasDeclaredException", new LinkedList<>())));
+                        new DefaultRelation("hasDefiningClass", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasCaughtException", new LinkedList<>())));
+                        new DefaultRelation("hasDeclaredException", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("throwsException", new LinkedList<>())));
+                        new DefaultRelation("hasCaughtException", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasSubClass", new LinkedList<>())));
+                        new DefaultRelation("throwsException", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasSuperClass", new LinkedList<>())));
+                        new DefaultRelation("hasSubClass", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesNestedType", new LinkedList<>())));
+                        new DefaultRelation("hasSuperClass", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesParameter", new LinkedList<>())));
+                        new DefaultRelation("definesNestedType", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesVariable", new LinkedList<>())));
+                        new DefaultRelation("definesParameter", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationInstance", new LinkedList<>())));
+                        new DefaultRelation("definesVariable", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationType", new LinkedList<>())));
+                        new DefaultRelation("hasAnnotationInstance", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationTypeAttribute", new LinkedList<>())));
+                        new DefaultRelation("hasAnnotationType", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationInstanceAttribute", new LinkedList<>())));
+                        new DefaultRelation("hasAnnotationTypeAttribute", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesAttribute", new LinkedList<>())));
+                        new DefaultRelation(
+                                "hasAnnotationInstanceAttribute", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("definesMethod", new LinkedList<>())));
+                        new DefaultRelation("definesAttribute", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("imports", new LinkedList<>())));
+                        new DefaultRelation("definesMethod", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("namespaceContains", new LinkedList<>())));
+                        new DefaultRelation("imports", "", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new DefaultRelation("hasDeclaredType", new LinkedList<>())));
+                        new DefaultRelation("namespaceContains", "", new LinkedList<>())));
+        Assertions.assertTrue(
+                relationManager.doesRelationExist(
+                        new DefaultRelation("hasDeclaredType", "", new LinkedList<>())));
     }
 
     @Test
@@ -133,7 +135,7 @@ class RelationManagerTest {
                     relationManager.getRelationByName("abc");
                 });
         Assertions.assertEquals(
-                new DefaultRelation("hasModifier", new LinkedList<>()),
+                new DefaultRelation("hasModifier", "", new LinkedList<>()),
                 relationManager.getRelationByName("hasModifier"));
     }
 
@@ -151,10 +153,10 @@ class RelationManagerTest {
                     relationManager.getRelationByRealName("hasName");
                 });
         Assertions.assertEquals(
-                new JenaBuiltinRelation("matches", "regex", new LinkedList<>()),
+                new JenaBuiltinRelation("matches", "regex", "", new LinkedList<>()),
                 relationManager.getRelationByRealName("regex"));
         Assertions.assertEquals(
-                new TypeRelation("is-of-type", "type"),
+                new TypeRelation("is-of-type", "type", ""),
                 relationManager.getRelationByRealName("type"));
     }
 
@@ -163,8 +165,8 @@ class RelationManagerTest {
             throws RelationAlreadyExistsException, VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         Assertions.assertEquals(0, relationManager.getCustomRelations().size());
-        relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
-        relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
+        relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
+        relationManager.addRelation(new DefaultRelation("abc", "", new LinkedList<>()));
         Assertions.assertEquals(1, relationManager.getCustomRelations().size());
     }
 
@@ -173,14 +175,14 @@ class RelationManagerTest {
             throws RelationAlreadyExistsException, VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
         Assertions.assertEquals(28, relationManager.getRelations().size());
-        relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
-        relationManager.addRelation(new DefaultRelation("abc", new LinkedList<>()));
-        relationManager.addRelation(new TypeRelation("xyz", "xyz"));
-        relationManager.addRelation(new JenaBuiltinRelation("zhn", "kjh", new LinkedList<>()));
+        relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
+        relationManager.addRelation(new DefaultRelation("abc", "", new LinkedList<>()));
+        relationManager.addRelation(new TypeRelation("xyz", "xyz", ""));
+        relationManager.addRelation(new JenaBuiltinRelation("zhn", "kjh", "", new LinkedList<>()));
         Assertions.assertThrows(
                 RelationAlreadyExistsException.class,
                 () -> {
-                    relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
+                    relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
                 });
         Assertions.assertEquals(32, relationManager.getRelations().size());
     }
@@ -192,14 +194,15 @@ class RelationManagerTest {
                     ConceptDoesNotExistException, RelationAlreadyExistsException,
                     UnrelatedMappingException {
         Assertions.assertEquals(28, relationManager.getRelations().size());
-        relationManager.addOrAppend(new CustomRelation("test", new LinkedList<>()));
-        relationManager.addOrAppend(new CustomRelation("abc", new LinkedList<>()));
-        relationManager.addOrAppend(new CustomRelation("abc", new LinkedList<>()));
+        relationManager.addOrAppend(new CustomRelation("test", "", new LinkedList<>()));
+        relationManager.addOrAppend(new CustomRelation("abc", "", new LinkedList<>()));
+        relationManager.addOrAppend(new CustomRelation("abc", "", new LinkedList<>()));
         Assertions.assertEquals(30, relationManager.getRelations().size());
 
         final String relationName = "with";
 
-        final CustomRelation withRelation = new CustomRelation(relationName, new LinkedList<>());
+        final CustomRelation withRelation =
+                new CustomRelation(relationName, "", new LinkedList<>());
         final List<AndTriplets> when1 = new LinkedList<>();
         final List<Triplet> and1 = new LinkedList<>();
         and1.add(
@@ -227,7 +230,7 @@ class RelationManagerTest {
                 1, extractedWithRelation.getMapping().get().getWhenTriplets().size());
 
         final CustomRelation otherWithRelation =
-                new CustomRelation(relationName, new LinkedList<>());
+                new CustomRelation(relationName, "", new LinkedList<>());
         final List<AndTriplets> when2 = new LinkedList<>();
         final List<Triplet> and2 = new LinkedList<>();
         and2.add(

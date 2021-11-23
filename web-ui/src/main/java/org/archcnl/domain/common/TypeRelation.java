@@ -11,8 +11,8 @@ public class TypeRelation extends Relation {
 
     private String realName;
 
-    public TypeRelation(String name, String realName) {
-        super(name, new LinkedList<>());
+    public TypeRelation(String name, String realName, String description) {
+        super(name, description, new LinkedList<>());
         this.realName = realName;
     }
 
