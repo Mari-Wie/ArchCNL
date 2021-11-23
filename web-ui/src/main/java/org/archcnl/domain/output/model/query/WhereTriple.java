@@ -3,9 +3,9 @@ package org.archcnl.domain.output.model.query;
 import java.util.Objects;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
+import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.output.model.query.attribute.QueryField;
 import org.archcnl.domain.output.model.query.attribute.QueryObject;
-import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 
 /**
  * Representation of triple from SPARQL subject-predicate-object, for example: ?aggregate rdf:type
@@ -14,11 +14,11 @@ import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     private QueryField subject;
-    private QueryPredicate predicate;
+    private Relation predicate;
     private QueryObject object;
 
     public WhereTriple(
-            final QueryField subject, final QueryPredicate predicate, final QueryObject object) {
+            final QueryField subject, final Relation predicate, final QueryObject object) {
         this.subject = subject;
         this.predicate = predicate;
         this.object = object;
@@ -28,7 +28,7 @@ public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDom
         return subject;
     }
 
-    public QueryPredicate getPredicate() {
+    public Relation getPredicate() {
         return predicate;
     }
 
