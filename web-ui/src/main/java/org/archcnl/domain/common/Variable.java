@@ -1,12 +1,16 @@
 package org.archcnl.domain.common;
 
+import java.util.Objects;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 
-public class Variable extends ObjectType {
+public class Variable extends ObjectType implements FormattedDomainObject {
 
     private String name;
 
     public Variable(String name) throws InvalidVariableNameException {
+        if (name.startsWith("?")) {
+            name = name.substring(1);
+        }
         if (!name.matches("\\w+")) {
             throw new InvalidVariableNameException(name);
         }
@@ -24,14 +28,31 @@ public class Variable extends ObjectType {
     }
 
     @Override
-    /** Warning: Not a real equals method! Only checks if o is instance of this class. */
-    public boolean equals(Object o) {
-        return o instanceof Variable;
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override
-    /** Warning: Not a real hasCode method! Will always return 0. */
-    public int hashCode() {
-        return 0;
+    public boolean equals(final Object obj) {
+        if (obj instanceof Variable) {
+            final Variable that = (Variable) obj;
+            return Objects.equals(this.getName(), that.getName());
+        }
+        return false;
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return "?" + name;
     }
 }
