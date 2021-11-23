@@ -4,7 +4,7 @@ import java.util.Objects;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.common.Relation;
-import org.archcnl.domain.output.model.query.attribute.QueryField;
+import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.output.model.query.attribute.QueryObject;
 
 /**
@@ -13,18 +13,17 @@ import org.archcnl.domain.output.model.query.attribute.QueryObject;
  */
 public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
-    private QueryField subject;
+    private Variable subject;
     private Relation predicate;
     private QueryObject object;
 
-    public WhereTriple(
-            final QueryField subject, final Relation predicate, final QueryObject object) {
+    public WhereTriple(final Variable subject, final Relation predicate, final QueryObject object) {
         this.subject = subject;
         this.predicate = predicate;
         this.object = object;
     }
 
-    public QueryField getSubject() {
+    public Variable getSubject() {
         return subject;
     }
 
