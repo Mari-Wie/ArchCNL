@@ -28,11 +28,6 @@ public class Variable extends ObjectType implements FormattedDomainObject {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    @Override
     public boolean equals(final Object obj) {
         if (obj instanceof Variable) {
             final Variable that = (Variable) obj;
