@@ -100,13 +100,12 @@ public abstract class Relation implements FormattedDomainObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Relation)) {
-            return false;
+    public boolean equals(Object obj) {
+        if (obj instanceof Relation) {
+            final Relation that = (Relation) obj;
+            return Objects.equals(this.getName(), that.getName());
         }
-        Relation otherRelation = (Relation) o;
-        return name.equals(otherRelation.getName());
+        return false;
     }
 
     @Override
