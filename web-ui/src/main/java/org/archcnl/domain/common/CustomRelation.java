@@ -35,11 +35,6 @@ public class CustomRelation extends Relation {
         return Optional.ofNullable(mapping);
     }
 
-    @Override
-    public String toStringRepresentation() {
-        return RELATION_TYPE + ":" + getName();
-    }
-
     public void changeRelatableObjectTypes(ObjectType objectType) {
         List<ObjectType> objectTypes = new LinkedList<>();
         objectTypes.add(objectType);
@@ -50,5 +45,20 @@ public class CustomRelation extends Relation {
             throw new RuntimeException(e.getMessage());
         }
         setRelatableObjectType(objectTypes);
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return RELATION_TYPE + ":" + getName();
     }
 }

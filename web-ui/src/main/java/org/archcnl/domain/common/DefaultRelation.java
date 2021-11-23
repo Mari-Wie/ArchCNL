@@ -11,7 +11,17 @@ public class DefaultRelation extends Relation {
     }
 
     @Override
-    public String toStringRepresentation() {
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
         return RELATION_TYPE + ":" + getName();
     }
 }

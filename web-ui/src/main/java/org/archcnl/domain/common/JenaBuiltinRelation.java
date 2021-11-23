@@ -12,12 +12,22 @@ public class JenaBuiltinRelation extends Relation {
         this.realName = realName;
     }
 
-    @Override
-    public String toStringRepresentation() {
-        return getRealName();
-    }
-
     public String getRealName() {
         return realName;
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return getRealName();
     }
 }

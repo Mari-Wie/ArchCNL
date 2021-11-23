@@ -17,11 +17,6 @@ public class TypeRelation extends Relation {
     }
 
     @Override
-    public String toStringRepresentation() {
-        return RELATION_TYPE + ":" + getRealName();
-    }
-
-    @Override
     public boolean canRelateToObjectType(ObjectType objectType) {
         return true;
     }
@@ -35,5 +30,20 @@ public class TypeRelation extends Relation {
 
     public String getRealName() {
         return realName;
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return RELATION_TYPE + ":" + getRealName();
     }
 }

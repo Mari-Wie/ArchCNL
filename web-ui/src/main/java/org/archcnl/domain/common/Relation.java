@@ -11,7 +11,7 @@ import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Relation {
+public abstract class Relation implements FormattedDomainObject {
 
     private String name;
     private String description;
@@ -48,8 +48,6 @@ public abstract class Relation {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public abstract String toStringRepresentation();
 
     public boolean canRelateToObjectType(ObjectType objectType) {
         return relatableObjectTypes.contains(objectType);
