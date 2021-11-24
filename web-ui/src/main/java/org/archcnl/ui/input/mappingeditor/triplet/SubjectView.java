@@ -9,5 +9,5 @@ public class SubjectView extends VariableSelectionView {
     public SubjectView(VariableSelectionContract.Presenter<View> presenter) {
         super(presenter);
         setLabel("Subject");
-    }
+    } 
 }
