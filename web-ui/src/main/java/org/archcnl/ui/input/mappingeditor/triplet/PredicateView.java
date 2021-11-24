@@ -16,7 +16,6 @@ public class PredicateView extends ComboBox<String>
         this.presenter = presenter;
         this.presenter.setView(this);
         setActive(true);
-        setLabel("Predicate");
         setPlaceholder("Relation");
         updateItems();
         setClearButtonVisible(true);

@@ -31,6 +31,7 @@ public class RelationEditorView extends MappingEditorView {
         HorizontalLayout thenTriplet = new HorizontalLayout();
         subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
         subjectView = new SubjectView(subjectPresenter);
+        subjectView.setLabel("Subject");
         thenTriplet.add(subjectView);
         relationNameField = new TextField("Predicate");
         relationNameField.setReadOnly(true);

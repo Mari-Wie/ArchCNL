@@ -93,5 +93,5 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         // there is no need to show the errorMessage when both views are null
         // as in that case the predicate is not set and the actual error message
         // is shown there
-    }
+    }   
 }

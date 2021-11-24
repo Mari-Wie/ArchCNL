@@ -29,6 +29,7 @@ public class ConceptEditorView extends MappingEditorView {
         HorizontalLayout thenTriplet = new HorizontalLayout();
         subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
         subjectView = new SubjectView(subjectPresenter);
+        subjectView.setLabel("Subject");
         thenTriplet.add(subjectView);
         TextField predicateField = new TextField("Predicate");
         predicateField.setValue("is-of-type");

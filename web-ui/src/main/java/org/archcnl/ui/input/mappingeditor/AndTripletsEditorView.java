@@ -8,6 +8,8 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +39,25 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         boxContent = new VerticalLayout();
         boxContent.getStyle().set("border", "1px solid black");
         boxContent.add(new Label("OR-Block (All rows in this block are AND connected)"));
+        
+        HorizontalLayout tripletLabelLayout = new HorizontalLayout();
+        tripletLabelLayout.setWidthFull();
+        
+        TextField subjectLabel = new TextField();
+        subjectLabel.setValue("Subject");
+        subjectLabel.setEnabled(false);
+        
+        TextField predicateLabel = new TextField();
+        predicateLabel.setValue("Predicate");
+        predicateLabel.setEnabled(false);
+        
+        TextField objectLabel = new TextField();
+        objectLabel.setValue("Object");
+        objectLabel.setEnabled(false);
+                
+        tripletLabelLayout.add(subjectLabel, predicateLabel, objectLabel);
+        
+        boxContent.add(tripletLabelLayout);
         boxContent.add(createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
         boxContent.setWidth(95, Unit.PERCENTAGE);
 
