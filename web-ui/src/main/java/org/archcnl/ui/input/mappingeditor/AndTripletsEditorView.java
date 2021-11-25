@@ -9,7 +9,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,53 +30,48 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         this.presenter = presenter;
         setPadding(false);
         setWidthFull();
-        
-        orBlock = new HorizontalLayout();              
+
+        orBlock = new HorizontalLayout();
         orBlock.setPadding(false);
-        orBlock.setWidthFull();        
-        
+        orBlock.setWidthFull();
+
         boxContent = new VerticalLayout();
         boxContent.getStyle().set("border", "1px solid black");
         boxContent.add(new Label("OR-Block (All rows in this block are AND connected)"));
-        
+
         HorizontalLayout tripletLabelLayout = new HorizontalLayout();
         tripletLabelLayout.setWidthFull();
-        
+
         TextField subjectLabel = new TextField();
         subjectLabel.setValue("Subject");
         subjectLabel.setEnabled(false);
-        
+
         TextField predicateLabel = new TextField();
         predicateLabel.setValue("Predicate");
         predicateLabel.setEnabled(false);
-        
+
         TextField objectLabel = new TextField();
         objectLabel.setValue("Object");
         objectLabel.setEnabled(false);
-                
+
         tripletLabelLayout.add(subjectLabel, predicateLabel, objectLabel);
-        
+
         boxContent.add(tripletLabelLayout);
-        boxContent.add(createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
+        boxContent.add(
+                createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
         boxContent.setWidth(95, Unit.PERCENTAGE);
 
         boxButtonLayout = new VerticalLayout();
         boxButtonLayout.setWidth(5, Unit.PERCENTAGE);
-        addButton =
-                new Button(                  
-                        new Icon(VaadinIcon.PLUS),
-                        click -> presenter.addButtonPressed());
-        
-        deleteButton =
-                new Button(                  
-                        new Icon(VaadinIcon.MINUS),
-                        click -> presenter.delete());
-        
+        addButton = new Button(new Icon(VaadinIcon.PLUS), click -> presenter.addButtonPressed());
+
+        deleteButton = new Button(new Icon(VaadinIcon.TRASH), click -> presenter.delete());
+
         boxButtonLayout.add(addButton, deleteButton);
-        
+
         orBlock.add(boxContent, boxButtonLayout);
         add(orBlock);
-        
+
         this.presenter.setView(this);
     }
 
@@ -105,7 +99,8 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
 
     @Override
     public List<TripletPresenter> getTripletPresenters() {
-        return boxContent.getChildren()
+        return boxContent
+                .getChildren()
                 .filter(TripletView.class::isInstance)
                 .map(TripletView.class::cast)
                 .map(TripletView::getPresenter)
