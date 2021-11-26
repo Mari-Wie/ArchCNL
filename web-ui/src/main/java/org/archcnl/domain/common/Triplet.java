@@ -29,14 +29,14 @@ public class Triplet {
         if (predicate instanceof JenaBuiltinRelation) {
             builder.append(predicate.transformToAdoc());
             builder.append("(");
-            builder.append(subject.toStringRepresentation() + ", ");
-            builder.append(object.toStringRepresentation());
+            builder.append(subject.transformToAdoc() + ", ");
+            builder.append(object.transformToAdoc());
             builder.append(")");
         } else {
             builder.append("(");
-            builder.append(subject.toStringRepresentation() + " ");
+            builder.append(subject.transformToAdoc() + " ");
             builder.append(predicate.transformToAdoc() + " ");
-            builder.append(object.toStringRepresentation());
+            builder.append(object.transformToAdoc());
             builder.append(")");
         }
         return builder.toString();
