@@ -17,8 +17,6 @@ public interface AndTripletsEditorContract {
 
         public List<TripletPresenter> getTripletPresenters();
 
-        public void setAddButtonVisible(boolean visible);
-
         public void clearContent();
     }
 
@@ -31,10 +29,6 @@ public interface AndTripletsEditorContract {
         public void addNewTripletViewAfter(TripletContract.View tripletView);
 
         public void deleteTripletView(TripletContract.View view);
-
-        public void mouseEnter();
-
-        public void mouseLeave();
 
         public void addButtonPressed();
 

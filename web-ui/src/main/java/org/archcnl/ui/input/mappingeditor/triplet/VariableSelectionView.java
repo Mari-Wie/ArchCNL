@@ -19,7 +19,6 @@ public class VariableSelectionView extends ComboBox<String>
         this.presenter = presenter;
         this.presenter.setView(this);
         setActive(true);
-        setLabel("Object");
         setPlaceholder("Variable");
         updateItems();
         setClearButtonVisible(true);
