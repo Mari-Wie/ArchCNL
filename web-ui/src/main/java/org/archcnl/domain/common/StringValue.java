@@ -51,33 +51,4 @@ public class StringValue extends ObjectType {
     protected int requiredHashCodeOverride() {
         return Objects.hash(value);
     }
-
-    @Override
-    public String transformToSparqlQuery() {
-        return "\"" + value + "\"" + "^^xsd:string";
-    }
-
-    @Override
-    public String transformToGui() {
-        return transformToAdoc();
-    }
-
-    @Override
-    public String transformToAdoc() {
-        return "'" + value + "'";
-    }
-
-    @Override
-    protected boolean requiredEqualsOverride(Object obj) {
-        if (obj instanceof StringValue) {
-            final StringValue that = (StringValue) obj;
-            return Objects.equals(this.getValue(), that.getValue());
-        }
-        return false;
-    }
-
-    @Override
-    protected int requiredHashCodeOverride() {
-        return Objects.hash(value);
-    }
 }
