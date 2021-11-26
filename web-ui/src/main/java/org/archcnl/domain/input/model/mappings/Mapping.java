@@ -30,13 +30,13 @@ public abstract class Mapping {
             return new LinkedList<>(
                     Arrays.asList(
                             new AndTriplets()
-                                    .toStringRepresentation(
+                                    .transformToAdoc(
                                             getMappingNameRepresentation(), getThenTriplet())));
         } else {
             return orStatements.stream()
                     .map(
                             andTriplets ->
-                                    andTriplets.toStringRepresentation(
+                                    andTriplets.transformToAdoc(
                                             getMappingNameRepresentation(), getThenTriplet()))
                     .collect(Collectors.toList());
         }
