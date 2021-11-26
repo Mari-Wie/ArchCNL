@@ -5,24 +5,24 @@ import java.util.Objects;
 import java.util.Set;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
-import org.archcnl.domain.output.model.query.attribute.QueryField;
+import org.archcnl.domain.common.Variable;
 
 /** Representation of SPARQL SELECT clause */
 public class SelectClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
 
     public static final String SELECT = "SELECT";
 
-    private Set<QueryField> objects;
+    private Set<Variable> objects;
 
-    public SelectClause(final Set<QueryField> objects) {
+    public SelectClause(final Set<Variable> objects) {
         this.objects = objects;
     }
 
-    public Set<QueryField> getObjects() {
+    public Set<Variable> getObjects() {
         return objects;
     }
 
-    public void addObject(final QueryField object) {
+    public void addObject(final Variable object) {
         if (objects == null) {
             objects = new LinkedHashSet<>();
         }

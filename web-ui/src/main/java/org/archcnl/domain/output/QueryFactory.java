@@ -8,11 +8,9 @@ import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
 import org.archcnl.domain.output.model.query.WhereTriple;
-import org.archcnl.domain.output.model.query.attribute.QueryField;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 import org.archcnl.domain.output.model.query.attribute.QueryObject;
 import org.archcnl.domain.output.model.query.attribute.QueryObjectType;
-import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 
 public class QueryFactory {
 
