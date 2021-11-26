@@ -52,33 +52,4 @@ public class BooleanValue extends ObjectType {
     protected int requiredHashCodeOverride() {
         return Objects.hash(value);
     }
-
-    @Override
-    public String transformToSparqlQuery() {
-        return "\"" + value + "\"" + "^^xsd:boolean";
-    }
-
-    @Override
-    public String transformToGui() {
-        return transformToAdoc();
-    }
-
-    @Override
-    public String transformToAdoc() {
-        return "'" + value + "'" + "^^xsd:boolean";
-    }
-
-    @Override
-    protected boolean requiredEqualsOverride(Object obj) {
-        if (obj instanceof BooleanValue) {
-            final BooleanValue that = (BooleanValue) obj;
-            return Objects.equals(this.getValue(), that.getValue());
-        }
-        return false;
-    }
-
-    @Override
-    protected int requiredHashCodeOverride() {
-        return Objects.hash(value);
-    }
 }
