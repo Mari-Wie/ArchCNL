@@ -11,7 +11,7 @@ import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Relation {
+public abstract class Relation implements FormattedAdocDomainObject, FormattedViewDomainObject {
 
     private String name;
     private String description;
@@ -23,20 +23,9 @@ public abstract class Relation {
      * Constructs a relation that can relate to the given object types
      *
      * @param name The name of the relation used in the UI and in written files
+     * @param description A description for this Relation
      * @param relatableObjectTypes The object types this relation can relate to
      */
-    protected Relation(String name, List<ObjectType> relatableObjectTypes) {
-        this.name = name;
-        this.description = name + ": Description Missing";
-        this.relatableObjectTypes = relatableObjectTypes;
-        // A relation can always relate to a variable
-        try {
-            addRelatableObjectType(new Variable("placeholder"));
-        } catch (InvalidVariableNameException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
     protected Relation(String name, String description, List<ObjectType> relatableObjectTypes) {
         this.name = name;
         this.description = description;
@@ -48,8 +37,6 @@ public abstract class Relation {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public abstract String toStringRepresentation();
 
     public boolean canRelateToObjectType(ObjectType objectType) {
         return relatableObjectTypes.contains(objectType);
@@ -88,7 +75,7 @@ public abstract class Relation {
                                 .getRelationByRealName(predicateName);
                     }
                 } catch (RelationDoesNotExistException e1) {
-                    return new CustomRelation(predicateName, new LinkedList<>());
+                    return new CustomRelation(predicateName, "", new LinkedList<>());
                 }
             } else {
                 // has to be a SpecialRelation
@@ -102,13 +89,12 @@ public abstract class Relation {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Relation)) {
-            return false;
+    public boolean equals(Object obj) {
+        if (obj instanceof Relation) {
+            final Relation that = (Relation) obj;
+            return Objects.equals(this.getName(), that.getName());
         }
-        Relation otherRelation = (Relation) o;
-        return name.equals(otherRelation.getName());
+        return false;
     }
 
     @Override
@@ -119,7 +105,7 @@ public abstract class Relation {
     public void changeName(String newName) throws RelationAlreadyExistsException {
         if (!RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
-                .doesRelationExist(new CustomRelation(newName, new LinkedList<>()))) {
+                .doesRelationExist(new CustomRelation(newName, "", new LinkedList<>()))) {
             this.name = newName;
             RulesConceptsAndRelations.getInstance()
                     .getRelationManager()

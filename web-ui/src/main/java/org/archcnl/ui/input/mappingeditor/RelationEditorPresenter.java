@@ -47,7 +47,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         if (relation.isEmpty()) {
             List<ObjectType> relatableObjectTypes = new LinkedList<>();
             relatableObjectTypes.add(view.getSelectedObjectTypeInThenTriplet());
-            relation = Optional.of(new CustomRelation(newName, relatableObjectTypes));
+            relation = Optional.of(new CustomRelation(newName, "", relatableObjectTypes));
         } else {
             try {
                 relation.get().changeName(newName);

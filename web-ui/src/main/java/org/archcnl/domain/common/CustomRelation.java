@@ -7,7 +7,7 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
-public class CustomRelation extends Relation {
+public class CustomRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "architecture";
 
@@ -15,10 +15,6 @@ public class CustomRelation extends Relation {
 
     public CustomRelation(String name, String description, List<ObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
-    }
-
-    public CustomRelation(String name, List<ObjectType> relatableObjectTypes) {
-        super(name, relatableObjectTypes);
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
@@ -35,11 +31,6 @@ public class CustomRelation extends Relation {
         return Optional.ofNullable(mapping);
     }
 
-    @Override
-    public String toStringRepresentation() {
-        return RELATION_TYPE + ":" + getName();
-    }
-
     public void changeRelatableObjectTypes(ObjectType objectType) {
         List<ObjectType> objectTypes = new LinkedList<>();
         objectTypes.add(objectType);
@@ -50,5 +41,20 @@ public class CustomRelation extends Relation {
             throw new RuntimeException(e.getMessage());
         }
         setRelatableObjectType(objectTypes);
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return RELATION_TYPE + ":" + getName();
     }
 }

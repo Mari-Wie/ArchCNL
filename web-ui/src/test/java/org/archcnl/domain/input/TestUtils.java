@@ -217,14 +217,14 @@ public class TestUtils {
                 new ConceptMapping(packageVariable, domainRingWhenTriplets, domainRing);
         domainRing.setMapping(domainRingMapping);
 
-        CustomRelation resideIn = new CustomRelation("resideIn", new LinkedList<>());
+        CustomRelation resideIn = new CustomRelation("resideIn", "", new LinkedList<>());
         RelationMapping resideInMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
                         resideInWhenTriplets);
         resideIn.setMapping(resideInMapping);
 
-        CustomRelation use = new CustomRelation("use", new LinkedList<>());
+        CustomRelation use = new CustomRelation("use", "", new LinkedList<>());
         RelationMapping useMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, use, class2Variable),
@@ -239,7 +239,7 @@ public class TestUtils {
         List<ObjectType> relatableObjectTypes = new LinkedList<>();
         relatableObjectTypes.add(new StringValue(""));
         CustomRelation emptyWhenRelationString =
-                new CustomRelation("emptyWhenRelationString", relatableObjectTypes);
+                new CustomRelation("emptyWhenRelationString", "", relatableObjectTypes);
         RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -252,7 +252,7 @@ public class TestUtils {
         relatableObjectTypes = new LinkedList<>();
         relatableObjectTypes.add(new BooleanValue(false));
         CustomRelation emptyWhenRelationBoolean =
-                new CustomRelation("emptyWhenRelationBoolean", relatableObjectTypes);
+                new CustomRelation("emptyWhenRelationBoolean", "", relatableObjectTypes);
         RelationMapping emptyWhenRelationBooleanMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -261,7 +261,7 @@ public class TestUtils {
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
         CustomRelation emptyWhenRelationVariable =
-                new CustomRelation("emptyWhenRelationVariable", new LinkedList<>());
+                new CustomRelation("emptyWhenRelationVariable", "", new LinkedList<>());
         RelationMapping emptyWhenRelationVariableMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(

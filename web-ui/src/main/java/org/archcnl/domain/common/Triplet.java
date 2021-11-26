@@ -27,7 +27,7 @@ public class Triplet {
     public String toStringRepresentation() {
         StringBuilder builder = new StringBuilder();
         if (predicate instanceof JenaBuiltinRelation) {
-            builder.append(predicate.toStringRepresentation());
+            builder.append(predicate.transformToAdoc());
             builder.append("(");
             builder.append(subject.toStringRepresentation() + ", ");
             builder.append(object.toStringRepresentation());
@@ -35,7 +35,7 @@ public class Triplet {
         } else {
             builder.append("(");
             builder.append(subject.toStringRepresentation() + " ");
-            builder.append(predicate.toStringRepresentation() + " ");
+            builder.append(predicate.transformToAdoc() + " ");
             builder.append(object.toStringRepresentation());
             builder.append(")");
         }
