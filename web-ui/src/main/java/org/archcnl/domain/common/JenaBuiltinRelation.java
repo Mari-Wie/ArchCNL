@@ -28,5 +28,4 @@ public class JenaBuiltinRelation extends Relation {
     public String transformToAdoc() {
         return getRealName();
     }
-
 }
