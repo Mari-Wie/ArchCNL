@@ -7,7 +7,7 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
-public class CustomRelation extends Relation {
+public class CustomRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "architecture";
 

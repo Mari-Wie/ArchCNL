@@ -20,11 +20,6 @@ public class JenaBuiltinRelation extends Relation {
     }
 
     @Override
-    public String transformToSparqlQuery() {
-        return transformToAdoc();
-    }
-
-    @Override
     public String transformToGui() {
         return transformToAdoc();
     }

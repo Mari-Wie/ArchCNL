@@ -2,7 +2,7 @@ package org.archcnl.domain.common;
 
 import java.util.List;
 
-public class DefaultRelation extends Relation {
+public class DefaultRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "famix";
 

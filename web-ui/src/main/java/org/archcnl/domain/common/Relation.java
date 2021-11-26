@@ -11,7 +11,7 @@ import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Relation implements FormattedDomainObject {
+public abstract class Relation implements FormattedAdocDomainObject, FormattedViewDomainObject {
 
     private String name;
     private String description;

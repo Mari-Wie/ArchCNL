@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public class TypeRelation extends Relation {
+public class TypeRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "rdf";
 
