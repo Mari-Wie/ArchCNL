@@ -60,9 +60,10 @@ public class Triplet implements FormattedDomainObject {
     @Override
     public String transformToSparqlQuery() {
         final StringBuilder sb = new StringBuilder();
+        FormattedQueryDomainObject parsedPredicate = (FormattedQueryDomainObject) predicate;
         sb.append(subject.transformToSparqlQuery());
         sb.append(" ");
-        sb.append(predicate.transformToSparqlQuery());
+        sb.append(parsedPredicate.transformToSparqlQuery());
         sb.append(" ");
         sb.append(object.transformToSparqlQuery());
         sb.append(".");
