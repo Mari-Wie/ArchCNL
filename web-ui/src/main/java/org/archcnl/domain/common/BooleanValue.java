@@ -5,6 +5,7 @@ import java.util.Objects;
 public class BooleanValue extends ObjectType {
 
     private boolean value;
+    private static final String XSD_BOOLEAN = "^^xsd:boolean";
 
     public BooleanValue(boolean value) {
         this.setValue(value);
@@ -25,7 +26,7 @@ public class BooleanValue extends ObjectType {
 
     @Override
     public String transformToSparqlQuery() {
-        return "\"" + value + "\"" + "^^xsd:boolean";
+        return "\"" + value + "\"" + XSD_BOOLEAN;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class BooleanValue extends ObjectType {
 
     @Override
     public String transformToAdoc() {
-        return "'" + value + "'" + "^^xsd:boolean";
+        return "'" + value + "'" + XSD_BOOLEAN;
     }
 
     @Override

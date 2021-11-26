@@ -49,9 +49,10 @@ public class WhereTriple implements FormattedQueryDomainObject, FormattedViewDom
     @Override
     public String transformToSparqlQuery() {
         final StringBuffer sb = new StringBuffer();
+        FormattedQueryDomainObject parsedPredicate = (FormattedQueryDomainObject) predicate;
         sb.append(subject.transformToSparqlQuery());
         sb.append(" ");
-        sb.append(predicate.transformToSparqlQuery());
+        sb.append(parsedPredicate.transformToSparqlQuery());
         sb.append(" ");
         sb.append(object.transformToSparqlQuery());
         return sb.toString();
