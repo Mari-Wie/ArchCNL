@@ -10,7 +10,7 @@ import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.SubjectPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.SubjectView;
+import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionView;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableStringBoolSelectionView;
 
 public class RelationEditorView extends MappingEditorView {
@@ -18,7 +18,7 @@ public class RelationEditorView extends MappingEditorView {
     private static final long serialVersionUID = -335119786400292325L;
     private TextField relationNameField;
     private SubjectPresenter subjectPresenter;
-    private SubjectView subjectView;
+    private VariableSelectionView subjectView;
     private VariableStringBoolSelectionView objectView;
 
     public RelationEditorView(
@@ -30,7 +30,8 @@ public class RelationEditorView extends MappingEditorView {
     protected void addThenTripletView() {
         HorizontalLayout thenTriplet = new HorizontalLayout();
         subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
-        subjectView = new SubjectView(subjectPresenter);
+        subjectView = new VariableSelectionView(subjectPresenter);
+        subjectView.setLabel("Subject");
         thenTriplet.add(subjectView);
         relationNameField = new TextField("Predicate");
         relationNameField.setReadOnly(true);

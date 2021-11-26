@@ -15,7 +15,6 @@ public class ConceptSelectionView extends ComboBox<String>
 
     public ConceptSelectionView() {
         setActive(true);
-        setLabel("Object");
         setPlaceholder("Concept");
         updateItems();
         setClearButtonVisible(true);

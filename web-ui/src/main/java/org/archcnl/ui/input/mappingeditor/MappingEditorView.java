@@ -70,7 +70,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
                 });
         add(description);
 
-        // TODO: add used in functionality
+        // TODO: add "used in" functionality
         VariableListPresenter variableListPresenter =
                 new VariableListPresenter(presenter.getVariableManager());
         add(new VariableListView(variableListPresenter));

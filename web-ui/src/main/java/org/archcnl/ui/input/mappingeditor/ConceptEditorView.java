@@ -10,14 +10,14 @@ import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.SubjectPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.SubjectView;
+import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionView;
 
 public class ConceptEditorView extends MappingEditorView {
 
     private static final long serialVersionUID = 1260768304754207599L;
     private TextField conceptNameField;
     private SubjectPresenter subjectPresenter;
-    private SubjectView subjectView;
+    private VariableSelectionView subjectView;
 
     public ConceptEditorView(
             MappingEditorContract.Presenter<View> presenter, InputContract.Remote inputRemote) {
@@ -28,7 +28,8 @@ public class ConceptEditorView extends MappingEditorView {
     protected void addThenTripletView() {
         HorizontalLayout thenTriplet = new HorizontalLayout();
         subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
-        subjectView = new SubjectView(subjectPresenter);
+        subjectView = new VariableSelectionView(subjectPresenter);
+        subjectView.setLabel("Subject");
         thenTriplet.add(subjectView);
         TextField predicateField = new TextField("Predicate");
         predicateField.setValue("is-of-type");

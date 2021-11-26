@@ -71,16 +71,6 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
     }
 
     @Override
-    public void mouseEnter() {
-        view.setAddButtonVisible(true);
-    }
-
-    @Override
-    public void mouseLeave() {
-        view.setAddButtonVisible(false);
-    }
-
-    @Override
     public void addButtonPressed() {
         mappingEditorPresenter.addNewAndTripletsViewAfter(view);
     }
