@@ -1,4 +1,4 @@
-package org.archcnl.output.model.query;
+package org.archcnl.domain.common;
 
 import org.archcnl.domain.output.model.query.WhereTriple;
 import org.archcnl.domain.output.model.query.attribute.QueryField;

@@ -1,17 +1,7 @@
-package org.archcnl.domain.input.mappings;
+package org.archcnl.domain.common;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.domain.common.ConceptManager;
-import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.DefaultRelation;
-import org.archcnl.domain.common.JenaBuiltinRelation;
-import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.Triplet;
-import org.archcnl.domain.common.TripletFactory;
-import org.archcnl.domain.common.TypeRelation;
-import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;

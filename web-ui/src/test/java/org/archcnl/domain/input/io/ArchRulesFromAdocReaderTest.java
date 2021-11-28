@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.Relation;
-import org.archcnl.domain.input.TestUtils;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;

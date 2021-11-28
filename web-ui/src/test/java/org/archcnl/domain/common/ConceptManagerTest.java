@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.mappings;
+package org.archcnl.domain.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -7,13 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.domain.common.ConceptManager;
-import org.archcnl.domain.common.CustomConcept;
-import org.archcnl.domain.common.DefaultConcept;
-import org.archcnl.domain.common.Triplet;
-import org.archcnl.domain.common.TripletFactory;
-import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
