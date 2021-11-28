@@ -7,6 +7,7 @@ import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
@@ -38,10 +39,17 @@ public class WhereClauseTest {
         final WhereClause whereClause = new WhereClause(triplets);
 
         final String expectedQueryString =
-                "WHERE {\n"
-                        + "  GRAPH ?g {\n"
-                        + "    ?aggregate rdf:type architecture:Aggregate.\n"
-                        + "    ?aggregate famix:hasName ?name.\n  }\n}";
+                "WHERE {"
+                        + System.lineSeparator()
+                        + "  GRAPH ?g {"
+                        + System.lineSeparator()
+                        + "    ?aggregate rdf:type architecture:Aggregate."
+                        + System.lineSeparator()
+                        + "    ?aggregate famix:hasName ?name."
+                        + System.lineSeparator()
+                        + "  }"
+                        + System.lineSeparator()
+                        + "}";
 
         // when
         final String whereClauseAsString = whereClause.transformToGui();
@@ -51,7 +59,9 @@ public class WhereClauseTest {
     }
 
     @Test
-    public void givenWhereClause_whenCallAsFormattedString_thenReturnFormattedString() {
+    public void givenWhereClause_whenCallAsFormattedString_thenReturnFormattedString()
+            throws InvalidVariableNameException, RelationDoesNotExistException,
+                    ConceptDoesNotExistException {
         // given
         final Triplet triplet1 =
                 new Triplet(
@@ -59,31 +69,43 @@ public class WhereClauseTest {
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
                                 .getRelationByName("is-of-type"),
-                        new QueryObject("conformance:ArchitectureRule", QueryObjectType.PROPERTY));
+                        RulesConceptsAndRelations.getInstance()
+                                .getConceptManager()
+                                .getConceptByName("ArchitectureRule"));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("rule"),
-                        new QueryPredicate("conformance", "hasRuleRepresentation"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasRuleRepresentation"),
                         new StringValue("string"));
         final Triplet triplet3 =
                 new Triplet(
                         new Variable("rule"),
-                        new QueryPredicate("conformance", "hasRuleRepresentation"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasRuleRepresentation"),
                         new Variable("cnl"));
         final Triplet triplet4 =
                 new Triplet(
                         new Variable("violation"),
-                        new QueryPredicate("conformance", "violates"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("violates"),
                         new Variable("rule"));
         final Triplet triplet5 =
                 new Triplet(
                         new Variable("proof"),
-                        new QueryPredicate("conformance", "proofs"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("proofs"),
                         new Variable("violation"));
         final Triplet triplet6 =
                 new Triplet(
                         new Variable("proof"),
-                        new QueryPredicate("conformance", "hasNotInferredStatement"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasNotInferredStatement"),
                         new BooleanValue(true));
         final AndTriplets triplets =
                 new AndTriplets(
@@ -91,15 +113,25 @@ public class WhereClauseTest {
         final WhereClause whereClause = new WhereClause(triplets);
 
         final String expectedQueryString =
-                "WHERE {\n"
-                        + "  GRAPH ?g {\n"
-                        + "    ?rule rdf:type conformance:ArchitectureRule.\n"
-                        + "    ?rule conformance:hasRuleRepresentation \"string\"^^xsd:string.\n"
-                        + "    ?rule conformance:hasRuleRepresentation ?cnl.\n"
-                        + "    ?violation conformance:violates ?rule.\n"
-                        + "    ?proof conformance:proofs ?violation.\n"
-                        + "    ?proof conformance:hasNotInferredStatement 'true'^^xsd:boolean.\n"
-                        + "  }\n}";
+                "WHERE {"
+                        + System.lineSeparator()
+                        + "  GRAPH ?g {"
+                        + System.lineSeparator()
+                        + "    ?rule rdf:type conformance:ArchitectureRule."
+                        + System.lineSeparator()
+                        + "    ?rule conformance:hasRuleRepresentation 'string'."
+                        + System.lineSeparator()
+                        + "    ?rule conformance:hasRuleRepresentation ?cnl."
+                        + System.lineSeparator()
+                        + "    ?violation conformance:violates ?rule."
+                        + System.lineSeparator()
+                        + "    ?proof conformance:proofs ?violation."
+                        + System.lineSeparator()
+                        + "    ?proof conformance:hasNotInferredStatement 'true'^^xsd:boolean."
+                        + System.lineSeparator()
+                        + "  }"
+                        + System.lineSeparator()
+                        + "}";
 
         // when
         final String whereClauseAsString = whereClause.transformToGui();

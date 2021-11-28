@@ -47,23 +47,31 @@ public class QueryTest {
         final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
 
         final String expectedQueryString =
-                "SELECT ?name \n"
-                        + "WHERE {\n"
-                        + "  GRAPH ?g {\n"
-                        + "    ?aggregate rdf:type architecture:Aggregate.\n"
-                        + "    ?aggregate famix:hasName ?name.\n  }\n}";
+                "SELECT ?name "
+                        + System.lineSeparator()
+                        + "WHERE {"
+                        + System.lineSeparator()
+                        + "  GRAPH ?g {"
+                        + System.lineSeparator()
+                        + "    ?aggregate rdf:type architecture:Aggregate."
+                        + System.lineSeparator()
+                        + "    ?aggregate famix:hasName ?name."
+                        + System.lineSeparator()
+                        + "  }"
+                        + System.lineSeparator()
+                        + "}";
 
         // when
         final String queryAsString = query.transformToGui();
 
         // then
         Assert.assertEquals(
-                getDefaultNamespacesAsFormattedString() + "\n" + expectedQueryString,
-                queryAsString);
+                getDefaultNamespacesAsFormattedString() + expectedQueryString, queryAsString);
     }
 
     @Test
-    public void givenDifficultQuery_whenCallAsFormattedString_thenReturnFormattedQueryString() {
+    public void givenDifficultQuery_whenCallAsFormattedString_thenReturnFormattedQueryString()
+            throws InvalidVariableNameException, RelationDoesNotExistException {
         // given
         final Variable field1 = new Variable("cnl");
         final Variable field2 = new Variable("subject");
@@ -75,42 +83,58 @@ public class QueryTest {
         final Triplet triplet1 =
                 new Triplet(
                         new Variable("rule"),
-                        new QueryPredicate("conformance", "hasRuleRepresentation"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasRuleRepresentation"),
                         new StringValue("Every Aggregate must residein a DomainRing."));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("rule"),
-                        new QueryPredicate("conformance", "hasRuleRepresentation"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasRuleRepresentation"),
                         new Variable("cnl"));
         final Triplet triplet3 =
                 new Triplet(
                         new Variable("violation"),
-                        new QueryPredicate("conformance", "violates"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("violates"),
                         new Variable("rule"));
         final Triplet triplet4 =
                 new Triplet(
                         new Variable("proof"),
-                        new QueryPredicate("conformance", "proofs"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("proofs"),
                         new Variable("violation"));
         final Triplet triplet5 =
                 new Triplet(
                         new Variable("proof"),
-                        new QueryPredicate("conformance", "hasNotInferredStatement"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasNotInferredStatement"),
                         new Variable("notInferred"));
         final Triplet triplet6 =
                 new Triplet(
                         new Variable("notInferred"),
-                        new QueryPredicate("conformance", "hasSubject"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasSubject"),
                         new Variable("subject"));
         final Triplet triplet7 =
                 new Triplet(
                         new Variable("notInferred"),
-                        new QueryPredicate("conformance", "hasPredicate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasPredicate"),
                         new Variable("predicate"));
         final Triplet triplet8 =
                 new Triplet(
                         new Variable("notInferred"),
-                        new QueryPredicate("conformance", "hasObject"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasObject"),
                         new Variable("object"));
         final AndTriplets triplets =
                 new AndTriplets(
@@ -121,18 +145,30 @@ public class QueryTest {
         final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
 
         final String expectedQueryString =
-                "SELECT ?cnl ?subject ?predicate ?object \n"
-                        + "WHERE {\n"
-                        + "  GRAPH ?g {\n"
-                        + "    ?rule conformance:hasRuleRepresentation \"Every Aggregate must residein a DomainRing.\"^^xsd:string.\n"
-                        + "    ?rule conformance:hasRuleRepresentation ?cnl.\n"
-                        + "    ?violation conformance:violates ?rule.\n"
-                        + "    ?proof conformance:proofs ?violation.\n"
-                        + "    ?proof conformance:hasNotInferredStatement ?notInferred.\n"
-                        + "    ?notInferred conformance:hasSubject ?subject.\n"
-                        + "    ?notInferred conformance:hasPredicate ?predicate.\n"
-                        + "    ?notInferred conformance:hasObject ?object.\n"
-                        + "  }\n"
+                "SELECT ?cnl ?subject ?predicate ?object "
+                        + System.lineSeparator()
+                        + "WHERE {"
+                        + System.lineSeparator()
+                        + "  GRAPH ?g {"
+                        + System.lineSeparator()
+                        + "    ?rule conformance:hasRuleRepresentation 'Every Aggregate must residein a DomainRing.'."
+                        + System.lineSeparator()
+                        + "    ?rule conformance:hasRuleRepresentation ?cnl."
+                        + System.lineSeparator()
+                        + "    ?violation conformance:violates ?rule."
+                        + System.lineSeparator()
+                        + "    ?proof conformance:proofs ?violation."
+                        + System.lineSeparator()
+                        + "    ?proof conformance:hasNotInferredStatement ?notInferred."
+                        + System.lineSeparator()
+                        + "    ?notInferred conformance:hasSubject ?subject."
+                        + System.lineSeparator()
+                        + "    ?notInferred conformance:hasPredicate ?predicate."
+                        + System.lineSeparator()
+                        + "    ?notInferred conformance:hasObject ?object."
+                        + System.lineSeparator()
+                        + "  }"
+                        + System.lineSeparator()
                         + "}";
 
         // when
@@ -140,8 +176,7 @@ public class QueryTest {
 
         // then
         Assert.assertEquals(
-                getDefaultNamespacesAsFormattedString() + "\n" + expectedQueryString,
-                queryAsString);
+                getDefaultNamespacesAsFormattedString() + expectedQueryString, queryAsString);
     }
 
     @Test
@@ -202,13 +237,20 @@ public class QueryTest {
     }
 
     private String getDefaultNamespacesAsFormattedString() {
-        return "PREFIX rdf <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
-                + "PREFIX owl <http://www.w3.org/2002/07/owl#>\n"
-                + "PREFIX rdfs <http://www.w3.org/2000/01/rdf-schema#>\n"
-                + "PREFIX xsd <http://www.w3.org/2001/XMLSchema#>\n"
-                + "PREFIX conformance <http://arch-ont.org/ontologies/architectureconformance#>\n"
-                + "PREFIX famix <http://arch-ont.org/ontologies/famix.owl#>\n"
-                + "PREFIX architecture <http://www.arch-ont.org/ontologies/architecture.owl#>";
+        return "PREFIX rdf <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+                + System.lineSeparator()
+                + "PREFIX owl <http://www.w3.org/2002/07/owl#>"
+                + System.lineSeparator()
+                + "PREFIX rdfs <http://www.w3.org/2000/01/rdf-schema#>"
+                + System.lineSeparator()
+                + "PREFIX xsd <http://www.w3.org/2001/XMLSchema#>"
+                + System.lineSeparator()
+                + "PREFIX conformance <http://arch-ont.org/ontologies/architectureconformance#>"
+                + System.lineSeparator()
+                + "PREFIX famix <http://arch-ont.org/ontologies/famix.owl#>"
+                + System.lineSeparator()
+                + "PREFIX architecture <http://www.arch-ont.org/ontologies/architecture.owl#>"
+                + System.lineSeparator();
     }
 
     private String getDefaultNamespacesAsFormattedQuery() {
