@@ -73,10 +73,11 @@ class ArchRulesFromAdocReaderTest {
 
         // Check if relations were correctly imported
         assertEquals(
-                expectedModel.getRelationManager().getRelations().size(),
-                rulesConceptsAndRelations.getRelationManager().getRelations().size());
-        for (Relation relation : rulesConceptsAndRelations.getRelationManager().getRelations()) {
-            assertTrue(expectedModel.getRelationManager().getRelations().contains(relation));
+                expectedModel.getRelationManager().getInputRelations().size(),
+                rulesConceptsAndRelations.getRelationManager().getInputRelations().size());
+        for (Relation relation :
+                rulesConceptsAndRelations.getRelationManager().getInputRelations()) {
+            assertTrue(expectedModel.getRelationManager().getInputRelations().contains(relation));
         }
     }
 }

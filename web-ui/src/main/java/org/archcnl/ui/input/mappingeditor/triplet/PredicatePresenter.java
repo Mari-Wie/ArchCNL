@@ -28,7 +28,10 @@ public class PredicatePresenter implements Presenter<View> {
 
     @Override
     public List<String> getRelationNames() {
-        return RulesConceptsAndRelations.getInstance().getRelationManager().getRelations().stream()
+        return RulesConceptsAndRelations.getInstance()
+                .getRelationManager()
+                .getInputRelations()
+                .stream()
                 .map(Relation::getName)
                 .collect(Collectors.toList());
     }
