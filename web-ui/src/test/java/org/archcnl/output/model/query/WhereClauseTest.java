@@ -1,34 +1,41 @@
 package org.archcnl.output.model.query;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.BooleanValue;
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.StringValue;
+import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.WhereClause;
-import org.archcnl.domain.output.model.query.WhereTriple;
-import org.archcnl.domain.output.model.query.attribute.QueryField;
-import org.archcnl.domain.output.model.query.attribute.QueryObject;
-import org.archcnl.domain.output.model.query.attribute.QueryObjectType;
-import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class WhereClauseTest {
 
     @Test
-    public void givenSimpleWhereClause_whenCallAsFormattedString_thenReturnFormattedString() {
+    public void givenSimpleWhereClause_whenCallAsFormattedString_thenReturnFormattedString()
+            throws InvalidVariableNameException, RelationDoesNotExistException {
         // given
-        final WhereTriple triple1 =
-                new WhereTriple(
-                        new QueryField("aggregate"),
-                        new QueryPredicate("rdf", "type"),
-                        new QueryObject("architecture:Aggregate", QueryObjectType.PROPERTY));
-        final WhereTriple triple2 =
-                new WhereTriple(
-                        new QueryField("aggregate"),
-                        new QueryPredicate("famix", "hasName"),
-                        new QueryObject("name", QueryObjectType.FIELD));
-        final Set<WhereTriple> triples = new LinkedHashSet<>(Arrays.asList(triple1, triple2));
-        final WhereClause whereClause = new WhereClause(triples);
+        final Triplet triplet1 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("is-of-type"),
+                        new CustomConcept("Aggregate", ""));
+        final Triplet triplet2 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasName"),
+                        new Variable("name"));
+        final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
+        final WhereClause whereClause = new WhereClause(triplets);
 
         final String expectedQueryString =
                 "WHERE {\n"
@@ -46,50 +53,52 @@ public class WhereClauseTest {
     @Test
     public void givenWhereClause_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
-        final WhereTriple triple1 =
-                new WhereTriple(
-                        new QueryField("rule"),
-                        new QueryPredicate("rdf", "type"),
+        final Triplet triplet1 =
+                new Triplet(
+                        new Variable("rule"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("is-of-type"),
                         new QueryObject("conformance:ArchitectureRule", QueryObjectType.PROPERTY));
-        final WhereTriple triple2 =
-                new WhereTriple(
-                        new QueryField("rule"),
+        final Triplet triplet2 =
+                new Triplet(
+                        new Variable("rule"),
                         new QueryPredicate("conformance", "hasRuleRepresentation"),
-                        new QueryObject("1", QueryObjectType.PRIMITIVE_VALUE));
-        final WhereTriple triple3 =
-                new WhereTriple(
-                        new QueryField("rule"),
+                        new StringValue("string"));
+        final Triplet triplet3 =
+                new Triplet(
+                        new Variable("rule"),
                         new QueryPredicate("conformance", "hasRuleRepresentation"),
-                        new QueryObject("cnl", QueryObjectType.FIELD));
-        final WhereTriple triple4 =
-                new WhereTriple(
-                        new QueryField("violation"),
+                        new Variable("cnl"));
+        final Triplet triplet4 =
+                new Triplet(
+                        new Variable("violation"),
                         new QueryPredicate("conformance", "violates"),
-                        new QueryObject("rule", QueryObjectType.FIELD));
-        final WhereTriple triple5 =
-                new WhereTriple(
-                        new QueryField("proof"),
+                        new Variable("rule"));
+        final Triplet triplet5 =
+                new Triplet(
+                        new Variable("proof"),
                         new QueryPredicate("conformance", "proofs"),
-                        new QueryObject("violation", QueryObjectType.FIELD));
-        final WhereTriple triple6 =
-                new WhereTriple(
-                        new QueryField("proof"),
+                        new Variable("violation"));
+        final Triplet triplet6 =
+                new Triplet(
+                        new Variable("proof"),
                         new QueryPredicate("conformance", "hasNotInferredStatement"),
-                        new QueryObject("1.1", QueryObjectType.PRIMITIVE_VALUE));
-        final Set<WhereTriple> triples =
-                new LinkedHashSet<>(
-                        Arrays.asList(triple1, triple2, triple3, triple4, triple5, triple6));
-        final WhereClause whereClause = new WhereClause(triples);
+                        new BooleanValue(true));
+        final AndTriplets triplets =
+                new AndTriplets(
+                        Arrays.asList(triplet1, triplet2, triplet3, triplet4, triplet5, triplet6));
+        final WhereClause whereClause = new WhereClause(triplets);
 
         final String expectedQueryString =
                 "WHERE {\n"
                         + "  GRAPH ?g {\n"
                         + "    ?rule rdf:type conformance:ArchitectureRule.\n"
-                        + "    ?rule conformance:hasRuleRepresentation \"1\"^^xsd:integer.\n"
+                        + "    ?rule conformance:hasRuleRepresentation \"string\"^^xsd:string.\n"
                         + "    ?rule conformance:hasRuleRepresentation ?cnl.\n"
                         + "    ?violation conformance:violates ?rule.\n"
                         + "    ?proof conformance:proofs ?violation.\n"
-                        + "    ?proof conformance:hasNotInferredStatement \"1.1\"^^xsd:double.\n"
+                        + "    ?proof conformance:hasNotInferredStatement 'true'^^xsd:boolean.\n"
                         + "  }\n}";
 
         // when
