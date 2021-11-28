@@ -3,39 +3,47 @@ package org.archcnl.output.model.query;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.archcnl.domain.common.AndTriplets;
+import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.StringValue;
+import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
-import org.archcnl.domain.output.model.query.WhereTriple;
-import org.archcnl.domain.output.model.query.attribute.QueryField;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
-import org.archcnl.domain.output.model.query.attribute.QueryObject;
-import org.archcnl.domain.output.model.query.attribute.QueryObjectType;
-import org.archcnl.domain.output.model.query.attribute.QueryPredicate;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class QueryTest {
 
     @Test
-    public void givenSimpleQuery_whenCallAsFormattedString_thenReturnFormattedQueryString() {
+    public void givenSimpleQuery_whenCallAsFormattedString_thenReturnFormattedQueryString()
+            throws InvalidVariableNameException, RelationDoesNotExistException {
         // given
-        final QueryField field = new QueryField("name");
-        final Set<QueryField> objects = new LinkedHashSet<>(Arrays.asList(field));
+        final Variable field = new Variable("name");
+        final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(field));
         final SelectClause selectClause = new SelectClause(objects);
 
-        final WhereTriple triple1 =
-                new WhereTriple(
-                        new QueryField("aggregate"),
-                        new QueryPredicate("rdf", "type"),
-                        new QueryObject("architecture:Aggregate", QueryObjectType.PROPERTY));
-        final WhereTriple triple2 =
-                new WhereTriple(
-                        new QueryField("aggregate"),
-                        new QueryPredicate("famix", "hasName"),
-                        new QueryObject("name", QueryObjectType.FIELD));
-        final Set<WhereTriple> triples = new LinkedHashSet<>(Arrays.asList(triple1, triple2));
-        final WhereClause whereClause = new WhereClause(triples);
+        final Triplet triplet1 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("is-of-type"),
+                        new CustomConcept("Aggregate", ""));
+        final Triplet triplet2 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasName"),
+                        new Variable("name"));
+        final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
+        final WhereClause whereClause = new WhereClause(triplets);
         final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
 
         final String expectedQueryString =
@@ -57,61 +65,59 @@ public class QueryTest {
     @Test
     public void givenDifficultQuery_whenCallAsFormattedString_thenReturnFormattedQueryString() {
         // given
-        final QueryField field1 = new QueryField("cnl");
-        final QueryField field2 = new QueryField("subject");
-        final QueryField field3 = new QueryField("predicate");
-        final QueryField field4 = new QueryField("object");
-        final Set<QueryField> objects =
+        final Variable field1 = new Variable("cnl");
+        final Variable field2 = new Variable("subject");
+        final Variable field3 = new Variable("predicate");
+        final Variable field4 = new Variable("object");
+        final Set<Variable> objects =
                 new LinkedHashSet<>(Arrays.asList(field1, field2, field3, field4));
         final SelectClause selectClause = new SelectClause(objects);
-        final WhereTriple triple1 =
-                new WhereTriple(
-                        new QueryField("rule"),
+        final Triplet triplet1 =
+                new Triplet(
+                        new Variable("rule"),
                         new QueryPredicate("conformance", "hasRuleRepresentation"),
-                        new QueryObject(
-                                "Every Aggregate must residein a DomainRing.",
-                                QueryObjectType.PRIMITIVE_VALUE));
-        final WhereTriple triple2 =
-                new WhereTriple(
-                        new QueryField("rule"),
+                        new StringValue("Every Aggregate must residein a DomainRing."));
+        final Triplet triplet2 =
+                new Triplet(
+                        new Variable("rule"),
                         new QueryPredicate("conformance", "hasRuleRepresentation"),
-                        new QueryObject("cnl", QueryObjectType.FIELD));
-        final WhereTriple triple3 =
-                new WhereTriple(
-                        new QueryField("violation"),
+                        new Variable("cnl"));
+        final Triplet triplet3 =
+                new Triplet(
+                        new Variable("violation"),
                         new QueryPredicate("conformance", "violates"),
-                        new QueryObject("rule", QueryObjectType.FIELD));
-        final WhereTriple triple4 =
-                new WhereTriple(
-                        new QueryField("proof"),
+                        new Variable("rule"));
+        final Triplet triplet4 =
+                new Triplet(
+                        new Variable("proof"),
                         new QueryPredicate("conformance", "proofs"),
-                        new QueryObject("violation", QueryObjectType.FIELD));
-        final WhereTriple triple5 =
-                new WhereTriple(
-                        new QueryField("proof"),
+                        new Variable("violation"));
+        final Triplet triplet5 =
+                new Triplet(
+                        new Variable("proof"),
                         new QueryPredicate("conformance", "hasNotInferredStatement"),
-                        new QueryObject("notInferred", QueryObjectType.FIELD));
-        final WhereTriple triple6 =
-                new WhereTriple(
-                        new QueryField("notInferred"),
+                        new Variable("notInferred"));
+        final Triplet triplet6 =
+                new Triplet(
+                        new Variable("notInferred"),
                         new QueryPredicate("conformance", "hasSubject"),
-                        new QueryObject("subject", QueryObjectType.FIELD));
-        final WhereTriple triple7 =
-                new WhereTriple(
-                        new QueryField("notInferred"),
+                        new Variable("subject"));
+        final Triplet triplet7 =
+                new Triplet(
+                        new Variable("notInferred"),
                         new QueryPredicate("conformance", "hasPredicate"),
-                        new QueryObject("predicate", QueryObjectType.FIELD));
-        final WhereTriple triple8 =
-                new WhereTriple(
-                        new QueryField("notInferred"),
+                        new Variable("predicate"));
+        final Triplet triplet8 =
+                new Triplet(
+                        new Variable("notInferred"),
                         new QueryPredicate("conformance", "hasObject"),
-                        new QueryObject("object", QueryObjectType.FIELD));
-        final Set<WhereTriple> triples =
-                new LinkedHashSet<>(
+                        new Variable("object"));
+        final AndTriplets triplets =
+                new AndTriplets(
                         Arrays.asList(
-                                triple1, triple2, triple3, triple4, triple5, triple6, triple7,
-                                triple8));
-        final WhereClause whereClause = new WhereClause(triples);
+                                triplet1, triplet2, triplet3, triplet4, triplet5, triplet6,
+                                triplet7, triplet8));
+        final WhereClause whereClause = new WhereClause(triplets);
         final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
 
         final String expectedQueryString =
@@ -139,23 +145,28 @@ public class QueryTest {
     }
 
     @Test
-    public void givenSimpleQuery_whenCallAsFormattedQuery_thenReturnFormattedQueryString() {
+    public void givenSimpleQuery_whenCallAsFormattedQuery_thenReturnFormattedQueryString()
+            throws InvalidVariableNameException, RelationDoesNotExistException {
         // given
-        final QueryField field = new QueryField("name");
-        final Set<QueryField> objects = new LinkedHashSet<>(Arrays.asList(field));
+        final Variable field = new Variable("name");
+        final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(field));
         final SelectClause selectClause = new SelectClause(objects);
-        final WhereTriple triple1 =
-                new WhereTriple(
-                        new QueryField("aggregate"),
-                        new QueryPredicate("rdf", "type"),
-                        new QueryObject("architecture:Aggregate", QueryObjectType.PROPERTY));
-        final WhereTriple triple2 =
-                new WhereTriple(
-                        new QueryField("aggregate"),
-                        new QueryPredicate("famix", "hasName"),
-                        new QueryObject("name", QueryObjectType.FIELD));
-        final Set<WhereTriple> triples = new LinkedHashSet<>(Arrays.asList(triple1, triple2));
-        final WhereClause whereClause = new WhereClause(triples);
+        final Triplet triplet1 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("is-of-type"),
+                        new CustomConcept("Aggregate", ""));
+        final Triplet triplet2 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasName"),
+                        new Variable("name"));
+        final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
+        final WhereClause whereClause = new WhereClause(triplets);
         final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
 
         final String expectedQueryString =
