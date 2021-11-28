@@ -29,103 +29,39 @@ class RelationManagerTest {
     }
 
     @Test
-    void givenRelationManager_whenCreated_thenExpectedInputRelations() {
-        Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());
-        Assertions.assertFalse(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("abc", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new JenaBuiltinRelation("matches", "regex", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(new TypeRelation("is-of-type", "type", "")));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasModifier", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasName", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasSignature", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasValue", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasFullQualifiedName", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("isConstructor", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("isExternal", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("isInterface", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasDefiningClass", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasDeclaredException", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasCaughtException", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("throwsException", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasSubClass", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasSuperClass", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("definesNestedType", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("definesParameter", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("definesVariable", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationInstance", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationType", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasAnnotationTypeAttribute", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation(
-                                "hasAnnotationInstanceAttribute", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("definesAttribute", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("definesMethod", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("imports", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("namespaceContains", "", new LinkedList<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new DefaultRelation("hasDeclaredType", "", new LinkedList<>())));
+    void givenRelationManager_whenGetInputRelations_thenExpectedResults() {
+        // given and when
+        final List<Relation> relations = relationManager.getInputRelations();
+
+        // then
+        Assertions.assertEquals(inputRelationsCount, relations.size());
+        Assertions.assertFalse(relations.stream().anyMatch(ConformanceRelation.class::isInstance));
     }
 
     @Test
-    void givenRelationManager_whenCreated_thenExpectedOutputRelations() {
+    void givenRelationManager_whenGetOutputRelations_thenExpectedResults() {
+        // given and when
+        final List<Relation> relations = relationManager.getOutputRelations();
+
+        // then
+        Assertions.assertEquals(outputRelationsCount, relations.size());
+        Assertions.assertFalse(relations.stream().anyMatch(JenaBuiltinRelation.class::isInstance));
+    }
+
+    @Test
+    void givenRelationManager_whenCreated_thenExpectedRelations() {
+        Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());
         Assertions.assertEquals(outputRelationsCount, relationManager.getOutputRelations().size());
         Assertions.assertFalse(
                 relationManager.doesRelationExist(
                         new DefaultRelation("abc", "", new LinkedList<>())));
+
+        // Jena builtin
+        Assertions.assertTrue(
+                relationManager.doesRelationExist(
+                        new JenaBuiltinRelation("matches", "regex", "", new LinkedList<>())));
+
+        // Famix
         Assertions.assertTrue(
                 relationManager.doesRelationExist(new TypeRelation("is-of-type", "type", "")));
         Assertions.assertTrue(
@@ -208,7 +144,7 @@ class RelationManagerTest {
                 relationManager.doesRelationExist(
                         new DefaultRelation("hasDeclaredType", "", new LinkedList<>())));
 
-        // ConformanceRelations
+        // Conformance
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
                         new ConformanceRelation("hasRuleRepresentation", "", new LinkedList<>())));

@@ -16,6 +16,7 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,32 +34,32 @@ class ConceptManagerTest {
     }
 
     @Test
-    void givenConceptManager_whenCreated_thenExpectedInputConcepts()
-            throws ConceptDoesNotExistException {
-        assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
-        assertFalse(conceptManager.doesConceptExist(new DefaultConcept("ABC", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("FamixClass", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Namespace", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Enum", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationType", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Method", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Attribute", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Inheritance", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationInstance", "")));
-        assertTrue(
-                conceptManager.doesConceptExist(new DefaultConcept("AnnotationTypeAttribute", "")));
-        assertTrue(
-                conceptManager.doesConceptExist(
-                        new DefaultConcept("AnnotationInstanceAttribute", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Parameter", "")));
-        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("LocalVariable", "")));
+    void givenConceptManager_whenGetInputConcepts_thenExpectedResults() {
+        // given and when
+        final List<Concept> concepts = conceptManager.getInputConcepts();
+
+        // then
+        Assertions.assertEquals(inputConceptsCount, concepts.size());
+        Assertions.assertFalse(concepts.stream().anyMatch(ConformanceConcept.class::isInstance));
     }
 
     @Test
-    void givenConceptManager_whenCreated_thenExpectedOutputConcepts()
+    void givenConceptManager_whenGetOutputConcepts_thenExpectedResults() {
+        // given and when
+        final List<Concept> concepts = conceptManager.getOutputConcepts();
+
+        // then
+        Assertions.assertEquals(outputConceptsCount, concepts.size());
+    }
+
+    @Test
+    void givenConceptManager_whenCreated_thenExpectedConcepts()
             throws ConceptDoesNotExistException {
+        assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
         assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
         assertFalse(conceptManager.doesConceptExist(new DefaultConcept("ABC", "")));
+
+        // Famix
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("FamixClass", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Namespace", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Enum", "")));
@@ -75,6 +76,7 @@ class ConceptManagerTest {
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Parameter", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("LocalVariable", "")));
 
+        // Conformance
         assertTrue(conceptManager.doesConceptExist(new ConformanceConcept("ConformanceCheck", "")));
         assertTrue(conceptManager.doesConceptExist(new ConformanceConcept("ArchitectureRule", "")));
         assertTrue(
