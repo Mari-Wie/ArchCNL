@@ -51,7 +51,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
     private void updateConceptView() {
         List<Concept> concepts =
-                RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts();
+                RulesConceptsAndRelations.getInstance().getConceptManager().getInputConcepts();
         List<MappingListEntry> conceptData = new LinkedList<>();
         ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
         conceptData.add(defaultConceptsStub);

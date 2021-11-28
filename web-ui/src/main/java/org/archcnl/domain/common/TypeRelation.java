@@ -3,6 +3,7 @@ package org.archcnl.domain.common;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public class TypeRelation extends Relation implements FormattedQueryDomainObject {
@@ -23,9 +24,17 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
 
     @Override
     public List<ObjectType> getRelatableObjectTypes() {
-        return RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts().stream()
-                .map(ObjectType.class::cast)
-                .collect(Collectors.toList());
+        Stream<Concept> allConcepts =
+                Stream.concat(
+                        RulesConceptsAndRelations.getInstance()
+                                .getConceptManager()
+                                .getInputConcepts()
+                                .stream(),
+                        RulesConceptsAndRelations.getInstance()
+                                .getConceptManager()
+                                .getOutputConcepts()
+                                .stream());
+        return allConcepts.map(ObjectType.class::cast).collect(Collectors.toList());
     }
 
     public String getRealName() {

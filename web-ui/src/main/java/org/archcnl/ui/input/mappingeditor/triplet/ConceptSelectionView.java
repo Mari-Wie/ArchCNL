@@ -30,7 +30,10 @@ public class ConceptSelectionView extends ComboBox<String>
 
     public void updateItems() {
         setItems(
-                RulesConceptsAndRelations.getInstance().getConceptManager().getConcepts().stream()
+                RulesConceptsAndRelations.getInstance()
+                        .getConceptManager()
+                        .getInputConcepts()
+                        .stream()
                         .map(Concept::getName)
                         .collect(Collectors.toList()));
     }

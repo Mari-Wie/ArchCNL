@@ -22,16 +22,20 @@ import org.junit.jupiter.api.Test;
 class ConceptManagerTest {
 
     private ConceptManager conceptManager;
+    private int inputConceptsCount;
+    private int outputConceptsCount;
 
     @BeforeEach
     private void setup() {
         conceptManager = new ConceptManager();
+        inputConceptsCount = 12;
+        outputConceptsCount = 18;
     }
 
     @Test
-    void givenConceptManager_whenCreated_thenExpectedConcepts()
+    void givenConceptManager_whenCreated_thenExpectedInputConcepts()
             throws ConceptDoesNotExistException {
-        assertEquals(12, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
         assertFalse(conceptManager.doesConceptExist(new DefaultConcept("ABC", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("FamixClass", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Namespace", "")));
@@ -48,6 +52,40 @@ class ConceptManagerTest {
                         new DefaultConcept("AnnotationInstanceAttribute", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Parameter", "")));
         assertTrue(conceptManager.doesConceptExist(new DefaultConcept("LocalVariable", "")));
+    }
+
+    @Test
+    void givenConceptManager_whenCreated_thenExpectedOutputConcepts()
+            throws ConceptDoesNotExistException {
+        assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
+        assertFalse(conceptManager.doesConceptExist(new DefaultConcept("ABC", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("FamixClass", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Namespace", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Enum", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationType", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Method", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Attribute", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Inheritance", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("AnnotationInstance", "")));
+        assertTrue(
+                conceptManager.doesConceptExist(new DefaultConcept("AnnotationTypeAttribute", "")));
+        assertTrue(
+                conceptManager.doesConceptExist(
+                        new DefaultConcept("AnnotationInstanceAttribute", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("Parameter", "")));
+        assertTrue(conceptManager.doesConceptExist(new DefaultConcept("LocalVariable", "")));
+
+        assertTrue(conceptManager.doesConceptExist(new ConformanceConcept("ConformanceCheck", "")));
+        assertTrue(conceptManager.doesConceptExist(new ConformanceConcept("ArchitectureRule", "")));
+        assertTrue(
+                conceptManager.doesConceptExist(
+                        new ConformanceConcept("ArchitectureViolation", "")));
+        assertTrue(conceptManager.doesConceptExist(new ConformanceConcept("Proof", "")));
+        assertTrue(
+                conceptManager.doesConceptExist(new ConformanceConcept("AssertedStatement", "")));
+        assertTrue(
+                conceptManager.doesConceptExist(
+                        new ConformanceConcept("NotInferredStatement", "")));
     }
 
     @Test
@@ -79,15 +117,18 @@ class ConceptManagerTest {
             throws ConceptAlreadyExistsException, VariableAlreadyExistsException,
                     UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
                     InvalidVariableNameException {
-        assertEquals(12, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
+        assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
         conceptManager.addConcept(new CustomConcept("Test", ""));
         conceptManager.addConcept(new DefaultConcept("ABC", ""));
+        conceptManager.addConcept(new ConformanceConcept("ConformanceConcept", ""));
         assertThrows(
                 ConceptAlreadyExistsException.class,
                 () -> {
                     conceptManager.addConcept(new DefaultConcept("FamixClass", ""));
                 });
-        assertEquals(14, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount + 2, conceptManager.getInputConcepts().size());
+        assertEquals(outputConceptsCount + 3, conceptManager.getOutputConcepts().size());
     }
 
     @Test
@@ -95,11 +136,13 @@ class ConceptManagerTest {
             throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
                     RelationDoesNotExistException, InvalidVariableNameException,
                     ConceptDoesNotExistException, UnrelatedMappingException {
-        assertEquals(12, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
+        assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
         conceptManager.addOrAppend(new CustomConcept("Test", ""));
         conceptManager.addOrAppend(new CustomConcept("ABC", ""));
         conceptManager.addOrAppend(new CustomConcept("ABC", ""));
-        assertEquals(14, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount + 2, conceptManager.getInputConcepts().size());
+        assertEquals(outputConceptsCount + 2, conceptManager.getOutputConcepts().size());
 
         String conceptName = "ConceptName";
 
@@ -119,7 +162,8 @@ class ConceptManagerTest {
         ConceptMapping mapping1 = new ConceptMapping(new Variable("class"), when1, concept1);
         concept1.setMapping(mapping1);
         conceptManager.addOrAppend(concept1);
-        assertEquals(15, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount + 3, conceptManager.getInputConcepts().size());
+        assertEquals(outputConceptsCount + 3, conceptManager.getOutputConcepts().size());
         CustomConcept extractedConcept_extracted =
                 (CustomConcept) conceptManager.getConceptByName(conceptName);
         assertEquals(1, extractedConcept_extracted.getMapping().get().getWhenTriplets().size());
@@ -140,7 +184,8 @@ class ConceptManagerTest {
         ConceptMapping mapping2 = new ConceptMapping(new Variable("class"), when2, concept2);
         concept2.setMapping(mapping2);
         conceptManager.addOrAppend(concept2);
-        assertEquals(15, conceptManager.getConcepts().size());
+        assertEquals(inputConceptsCount + 3, conceptManager.getInputConcepts().size());
+        assertEquals(outputConceptsCount + 3, conceptManager.getOutputConcepts().size());
         extractedConcept_extracted = (CustomConcept) conceptManager.getConceptByName(conceptName);
         assertEquals(2, extractedConcept_extracted.getMapping().get().getWhenTriplets().size());
     }
