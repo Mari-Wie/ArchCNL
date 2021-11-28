@@ -3,22 +3,24 @@ package org.archcnl.output.model.query;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.output.model.query.SelectClause;
-import org.archcnl.domain.output.model.query.attribute.QueryField;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class SelectClauseTest {
 
     @Test
-    public void givenSelectClause_whenCallAsFormattedString_thenReturnFormattedString() {
+    public void givenSelectClause_whenCallAsFormattedString_thenReturnFormattedString()
+            throws InvalidVariableNameException {
         // given
-        final QueryField field1 = new QueryField("name");
-        final QueryField field2 = new QueryField("cnl");
-        final QueryField field3 = new QueryField("a");
-        final QueryField field4 = new QueryField("b");
-        final Set<QueryField> objects =
-                new LinkedHashSet<>(Arrays.asList(field1, field2, field3, field4));
+        final Variable variable1 = new Variable("name");
+        final Variable variable2 = new Variable("cnl");
+        final Variable variable3 = new Variable("a");
+        final Variable variable4 = new Variable("b");
+        final Set<Variable> objects =
+                new LinkedHashSet<>(Arrays.asList(variable1, variable2, variable3, variable4));
         final SelectClause selectClause = new SelectClause(objects);
 
         final String expectedString = "SELECT ?name ?cnl ?a ?b ";
@@ -31,10 +33,11 @@ public class SelectClauseTest {
     }
 
     @Test
-    public void givenSimpleSelectClause_whenCallAsFormattedString_thenReturnFormattedString() {
+    public void givenSimpleSelectClause_whenCallAsFormattedString_thenReturnFormattedString()
+            throws InvalidVariableNameException {
         // given
-        final QueryField field1 = new QueryField("name");
-        final Set<QueryField> objects = new LinkedHashSet<>(Arrays.asList(field1));
+        final Variable variable1 = new Variable("name");
+        final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(variable1));
         final SelectClause selectClause = new SelectClause(objects);
 
         final String expectedString = "SELECT ?name ";
