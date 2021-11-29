@@ -23,7 +23,7 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
         setWidthFull();
         SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
         presenter.setSubjectPresenter(subjectPresenter);
-        SubjectView subjectView = new SubjectView(subjectPresenter);
+        VariableSelectionView subjectView = new VariableSelectionView(subjectPresenter);
         ObjectPresenter objectPresenter = new ObjectPresenter(variableManager);
         presenter.setObjectPresenter(objectPresenter);
         ObjectView objectView = new ObjectView(objectPresenter);

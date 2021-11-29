@@ -7,7 +7,6 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.domain.common.FamixRelation;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.SpecialRelation;
 import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.common.TripletFactory;
 import org.archcnl.domain.common.TypeRelation;
@@ -151,7 +150,7 @@ class RelationManagerTest {
                     relationManager.getRelationByRealName("hasName");
                 });
         Assertions.assertEquals(
-                new SpecialRelation("matches", "regex", new LinkedList<>()),
+                new JenaBuiltinRelation("matches", "regex", new LinkedList<>()),
                 relationManager.getRelationByRealName("regex"));
         Assertions.assertEquals(
                 new TypeRelation("is-of-type", "type"),
@@ -176,7 +175,7 @@ class RelationManagerTest {
         relationManager.addRelation(new CustomRelation("test", new LinkedList<>()));
         relationManager.addRelation(new FamixRelation("abc", new LinkedList<>()));
         relationManager.addRelation(new TypeRelation("xyz", "xyz"));
-        relationManager.addRelation(new SpecialRelation("zhn", "kjh", new LinkedList<>()));
+        relationManager.addRelation(new JenaBuiltinRelation("zhn", "kjh", new LinkedList<>()));
         Assertions.assertThrows(
                 RelationAlreadyExistsException.class,
                 () -> {
