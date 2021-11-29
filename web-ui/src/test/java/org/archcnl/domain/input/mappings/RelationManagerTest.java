@@ -6,6 +6,7 @@ import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.domain.common.FamixRelation;
+import org.archcnl.domain.common.JenaBuiltinRelation;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.common.TripletFactory;
@@ -40,7 +41,7 @@ class RelationManagerTest {
                 relationManager.doesRelationExist(new FamixRelation("abc", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
-                        new SpecialRelation("matches", "regex", new LinkedList<>())));
+                        new CustomRelation("matches", "regex", new LinkedList<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(new TypeRelation("is-of-type", "type")));
         Assertions.assertTrue(
