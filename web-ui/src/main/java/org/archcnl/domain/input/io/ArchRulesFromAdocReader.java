@@ -138,11 +138,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
             Triplet thenTriplet = parseThenPart(thenPart);
-            thisRelation.changeRelatableObjectTypes(thenTriplet.getObject());
-            Triplet mappingTriplet =
-                    TripletFactory.createTriplet(
-                            thenTriplet.getSubject(), thisRelation, thenTriplet.getObject());
-            return new RelationMapping(mappingTriplet, whenTriplets);
+            return new RelationMapping(thenTriplet, whenTriplets);
         } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
@@ -186,8 +182,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 Relation predicate = Relation.parsePredicate(predicateString);
                 if (isThenTriplet && predicate instanceof CustomRelation) {
                     CustomRelation customRelation = (CustomRelation) predicate;
-                    customRelation.changeRelatableObjectTypes(object);
-                    predicate = customRelation;
+                    customRelation.setRelatableObjectType(object);
                 }
                 return TripletFactory.createTriplet(subject, predicate, object);
             }

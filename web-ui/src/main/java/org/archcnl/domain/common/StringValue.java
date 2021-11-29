@@ -2,7 +2,7 @@ package org.archcnl.domain.common;
 
 import java.util.Objects;
 
-public class StringValue extends ObjectType {
+public class StringValue extends ActualObjectType {
 
     private String value;
 
@@ -50,5 +50,10 @@ public class StringValue extends ObjectType {
     @Override
     protected int requiredHashCodeOverride() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public boolean matchesRelatableObjectType(ActualObjectType actualObjectType) {
+        return actualObjectType instanceof StringValue;
     }
 }

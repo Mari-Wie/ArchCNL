@@ -19,11 +19,11 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
 
     @Override
     public boolean canRelateToObjectType(ObjectType objectType) {
-        return true;
+        return objectType instanceof Concept;
     }
 
     @Override
-    public List<ObjectType> getRelatableObjectTypes() {
+    public List<ActualObjectType> getRelatableObjectTypes() {
         Stream<Concept> allConcepts =
                 Stream.concat(
                         RulesConceptsAndRelations.getInstance()
@@ -34,7 +34,7 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
                                 .getConceptManager()
                                 .getOutputConcepts()
                                 .stream());
-        return allConcepts.map(ObjectType.class::cast).collect(Collectors.toList());
+        return allConcepts.map(ActualObjectType.class::cast).collect(Collectors.toList());
     }
 
     public String getRealName() {

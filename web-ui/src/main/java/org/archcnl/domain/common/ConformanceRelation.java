@@ -7,7 +7,7 @@ public class ConformanceRelation extends Relation implements FormattedQueryDomai
     private static final String RELATION_TYPE = "conformance";
 
     protected ConformanceRelation(
-            String name, String description, List<ObjectType> relatableObjectTypes) {
+            String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
     }
 

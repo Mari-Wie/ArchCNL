@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
@@ -17,7 +16,7 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
     private String description;
 
     // The object types this relation relates to
-    private List<ObjectType> relatableObjectTypes;
+    protected List<ActualObjectType> relatableObjectTypes;
 
     /**
      * Constructs a relation that can relate to the given object types
@@ -26,32 +25,26 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
      * @param description A description for this Relation
      * @param relatableObjectTypes The object types this relation can relate to
      */
-    protected Relation(String name, String description, List<ObjectType> relatableObjectTypes) {
+    protected Relation(
+            String name, String description, List<ActualObjectType> relatableObjectTypes) {
         this.name = name;
         this.description = description;
         this.relatableObjectTypes = relatableObjectTypes;
-        // A relation can always relate to a variable
-        try {
-            addRelatableObjectType(new Variable("placeholder"));
-        } catch (InvalidVariableNameException e) {
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     public boolean canRelateToObjectType(ObjectType objectType) {
-        return relatableObjectTypes.contains(objectType);
+        if (objectType instanceof Variable) {
+            // at the moment a Relation can always relate to a Variable
+            return true;
+        } else {
+            ActualObjectType actualObjectType = (ActualObjectType) objectType;
+            return relatableObjectTypes.stream()
+                    .anyMatch(actualObjectType::matchesRelatableObjectType);
+        }
     }
 
-    public List<ObjectType> getRelatableObjectTypes() {
+    public List<ActualObjectType> getRelatableObjectTypes() {
         return relatableObjectTypes;
-    }
-
-    protected void addRelatableObjectType(ObjectType objectType) {
-        relatableObjectTypes.add(objectType);
-    }
-
-    protected void setRelatableObjectType(List<ObjectType> objectTypes) {
-        relatableObjectTypes = objectTypes;
     }
 
     public String getName() {
