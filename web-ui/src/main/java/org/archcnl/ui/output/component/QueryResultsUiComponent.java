@@ -9,6 +9,7 @@ public class QueryResultsUiComponent extends AbstractQueryResults {
     public QueryResultsUiComponent() {
         generalInfoLayout = new GeneralInfoLayout();
         gridView.update(exampleQuery);
+        queryTextArea.setReadOnly(true);
         registerEventListeners();
         addComponents();
     }
