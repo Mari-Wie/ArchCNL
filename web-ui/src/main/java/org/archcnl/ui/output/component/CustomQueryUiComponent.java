@@ -41,4 +41,8 @@ public class CustomQueryUiComponent extends AbstractQueryResults {
                 hideQueryTextArea,
                 queryTextArea);
     }
+    
+    public String getQuery() {
+    	return queryTextArea.getValue();
+    }
 }
