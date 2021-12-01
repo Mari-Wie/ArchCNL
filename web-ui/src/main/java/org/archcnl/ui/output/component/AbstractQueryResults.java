@@ -25,6 +25,7 @@ abstract class AbstractQueryResults extends VerticalLayout {
         queryTextArea = new TextArea("SPARQL Query");
         queryTextArea.setValue(exampleQuery);
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
+     
         registerEventListeners();
     }
 

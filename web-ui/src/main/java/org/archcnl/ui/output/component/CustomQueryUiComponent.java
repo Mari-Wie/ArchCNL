@@ -26,6 +26,7 @@ public class CustomQueryUiComponent extends AbstractQueryResults {
 
     public CustomQueryUiComponent() {
         whereLabel.setHeight(100, Unit.PERCENTAGE);
+        queryTextArea.setReadOnly(true);
         addComponents();
     }
 
