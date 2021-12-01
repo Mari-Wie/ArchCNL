@@ -8,7 +8,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.output.events.ResultUpdateEvent;
 
-abstract class AbstractQueryResults extends VerticalLayout {
+public abstract class AbstractQueryResults extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
