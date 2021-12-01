@@ -18,7 +18,7 @@ public class QueryView extends HorizontalLayout {
     public QueryView(MainPresenter mainPresenter) {
         queryResults = new QueryResultsUiComponent();
         customQueryResults = new CustomQueryUiComponent();
-        freeTextQuery = new FreeTextQueryUiComponent(this);    
+        freeTextQuery = new FreeTextQueryUiComponent(this);
         sideBar = new SideBarLayout(this, mainPresenter);
         initLayout();
         addAndExpand(sideBar, queryResults);
@@ -43,13 +43,13 @@ public class QueryView extends HorizontalLayout {
         replace(currentComponent, customQueryResults);
         currentComponent = customQueryResults;
     }
-    
+
     public void switchToFreeTextQueryView() {
         replace(currentComponent, freeTextQuery);
         currentComponent = freeTextQuery;
     }
-    
+
     public String getCustomQuery() {
-    	return customQueryResults.getQuery();
+        return customQueryResults.getQuery();
     }
 }

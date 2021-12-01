@@ -13,7 +13,8 @@ public class SideBarLayout extends VerticalLayout {
     Button gotoQueryViewButton = new Button("General Information", e -> parent.switchToQueryView());
     Button gotoCustomQueryViewButton =
             new Button("Custom Queries", e -> parent.switchToCustomQueryView());
-    Button gotoFreeTextQueryViewButton = new Button("Free Text Queries", e -> parent.switchToFreeTextQueryView());
+    Button gotoFreeTextQueryViewButton =
+            new Button("Free Text Queries", e -> parent.switchToFreeTextQueryView());
 
     public SideBarLayout(final QueryView parent, MainPresenter mainPresenter) {
         this.parent = parent;
@@ -21,7 +22,10 @@ public class SideBarLayout extends VerticalLayout {
         gotoCustomQueryViewButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         gotoFreeTextQueryViewButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         VerticalLayout queryOptions =
-                new VerticalLayout(gotoQueryViewButton, gotoCustomQueryViewButton, gotoFreeTextQueryViewButton);
+                new VerticalLayout(
+                        gotoQueryViewButton,
+                        gotoCustomQueryViewButton,
+                        gotoFreeTextQueryViewButton);
 
         Button returnToRuleEditorButton =
                 new Button(
