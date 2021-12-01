@@ -33,8 +33,8 @@ public class QueryFactory {
         return new QueryObject(objString, getTypeFromString(objString));
     }
 
-    private QueryPredicate createQueryPredicate(final String praedicateString) {
-        final String[] key_value_pair = praedicateString.split(":");
+    private QueryPredicate createQueryPredicate(final String predicateString) {
+        final String[] key_value_pair = predicateString.split(":");
         return new QueryPredicate(key_value_pair[0], key_value_pair[1]);
     }
 
@@ -42,7 +42,7 @@ public class QueryFactory {
         return new QueryField(subjectString);
     }
 
-    // TODO relpace get methods with clear indication where which part is in the LIst
+    // TODO replace get methods with clear indication where which part is in the LIst
     private WhereTriple createWhereTriplet(final List<String> subObjPradList) {
         final QueryField subject = createQuerySubject(subObjPradList.get(0));
         final QueryPredicate predicate = createQueryPredicate(subObjPradList.get(1));
