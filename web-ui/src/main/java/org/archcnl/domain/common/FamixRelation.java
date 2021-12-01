@@ -2,11 +2,11 @@ package org.archcnl.domain.common;
 
 import java.util.List;
 
-public class DefaultRelation extends Relation {
+public class FamixRelation extends Relation {
 
     private static final String RELATION_TYPE = "famix";
 
-    public DefaultRelation(String name, List<ObjectType> relatableObjectTypes) {
+    public FamixRelation(String name, List<ObjectType> relatableObjectTypes) {
         super(name, relatableObjectTypes);
     }
 
