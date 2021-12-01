@@ -11,7 +11,7 @@ public class QueryView extends HorizontalLayout {
 
     AbstractQueryResults queryResults;
     AbstractQueryResults customQueryResults;
-    FreeTextQueryUiComponent freeTextQuery;
+    AbstractQueryResults freeTextQuery;
     SideBarLayout sideBar;
     Component currentComponent;
 
