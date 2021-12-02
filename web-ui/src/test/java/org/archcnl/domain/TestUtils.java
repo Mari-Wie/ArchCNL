@@ -1,5 +1,6 @@
-package org.archcnl.domain.input;
+package org.archcnl.domain;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -8,7 +9,6 @@ import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.common.TripletFactory;
@@ -201,45 +201,46 @@ public class TestUtils {
         useWhenTriplets.add(new AndTriplets(triplets));
         useWhenTriplets.add(new AndTriplets(triplets2));
 
-        CustomConcept aggregate = new CustomConcept("Aggregate");
+        CustomConcept aggregate = new CustomConcept("Aggregate", "");
         ConceptMapping aggregateMapping =
                 new ConceptMapping(classVariable, aggregateWhenTriplets, aggregate);
         aggregate.setMapping(aggregateMapping);
 
-        CustomConcept applicationService = new CustomConcept("ApplicationService");
+        CustomConcept applicationService = new CustomConcept("ApplicationService", "");
         ConceptMapping applicationServiceMapping =
                 new ConceptMapping(
                         classVariable, applicationServiceWhenTriplets, applicationService);
         applicationService.setMapping(applicationServiceMapping);
 
-        CustomConcept domainRing = new CustomConcept("DomainRing");
+        CustomConcept domainRing = new CustomConcept("DomainRing", "");
         ConceptMapping domainRingMapping =
                 new ConceptMapping(packageVariable, domainRingWhenTriplets, domainRing);
         domainRing.setMapping(domainRingMapping);
 
-        CustomRelation resideIn = new CustomRelation("resideIn", new LinkedList<>());
+        CustomRelation resideIn = new CustomRelation("resideIn", "", new LinkedList<>());
         RelationMapping resideInMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
                         resideInWhenTriplets);
         resideIn.setMapping(resideInMapping);
 
-        CustomRelation use = new CustomRelation("use", new LinkedList<>());
+        CustomRelation use = new CustomRelation("use", "", new LinkedList<>());
         RelationMapping useMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, use, class2Variable),
                         useWhenTriplets);
         use.setMapping(useMapping);
 
-        CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept");
+        CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept", "");
         ConceptMapping emptyWhenConceptMapping =
                 new ConceptMapping(varVariable, new LinkedList<>(), emptyWhenConcept);
         emptyWhenConcept.setMapping(emptyWhenConceptMapping);
 
-        List<ObjectType> relatableObjectTypes = new LinkedList<>();
-        relatableObjectTypes.add(new StringValue(""));
         CustomRelation emptyWhenRelationString =
-                new CustomRelation("emptyWhenRelationString", relatableObjectTypes);
+                new CustomRelation(
+                        "emptyWhenRelationString",
+                        "",
+                        new LinkedList<>(Arrays.asList(new StringValue(""))));
         RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -249,10 +250,11 @@ public class TestUtils {
                         new LinkedList<>());
         emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
 
-        relatableObjectTypes = new LinkedList<>();
-        relatableObjectTypes.add(new BooleanValue(false));
         CustomRelation emptyWhenRelationBoolean =
-                new CustomRelation("emptyWhenRelationBoolean", relatableObjectTypes);
+                new CustomRelation(
+                        "emptyWhenRelationBoolean",
+                        "",
+                        new LinkedList<>(Arrays.asList(new BooleanValue(false))));
         RelationMapping emptyWhenRelationBooleanMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -261,7 +263,7 @@ public class TestUtils {
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
         CustomRelation emptyWhenRelationVariable =
-                new CustomRelation("emptyWhenRelationVariable", new LinkedList<>());
+                new CustomRelation("emptyWhenRelationVariable", "", new LinkedList<>());
         RelationMapping emptyWhenRelationVariableMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(

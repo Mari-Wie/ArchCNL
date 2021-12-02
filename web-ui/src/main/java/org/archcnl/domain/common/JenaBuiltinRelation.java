@@ -7,17 +7,25 @@ public class JenaBuiltinRelation extends Relation {
     private String realName;
 
     public JenaBuiltinRelation(
-            String name, String realName, List<ObjectType> relatableObjectTypes) {
-        super(name, relatableObjectTypes);
+            String name,
+            String realName,
+            String description,
+            List<ActualObjectType> relatableObjectTypes) {
+        super(name, description, relatableObjectTypes);
         this.realName = realName;
-    }
-
-    @Override
-    public String toStringRepresentation() {
-        return getRealName();
     }
 
     public String getRealName() {
         return realName;
+    }
+
+    @Override
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return getRealName();
     }
 }

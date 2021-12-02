@@ -1,16 +1,14 @@
 package org.archcnl.domain.common;
 
-public class BooleanValue extends ObjectType {
+import java.util.Objects;
+
+public class BooleanValue extends ActualObjectType {
 
     private boolean value;
+    private static final String XSD_BOOLEAN = "^^xsd:boolean";
 
     public BooleanValue(boolean value) {
         this.setValue(value);
-    }
-
-    @Override
-    public String toStringRepresentation() {
-        return "'" + value + "'" + "^^xsd:boolean";
     }
 
     public boolean getValue() {
@@ -27,14 +25,36 @@ public class BooleanValue extends ObjectType {
     }
 
     @Override
-    /** Warning: Not a real equals method! Only checks if o is instance of this class. */
-    public boolean equals(Object o) {
-        return o instanceof BooleanValue;
+    public String transformToSparqlQuery() {
+        return "\"" + value + "\"" + XSD_BOOLEAN;
     }
 
     @Override
-    /** Warning: Not a real hasCode method! Will always return 0. */
-    public int hashCode() {
-        return 0;
+    public String transformToGui() {
+        return transformToAdoc();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        return "'" + value + "'" + XSD_BOOLEAN;
+    }
+
+    @Override
+    protected boolean requiredEqualsOverride(Object obj) {
+        if (obj instanceof BooleanValue) {
+            final BooleanValue that = (BooleanValue) obj;
+            return Objects.equals(this.getValue(), that.getValue());
+        }
+        return false;
+    }
+
+    @Override
+    protected int requiredHashCodeOverride() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public boolean matchesRelatableObjectType(ActualObjectType actualObjectType) {
+        return actualObjectType instanceof BooleanValue;
     }
 }

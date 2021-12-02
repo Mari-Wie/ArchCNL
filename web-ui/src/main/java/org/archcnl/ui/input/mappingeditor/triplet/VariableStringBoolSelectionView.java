@@ -17,32 +17,38 @@ import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedEx
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {
 
+    private static final String STRING = "String";
+    private static final String BOOLEAN = "Boolean";
+    private static final String VARIABLE = "Variable";
     private static final long serialVersionUID = 8635404097691880603L;
+
     private BooleanSelectionView booleanSelectionView;
     private StringSelectionView stringSelectionView;
     private VariableSelectionView variableSelectionView;
     private VariableSelectionPresenter variableSelectionPresenter;
     private VariableManager variableManager;
+    private ComboBox<String> typeSelection;
 
     public VariableStringBoolSelectionView(
             VariableManager variableManager,
             boolean stringsAllowed,
             boolean booleanAllowed,
             Optional<Presenter<View>> optional) {
+
         this.variableManager = variableManager;
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
 
-        ComboBox<String> typeSelection = new ComboBox<>();
+        typeSelection = new ComboBox<>();
         List<String> items = new LinkedList<>();
-        items.add("Variable");
+        items.add(VARIABLE);
         if (stringsAllowed) {
-            items.add("String");
+            items.add(STRING);
         }
         if (booleanAllowed) {
-            items.add("Boolean");
+            items.add(BOOLEAN);
         }
         typeSelection.setItems(items);
-        typeSelection.setValue("Variable");
+        typeSelection.setValue(VARIABLE);
         if (items.size() > 1) {
             add(typeSelection);
         }
@@ -53,20 +59,17 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                     String value = event.getValue();
                     if (value != null) {
                         switch (value) {
-                            case "Variable":
+                            case VARIABLE:
                                 showVariableSelectionView();
                                 break;
-                            case "String":
+                            case STRING:
                                 showStringSelectionView();
                                 break;
-                            case "Boolean":
+                            case BOOLEAN:
                                 showBooleanSelectionView();
                                 break;
                             default:
                                 // should never happen
-                        }
-                        if (optional.isPresent()) {
-                            optional.get().selectedObjectTypeHasChanged();
                         }
                     }
                 });
@@ -90,12 +93,15 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
 
     public void setObject(ObjectType object) {
         if (object instanceof StringValue) {
+            typeSelection.setValue(STRING);
             showStringSelectionView();
             stringSelectionView.setValue(((StringValue) object).getValue());
         } else if (object instanceof BooleanValue) {
+            typeSelection.setValue(BOOLEAN);
             showBooleanSelectionView();
             booleanSelectionView.setValue(String.valueOf(((BooleanValue) object).getValue()));
         } else if (object instanceof Variable) {
+            typeSelection.setValue(VARIABLE);
             showVariableSelectionView();
             variableSelectionPresenter.setSelectedVariable((Variable) object);
         } else {

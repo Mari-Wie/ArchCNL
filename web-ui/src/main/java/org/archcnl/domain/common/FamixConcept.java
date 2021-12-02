@@ -4,12 +4,12 @@ public class FamixConcept extends Concept {
 
     private static final String CONCEPT_TYPE = "famix";
 
-    public FamixConcept(String name) {
-        super(name);
+    public FamixConcept(String name, String description) {
+        super(name, description);
     }
 
     @Override
-    public String toStringRepresentation() {
-        return CONCEPT_TYPE + ":" + getName();
+    protected String getConceptType() {
+        return CONCEPT_TYPE;
     }
 }

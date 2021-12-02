@@ -1,18 +1,15 @@
 package org.archcnl.domain.common;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class ObjectType {
+public abstract class ObjectType implements FormattedDomainObject {
 
     private static final Pattern CONCEPT_RELATION_PATTERN = Pattern.compile(".+:.+");
     private static final Pattern NAME_PATTERN = Pattern.compile("(?<=.+:).+");
-
-    public abstract String toStringRepresentation();
 
     public abstract String getName();
 
@@ -34,7 +31,7 @@ public abstract class ObjectType {
                             .getConceptManager()
                             .getConceptByName(objectName);
                 } catch (ConceptDoesNotExistException e) {
-                    return new CustomConcept(objectName);
+                    return new CustomConcept(objectName, "");
                 }
             } else {
                 throw new NoObjectTypeException(potentialObject);
@@ -45,17 +42,16 @@ public abstract class ObjectType {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof ObjectType)) {
-            return false;
-        }
-        ObjectType otherObjectType = (ObjectType) o;
-        return toStringRepresentation().equals(otherObjectType.toStringRepresentation());
+    public boolean equals(Object obj) {
+        return requiredEqualsOverride(obj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(toStringRepresentation());
+        return requiredHashCodeOverride();
     }
+
+    protected abstract boolean requiredEqualsOverride(Object obj);
+
+    protected abstract int requiredHashCodeOverride();
 }

@@ -72,8 +72,6 @@ public interface MappingEditorContract {
 
         public void showFirstAndTripletsView();
 
-        public void selectedObjectTypeHasChanged();
-
         public void descriptionHasChanged(String value);
     }
 }
