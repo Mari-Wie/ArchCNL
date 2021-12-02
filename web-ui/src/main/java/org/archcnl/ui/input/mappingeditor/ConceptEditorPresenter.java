@@ -57,7 +57,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
         if (concept.isEmpty()) {
-            concept = Optional.of(new CustomConcept(newName));
+            concept = Optional.of(new CustomConcept(newName, ""));
         } else {
             try {
                 concept.get().changeName(newName);
@@ -67,12 +67,6 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 }
             }
         }
-    }
-
-    @Override
-    public void selectedObjectTypeHasChanged() {
-        throw new UnsupportedOperationException(
-                "The selected ObjectType cannot change for a Concept.");
     }
 
     @Override

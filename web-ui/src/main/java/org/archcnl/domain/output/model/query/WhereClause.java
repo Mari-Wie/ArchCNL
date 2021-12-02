@@ -1,8 +1,7 @@
 package org.archcnl.domain.output.model.query;
 
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
+import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
 
@@ -17,40 +16,33 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
     public static final String TAB = "  ";
     public static final String NEW_LINE = System.lineSeparator();
 
-    private Set<WhereTriple> triples;
+    private AndTriplets andTriplets;
 
-    public WhereClause(final Set<WhereTriple> triples) {
-        this.triples = triples;
+    public WhereClause(final AndTriplets andTriplets) {
+        this.andTriplets = andTriplets;
     }
 
-    public Set<WhereTriple> getTriples() {
-        return triples;
-    }
-
-    public void addTriple(final WhereTriple triple) {
-        if (triples == null) {
-            triples = new LinkedHashSet<>();
-        }
-        triples.add(triple);
+    public AndTriplets getAndTriplets() {
+        return andTriplets;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(triples);
+        return Objects.hash(andTriplets);
     }
 
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof WhereClause) {
             final WhereClause that = (WhereClause) obj;
-            return Objects.equals(this.triples, that.triples);
+            return Objects.equals(this.andTriplets, that.andTriplets);
         }
         return false;
     }
 
     @Override
     public String transformToGui() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(WhereClause.WHERE);
         sb.append(" ");
         sb.append(WhereClause.OPEN_BRACKET);
@@ -62,29 +54,17 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
         sb.append(" ");
         sb.append(WhereClause.OPEN_BRACKET);
         sb.append(WhereClause.NEW_LINE);
-        addTriplesToFormattedStringWhereClause(sb);
+        sb.append(andTriplets.transformToGui(WhereClause.TAB, WhereClause.NEW_LINE));
         sb.append(WhereClause.TAB);
         sb.append(WhereClause.CLOSE_BRACKET);
         sb.append(WhereClause.NEW_LINE);
         sb.append(WhereClause.CLOSE_BRACKET);
         return sb.toString();
-    }
-
-    private void addTriplesToFormattedStringWhereClause(final StringBuffer sb) {
-        triples.stream()
-                .forEach(
-                        t ->
-                                sb.append(
-                                        WhereClause.TAB
-                                                + WhereClause.TAB
-                                                + t.transformToGui()
-                                                + "."
-                                                + WhereClause.NEW_LINE));
     }
 
     @Override
     public String transformToSparqlQuery() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(WhereClause.WHERE);
         sb.append(" ");
         sb.append(WhereClause.OPEN_BRACKET);
@@ -94,14 +74,10 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
         sb.append(WhereClause.GRAPH_FIELD);
         sb.append(" ");
         sb.append(WhereClause.OPEN_BRACKET);
-        addTriplesToFormattedQueryWhereClause(sb);
+        sb.append(andTriplets.transformToSparqlQuery());
         sb.append(" ");
         sb.append(WhereClause.CLOSE_BRACKET);
         sb.append(WhereClause.CLOSE_BRACKET);
         return sb.toString();
-    }
-
-    private void addTriplesToFormattedQueryWhereClause(final StringBuffer sb) {
-        triples.stream().forEach(t -> sb.append(" " + t.transformToSparqlQuery() + "."));
     }
 }

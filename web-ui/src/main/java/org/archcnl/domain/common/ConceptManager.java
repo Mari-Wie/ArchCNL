@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
@@ -73,26 +74,41 @@ public class ConceptManager {
     }
 
     private void initializeConcepts() {
-        concepts.add(new FamixConcept("FamixClass"));
-        concepts.add(new FamixConcept("Namespace"));
-        concepts.add(new FamixConcept("Enum"));
-        concepts.add(new FamixConcept("AnnotationType"));
-        concepts.add(new FamixConcept("Method"));
-        concepts.add(new FamixConcept("Attribute"));
-        concepts.add(new FamixConcept("Inheritance"));
-        concepts.add(new FamixConcept("AnnotationInstance"));
-        concepts.add(new FamixConcept("AnnotationTypeAttribute"));
-        concepts.add(new FamixConcept("AnnotationInstanceAttribute"));
-        concepts.add(new FamixConcept("Parameter"));
-        concepts.add(new FamixConcept("LocalVariable"));
+        // Famix
+        concepts.add(new FamixConcept("FamixClass", ""));
+        concepts.add(new FamixConcept("Namespace", ""));
+        concepts.add(new FamixConcept("Enum", ""));
+        concepts.add(new FamixConcept("AnnotationType", ""));
+        concepts.add(new FamixConcept("Method", ""));
+        concepts.add(new FamixConcept("Attribute", ""));
+        concepts.add(new FamixConcept("Inheritance", ""));
+        concepts.add(new FamixConcept("AnnotationInstance", ""));
+        concepts.add(new FamixConcept("AnnotationTypeAttribute", ""));
+        concepts.add(new FamixConcept("AnnotationInstanceAttribute", ""));
+        concepts.add(new FamixConcept("Parameter", ""));
+        concepts.add(new FamixConcept("LocalVariable", ""));
+
+        // Conformance
+        concepts.add(new ConformanceConcept("ConformanceCheck", ""));
+        concepts.add(new ConformanceConcept("ArchitectureRule", ""));
+        concepts.add(new ConformanceConcept("ArchitectureViolation", ""));
+        concepts.add(new ConformanceConcept("Proof", ""));
+        concepts.add(new ConformanceConcept("AssertedStatement", ""));
+        concepts.add(new ConformanceConcept("NotInferredStatement", ""));
     }
 
-    public List<Concept> getConcepts() {
+    public List<Concept> getInputConcepts() {
+        return concepts.stream()
+                .filter(Predicate.not(ConformanceConcept.class::isInstance))
+                .collect(Collectors.toList());
+    }
+
+    public List<Concept> getOutputConcepts() {
         return concepts;
     }
 
     public List<CustomConcept> getCustomConcepts() {
-        return getConcepts().stream()
+        return concepts.stream()
                 .filter(CustomConcept.class::isInstance)
                 .map(CustomConcept.class::cast)
                 .collect(Collectors.toList());

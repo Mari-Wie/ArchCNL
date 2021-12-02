@@ -3,6 +3,7 @@ package org.archcnl.ui.input.mappingeditor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.archcnl.domain.common.ActualObjectType;
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.domain.common.ObjectType;
@@ -45,9 +46,12 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
         if (relation.isEmpty()) {
-            List<ObjectType> relatableObjectTypes = new LinkedList<>();
-            relatableObjectTypes.add(view.getSelectedObjectTypeInThenTriplet());
-            relation = Optional.of(new CustomRelation(newName, relatableObjectTypes));
+            List<ActualObjectType> relatableObjectTypes = new LinkedList<>();
+            ObjectType selectedObjectType = view.getSelectedObjectTypeInThenTriplet();
+            if (selectedObjectType instanceof ActualObjectType) {
+                relatableObjectTypes.add((ActualObjectType) selectedObjectType);
+            }
+            relation = Optional.of(new CustomRelation(newName, "", relatableObjectTypes));
         } else {
             try {
                 relation.get().changeName(newName);
@@ -75,23 +79,18 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         }
     }
 
-    public void selectedObjectTypeHasChanged() {
-        if (relation.isPresent()) {
-            relation.get().changeRelatableObjectTypes(view.getSelectedObjectTypeInThenTriplet());
-        }
-    }
-
     @Override
     protected void updateMapping(InputContract.Remote inputRemote) {
         if (relation.isPresent()) {
             try {
-                Triplet newTriplet =
+                CustomRelation thenRelation = relation.get();
+                ObjectType thenObject = view.getThenTripletObject().get();
+                thenRelation.setRelatableObjectType(thenObject);
+                Triplet thenTriplet =
                         TripletFactory.createTriplet(
-                                view.getThenTripletSubject(),
-                                relation.get(),
-                                view.getThenTripletObject().get());
+                                view.getThenTripletSubject(), thenRelation, thenObject);
 
-                RelationMapping mapping = new RelationMapping(newTriplet, getAndTriplets());
+                RelationMapping mapping = new RelationMapping(thenTriplet, getAndTriplets());
 
                 relation.get().setMapping(mapping);
 

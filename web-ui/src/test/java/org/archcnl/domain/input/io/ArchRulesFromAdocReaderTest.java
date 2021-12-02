@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.Relation;
-import org.archcnl.domain.input.TestUtils;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -65,18 +65,19 @@ class ArchRulesFromAdocReaderTest {
 
         // Check if concepts were correctly imported
         assertEquals(
-                expectedModel.getConceptManager().getConcepts().size(),
-                rulesConceptsAndRelations.getConceptManager().getConcepts().size());
-        for (Concept concept : rulesConceptsAndRelations.getConceptManager().getConcepts()) {
-            assertTrue(expectedModel.getConceptManager().getConcepts().contains(concept));
+                expectedModel.getConceptManager().getInputConcepts().size(),
+                rulesConceptsAndRelations.getConceptManager().getInputConcepts().size());
+        for (Concept concept : rulesConceptsAndRelations.getConceptManager().getInputConcepts()) {
+            assertTrue(expectedModel.getConceptManager().getInputConcepts().contains(concept));
         }
 
         // Check if relations were correctly imported
         assertEquals(
-                expectedModel.getRelationManager().getRelations().size(),
-                rulesConceptsAndRelations.getRelationManager().getRelations().size());
-        for (Relation relation : rulesConceptsAndRelations.getRelationManager().getRelations()) {
-            assertTrue(expectedModel.getRelationManager().getRelations().contains(relation));
+                expectedModel.getRelationManager().getInputRelations().size(),
+                rulesConceptsAndRelations.getRelationManager().getInputRelations().size());
+        for (Relation relation :
+                rulesConceptsAndRelations.getRelationManager().getInputRelations()) {
+            assertTrue(expectedModel.getRelationManager().getInputRelations().contains(relation));
         }
     }
 }
