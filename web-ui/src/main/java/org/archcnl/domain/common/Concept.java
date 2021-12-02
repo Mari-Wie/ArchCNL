@@ -4,7 +4,7 @@ import java.util.Objects;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Concept extends ObjectType {
+public abstract class Concept extends ActualObjectType {
 
     private String name;
     private String description;
@@ -66,6 +66,12 @@ public abstract class Concept extends ObjectType {
     @Override
     public String transformToAdoc() {
         return getConceptType() + ":" + getName();
+    }
+
+    @Override
+    public boolean matchesRelatableObjectType(ActualObjectType actualObjectType) {
+        return actualObjectType instanceof Concept
+                && Objects.equals(this.getName(), actualObjectType.getName());
     }
 
     protected abstract String getConceptType();

@@ -1,5 +1,6 @@
-package org.archcnl.domain.input;
+package org.archcnl.domain;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -8,7 +9,6 @@ import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.common.TripletFactory;
@@ -236,10 +236,11 @@ public class TestUtils {
                 new ConceptMapping(varVariable, new LinkedList<>(), emptyWhenConcept);
         emptyWhenConcept.setMapping(emptyWhenConceptMapping);
 
-        List<ObjectType> relatableObjectTypes = new LinkedList<>();
-        relatableObjectTypes.add(new StringValue(""));
         CustomRelation emptyWhenRelationString =
-                new CustomRelation("emptyWhenRelationString", "", relatableObjectTypes);
+                new CustomRelation(
+                        "emptyWhenRelationString",
+                        "",
+                        new LinkedList<>(Arrays.asList(new StringValue(""))));
         RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -249,10 +250,11 @@ public class TestUtils {
                         new LinkedList<>());
         emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
 
-        relatableObjectTypes = new LinkedList<>();
-        relatableObjectTypes.add(new BooleanValue(false));
         CustomRelation emptyWhenRelationBoolean =
-                new CustomRelation("emptyWhenRelationBoolean", "", relatableObjectTypes);
+                new CustomRelation(
+                        "emptyWhenRelationBoolean",
+                        "",
+                        new LinkedList<>(Arrays.asList(new BooleanValue(false))));
         RelationMapping emptyWhenRelationBooleanMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(

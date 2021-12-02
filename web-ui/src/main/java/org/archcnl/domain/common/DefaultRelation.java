@@ -6,7 +6,8 @@ public class DefaultRelation extends Relation implements FormattedQueryDomainObj
 
     private static final String RELATION_TYPE = "famix";
 
-    public DefaultRelation(String name, String description, List<ObjectType> relatableObjectTypes) {
+    public DefaultRelation(
+            String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
     }
 

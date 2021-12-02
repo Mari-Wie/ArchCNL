@@ -2,7 +2,7 @@ package org.archcnl.domain.common;
 
 import java.util.Objects;
 
-public class BooleanValue extends ObjectType {
+public class BooleanValue extends ActualObjectType {
 
     private boolean value;
     private static final String XSD_BOOLEAN = "^^xsd:boolean";
@@ -51,5 +51,10 @@ public class BooleanValue extends ObjectType {
     @Override
     protected int requiredHashCodeOverride() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public boolean matchesRelatableObjectType(ActualObjectType actualObjectType) {
+        return actualObjectType instanceof BooleanValue;
     }
 }

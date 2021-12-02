@@ -1,9 +1,9 @@
 package org.archcnl.domain.common;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
@@ -13,14 +13,18 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
 
     private RelationMapping mapping;
 
-    public CustomRelation(String name, String description, List<ObjectType> relatableObjectTypes) {
+    public CustomRelation(
+            String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getPredicate())) {
             this.mapping = mapping;
-            addRelatableObjectType(mapping.getThenTriplet().getObject());
+            ObjectType thenTripletObject = mapping.getThenTriplet().getObject();
+            if (thenTripletObject instanceof ActualObjectType) {
+                setRelatableObjectType((ActualObjectType) thenTripletObject);
+            }
         } else {
             throw new UnrelatedMappingException(
                     getName(), mapping.getThenTriplet().getPredicate().getName());
@@ -31,16 +35,12 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
         return Optional.ofNullable(mapping);
     }
 
-    public void changeRelatableObjectTypes(ObjectType objectType) {
-        List<ObjectType> objectTypes = new LinkedList<>();
-        objectTypes.add(objectType);
-        // A relation can always relate to a variable
-        try {
-            objectTypes.add(new Variable("placeholder"));
-        } catch (InvalidVariableNameException e) {
-            throw new RuntimeException(e.getMessage());
+    public void setRelatableObjectType(ObjectType objectType) {
+        if (objectType instanceof Variable) {
+            relatableObjectTypes = new ArrayList<>();
+        } else {
+            relatableObjectTypes = new ArrayList<>(Arrays.asList((ActualObjectType) objectType));
         }
-        setRelatableObjectType(objectTypes);
     }
 
     @Override
