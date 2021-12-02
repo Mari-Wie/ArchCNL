@@ -4,7 +4,6 @@ import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -13,6 +12,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.List;
+
+import org.archcnl.ui.common.AddRemoveButtonLayout;
 import org.archcnl.ui.output.events.AddWhereLayoutRequestEvent;
 import org.archcnl.ui.output.events.RemoveWhereLayoutRequestEvent;
 
@@ -23,8 +24,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
     private TextField subjectTextField = new TextField();
     private TextField objectTextField = new TextField();
     private TextField predicateTextField = new TextField();
-    private Button addButton = new Button(new Icon(VaadinIcon.PLUS));
-    private Button minusButton = new Button(new Icon(VaadinIcon.MINUS));
+    private AddRemoveButtonLayout addRemoveButtonLayout;
     private PlayPauseButton pauseButton = new PlayPauseButton(new Icon(VaadinIcon.PAUSE));
     private boolean isEnabled = true;
     private String tooltipMessageEnabled = "Disables this row of subject, predicate, and object";
@@ -50,21 +50,21 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
                     // TODO do something useful with this
                 });
 
-        addButton.addClickListener(
-                e -> {
-                    fireEvent(new AddWhereLayoutRequestEvent(this, false));
-                });
-        minusButton.addClickListener(
-                e -> {
-                    fireEvent(new RemoveWhereLayoutRequestEvent(this, false));
-                });
+
         pauseButton.addClickListener(
                 e -> {
                     pauseRow();
                 });
         pauseButton.getElement().setProperty("title", tooltipMessageEnabled);
-        add(addButton);
-        add(minusButton);
+
+		addRemoveButtonLayout = new AddRemoveButtonLayout();
+        addRemoveButtonLayout.addListener(
+                AddWhereLayoutRequestEvent.class, e -> 
+                    fireEvent(new AddWhereLayoutRequestEvent(this, false)));
+        addRemoveButtonLayout.addListener(RemoveWhereLayoutRequestEvent.class, e -> 
+                    fireEvent(new RemoveWhereLayoutRequestEvent<WhereTextBoxesLayout>(this, false)));
+        add(addRemoveButtonLayout);
+
         add(pauseButton);
     }
 
@@ -73,7 +73,7 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         subjectTextField.setEnabled(isEnabled);
         objectTextField.setEnabled(isEnabled);
         predicateTextField.setEnabled(isEnabled);
-        minusButton.setEnabled(isEnabled);
+        addRemoveButtonLayout.setEnabled(isEnabled);
         if (isEnabled) {
             pauseButton.getElement().setProperty("title", tooltipMessageEnabled);
         } else {

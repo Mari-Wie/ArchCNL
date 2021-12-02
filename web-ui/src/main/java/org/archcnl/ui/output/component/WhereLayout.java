@@ -1,8 +1,11 @@
 package org.archcnl.ui.output.component;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.archcnl.ui.common.AddRemoveButtonLayout;
 import org.archcnl.ui.output.events.AddWhereLayoutRequestEvent;
 import org.archcnl.ui.output.events.RemoveWhereLayoutRequestEvent;
 
@@ -14,8 +17,8 @@ public class WhereLayout extends VerticalLayout {
         addWhereTextLayout(0);
     }
 
-    public void removeRow(final WhereTextBoxesLayout layout) {
-        remove(layout);
+    public void removeRow(final Component component) {
+        remove(component);
         if (collect().size() <= 0) {
             addWhereTextLayout(0);
         }
