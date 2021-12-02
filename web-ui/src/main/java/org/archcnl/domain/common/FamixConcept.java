@@ -1,10 +1,10 @@
 package org.archcnl.domain.common;
 
-public class DefaultConcept extends Concept {
+public class FamixConcept extends Concept {
 
     private static final String CONCEPT_TYPE = "famix";
 
-    public DefaultConcept(String name, String description) {
+    public FamixConcept(String name, String description) {
         super(name, description);
     }
 

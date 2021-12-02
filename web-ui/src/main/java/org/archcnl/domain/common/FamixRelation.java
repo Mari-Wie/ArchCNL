@@ -2,11 +2,11 @@ package org.archcnl.domain.common;
 
 import java.util.List;
 
-public class DefaultRelation extends Relation implements FormattedQueryDomainObject {
+public class FamixRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "famix";
 
-    public DefaultRelation(
+    public FamixRelation(
             String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
     }
