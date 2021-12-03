@@ -20,7 +20,7 @@ public class AddRemoveButtonLayout extends HorizontalLayout {
     public AddRemoveButtonLayout() {
         addButton.addClickListener(
                 e -> {
-                    fireEvent(new AddWhereLayoutRequestEvent(this, false));
+                    fireEvent(new AddWhereLayoutRequestEvent<AddRemoveButtonLayout>(this, false));
                 });
         minusButton.addClickListener(
                 e -> {

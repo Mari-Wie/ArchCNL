@@ -34,6 +34,6 @@ public class InputView extends HorizontalLayout implements InputContract.View {
 
     @Override
     public void changeCurrentlyShownView(RulesOrMappingEditorView newView) {
-        ignoreTheOldBS(newView);
+        newSetup(newView);
     }
 }
