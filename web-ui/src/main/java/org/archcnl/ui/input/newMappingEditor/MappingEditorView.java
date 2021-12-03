@@ -36,9 +36,10 @@ public class MappingEditorView extends VerticalLayout {
         createThenBlock();
         createControlRow();
     }
+
     private void createVariableList() {
-    	variableList = new VariableList();
-    	add(variableList);
+        variableList = new VariableList();
+        add(variableList);
     }
 
     private void createTitleBar() {
@@ -57,8 +58,18 @@ public class MappingEditorView extends VerticalLayout {
 
     private void createWhenBlock() {
         whenBlockComponent = new WhenBlock();
+
         whenBlockComponent.addListener(PredicateSelectionEvent.class, e -> fireEvent(e));
-        whenBlockComponent.addListener(VariableSelectionEvent.class, e -> fireEvent(new VariableUpdateRequest(e.getSource(), e.isFromClient(), variableList, e.getSelectedVariableString())));
+        whenBlockComponent.addListener(PredicateListUpdateRequest .class, e -> fireEvent(e));
+        whenBlockComponent.addListener(
+                VariableSelectionEvent.class,
+                e ->
+                        fireEvent(
+                                new VariableUpdateRequest(
+                                        e.getSource(),
+                                        e.isFromClient(),
+                                        variableList,
+                                        e.getSelectedVariableString())));
 
         add(whenBlockComponent);
     }

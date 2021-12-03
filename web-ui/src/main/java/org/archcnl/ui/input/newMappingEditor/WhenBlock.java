@@ -26,15 +26,26 @@ public class WhenBlock extends VerticalLayout {
         orBlocks.forEach(
                 p -> {
                     p.addListener(PredicateSelectionEvent.class, e -> fireEvent(e));
-                    p.addListener(VariableSelectionEvent.class, e-> { System.out.println("Refireing Event in WhenBlock"); fireEvent(e);});
+                    p.addListener(
+                            PredicateListUpdateRequest .class,
+                            e -> {
+                                System.out.println("Refireing Event in WhenBlock");
+                                fireEvent(e);
+                            });
+                    p.addListener(
+                            VariableSelectionEvent.class,
+                            e -> {
+                                System.out.println("Refireing Event in WhenBlock");
+                                fireEvent(e);
+                            });
                     add(p);
                 });
     }
-    
 
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
+
 }
