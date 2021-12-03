@@ -7,8 +7,7 @@ public class RemoveWhereLayoutRequestEvent<T extends Component> extends Componen
 
     private static final long serialVersionUID = 1L;
 
-    public RemoveWhereLayoutRequestEvent(
-            final T destination, final boolean fromClient) {
+    public RemoveWhereLayoutRequestEvent(final T destination, final boolean fromClient) {
         super(destination, fromClient);
         // TODO add logger call for event creation
     }

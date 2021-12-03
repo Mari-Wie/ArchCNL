@@ -8,6 +8,7 @@ import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
 import org.archcnl.ui.input.mappingeditor.RelationEditorView;
+import org.archcnl.ui.input.newMappingEditor.MappingEditorPresenter;
 import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.input.ruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.input.ruleeditor.NewArchitectureRuleView;
@@ -16,8 +17,9 @@ import org.archcnl.ui.main.MainPresenter;
 public class InputPresenter implements InputContract.Presenter, InputContract.Remote {
 
     private static final long serialVersionUID = 7554955330532215929L;
-    private View view;
+    private InputView view;
     private MainPresenter mainPresenter;
+    private MappingEditorPresenter mep;
 
     public InputPresenter(MainPresenter mainPresenter) {
         this.mainPresenter = mainPresenter;
@@ -25,14 +27,13 @@ public class InputPresenter implements InputContract.Presenter, InputContract.Re
 
     @Override
     public void setView(View view) {
-        this.view = view;
+        this.view = (InputView) view;
     }
 
     @Override
     public void switchToConceptEditorView() {
-        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
-        MappingEditorView mappingEditorView = new ConceptEditorView(conceptEditorPresenter, this);
-        view.changeCurrentlyShownView(mappingEditorView);
+        mep = new MappingEditorPresenter();
+        view.newSetup(mep.getView());
     }
 
     @Override

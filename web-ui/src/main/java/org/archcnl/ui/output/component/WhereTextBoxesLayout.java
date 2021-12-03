@@ -12,7 +12,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.List;
-
 import org.archcnl.ui.common.AddRemoveButtonLayout;
 import org.archcnl.ui.output.events.AddWhereLayoutRequestEvent;
 import org.archcnl.ui.output.events.RemoveWhereLayoutRequestEvent;
@@ -50,19 +49,22 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
                     // TODO do something useful with this
                 });
 
-
         pauseButton.addClickListener(
                 e -> {
                     pauseRow();
                 });
         pauseButton.getElement().setProperty("title", tooltipMessageEnabled);
 
-		addRemoveButtonLayout = new AddRemoveButtonLayout();
+        addRemoveButtonLayout = new AddRemoveButtonLayout();
         addRemoveButtonLayout.addListener(
-                AddWhereLayoutRequestEvent.class, e -> 
-                    fireEvent(new AddWhereLayoutRequestEvent(this, false)));
-        addRemoveButtonLayout.addListener(RemoveWhereLayoutRequestEvent.class, e -> 
-                    fireEvent(new RemoveWhereLayoutRequestEvent<WhereTextBoxesLayout>(this, false)));
+                AddWhereLayoutRequestEvent.class,
+                e -> fireEvent(new AddWhereLayoutRequestEvent<WhereTextBoxesLayout>(this, false)));
+        addRemoveButtonLayout.addListener(
+                RemoveWhereLayoutRequestEvent.class,
+                e ->
+                        fireEvent(
+                                new RemoveWhereLayoutRequestEvent<WhereTextBoxesLayout>(
+                                        this, false)));
         add(addRemoveButtonLayout);
 
         add(pauseButton);

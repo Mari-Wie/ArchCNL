@@ -2,6 +2,7 @@ package org.archcnl.ui.input;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.archcnl.ui.input.InputContract.Presenter;
 
 public class InputView extends HorizontalLayout implements InputContract.View {
@@ -10,7 +11,7 @@ public class InputView extends HorizontalLayout implements InputContract.View {
     private static final float GOLDEN_RATIO = 61.8f;
 
     private ConceptAndRelationView conceptAndRelationView;
-    private RulesOrMappingEditorView currentlyShownView;
+    private VerticalLayout currentlyShownView;
     private Presenter presenter;
 
     public InputView(InputContract.Presenter presenter) {
@@ -25,10 +26,14 @@ public class InputView extends HorizontalLayout implements InputContract.View {
         addAndExpand(currentlyShownView, conceptAndRelationView);
     }
 
+    public void newSetup(VerticalLayout newComp) {
+        newComp.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
+        replace(currentlyShownView, newComp);
+        currentlyShownView = newComp;
+    }
+
     @Override
     public void changeCurrentlyShownView(RulesOrMappingEditorView newView) {
-        newView.setWidth(GOLDEN_RATIO, Unit.PERCENTAGE);
-        replace(currentlyShownView, newView);
-        currentlyShownView = newView;
+        ignoreTheOldBS(newView);
     }
 }
