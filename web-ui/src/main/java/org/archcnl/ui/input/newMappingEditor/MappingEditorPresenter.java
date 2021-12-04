@@ -3,7 +3,6 @@ package org.archcnl.ui.input.newMappingEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,13 +78,13 @@ public class MappingEditorPresenter extends Component {
             }
         }
     }
-    
-    public void updateVariableComboBox(ComboBox<String> target, List<String> items, String newItem) {
-            items.add(newItem);
-            target.setItems(items);
-            target.setValue(newItem);
-    }
 
+    public void updateVariableComboBox(
+            ComboBox<String> target, List<String> items, String newItem) {
+        items.add(newItem);
+        target.setItems(items);
+        target.setValue(newItem);
+    }
 
     public void handleVariableUpdateRequest(VariableUpdateRequest e) {
         System.out.println("received VariableUpdateRequest");
@@ -100,10 +99,9 @@ public class MappingEditorPresenter extends Component {
         if (!newVariable.matches(noSpacesRegex)) {
             source.setInvalid(true);
             source.setErrorMessage("Spaces");
-        } 
-        else  if (!variableList.contains(newVariable)) {
-        	updateVariableComboBox(source, variableList, newVariable);
-        	variableListComponent.addVariable(newVariable);
+        } else if (!variableList.contains(newVariable)) {
+            updateVariableComboBox(source, variableList, newVariable);
+            variableListComponent.addVariable(newVariable);
         }
     }
 

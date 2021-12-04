@@ -20,9 +20,10 @@ public class VariableList extends HorizontalLayout {
                 .map(Span::getText)
                 .collect(Collectors.toList());
     }
+
     public void addVariable(String variable) {
-            // TODO: Fix setup of Spans, general css layout could be at fault
-            Span nTextField = new Span(variable);
-            add(nTextField);
+        // TODO: Fix setup of Spans, general css layout could be at fault
+        Span nTextField = new Span(variable);
+        add(nTextField);
     }
 }
