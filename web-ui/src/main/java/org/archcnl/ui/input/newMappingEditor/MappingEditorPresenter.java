@@ -15,6 +15,9 @@ import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.TypeRelation;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateSelectionEvent;
+import org.archcnl.ui.input.newMappingEditor.events.VariableUpdateRequest;
 
 @Tag("Test")
 public class MappingEditorPresenter extends Component {

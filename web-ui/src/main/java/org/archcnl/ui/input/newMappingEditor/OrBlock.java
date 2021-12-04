@@ -10,6 +10,10 @@ import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.ui.common.AddRemoveButtonLayout;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateSelectionEvent;
+import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.VariableSelectionEvent;
 import org.archcnl.ui.output.events.AddWhereLayoutRequestEvent;
 import org.archcnl.ui.output.events.RemoveWhereLayoutRequestEvent;
 

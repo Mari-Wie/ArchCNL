@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.archcnl.ui.common.AddRemoveButtonLayout;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateSelectionEvent;
+import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.VariableSelectionEvent;
 import org.archcnl.ui.output.events.AddWhereLayoutRequestEvent;
 import org.archcnl.ui.output.events.RemoveWhereLayoutRequestEvent;
 

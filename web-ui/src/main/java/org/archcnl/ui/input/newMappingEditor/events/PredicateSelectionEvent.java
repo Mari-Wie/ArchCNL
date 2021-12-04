@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.newMappingEditor;
+package org.archcnl.ui.input.newMappingEditor.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -20,11 +20,11 @@ public class PredicateSelectionEvent extends ComponentEvent<ComboBox<String>> {
         System.out.println("Event send");
     }
 
-    String getSelectedPredicate() {
+    public String getSelectedPredicate() {
         return selectedPredicate;
     }
 
-    ComboBox<String> getVariableTypeSelection() {
+    public ComboBox<String> getVariableTypeSelection() {
         return variableTypeSelection;
     }
 }

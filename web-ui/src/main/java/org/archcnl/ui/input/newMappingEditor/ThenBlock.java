@@ -1,5 +1,7 @@
 package org.archcnl.ui.input.newMappingEditor;
 
+import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
+
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;

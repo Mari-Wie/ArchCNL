@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.newMappingEditor;
+package org.archcnl.ui.input.newMappingEditor.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -15,7 +15,7 @@ public class VariableSelectionEvent extends ComponentEvent<ComboBox<String>> {
         this.selectedVariable = selectedVariable;
     }
 
-    String getSelectedVariableString() {
+    public String getSelectedVariableString() {
         return selectedVariable;
     }
 }
