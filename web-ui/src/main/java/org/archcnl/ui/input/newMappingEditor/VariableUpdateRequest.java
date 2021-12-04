@@ -2,17 +2,16 @@ package org.archcnl.ui.input.newMappingEditor;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class VariableUpdateRequest extends ComponentEvent<ComboBox<String>> {
     private static final long serialVersionUID = 1L;
-    HorizontalLayout variableContainter;
+    VariableList variableContainter;
     String selectedVariable;
 
     public VariableUpdateRequest(
             ComboBox<String> source,
             boolean fromClient,
-            HorizontalLayout variableContainer,
+            VariableList variableContainer,
             String selectedVariable) {
         super(source, fromClient);
         this.variableContainter = variableContainer;
@@ -20,7 +19,7 @@ public class VariableUpdateRequest extends ComponentEvent<ComboBox<String>> {
         System.out.println("Variable UpdateRequest send");
     }
 
-    public HorizontalLayout getVariableContainer() {
+    public VariableList getVariableContainer() {
         return variableContainter;
     }
 

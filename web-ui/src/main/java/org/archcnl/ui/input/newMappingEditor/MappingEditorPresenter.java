@@ -3,8 +3,8 @@ package org.archcnl.ui.input.newMappingEditor;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +32,12 @@ public class MappingEditorPresenter extends Component {
         view = new MappingEditorView();
         view.addListener(PredicateSelectionEvent.class, e -> handlePredicateSelectionEvent(e));
         view.addListener(VariableUpdateRequest.class, e -> handleVariableUpdateRequest(e));
-        view.addListener(PredicateListUpdateRequest.class, e -> handlePredicateListUpdateRequest(e));
+        view.addListener(
+                PredicateListUpdateRequest.class, e -> handlePredicateListUpdateRequest(e));
     }
 
     public void updateVariableSelectionOptions(Relation relation, ComboBox<String> target) {
-    	List<String> items = new ArrayList<String>();
+        List<String> items = new ArrayList<String>();
         boolean stringsAllowed = relation.canRelateToObjectType(new StringValue(""));
         boolean booleanAllowed = relation.canRelateToObjectType(new BooleanValue(false));
 
@@ -52,15 +53,16 @@ public class MappingEditorPresenter extends Component {
     }
 
     public void handlePredicateListUpdateRequest(PredicateListUpdateRequest e) {
-    	System.out.println("PredicateListUpdateRequest received");
+        System.out.println("PredicateListUpdateRequest received");
         e.getSource().setItems(getRelationNameList());
     }
+
     public void handlePredicateSelectionEvent(PredicateSelectionEvent e) {
-    	System.out.println("PredicateSelectionEvent Event received");
+        System.out.println("PredicateSelectionEvent Event received");
         Relation relation = null;
         String newValue = e.getSelectedPredicate();
         if (newValue != null) {
-			System.out.println(newValue);
+            System.out.println(newValue);
             try {
                 relation =
                         RulesConceptsAndRelations.getInstance()
@@ -71,16 +73,38 @@ public class MappingEditorPresenter extends Component {
                 return;
             }
             if (relation instanceof TypeRelation) {
-            	// TODO see old code (something something switch to concept view)
+                // TODO see old code (something something switch to concept view)
             } else {
                 updateVariableSelectionOptions(relation, e.getVariableTypeSelection());
             }
         }
     }
+    
+    public void updateVariableComboBox(ComboBox<String> target, List<String> items, String newItem) {
+            items.add(newItem);
+            target.setItems(items);
+            target.setValue(newItem);
+    }
+
 
     public void handleVariableUpdateRequest(VariableUpdateRequest e) {
         System.out.println("received VariableUpdateRequest");
-        e.getVariableContainer().add(new TextField(e.getSelectedVariable()));
+
+        String newVariable = e.getSelectedVariable().trim();
+        ComboBox<String> source = e.getSource();
+        VariableList variableListComponent = e.getVariableContainer();
+        String noSpacesRegex = "^[^\\s]+$";
+        List<String> variableList = variableListComponent.collect();
+
+        source.setInvalid(false);
+        if (!newVariable.matches(noSpacesRegex)) {
+            source.setInvalid(true);
+            source.setErrorMessage("Spaces");
+        } 
+        else  if (!variableList.contains(newVariable)) {
+        	updateVariableComboBox(source, variableList, newVariable);
+        	variableListComponent.addVariable(newVariable);
+        }
     }
 
     public List<String> getRelationNameList() {

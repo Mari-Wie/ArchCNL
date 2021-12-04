@@ -58,13 +58,10 @@ public class WhereTextBoxesLayout extends HorizontalLayout {
         addRemoveButtonLayout = new AddRemoveButtonLayout();
         addRemoveButtonLayout.addListener(
                 AddWhereLayoutRequestEvent.class,
-                e -> fireEvent(new AddWhereLayoutRequestEvent<WhereTextBoxesLayout>(this, false)));
+                e -> fireEvent(new AddWhereLayoutRequestEvent(this, false)));
         addRemoveButtonLayout.addListener(
                 RemoveWhereLayoutRequestEvent.class,
-                e ->
-                        fireEvent(
-                                new RemoveWhereLayoutRequestEvent<WhereTextBoxesLayout>(
-                                        this, false)));
+                e -> fireEvent(new RemoveWhereLayoutRequestEvent(this, false)));
         add(addRemoveButtonLayout);
 
         add(pauseButton);

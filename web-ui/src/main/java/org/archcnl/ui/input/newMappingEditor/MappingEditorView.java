@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,6 +21,7 @@ public class MappingEditorView extends VerticalLayout {
     TextField mappingName;
     TextField description;
     WhenBlock whenBlockComponent;
+    ThenBlock thenBlock;
     VariableList variableList;
 
     public MappingEditorView() {
@@ -56,11 +58,19 @@ public class MappingEditorView extends VerticalLayout {
         add(titleBar);
     }
 
+    private void handleVariableListUpdateRequest(VariableListUpdateRequest e) {
+
+        e.getSource().setItems(variableList.collect());
+    }
+
     private void createWhenBlock() {
         whenBlockComponent = new WhenBlock();
 
         whenBlockComponent.addListener(PredicateSelectionEvent.class, e -> fireEvent(e));
-        whenBlockComponent.addListener(PredicateListUpdateRequest .class, e -> fireEvent(e));
+        whenBlockComponent.addListener(PredicateListUpdateRequest.class, e -> fireEvent(e));
+
+        whenBlockComponent.addListener(
+                VariableListUpdateRequest.class, e -> handleVariableListUpdateRequest(e));
         whenBlockComponent.addListener(
                 VariableSelectionEvent.class,
                 e ->
@@ -81,6 +91,8 @@ public class MappingEditorView extends VerticalLayout {
                 event -> {
                     mappingName.setInvalid(false);
                 });
+        mappingName.addValueChangeListener(
+                event -> thenBlock.setObject(event.getSource().getValue()));
         add(mappingName);
     }
 
@@ -93,9 +105,24 @@ public class MappingEditorView extends VerticalLayout {
         add(description);
     }
 
-    public void createThenBlock() {}
+    public void createThenBlock() {
+        thenBlock = new ThenBlock();
+        thenBlock.setPredicate("is-of-type");
+        thenBlock.setObject(mappingName.getValue());
+        thenBlock.addListener(
+                VariableListUpdateRequest.class, e -> handleVariableListUpdateRequest(e));
+        add(thenBlock);
+    }
 
-    public void createControlRow() {}
+    public void createControlRow() {
+
+        HorizontalLayout buttonRow = new HorizontalLayout();
+        buttonRow.setWidthFull();
+        buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonRow.add(new Button("Done", click -> System.out.println("Ups not implemented")));
+        buttonRow.add(new Button("Cancel", click -> System.out.println("Ups not implemented")));
+        add(buttonRow);
+    }
 
     public void addNameChangedListener() {}
 
