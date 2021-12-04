@@ -1,13 +1,12 @@
 package org.archcnl.ui.input.newMappingEditor;
 
-import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
-
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
 
 public class ThenBlock extends HorizontalLayout {
 

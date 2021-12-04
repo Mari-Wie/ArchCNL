@@ -1,11 +1,5 @@
 package org.archcnl.ui.input.newMappingEditor;
 
-import org.archcnl.ui.input.newMappingEditor.events.PredicateListUpdateRequest;
-import org.archcnl.ui.input.newMappingEditor.events.PredicateSelectionEvent;
-import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
-import org.archcnl.ui.input.newMappingEditor.events.VariableSelectionEvent;
-import org.archcnl.ui.input.newMappingEditor.events.VariableUpdateRequest;
-
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -18,6 +12,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.PredicateSelectionEvent;
+import org.archcnl.ui.input.newMappingEditor.events.VariableListUpdateRequest;
+import org.archcnl.ui.input.newMappingEditor.events.VariableSelectionEvent;
+import org.archcnl.ui.input.newMappingEditor.events.VariableUpdateRequest;
 
 public class MappingEditorView extends VerticalLayout {
 

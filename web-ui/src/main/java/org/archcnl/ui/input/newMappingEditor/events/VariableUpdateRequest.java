@@ -1,9 +1,8 @@
 package org.archcnl.ui.input.newMappingEditor.events;
 
-import org.archcnl.ui.input.newMappingEditor.VariableList;
-
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.combobox.ComboBox;
+import org.archcnl.ui.input.newMappingEditor.VariableList;
 
 public class VariableUpdateRequest extends ComponentEvent<ComboBox<String>> {
     private static final long serialVersionUID = 1L;
