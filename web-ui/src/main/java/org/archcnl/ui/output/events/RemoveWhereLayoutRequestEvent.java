@@ -1,13 +1,15 @@
 package org.archcnl.ui.output.events;
 
+import org.archcnl.ui.output.component.WhereTextBoxesLayout;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 
-public class RemoveWhereLayoutRequestEvent<T extends Component> extends ComponentEvent<T> {
+public class RemoveWhereLayoutRequestEvent extends ComponentEvent<Component> {
 
     private static final long serialVersionUID = 1L;
 
-    public RemoveWhereLayoutRequestEvent(final T destination, final boolean fromClient) {
+    public RemoveWhereLayoutRequestEvent(final Component destination, final boolean fromClient) {
         super(destination, fromClient);
         // TODO add logger call for event creation
     }
