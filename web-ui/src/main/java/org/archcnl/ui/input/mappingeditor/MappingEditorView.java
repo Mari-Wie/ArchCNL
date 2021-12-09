@@ -16,7 +16,6 @@ import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableListPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableListView;
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView
         implements MappingEditorContract.View {
