@@ -34,8 +34,7 @@ public class RelationEditorView extends MappingEditorView {
         relationNameField.setReadOnly(true);
         thenTriplet.add(relationNameField);
         objectView =
-                new VariableStringBoolSelectionView(
-                        presenter.getVariableManager(), true, true, Optional.of(presenter));
+                new VariableStringBoolSelectionView(presenter.getVariableManager(), true, true);
         thenTriplet.add(objectView);
         add(thenTriplet);
     }

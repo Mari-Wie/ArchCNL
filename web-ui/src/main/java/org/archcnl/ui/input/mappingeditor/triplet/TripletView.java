@@ -5,6 +5,8 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.domain.common.VariableManager;
+import org.archcnl.ui.input.mappingeditor.events.AddTripletViewAfterButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.TripletViewDeleteButtonPressedEvent;
 
 public class TripletView extends HorizontalLayout {
 
@@ -28,14 +30,19 @@ public class TripletView extends HorizontalLayout {
         predicateComponent = new PredicateComponent(objectView);
 
         HorizontalLayout triplet = new HorizontalLayout();
-        triplet.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         triplet.setWidthFull();
         triplet.add(subjectComponent);
         triplet.add(predicateComponent);
         triplet.add(objectView);
         add(triplet);
-        add(new Button(new Icon(VaadinIcon.TRASH), click -> presenter.deleteButtonPressed()));
-        add(new Button(new Icon(VaadinIcon.PLUS), click -> presenter.addButtonPressed()));
+        add(
+                new Button(
+                        new Icon(VaadinIcon.TRASH),
+                        click -> fireEvent(new TripletViewDeleteButtonPressedEvent(this))));
+        add(
+                new Button(
+                        new Icon(VaadinIcon.PLUS),
+                        click -> fireEvent(new AddTripletViewAfterButtonPressedEvent(this))));
     }
 
     public SubjectComponent getSubjectComponent() {
