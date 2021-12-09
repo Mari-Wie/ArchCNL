@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableSelectionComponent extends ComboBox<String>

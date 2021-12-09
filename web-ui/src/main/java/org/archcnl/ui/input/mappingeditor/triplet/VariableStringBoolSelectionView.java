@@ -9,10 +9,10 @@ import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {

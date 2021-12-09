@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.VariableManager;
 
 public class VariableListView extends VerticalLayout implements PropertyChangeListener {
 
