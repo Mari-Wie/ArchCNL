@@ -2,49 +2,37 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.Optional;
+import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.StringValue;
+import org.archcnl.domain.common.TypeRelation;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.View;
 
-public class ObjectView extends HorizontalLayout implements ObjectContract.View {
+public class ObjectComponent extends HorizontalLayout {
 
     private static final long serialVersionUID = -1105253743414019620L;
-    private Presenter<View> presenter;
     private ConceptSelectionView conceptSelectionView;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
+    private VariableManager variableManager;
 
-    public ObjectView(ObjectContract.Presenter<View> presenter) {
-        this.presenter = presenter;
-        this.presenter.setView(this);
+    public ObjectComponent(VariableManager variableManager) {
+        this.variableManager = variableManager;
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
     }
 
-    private void resetViews() {
-        conceptSelectionView = null;
-        variableStringBoolSelectionView = null;
-    }
-
-    @Override
-    public void clearView() {
-        removeAll();
-        resetViews();
-    }
-
-    @Override
     public void switchToConceptView() {
         clearView();
         conceptSelectionView = new ConceptSelectionView();
         add(conceptSelectionView);
     }
 
-    @Override
     public void switchToVariableStringBooleanView(
             VariableManager variableManager, boolean stringsAllowed, boolean booleansAllowed) {
         clearView();
@@ -57,7 +45,6 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         add(variableStringBoolSelectionView);
     }
 
-    @Override
     public ObjectType getObject()
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
                     InvalidVariableNameException, SubjectOrObjectNotDefinedException {
@@ -72,7 +59,6 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         return object;
     }
 
-    @Override
     public void setObject(ObjectType object) throws PredicateCannotRelateToObjectException {
         if (conceptSelectionView != null && object instanceof Concept) {
             conceptSelectionView.setObject((Concept) object);
@@ -83,8 +69,34 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         }
     }
 
-    @Override
-    public void showErrorMessage(String errorMessage) {
+    public void predicateHasChanged(Optional<Relation> relationOptional) {
+        if (relationOptional.isEmpty()) {
+            clearView();
+        } else {
+            Relation relation = relationOptional.orElseThrow();
+            if (relation instanceof TypeRelation) {
+                switchToConceptView();
+            } else {
+                boolean stringsAllowed = relation.canRelateToObjectType(new StringValue(""));
+                boolean booleansAllowed = relation.canRelateToObjectType(new BooleanValue(false));
+                switchToVariableStringBooleanView(variableManager, stringsAllowed, booleansAllowed);
+            }
+        }
+    }
+
+    public void highlightWhenEmpty() {
+        try {
+            getObject();
+        } catch (ConceptDoesNotExistException e) {
+            showErrorMessage("Concept does not exist");
+        } catch (ObjectNotDefinedException | SubjectOrObjectNotDefinedException e) {
+            showErrorMessage("Object not set");
+        } catch (InvalidVariableNameException e) {
+            showErrorMessage("Invalid Variable name");
+        }
+    }
+
+    private void showErrorMessage(String errorMessage) {
         if (conceptSelectionView != null) {
             conceptSelectionView.showErrorMessage(errorMessage);
         } else if (variableStringBoolSelectionView != null) {
@@ -93,5 +105,11 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         // there is no need to show the errorMessage when both views are null
         // as in that case the predicate is not set and the actual error message
         // is shown there
+    }
+
+    private void clearView() {
+        removeAll();
+        conceptSelectionView = null;
+        variableStringBoolSelectionView = null;
     }
 }
