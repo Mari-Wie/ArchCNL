@@ -9,15 +9,13 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.SubjectPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionView;
+import org.archcnl.ui.input.mappingeditor.triplet.SubjectComponent;
 
 public class ConceptEditorView extends MappingEditorView {
 
     private static final long serialVersionUID = 1260768304754207599L;
     private TextField conceptNameField;
-    private SubjectPresenter subjectPresenter;
-    private VariableSelectionView subjectView;
+    private SubjectComponent subjectComponent;
 
     public ConceptEditorView(
             MappingEditorContract.Presenter<View> presenter, InputContract.Remote inputRemote) {
@@ -27,10 +25,9 @@ public class ConceptEditorView extends MappingEditorView {
     @Override
     protected void addThenTripletView() {
         HorizontalLayout thenTriplet = new HorizontalLayout();
-        subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
-        subjectView = new VariableSelectionView(subjectPresenter);
-        subjectView.setLabel("Subject");
-        thenTriplet.add(subjectView);
+        subjectComponent = new SubjectComponent(presenter.getVariableManager());
+        subjectComponent.setLabel("Subject");
+        thenTriplet.add(subjectComponent);
         TextField predicateField = new TextField("Predicate");
         predicateField.setValue("is-of-type");
         predicateField.setReadOnly(true);
@@ -49,7 +46,7 @@ public class ConceptEditorView extends MappingEditorView {
     @Override
     public Variable getThenTripletSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return subjectPresenter.getSubject();
+        return subjectComponent.getSubject();
     }
 
     @Override
@@ -59,8 +56,8 @@ public class ConceptEditorView extends MappingEditorView {
 
     @Override
     public void showThenSubjectErrorMessage(String message) {
-        subjectView.setErrorMessage(message);
-        subjectView.setInvalid(true);
+        subjectComponent.setErrorMessage(message);
+        subjectComponent.setInvalid(true);
     }
 
     @Override
@@ -70,7 +67,7 @@ public class ConceptEditorView extends MappingEditorView {
 
     @Override
     public void setSubjectInThenTriplet(Variable subject) {
-        subjectPresenter.setSubject(subject);
+        subjectComponent.setSubject(subject);
     }
 
     @Override

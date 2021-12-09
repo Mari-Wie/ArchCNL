@@ -9,16 +9,14 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.SubjectPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionView;
+import org.archcnl.ui.input.mappingeditor.triplet.SubjectComponent;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableStringBoolSelectionView;
 
 public class RelationEditorView extends MappingEditorView {
 
     private static final long serialVersionUID = -335119786400292325L;
     private TextField relationNameField;
-    private SubjectPresenter subjectPresenter;
-    private VariableSelectionView subjectView;
+    private SubjectComponent subjectComponent;
     private VariableStringBoolSelectionView objectView;
 
     public RelationEditorView(
@@ -29,10 +27,9 @@ public class RelationEditorView extends MappingEditorView {
     @Override
     protected void addThenTripletView() {
         HorizontalLayout thenTriplet = new HorizontalLayout();
-        subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
-        subjectView = new VariableSelectionView(subjectPresenter);
-        subjectView.setLabel("Subject");
-        thenTriplet.add(subjectView);
+        subjectComponent = new SubjectComponent(presenter.getVariableManager());
+        subjectComponent.setLabel("Subject");
+        thenTriplet.add(subjectComponent);
         relationNameField = new TextField("Predicate");
         relationNameField.setReadOnly(true);
         thenTriplet.add(relationNameField);
@@ -51,7 +48,7 @@ public class RelationEditorView extends MappingEditorView {
     @Override
     public Variable getThenTripletSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return subjectPresenter.getSubject();
+        return subjectComponent.getSubject();
     }
 
     @Override
@@ -62,14 +59,14 @@ public class RelationEditorView extends MappingEditorView {
 
     @Override
     public void showThenSubjectErrorMessage(String message) {
-        subjectView.setErrorMessage(message);
-        subjectView.setInvalid(true);
+        subjectComponent.setErrorMessage(message);
+        subjectComponent.setInvalid(true);
     }
 
     @Override
     public void showThenSubjectOrObjectErrorMessage(String message) {
         try {
-            subjectPresenter.getSubject();
+            subjectComponent.getSubject();
         } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
             showThenSubjectErrorMessage(message);
         }
@@ -82,7 +79,7 @@ public class RelationEditorView extends MappingEditorView {
 
     @Override
     public void setSubjectInThenTriplet(Variable subject) {
-        subjectPresenter.setSubject(subject);
+        subjectComponent.setSubject(subject);
     }
 
     @Override
