@@ -15,7 +15,6 @@ import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableListPresenter;
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView
         implements MappingEditorContract.View {
@@ -70,9 +69,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         add(description);
 
         // TODO: add "used in" functionality
-        VariableListPresenter variableListPresenter =
-                new VariableListPresenter(presenter.getVariableManager());
-        add(new VariableListView(variableListPresenter));
+        add(new VariableListView(presenter.getVariableManager()));
 
         add(new Label("When"));
         add(content);
