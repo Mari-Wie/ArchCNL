@@ -1,5 +1,7 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dnd.DropTarget;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -8,25 +10,35 @@ import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.PredicateContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.triplet.PredicateContract.View;
 
-public class PredicatePresenter implements Presenter<View> {
+public class PredicateComponent extends ComboBox<String> implements DropTarget<PredicateComponent> {
 
-    private static final long serialVersionUID = 6266956055576570360L;
-    private View view;
+    private static final long serialVersionUID = -5423813782732362932L;
     private ObjectPresenter objectPresenter;
 
-    public PredicatePresenter(ObjectPresenter objectPresenter) {
+    public PredicateComponent(ObjectPresenter objectPresenter) {
         this.objectPresenter = objectPresenter;
+        setActive(true);
+        setPlaceholder("Relation");
+        updateItems();
+        setClearButtonVisible(true);
+
+        addValueChangeListener(
+                event -> {
+                    valueHasChanged();
+                    setInvalid(false);
+                });
+        addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
-    @Override
-    public void setView(View view) {
-        this.view = view;
+    public void updateItems() {
+        setItems(this.getRelationNames());
     }
 
-    @Override
+    private Optional<String> getSelectedItem() {
+        return Optional.ofNullable(getValue());
+    }
+
     public List<String> getRelationNames() {
         return RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
@@ -38,31 +50,29 @@ public class PredicatePresenter implements Presenter<View> {
 
     public Relation getPredicate()
             throws RelationDoesNotExistException, RelationNotDefinedException {
-        String relationName = view.getSelectedItem().orElseThrow(RelationNotDefinedException::new);
+        String relationName = getSelectedItem().orElseThrow(RelationNotDefinedException::new);
         return RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
                 .getRelationByName(relationName);
     }
 
     public void setPredicate(Relation predicate) {
-        view.setItem(predicate.getName());
+        setValue(predicate.getName());
     }
 
-    @Override
     public void handleDropEvent(Object data) {
         if (data instanceof Relation) {
             Relation relation = (Relation) data;
-            view.setItem(relation.getName());
+            setPredicate(relation);
         } else {
-            view.showErrorMessage("Not a Relation");
+            showErrorMessage("Not a Relation");
         }
     }
 
-    @Override
     public void valueHasChanged() {
         Relation relation = null;
         try {
-            String newValue = view.getSelectedItem().orElseThrow(NoSuchElementException::new);
+            String newValue = getSelectedItem().orElseThrow(NoSuchElementException::new);
             relation =
                     RulesConceptsAndRelations.getInstance()
                             .getRelationManager()
@@ -77,9 +87,14 @@ public class PredicatePresenter implements Presenter<View> {
         try {
             getPredicate();
         } catch (RelationDoesNotExistException e) {
-            view.showErrorMessage("Relation does not exist");
+            showErrorMessage("Relation does not exist");
         } catch (RelationNotDefinedException e) {
-            view.showErrorMessage("Predicate not set");
+            showErrorMessage("Predicate not set");
         }
+    }
+
+    private void showErrorMessage(String message) {
+        setErrorMessage(message);
+        setInvalid(true);
     }
 }
