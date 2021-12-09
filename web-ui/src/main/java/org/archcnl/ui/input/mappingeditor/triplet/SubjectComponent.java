@@ -5,30 +5,30 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
-public class SubjectPresenter extends VariableSelectionPresenter {
+public class SubjectComponent extends VariableSelectionComponent {
 
     private static final long serialVersionUID = 7992050926821966999L;
 
-    public SubjectPresenter(VariableManager variableManager) {
+    public SubjectComponent(VariableManager variableManager) {
         super(variableManager);
     }
 
     public Variable getSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return getSelectedVariable();
+        return getVariable();
     }
 
     public void setSubject(Variable subject) {
-        setSelectedVariable(subject);
+        setVariable(subject);
     }
 
     public void highlightWhenEmpty() {
         try {
             getSubject();
         } catch (InvalidVariableNameException e) {
-            view.showErrorMessage("Invalid Variable name");
+            showErrorMessage("Invalid Variable name");
         } catch (SubjectOrObjectNotDefinedException e) {
-            view.showErrorMessage("Variable not set");
+            showErrorMessage("Variable not set");
         }
     }
 }
