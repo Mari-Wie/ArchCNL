@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;

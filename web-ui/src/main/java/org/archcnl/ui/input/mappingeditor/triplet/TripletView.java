@@ -1,10 +1,11 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import org.archcnl.domain.common.VariableManager;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
 
 public class TripletView extends HorizontalLayout {
 
