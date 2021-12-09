@@ -1,11 +1,10 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
-import org.archcnl.domain.common.VariableManager;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.domain.common.VariableManager;
 
 public class TripletView extends HorizontalLayout {
 
@@ -15,7 +14,11 @@ public class TripletView extends HorizontalLayout {
     private PredicateComponent predicateComponent;
     private ObjectView objectView;
 
-    public TripletView(VariableManager variableManager) {
+    // TODO: remove this reference
+    private TripletPresenter presenter;
+
+    public TripletView(TripletPresenter presenter, VariableManager variableManager) {
+        this.presenter = presenter;
         setPadding(false);
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         setWidthFull();
@@ -45,5 +48,9 @@ public class TripletView extends HorizontalLayout {
 
     public ObjectView getObjectView() {
         return objectView;
+    }
+
+    public TripletPresenter getPresenter() {
+        return presenter;
     }
 }

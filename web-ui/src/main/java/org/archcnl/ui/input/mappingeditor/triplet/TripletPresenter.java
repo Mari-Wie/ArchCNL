@@ -6,12 +6,11 @@ import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.Triplet;
 import org.archcnl.domain.common.TripletFactory;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
@@ -21,19 +20,12 @@ import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 public class TripletPresenter {
 
     private TripletView tripletView;
-    private AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
-            andTripletsEditorPresenter;
     private Optional<Triplet> triplet;
 
-    public TripletPresenter(
-            AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
-                    andTripletsEditorPresenter,
-            Optional<Triplet> triplet,
-            VariableManager variableManager) {
-        this.andTripletsEditorPresenter = andTripletsEditorPresenter;
+    public TripletPresenter(Optional<Triplet> triplet, VariableManager variableManager) {
         this.triplet = triplet;
 
-        tripletView = new TripletView(variableManager);
+        tripletView = new TripletView(this, variableManager);
         fillTriplet();
     }
 
@@ -105,5 +97,9 @@ public class TripletPresenter {
 
     public void addButtonPressed() {
         andTripletsEditorPresenter.addNewTripletViewAfter(view);
+    }
+
+    public TripletView getTripletView() {
+        return tripletView;
     }
 }
