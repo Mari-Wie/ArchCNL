@@ -29,6 +29,9 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
         this.variableManager = variableManager;
         this.mappingEditorPresenter = mappingEditorPresenter;
         this.andTriplets = andTriplets;
+
+        // TODO: add Listeners for AddTripletViewAfterButtonPressedEvent and
+        // TripletViewDeleteButtonPressedEvent
     }
 
     @Override

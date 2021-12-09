@@ -4,15 +4,12 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {
@@ -29,13 +26,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private ComboBox<String> typeSelection;
 
     public VariableStringBoolSelectionView(
-            VariableManager variableManager,
-            boolean stringsAllowed,
-            boolean booleanAllowed,
-            Optional<Presenter<View>> optional) {
+            VariableManager variableManager, boolean stringsAllowed, boolean booleanAllowed) {
 
         this.variableManager = variableManager;
-        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
+        setDefaultVerticalComponentAlignment(Alignment.END);
 
         typeSelection = new ComboBox<>();
         List<String> items = new LinkedList<>();

@@ -8,7 +8,6 @@ public class BooleanSelectionComponent extends ComboBox<String> {
     private static final long serialVersionUID = -2542077868183389974L;
 
     public BooleanSelectionComponent() {
-        setLabel("Object");
         String[] items = {"True", "False"};
         setItems(items);
         setValue("False");

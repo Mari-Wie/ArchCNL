@@ -24,7 +24,6 @@ public class ObjectView extends HorizontalLayout {
 
     public ObjectView(VariableManager variableManager) {
         this.variableManager = variableManager;
-        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
     }
 
     public void switchToConceptView() {
@@ -38,10 +37,7 @@ public class ObjectView extends HorizontalLayout {
         clearView();
         variableStringBoolSelectionView =
                 new VariableStringBoolSelectionView(
-                        variableManager,
-                        stringsAllowed,
-                        booleansAllowed,
-                        Optional.ofNullable(null));
+                        variableManager, stringsAllowed, booleansAllowed);
         add(variableStringBoolSelectionView);
     }
 

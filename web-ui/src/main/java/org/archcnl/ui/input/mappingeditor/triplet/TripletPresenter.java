@@ -91,14 +91,6 @@ public class TripletPresenter {
         tripletView.getObjectView().highlightWhenEmpty();
     }
 
-    public void deleteButtonPressed() {
-        andTripletsEditorPresenter.deleteTripletView(view);
-    }
-
-    public void addButtonPressed() {
-        andTripletsEditorPresenter.addNewTripletViewAfter(view);
-    }
-
     public TripletView getTripletView() {
         return tripletView;
     }
