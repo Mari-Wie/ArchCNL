@@ -1,5 +1,10 @@
 package org.archcnl.ui.input.mappingeditor;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.AndTriplets;
@@ -8,9 +13,13 @@ import org.archcnl.ui.common.ButtonClickResponder;
 import org.archcnl.ui.common.OkCancelDialog;
 import org.archcnl.ui.input.InputContract;
 import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableSelectedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 
-public abstract class MappingEditorPresenter implements MappingEditorContract.Presenter<View> {
+@Tag("Editor")
+public abstract class MappingEditorPresenter extends Component
+        implements MappingEditorContract.Presenter<View> {
 
     private static final long serialVersionUID = -9123529250149326943L;
     protected View view;
@@ -20,6 +29,22 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
     protected MappingEditorPresenter(List<AndTriplets> andTripletsList) {
         this.variableManager = new VariableManager();
         this.andTripletsList = andTripletsList;
+        addListeners();
+    }
+
+    private void addListeners() {
+        addListener(VariableSelectedEvent.class, e -> handleVariableSelectedEvent(e));
+        addListener(
+                VariableListUpdateRequestedEvent.class,
+                e -> handleVariableListUpdateRequestEvent(e));
+    }
+
+    void handleVariableSelectedEvent(VariableSelectedEvent e) {
+        System.out.println("EditorPresenter has received: handleVariableSelectedEvent");
+    }
+
+    void handleVariableListUpdateRequestEvent(VariableListUpdateRequestedEvent e) {
+        System.out.println("EditorPresenter has received: VariableListUpdateRequestedEvent");
     }
 
     @Override
@@ -125,4 +150,10 @@ public abstract class MappingEditorPresenter implements MappingEditorContract.Pr
     protected abstract void initInfoFieldAndThenTriplet();
 
     protected abstract void updateMapping(InputContract.Remote inputRemote);
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
 }

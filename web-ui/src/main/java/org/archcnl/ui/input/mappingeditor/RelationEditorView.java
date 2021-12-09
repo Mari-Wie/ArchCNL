@@ -47,7 +47,7 @@ public class RelationEditorView extends MappingEditorView {
     @Override
     public Variable getThenTripletSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return subjectComponent.getSubject();
+        return new Variable(subjectComponent.getValue());
     }
 
     @Override
@@ -64,21 +64,23 @@ public class RelationEditorView extends MappingEditorView {
 
     @Override
     public void showThenSubjectOrObjectErrorMessage(String message) {
-        try {
-            subjectComponent.getSubject();
-        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
-            showThenSubjectErrorMessage(message);
-        }
-        try {
-            objectView.getObject();
-        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
-            objectView.showErrorMessage(message);
-        }
+    	//TODO Fix
+        //try {
+        //    subjectComponent.getSubject();
+        //} catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
+        //    showThenSubjectErrorMessage(message);
+        //}
+        //try {
+        //    objectView.getObject();
+        //} catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
+        //    objectView.showErrorMessage(message);
+        //}
     }
 
     @Override
     public void setSubjectInThenTriplet(Variable subject) {
-        subjectComponent.setSubject(subject);
+    	//TODO: remove
+        //subjectComponent.setSubject(subject);
     }
 
     @Override
