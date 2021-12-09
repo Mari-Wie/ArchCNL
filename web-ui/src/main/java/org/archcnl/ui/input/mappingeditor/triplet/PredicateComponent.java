@@ -14,10 +14,10 @@ import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException
 public class PredicateComponent extends ComboBox<String> implements DropTarget<PredicateComponent> {
 
     private static final long serialVersionUID = -5423813782732362932L;
-    private ObjectPresenter objectPresenter;
+    private ObjectView objectView;
 
-    public PredicateComponent(ObjectPresenter objectPresenter) {
-        this.objectPresenter = objectPresenter;
+    public PredicateComponent(ObjectView objectView) {
+        this.objectView = objectView;
         setActive(true);
         setPlaceholder("Relation");
         updateItems();
@@ -80,7 +80,7 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         } catch (RelationDoesNotExistException | NoSuchElementException e) {
             // leave relation == null
         }
-        objectPresenter.predicateHasChanged(Optional.ofNullable(relation));
+        objectView.predicateHasChanged(Optional.ofNullable(relation));
     }
 
     public void highlightWhenEmpty() {
