@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.mappingeditor.triplet;
+package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.dnd.DragSource;
@@ -10,7 +10,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
 
 public class VariableListView extends VerticalLayout implements PropertyChangeListener {
 
