@@ -11,20 +11,16 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract;
+import org.archcnl.ui.input.mappingeditor.VariableManager;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
 
-public class TripletPresenter implements TripletContract.Presenter<View> {
+public class TripletPresenter {
 
-    private static final long serialVersionUID = -7565399174691810818L;
-    private SubjectPresenter subjectPresenter;
-    private PredicatePresenter predicatePresenter;
-    private ObjectPresenter objectPresenter;
-    private View view;
+    private TripletView tripletView;
     private AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
             andTripletsEditorPresenter;
     private Optional<Triplet> triplet;
@@ -32,38 +28,21 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     public TripletPresenter(
             AndTripletsEditorContract.Presenter<AndTripletsEditorContract.View>
                     andTripletsEditorPresenter,
-            Optional<Triplet> triplet) {
+            Optional<Triplet> triplet,
+            VariableManager variableManager) {
         this.andTripletsEditorPresenter = andTripletsEditorPresenter;
         this.triplet = triplet;
-    }
 
-    @Override
-    public void setSubjectPresenter(SubjectPresenter subjectPresenter) {
-        this.subjectPresenter = subjectPresenter;
-    }
-
-    @Override
-    public void setPredicatePresenter(PredicatePresenter predicatePresenter) {
-        this.predicatePresenter = predicatePresenter;
-    }
-
-    @Override
-    public void setObjectPresenter(ObjectPresenter objectPresenter) {
-        this.objectPresenter = objectPresenter;
-    }
-
-    @Override
-    public void setView(View view) {
-        this.view = view;
+        tripletView = new TripletView(variableManager);
         fillTriplet();
     }
 
     private void fillTriplet() {
         if (triplet.isPresent()) {
-            subjectPresenter.setSubject(triplet.get().getSubject());
-            predicatePresenter.setPredicate(triplet.get().getPredicate());
+            tripletView.getSubjectComponent().setSubject(triplet.get().getSubject());
+            tripletView.getPredicateComponent().setPredicate(triplet.get().getPredicate());
             try {
-                objectPresenter.setObject(triplet.get().getObject());
+                tripletView.getObjectView().setObject(triplet.get().getObject());
             } catch (PredicateCannotRelateToObjectException e) {
                 // do not set the object
             }
@@ -75,9 +54,9 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
         Relation predicate;
         ObjectType object;
         try {
-            subject = subjectPresenter.getSubject();
-            predicate = predicatePresenter.getPredicate();
-            object = objectPresenter.getObject();
+            subject = tripletView.getSubjectComponent().getSubject();
+            predicate = tripletView.getPredicateComponent().getPredicate();
+            object = tripletView.getObjectView().getObject();
         } catch (InvalidVariableNameException
                 | SubjectOrObjectNotDefinedException
                 | RelationDoesNotExistException
@@ -94,17 +73,17 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
         boolean predicateMissing = false;
         boolean objectMissing = false;
         try {
-            subjectPresenter.getSubject();
+            tripletView.getSubjectComponent().getSubject();
         } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e1) {
             subjectMissing = true;
         }
         try {
-            predicatePresenter.getPredicate();
+            tripletView.getPredicateComponent().getPredicate();
         } catch (RelationDoesNotExistException | RelationNotDefinedException e) {
             predicateMissing = true;
         }
         try {
-            objectPresenter.getObject();
+            tripletView.getObjectView().getObject();
         } catch (ConceptDoesNotExistException
                 | ObjectNotDefinedException
                 | InvalidVariableNameException
@@ -115,27 +94,15 @@ public class TripletPresenter implements TripletContract.Presenter<View> {
     }
 
     public void highlightIncompleteParts() {
-        subjectPresenter.highlightWhenEmpty();
-        predicatePresenter.highlightWhenEmpty();
-        objectPresenter.highlightWhenEmpty();
+        tripletView.getSubjectComponent().highlightWhenEmpty();
+        tripletView.getPredicateComponent().highlightWhenEmpty();
+        tripletView.getObjectView().highlightWhenEmpty();
     }
 
-    @Override
-    public void mouseEnter() {
-        view.setAddButtonVisible(true);
-    }
-
-    @Override
-    public void mouseLeave() {
-        view.setAddButtonVisible(false);
-    }
-
-    @Override
     public void deleteButtonPressed() {
         andTripletsEditorPresenter.deleteTripletView(view);
     }
 
-    @Override
     public void addButtonPressed() {
         andTripletsEditorPresenter.addNewTripletViewAfter(view);
     }
