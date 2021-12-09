@@ -18,7 +18,7 @@ import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedEx
 public class ObjectView extends HorizontalLayout {
 
     private static final long serialVersionUID = -1105253743414019620L;
-    private ConceptSelectionView conceptSelectionView;
+    private ConceptSelectionComponent conceptSelectionComponent;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
     private VariableManager variableManager;
 
@@ -29,8 +29,8 @@ public class ObjectView extends HorizontalLayout {
 
     public void switchToConceptView() {
         clearView();
-        conceptSelectionView = new ConceptSelectionView();
-        add(conceptSelectionView);
+        conceptSelectionComponent = new ConceptSelectionComponent();
+        add(conceptSelectionComponent);
     }
 
     public void switchToVariableStringBooleanView(
@@ -49,8 +49,8 @@ public class ObjectView extends HorizontalLayout {
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
                     InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (conceptSelectionView != null) {
-            object = conceptSelectionView.getObject();
+        if (conceptSelectionComponent != null) {
+            object = conceptSelectionComponent.getObject();
         } else if (variableStringBoolSelectionView != null) {
             object = variableStringBoolSelectionView.getObject();
         } else {
@@ -60,8 +60,8 @@ public class ObjectView extends HorizontalLayout {
     }
 
     public void setObject(ObjectType object) throws PredicateCannotRelateToObjectException {
-        if (conceptSelectionView != null && object instanceof Concept) {
-            conceptSelectionView.setObject((Concept) object);
+        if (conceptSelectionComponent != null && object instanceof Concept) {
+            conceptSelectionComponent.setObject((Concept) object);
         } else if (variableStringBoolSelectionView != null) {
             variableStringBoolSelectionView.setObject(object);
         } else {
@@ -97,8 +97,8 @@ public class ObjectView extends HorizontalLayout {
     }
 
     private void showErrorMessage(String errorMessage) {
-        if (conceptSelectionView != null) {
-            conceptSelectionView.showErrorMessage(errorMessage);
+        if (conceptSelectionComponent != null) {
+            conceptSelectionComponent.showErrorMessage(errorMessage);
         } else if (variableStringBoolSelectionView != null) {
             variableStringBoolSelectionView.showErrorMessage(errorMessage);
         }
@@ -109,7 +109,7 @@ public class ObjectView extends HorizontalLayout {
 
     private void clearView() {
         removeAll();
-        conceptSelectionView = null;
+        conceptSelectionComponent = null;
         variableStringBoolSelectionView = null;
     }
 }
