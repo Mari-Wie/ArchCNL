@@ -15,14 +15,14 @@ import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
-public class ObjectComponent extends HorizontalLayout {
+public class ObjectView extends HorizontalLayout {
 
     private static final long serialVersionUID = -1105253743414019620L;
     private ConceptSelectionView conceptSelectionView;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
     private VariableManager variableManager;
 
-    public ObjectComponent(VariableManager variableManager) {
+    public ObjectView(VariableManager variableManager) {
         this.variableManager = variableManager;
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
     }
