@@ -10,11 +10,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletContract;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
@@ -57,8 +55,7 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         tripletLabelLayout.add(subjectLabel, predicateLabel, objectLabel);
 
         boxContent.add(tripletLabelLayout);
-        boxContent.add(
-                createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
+        boxContent.add(presenter.createEmptyTripletView());
         boxContent.setWidth(95, Unit.PERCENTAGE);
 
         boxButtonLayout = new VerticalLayout();
@@ -76,21 +73,17 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
     }
 
     @Override
-    public void addNewTripletViewAfter(TripletContract.View tripletView) {
+    public void addNewTripletViewAfter(TripletView tripletView) {
         int previousIndex = boxContent.indexOf((Component) tripletView);
-        boxContent.addComponentAtIndex(
-                previousIndex + 1,
-                createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null))));
+        boxContent.addComponentAtIndex(previousIndex + 1, presenter.createEmptyTripletView());
     }
 
     @Override
-    public void deleteTripletView(TripletContract.View tripletView) {
+    public void deleteTripletView(TripletView tripletView) {
         boxContent.remove((Component) tripletView);
         if (getTripletPresenters().isEmpty()) {
             if (presenter.isLastAndTripletsEditor()) {
-                boxContent.add(
-                        createTripletView(
-                                new TripletPresenter(presenter, Optional.ofNullable(null))));
+                boxContent.add(presenter.createEmptyTripletView());
             } else {
                 presenter.delete();
             }
@@ -113,13 +106,9 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         return presenter;
     }
 
-    private TripletView createTripletView(TripletPresenter tripletPresenter) {
-        return new TripletView(tripletPresenter, presenter.getVariableManager());
-    }
-
     @Override
     public void addNewTripletView(TripletPresenter tripletPresenter) {
-        boxContent.add(new TripletView(tripletPresenter, presenter.getVariableManager()));
+        boxContent.add(tripletPresenter.getTripletView());
     }
 
     @Override

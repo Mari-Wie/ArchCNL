@@ -6,16 +6,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
 import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletContract;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
+import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
 public class AndTripletsEditorPresenter implements Presenter<View> {
 
-    private static final long serialVersionUID = 5409700467865922127L;
     private View view;
     private VariableManager variableManager;
     private MappingEditorContract.Presenter<MappingEditorContract.View> mappingEditorPresenter;
@@ -42,13 +42,12 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
         return variableManager;
     }
 
-    @Override
-    public void addNewTripletViewAfter(TripletContract.View tripletView) {
+    public void addNewTripletViewAfter(TripletView tripletView) {
+
         view.addNewTripletViewAfter(tripletView);
     }
 
-    @Override
-    public void deleteTripletView(TripletContract.View tripletView) {
+    public void deleteTripletView(TripletView tripletView) {
         view.deleteTripletView(tripletView);
     }
 
@@ -93,7 +92,8 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
                     .forEach(
                             triplet ->
                                     view.addNewTripletView(
-                                            new TripletPresenter(this, Optional.of(triplet))));
+                                            new TripletPresenter(
+                                                    Optional.of(triplet), variableManager)));
         }
     }
 
@@ -103,5 +103,10 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
 
     public void highlightIncompleteTriplets() {
         view.getTripletPresenters().stream().forEach(TripletPresenter::highlightIncompleteParts);
+    }
+
+    @Override
+    public TripletView createEmptyTripletView() {
+        return new TripletPresenter(Optional.ofNullable(null), variableManager).getTripletView();
     }
 }
