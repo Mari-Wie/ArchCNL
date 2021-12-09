@@ -113,7 +113,7 @@ public class VariableSelectionComponent extends ComboBox<String>
         setValue(value);
     }
 
-    private void showErrorMessage(String message) {
+    protected void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
     }
