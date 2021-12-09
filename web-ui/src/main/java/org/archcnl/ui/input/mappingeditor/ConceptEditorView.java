@@ -46,7 +46,7 @@ public class ConceptEditorView extends MappingEditorView {
     @Override
     public Variable getThenTripletSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return subjectComponent.getSubject();
+        return new Variable(subjectComponent.getValue());
     }
 
     @Override
@@ -67,7 +67,8 @@ public class ConceptEditorView extends MappingEditorView {
 
     @Override
     public void setSubjectInThenTriplet(Variable subject) {
-        subjectComponent.setSubject(subject);
+        // TODO not needed
+        // subjectComponent.setSubject(subject);
     }
 
     @Override

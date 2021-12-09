@@ -1,5 +1,8 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -13,9 +16,9 @@ public class SubjectComponent extends VariableSelectionComponent {
         super(variableManager);
     }
 
-    public Variable getSubject()
+    public String getSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return getVariable();
+        return getValue();
     }
 
     public void setSubject(Variable subject) {
@@ -30,5 +33,11 @@ public class SubjectComponent extends VariableSelectionComponent {
         } catch (SubjectOrObjectNotDefinedException e) {
             showErrorMessage("Variable not set");
         }
+    }
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

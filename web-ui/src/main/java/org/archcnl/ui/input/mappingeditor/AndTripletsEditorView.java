@@ -96,7 +96,6 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
                 .getChildren()
                 .filter(TripletView.class::isInstance)
                 .map(TripletView.class::cast)
-                .map(TripletView::getPresenter)
                 .filter(TripletPresenter.class::isInstance)
                 .map(TripletPresenter.class::cast)
                 .collect(Collectors.toList());

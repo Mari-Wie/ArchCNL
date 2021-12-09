@@ -1,7 +1,10 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
+import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -9,6 +12,7 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.ui.input.mappingeditor.events.PredicateSelectedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
 
 public class PredicateComponent extends ComboBox<String> implements DropTarget<PredicateComponent> {
@@ -23,11 +27,7 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         updateItems();
         setClearButtonVisible(true);
 
-        addValueChangeListener(
-                event -> {
-                    valueHasChanged();
-                    setInvalid(false);
-                });
+        addValueChangeListener(e -> fireEvent(new PredicateSelectedEvent(this, false)));
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
@@ -69,6 +69,7 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         }
     }
 
+    // TODO: move to presenter
     public void valueHasChanged() {
         Relation relation = null;
         try {
@@ -96,5 +97,11 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
     private void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
+    }
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }
