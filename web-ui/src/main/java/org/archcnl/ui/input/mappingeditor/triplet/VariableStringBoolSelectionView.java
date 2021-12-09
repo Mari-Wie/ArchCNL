@@ -24,7 +24,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
 
     private BooleanSelectionComponent booleanSelectionComponent;
     private StringSelectionComponent stringSelectionComponent;
-    private VariableSelectionView variableSelectionView;
+    private VariableSelectionComponent variableSelectionComponent;
     private VariableSelectionPresenter variableSelectionPresenter;
     private VariableManager variableManager;
     private ComboBox<String> typeSelection;
@@ -82,7 +82,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             object = booleanSelectionComponent.getObject();
         } else if (stringSelectionComponent != null) {
             object = stringSelectionComponent.getObject();
-        } else if (variableSelectionView != null && variableSelectionPresenter != null) {
+        } else if (variableSelectionComponent != null && variableSelectionPresenter != null) {
             object = variableSelectionPresenter.getSelectedVariable();
         } else {
             // should never happen
@@ -111,7 +111,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     }
 
     public void showErrorMessage(String message) {
-        variableSelectionView.showErrorMessage(message);
+        variableSelectionComponent.showErrorMessage(message);
     }
 
     private void removeAllSecondaryViews() {
@@ -121,12 +121,12 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         if (stringSelectionComponent != null) {
             remove(stringSelectionComponent);
         }
-        if (variableSelectionView != null) {
-            remove(variableSelectionView);
+        if (variableSelectionComponent != null) {
+            remove(variableSelectionComponent);
         }
         booleanSelectionComponent = null;
         stringSelectionComponent = null;
-        variableSelectionView = null;
+        variableSelectionComponent = null;
         variableSelectionPresenter = null;
     }
 
@@ -145,8 +145,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private void showVariableSelectionView() {
         removeAllSecondaryViews();
         variableSelectionPresenter = new VariableSelectionPresenter(variableManager);
-        variableSelectionView = new VariableSelectionView(variableSelectionPresenter);
-        add(variableSelectionView);
+        variableSelectionComponent = new VariableSelectionComponent(variableSelectionPresenter);
+        add(variableSelectionComponent);
     }
 
     public ObjectType getSelectedObjectType() {
@@ -155,7 +155,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             object = new BooleanValue(false);
         } else if (stringSelectionComponent != null) {
             object = new StringValue("");
-        } else if (variableSelectionView != null && variableSelectionPresenter != null) {
+        } else if (variableSelectionComponent != null && variableSelectionPresenter != null) {
             try {
                 object = new Variable("placeholder");
             } catch (InvalidVariableNameException e) {
