@@ -4,7 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.ui.output.events.ResultUpdateEvent;
 
-public class FreeTextQueryUiComponent extends AbstractQueryResults {
+public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
 
@@ -14,7 +14,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResults {
     private Button defaultQueryButton =
             new Button("Default Query", e -> queryTextArea.setValue(exampleQuery));
     private Button importCustomQueryButton =
-            new Button("Import Custom Query", e -> importCustomQueryText());
+            new Button("Use Custom Query", e -> importCustomQueryText());
     private Button applyButton =
             new Button("Apply", e -> fireEvent(new ResultUpdateEvent(this, false)));
 

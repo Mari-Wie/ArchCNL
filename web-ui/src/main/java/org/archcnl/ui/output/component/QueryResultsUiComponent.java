@@ -1,6 +1,6 @@
 package org.archcnl.ui.output.component;
 
-public class QueryResultsUiComponent extends AbstractQueryResults {
+public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
 

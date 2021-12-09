@@ -9,9 +9,9 @@ public class QueryView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    AbstractQueryResults queryResults;
-    AbstractQueryResults customQueryResults;
-    AbstractQueryResults freeTextQuery;
+    AbstractQueryResultsComponent queryResults;
+    AbstractQueryResultsComponent customQueryResults;
+    AbstractQueryResultsComponent freeTextQuery;
     SideBarLayout sideBar;
     Component currentComponent;
 
