@@ -8,12 +8,12 @@ import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 
-public class ConceptSelectionView extends ComboBox<String>
-        implements DropTarget<ConceptSelectionView> {
+public class ConceptSelectionComponent extends ComboBox<String>
+        implements DropTarget<ConceptSelectionComponent> {
 
     private static final long serialVersionUID = 5874026321476515429L;
 
-    public ConceptSelectionView() {
+    public ConceptSelectionComponent() {
         setActive(true);
         setPlaceholder("Concept");
         updateItems();

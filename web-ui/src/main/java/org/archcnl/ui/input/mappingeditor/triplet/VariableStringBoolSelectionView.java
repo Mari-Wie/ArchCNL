@@ -22,8 +22,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private static final String VARIABLE = "Variable";
     private static final long serialVersionUID = 8635404097691880603L;
 
-    private BooleanSelectionView booleanSelectionView;
-    private StringSelectionView stringSelectionView;
+    private BooleanSelectionComponent booleanSelectionComponent;
+    private StringSelectionComponent stringSelectionComponent;
     private VariableSelectionView variableSelectionView;
     private VariableSelectionPresenter variableSelectionPresenter;
     private VariableManager variableManager;
@@ -78,10 +78,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     public ObjectType getObject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (booleanSelectionView != null) {
-            object = booleanSelectionView.getObject();
-        } else if (stringSelectionView != null) {
-            object = stringSelectionView.getObject();
+        if (booleanSelectionComponent != null) {
+            object = booleanSelectionComponent.getObject();
+        } else if (stringSelectionComponent != null) {
+            object = stringSelectionComponent.getObject();
         } else if (variableSelectionView != null && variableSelectionPresenter != null) {
             object = variableSelectionPresenter.getSelectedVariable();
         } else {
@@ -95,11 +95,11 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         if (object instanceof StringValue) {
             typeSelection.setValue(STRING);
             showStringSelectionView();
-            stringSelectionView.setValue(((StringValue) object).getValue());
+            stringSelectionComponent.setValue(((StringValue) object).getValue());
         } else if (object instanceof BooleanValue) {
             typeSelection.setValue(BOOLEAN);
             showBooleanSelectionView();
-            booleanSelectionView.setValue(String.valueOf(((BooleanValue) object).getValue()));
+            booleanSelectionComponent.setValue(String.valueOf(((BooleanValue) object).getValue()));
         } else if (object instanceof Variable) {
             typeSelection.setValue(VARIABLE);
             showVariableSelectionView();
@@ -115,31 +115,31 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     }
 
     private void removeAllSecondaryViews() {
-        if (booleanSelectionView != null) {
-            remove(booleanSelectionView);
+        if (booleanSelectionComponent != null) {
+            remove(booleanSelectionComponent);
         }
-        if (stringSelectionView != null) {
-            remove(stringSelectionView);
+        if (stringSelectionComponent != null) {
+            remove(stringSelectionComponent);
         }
         if (variableSelectionView != null) {
             remove(variableSelectionView);
         }
-        booleanSelectionView = null;
-        stringSelectionView = null;
+        booleanSelectionComponent = null;
+        stringSelectionComponent = null;
         variableSelectionView = null;
         variableSelectionPresenter = null;
     }
 
     private void showStringSelectionView() {
         removeAllSecondaryViews();
-        stringSelectionView = new StringSelectionView();
-        add(stringSelectionView);
+        stringSelectionComponent = new StringSelectionComponent();
+        add(stringSelectionComponent);
     }
 
     private void showBooleanSelectionView() {
         removeAllSecondaryViews();
-        booleanSelectionView = new BooleanSelectionView();
-        add(booleanSelectionView);
+        booleanSelectionComponent = new BooleanSelectionComponent();
+        add(booleanSelectionComponent);
     }
 
     private void showVariableSelectionView() {
@@ -151,9 +151,9 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
 
     public ObjectType getSelectedObjectType() {
         ObjectType object;
-        if (booleanSelectionView != null) {
+        if (booleanSelectionComponent != null) {
             object = new BooleanValue(false);
-        } else if (stringSelectionView != null) {
+        } else if (stringSelectionComponent != null) {
             object = new StringValue("");
         } else if (variableSelectionView != null && variableSelectionPresenter != null) {
             try {
