@@ -3,7 +3,9 @@ package org.archcnl.ui.output.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+
 import org.archcnl.ui.main.MainPresenter;
+import org.archcnl.ui.output.events.CustomQueryInsertionRequestedEvent;
 
 public class QueryView extends HorizontalLayout {
 
@@ -18,9 +20,10 @@ public class QueryView extends HorizontalLayout {
     public QueryView(MainPresenter mainPresenter) {
         queryResults = new QueryResultsUiComponent();
         customQueryResults = new CustomQueryUiComponent();
-        freeTextQuery = new FreeTextQueryUiComponent(this);
+        freeTextQuery = new FreeTextQueryUiComponent();
         sideBar = new SideBarLayout(this, mainPresenter);
         initLayout();
+        registerEventListeners();
         addAndExpand(sideBar, queryResults);
     }
 
@@ -30,6 +33,10 @@ public class QueryView extends HorizontalLayout {
         sideBar.setWidth(20, Unit.PERCENTAGE);
         queryResults.setWidth(80, Unit.PERCENTAGE);
         currentComponent = queryResults;
+    }
+    
+    protected void registerEventListeners() {
+        freeTextQuery.addListener(CustomQueryInsertionRequestedEvent.class, e -> this.insertCustomQueryIntoFreeTextQuery());
     }
 
     // TODO Extract into interface
@@ -48,8 +55,10 @@ public class QueryView extends HorizontalLayout {
         replace(currentComponent, freeTextQuery);
         currentComponent = freeTextQuery;
     }
-
-    public String getCustomQuery() {
-        return customQueryResults.getQuery();
+    
+    private void insertCustomQueryIntoFreeTextQuery() {
+    	System.out.print("insertInView");
+    	String customQuery = customQueryResults.getQuery();
+    	freeTextQuery.setQueryText(customQuery);
     }
 }

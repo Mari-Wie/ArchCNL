@@ -46,6 +46,11 @@ public abstract class AbstractQueryResultsComponent extends VerticalLayout {
     public String getQuery() {
         return queryTextArea.getValue();
     }
+    
+    public void setQueryText(String text) {
+    	System.out.print("setQuery");
+    	queryTextArea.setValue(text);
+    }
 
     protected abstract void addComponents();
 }
