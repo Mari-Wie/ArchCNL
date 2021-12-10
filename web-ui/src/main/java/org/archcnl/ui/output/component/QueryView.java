@@ -3,7 +3,6 @@ package org.archcnl.ui.output.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-
 import org.archcnl.ui.main.MainPresenter;
 import org.archcnl.ui.output.events.CustomQueryInsertionRequestedEvent;
 
@@ -34,9 +33,11 @@ public class QueryView extends HorizontalLayout {
         queryResults.setWidth(80, Unit.PERCENTAGE);
         currentComponent = queryResults;
     }
-    
+
     protected void registerEventListeners() {
-        freeTextQuery.addListener(CustomQueryInsertionRequestedEvent.class, e -> this.insertCustomQueryIntoFreeTextQuery());
+        freeTextQuery.addListener(
+                CustomQueryInsertionRequestedEvent.class,
+                e -> this.insertCustomQueryIntoFreeTextQuery());
     }
 
     // TODO Extract into interface
@@ -55,10 +56,10 @@ public class QueryView extends HorizontalLayout {
         replace(currentComponent, freeTextQuery);
         currentComponent = freeTextQuery;
     }
-    
+
     private void insertCustomQueryIntoFreeTextQuery() {
-    	System.out.print("insertInView");
-    	String customQuery = customQueryResults.getQuery();
-    	freeTextQuery.setQueryText(customQuery);
+        System.out.print("insertInView");
+        String customQuery = customQueryResults.getQuery();
+        freeTextQuery.setQueryText(customQuery);
     }
 }
