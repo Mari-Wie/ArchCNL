@@ -28,7 +28,7 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         List<Mapping> conceptMappings = new LinkedList<>();
         customConcepts.forEach(
                 concept -> concept.getMapping().ifPresent(mapping -> conceptMappings.add(mapping)));
-        String conceptMappingsString = constructMappingString(conceptMappings);
+        String conceptMappingsString = constructConceptString(customConcepts);
 
         List<CustomRelation> customRelations =
                 rulesConceptsAndRelations.getRelationManager().getCustomRelations();
@@ -36,7 +36,7 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         customRelations.forEach(
                 relation ->
                         relation.getMapping().ifPresent(mapping -> relationMappings.add(mapping)));
-        String relationMappingsString = constructMappingString(relationMappings);
+        String relationMappingsString = constructRelationString(customRelations);
 
         FileUtils.writeStringToFile(
                 file,
@@ -54,14 +54,37 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         }
         return builder.toString();
     }
-
-    private String constructMappingString(List<Mapping> mappings) {
+    
+    private String constructConceptString(List<CustomConcept> concepts) {
         StringBuilder builder = new StringBuilder();
-        for (Mapping mapping : mappings) {
+        concepts.removeIf(concept -> concept.getMapping().isEmpty());
+        for (CustomConcept concept : concepts) {
+        	Mapping mapping = concept.getMapping().get();
+            for (String oneMapping : mapping.toStringRepresentation()) {
+            	builder.append("[role=\"description\"]");
+                builder.append("\n");
+                builder.append(concept.getDescription());
+                builder.append("\n");
+                builder.append("[role=\"mapping\"]");
+                builder.append("\n");
+                builder.append(oneMapping);
+                builder.append("\n\n");
+            }
+        }
+        return builder.toString();
+    }
+    
+    private String constructRelationString(List<CustomRelation> relations) {
+        StringBuilder builder = new StringBuilder();
+        relations.removeIf(relation -> relation.getMapping().isEmpty());
+        for (CustomRelation relation : relations) {
+        	Mapping mapping = relation.getMapping().get();
             for (String oneMapping : mapping.toStringRepresentation()) {
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
+                builder.append("\n");
+                builder.append(relation.getDescription());
                 builder.append("\n\n");
             }
         }
