@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -38,18 +39,24 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private static final Pattern DESCRIPTION_TEXT_PATTERN =
             Pattern.compile(
-                    "(w+(?=(\r\n?|\n)))");
+            		"(?<=\\[role=\"description\"\\](\r\n?|\n))\\w+(?=(\r\n?|\n))");
     private static final Pattern DESCRIPTION_PATTERN =
             Pattern.compile(
-                    "(?<=\\[role=\"description\"\\](\r\n?|\n))" + DESCRIPTION_TEXT_PATTERN);
+                    "\\[role=\"description\"\\](\r\n?|\n)\\w+(\r\n?|\n)");
     private static final Pattern RULE_PATTERN =
-            Pattern.compile("(" + DESCRIPTION_PATTERN + ")+" + "(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
-    private static final Pattern CONCEPT_MAPPING_PATTERN =
+            Pattern.compile("(" + DESCRIPTION_PATTERN + ")?\\[role=\"rule\"\\](\r\n?|\n).+\\.");
+    private static final Pattern RULE_CONTENT_PATTERN =
+            Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
+    private static final Pattern CONCEPT_PATTERN =
             Pattern.compile(
-            		"(" + DESCRIPTION_PATTERN + ")+" + "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
-    private static final Pattern RELATION_MAPPING_PATTERN =
+            		"(" + DESCRIPTION_PATTERN + ")?\\[role=\"mapping\"\\](\r\n?|\n)is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
+    private static final Pattern CONCEPT_CONTENT_PATTERN =
+            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
+    private static final Pattern RELATION_PATTERN =
             Pattern.compile(
-            		"(" + DESCRIPTION_PATTERN + ")+" + "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
+            		"(" + DESCRIPTION_PATTERN + ")?\\[role=\"mapping\"\\](\r\n?|\n)\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
+    private static final Pattern RELATION_CONTENT_PATTERN =
+            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
                     "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
@@ -65,6 +72,8 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     @Override
     public void readArchitectureRules(
             File file, RulesConceptsAndRelations rulesConceptsAndRelations) throws IOException {
+    	
+    	System.out.println("readArchitectureRules called");
 
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
@@ -72,24 +81,48 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
         AdocIoUtils.getAllMatches(RULE_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRule -> {
-                            try {
+                        	try {
+                        	System.out.println("Rule Found: " + potentialRule);
+                        	String description = "";
+                            Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRule);
+                            if(matcher.find()) {
+                            	description = matcher.group();
+                            	System.out.println("Description found: " + description);
+                            	//potentialRule.replaceAll("\\[role=\"description\"\\](\r\n?|\n)\\w+(\r\n?|\n)", "");
+                            	System.out.println("Rule after removal: " + potentialRule);
+                            }
+                            // TODO: Add the description to the rule once rules have descriptions
+                                String potentialRulePart =
+                                        AdocIoUtils.getFirstMatch(
+                                                RULE_CONTENT_PATTERN, potentialRule);
                                 rulesConceptsAndRelations
                                         .getArchitectureRuleManager()
-                                        .addArchitectureRule(parseArchitectureRule(potentialRule));
-                            } catch (NoArchitectureRuleException e) {
+                                        .addArchitectureRule(parseArchitectureRule(potentialRulePart));
+                            } catch (NoArchitectureRuleException
+                            		| NoMatchFoundException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });
 
-        AdocIoUtils.getAllMatches(CONCEPT_MAPPING_PATTERN, fileContent).stream()
+        AdocIoUtils.getAllMatches(CONCEPT_PATTERN, fileContent).stream()
                 .forEach(
                         potentialConceptMapping -> {
                             try {
+                            	System.out.println("Found Concept: " + potentialConceptMapping);
+                            	String description = "";
+                                Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialConceptMapping);
+                                if(matcher.find()) {
+                                	description = matcher.group();
+                                	System.out.println("Description found: " + description);
+                                	//potentialConceptMapping.replaceAll(DESCRIPTION_PATTERN.pattern(), "");
+                                	System.out.println("Rule after removal: " + potentialConceptMapping);
+                                }
+                                String potentialRuleContent = AdocIoUtils.getFirstMatch(CONCEPT_CONTENT_PATTERN, potentialConceptMapping);
                                 String name =
                                         AdocIoUtils.getFirstMatch(
-                                                CONCEPT_MAPPING_NAME, potentialConceptMapping);
-                                CustomConcept concept = new CustomConcept(name, "");
-                                concept.setMapping(parseMapping(potentialConceptMapping, concept));
+                                                CONCEPT_MAPPING_NAME, potentialRuleContent);
+                                CustomConcept concept = new CustomConcept(name, description);
+                                concept.setMapping(parseMapping(potentialRuleContent, concept));
                                 rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
                             } catch (UnrelatedMappingException
                                     | NoMappingException
@@ -98,17 +131,25 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             }
                         });
 
-        AdocIoUtils.getAllMatches(RELATION_MAPPING_PATTERN, fileContent).stream()
+        AdocIoUtils.getAllMatches(RELATION_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRelationMapping -> {
                             try {
+                            	System.out.println("Found Mapping: " + potentialRelationMapping);
+                            	String description = "";
+                                Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRelationMapping);
+                                if(matcher.find()) {
+                                	description = matcher.group();
+                                	//potentialRelationMapping.replaceAll(DESCRIPTION_PATTERN.pattern(), "");
+                                }
+                                String potentialRelationContent = AdocIoUtils.getFirstMatch(RELATION_CONTENT_PATTERN, potentialRelationMapping);
                                 String name =
                                         AdocIoUtils.getFirstMatch(
-                                                RELATION_MAPPING_NAME, potentialRelationMapping);
+                                                RELATION_MAPPING_NAME, potentialRelationContent);
                                 CustomRelation relation =
-                                        new CustomRelation(name, "", new LinkedList<>());
+                                        new CustomRelation(name, description, new LinkedList<>());
                                 relation.setMapping(
-                                        parseMapping(potentialRelationMapping, relation));
+                                        parseMapping(potentialRelationContent, relation));
                                 rulesConceptsAndRelations
                                         .getRelationManager()
                                         .addOrAppend(relation);
@@ -236,11 +277,11 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     @VisibleForTesting
     public static Pattern getConceptMappingPattern() {
-        return CONCEPT_MAPPING_PATTERN;
+        return CONCEPT_PATTERN;
     }
 
     @VisibleForTesting
     public static Pattern getRelationMappingPattern() {
-        return RELATION_MAPPING_PATTERN;
+        return RELATION_PATTERN;
     }
 }
