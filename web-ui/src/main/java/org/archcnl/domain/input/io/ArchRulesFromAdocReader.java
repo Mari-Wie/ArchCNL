@@ -36,14 +36,20 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private static final Logger LOG = LogManager.getLogger(ArchRulesFromAdocReader.class);
 
+    private static final Pattern DESCRIPTION_TEXT_PATTERN =
+            Pattern.compile(
+                    "(w+(?=(\r\n?|\n)))");
+    private static final Pattern DESCRIPTION_PATTERN =
+            Pattern.compile(
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n))" + DESCRIPTION_TEXT_PATTERN);
     private static final Pattern RULE_PATTERN =
-            Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
+            Pattern.compile("(" + DESCRIPTION_PATTERN + ")+" + "(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_MAPPING_PATTERN =
             Pattern.compile(
-                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
+            		"(" + DESCRIPTION_PATTERN + ")+" + "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
     private static final Pattern RELATION_MAPPING_PATTERN =
             Pattern.compile(
-                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
+            		"(" + DESCRIPTION_PATTERN + ")+" + "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
                     "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
