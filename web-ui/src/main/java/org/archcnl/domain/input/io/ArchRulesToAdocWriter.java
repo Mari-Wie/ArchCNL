@@ -3,7 +3,6 @@ package org.archcnl.domain.input.io;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.common.CustomConcept;
@@ -25,27 +24,21 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
 
         List<CustomConcept> customConcepts =
                 rulesConceptsAndRelations.getConceptManager().getCustomConcepts();
-        List<Mapping> conceptMappings = new LinkedList<>();
-        customConcepts.forEach(
-                concept -> concept.getMapping().ifPresent(mapping -> conceptMappings.add(mapping)));
-        String conceptMappingsString = constructConceptString(customConcepts);
+        String conceptsString = constructConceptString(customConcepts);
 
         List<CustomRelation> customRelations =
                 rulesConceptsAndRelations.getRelationManager().getCustomRelations();
-        List<Mapping> relationMappings = new LinkedList<>();
-        customRelations.forEach(
-                relation ->
-                        relation.getMapping().ifPresent(mapping -> relationMappings.add(mapping)));
-        String relationMappingsString = constructRelationString(customRelations);
+        String relationsString = constructRelationString(customRelations);
 
         FileUtils.writeStringToFile(
                 file,
-                rulesString + conceptMappingsString + relationMappingsString,
+                rulesString + conceptsString + relationsString,
                 StandardCharsets.UTF_8);
     }
 
     private String constructArchRuleString(List<ArchitectureRule> rules) {
         StringBuilder builder = new StringBuilder();
+        // TODO: Add description once rules have them
         for (ArchitectureRule rule : rules) {
             builder.append("[role=\"rule\"]");
             builder.append("\n");
@@ -61,10 +54,12 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         for (CustomConcept concept : concepts) {
         	Mapping mapping = concept.getMapping().get();
             for (String oneMapping : mapping.toStringRepresentation()) {
-            	builder.append("[role=\"description\"]");
-                builder.append("\n");
-                builder.append(concept.getDescription());
-                builder.append("\n");
+            	if(!concept.getDescription().isEmpty()) {
+            		builder.append("[role=\"description\"]");
+            		builder.append("\n");
+            		builder.append(concept.getDescription());
+            		builder.append("\n");        		
+            	}
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
@@ -80,11 +75,15 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         for (CustomRelation relation : relations) {
         	Mapping mapping = relation.getMapping().get();
             for (String oneMapping : mapping.toStringRepresentation()) {
+            	if(!relation.getDescription().isEmpty()) {
+            		builder.append("[role=\"description\"]");
+            		builder.append("\n");
+            		builder.append(relation.getDescription());
+            		builder.append("\n");        		
+            	}
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
-                builder.append("\n");
-                builder.append(relation.getDescription());
                 builder.append("\n\n");
             }
         }
