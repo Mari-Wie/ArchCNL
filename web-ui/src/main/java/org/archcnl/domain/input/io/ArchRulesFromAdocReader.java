@@ -77,8 +77,6 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     public void readArchitectureRules(
             File file, RulesConceptsAndRelations rulesConceptsAndRelations) throws IOException {
 
-        System.out.println("readArchitectureRules called");
-
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
         // Extract and add architecture rules
