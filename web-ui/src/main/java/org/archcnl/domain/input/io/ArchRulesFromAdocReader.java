@@ -38,25 +38,29 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private static final Logger LOG = LogManager.getLogger(ArchRulesFromAdocReader.class);
 
     private static final Pattern DESCRIPTION_TEXT_PATTERN =
-            Pattern.compile(
-            		"(?<=\\[role=\"description\"\\](\r\n?|\n))[\\w\\. ]+(?=(\r\n?|\n))");
+            Pattern.compile("(?<=\\[role=\"description\"\\](\r\n?|\n))[\\w\\. ]+(?=(\r\n?|\n))");
     private static final Pattern DESCRIPTION_PATTERN =
-            Pattern.compile(
-                    "\\[role=\"description\"\\](\r\n?|\n)[\\w\\. ]+(\r\n?|\n)");
+            Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern RULE_PATTERN =
             Pattern.compile("(" + DESCRIPTION_PATTERN + ")?\\[role=\"rule\"\\](\r\n?|\n).+\\.");
     private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_PATTERN =
             Pattern.compile(
-            		"(" + DESCRIPTION_PATTERN + ")?\\[role=\"mapping\"\\](\r\n?|\n)is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
+                    "("
+                            + DESCRIPTION_PATTERN
+                            + ")?\\[role=\"mapping\"\\](\r\n?|\n)is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
     private static final Pattern CONCEPT_CONTENT_PATTERN =
-            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
+            Pattern.compile(
+                    "(?<=\\[role=\"mapping\"\\](\r\n?|\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
     private static final Pattern RELATION_PATTERN =
             Pattern.compile(
-            		"(" + DESCRIPTION_PATTERN + ")?\\[role=\"mapping\"\\](\r\n?|\n)\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
+                    "("
+                            + DESCRIPTION_PATTERN
+                            + ")?\\[role=\"mapping\"\\](\r\n?|\n)\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern RELATION_CONTENT_PATTERN =
-            Pattern.compile("(?<=\\[role=\"mapping\"\\](\r\n?|\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
+            Pattern.compile(
+                    "(?<=\\[role=\"mapping\"\\](\r\n?|\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
                     "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
@@ -72,8 +76,8 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     @Override
     public void readArchitectureRules(
             File file, RulesConceptsAndRelations rulesConceptsAndRelations) throws IOException {
-    	
-    	System.out.println("readArchitectureRules called");
+
+        System.out.println("readArchitectureRules called");
 
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
@@ -81,20 +85,20 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
         AdocIoUtils.getAllMatches(RULE_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRule -> {
-                        	try {
-                        	String description = "";
-                            Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRule);
-                            if(matcher.find()) {
-                            	description = matcher.group();
-                            }
+                            try {
+                                String description = "";
+                                Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRule);
+                                if (matcher.find()) {
+                                    description = matcher.group();
+                                }
                                 String potentialRuleContent =
                                         AdocIoUtils.getFirstMatch(
                                                 RULE_CONTENT_PATTERN, potentialRule);
                                 rulesConceptsAndRelations
                                         .getArchitectureRuleManager()
-                                        .addArchitectureRule(parseArchitectureRule(potentialRuleContent));
-                            } catch (NoArchitectureRuleException
-                            		| NoMatchFoundException e) {
+                                        .addArchitectureRule(
+                                                parseArchitectureRule(potentialRuleContent));
+                            } catch (NoArchitectureRuleException | NoMatchFoundException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });
@@ -103,12 +107,15 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 .forEach(
                         potentialConceptMapping -> {
                             try {
-                            	String description = "";
-                                Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialConceptMapping);
-                                if(matcher.find()) {
-                                	description = matcher.group();
+                                String description = "";
+                                Matcher matcher =
+                                        DESCRIPTION_TEXT_PATTERN.matcher(potentialConceptMapping);
+                                if (matcher.find()) {
+                                    description = matcher.group();
                                 }
-                                String potentialRuleContent = AdocIoUtils.getFirstMatch(CONCEPT_CONTENT_PATTERN, potentialConceptMapping);
+                                String potentialRuleContent =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_CONTENT_PATTERN, potentialConceptMapping);
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 CONCEPT_MAPPING_NAME, potentialRuleContent);
@@ -126,12 +133,15 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 .forEach(
                         potentialRelationMapping -> {
                             try {
-                            	String description = "";
-                                Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRelationMapping);
-                                if(matcher.find()) {
-                                	description = matcher.group();
+                                String description = "";
+                                Matcher matcher =
+                                        DESCRIPTION_TEXT_PATTERN.matcher(potentialRelationMapping);
+                                if (matcher.find()) {
+                                    description = matcher.group();
                                 }
-                                String potentialRelationContent = AdocIoUtils.getFirstMatch(RELATION_CONTENT_PATTERN, potentialRelationMapping);
+                                String potentialRelationContent =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_CONTENT_PATTERN, potentialRelationMapping);
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 RELATION_MAPPING_NAME, potentialRelationContent);

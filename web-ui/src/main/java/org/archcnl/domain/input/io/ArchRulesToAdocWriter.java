@@ -31,9 +31,7 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         String relationsString = constructRelationString(customRelations);
 
         FileUtils.writeStringToFile(
-                file,
-                rulesString + conceptsString + relationsString,
-                StandardCharsets.UTF_8);
+                file, rulesString + conceptsString + relationsString, StandardCharsets.UTF_8);
     }
 
     private String constructArchRuleString(List<ArchitectureRule> rules) {
@@ -47,19 +45,19 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         }
         return builder.toString();
     }
-    
+
     private String constructConceptString(List<CustomConcept> concepts) {
         StringBuilder builder = new StringBuilder();
         concepts.removeIf(concept -> concept.getMapping().isEmpty());
         for (CustomConcept concept : concepts) {
-        	Mapping mapping = concept.getMapping().get();
+            Mapping mapping = concept.getMapping().get();
             for (String oneMapping : mapping.toStringRepresentation()) {
-            	if(!concept.getDescription().isEmpty()) {
-            		builder.append("[role=\"description\"]");
-            		builder.append("\n");
-            		builder.append(concept.getDescription());
-            		builder.append("\n");        		
-            	}
+                if (!concept.getDescription().isEmpty()) {
+                    builder.append("[role=\"description\"]");
+                    builder.append("\n");
+                    builder.append(concept.getDescription());
+                    builder.append("\n");
+                }
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
@@ -68,19 +66,19 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         }
         return builder.toString();
     }
-    
+
     private String constructRelationString(List<CustomRelation> relations) {
         StringBuilder builder = new StringBuilder();
         relations.removeIf(relation -> relation.getMapping().isEmpty());
         for (CustomRelation relation : relations) {
-        	Mapping mapping = relation.getMapping().get();
+            Mapping mapping = relation.getMapping().get();
             for (String oneMapping : mapping.toStringRepresentation()) {
-            	if(!relation.getDescription().isEmpty()) {
-            		builder.append("[role=\"description\"]");
-            		builder.append("\n");
-            		builder.append(relation.getDescription());
-            		builder.append("\n");        		
-            	}
+                if (!relation.getDescription().isEmpty()) {
+                    builder.append("[role=\"description\"]");
+                    builder.append("\n");
+                    builder.append(relation.getDescription());
+                    builder.append("\n");
+                }
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
