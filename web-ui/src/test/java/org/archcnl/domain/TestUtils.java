@@ -41,7 +41,8 @@ public class TestUtils {
         Matcher matcher = regex.matcher(expected);
         while (matcher.find()) {
             String match = matcher.group();
-            if (!actual.contains(match)) {
+            String replaced = match.replaceAll("\r\n?", "\n");  
+            if (!actual.contains(replaced)) {
                 return false;
             }
         }
