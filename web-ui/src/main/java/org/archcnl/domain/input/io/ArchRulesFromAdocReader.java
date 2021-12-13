@@ -82,16 +82,11 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 .forEach(
                         potentialRule -> {
                         	try {
-                        	System.out.println("Rule Found: " + potentialRule);
                         	String description = "";
                             Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRule);
                             if(matcher.find()) {
                             	description = matcher.group();
-                            	System.out.println("Description found: " + description);
-                            	//potentialRule.replaceAll("\\[role=\"description\"\\](\r\n?|\n)\\w+(\r\n?|\n)", "");
-                            	System.out.println("Rule after removal: " + potentialRule);
                             }
-                            // TODO: Add the description to the rule once rules have descriptions
                                 String potentialRuleContent =
                                         AdocIoUtils.getFirstMatch(
                                                 RULE_CONTENT_PATTERN, potentialRule);
@@ -108,14 +103,10 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 .forEach(
                         potentialConceptMapping -> {
                             try {
-                            	System.out.println("Found Concept: " + potentialConceptMapping);
                             	String description = "";
                                 Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialConceptMapping);
                                 if(matcher.find()) {
                                 	description = matcher.group();
-                                	//System.out.println("Description found: " + description);
-                                	//potentialConceptMapping.replaceAll(DESCRIPTION_PATTERN.pattern(), "");
-                                	//System.out.println("Rule after removal: " + potentialConceptMapping);
                                 }
                                 String potentialRuleContent = AdocIoUtils.getFirstMatch(CONCEPT_CONTENT_PATTERN, potentialConceptMapping);
                                 String name =
@@ -135,12 +126,10 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 .forEach(
                         potentialRelationMapping -> {
                             try {
-                            	System.out.println("Found Mapping: " + potentialRelationMapping);
                             	String description = "";
                                 Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRelationMapping);
                                 if(matcher.find()) {
                                 	description = matcher.group();
-                                	//potentialRelationMapping.replaceAll(DESCRIPTION_PATTERN.pattern(), "");
                                 }
                                 String potentialRelationContent = AdocIoUtils.getFirstMatch(RELATION_CONTENT_PATTERN, potentialRelationMapping);
                                 String name =
