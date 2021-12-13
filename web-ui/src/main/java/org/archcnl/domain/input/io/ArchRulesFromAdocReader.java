@@ -39,10 +39,10 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private static final Pattern DESCRIPTION_TEXT_PATTERN =
             Pattern.compile(
-            		"(?<=\\[role=\"description\"\\](\r\n?|\n))\\w+(?=(\r\n?|\n))");
+            		"(?<=\\[role=\"description\"\\](\r\n?|\n))[\\w\\. ]+(?=(\r\n?|\n))");
     private static final Pattern DESCRIPTION_PATTERN =
             Pattern.compile(
-                    "\\[role=\"description\"\\](\r\n?|\n)\\w+(\r\n?|\n)");
+                    "\\[role=\"description\"\\](\r\n?|\n)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern RULE_PATTERN =
             Pattern.compile("(" + DESCRIPTION_PATTERN + ")?\\[role=\"rule\"\\](\r\n?|\n).+\\.");
     private static final Pattern RULE_CONTENT_PATTERN =
@@ -92,12 +92,12 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             	System.out.println("Rule after removal: " + potentialRule);
                             }
                             // TODO: Add the description to the rule once rules have descriptions
-                                String potentialRulePart =
+                                String potentialRuleContent =
                                         AdocIoUtils.getFirstMatch(
                                                 RULE_CONTENT_PATTERN, potentialRule);
                                 rulesConceptsAndRelations
                                         .getArchitectureRuleManager()
-                                        .addArchitectureRule(parseArchitectureRule(potentialRulePart));
+                                        .addArchitectureRule(parseArchitectureRule(potentialRuleContent));
                             } catch (NoArchitectureRuleException
                             		| NoMatchFoundException e) {
                                 LOG.warn(e.getMessage());
@@ -113,9 +113,9 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialConceptMapping);
                                 if(matcher.find()) {
                                 	description = matcher.group();
-                                	System.out.println("Description found: " + description);
+                                	//System.out.println("Description found: " + description);
                                 	//potentialConceptMapping.replaceAll(DESCRIPTION_PATTERN.pattern(), "");
-                                	System.out.println("Rule after removal: " + potentialConceptMapping);
+                                	//System.out.println("Rule after removal: " + potentialConceptMapping);
                                 }
                                 String potentialRuleContent = AdocIoUtils.getFirstMatch(CONCEPT_CONTENT_PATTERN, potentialConceptMapping);
                                 String name =
