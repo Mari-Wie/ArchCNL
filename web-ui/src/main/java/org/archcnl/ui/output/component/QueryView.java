@@ -58,7 +58,6 @@ public class QueryView extends HorizontalLayout {
     }
 
     private void insertCustomQueryIntoFreeTextQuery() {
-        System.out.print("insertInView");
         String customQuery = customQueryResults.getQuery();
         freeTextQuery.setQueryText(customQuery);
     }
