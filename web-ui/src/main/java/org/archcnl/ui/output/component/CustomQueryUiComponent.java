@@ -6,7 +6,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.ui.output.events.ResultUpdateEvent;
 
-public class CustomQueryUiComponent extends AbstractQueryResults {
+public class CustomQueryUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,6 +26,7 @@ public class CustomQueryUiComponent extends AbstractQueryResults {
 
     public CustomQueryUiComponent() {
         whereLabel.setHeight(100, Unit.PERCENTAGE);
+        queryTextArea.setReadOnly(true);
         addComponents();
     }
 
