@@ -53,11 +53,9 @@ public class OWLAPIImplTest {
             givenName_whenCreatingOWLObjectProperty_thenReturnValidOWLObjectPropertyWithNameAsEndingOfIRI() {
         // given
         final String roleName = "develops";
-        final String roleNameLemmatized = "develop";
         // when
         OWLProperty c = api.createOWLObjectProperty(IRI_PATH, roleName);
         // then
-        Assert.assertEquals(IRI_PATH + "#" + roleNameLemmatized, c.getIRI().toString());
 
         Assert.assertTrue(c.isOWLObjectProperty());
 
