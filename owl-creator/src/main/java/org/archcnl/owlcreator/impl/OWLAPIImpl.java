@@ -177,7 +177,7 @@ public class OWLAPIImpl implements OntologyAPI {
 
     @Override
     public OWLObjectProperty createOWLObjectProperty(String iriPath, String roleName) {
-        return df.getOWLObjectProperty(iriPath + "#" + lemmatizeProperty(roleName));
+        return df.getOWLObjectProperty(iriPath + "#" + roleName);
     }
 
     @Override
