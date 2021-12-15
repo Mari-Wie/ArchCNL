@@ -8,7 +8,6 @@ public class StringSelectionView extends TextField {
     private static final long serialVersionUID = -3205839871923884627L;
 
     public StringSelectionView() {
-        setLabel("Object");
         setPlaceholder("String");
     }
 

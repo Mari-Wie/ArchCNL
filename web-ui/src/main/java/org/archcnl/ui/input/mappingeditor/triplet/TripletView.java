@@ -63,17 +63,13 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
     
     public void setLabels(boolean firstRow)
     {
+        objectView.setLabel(firstRow);
+        subjectView.setLabel("");
+        predicateView.setLabel("");
         if(firstRow)
         {
             subjectView.setLabel("Subject");
-            objectView.setLabel("Object");
             predicateView.setLabel("Predicate");
-        }
-        else
-        {
-            subjectView.setLabel("");
-            objectView.setLabel("");
-            predicateView.setLabel("");
         }
     }
 }

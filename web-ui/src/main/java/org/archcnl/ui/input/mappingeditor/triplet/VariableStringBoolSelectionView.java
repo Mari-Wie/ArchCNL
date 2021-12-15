@@ -28,17 +28,20 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private VariableSelectionPresenter variableSelectionPresenter;
     private VariableManager variableManager;
     private ComboBox<String> typeSelection;
+    private boolean showLabel;
 
     public VariableStringBoolSelectionView(
             VariableManager variableManager,
             boolean stringsAllowed,
             boolean booleanAllowed,
+            boolean showLabel,
             Optional<Presenter<View>> optional) {
 
         this.variableManager = variableManager;
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
 
         typeSelection = new ComboBox<>();
+        this.showLabel = showLabel;
         List<String> items = new LinkedList<>();
         items.add(VARIABLE);
         if (stringsAllowed) {
@@ -133,12 +136,20 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private void showStringSelectionView() {
         removeAllSecondaryViews();
         stringSelectionView = new StringSelectionView();
+        if(showLabel)
+        {
+            stringSelectionView.setLabel("Object");
+        }
         add(stringSelectionView);
     }
 
     private void showBooleanSelectionView() {
         removeAllSecondaryViews();
         booleanSelectionView = new BooleanSelectionView();
+        if(showLabel)
+        {
+            booleanSelectionView.setLabel("Object");
+        }
         add(booleanSelectionView);
     }
 
@@ -146,6 +157,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         removeAllSecondaryViews();
         variableSelectionPresenter = new VariableSelectionPresenter(variableManager);
         variableSelectionView = new VariableSelectionView(variableSelectionPresenter);
+        if(showLabel)
+        {
+            variableSelectionView.setLabel("Object");
+        }
         add(variableSelectionView);
     }
 
@@ -166,5 +181,30 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
         }
         return object;
+    }
+    
+    public void changeLabel(boolean showLabel)
+    {
+        if (booleanSelectionView != null) {
+            booleanSelectionView.setLabel("");
+            if(showLabel)
+            {
+                booleanSelectionView.setLabel("Object");
+            }
+        }
+        if (stringSelectionView != null) {
+            stringSelectionView.setLabel("");
+            if(showLabel)
+            {
+                stringSelectionView.setLabel("Object");
+            }
+        }
+        if (variableSelectionView != null) {
+            variableSelectionView.setLabel("");
+            if(showLabel)
+            {
+                variableSelectionView.setLabel("Object");
+            }
+        }
     }
 }

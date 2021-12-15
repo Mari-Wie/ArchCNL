@@ -19,6 +19,7 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
     private Presenter<View> presenter;
     private ConceptSelectionView conceptSelectionView;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
+    private boolean showLabel;
 
     public ObjectView(ObjectContract.Presenter<View> presenter) {
         this.presenter = presenter;
@@ -41,6 +42,10 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
     public void switchToConceptView() {
         clearView();
         conceptSelectionView = new ConceptSelectionView();
+        if(showLabel)
+        {
+            conceptSelectionView.setLabel("Object");
+        }        
         add(conceptSelectionView);
     }
 
@@ -53,6 +58,7 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
                         variableManager,
                         stringsAllowed,
                         booleansAllowed,
+                        showLabel,
                         Optional.ofNullable(null));
         add(variableStringBoolSelectionView);
     }
@@ -95,9 +101,20 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         // is shown there
     }
     
-    public void setLabel(String label)
+    public void setLabel(boolean firstRow)
     {
-        switchToConceptView();
-        conceptSelectionView.setLabel(label);
+        showLabel = firstRow;
+        if(variableStringBoolSelectionView != null)
+        {
+            variableStringBoolSelectionView.changeLabel(firstRow);
+        }
+        if(conceptSelectionView != null)
+        {
+            conceptSelectionView.setLabel("");
+            if(firstRow == true)
+            {
+                conceptSelectionView.setLabel("Object");
+            }
+        }
     }
 }
