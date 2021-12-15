@@ -55,7 +55,7 @@ public class VariableSelectionComponent extends ComboBox<String>
     public Variable getVariable()
             throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
         String variableName =
-                getSelectedItem().orElseThrow(SubjectOrObjectNotDefinedException::new);
+                getSelectedValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
         return new Variable(variableName);
     }
 
@@ -81,10 +81,6 @@ public class VariableSelectionComponent extends ComboBox<String>
     protected void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
-    }
-
-    private Optional<String> getSelectedItem() {
-        return Optional.ofNullable(getValue());
     }
 
     @Override
