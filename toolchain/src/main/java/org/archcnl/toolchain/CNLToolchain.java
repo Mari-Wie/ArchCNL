@@ -244,7 +244,6 @@ public class CNLToolchain {
             try {
                 icvAPI.addIntegrityConstraint(rule.getRuleModel());
                 ruleToViolationMapping.put(rule, icvAPI.explainViolationsForContext(context).get(0));
-                LOG.info("Violations after rule: " + ruleToViolationMapping);
                 icvAPI.removeIntegrityConstraints();
             } catch (DBAccessException e) {
                 LOG.error(e.getMessage());
