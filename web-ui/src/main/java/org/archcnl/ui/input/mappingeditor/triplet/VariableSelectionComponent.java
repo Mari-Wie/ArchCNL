@@ -5,10 +5,13 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
+import java.util.Optional;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.domain.common.VariableManager;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
-import org.archcnl.ui.input.mappingeditor.events.VariableSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableSelectionComponent extends ComboBox<String>
         implements DropTarget<VariableSelectionComponent> {
@@ -17,7 +20,7 @@ public class VariableSelectionComponent extends ComboBox<String>
     private static final String CREATE_ITEM = "Create new variable ";
     private static final String CREATE_ITEM_PATTERN = CREATE_ITEM + "\"\\w+\"";
 
-    public VariableSelectionComponent(VariableManager variableManager) {
+    public VariableSelectionComponent(String initialValue) {
         setActive(true);
         setPlaceholder("Variable");
         setClearButtonVisible(true);
@@ -25,23 +28,39 @@ public class VariableSelectionComponent extends ComboBox<String>
         setPreventInvalidInput(true);
 
         addListeners();
+
+        setValue(initialValue);
     }
 
     private void addListeners() {
+        addFilterChangeListener(
+                event -> fireEvent(new VariableFilterChangedEvent(this, true, event.getFilter())));
         addCustomValueSetListener(
                 event -> {
-                    fireEvent(new VariableSelectedEvent(this, false));
+                    setInvalid(false);
+                    fireEvent(new VariableCreationRequestedEvent(this, true, event.getDetail()));
+                });
+        addValueChangeListener(
+                event -> {
+                    if (event.getValue() != null && event.getValue().matches(CREATE_ITEM_PATTERN)) {
+                        fireEvent(
+                                new VariableCreationRequestedEvent(this, true, getFilterString()));
+                    }
+                    setInvalid(false);
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
-        addAttachListener(e -> update());
+        addAttachListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
     }
 
-    public void update() {
-        fireEvent(new VariableListUpdateRequestedEvent(this, false));
+    public Variable getVariable()
+            throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
+        String variableName =
+                getSelectedItem().orElseThrow(SubjectOrObjectNotDefinedException::new);
+        return new Variable(variableName);
     }
 
-    public void setVariable(Variable variable) {
-        setValue(variable.getName());
+    public Optional<String> getSeValue() {
+        return getOptionalValue();
     }
 
     public void handleDropEvent(Object data) {
@@ -56,6 +75,10 @@ public class VariableSelectionComponent extends ComboBox<String>
     protected void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
+    }
+
+    private Optional<String> getSelectedItem() {
+        return Optional.ofNullable(getValue());
     }
 
     @Override
