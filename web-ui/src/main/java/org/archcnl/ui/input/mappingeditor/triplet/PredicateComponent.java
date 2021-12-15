@@ -5,91 +5,41 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.archcnl.domain.common.Relation;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.ui.input.mappingeditor.events.PredicateSelectedEvent;
-import org.archcnl.ui.input.mappingeditor.exceptions.RelationNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.events.RelationListUpdateRequestedEvent;
 
 public class PredicateComponent extends ComboBox<String> implements DropTarget<PredicateComponent> {
 
     private static final long serialVersionUID = -5423813782732362932L;
-    private ObjectView objectView;
 
-    public PredicateComponent(ObjectView objectView) {
-        this.objectView = objectView;
+    public PredicateComponent(String initialValue) {
         setActive(true);
         setPlaceholder("Relation");
-        updateItems();
         setClearButtonVisible(true);
+        setValue(initialValue);
 
-        addValueChangeListener(e -> fireEvent(new PredicateSelectedEvent(this, false)));
+        addAttachListener(e -> fireEvent(new RelationListUpdateRequestedEvent(this, true)));
+        addValueChangeListener(e -> fireEvent(new PredicateSelectedEvent(this, true)));
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
-    public void updateItems() {
-        setItems(this.getRelationNames());
-    }
-
-    private Optional<String> getSelectedItem() {
-        return Optional.ofNullable(getValue());
-    }
-
-    public List<String> getRelationNames() {
-        return RulesConceptsAndRelations.getInstance()
-                .getRelationManager()
-                .getInputRelations()
-                .stream()
-                .map(Relation::getName)
-                .collect(Collectors.toList());
-    }
-
-    public Relation getPredicate()
-            throws RelationDoesNotExistException, RelationNotDefinedException {
-        String relationName = getSelectedItem().orElseThrow(RelationNotDefinedException::new);
-        return RulesConceptsAndRelations.getInstance()
-                .getRelationManager()
-                .getRelationByName(relationName);
-    }
-
-    public void setPredicate(Relation predicate) {
-        setValue(predicate.getName());
+    public Optional<String> getSelectedItem() {
+        return getOptionalValue();
     }
 
     public void handleDropEvent(Object data) {
         if (data instanceof Relation) {
             Relation relation = (Relation) data;
-            setPredicate(relation);
+            setValue(relation.getName());
         } else {
             showErrorMessage("Not a Relation");
         }
     }
 
-    // TODO: move to presenter
-    public void valueHasChanged() {
-        Relation relation = null;
-        try {
-            String newValue = getSelectedItem().orElseThrow(NoSuchElementException::new);
-            relation =
-                    RulesConceptsAndRelations.getInstance()
-                            .getRelationManager()
-                            .getRelationByName(newValue);
-        } catch (RelationDoesNotExistException | NoSuchElementException e) {
-            // leave relation == null
-        }
-        objectView.predicateHasChanged(Optional.ofNullable(relation));
-    }
-
     public void highlightWhenEmpty() {
-        try {
-            getPredicate();
-        } catch (RelationDoesNotExistException e) {
-            showErrorMessage("Relation does not exist");
-        } catch (RelationNotDefinedException e) {
+        if (getSelectedItem().isEmpty()) {
             showErrorMessage("Predicate not set");
         }
     }
