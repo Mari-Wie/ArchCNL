@@ -8,8 +8,10 @@ import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {
@@ -22,13 +24,9 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private BooleanSelectionComponent booleanSelectionComponent;
     private StringSelectionComponent stringSelectionComponent;
     private VariableSelectionComponent variableSelectionComponent;
-    private VariableManager variableManager;
     private ComboBox<String> typeSelection;
 
-    public VariableStringBoolSelectionView(
-            VariableManager variableManager, boolean stringsAllowed, boolean booleanAllowed) {
-
-        this.variableManager = variableManager;
+    public VariableStringBoolSelectionView(boolean stringsAllowed, boolean booleanAllowed) {
         setDefaultVerticalComponentAlignment(Alignment.END);
 
         typeSelection = new ComboBox<>();
@@ -136,7 +134,12 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
 
     private void showVariableSelectionView() {
         removeAllSecondaryViews();
-        variableSelectionComponent = new VariableSelectionComponent(variableManager);
+        variableSelectionComponent = new VariableSelectionComponent();
+        variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        variableSelectionComponent.addListener(
+                VariableCreationRequestedEvent.class, this::fireEvent);
+        variableSelectionComponent.addListener(
+                VariableListUpdateRequestedEvent.class, this::fireEvent);
         add(variableSelectionComponent);
     }
 
