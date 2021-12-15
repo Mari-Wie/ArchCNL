@@ -7,11 +7,9 @@ import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableSelectionComponent extends ComboBox<String>
         implements DropTarget<VariableSelectionComponent> {
@@ -50,13 +48,6 @@ public class VariableSelectionComponent extends ComboBox<String>
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
         addAttachListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
-    }
-
-    public Variable getVariable()
-            throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
-        String variableName =
-                getSelectedValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
-        return new Variable(variableName);
     }
 
     public Optional<String> getSelectedValue() {
