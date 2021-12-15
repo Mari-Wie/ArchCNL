@@ -1,7 +1,10 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.common.BooleanValue;
@@ -160,5 +163,11 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
         }
         return object;
+    }
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

@@ -1,7 +1,10 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
+import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
@@ -46,5 +49,11 @@ public class ConceptSelectionComponent extends ComboBox<String>
     protected void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
+    }
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

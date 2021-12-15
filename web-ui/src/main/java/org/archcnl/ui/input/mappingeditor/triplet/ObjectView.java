@@ -1,6 +1,9 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.Concept;
@@ -8,9 +11,14 @@ import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.TypeRelation;
-import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
@@ -20,24 +28,26 @@ public class ObjectView extends HorizontalLayout {
     private static final long serialVersionUID = -1105253743414019620L;
     private ConceptSelectionComponent conceptSelectionComponent;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
-    private VariableManager variableManager;
-
-    public ObjectView(VariableManager variableManager) {
-        this.variableManager = variableManager;
-    }
 
     public void switchToConceptView() {
         clearView();
         conceptSelectionComponent = new ConceptSelectionComponent();
+        conceptSelectionComponent.addListener(
+                ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        conceptSelectionComponent.addListener(ConceptSelectedEvent.class, this::fireEvent);
         add(conceptSelectionComponent);
     }
 
-    public void switchToVariableStringBooleanView(
-            VariableManager variableManager, boolean stringsAllowed, boolean booleansAllowed) {
+    public void switchToVariableStringBooleanView(boolean stringsAllowed, boolean booleansAllowed) {
         clearView();
         variableStringBoolSelectionView =
-                new VariableStringBoolSelectionView(
-                        variableManager, stringsAllowed, booleansAllowed);
+                new VariableStringBoolSelectionView(stringsAllowed, booleansAllowed);
+        variableStringBoolSelectionView.addListener(
+                VariableFilterChangedEvent.class, this::fireEvent);
+        variableStringBoolSelectionView.addListener(
+                VariableCreationRequestedEvent.class, this::fireEvent);
+        variableStringBoolSelectionView.addListener(
+                VariableListUpdateRequestedEvent.class, this::fireEvent);
         add(variableStringBoolSelectionView);
     }
 
@@ -45,8 +55,14 @@ public class ObjectView extends HorizontalLayout {
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
                     InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (conceptSelectionComponent != null) {
-            object = conceptSelectionComponent.getObject();
+        if (conceptSelectionComponent != null
+                && conceptSelectionComponent.getSelectedItem().isPresent()) {
+            String conceptName = conceptSelectionComponent.getSelectedItem().get();
+            // TODO: The RulesConceptsAndRelations call does not belong here
+            object =
+                    RulesConceptsAndRelations.getInstance()
+                            .getConceptManager()
+                            .getConceptByName(conceptName);
         } else if (variableStringBoolSelectionView != null) {
             object = variableStringBoolSelectionView.getObject();
         } else {
@@ -75,7 +91,7 @@ public class ObjectView extends HorizontalLayout {
             } else {
                 boolean stringsAllowed = relation.canRelateToObjectType(new StringValue(""));
                 boolean booleansAllowed = relation.canRelateToObjectType(new BooleanValue(false));
-                switchToVariableStringBooleanView(variableManager, stringsAllowed, booleansAllowed);
+                switchToVariableStringBooleanView(stringsAllowed, booleansAllowed);
             }
         }
     }
@@ -107,5 +123,11 @@ public class ObjectView extends HorizontalLayout {
         removeAll();
         conceptSelectionComponent = null;
         variableStringBoolSelectionView = null;
+    }
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }
