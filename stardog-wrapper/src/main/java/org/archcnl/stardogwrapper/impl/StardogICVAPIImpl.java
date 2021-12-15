@@ -61,7 +61,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
             aValidator.addConstraints().format(RDFFormats.RDFXML).stream(reader);
 
             aConn.commit();
-            
+
         } catch (HttpClientException e) {
             LOG.error("Error while adding constraints to the database: ", e);
             throw new DBAccessException("Adding integrity constraints failed.", e);

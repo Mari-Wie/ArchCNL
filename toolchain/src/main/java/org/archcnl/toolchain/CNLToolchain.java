@@ -46,7 +46,7 @@ public class CNLToolchain {
     private final IConformanceCheck check;
     private final StardogDatabaseAPI db;
     private Map<ArchitectureRule, ConstraintViolationsResultSet> ruleToViolationMapping =
-    	    new HashMap<ArchitectureRule, ConstraintViolationsResultSet>();
+            new HashMap<ArchitectureRule, ConstraintViolationsResultSet>();
 
     // mapping of name to transformer factories
     // add new parsers here
@@ -243,7 +243,8 @@ public class CNLToolchain {
 
             try {
                 icvAPI.addIntegrityConstraint(rule.getRuleModel());
-                ruleToViolationMapping.put(rule, icvAPI.explainViolationsForContext(context).get(0));
+                ruleToViolationMapping.put(
+                        rule, icvAPI.explainViolationsForContext(context).get(0));
                 icvAPI.removeIntegrityConstraints();
             } catch (DBAccessException e) {
                 LOG.error(e.getMessage());
