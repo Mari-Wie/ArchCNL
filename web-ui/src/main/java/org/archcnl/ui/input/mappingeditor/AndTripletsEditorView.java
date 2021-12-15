@@ -1,6 +1,8 @@
 package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
@@ -9,27 +11,21 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
+import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.input.mappingeditor.events.AddAndTripletsViewButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
-public class AndTripletsEditorView extends VerticalLayout implements View {
+public class AndTripletsEditorView extends VerticalLayout {
 
     private static final long serialVersionUID = -6056440514075289398L;
-    private Presenter<View> presenter;
-    private Button addButton, deleteButton;
-    private VerticalLayout boxContent, boxButtonLayout;
-    private HorizontalLayout orBlock;
+    private VerticalLayout boxContent;
 
-    public AndTripletsEditorView(AndTripletsEditorContract.Presenter<View> presenter) {
-        this.presenter = presenter;
+    public AndTripletsEditorView(TripletView emptyTripletView) {
         setPadding(false);
         setWidthFull();
 
-        orBlock = new HorizontalLayout();
+        HorizontalLayout orBlock = new HorizontalLayout();
         orBlock.setPadding(false);
         orBlock.setWidthFull();
 
@@ -55,63 +51,45 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
         tripletLabelLayout.add(subjectLabel, predicateLabel, objectLabel);
 
         boxContent.add(tripletLabelLayout);
-        boxContent.add(presenter.createEmptyTripletView());
+        boxContent.add(emptyTripletView);
         boxContent.setWidth(95, Unit.PERCENTAGE);
 
-        boxButtonLayout = new VerticalLayout();
+        VerticalLayout boxButtonLayout = new VerticalLayout();
         boxButtonLayout.setWidth(5, Unit.PERCENTAGE);
-        addButton = new Button(new Icon(VaadinIcon.PLUS), click -> presenter.addButtonPressed());
-
-        deleteButton = new Button(new Icon(VaadinIcon.TRASH), click -> presenter.delete());
-
+        Button addButton =
+                new Button(
+                        new Icon(VaadinIcon.PLUS),
+                        click -> fireEvent(new AddAndTripletsViewButtonPressedEvent(this, true)));
+        Button deleteButton =
+                new Button(
+                        new Icon(VaadinIcon.TRASH),
+                        click -> fireEvent(new DeleteAndTripletsViewRequestedEvent(this, true)));
         boxButtonLayout.add(addButton, deleteButton);
 
         orBlock.add(boxContent, boxButtonLayout);
         add(orBlock);
-
-        this.presenter.setView(this);
     }
 
-    @Override
-    public void addNewTripletViewAfter(TripletView tripletView) {
-        int previousIndex = boxContent.indexOf((Component) tripletView);
-        boxContent.addComponentAtIndex(previousIndex + 1, presenter.createEmptyTripletView());
+    public void addNewTripletViewAfter(TripletView oldTripletView, TripletView newTripletView) {
+        int previousIndex = boxContent.indexOf((Component) oldTripletView);
+        boxContent.addComponentAtIndex(previousIndex + 1, newTripletView);
     }
 
-    @Override
     public void deleteTripletView(TripletView tripletView) {
         boxContent.remove((Component) tripletView);
-        if (getTripletPresenters().isEmpty()) {
-            if (presenter.isLastAndTripletsEditor()) {
-                boxContent.add(presenter.createEmptyTripletView());
-            } else {
-                presenter.delete();
-            }
-        }
     }
 
-    @Override
-    public List<TripletPresenter> getTripletPresenters() {
-        return boxContent
-                .getChildren()
-                .filter(TripletView.class::isInstance)
-                .map(TripletView.class::cast)
-                .filter(TripletPresenter.class::isInstance)
-                .map(TripletPresenter.class::cast)
-                .collect(Collectors.toList());
+    public void addTripletView(TripletView tripletView) {
+        boxContent.add(tripletView);
     }
 
-    public Presenter<View> getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    public void addNewTripletView(TripletPresenter tripletPresenter) {
-        boxContent.add(tripletPresenter.getTripletView());
-    }
-
-    @Override
     public void clearContent() {
         boxContent.removeAll();
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

@@ -1,62 +1,58 @@
 package org.archcnl.ui.input.mappingeditor;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.shared.Registration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.Triplet;
-import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.AndTripletsEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.events.AddAndTripletsViewButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.AddTripletViewAfterButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.DeleteAndTripletsViewRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.TripletViewDeleteButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletPresenter;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
 
-public class AndTripletsEditorPresenter implements Presenter<View> {
+@Tag("AndTripletsEditorPresenter")
+public class AndTripletsEditorPresenter extends Component {
 
-    private View view;
-    private VariableManager variableManager;
-    private MappingEditorContract.Presenter<MappingEditorContract.View> mappingEditorPresenter;
-    // does not contain changes made in this editor, only for internal use
-    private AndTriplets andTriplets;
+    private static final long serialVersionUID = 3037437189766673164L;
+    private static final Logger LOG = LogManager.getLogger(AndTripletsEditorPresenter.class);
+    private AndTripletsEditorView view;
+    private List<TripletPresenter> tripletPresenters = new LinkedList<>();
 
-    public AndTripletsEditorPresenter(
-            VariableManager variableManager,
-            MappingEditorContract.Presenter<MappingEditorContract.View> mappingEditorPresenter,
-            AndTriplets andTriplets) {
-        this.variableManager = variableManager;
-        this.mappingEditorPresenter = mappingEditorPresenter;
-        this.andTriplets = andTriplets;
-
-        // TODO: add Listeners for AddTripletViewAfterButtonPressedEvent and
-        // TripletViewDeleteButtonPressedEvent
+    public AndTripletsEditorPresenter(AndTriplets andTriplets) {
+        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()));
+        showTriplets(andTriplets);
+        addListeners();
     }
 
-    @Override
-    public void setView(View view) {
-        this.view = view;
-        showTriplets();
+    public AndTripletsEditorPresenter() {
+        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()));
+        addListeners();
     }
 
-    @Override
-    public VariableManager getVariableManager() {
-        return variableManager;
-    }
-
-    public void addNewTripletViewAfter(TripletView tripletView) {
-
-        view.addNewTripletViewAfter(tripletView);
-    }
-
-    public void deleteTripletView(TripletView tripletView) {
-        view.deleteTripletView(tripletView);
+    private void addListeners() {
+        view.addListener(AddAndTripletsViewButtonPressedEvent.class, this::fireEvent);
+        view.addListener(DeleteAndTripletsViewRequestedEvent.class, this::fireEvent);
     }
 
     public AndTriplets getAndTriplets() {
         List<Triplet> triplets =
-                view.getTripletPresenters().stream()
+                tripletPresenters.stream()
                         .map(
                                 presenter -> {
                                     try {
@@ -72,44 +68,73 @@ public class AndTripletsEditorPresenter implements Presenter<View> {
         return new AndTriplets(triplets);
     }
 
-    @Override
-    public void addButtonPressed() {
-        mappingEditorPresenter.addNewAndTripletsViewAfter(view);
-    }
-
-    @Override
-    public boolean isLastAndTripletsEditor() {
-        return mappingEditorPresenter.numberOfAndTriplets() == 1;
-    }
-
-    @Override
-    public void delete() {
-        mappingEditorPresenter.deleteAndTripletsView(view);
-    }
-
-    private void showTriplets() {
+    private void showTriplets(AndTriplets andTriplets) {
         if (!andTriplets.getTriplets().isEmpty()) {
             view.clearContent();
             andTriplets
                     .getTriplets()
                     .forEach(
                             triplet ->
-                                    view.addNewTripletView(
-                                            new TripletPresenter(
-                                                    Optional.of(triplet), variableManager)));
+                                    view.addTripletView(
+                                            prepareTripletView(new TripletPresenter(triplet))));
         }
     }
 
     public boolean hasIncompleteTriplets() {
-        return view.getTripletPresenters().stream().anyMatch(TripletPresenter::isIncomplete);
+        return tripletPresenters.stream().anyMatch(TripletPresenter::isIncomplete);
     }
 
     public void highlightIncompleteTriplets() {
-        view.getTripletPresenters().stream().forEach(TripletPresenter::highlightIncompleteParts);
+        tripletPresenters.forEach(TripletPresenter::highlightIncompleteParts);
+    }
+
+    private TripletView prepareTripletView(TripletPresenter tripletPresenter) {
+        addListenersToTripletPresenter(tripletPresenter);
+        tripletPresenters.add(tripletPresenter);
+        return tripletPresenter.getTripletView();
+    }
+
+    private void addListenersToTripletPresenter(TripletPresenter tripletPresenter) {
+        tripletPresenter.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(
+                TripletViewDeleteButtonPressedEvent.class,
+                event -> deleteTripletView(event.getSource()));
+        tripletPresenter.addListener(
+                AddTripletViewAfterButtonPressedEvent.class,
+                event -> addNewTripletViewAfter(event.getSource()));
+    }
+
+    private void addNewTripletViewAfter(TripletView oldTripletView) {
+        view.addNewTripletViewAfter(oldTripletView, prepareTripletView(new TripletPresenter()));
+    }
+
+    private void deleteTripletView(TripletView tripletView) {
+        Optional<TripletPresenter> correspondingPresenter = findCorrespondingPresenter(tripletView);
+        if (correspondingPresenter.isPresent()) {
+            tripletPresenters.remove(correspondingPresenter.get());
+        } else {
+            LOG.error("No corresponding TripletView found in AndTripletsEditorPresenter.");
+        }
+        view.deleteTripletView(tripletView);
+        if (tripletPresenters.isEmpty()) {
+            fireEvent(new DeleteAndTripletsViewRequestedEvent(view, false));
+        }
+    }
+
+    private Optional<TripletPresenter> findCorrespondingPresenter(TripletView tripletView) {
+        for (TripletPresenter tripletPresenter : tripletPresenters) {
+            if (Objects.equals(tripletPresenter.getTripletView(), tripletView)) {
+                return Optional.of(tripletPresenter);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
-    public TripletView createEmptyTripletView() {
-        return new TripletPresenter(Optional.ofNullable(null), variableManager).getTripletView();
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }
