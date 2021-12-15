@@ -11,9 +11,12 @@ import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
 public class TripletView extends HorizontalLayout implements TripletContract.View {
 
     private static final long serialVersionUID = -547117976123681486L;
-
     private Presenter<View> presenter;
     private Button addButton;
+    
+    private VariableSelectionView subjectView;
+    private ObjectView objectView;
+    private PredicateView predicateView;
 
     public TripletView(Presenter<View> presenter, VariableManager variableManager) {
         this.presenter = presenter;
@@ -23,13 +26,15 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
         setWidthFull();
         SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
         presenter.setSubjectPresenter(subjectPresenter);
-        VariableSelectionView subjectView = new VariableSelectionView(subjectPresenter);
+        subjectView = new VariableSelectionView(subjectPresenter);
+        
         ObjectPresenter objectPresenter = new ObjectPresenter(variableManager);
         presenter.setObjectPresenter(objectPresenter);
-        ObjectView objectView = new ObjectView(objectPresenter);
+        objectView = new ObjectView(objectPresenter);
+        
         PredicatePresenter predicatePresenter = new PredicatePresenter(objectPresenter);
         presenter.setPredicatePresenter(predicatePresenter);
-        PredicateView predicateView = new PredicateView(predicatePresenter);
+        predicateView = new PredicateView(predicatePresenter);
 
         HorizontalLayout triplet = new HorizontalLayout();
         triplet.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
@@ -54,5 +59,21 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
 
     public Presenter<View> getPresenter() {
         return presenter;
+    }
+    
+    public void setLabels(boolean firstRow)
+    {
+        if(firstRow)
+        {
+            subjectView.setLabel("Subject");
+            objectView.setLabel("Object");
+            predicateView.setLabel("Predicate");
+        }
+        else
+        {
+            subjectView.setLabel("");
+            objectView.setLabel("");
+            predicateView.setLabel("");
+        }
     }
 }

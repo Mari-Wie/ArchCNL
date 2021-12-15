@@ -94,4 +94,10 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         // as in that case the predicate is not set and the actual error message
         // is shown there
     }
+    
+    public void setLabel(String label)
+    {
+        switchToConceptView();
+        conceptSelectionView.setLabel(label);
+    }
 }
