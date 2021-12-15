@@ -51,7 +51,7 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         }
     }
 
-    private void showErrorMessage(String message) {
+    public void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
     }

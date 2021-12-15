@@ -5,90 +5,120 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.Triplet;
+import org.archcnl.domain.common.TripletFactory;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.domain.common.VariableManager;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.ui.input.mappingeditor.events.AddTripletViewAfterButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptSelectedEvent;
 import org.archcnl.ui.input.mappingeditor.events.PredicateSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.TripletViewDeleteButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
-import org.archcnl.ui.input.mappingeditor.events.VariableSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 
 @Tag("TripletPresenter")
 public class TripletPresenter extends Component {
 
+    private static final long serialVersionUID = 3517038691361279084L;
     private TripletView tripletView;
-    private Triplet triplet;
 
-    public TripletPresenter(Optional<Triplet> triplet, VariableManager variableManager) {
-        // TODO fix optional
-        if (triplet.isPresent()) {
-            this.triplet = triplet.get();
-            tripletView = new TripletView(this, variableManager, this.triplet);
-        } else {
-            tripletView = new TripletView(this, variableManager);
-        }
+    public TripletPresenter(Triplet triplet) {
+        tripletView = new TripletView(triplet);
+        addListeners();
+    }
+
+    public TripletPresenter() {
+        tripletView = new TripletView();
         addListeners();
     }
 
     private void addListeners() {
-        tripletView.addListener(
-                VariableSelectedEvent.class,
-                e -> {
-                    System.out.println("received event in TripletPresenter, refireing");
-                    fireEvent(e);
-                });
-        tripletView.addListener(
-                VariableListUpdateRequestedEvent.class,
-                e -> {
-                    System.out.println("received event in TripletPresenter, refireing");
-                    fireEvent(e);
-                });
+        tripletView.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        tripletView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        tripletView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+
         tripletView.addListener(
                 PredicateSelectedEvent.class,
-                e -> {
-                    System.out.println("received event in TripletPresenter, refireing");
-                    fireEvent(e);
-                });
+                event ->
+                        event.handleEvent(
+                                RulesConceptsAndRelations.getInstance().getRelationManager(),
+                                tripletView.getObjectView()));
+        tripletView.addListener(
+                RelationListUpdateRequestedEvent.class,
+                event ->
+                        event.handleEvent(
+                                RulesConceptsAndRelations.getInstance()
+                                        .getRelationManager()
+                                        .getInputRelations()));
+
+        tripletView.addListener(
+                ConceptListUpdateRequestedEvent.class,
+                event ->
+                        event.handleEvent(
+                                RulesConceptsAndRelations.getInstance()
+                                        .getConceptManager()
+                                        .getInputConcepts()));
+        tripletView.addListener(
+                ConceptSelectedEvent.class,
+                event ->
+                        event.handleEvent(
+                                RulesConceptsAndRelations.getInstance().getConceptManager()));
+
+        tripletView.addListener(TripletViewDeleteButtonPressedEvent.class, this::fireEvent);
+        tripletView.addListener(AddTripletViewAfterButtonPressedEvent.class, this::fireEvent);
     }
 
     public Triplet getTriplet() throws TripletNotDefinedException, UnsupportedObjectTypeInTriplet {
         Variable subject;
         Relation predicate;
         ObjectType object;
-        /*
         try {
-            subject = tripletView.getSubjectComponent().getSubject();
-            predicate = tripletView.getPredicateComponent().getPredicate();
+            subject = tripletView.getSubjectComponent().getVariable();
+            String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
+            predicate =
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .getRelationByName(relationName);
             object = tripletView.getObjectView().getObject();
         } catch (InvalidVariableNameException
                 | SubjectOrObjectNotDefinedException
                 | RelationDoesNotExistException
-                | RelationNotDefinedException
+                | NoSuchElementException
                 | ConceptDoesNotExistException
                 | ObjectNotDefinedException e) {
             throw new TripletNotDefinedException();
         }
-            */
-        return null; // TripletFactory.createTriplet(subject, predicate, object);
+        return TripletFactory.createTriplet(subject, predicate, object);
     }
 
     public boolean isIncomplete() {
         boolean subjectMissing = false;
         boolean predicateMissing = false;
         boolean objectMissing = false;
-        /*
         try {
-            tripletView.getSubjectComponent().getSubject();
+            tripletView.getSubjectComponent().getVariable();
         } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e1) {
             subjectMissing = true;
         }
         try {
-            tripletView.getPredicateComponent().getPredicate();
-        } catch (RelationDoesNotExistException | RelationNotDefinedException e) {
+            String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
+            RulesConceptsAndRelations.getInstance()
+                    .getRelationManager()
+                    .getRelationByName(relationName);
+        } catch (RelationDoesNotExistException | NoSuchElementException e) {
             predicateMissing = true;
         }
         try {
@@ -99,16 +129,13 @@ public class TripletPresenter extends Component {
                 | SubjectOrObjectNotDefinedException e) {
             objectMissing = true;
         }
-        */
         return !(subjectMissing == predicateMissing && predicateMissing == objectMissing);
     }
 
     public void highlightIncompleteParts() {
-        /*
         tripletView.getSubjectComponent().highlightWhenEmpty();
         tripletView.getPredicateComponent().highlightWhenEmpty();
         tripletView.getObjectView().highlightWhenEmpty();
-        */
     }
 
     public TripletView getTripletView() {

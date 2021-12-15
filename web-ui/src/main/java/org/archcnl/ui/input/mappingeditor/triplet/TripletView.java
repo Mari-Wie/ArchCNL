@@ -7,6 +7,9 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.common.Triplet;
 import org.archcnl.ui.input.mappingeditor.events.AddTripletViewAfterButtonPressedEvent;
 import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.ConceptSelectedEvent;
@@ -16,14 +19,28 @@ import org.archcnl.ui.input.mappingeditor.events.TripletViewDeleteButtonPressedE
 import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 
 public class TripletView extends HorizontalLayout {
 
     private static final long serialVersionUID = -547117976123681486L;
+    private static final Logger LOG = LogManager.getLogger(TripletView.class);
 
     private VariableSelectionComponent subjectComponent;
     private PredicateComponent predicateComponent;
     private ObjectView objectView;
+
+    public TripletView(Triplet triplet) {
+        this();
+        subjectComponent.setVariable(triplet.getSubject());
+        predicateComponent.setPredicate(triplet.getPredicate());
+        try {
+            objectView.setObject(triplet.getObject());
+        } catch (PredicateCannotRelateToObjectException e) {
+            // this is not possible with a correctly instantiated Triplet
+            LOG.error(e.getMessage());
+        }
+    }
 
     public TripletView() {
         setPadding(false);
@@ -44,6 +61,18 @@ public class TripletView extends HorizontalLayout {
         addCreateRemoveButtons();
 
         addListeners();
+    }
+
+    public VariableSelectionComponent getSubjectComponent() {
+        return subjectComponent;
+    }
+
+    public PredicateComponent getPredicateComponent() {
+        return predicateComponent;
+    }
+
+    public ObjectView getObjectView() {
+        return objectView;
     }
 
     private void addListeners() {

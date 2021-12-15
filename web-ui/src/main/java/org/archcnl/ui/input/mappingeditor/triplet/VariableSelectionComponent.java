@@ -31,7 +31,10 @@ public class VariableSelectionComponent extends ComboBox<String>
 
     private void addListeners() {
         addFilterChangeListener(
-                event -> fireEvent(new VariableFilterChangedEvent(this, true, event.getFilter())));
+                event ->
+                        fireEvent(
+                                new VariableFilterChangedEvent(
+                                        this, true, event.getFilter(), CREATE_ITEM)));
         addCustomValueSetListener(
                 event -> {
                     setInvalid(false);
