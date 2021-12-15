@@ -45,6 +45,8 @@ public class CNLToolchain {
     private final StardogICVAPI icvAPI;
     private final IConformanceCheck check;
     private final StardogDatabaseAPI db;
+    private Map<ArchitectureRule, ConstraintViolationsResultSet> ruleToViolationMapping =
+    	    new HashMap<ArchitectureRule, ConstraintViolationsResultSet>();
 
     // mapping of name to transformer factories
     // add new parsers here
@@ -219,13 +221,9 @@ public class CNLToolchain {
 
         storeModelAndConstraintsInDB(context, rules, MAPPED_ONTOLOGY_PATH);
 
-        List<ConstraintViolationsResultSet> violations =
-                icvAPI.explainViolationsForContext(context);
-        icvAPI.removeIntegrityConstraints();
-
         String resultPath = TEMPORARY_DIRECTORY + "/check.owl";
 
-        addViolationsToOntology(MAPPED_ONTOLOGY_PATH, rules, violations, resultPath);
+        addViolationsToOntology(MAPPED_ONTOLOGY_PATH, ruleToViolationMapping, resultPath);
 
         db.addDataByRDFFileAsNamedGraph(resultPath, context);
 
@@ -238,8 +236,6 @@ public class CNLToolchain {
         LOG.debug("Adding the mapped model to the database...");
         db.addDataByRDFFileAsNamedGraph(modelPath, context);
 
-        List<ArchitectureRule> sucessfullyCheckedRules = new ArrayList<>();
-
         for (ArchitectureRule rule : rules) {
             String path = TEMPORARY_DIRECTORY + "/architecture" + rule.getId() + ".owl";
 
@@ -247,7 +243,9 @@ public class CNLToolchain {
 
             try {
                 icvAPI.addIntegrityConstraint(rule.getRuleModel());
-                sucessfullyCheckedRules.add(rule);
+                ruleToViolationMapping.put(rule, icvAPI.explainViolationsForContext(context).get(0));
+                LOG.info("Violations after rule: " + ruleToViolationMapping);
+                icvAPI.removeIntegrityConstraints();
             } catch (DBAccessException e) {
                 LOG.error(e.getMessage());
                 LOG.warn(
@@ -258,25 +256,17 @@ public class CNLToolchain {
             }
         }
         rules.clear();
-        rules.addAll(sucessfullyCheckedRules);
     }
 
     private void addViolationsToOntology(
             String tempfile,
-            List<ArchitectureRule> sucessfulRules,
-            List<ConstraintViolationsResultSet> violations,
+            Map<ArchitectureRule, ConstraintViolationsResultSet> violations,
             String resultPath)
             throws FileNotFoundException {
         check.createNewConformanceCheck();
-        int ruleIndex = 0;
-        for (ArchitectureRule rule : sucessfulRules) {
+        for (ArchitectureRule rule : violations.keySet()) {
             List<ConstraintViolation> violationsForRule;
-            if (ruleIndex < violations.size()) {
-                violationsForRule = violations.get(ruleIndex).getViolationList();
-            } else {
-                LOG.info("ruleIndex is greater than violation list size");
-                violationsForRule = new ArrayList<>();
-            }
+            violationsForRule = violations.get(rule).getViolationList();
 
             CheckedRule vr = new CheckedRule(rule, violationsForRule);
 
@@ -285,7 +275,6 @@ public class CNLToolchain {
             }
 
             check.validateRule(vr, tempfile, resultPath);
-            ruleIndex++;
         }
     }
 
