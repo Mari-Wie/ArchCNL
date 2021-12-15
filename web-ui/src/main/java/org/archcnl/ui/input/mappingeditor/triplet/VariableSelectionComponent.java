@@ -59,8 +59,14 @@ public class VariableSelectionComponent extends ComboBox<String>
         return new Variable(variableName);
     }
 
-    public Optional<String> getSeValue() {
+    public Optional<String> getSelectedValue() {
         return getOptionalValue();
+    }
+
+    public void highlightWhenEmpty() {
+        if (getSelectedValue().isEmpty()) {
+            showErrorMessage("Variable not set");
+        }
     }
 
     public void handleDropEvent(Object data) {
