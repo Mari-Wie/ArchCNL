@@ -20,6 +20,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private static final String STRING = "String";
     private static final String BOOLEAN = "Boolean";
     private static final String VARIABLE = "Variable";
+    private static final String OBJECT = "Object";
+    private static final String EMPTYSTRING = "";
     private static final long serialVersionUID = 8635404097691880603L;
 
     private BooleanSelectionView booleanSelectionView;
@@ -136,9 +138,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private void showStringSelectionView() {
         removeAllSecondaryViews();
         stringSelectionView = new StringSelectionView();
-        if(showLabel)
-        {
-            stringSelectionView.setLabel("Object");
+        if (showLabel) {
+            stringSelectionView.setLabel(OBJECT);
         }
         add(stringSelectionView);
     }
@@ -146,9 +147,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private void showBooleanSelectionView() {
         removeAllSecondaryViews();
         booleanSelectionView = new BooleanSelectionView();
-        if(showLabel)
-        {
-            booleanSelectionView.setLabel("Object");
+        if (showLabel) {
+            booleanSelectionView.setLabel(OBJECT);
         }
         add(booleanSelectionView);
     }
@@ -157,9 +157,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         removeAllSecondaryViews();
         variableSelectionPresenter = new VariableSelectionPresenter(variableManager);
         variableSelectionView = new VariableSelectionView(variableSelectionPresenter);
-        if(showLabel)
-        {
-            variableSelectionView.setLabel("Object");
+        if (showLabel) {
+            variableSelectionView.setLabel(OBJECT);
         }
         add(variableSelectionView);
     }
@@ -169,7 +168,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         if (booleanSelectionView != null) {
             object = new BooleanValue(false);
         } else if (stringSelectionView != null) {
-            object = new StringValue("");
+            object = new StringValue(EMPTYSTRING);
         } else if (variableSelectionView != null && variableSelectionPresenter != null) {
             try {
                 object = new Variable("placeholder");
@@ -182,29 +181,25 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         }
         return object;
     }
-    
-    public void changeLabel(boolean showLabel)
-    {
+
+    public void changeLabel(boolean showLabel) {
+        if (showLabel) {
+            if (booleanSelectionView != null) {
+                booleanSelectionView.setLabel(OBJECT);
+            } else if (stringSelectionView != null) {
+                stringSelectionView.setLabel(OBJECT);
+            } else if (variableSelectionView != null) {
+                variableSelectionView.setLabel(OBJECT);
+            }
+            return;
+        }
+
         if (booleanSelectionView != null) {
-            booleanSelectionView.setLabel("");
-            if(showLabel)
-            {
-                booleanSelectionView.setLabel("Object");
-            }
-        }
-        if (stringSelectionView != null) {
-            stringSelectionView.setLabel("");
-            if(showLabel)
-            {
-                stringSelectionView.setLabel("Object");
-            }
-        }
-        if (variableSelectionView != null) {
-            variableSelectionView.setLabel("");
-            if(showLabel)
-            {
-                variableSelectionView.setLabel("Object");
-            }
+            booleanSelectionView.setLabel(EMPTYSTRING);
+        } else if (stringSelectionView != null) {
+            stringSelectionView.setLabel(EMPTYSTRING);
+        } else if (variableSelectionView != null) {
+            variableSelectionView.setLabel(EMPTYSTRING);
         }
     }
 }

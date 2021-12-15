@@ -16,6 +16,7 @@ import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.View;
 public class ObjectView extends HorizontalLayout implements ObjectContract.View {
 
     private static final long serialVersionUID = -1105253743414019620L;
+    private static final String OBJECT = "Object";
     private Presenter<View> presenter;
     private ConceptSelectionView conceptSelectionView;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
@@ -42,10 +43,9 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
     public void switchToConceptView() {
         clearView();
         conceptSelectionView = new ConceptSelectionView();
-        if(showLabel)
-        {
-            conceptSelectionView.setLabel("Object");
-        }        
+        if (showLabel) {
+            conceptSelectionView.setLabel(OBJECT);
+        }
         add(conceptSelectionView);
     }
 
@@ -100,21 +100,18 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         // as in that case the predicate is not set and the actual error message
         // is shown there
     }
-    
-    public void setLabel(boolean firstRow)
-    {
+
+    public void setLabel(boolean firstRow) {
         showLabel = firstRow;
-        if(variableStringBoolSelectionView != null)
-        {
+
+        if (variableStringBoolSelectionView != null) {
             variableStringBoolSelectionView.changeLabel(firstRow);
-        }
-        if(conceptSelectionView != null)
-        {
-            conceptSelectionView.setLabel("");
-            if(firstRow == true)
-            {
-                conceptSelectionView.setLabel("Object");
+        } else if (conceptSelectionView != null) {
+            if (firstRow) {
+                conceptSelectionView.setLabel(OBJECT);
+                return;
             }
+            conceptSelectionView.setLabel("");
         }
     }
 }

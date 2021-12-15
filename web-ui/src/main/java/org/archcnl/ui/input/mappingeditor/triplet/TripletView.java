@@ -13,7 +13,7 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
     private static final long serialVersionUID = -547117976123681486L;
     private Presenter<View> presenter;
     private Button addButton;
-    
+
     private VariableSelectionView subjectView;
     private ObjectView objectView;
     private PredicateView predicateView;
@@ -27,11 +27,11 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
         SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
         presenter.setSubjectPresenter(subjectPresenter);
         subjectView = new VariableSelectionView(subjectPresenter);
-        
+
         ObjectPresenter objectPresenter = new ObjectPresenter(variableManager);
         presenter.setObjectPresenter(objectPresenter);
         objectView = new ObjectView(objectPresenter);
-        
+
         PredicatePresenter predicatePresenter = new PredicatePresenter(objectPresenter);
         presenter.setPredicatePresenter(predicatePresenter);
         predicateView = new PredicateView(predicatePresenter);
@@ -60,16 +60,15 @@ public class TripletView extends HorizontalLayout implements TripletContract.Vie
     public Presenter<View> getPresenter() {
         return presenter;
     }
-    
-    public void setLabels(boolean firstRow)
-    {
+
+    public void setLabels(boolean firstRow) {
         objectView.setLabel(firstRow);
-        subjectView.setLabel("");
-        predicateView.setLabel("");
-        if(firstRow)
-        {
+        if (firstRow) {
             subjectView.setLabel("Subject");
             predicateView.setLabel("Predicate");
+            return;
         }
+        subjectView.setLabel("");
+        predicateView.setLabel("");
     }
 }

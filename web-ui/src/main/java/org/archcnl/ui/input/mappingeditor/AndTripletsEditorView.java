@@ -8,7 +8,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +25,11 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
     private Button addButton, deleteButton;
     private VerticalLayout boxContent, boxButtonLayout;
     private HorizontalLayout orBlock;
-    private ArrayList<TripletView> TripletList;
+    private ArrayList<TripletView> tripletList;
 
     public AndTripletsEditorView(AndTripletsEditorContract.Presenter<View> presenter) {
         this.presenter = presenter;
-        TripletList = new ArrayList<TripletView>();
+        tripletList = new ArrayList<TripletView>();
         setPadding(false);
         setWidthFull();
 
@@ -40,7 +39,7 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
 
         boxContent = new VerticalLayout();
         boxContent.getStyle().set("border", "1px solid black");
-        boxContent.add(new Label("OR-Block (All rows in this block are AND connected)"));        
+        boxContent.add(new Label("OR-Block (All rows in this block are AND connected)"));
         boxContent.setWidth(95, Unit.PERCENTAGE);
         addNewTripletViewAfter();
 
@@ -52,41 +51,39 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
 
         orBlock.add(boxContent, boxButtonLayout);
         add(orBlock);
-
         this.presenter.setView(this);
     }
 
     @Override
     public void addNewTripletViewAfter(TripletContract.View tripletView) {
-        int previousIndex = boxContent.indexOf((Component) tripletView);       
-        TripletView newTripletView = createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null)));
-        boxContent.addComponentAtIndex(
-                previousIndex + 1,
-                newTripletView);
-        TripletList.add(newTripletView);
+        int previousIndex = boxContent.indexOf((Component) tripletView);
+        TripletView newTripletView =
+                createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null)));
+        boxContent.addComponentAtIndex(previousIndex + 1, newTripletView);
+        tripletList.add(previousIndex, newTripletView);
         updateLabels();
     }
-    
+
     public void addNewTripletViewAfter() {
-        int previousIndex = 0;   
-        TripletView newTripletView = createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null)));
-        boxContent.addComponentAtIndex(
-                previousIndex + 1, newTripletView
-                );
-        TripletList.add(newTripletView);
+        TripletView newTripletView =
+                createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null)));
+        boxContent.addComponentAtIndex(1, newTripletView);
+        tripletList.add(0, newTripletView);
         updateLabels();
     }
 
     @Override
     public void deleteTripletView(TripletContract.View tripletView) {
         boxContent.remove((Component) tripletView);
-        TripletList.remove(tripletView);
-        
+        tripletList.remove(tripletView);
+
         if (getTripletPresenters().isEmpty()) {
             if (presenter.isLastAndTripletsEditor()) {
-                TripletView newTripletView = createTripletView(new TripletPresenter(presenter, Optional.ofNullable(null)));
+                TripletView newTripletView =
+                        createTripletView(
+                                new TripletPresenter(presenter, Optional.ofNullable(null)));
                 boxContent.add(newTripletView);
-                TripletList.add(newTripletView);
+                tripletList.add(newTripletView);
             } else {
                 presenter.delete();
             }
@@ -123,13 +120,8 @@ public class AndTripletsEditorView extends VerticalLayout implements View {
     public void clearContent() {
         boxContent.removeAll();
     }
-    
-    public void updateLabels()
-    {        
-        boolean firstRow = true;
-        for (TripletView tripletView : TripletList) {
-            tripletView.setLabels(firstRow);
-            firstRow = false;
-        }
+
+    public void updateLabels() {
+        tripletList.get(0).setLabels(true);
     }
 }
