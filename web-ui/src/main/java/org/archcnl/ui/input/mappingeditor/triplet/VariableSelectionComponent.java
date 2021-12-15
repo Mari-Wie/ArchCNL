@@ -5,11 +5,12 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
-import java.util.Optional;
 import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableSelectionComponent extends ComboBox<String>
         implements DropTarget<VariableSelectionComponent> {
@@ -50,17 +51,20 @@ public class VariableSelectionComponent extends ComboBox<String>
         addAttachListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
     }
 
-    public Optional<String> getSelectedValue() {
-        return getOptionalValue();
+    public Variable getVariable()
+            throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
+        String variableName =
+                getOptionalValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
+        return new Variable(variableName);
     }
 
     public void highlightWhenEmpty() {
-        if (getSelectedValue().isEmpty()) {
+        if (getOptionalValue().isEmpty()) {
             showErrorMessage("Variable not set");
         }
     }
 
-    public void handleDropEvent(Object data) {
+    private void handleDropEvent(Object data) {
         if (data instanceof Variable) {
             Variable variable = (Variable) data;
             setValue(variable.getName());
@@ -69,7 +73,7 @@ public class VariableSelectionComponent extends ComboBox<String>
         }
     }
 
-    protected void showErrorMessage(String message) {
+    public void showErrorMessage(String message) {
         setErrorMessage(message);
         setInvalid(true);
     }
