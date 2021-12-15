@@ -2,11 +2,10 @@ package org.archcnl.ui.input.mappingeditor.triplet;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.archcnl.domain.common.Concept;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptSelectedEvent;
 
 public class ConceptSelectionComponent extends ComboBox<String>
         implements DropTarget<ConceptSelectionComponent> {
@@ -16,35 +15,19 @@ public class ConceptSelectionComponent extends ComboBox<String>
     public ConceptSelectionComponent() {
         setActive(true);
         setPlaceholder("Concept");
-        updateItems();
         setClearButtonVisible(true);
 
+        addAttachListener(e -> fireEvent(new ConceptListUpdateRequestedEvent(this, true)));
         addValueChangeListener(
                 event -> {
-                    // TODO: Check if predicate can relate to this concept
                     setInvalid(false);
+                    fireEvent(new ConceptSelectedEvent(this, true));
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
-    public void updateItems() {
-        setItems(
-                RulesConceptsAndRelations.getInstance()
-                        .getConceptManager()
-                        .getInputConcepts()
-                        .stream()
-                        .map(Concept::getName)
-                        .collect(Collectors.toList()));
-    }
-
-    public Concept getObject() throws ConceptDoesNotExistException, ObjectNotDefinedException {
-        String conceptName = getValue();
-        if (conceptName != null) {
-            return RulesConceptsAndRelations.getInstance()
-                    .getConceptManager()
-                    .getConceptByName(conceptName);
-        }
-        throw new ObjectNotDefinedException();
+    public Optional<String> getSelectedItem() {
+        return getOptionalValue();
     }
 
     public void setObject(Concept concept) {

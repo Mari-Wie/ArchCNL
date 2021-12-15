@@ -39,11 +39,11 @@ public class VariableSelectionComponent extends ComboBox<String>
                 });
         addValueChangeListener(
                 event -> {
+                    setInvalid(false);
                     if (event.getValue() != null && event.getValue().matches(CREATE_ITEM_PATTERN)) {
                         fireEvent(
                                 new VariableCreationRequestedEvent(this, true, getFilterString()));
                     }
-                    setInvalid(false);
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
         addAttachListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));

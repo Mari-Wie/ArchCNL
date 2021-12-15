@@ -20,7 +20,11 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         setClearButtonVisible(true);
 
         addAttachListener(e -> fireEvent(new RelationListUpdateRequestedEvent(this, true)));
-        addValueChangeListener(e -> fireEvent(new PredicateSelectedEvent(this, true)));
+        addValueChangeListener(
+                e -> {
+                    setInvalid(false);
+                    fireEvent(new PredicateSelectedEvent(this, true));
+                });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
