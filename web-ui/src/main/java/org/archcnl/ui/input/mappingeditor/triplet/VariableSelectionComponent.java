@@ -18,7 +18,7 @@ public class VariableSelectionComponent extends ComboBox<String>
     private static final String CREATE_ITEM = "Create new variable ";
     private static final String CREATE_ITEM_PATTERN = CREATE_ITEM + "\"\\w+\"";
 
-    public VariableSelectionComponent(String initialValue) {
+    public VariableSelectionComponent(Variable initialVariable) {
         setActive(true);
         setPlaceholder("Variable");
         setClearButtonVisible(true);
@@ -27,7 +27,7 @@ public class VariableSelectionComponent extends ComboBox<String>
 
         addListeners();
 
-        setValue(initialValue);
+        setValue(initialVariable.getName());
     }
 
     private void addListeners() {
