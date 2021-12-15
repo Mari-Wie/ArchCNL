@@ -19,7 +19,7 @@ public class VariableSelectionComponent extends ComboBox<String>
     private static final String CREATE_ITEM = "Create new variable ";
     private static final String CREATE_ITEM_PATTERN = CREATE_ITEM + "\"\\w+\"";
 
-    public VariableSelectionComponent(Variable initialVariable) {
+    public VariableSelectionComponent() {
         setActive(true);
         setPlaceholder("Variable");
         setClearButtonVisible(true);
@@ -27,8 +27,6 @@ public class VariableSelectionComponent extends ComboBox<String>
         setPreventInvalidInput(true);
 
         addListeners();
-
-        setValue(initialVariable.getName());
     }
 
     private void addListeners() {
@@ -49,6 +47,10 @@ public class VariableSelectionComponent extends ComboBox<String>
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
         addAttachListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
+    }
+
+    public void setVariable(Variable variable) {
+        setValue(variable.getName());
     }
 
     public Variable getVariable()

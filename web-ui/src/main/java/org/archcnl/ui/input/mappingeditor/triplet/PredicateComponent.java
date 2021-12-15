@@ -14,11 +14,10 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
 
     private static final long serialVersionUID = -5423813782732362932L;
 
-    public PredicateComponent(Relation initialRelation) {
+    public PredicateComponent() {
         setActive(true);
         setPlaceholder("Relation");
         setClearButtonVisible(true);
-        setValue(initialRelation.getName());
 
         addAttachListener(e -> fireEvent(new RelationListUpdateRequestedEvent(this, true)));
         addValueChangeListener(e -> fireEvent(new PredicateSelectedEvent(this, true)));
@@ -27,6 +26,10 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
 
     public Optional<String> getSelectedItem() {
         return getOptionalValue();
+    }
+
+    public void setPredicate(Relation predicate) {
+        setValue(predicate.getName());
     }
 
     public void handleDropEvent(Object data) {
