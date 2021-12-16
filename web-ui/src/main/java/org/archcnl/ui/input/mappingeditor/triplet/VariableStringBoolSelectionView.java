@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
@@ -28,10 +29,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private StringSelectionComponent stringSelectionComponent;
     private VariableSelectionComponent variableSelectionComponent;
     private ComboBox<String> typeSelection;
+    private Optional<String> label = Optional.empty();
 
     public VariableStringBoolSelectionView(boolean stringsAllowed, boolean booleanAllowed) {
-        setDefaultVerticalComponentAlignment(Alignment.END);
-
+        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         typeSelection = new ComboBox<>();
         List<String> items = new LinkedList<>();
         items.add(VARIABLE);
@@ -108,6 +109,20 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         variableSelectionComponent.showErrorMessage(message);
     }
 
+    public void setLabel(String text) {
+        label = Optional.of(text);
+        // update currently shown view
+        if (booleanSelectionComponent != null) {
+            booleanSelectionComponent.setLabel(text);
+        }
+        if (stringSelectionComponent != null) {
+            stringSelectionComponent.setLabel(text);
+        }
+        if (variableSelectionComponent != null) {
+            variableSelectionComponent.setLabel(text);
+        }
+    }
+
     private void removeAllSecondaryViews() {
         if (booleanSelectionComponent != null) {
             remove(booleanSelectionComponent);
@@ -126,18 +141,27 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private void showStringSelectionView() {
         removeAllSecondaryViews();
         stringSelectionComponent = new StringSelectionComponent();
+        if (label.isPresent()) {
+            stringSelectionComponent.setLabel(label.get());
+        }
         add(stringSelectionComponent);
     }
 
     private void showBooleanSelectionView() {
         removeAllSecondaryViews();
         booleanSelectionComponent = new BooleanSelectionComponent();
+        if (label.isPresent()) {
+            booleanSelectionComponent.setLabel(label.get());
+        }
         add(booleanSelectionComponent);
     }
 
     private void showVariableSelectionView() {
         removeAllSecondaryViews();
         variableSelectionComponent = new VariableSelectionComponent();
+        if (label.isPresent()) {
+            variableSelectionComponent.setLabel(label.get());
+        }
         variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);

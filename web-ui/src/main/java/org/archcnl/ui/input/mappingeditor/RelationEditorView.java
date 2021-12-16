@@ -25,17 +25,16 @@ public class RelationEditorView extends MappingEditorView {
 
     @Override
     protected void addThenTripletView() {
-        HorizontalLayout thenTriplet = new HorizontalLayout();
         subjectComponent = new VariableSelectionComponent();
         subjectComponent.setLabel("Subject");
         addListenersToSubjectComponent();
-        thenTriplet.add(subjectComponent);
         relationNameField = new TextField("Predicate");
         relationNameField.setReadOnly(true);
-        thenTriplet.add(relationNameField);
         objectView = new VariableStringBoolSelectionView(true, true);
+        objectView.setLabel("Object");
         addListenersToObjectView();
-        thenTriplet.add(objectView);
+        HorizontalLayout thenTriplet = new HorizontalLayout();
+        thenTriplet.add(subjectComponent, relationNameField, objectView);
         add(thenTriplet);
     }
 

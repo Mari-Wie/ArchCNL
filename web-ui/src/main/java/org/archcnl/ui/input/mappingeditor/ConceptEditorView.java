@@ -22,18 +22,16 @@ public class ConceptEditorView extends MappingEditorView {
 
     @Override
     protected void addThenTripletView() {
-        HorizontalLayout thenTriplet = new HorizontalLayout();
         subjectComponent = new VariableSelectionComponent();
         subjectComponent.setLabel("Subject");
         addListenersToSubjectComponent();
-        thenTriplet.add(subjectComponent);
         TextField predicateField = new TextField("Predicate");
         predicateField.setValue("is-of-type");
         predicateField.setReadOnly(true);
-        thenTriplet.add(predicateField);
         conceptNameField = new TextField("Object");
         conceptNameField.setReadOnly(true);
-        thenTriplet.add(conceptNameField);
+        HorizontalLayout thenTriplet = new HorizontalLayout();
+        thenTriplet.add(subjectComponent, predicateField, conceptNameField);
         add(thenTriplet);
     }
 

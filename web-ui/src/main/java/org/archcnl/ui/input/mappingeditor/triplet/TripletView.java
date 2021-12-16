@@ -44,7 +44,6 @@ public class TripletView extends HorizontalLayout {
 
     public TripletView() {
         setPadding(false);
-        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         setWidthFull();
 
         subjectComponent = new VariableSelectionComponent();
