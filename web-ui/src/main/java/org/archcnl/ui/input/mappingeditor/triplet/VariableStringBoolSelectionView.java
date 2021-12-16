@@ -77,7 +77,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         } else if (stringSelectionComponent != null) {
             object = stringSelectionComponent.getObject();
         } else if (variableSelectionComponent != null) {
-            object = new Variable(variableSelectionComponent.getValue());
+            object = variableSelectionComponent.getVariable();
         } else {
             // should never happen
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
