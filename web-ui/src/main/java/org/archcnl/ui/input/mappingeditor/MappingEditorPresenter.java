@@ -63,9 +63,8 @@ public abstract class MappingEditorPresenter extends Component {
         view.addListener(
                 MappingCloseButtonClicked.class,
                 event -> inputRemote.switchToArchitectureRulesView());
-        view.addListener(MappingNameFieldChangedEvent.class, event -> nameHasChanged(event));
-        view.addListener(
-                MappingDescriptionFieldChangedEvent.class, event -> descriptionHasChanged(event));
+        view.addListener(MappingNameFieldChangedEvent.class, this::nameHasChanged);
+        view.addListener(MappingDescriptionFieldChangedEvent.class, this::descriptionHasChanged);
         view.addListener(MappingDoneButtonClickedEvent.class, event -> doneButtonClicked());
         view.addListener(
                 MappingCancelButtonClickedEvent.class,
