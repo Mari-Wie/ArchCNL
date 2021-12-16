@@ -108,8 +108,7 @@ public abstract class MappingEditorPresenter extends Component {
                 event -> deleteAndTripletsView(event.getSource()));
         andTripletsPresenter.addListener(
                 VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
-        andTripletsPresenter.addListener(
-                VariableCreationRequestedEvent.class, event -> addVariable(event));
+        andTripletsPresenter.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         andTripletsPresenter.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
@@ -183,7 +182,7 @@ public abstract class MappingEditorPresenter extends Component {
         } catch (InvalidVariableNameException e) {
             event.getSource().showErrorMessage("Invalid variable name");
         } catch (VariableAlreadyExistsException e) {
-            event.getSource().showErrorMessage("Variable already exists");
+            // can be ignored
         }
     }
 
