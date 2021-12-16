@@ -32,8 +32,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
-        initializeView(view);
         addThenTripletListeners();
+        initializeView(view);
     }
 
     public ConceptEditorPresenter(InputContract.Remote inputRemote, CustomConcept concept) {
@@ -42,8 +42,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
-        initializeView(view, extractAndTriplets(concept));
         addThenTripletListeners();
+        initializeView(view, extractAndTriplets(concept));
     }
 
     private void addThenTripletListeners() {

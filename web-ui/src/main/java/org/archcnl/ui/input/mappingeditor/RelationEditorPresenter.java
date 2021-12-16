@@ -35,8 +35,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         view =
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
-        initializeView(view);
         addThenTripletListeners();
+        initializeView(view);
     }
 
     public RelationEditorPresenter(InputContract.Remote inputRemote, CustomRelation relation) {
@@ -45,8 +45,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         view =
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
-        initializeView(view, extractAndTriplets(relation));
         addThenTripletListeners();
+        initializeView(view, extractAndTriplets(relation));
     }
 
     private void addThenTripletListeners() {
