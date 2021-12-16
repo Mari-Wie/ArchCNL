@@ -108,7 +108,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         if (relation.isPresent()) {
             try {
                 CustomRelation thenRelation = relation.get();
-                ObjectType thenObject = view.getThenTripletObject().get();
+                ObjectType thenObject = view.getThenTripletObject();
                 thenRelation.setRelatableObjectType(thenObject);
                 Triplet thenTriplet =
                         TripletFactory.createTriplet(

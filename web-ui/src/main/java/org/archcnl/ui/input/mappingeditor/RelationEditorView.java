@@ -2,7 +2,6 @@ package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import java.util.Optional;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -62,9 +61,9 @@ public class RelationEditorView extends MappingEditorView {
         return subjectComponent.getVariable();
     }
 
-    public Optional<ObjectType> getThenTripletObject()
+    public ObjectType getThenTripletObject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return Optional.of(objectView.getObject());
+        return objectView.getObject();
     }
 
     public void showThenSubjectOrObjectErrorMessage(String message) {
