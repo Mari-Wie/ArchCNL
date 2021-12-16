@@ -28,21 +28,21 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
 
     public ConceptEditorPresenter(InputContract.Remote inputRemote) {
         super(inputRemote);
+        this.concept = Optional.empty();
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         initializeView(view);
-        this.concept = Optional.empty();
         addThenTripletListeners();
     }
 
     public ConceptEditorPresenter(InputContract.Remote inputRemote, CustomConcept concept) {
         super(inputRemote);
+        this.concept = Optional.of(concept);
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         initializeView(view, extractAndTriplets(concept));
-        this.concept = Optional.of(concept);
         addThenTripletListeners();
     }
 

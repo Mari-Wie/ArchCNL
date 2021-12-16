@@ -31,21 +31,21 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
     public RelationEditorPresenter(InputContract.Remote inputRemote) {
         super(inputRemote);
+        this.relation = Optional.empty();
         view =
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         initializeView(view);
-        this.relation = Optional.empty();
         addThenTripletListeners();
     }
 
     public RelationEditorPresenter(InputContract.Remote inputRemote, CustomRelation relation) {
         super(inputRemote);
+        this.relation = Optional.of(relation);
         view =
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         initializeView(view, extractAndTriplets(relation));
-        this.relation = Optional.of(relation);
         addThenTripletListeners();
     }
 
