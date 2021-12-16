@@ -88,6 +88,10 @@ public class AndTripletsEditorPresenter extends Component {
         tripletPresenters.forEach(TripletPresenter::highlightIncompleteParts);
     }
 
+    public AndTripletsEditorView getAndTripletsEditorView() {
+        return view;
+    }
+
     private TripletView prepareTripletView(TripletPresenter tripletPresenter) {
         addListenersToTripletPresenter(tripletPresenter);
         tripletPresenters.add(tripletPresenter);

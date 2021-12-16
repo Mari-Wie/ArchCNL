@@ -1,6 +1,8 @@
 package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -9,41 +11,34 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.ui.input.InputContract;
+import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.events.MappingCancelButtonClickedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingCloseButtonClicked;
+import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingDoneButtonClickedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingNameFieldChangedEvent;
 
-public abstract class MappingEditorView extends RulesOrMappingEditorView
-        implements MappingEditorContract.View {
+public abstract class MappingEditorView extends RulesOrMappingEditorView {
 
     private static final long serialVersionUID = 156879235315976468L;
     private VerticalLayout content = new VerticalLayout();
-    protected MappingEditorContract.Presenter<View> presenter;
+    private VariableListView variableListView;
     protected TextField mappingName;
     protected TextField description;
 
-    protected MappingEditorView(
-            MappingEditorContract.Presenter<View> presenter,
-            InputContract.Remote inputRemote,
-            String mappingType) {
-        this.presenter = presenter;
+    protected MappingEditorView(String mappingType, AndTripletsEditorView emptyAndTripletsView) {
         setHeightFull();
         getStyle().set("overflow", "auto");
         getStyle().set("border", "1px solid black");
 
-        AndTripletsEditorPresenter andTripletsEditorPresenter =
-                new AndTripletsEditorPresenter(
-                        presenter.getVariableManager(), presenter, new AndTriplets());
-        content.add(new AndTripletsEditorView(andTripletsEditorPresenter));
+        content.add(emptyAndTripletsView);
 
         Label title = new Label("Create or edit a " + mappingType);
         Button closeButton =
                 new Button(
                         new Icon(VaadinIcon.CLOSE),
-                        click -> inputRemote.switchToArchitectureRulesView());
+                        click -> fireEvent(new MappingCloseButtonClicked(this, true)));
         HorizontalLayout titleBar = new HorizontalLayout(title, closeButton);
         titleBar.setWidthFull();
         title.setWidthFull();
@@ -55,7 +50,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         mappingName.addValueChangeListener(
                 event -> {
                     mappingName.setInvalid(false);
-                    presenter.nameHasChanged(event.getValue());
+                    fireEvent(new MappingNameFieldChangedEvent(this, true, event.getValue()));
                 });
         add(mappingName);
 
@@ -63,13 +58,15 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         description.setWidthFull();
         description.setPlaceholder("What does this " + mappingType + " represent?");
         description.addValueChangeListener(
-                event -> {
-                    presenter.descriptionHasChanged(event.getValue());
-                });
+                event ->
+                        fireEvent(
+                                new MappingDescriptionFieldChangedEvent(
+                                        this, true, event.getValue())));
         add(description);
 
         // TODO: add "used in" functionality
-        add(new VariableListView(presenter.getVariableManager()));
+        variableListView = new VariableListView();
+        add(variableListView);
 
         add(new Label("When"));
         add(content);
@@ -79,71 +76,62 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView
         HorizontalLayout buttonRow = new HorizontalLayout();
         buttonRow.setWidthFull();
         buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        buttonRow.add(new Button("Done", click -> presenter.doneButtonClicked(inputRemote)));
-        buttonRow.add(new Button("Cancel", click -> inputRemote.switchToArchitectureRulesView()));
+        buttonRow.add(
+                new Button(
+                        "Done", click -> fireEvent(new MappingDoneButtonClickedEvent(this, true))));
+        buttonRow.add(
+                new Button(
+                        "Cancel",
+                        click -> fireEvent(new MappingCancelButtonClickedEvent(this, true))));
         add(buttonRow);
-        this.presenter.setView(this);
     }
 
-    @Override
-    public void deleteAndTripletsView(AndTripletsEditorContract.View andTripletsView) {
+    public void deleteAndTripletsView(AndTripletsEditorView andTripletsView) {
         content.remove((Component) andTripletsView);
-        if (content.getComponentCount() == 0) {
-            presenter.lastAndTripletsDeleted();
-        }
     }
 
-    @Override
-    public List<AndTripletsEditorPresenter> getAndTripletsPresenters() {
-        return content.getChildren()
-                .filter(AndTripletsEditorView.class::isInstance)
-                .map(AndTripletsEditorView.class::cast)
-                .map(AndTripletsEditorView::getPresenter)
-                .filter(AndTripletsEditorPresenter.class::isInstance)
-                .map(AndTripletsEditorPresenter.class::cast)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void updateNameField(String newName) {
         mappingName.setValue(newName);
     }
 
-    @Override
     public void showNameFieldErrorMessage(String message) {
         mappingName.setErrorMessage(message);
         mappingName.setInvalid(true);
     }
 
-    @Override
-    public int getIndexOf(AndTripletsEditorContract.View andTripletsView) {
-        return content.indexOf((Component) andTripletsView);
-    }
-
-    @Override
-    public void addAndTripletsView(AndTripletsEditorView andTripletsView) {
+    public void addNewAndTripletsView(AndTripletsEditorView andTripletsView) {
         content.add(andTripletsView);
     }
 
-    @Override
-    public void addAndTripletsViewAtIndex(int index, AndTripletsEditorView andTripletsView) {
-        content.addComponentAtIndex(index, andTripletsView);
+    public void addNewAndTripletsViewAfter(
+            AndTripletsEditorView oldAndTripletsView, AndTripletsEditorView newAndTripletsView) {
+        int previousIndex = content.indexOf((Component) oldAndTripletsView);
+        content.addComponentAtIndex(previousIndex + 1, newAndTripletsView);
     }
 
-    @Override
     public void clearContent() {
         content.removeAll();
     }
 
-    @Override
     public void updateDescription(String newDescription) {
         description.setValue(newDescription);
     }
 
-    @Override
     public String getDescription() {
         return description.getValue();
     }
 
+    public VariableListView getVariableListView() {
+        return variableListView;
+    }
+
     protected abstract void addThenTripletView();
+
+    protected abstract void updateNameFieldInThenTriplet(String newName);
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
 }

@@ -6,36 +6,24 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.domain.common.VariableManager;
 
-public class VariableListView extends VerticalLayout implements PropertyChangeListener {
+public class VariableListView extends VerticalLayout {
 
     private static final long serialVersionUID = 1573494658930202757L;
     private HorizontalLayout content;
-    private VariableManager variableManager;
 
-    public VariableListView(VariableManager variableManager) {
-        this.variableManager = variableManager;
-        this.variableManager.addPropertyChangeListener(this);
+    public VariableListView() {
         content = new HorizontalLayout();
         content.setWidthFull();
         content.setPadding(true);
         content.getStyle().set("overflow-x", "auto");
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getNewValue() instanceof List<?>) {
-            List<?> variables = (List<?>) evt.getNewValue();
-            if (variables.get(variables.size() - 1) instanceof Variable) {
-                Variable newVariable = (Variable) variables.get(variables.size() - 1);
-                addVariableView(newVariable);
-            }
-        }
+    public void showVariableList(List<Variable> variables) {
+        content.removeAll();
+        variables.forEach(this::addVariableView);
     }
 
     private void addVariableView(Variable variable) {

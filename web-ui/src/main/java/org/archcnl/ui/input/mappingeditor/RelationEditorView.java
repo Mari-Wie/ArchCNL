@@ -64,23 +64,23 @@ public class RelationEditorView extends MappingEditorView {
 
     @Override
     public void showThenSubjectOrObjectErrorMessage(String message) {
-    	//TODO Fix
-        //try {
+        // TODO Fix
+        // try {
         //    subjectComponent.getSubject();
-        //} catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
+        // } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
         //    showThenSubjectErrorMessage(message);
-        //}
-        //try {
+        // }
+        // try {
         //    objectView.getObject();
-        //} catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
+        // } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
         //    objectView.showErrorMessage(message);
-        //}
+        // }
     }
 
     @Override
     public void setSubjectInThenTriplet(Variable subject) {
-    	//TODO: remove
-        //subjectComponent.setSubject(subject);
+        // TODO: remove
+        // subjectComponent.setSubject(subject);
     }
 
     @Override
