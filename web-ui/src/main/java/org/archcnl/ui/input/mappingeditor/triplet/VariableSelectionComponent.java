@@ -49,7 +49,7 @@ public class VariableSelectionComponent extends ComboBox<String>
                     }
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
-        addAttachListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
+        addFocusListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
     }
 
     public void setVariable(Variable variable) {

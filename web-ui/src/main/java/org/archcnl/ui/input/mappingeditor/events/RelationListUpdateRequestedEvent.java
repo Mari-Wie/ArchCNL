@@ -15,7 +15,9 @@ public class RelationListUpdateRequestedEvent extends ComponentEvent<PredicateCo
     }
 
     public void handleEvent(List<Relation> relations) {
+        String currentItem = getSource().getValue();
         getSource()
                 .setItems(relations.stream().map(Relation::getName).collect(Collectors.toList()));
+        getSource().setValue(currentItem);
     }
 }

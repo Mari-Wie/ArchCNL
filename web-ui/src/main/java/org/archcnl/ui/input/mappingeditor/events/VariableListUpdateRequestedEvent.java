@@ -14,6 +14,8 @@ public class VariableListUpdateRequestedEvent extends ComponentEvent<VariableSel
     }
 
     public void handleEvent(VariableManager variableManager) {
+        String currentItem = getSource().getValue();
         getSource().setItems(variableManager.getVariables().stream().map(Variable::getName));
+        getSource().setValue(currentItem);
     }
 }
