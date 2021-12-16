@@ -49,7 +49,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     private void addThenTripletListeners() {
         view.addListener(
                 VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
-        view.addListener(VariableCreationRequestedEvent.class, event -> addVariable(event));
+        view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));

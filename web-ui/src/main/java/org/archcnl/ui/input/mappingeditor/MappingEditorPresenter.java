@@ -38,29 +38,25 @@ public abstract class MappingEditorPresenter extends Component {
 
     private static final long serialVersionUID = -9123529250149326943L;
     private static final Logger LOG = LogManager.getLogger(MappingEditorPresenter.class);
-    protected MappingEditorView view;
+    private MappingEditorView view;
     private List<AndTripletsEditorPresenter> andTripletsPresenters = new LinkedList<>();
-    private VariableManager variableManager;
+    protected VariableManager variableManager;
     private Remote inputRemote;
 
-    protected MappingEditorPresenter(
-            List<AndTriplets> andTripletsList,
-            MappingEditorView view,
-            VariableManager variableManager,
-            InputContract.Remote inputRemote) {
-        this(view, variableManager, inputRemote);
-        showAndTriplets(andTripletsList);
+    protected MappingEditorPresenter(InputContract.Remote inputRemote) {
+        this.inputRemote = inputRemote;
+        this.variableManager = new VariableManager();
     }
 
-    protected MappingEditorPresenter(
-            MappingEditorView view,
-            VariableManager variableManager,
-            InputContract.Remote inputRemote) {
-        this.inputRemote = inputRemote;
-        this.variableManager = variableManager;
+    protected void initializeView(MappingEditorView view) {
         this.view = view;
         initInfoFieldAndThenTriplet();
         addListeners();
+    }
+
+    protected void initializeView(MappingEditorView view, List<AndTriplets> andTripletsList) {
+        initializeView(view);
+        showAndTriplets(andTripletsList);
     }
 
     private void addListeners() {
@@ -95,7 +91,7 @@ public abstract class MappingEditorPresenter extends Component {
                                         new AndTripletsEditorPresenter(andTriplets))));
     }
 
-    private AndTripletsEditorView prepareAndTripletsEditorView(
+    protected AndTripletsEditorView prepareAndTripletsEditorView(
             AndTripletsEditorPresenter andTripletsPresenter) {
         addListenersToAndTripletsPresenter(andTripletsPresenter);
         andTripletsPresenters.add(andTripletsPresenter);
@@ -176,7 +172,7 @@ public abstract class MappingEditorPresenter extends Component {
                 .open();
     }
 
-    private void addVariable(VariableCreationRequestedEvent event) {
+    protected void addVariable(VariableCreationRequestedEvent event) {
         try {
             Variable newVariable = new Variable(event.getVariableName());
             variableManager.addVariable(newVariable);

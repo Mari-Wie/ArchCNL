@@ -6,37 +6,50 @@ import java.util.Optional;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.ui.input.InputContract;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.SubjectComponent;
+import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionComponent;
 import org.archcnl.ui.input.mappingeditor.triplet.VariableStringBoolSelectionView;
 
 public class RelationEditorView extends MappingEditorView {
 
     private static final long serialVersionUID = -335119786400292325L;
     private TextField relationNameField;
-    private SubjectComponent subjectComponent;
+    private VariableSelectionComponent subjectComponent;
     private VariableStringBoolSelectionView objectView;
 
-    public RelationEditorView(
-            MappingEditorContract.Presenter<View> presenter, InputContract.Remote inputRemote) {
-        super(presenter, inputRemote, "Relation");
+    public RelationEditorView(AndTripletsEditorView emptyAndTripletsView) {
+        super("Relation", emptyAndTripletsView);
     }
 
     @Override
     protected void addThenTripletView() {
         HorizontalLayout thenTriplet = new HorizontalLayout();
-        subjectComponent = new SubjectComponent(presenter.getVariableManager());
+        subjectComponent = new VariableSelectionComponent();
         subjectComponent.setLabel("Subject");
+        addListenersToSubjectComponent();
         thenTriplet.add(subjectComponent);
         relationNameField = new TextField("Predicate");
         relationNameField.setReadOnly(true);
         thenTriplet.add(relationNameField);
-        objectView =
-                new VariableStringBoolSelectionView(presenter.getVariableManager(), true, true);
+        objectView = new VariableStringBoolSelectionView(true, true);
+        addListenersToObjectView();
         thenTriplet.add(objectView);
         add(thenTriplet);
+    }
+
+    private void addListenersToSubjectComponent() {
+        subjectComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+    }
+
+    private void addListenersToObjectView() {
+        objectView.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        objectView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        objectView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
     }
 
     @Override
@@ -44,51 +57,37 @@ public class RelationEditorView extends MappingEditorView {
         relationNameField.setValue(newName);
     }
 
-    @Override
     public Variable getThenTripletSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return new Variable(subjectComponent.getValue());
+        return subjectComponent.getVariable();
     }
 
-    @Override
     public Optional<ObjectType> getThenTripletObject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         return Optional.of(objectView.getObject());
     }
 
-    @Override
-    public void showThenSubjectErrorMessage(String message) {
-        subjectComponent.setErrorMessage(message);
-        subjectComponent.setInvalid(true);
-    }
-
-    @Override
     public void showThenSubjectOrObjectErrorMessage(String message) {
-        // TODO Fix
-        // try {
-        //    subjectComponent.getSubject();
-        // } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
-        //    showThenSubjectErrorMessage(message);
-        // }
-        // try {
-        //    objectView.getObject();
-        // } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
-        //    objectView.showErrorMessage(message);
-        // }
+        try {
+            subjectComponent.getVariable();
+        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
+            subjectComponent.showErrorMessage(message);
+        }
+        try {
+            objectView.getObject();
+        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e) {
+            objectView.showErrorMessage(message);
+        }
     }
 
-    @Override
     public void setSubjectInThenTriplet(Variable subject) {
-        // TODO: remove
-        // subjectComponent.setSubject(subject);
+        subjectComponent.setVariable(subject);
     }
 
-    @Override
     public void setObjectInThenTriplet(ObjectType object) {
         objectView.setObject(object);
     }
 
-    @Override
     public ObjectType getSelectedObjectTypeInThenTriplet() {
         return objectView.getSelectedObjectType();
     }
