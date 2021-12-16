@@ -198,6 +198,10 @@ public abstract class MappingEditorPresenter extends Component {
                 .collect(Collectors.toList());
     }
 
+    public MappingEditorView getMappingEditorView() {
+        return view;
+    }
+
     protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
 
     protected abstract void initInfoFieldAndThenTriplet();
