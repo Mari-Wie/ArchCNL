@@ -23,13 +23,13 @@ public class VariableListView extends VerticalLayout {
 
     public void showVariableList(List<Variable> variables) {
         content.removeAll();
+        if (getComponentCount() == 0) {
+            addBasicView();
+        }
         variables.forEach(this::addVariableView);
     }
 
     private void addVariableView(Variable variable) {
-        if (content.getComponentCount() == 0) {
-            addBasicView();
-        }
         content.add(createVariableCard(variable));
     }
 
