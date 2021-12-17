@@ -34,15 +34,13 @@ public class AndTripletsEditorPresenter extends Component {
     private AndTripletsEditorView view;
     private List<TripletPresenter> tripletPresenters = new LinkedList<>();
 
-    public AndTripletsEditorPresenter(AndTriplets andTriplets) {
-        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()));
-        showTriplets(andTriplets);
-        addListeners();
-    }
-
     public AndTripletsEditorPresenter() {
         view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()));
         addListeners();
+    }
+
+    public void showAndTriplets(AndTriplets andTriplets) {
+        showTriplets(andTriplets);
     }
 
     private void addListeners() {
@@ -74,9 +72,12 @@ public class AndTripletsEditorPresenter extends Component {
             andTriplets
                     .getTriplets()
                     .forEach(
-                            triplet ->
-                                    view.addTripletView(
-                                            prepareTripletView(new TripletPresenter(triplet))));
+                            triplet -> {
+                                TripletPresenter tripletPresenter = new TripletPresenter();
+                                TripletView tripletView = prepareTripletView(tripletPresenter);
+                                tripletPresenter.showTriplet(triplet);
+                                view.addTripletView(tripletView);
+                            });
         }
     }
 

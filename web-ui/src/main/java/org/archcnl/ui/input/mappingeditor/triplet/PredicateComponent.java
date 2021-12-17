@@ -33,7 +33,12 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
     }
 
     public void setPredicate(Relation predicate) {
-        setValue(predicate.getName());
+        try {
+            setValue(predicate.getName());
+        } catch (IllegalStateException e) {
+            fireEvent(new RelationListUpdateRequestedEvent(this, false));
+            setValue(predicate.getName());
+        }
     }
 
     public void handleDropEvent(Object data) {

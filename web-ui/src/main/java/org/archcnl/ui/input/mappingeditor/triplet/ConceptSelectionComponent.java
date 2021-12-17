@@ -34,7 +34,12 @@ public class ConceptSelectionComponent extends ComboBox<String>
     }
 
     public void setObject(Concept concept) {
-        setValue(concept.getName());
+        try {
+            setValue(concept.getName());
+        } catch (IllegalStateException e) {
+            fireEvent(new ConceptListUpdateRequestedEvent(this, false));
+            setValue(concept.getName());
+        }
     }
 
     private void handleDropEvent(Object data) {

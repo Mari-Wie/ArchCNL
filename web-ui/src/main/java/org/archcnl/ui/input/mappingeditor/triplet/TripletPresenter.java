@@ -35,14 +35,13 @@ public class TripletPresenter extends Component {
     private static final long serialVersionUID = 3517038691361279084L;
     private TripletView tripletView;
 
-    public TripletPresenter(Triplet triplet) {
-        tripletView = new TripletView(triplet);
-        addListeners();
-    }
-
     public TripletPresenter() {
         tripletView = new TripletView();
         addListeners();
+    }
+
+    public void showTriplet(Triplet triplet) {
+        tripletView.showTriplet(triplet);
     }
 
     private void addListeners() {

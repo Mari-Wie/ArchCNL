@@ -30,18 +30,6 @@ public class TripletView extends HorizontalLayout {
     private PredicateComponent predicateComponent;
     private ObjectView objectView;
 
-    public TripletView(Triplet triplet) {
-        this();
-        subjectComponent.setVariable(triplet.getSubject());
-        predicateComponent.setPredicate(triplet.getPredicate());
-        try {
-            objectView.setObject(triplet.getObject());
-        } catch (PredicateCannotRelateToObjectException e) {
-            // this is not possible with a correctly instantiated Triplet
-            LOG.error(e.getMessage());
-        }
-    }
-
     public TripletView() {
         setPadding(false);
         setWidthFull();
@@ -60,6 +48,17 @@ public class TripletView extends HorizontalLayout {
         addCreateRemoveButtons();
 
         addListeners();
+    }
+
+    public void showTriplet(Triplet triplet) {
+        subjectComponent.setVariable(triplet.getSubject());
+        predicateComponent.setPredicate(triplet.getPredicate());
+        try {
+            objectView.setObject(triplet.getObject());
+        } catch (PredicateCannotRelateToObjectException e) {
+            // this is not possible with a correctly instantiated Triplet
+            LOG.error(e.getMessage());
+        }
     }
 
     public VariableSelectionComponent getSubjectComponent() {

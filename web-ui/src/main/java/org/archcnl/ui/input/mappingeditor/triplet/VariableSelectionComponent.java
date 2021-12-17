@@ -53,7 +53,11 @@ public class VariableSelectionComponent extends ComboBox<String>
     }
 
     public void setVariable(Variable variable) {
-        setValue(variable.getName());
+        try {
+            setValue(variable.getName());
+        } catch (IllegalStateException e) {
+            fireEvent(new VariableCreationRequestedEvent(this, false, variable.getName()));
+        }
     }
 
     public Variable getVariable()

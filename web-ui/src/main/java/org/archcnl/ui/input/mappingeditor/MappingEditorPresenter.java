@@ -84,10 +84,14 @@ public abstract class MappingEditorPresenter extends Component {
     private void showAndTriplets(List<AndTriplets> andTripletsList) {
         view.clearContent();
         andTripletsList.forEach(
-                andTriplets ->
-                        view.addNewAndTripletsView(
-                                prepareAndTripletsEditorView(
-                                        new AndTripletsEditorPresenter(andTriplets))));
+                andTriplets -> {
+                    AndTripletsEditorPresenter andTripletsPresenter =
+                            new AndTripletsEditorPresenter();
+                    AndTripletsEditorView andTripletsView =
+                            prepareAndTripletsEditorView(andTripletsPresenter);
+                    andTripletsPresenter.showAndTriplets(andTriplets);
+                    view.addNewAndTripletsView(andTripletsView);
+                });
     }
 
     protected AndTripletsEditorView prepareAndTripletsEditorView(
