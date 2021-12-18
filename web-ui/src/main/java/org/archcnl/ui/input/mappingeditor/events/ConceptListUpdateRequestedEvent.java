@@ -16,6 +16,7 @@ public class ConceptListUpdateRequestedEvent extends ComponentEvent<ConceptSelec
 
     public void handleEvent(List<Concept> concepts) {
         String currentItem = getSource().getValue();
+        System.out.println("handleListUpdateEvent, current item: " + currentItem);
         getSource().setItems(concepts.stream().map(Concept::getName).collect(Collectors.toList()));
         getSource().setValue(currentItem);
     }
