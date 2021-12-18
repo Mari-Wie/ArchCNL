@@ -41,7 +41,7 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         }
     }
 
-    public void handleDropEvent(Object data) {
+    private void handleDropEvent(Object data) {
         if (data instanceof Relation) {
             Relation relation = (Relation) data;
             setValue(relation.getName());
