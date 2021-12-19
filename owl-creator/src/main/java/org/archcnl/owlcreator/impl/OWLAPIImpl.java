@@ -3,11 +3,9 @@ package org.archcnl.owlcreator.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.owlcreator.api.OntologyAPI;
-import org.archcnl.owlcreator.stemmer.StanfordLemmatizer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
@@ -82,12 +80,6 @@ public class OWLAPIImpl implements OntologyAPI {
     public void addSubClassAxiom(OWLClassExpression superClass, OWLClassExpression subClass) {
         OWLAxiom subClassAxiom = df.getOWLSubClassOfAxiom(subClass, superClass);
         manager.addAxiom(currentOntology, subClassAxiom);
-    }
-
-    private String lemmatizeProperty(String propertyName) {
-        StanfordLemmatizer slem = new StanfordLemmatizer();
-        List<String> result = slem.lemmatize(propertyName);
-        return result.get(0);
     }
 
     @Override
