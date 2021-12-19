@@ -34,17 +34,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-corenlp</artifactId>
-			<version>${stanfordnlpVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-corenlp</artifactId>
-			<version>${stanfordnlpVersion}</version>
-			<classifier>models</classifier>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-api -->
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
