@@ -260,13 +260,13 @@ public class CNLToolchain {
 
     private void addViolationsToOntology(
             String tempfile,
-            Map<ArchitectureRule, ConstraintViolationsResultSet> violations,
+            Map<ArchitectureRule, ConstraintViolationsResultSet> ruleToViolationMapping,
             String resultPath)
             throws FileNotFoundException {
         check.createNewConformanceCheck();
-        for (ArchitectureRule rule : violations.keySet()) {
+        for (ArchitectureRule rule : ruleToViolationMapping.keySet()) {
             List<ConstraintViolation> violationsForRule;
-            violationsForRule = violations.get(rule).getViolationList();
+            violationsForRule = ruleToViolationMapping.get(rule).getViolationList();
 
             CheckedRule vr = new CheckedRule(rule, violationsForRule);
 
