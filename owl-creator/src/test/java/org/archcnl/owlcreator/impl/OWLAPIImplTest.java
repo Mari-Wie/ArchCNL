@@ -57,7 +57,7 @@ public class OWLAPIImplTest {
         OWLProperty c = api.createOWLObjectProperty(IRI_PATH, roleName);
         // then
         Assert.assertEquals(IRI_PATH + "#" + roleName, c.getIRI().toString());
-        
+
         Assert.assertTrue(c.isOWLObjectProperty());
 
         Assert.assertFalse(c.isOWLDataProperty());
