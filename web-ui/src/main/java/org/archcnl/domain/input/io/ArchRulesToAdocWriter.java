@@ -55,6 +55,8 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
                 if (!concept.getDescription().isEmpty()) {
                     builder.append("[role=\"description\"]");
                     builder.append("\n");
+                    builder.append(mapping.getMappingNameRepresentation());
+                    builder.append(": ");
                     builder.append(concept.getDescription());
                     builder.append("\n");
                 }
@@ -76,6 +78,8 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
                 if (!relation.getDescription().isEmpty()) {
                     builder.append("[role=\"description\"]");
                     builder.append("\n");
+                    builder.append(mapping.getMappingNameRepresentation());
+                    builder.append(": ");
                     builder.append(relation.getDescription());
                     builder.append("\n");
                 }

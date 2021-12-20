@@ -37,10 +37,12 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private static final Logger LOG = LogManager.getLogger(ArchRulesFromAdocReader.class);
 
+    private static final Pattern CONCEPT_MAPPING_NAME = Pattern.compile("(?<=is)\\w+(?=:)");
+    private static final Pattern RELATION_MAPPING_NAME = Pattern.compile(".+(?=Mapping:)");
     private static final Pattern DESCRIPTION_TEXT_PATTERN =
             Pattern.compile("(?<=\\[role=\"description\"\\](\r\n?|\n))[\\w\\. ]+(?=(\r\n?|\n))");
     private static final Pattern DESCRIPTION_PATTERN =
-            Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)[\\w\\. ]+(\r\n?|\n)");
+            Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(" + CONCEPT_MAPPING_NAME + "|" + RELATION_MAPPING_NAME + ")[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern RULE_PATTERN =
             Pattern.compile("(" + DESCRIPTION_PATTERN + ")?\\[role=\"rule\"\\](\r\n?|\n).+\\.");
     private static final Pattern RULE_CONTENT_PATTERN =
@@ -70,8 +72,6 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             Pattern.compile(NORMAL_TRIPLET_PATTERN + "|" + SPECIAL_TRIPLET_PATTERN);
     private static final Pattern WHEN_PATTERN = Pattern.compile(".+(?=\\-\\>)");
     private static final Pattern THEN_PATTERN = Pattern.compile("(?<=\\-\\>).+");
-    private static final Pattern CONCEPT_MAPPING_NAME = Pattern.compile("(?<=is)\\w+(?=:)");
-    private static final Pattern RELATION_MAPPING_NAME = Pattern.compile(".+(?=Mapping:)");
 
     @Override
     public void readArchitectureRules(
@@ -84,6 +84,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                 .forEach(
                         potentialRule -> {
                             try {
+                            	//TODO: actually add description to rule once they have them
                                 String description = "";
                                 Matcher matcher = DESCRIPTION_TEXT_PATTERN.matcher(potentialRule);
                                 if (matcher.find()) {
