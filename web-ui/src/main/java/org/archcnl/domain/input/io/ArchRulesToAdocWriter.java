@@ -51,15 +51,15 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         concepts.removeIf(concept -> concept.getMapping().isEmpty());
         for (CustomConcept concept : concepts) {
             Mapping mapping = concept.getMapping().get();
+            if (!concept.getDescription().isEmpty()) {
+                builder.append("[role=\"description\"]");
+                builder.append("\n");
+                builder.append(mapping.getMappingNameRepresentation());
+                builder.append(": ");
+                builder.append(concept.getDescription());
+                builder.append("\n");
+            }
             for (String oneMapping : mapping.toStringRepresentation()) {
-                if (!concept.getDescription().isEmpty()) {
-                    builder.append("[role=\"description\"]");
-                    builder.append("\n");
-                    builder.append(mapping.getMappingNameRepresentation());
-                    builder.append(": ");
-                    builder.append(concept.getDescription());
-                    builder.append("\n");
-                }
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
@@ -74,15 +74,15 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         relations.removeIf(relation -> relation.getMapping().isEmpty());
         for (CustomRelation relation : relations) {
             Mapping mapping = relation.getMapping().get();
+            if (!relation.getDescription().isEmpty()) {
+            	builder.append("[role=\"description\"]");
+            	builder.append("\n");
+            	builder.append(mapping.getMappingNameRepresentation());
+            	builder.append(": ");
+            	builder.append(relation.getDescription());
+            	builder.append("\n");
+            }
             for (String oneMapping : mapping.toStringRepresentation()) {
-                if (!relation.getDescription().isEmpty()) {
-                    builder.append("[role=\"description\"]");
-                    builder.append("\n");
-                    builder.append(mapping.getMappingNameRepresentation());
-                    builder.append(": ");
-                    builder.append(relation.getDescription());
-                    builder.append("\n");
-                }
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);
