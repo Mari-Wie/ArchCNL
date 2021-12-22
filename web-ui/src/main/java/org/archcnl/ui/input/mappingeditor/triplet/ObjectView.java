@@ -20,34 +20,42 @@ import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class ObjectView extends HorizontalLayout {
 
     private static final long serialVersionUID = -1105253743414019620L;
+    private static final String CONCEPT = "Concept";
+    private static final String VAR_STRING_BOOL = "VariableStringBool";
     private ConceptSelectionComponent conceptSelectionComponent;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
+    private String currentSelectionComponentString = "";
 
-    public void switchToConceptView() {
-        clearView();
+    public ObjectView() {
         conceptSelectionComponent = new ConceptSelectionComponent();
+        variableStringBoolSelectionView = new VariableStringBoolSelectionView();
+
         conceptSelectionComponent.addListener(
                 ConceptListUpdateRequestedEvent.class, this::fireEvent);
         conceptSelectionComponent.addListener(ConceptSelectedEvent.class, this::fireEvent);
-        add(conceptSelectionComponent);
-    }
 
-    public void switchToVariableStringBooleanView(boolean stringsAllowed, boolean booleansAllowed) {
-        clearView();
-        variableStringBoolSelectionView =
-                new VariableStringBoolSelectionView(stringsAllowed, booleansAllowed);
         variableStringBoolSelectionView.addListener(
                 VariableFilterChangedEvent.class, this::fireEvent);
         variableStringBoolSelectionView.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableStringBoolSelectionView.addListener(
                 VariableListUpdateRequestedEvent.class, this::fireEvent);
+    }
+
+    private void switchToConceptView() {
+        currentSelectionComponentString = CONCEPT;
+        add(conceptSelectionComponent);
+    }
+
+    private void switchToVariableStringBooleanView(
+            boolean stringsAllowed, boolean booleansAllowed) {
+        currentSelectionComponentString = VAR_STRING_BOOL;
+        variableStringBoolSelectionView.updateTypeSelectionItems(stringsAllowed, booleansAllowed);
         add(variableStringBoolSelectionView);
     }
 
@@ -55,7 +63,7 @@ public class ObjectView extends HorizontalLayout {
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
                     InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (conceptSelectionComponent != null
+        if (currentSelectionComponentString.equals(CONCEPT)
                 && conceptSelectionComponent.getSelectedItem().isPresent()) {
             String conceptName = conceptSelectionComponent.getSelectedItem().get();
             // TODO: The RulesConceptsAndRelations call does not belong here
@@ -63,7 +71,7 @@ public class ObjectView extends HorizontalLayout {
                     RulesConceptsAndRelations.getInstance()
                             .getConceptManager()
                             .getConceptByName(conceptName);
-        } else if (variableStringBoolSelectionView != null) {
+        } else if (currentSelectionComponentString.equals(VAR_STRING_BOOL)) {
             object = variableStringBoolSelectionView.getObject();
         } else {
             throw new ObjectNotDefinedException();
@@ -71,21 +79,18 @@ public class ObjectView extends HorizontalLayout {
         return object;
     }
 
-    public void setObject(ObjectType object) throws PredicateCannotRelateToObjectException {
-        if (conceptSelectionComponent != null && object instanceof Concept) {
+    public void setObject(ObjectType object) {
+        if (object instanceof Concept) {
             conceptSelectionComponent.setObject((Concept) object);
-        } else if (variableStringBoolSelectionView != null) {
-            variableStringBoolSelectionView.setObject(object);
         } else {
-            throw new PredicateCannotRelateToObjectException(object);
+            variableStringBoolSelectionView.setObject(object);
         }
     }
 
     public void predicateHasChanged(Optional<Relation> relationOptional) {
-        if (relationOptional.isEmpty()) {
-            clearView();
-        } else {
-            Relation relation = relationOptional.orElseThrow();
+        removeAll();
+        if (relationOptional.isPresent()) {
+            Relation relation = relationOptional.get();
             if (relation instanceof TypeRelation) {
                 switchToConceptView();
             } else {
@@ -109,20 +114,14 @@ public class ObjectView extends HorizontalLayout {
     }
 
     private void showErrorMessage(String errorMessage) {
-        if (conceptSelectionComponent != null) {
+        if (currentSelectionComponentString.equals(CONCEPT)) {
             conceptSelectionComponent.showErrorMessage(errorMessage);
-        } else if (variableStringBoolSelectionView != null) {
+        } else if (currentSelectionComponentString.equals(VAR_STRING_BOOL)) {
             variableStringBoolSelectionView.showErrorMessage(errorMessage);
         }
         // there is no need to show the errorMessage when both views are null
         // as in that case the predicate is not set and the actual error message
         // is shown there
-    }
-
-    private void clearView() {
-        removeAll();
-        conceptSelectionComponent = null;
-        variableStringBoolSelectionView = null;
     }
 
     @Override

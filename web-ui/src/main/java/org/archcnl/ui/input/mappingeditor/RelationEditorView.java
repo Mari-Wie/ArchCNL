@@ -30,7 +30,7 @@ public class RelationEditorView extends MappingEditorView {
         addListenersToSubjectComponent();
         relationNameField = new TextField("Predicate");
         relationNameField.setReadOnly(true);
-        objectView = new VariableStringBoolSelectionView(true, true);
+        objectView = new VariableStringBoolSelectionView();
         objectView.setLabel("Object");
         addListenersToObjectView();
         HorizontalLayout thenTriplet = new HorizontalLayout();

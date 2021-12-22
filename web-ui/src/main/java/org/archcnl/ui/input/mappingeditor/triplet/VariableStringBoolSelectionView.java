@@ -31,22 +31,10 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private ComboBox<String> typeSelection;
     private Optional<String> label = Optional.empty();
 
-    public VariableStringBoolSelectionView(boolean stringsAllowed, boolean booleanAllowed) {
+    public VariableStringBoolSelectionView() {
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         typeSelection = new ComboBox<>();
-        List<String> items = new LinkedList<>();
-        items.add(VARIABLE);
-        if (stringsAllowed) {
-            items.add(STRING);
-        }
-        if (booleanAllowed) {
-            items.add(BOOLEAN);
-        }
-        typeSelection.setItems(items);
-        typeSelection.setValue(VARIABLE);
-        if (items.size() > 1) {
-            add(typeSelection);
-        }
+        updateTypeSelectionItems(true, true);
         showVariableSelectionView();
 
         typeSelection.addValueChangeListener(
@@ -68,6 +56,24 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                         }
                     }
                 });
+    }
+
+    public void updateTypeSelectionItems(boolean stringsAllowed, boolean booleanAllowed) {
+        List<String> items = new LinkedList<>();
+        items.add(VARIABLE);
+        if (stringsAllowed) {
+            items.add(STRING);
+        }
+        if (booleanAllowed) {
+            items.add(BOOLEAN);
+        }
+        typeSelection.setItems(items);
+        // typeSelection.setValue(VARIABLE);
+        if (items.size() > 1) {
+            addComponentAsFirst(typeSelection);
+        } else {
+            remove(typeSelection);
+        }
     }
 
     public ObjectType getObject()
