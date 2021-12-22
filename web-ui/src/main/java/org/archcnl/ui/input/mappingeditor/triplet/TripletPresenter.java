@@ -6,6 +6,8 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.NoSuchElementException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.Triplet;
@@ -26,6 +28,7 @@ import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 
@@ -33,6 +36,7 @@ import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
 public class TripletPresenter extends Component {
 
     private static final long serialVersionUID = 3517038691361279084L;
+    private static final Logger LOG = LogManager.getLogger(TripletPresenter.class);
     private TripletView tripletView;
 
     public TripletPresenter() {
@@ -41,7 +45,14 @@ public class TripletPresenter extends Component {
     }
 
     public void showTriplet(Triplet triplet) {
-        tripletView.showTriplet(triplet);
+        tripletView.getSubjectComponent().setVariable(triplet.getSubject());
+        tripletView.getPredicateComponent().setPredicate(triplet.getPredicate());
+        try {
+            tripletView.getObjectView().setObject(triplet.getObject());
+        } catch (PredicateCannotRelateToObjectException e) {
+            // this is not possible with a correctly instantiated Triplet
+            LOG.error(e.getMessage());
+        }
     }
 
     private void addListeners() {
