@@ -33,11 +33,33 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
 
     public VariableStringBoolSelectionView() {
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        typeSelection = new ComboBox<>();
         updateTypeSelectionItems(true, true);
         showVariableSelectionView();
+    }
 
-        typeSelection.addValueChangeListener(
+    public void updateTypeSelectionItems(boolean stringsAllowed, boolean booleanAllowed) {
+        String oldValue = null;
+        if (typeSelection != null) {
+            remove(typeSelection);
+            oldValue = typeSelection.getValue();
+        }
+        ComboBox<String> newTypeSelection = new ComboBox<>();
+        List<String> items = new LinkedList<>();
+        items.add(VARIABLE);
+        if (stringsAllowed) {
+            items.add(STRING);
+        }
+        if (booleanAllowed) {
+            items.add(BOOLEAN);
+        }
+        newTypeSelection.setItems(items);
+        if (items.contains(oldValue)) {
+            newTypeSelection.setValue(oldValue);
+        } else {
+            newTypeSelection.setValue(VARIABLE);
+        }
+
+        newTypeSelection.addValueChangeListener(
                 event -> {
                     String value = event.getValue();
                     if (value != null) {
@@ -56,23 +78,9 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                         }
                     }
                 });
-    }
-
-    public void updateTypeSelectionItems(boolean stringsAllowed, boolean booleanAllowed) {
-        List<String> items = new LinkedList<>();
-        items.add(VARIABLE);
-        if (stringsAllowed) {
-            items.add(STRING);
-        }
-        if (booleanAllowed) {
-            items.add(BOOLEAN);
-        }
-        typeSelection.setItems(items);
-        // typeSelection.setValue(VARIABLE);
+        typeSelection = newTypeSelection;
         if (items.size() > 1) {
             addComponentAsFirst(typeSelection);
-        } else {
-            remove(typeSelection);
         }
     }
 
