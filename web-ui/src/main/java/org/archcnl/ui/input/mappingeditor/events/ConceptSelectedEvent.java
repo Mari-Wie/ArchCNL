@@ -18,7 +18,6 @@ public class ConceptSelectedEvent extends ComponentEvent<ConceptSelectionCompone
         Optional<String> value = getSource().getSelectedItem();
         if (value.isPresent()) {
             String name = value.get();
-            System.out.println("handleConceptSelectedEvent: selected concept: " + name);
             try {
                 conceptManager.getConceptByName(name);
             } catch (ConceptDoesNotExistException e) {

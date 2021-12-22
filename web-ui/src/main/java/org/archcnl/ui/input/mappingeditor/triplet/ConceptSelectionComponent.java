@@ -20,11 +20,7 @@ public class ConceptSelectionComponent extends ComboBox<String>
         setPlaceholder("Concept");
         setClearButtonVisible(true);
 
-        addAttachListener(
-                e -> {
-                    System.out.println("Attach event fired");
-                    fireEvent(new ConceptListUpdateRequestedEvent(this, true));
-                });
+        addAttachListener(e -> fireEvent(new ConceptListUpdateRequestedEvent(this, true)));
         addValueChangeListener(
                 event -> {
                     setInvalid(false);
@@ -38,11 +34,9 @@ public class ConceptSelectionComponent extends ComboBox<String>
     }
 
     public void setObject(Concept concept) {
-        System.out.println("setObject: " + concept.getName());
         try {
             setValue(concept.getName());
         } catch (IllegalStateException e) {
-            System.out.println("No items exist: Request Concept list update");
             fireEvent(new ConceptListUpdateRequestedEvent(this, false));
             setValue(concept.getName());
         }
@@ -66,11 +60,5 @@ public class ConceptSelectionComponent extends ComboBox<String>
     protected <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
-
-    @Override
-    public void setValue(String value) {
-        System.out.println("setValue called with: " + value);
-        super.setValue(value);
     }
 }
