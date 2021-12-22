@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -41,10 +40,6 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private static final Pattern CONCEPT_MAPPING_NAME = Pattern.compile("(?<=is)\\w+(?=:)");
     private static final Pattern RELATION_MAPPING_NAME = Pattern.compile(".+(?=Mapping:)");
-    private static final Pattern DESCRIPTION_TEXT_PATTERN =
-            Pattern.compile("(?<=\\[role=\"description\"\\](\r\n?|\n))[\\w\\. ]+(?=(\r\n?|\n))");
-    private static final Pattern DESCRIPTION_PATTERN =
-            Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)((is\\w+:)|(\\w+Mapping:))[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern CONCEPT_DESCRIPTION_PATTERN =
             Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(is\\w+:)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern CONCEPT_DESCRIPTION_CONTENT =
@@ -53,24 +48,12 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern RELATION_DESCRIPTION_CONTENT =
             Pattern.compile("(?<=\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:))[\\w\\. ]+((?=\r\n?|\n))");
-    private static final Pattern RULE_PATTERN =
-            Pattern.compile("(" + DESCRIPTION_PATTERN + ")?\\[role=\"rule\"\\](\r\n?|\n).+\\.");
     private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
-    private static final Pattern CONCEPT_PATTERN =
-            Pattern.compile(
-                    "("
-                            + DESCRIPTION_PATTERN
-                            + ")?\\[role=\"mapping\"\\](\r\n?|\n)is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
-    private static final Pattern CONCEPT_CONTENT_PATTERN =
+    private static final Pattern CONCEPT_MAPPING_PATTERN =
             Pattern.compile(
                     "(?<=\\[role=\"mapping\"\\](\r\n?|\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
-    private static final Pattern RELATION_PATTERN =
-            Pattern.compile(
-                    "("
-                            + DESCRIPTION_PATTERN
-                            + ")?\\[role=\"mapping\"\\](\r\n?|\n)\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
-    private static final Pattern RELATION_CONTENT_PATTERN =
+    private static final Pattern RELATION_MAPPING_PATTERN =
             Pattern.compile(
                     "(?<=\\[role=\"mapping\"\\](\r\n?|\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
@@ -100,14 +83,11 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                         String name =
                                 AdocIoUtils.getFirstMatch(
                                         CONCEPT_MAPPING_NAME, conceptDescription);
-                        System.out.println("ConceptMappingName: " + name);
                         String description = 
                                 AdocIoUtils.getFirstMatch(
                                         CONCEPT_DESCRIPTION_CONTENT, conceptDescription);
-                        System.out.println("Description: " + description);
                         conceptDescriptions.put(name, description);
                     } catch (NoMatchFoundException e) {
-                    	System.out.println("No name or description found, " + e);
                         LOG.warn(e.getMessage());
                     }
                 });
@@ -119,12 +99,9 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                         String name =
                                 AdocIoUtils.getFirstMatch(
                                         RELATION_MAPPING_NAME, relationDescription);
-                        System.out.println("RelationMappingName: " + name);
                         String description = 
                                 AdocIoUtils.getFirstMatch(
                                         RELATION_DESCRIPTION_CONTENT, relationDescription);
-                        System.out.println("RelationMappingContent: " + name);
-                        System.out.println("Description: " + description);
                         relationDescriptions.put(name, description);
                     } catch (NoMatchFoundException e) {
                         LOG.warn(e.getMessage());
@@ -145,7 +122,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             }
                         });
 
-        AdocIoUtils.getAllMatches(CONCEPT_CONTENT_PATTERN, fileContent).stream()
+        AdocIoUtils.getAllMatches(CONCEPT_MAPPING_PATTERN, fileContent).stream()
         .forEach(
                 potentialConceptMapping -> {
                     try {
@@ -166,7 +143,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                     }
                 });
 
-        AdocIoUtils.getAllMatches(RELATION_CONTENT_PATTERN, fileContent).stream()
+        AdocIoUtils.getAllMatches(RELATION_MAPPING_PATTERN, fileContent).stream()
         .forEach(
                 potentialRelationMapping -> {
                     try {
@@ -176,7 +153,6 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                         String description = "";
                         if(relationDescriptions.containsKey(name)) {
                         	description = relationDescriptions.get(name);
-                        	System.out.println("Adding description to: " + name);
                         }
                         CustomRelation relation =
                                 new CustomRelation(name, description, new LinkedList<>());
@@ -310,16 +286,21 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     @VisibleForTesting
     public static Pattern getConceptMappingPattern() {
-        return CONCEPT_CONTENT_PATTERN;
+        return CONCEPT_MAPPING_PATTERN;
     }
 
     @VisibleForTesting
     public static Pattern getRelationMappingPattern() {
-        return RELATION_CONTENT_PATTERN;
+        return RELATION_MAPPING_PATTERN;
     }
     
     @VisibleForTesting
-    public static Pattern getDescriptionPattern() {
-        return DESCRIPTION_PATTERN;
+    public static Pattern getConceptDescriptionPattern() {
+        return CONCEPT_DESCRIPTION_PATTERN;
+    }
+    
+    @VisibleForTesting
+    public static Pattern getRelationDescriptionPattern() {
+        return RELATION_DESCRIPTION_PATTERN;
     }
 }

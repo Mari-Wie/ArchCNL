@@ -56,14 +56,14 @@ class ArchRuleToAdocWriterTest {
                         ArchRulesFromAdocReader.getRelationMappingPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getDescriptionPattern(), expectedContent),
+                        ArchRulesFromAdocReader.getConceptDescriptionPattern(), expectedContent),
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getDescriptionPattern(), actualContent));
-
-        System.out.println("Matches in expected: " + TestUtils.numberOfMatches(
-                ArchRulesFromAdocReader.getDescriptionPattern(), expectedContent));
-        System.out.println("Matches in actual: " + TestUtils.numberOfMatches(
-                ArchRulesFromAdocReader.getDescriptionPattern(), actualContent));
+                        ArchRulesFromAdocReader.getConceptDescriptionPattern(), actualContent));
+        assertEquals(
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getRelationDescriptionPattern(), expectedContent),
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getRelationDescriptionPattern(), actualContent));
 
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
@@ -80,7 +80,12 @@ class ArchRuleToAdocWriterTest {
                         actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        ArchRulesFromAdocReader.getDescriptionPattern(),
+                        ArchRulesFromAdocReader.getConceptDescriptionPattern(),
+                        expectedContent,
+                        actualContent));
+        assertTrue(
+                TestUtils.doAllMatchesExistInSecondString(
+                        ArchRulesFromAdocReader.getRelationDescriptionPattern(),
                         expectedContent,
                         actualContent));
     }

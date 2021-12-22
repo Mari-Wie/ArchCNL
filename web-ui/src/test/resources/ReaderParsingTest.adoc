@@ -1,0 +1,54 @@
+==== Architecture Rules
+
+[role="rule"]
+Every Aggregate must resideIn a DomainRing.
+
+[role="rule"]
+No Aggregate can use an ApplicationService.
+
+
+==== Mapping for Concepts
+
+[role="description"]
+isAggregate: Every class whose name ends with Aggregate is an Aggregate.
+[role="mapping"]
+isAggregate: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '(\\w||\\W)*\\.(\\w||\\W)*Aggregate') -> (?class rdf:type architecture:Aggregate)
+
+[role="mapping"]
+isApplicationService: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:hasName ?name) regex(?name, 'api') (?package famix:namespaceContains ?class) -> (?class rdf:type architecture:ApplicationService)
+
+[role="description"]
+useMapping: A class uses another class if it has a field of it or if it imports it.
+[role="mapping"]
+useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?f rdf:type famix:Attribute) (?class famix:definesAttribute ?f) (?f famix:hasDeclaredType ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+isEmptyWhenConcept: -> (?var rdf:type architecture:EmptyWhenConcept)
+
+[role="mapping"]
+emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'test string')
+
+[role="mapping"]
+emptyWhenRelationBooleanMapping: -> (?var architecture:emptyWhenRelationBoolean 'false'^^xsd:boolean)
+
+[role="mapping"]
+emptyWhenRelationVariableMapping: -> (?var architecture:emptyWhenRelationVariable ?test)
+
+
+==== Incorrectly written rules and mappings
+
+[role="rule"]
+
+This is not a correct rule as it is not in the line after its tag.
+
+[role="description"]
+This is not a correct description.
+
+[role="description"]
+isAggregate: This is also not a correct description, as brackets [] are not allowed.
+
+[role="mapping"]
+(?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
