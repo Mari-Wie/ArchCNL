@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.Concept;
@@ -83,18 +82,33 @@ class ArchRulesFromAdocReaderTest {
             assertTrue(expectedModel.getRelationManager().getInputRelations().contains(relation));
         }
     }
-    
+
     @Test
     void givenRulesAndMappingsInAdocFormat_whenMatchingPatterns_thenMatchesAreFound()
-    throws IOException {
-    	// given, when
+            throws IOException {
+        // given, when
         final File ruleFile = new File("src/test/resources/ReaderParsingTest.adoc");
         String rulesFileString = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
         // then
-    	assertEquals(2, TestUtils.numberOfMatches(ArchRulesFromAdocReader.getRulePattern(), rulesFileString));
-    	assertEquals(1, TestUtils.numberOfMatches(ArchRulesFromAdocReader.getConceptDescriptionPattern(), rulesFileString));
-    	assertEquals(1, TestUtils.numberOfMatches(ArchRulesFromAdocReader.getRelationDescriptionPattern(), rulesFileString));
-    	assertEquals(5, TestUtils.numberOfMatches(ArchRulesFromAdocReader.getRelationMappingPattern(), rulesFileString));
-    	assertEquals(3, TestUtils.numberOfMatches(ArchRulesFromAdocReader.getConceptMappingPattern(), rulesFileString));
+        assertEquals(
+                2,
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getRulePattern(), rulesFileString));
+        assertEquals(
+                1,
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getConceptDescriptionPattern(), rulesFileString));
+        assertEquals(
+                1,
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getRelationDescriptionPattern(), rulesFileString));
+        assertEquals(
+                5,
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getRelationMappingPattern(), rulesFileString));
+        assertEquals(
+                3,
+                TestUtils.numberOfMatches(
+                        ArchRulesFromAdocReader.getConceptMappingPattern(), rulesFileString));
     }
 }

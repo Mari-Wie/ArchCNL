@@ -43,11 +43,13 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private static final Pattern CONCEPT_DESCRIPTION_PATTERN =
             Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(is\\w+:)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern CONCEPT_DESCRIPTION_CONTENT =
-            Pattern.compile("(?<=\\[role=\"description\"\\](\r\n?|\n)(is\\w+:))[\\w\\. ]+((?=\r\n?|\n))");
+            Pattern.compile(
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(is\\w+:))[\\w\\. ]+((?=\r\n?|\n))");
     private static final Pattern RELATION_DESCRIPTION_PATTERN =
             Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern RELATION_DESCRIPTION_CONTENT =
-            Pattern.compile("(?<=\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:))[\\w\\. ]+((?=\r\n?|\n))");
+            Pattern.compile(
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:))[\\w\\. ]+((?=\r\n?|\n))");
     private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_MAPPING_PATTERN =
@@ -71,43 +73,41 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             File file, RulesConceptsAndRelations rulesConceptsAndRelations) throws IOException {
 
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-        Map<String, String> conceptDescriptions =
-        	    new HashMap<String, String>();
-        Map<String, String> relationDescriptions =
-        	    new HashMap<String, String>();
+        Map<String, String> conceptDescriptions = new HashMap<String, String>();
+        Map<String, String> relationDescriptions = new HashMap<String, String>();
 
         AdocIoUtils.getAllMatches(CONCEPT_DESCRIPTION_PATTERN, fileContent).stream()
-        .forEach(
-                conceptDescription -> {
-                    try {
-                        String name =
-                                AdocIoUtils.getFirstMatch(
-                                        CONCEPT_MAPPING_NAME, conceptDescription);
-                        String description = 
-                                AdocIoUtils.getFirstMatch(
-                                        CONCEPT_DESCRIPTION_CONTENT, conceptDescription);
-                        conceptDescriptions.put(name, description);
-                    } catch (NoMatchFoundException e) {
-                        LOG.warn(e.getMessage());
-                    }
-                });
-        
+                .forEach(
+                        conceptDescription -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_MAPPING_NAME, conceptDescription);
+                                String description =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_DESCRIPTION_CONTENT, conceptDescription);
+                                conceptDescriptions.put(name, description);
+                            } catch (NoMatchFoundException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
+
         AdocIoUtils.getAllMatches(RELATION_DESCRIPTION_PATTERN, fileContent).stream()
-        .forEach(
-                relationDescription -> {
-                    try {
-                        String name =
-                                AdocIoUtils.getFirstMatch(
-                                        RELATION_MAPPING_NAME, relationDescription);
-                        String description = 
-                                AdocIoUtils.getFirstMatch(
-                                        RELATION_DESCRIPTION_CONTENT, relationDescription);
-                        relationDescriptions.put(name, description);
-                    } catch (NoMatchFoundException e) {
-                        LOG.warn(e.getMessage());
-                    }
-                });
-        
+                .forEach(
+                        relationDescription -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_MAPPING_NAME, relationDescription);
+                                String description =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_DESCRIPTION_CONTENT, relationDescription);
+                                relationDescriptions.put(name, description);
+                            } catch (NoMatchFoundException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
+
         // Extract and add architecture rules
         AdocIoUtils.getAllMatches(RULE_CONTENT_PATTERN, fileContent).stream()
                 .forEach(
@@ -115,59 +115,57 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             try {
                                 rulesConceptsAndRelations
                                         .getArchitectureRuleManager()
-                                        .addArchitectureRule(
-                                                parseArchitectureRule(potentialRule));
+                                        .addArchitectureRule(parseArchitectureRule(potentialRule));
                             } catch (NoArchitectureRuleException e) {
                                 LOG.warn(e.getMessage());
                             }
                         });
 
         AdocIoUtils.getAllMatches(CONCEPT_MAPPING_PATTERN, fileContent).stream()
-        .forEach(
-                potentialConceptMapping -> {
-                    try {
-                        String name =
-                                AdocIoUtils.getFirstMatch(
-                                        CONCEPT_MAPPING_NAME, potentialConceptMapping);
-                        String description = "";
-                        if(conceptDescriptions.containsKey(name)) {
-                        	description = conceptDescriptions.get(name);
-                        }
-                        CustomConcept concept = new CustomConcept(name, description);
-                        concept.setMapping(parseMapping(potentialConceptMapping, concept));
-                        rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
-                    } catch (UnrelatedMappingException
-                            | NoMappingException
-                            | NoMatchFoundException e) {
-                        LOG.warn(e.getMessage());
-                    }
-                });
+                .forEach(
+                        potentialConceptMapping -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_MAPPING_NAME, potentialConceptMapping);
+                                String description = "";
+                                if (conceptDescriptions.containsKey(name)) {
+                                    description = conceptDescriptions.get(name);
+                                }
+                                CustomConcept concept = new CustomConcept(name, description);
+                                concept.setMapping(parseMapping(potentialConceptMapping, concept));
+                                rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
+                            } catch (UnrelatedMappingException
+                                    | NoMappingException
+                                    | NoMatchFoundException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
 
         AdocIoUtils.getAllMatches(RELATION_MAPPING_PATTERN, fileContent).stream()
-        .forEach(
-                potentialRelationMapping -> {
-                    try {
-                        String name =
-                                AdocIoUtils.getFirstMatch(
-                                        RELATION_MAPPING_NAME, potentialRelationMapping);
-                        String description = "";
-                        if(relationDescriptions.containsKey(name)) {
-                        	description = relationDescriptions.get(name);
-                        }
-                        CustomRelation relation =
-                                new CustomRelation(name, description, new LinkedList<>());
-                        relation.setMapping(
-                                parseMapping(potentialRelationMapping, relation));
-                        rulesConceptsAndRelations
-                                .getRelationManager()
-                                .addOrAppend(relation);
-                    } catch (UnrelatedMappingException
-                            | NoMappingException
-                            | NoMatchFoundException e) {
-                        LOG.warn(e.getMessage());
-                    }
-                });
-
+                .forEach(
+                        potentialRelationMapping -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_MAPPING_NAME, potentialRelationMapping);
+                                String description = "";
+                                if (relationDescriptions.containsKey(name)) {
+                                    description = relationDescriptions.get(name);
+                                }
+                                CustomRelation relation =
+                                        new CustomRelation(name, description, new LinkedList<>());
+                                relation.setMapping(
+                                        parseMapping(potentialRelationMapping, relation));
+                                rulesConceptsAndRelations
+                                        .getRelationManager()
+                                        .addOrAppend(relation);
+                            } catch (UnrelatedMappingException
+                                    | NoMappingException
+                                    | NoMatchFoundException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
     }
 
     private ConceptMapping parseMapping(String potentialMapping, CustomConcept thisConcept)
@@ -293,12 +291,12 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     public static Pattern getRelationMappingPattern() {
         return RELATION_MAPPING_PATTERN;
     }
-    
+
     @VisibleForTesting
     public static Pattern getConceptDescriptionPattern() {
         return CONCEPT_DESCRIPTION_PATTERN;
     }
-    
+
     @VisibleForTesting
     public static Pattern getRelationDescriptionPattern() {
         return RELATION_DESCRIPTION_PATTERN;

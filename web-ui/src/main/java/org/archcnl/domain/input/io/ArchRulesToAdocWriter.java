@@ -75,12 +75,12 @@ public class ArchRulesToAdocWriter implements ArchRulesExporter {
         for (CustomRelation relation : relations) {
             Mapping mapping = relation.getMapping().get();
             if (!relation.getDescription().isEmpty()) {
-            	builder.append("[role=\"description\"]");
-            	builder.append("\n");
-            	builder.append(mapping.getMappingNameRepresentation());
-            	builder.append(": ");
-            	builder.append(relation.getDescription());
-            	builder.append("\n");
+                builder.append("[role=\"description\"]");
+                builder.append("\n");
+                builder.append(mapping.getMappingNameRepresentation());
+                builder.append(": ");
+                builder.append(relation.getDescription());
+                builder.append("\n");
             }
             for (String oneMapping : mapping.toStringRepresentation()) {
                 builder.append("[role=\"mapping\"]");
