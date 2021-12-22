@@ -74,9 +74,8 @@ public class AndTripletsEditorPresenter extends Component {
                     .forEach(
                             triplet -> {
                                 TripletPresenter tripletPresenter = new TripletPresenter();
-                                TripletView tripletView = prepareTripletView(tripletPresenter);
+                                view.addTripletView(prepareTripletView(tripletPresenter));
                                 tripletPresenter.showTriplet(triplet);
-                                view.addTripletView(tripletView);
                             });
         }
     }

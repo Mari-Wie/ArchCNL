@@ -177,15 +177,17 @@ public abstract class MappingEditorPresenter extends Component {
     protected void addVariable(VariableCreationRequestedEvent event) {
         try {
             Variable newVariable = new Variable(event.getVariableName());
-            variableManager.addVariable(newVariable);
+            try {
+                variableManager.addVariable(newVariable);
+            } catch (VariableAlreadyExistsException e) {
+                // do nothing
+            }
             event.getSource()
                     .setItems(variableManager.getVariables().stream().map(Variable::getName));
             event.getSource().setValue(newVariable.getName());
             view.getVariableListView().showVariableList(variableManager.getVariables());
-        } catch (InvalidVariableNameException e) {
+        } catch (InvalidVariableNameException e1) {
             event.getSource().showErrorMessage("Invalid variable name");
-        } catch (VariableAlreadyExistsException e) {
-            // can be ignored
         }
     }
 
