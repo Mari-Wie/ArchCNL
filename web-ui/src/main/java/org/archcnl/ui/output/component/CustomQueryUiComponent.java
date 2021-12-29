@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.output.events.ResultUpdateEvent;
 
 public class CustomQueryUiComponent extends AbstractQueryResultsComponent {
@@ -24,7 +25,7 @@ public class CustomQueryUiComponent extends AbstractQueryResultsComponent {
     private HideShowButton hideButton = new HideShowButton(gridView);
     private HideShowButton hideQueryTextArea = new HideShowButton(queryTextArea);
 
-    public CustomQueryUiComponent() {
+    public CustomQueryUiComponent() throws PropertyNotFoundException {
         whereLabel.setHeight(100, Unit.PERCENTAGE);
         queryTextArea.setReadOnly(true);
         addComponents();

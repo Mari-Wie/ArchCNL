@@ -2,6 +2,7 @@ package org.archcnl.ui.output.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.output.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.output.events.ResultUpdateEvent;
 
@@ -20,7 +21,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
     private Button applyButton =
             new Button("Apply", e -> fireEvent(new ResultUpdateEvent(this, false)));
 
-    public FreeTextQueryUiComponent() {
+    public FreeTextQueryUiComponent() throws PropertyNotFoundException {
         registerEventListeners();
         buttonBar =
                 new HorizontalLayout(

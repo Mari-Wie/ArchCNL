@@ -1,0 +1,26 @@
+version: '2.4'
+
+services:
+
+  firefox:
+    image: jlesage/firefox
+    container_name: archcnl-firefox
+    environment:
+      - DISPLAY=unix$DISPLAY
+      - SVGA_VGPU10=0
+    cpuset: "0"
+    mem_limit: "512mb"
+    security_opt:
+      - "seccomp=$HOME/chrome.json"
+    devices:
+      - "/dev/snd"
+      - "/dev/dri"
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix"
+      - "/dev/shm:/dev/shm" 
+    networks:
+     - archcnl-net
+
+networks:
+  archcnl-net:
+    name: archcnl-net

@@ -1,0 +1,35 @@
+version: "2.4"
+services:
+  archcnl-ui.org:
+    image: trunov/archcnl:0.0.1-SNAPSHOT
+    restart: always
+    container_name: archcnl-ui.org
+    environment:
+      - RUNTIME_ENV=DOCKER
+      - DB_HOST=archcnl-stardog.org
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - DB_NAME=archcnl_it_db
+      - DB_PROTOCOL=http
+      - DB_PORT=5820
+    depends_on:
+      - archcnl-stardog.org
+    ports:
+      - "127.0.0.1:8081:8080"
+    networks:
+      - archcnl-net
+  
+  archcnl-stardog.org:
+    image: stardog/stardog:7.6.4-java11-preview
+    restart: always
+    container_name: archcnl-stardog.org
+    volumes:
+      - /var/opt/stardog:/var/opt/stardog
+    ports:
+      - "127.0.0.1:5820:5820"
+    networks:
+      - archcnl-net
+
+networks:
+  archcnl-net:
+    name: archcnl-net

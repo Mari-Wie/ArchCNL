@@ -18,6 +18,7 @@ import com.vaadin.flow.server.VaadinServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
+import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.main.MainContract.Presenter;
 import org.archcnl.ui.main.MainContract.View;
 
@@ -37,7 +38,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
     private Presenter<View> presenter;
     private MenuItem saveProjectMenuItem;
 
-    public MainView() {
+    public MainView() throws PropertyNotFoundException {
         presenter = new MainPresenter();
         presenter.setView(this);
         setSizeFull();
@@ -54,39 +55,39 @@ public class MainView extends VerticalLayout implements MainContract.View {
     }
 
     @Override
-    public void setContent(HorizontalLayout newContent) {
+    public void setContent(final HorizontalLayout newContent) {
         newContent.setHeight(87.4f, Unit.PERCENTAGE);
         replace(content, newContent);
         content = newContent;
     }
 
     private HorizontalLayout createHeader() {
-        HorizontalLayout headerBox = new HorizontalLayout();
+        final HorizontalLayout headerBox = new HorizontalLayout();
 
-        Label title = new Label("ArchCNL");
+        final Label title = new Label("ArchCNL");
         title.getStyle().set("color", "#76d0f1");
         title.getStyle().set("font-size", "x-large");
         title.getStyle().set("font-weight", "bold");
 
-        MenuBar menuBar = new MenuBar();
-        MenuItem project = menuBar.addItem("Project");
-        MenuItem edit = menuBar.addItem("Edit");
-        MenuItem rules = menuBar.addItem("Rules");
+        final MenuBar menuBar = new MenuBar();
+        final MenuItem project = menuBar.addItem("Project");
+        final MenuItem edit = menuBar.addItem("Edit");
+        final MenuItem rules = menuBar.addItem("Rules");
         menuBar.addItem("View", e -> presenter.showView());
         menuBar.addItem("Help", e -> presenter.showHelp());
 
-        SubMenu projectSubMenu = project.getSubMenu();
+        final SubMenu projectSubMenu = project.getSubMenu();
         projectSubMenu.addItem("New Project", e -> presenter.showNewTab());
         projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
         saveProjectMenuItem = projectSubMenu.addItem("Save", e -> presenter.saveProject());
         saveProjectMenuItem.setEnabled(false);
         projectSubMenu.addItem("Save As", e -> presenter.showSaveProject());
 
-        SubMenu editSubMenu = edit.getSubMenu();
+        final SubMenu editSubMenu = edit.getSubMenu();
         editSubMenu.addItem("Undo", e -> presenter.undo());
         editSubMenu.addItem("Redo", e -> presenter.redo());
 
-        SubMenu rulesSubMenu = rules.getSubMenu();
+        final SubMenu rulesSubMenu = rules.getSubMenu();
         rulesSubMenu.addItem("Import from File", e -> presenter.showImportRulesFromFile());
         rulesSubMenu.addItem("Import Rule Presets", e -> presenter.showImportRulePresets());
 
@@ -97,14 +98,14 @@ public class MainView extends VerticalLayout implements MainContract.View {
     }
 
     private HorizontalLayout createFooter() {
-        HorizontalLayout footerHbox = new HorizontalLayout();
+        final HorizontalLayout footerHbox = new HorizontalLayout();
 
-        Label copyright = new Label("Developed at the University of Hamburg.");
+        final Label copyright = new Label("Developed at the University of Hamburg.");
 
-        HorizontalLayout buttonHBox = new HorizontalLayout();
-        Button contactButton = new Button("Contact", e -> presenter.showContact());
-        Button wikiButton = new Button("Wiki", e -> presenter.showWiki());
-        Button siteButton = new Button("Project Site", e -> presenter.showProjectSite());
+        final HorizontalLayout buttonHBox = new HorizontalLayout();
+        final Button contactButton = new Button("Contact", e -> presenter.showContact());
+        final Button wikiButton = new Button("Wiki", e -> presenter.showWiki());
+        final Button siteButton = new Button("Project Site", e -> presenter.showProjectSite());
         buttonHBox.add(copyright, contactButton, wikiButton, siteButton);
 
         footerHbox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -117,15 +118,16 @@ public class MainView extends VerticalLayout implements MainContract.View {
 
     @Override
     public void showNewTab() {
-        VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
+        final VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
         URI uri;
         try {
             uri = new URI(req.getRequestURL().toString());
             getUI().get().getPage().open(uri.toString(), "ArchCNL");
         } catch (URISyntaxException | NoSuchElementException e) {
-            Notification notification = new Notification();
-            Text errorMessage = new Text("Opening a new tab failed unexpectedly. Try again later.");
-            Button okButton = new Button("OK", click -> notification.close());
+            final Notification notification = new Notification();
+            final Text errorMessage =
+                    new Text("Opening a new tab failed unexpectedly. Try again later.");
+            final Button okButton = new Button("OK", click -> notification.close());
             notification.add(errorMessage, okButton);
             notification.setPosition(Notification.Position.MIDDLE);
             notification.open();
@@ -133,7 +135,7 @@ public class MainView extends VerticalLayout implements MainContract.View {
     }
 
     @Override
-    public void setSaveProjectMenuItemEnabled(boolean enabled) {
+    public void setSaveProjectMenuItemEnabled(final boolean enabled) {
         saveProjectMenuItem.setEnabled(enabled);
     }
 }

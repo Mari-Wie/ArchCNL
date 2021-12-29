@@ -3,6 +3,7 @@ package org.archcnl.ui.output.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.main.MainPresenter;
 import org.archcnl.ui.output.events.CustomQueryInsertionRequestedEvent;
 
@@ -16,7 +17,7 @@ public class QueryView extends HorizontalLayout {
     SideBarLayout sideBar;
     Component currentComponent;
 
-    public QueryView(MainPresenter mainPresenter) {
+    public QueryView(final MainPresenter mainPresenter) throws PropertyNotFoundException {
         queryResults = new QueryResultsUiComponent();
         customQueryResults = new CustomQueryUiComponent();
         freeTextQuery = new FreeTextQueryUiComponent();
@@ -58,7 +59,7 @@ public class QueryView extends HorizontalLayout {
     }
 
     private void insertCustomQueryIntoFreeTextQuery() {
-        String customQuery = customQueryResults.getQuery();
+        final String customQuery = customQueryResults.getQuery();
         freeTextQuery.setQueryText(customQuery);
     }
 }
