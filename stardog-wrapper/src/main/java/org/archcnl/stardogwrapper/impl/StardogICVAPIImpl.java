@@ -47,7 +47,7 @@ public class StardogICVAPIImpl implements StardogICVAPI {
     }
 
     @Override
-    public String addIntegrityConstraint(Model constraintModel) throws DBAccessException {
+    public void addIntegrityConstraint(Model constraintModel) throws DBAccessException {
         LOG.debug("Adding contraints to database");
         try (Connection aConn = establishConnection()) {
             ICVConnection aValidator = aConn.as(ICVConnection.class);
@@ -62,7 +62,6 @@ public class StardogICVAPIImpl implements StardogICVAPI {
 
             aConn.commit();
 
-            return aValidator.getConstraints().iterator().next().toString();
         } catch (HttpClientException e) {
             LOG.error("Error while adding constraints to the database: ", e);
             throw new DBAccessException("Adding integrity constraints failed.", e);

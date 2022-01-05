@@ -22,10 +22,9 @@ public interface StardogICVAPI {
      * ontology to the database.
      *
      * @param constraintModel The ontology modeling the constraints.
-     * @return A string representation of the added constraint.
      * @throws DBAccessException When accessing the database fails.
      */
-    public String addIntegrityConstraint(Model constraintModel) throws DBAccessException;
+    public void addIntegrityConstraint(Model constraintModel) throws DBAccessException;
 
     /** Connects to the given database and removes all integrity constraints from it. */
     void removeIntegrityConstraints();

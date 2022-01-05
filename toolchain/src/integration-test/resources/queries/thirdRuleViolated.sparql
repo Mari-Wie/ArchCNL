@@ -1,0 +1,12 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
+
+# Returns true when there are architecture violations. Otherwise, false is returned.
+
+ASK
+WHERE {
+    ?rule rdf:type conformance:ArchitectureRule.
+    ?rule conformance:hasRuleRepresentation "Every View must have a Presenter."^^xsd:string.
+    ?violation conformance:violates ?rule.
+}

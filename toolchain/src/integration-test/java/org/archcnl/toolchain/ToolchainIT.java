@@ -22,6 +22,11 @@ import org.junit.Assert;
 
 public class ToolchainIT {
 
+	private static final String FIRST_RULE_VIOLATED_QUERY = "queries/firstRuleViolated.sparql";
+    private static final String FIRST_RULE_CORRECTLY_MAPPED_QUERY = "queries/firstRuleCorrectlyMapped.sparql";
+    private static final String SECOND_RULE_VIOLATED_QUERY = "queries/secondRuleViolated.sparql";
+    private static final String SECOND_RULE_CORRECTLY_MAPPED_QUERY = "queries/secondRuleCorrectlyMapped.sparql";
+    private static final String THIRD_RULE_VIOLATED_QUERY = "queries/thirdRuleViolated.sparql";
     private final String rootDir = "./src/integration-test/resources/";
     private final String database = "archcnl_it_db";
     private final String server = "http://localhost:5820";
@@ -54,8 +59,11 @@ public class ToolchainIT {
         
         OntModel result = loadResult();
         // then
-        Assert.assertTrue(isFirstRuleViolated(result));
-        Assert.assertTrue(isSecondRuleViolated(result));
+        Assert.assertTrue(askQueryResult(result, FIRST_RULE_VIOLATED_QUERY));
+        Assert.assertTrue(askQueryResult(result, SECOND_RULE_VIOLATED_QUERY));
+        Assert.assertTrue(askQueryResult(result, FIRST_RULE_CORRECTLY_MAPPED_QUERY));
+        Assert.assertTrue(askQueryResult(result, SECOND_RULE_CORRECTLY_MAPPED_QUERY));
+        Assert.assertFalse(askQueryResult(result, THIRD_RULE_VIOLATED_QUERY));
     }
 
     private OntModel loadResult() throws IOException {
@@ -78,12 +86,8 @@ public class ToolchainIT {
         db.closeConnectionToServer();
     }
     
-    private boolean isFirstRuleViolated(OntModel model) throws IOException {
-        return execAskQuery(Path.of(rootDir + "queries/firstRuleViolated.sparql"), model);
-    }
-    
-    private boolean isSecondRuleViolated(OntModel model) throws IOException {
-        return execAskQuery(Path.of(rootDir + "queries/secondRuleViolated.sparql"), model);
+    private boolean askQueryResult(OntModel model, String path) throws IOException {
+        return execAskQuery(Path.of(rootDir + path), model);
     }
     
     private boolean execAskQuery(Path queryPath, OntModel model) throws IOException {

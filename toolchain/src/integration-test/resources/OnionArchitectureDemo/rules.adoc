@@ -16,6 +16,9 @@ Every Aggregate must resideIn a DomainRing.
 [role="rule"]
 No Aggregate can use an ApplicationService.
 
+[role="rule"]
+Every View must have a Presenter.
+
 
 ==== Mapping for Concepts
 
@@ -37,3 +40,13 @@ useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClas
 
 [role="mapping"]
 useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
+
+[role="mapping"]
+isView: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*View') (?class famix:isInterface 'false'^^xsd:boolean) -> (?class rdf:type architecture:View)
+
+[role="mapping"]
+isPresenter: (?class rdf:type famix:FamixClass) (?class famix:hasName ?name) regex(?name, '.*Presenter') (?class famix:isInterface 'false'^^xsd:boolean) -> (?class rdf:type architecture:Presenter)
+
+[role="mapping"]
+haveMapping: (?view rdf:type architecture:View) (?presenter rdf:type architecture:Presenter) (?view famix:hasName ?vName) (?presenter famix:hasName ?pName) regex(?vName, '(\\w*)View', ?vPrefix) regex(?pName, '(\\w*)Presenter', ?pPrefix) regex(?vPrefix, ?pPrefix) -> (?view architecture:have ?presenter) (?presenter architecture:have ?view)
+
