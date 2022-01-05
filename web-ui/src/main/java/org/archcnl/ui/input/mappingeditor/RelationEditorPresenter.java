@@ -16,22 +16,46 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.input.InputContract;
+import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class RelationEditorPresenter extends MappingEditorPresenter {
 
     private static final long serialVersionUID = -8403313455385623145L;
+    private RelationEditorView view;
     private Optional<CustomRelation> relation;
 
-    public RelationEditorPresenter() {
-        super(extractAndTriplets(null));
-        this.relation = Optional.ofNullable(null);
+    public RelationEditorPresenter(InputContract.Remote inputRemote) {
+        super(inputRemote);
+        this.relation = Optional.empty();
+        view =
+                new RelationEditorView(
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        addThenTripletListeners();
+        initializeView(view);
     }
 
-    public RelationEditorPresenter(CustomRelation relation) {
-        super(extractAndTriplets(relation));
+    public RelationEditorPresenter(InputContract.Remote inputRemote, CustomRelation relation) {
+        super(inputRemote);
         this.relation = Optional.of(relation);
+        view =
+                new RelationEditorView(
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        addThenTripletListeners();
+        initializeView(view, extractAndTriplets(relation));
+    }
+
+    private void addThenTripletListeners() {
+        view.addListener(
+                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
+        view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
+        view.addListener(
+                VariableListUpdateRequestedEvent.class,
+                event -> event.handleEvent(variableManager));
     }
 
     private static List<AndTriplets> extractAndTriplets(CustomRelation relation) {
@@ -84,13 +108,13 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         if (relation.isPresent()) {
             try {
                 CustomRelation thenRelation = relation.get();
-                ObjectType thenObject = view.getThenTripletObject().get();
+                ObjectType thenObject = view.getThenTripletObject();
                 thenRelation.setRelatableObjectType(thenObject);
                 Triplet thenTriplet =
                         TripletFactory.createTriplet(
                                 view.getThenTripletSubject(), thenRelation, thenObject);
 
-                RelationMapping mapping = new RelationMapping(thenTriplet, getAndTriplets());
+                RelationMapping mapping = new RelationMapping(thenTriplet, getAndTripletsList());
 
                 relation.get().setMapping(mapping);
 
@@ -122,7 +146,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void descriptionHasChanged(String value) {
-        relation.get().setDescription(value);
+    public void descriptionHasChanged(MappingDescriptionFieldChangedEvent event) {
+        relation.get().setDescription(event.getNewDescription());
     }
 }

@@ -13,22 +13,46 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.ui.input.InputContract;
+import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class ConceptEditorPresenter extends MappingEditorPresenter {
 
     private static final long serialVersionUID = 1636256374259524105L;
+    private ConceptEditorView view;
     private Optional<CustomConcept> concept;
 
-    public ConceptEditorPresenter() {
-        super(extractAndTriplets(null));
-        this.concept = Optional.ofNullable(null);
+    public ConceptEditorPresenter(InputContract.Remote inputRemote) {
+        super(inputRemote);
+        this.concept = Optional.empty();
+        view =
+                new ConceptEditorView(
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        addThenTripletListeners();
+        initializeView(view);
     }
 
-    public ConceptEditorPresenter(CustomConcept concept) {
-        super(extractAndTriplets(concept));
+    public ConceptEditorPresenter(InputContract.Remote inputRemote, CustomConcept concept) {
+        super(inputRemote);
         this.concept = Optional.of(concept);
+        view =
+                new ConceptEditorView(
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        addThenTripletListeners();
+        initializeView(view, extractAndTriplets(concept));
+    }
+
+    private void addThenTripletListeners() {
+        view.addListener(
+                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
+        view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
+        view.addListener(
+                VariableListUpdateRequestedEvent.class,
+                event -> event.handleEvent(variableManager));
     }
 
     private static List<AndTriplets> extractAndTriplets(CustomConcept concept) {
@@ -75,7 +99,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
             try {
                 ConceptMapping mapping =
                         new ConceptMapping(
-                                view.getThenTripletSubject(), getAndTriplets(), concept.get());
+                                view.getThenTripletSubject(), getAndTripletsList(), concept.get());
                 concept.get().setMapping(mapping);
 
                 if (!doesConceptExist(concept.get())) {
@@ -107,7 +131,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    public void descriptionHasChanged(String value) {
-        concept.get().setDescription(value);
+    public void descriptionHasChanged(MappingDescriptionFieldChangedEvent event) {
+        concept.get().setDescription(event.getNewDescription());
     }
 }

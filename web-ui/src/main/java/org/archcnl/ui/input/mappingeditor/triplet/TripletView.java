@@ -1,58 +1,91 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.triplet.TripletContract.View;
+import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.input.mappingeditor.events.AddTripletViewAfterButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.events.PredicateSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.TripletViewDeleteButtonPressedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 
-public class TripletView extends HorizontalLayout implements TripletContract.View {
+public class TripletView extends HorizontalLayout {
 
     private static final long serialVersionUID = -547117976123681486L;
 
-    private Presenter<View> presenter;
-    private Button addButton;
+    private VariableSelectionComponent subjectComponent;
+    private PredicateComponent predicateComponent;
+    private ObjectView objectView;
 
-    public TripletView(Presenter<View> presenter, VariableManager variableManager) {
-        this.presenter = presenter;
-
+    public TripletView() {
         setPadding(false);
-        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         setWidthFull();
-        SubjectPresenter subjectPresenter = new SubjectPresenter(variableManager);
-        presenter.setSubjectPresenter(subjectPresenter);
-        VariableSelectionView subjectView = new VariableSelectionView(subjectPresenter);
-        ObjectPresenter objectPresenter = new ObjectPresenter(variableManager);
-        presenter.setObjectPresenter(objectPresenter);
-        ObjectView objectView = new ObjectView(objectPresenter);
-        PredicatePresenter predicatePresenter = new PredicatePresenter(objectPresenter);
-        presenter.setPredicatePresenter(predicatePresenter);
-        PredicateView predicateView = new PredicateView(predicatePresenter);
 
-        HorizontalLayout triplet = new HorizontalLayout();
-        triplet.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        triplet.setWidthFull();
-        triplet.add(subjectView);
-        triplet.add(predicateView);
-        triplet.add(objectView);
-        add(triplet);
-        add(new Button(new Icon(VaadinIcon.TRASH), click -> presenter.deleteButtonPressed()));
-        add(new Button(new Icon(VaadinIcon.PLUS), click -> presenter.addButtonPressed()));
-        this.presenter.setView(this);
+        subjectComponent = new VariableSelectionComponent();
+        predicateComponent = new PredicateComponent();
+        objectView = new ObjectView();
+
+        HorizontalLayout tripletLayout = new HorizontalLayout();
+        tripletLayout.setWidthFull();
+        tripletLayout.add(subjectComponent);
+        tripletLayout.add(predicateComponent);
+        tripletLayout.add(objectView);
+        add(tripletLayout);
+
+        addCreateRemoveButtons();
+
+        addListeners();
+    }
+
+    public VariableSelectionComponent getSubjectComponent() {
+        return subjectComponent;
+    }
+
+    public PredicateComponent getPredicateComponent() {
+        return predicateComponent;
+    }
+
+    public ObjectView getObjectView() {
+        return objectView;
+    }
+
+    private void addListeners() {
+        subjectComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+
+        predicateComponent.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        predicateComponent.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+
+        objectView.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        objectView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        objectView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+        objectView.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        objectView.addListener(ConceptSelectedEvent.class, this::fireEvent);
+    }
+
+    private void addCreateRemoveButtons() {
+        add(
+                new Button(
+                        new Icon(VaadinIcon.TRASH),
+                        click -> fireEvent(new TripletViewDeleteButtonPressedEvent(this))));
+        add(
+                new Button(
+                        new Icon(VaadinIcon.PLUS),
+                        click -> fireEvent(new AddTripletViewAfterButtonPressedEvent(this))));
     }
 
     @Override
-    public void setAddButtonVisible(boolean visible) {
-        if (visible) {
-            add(addButton);
-        } else {
-            remove(addButton);
-        }
-    }
-
-    public Presenter<View> getPresenter() {
-        return presenter;
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

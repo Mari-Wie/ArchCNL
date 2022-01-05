@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.mappingeditor.triplet;
+package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.dnd.DragSource;
@@ -6,31 +6,30 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import java.util.List;
 import org.archcnl.domain.common.Variable;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableListContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableListContract.View;
 
-public class VariableListView extends VerticalLayout implements View {
+public class VariableListView extends VerticalLayout {
 
     private static final long serialVersionUID = 1573494658930202757L;
-    private Presenter<View> presenter;
     private HorizontalLayout content;
 
-    public VariableListView(VariableListContract.Presenter<View> presenter) {
-        this.presenter = presenter;
-        this.presenter.setView(this);
-
+    public VariableListView() {
         content = new HorizontalLayout();
         content.setWidthFull();
         content.setPadding(true);
         content.getStyle().set("overflow-x", "auto");
     }
 
-    @Override
-    public void addVariableView(Variable variable) {
-        if (content.getComponentCount() == 0) {
+    public void showVariableList(List<Variable> variables) {
+        content.removeAll();
+        if (getComponentCount() == 0) {
             addBasicView();
         }
+        variables.forEach(this::addVariableView);
+    }
+
+    private void addVariableView(Variable variable) {
         content.add(createVariableCard(variable));
     }
 

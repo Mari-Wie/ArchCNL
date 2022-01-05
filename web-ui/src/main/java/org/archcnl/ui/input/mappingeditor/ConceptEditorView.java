@@ -2,42 +2,36 @@ package org.archcnl.ui.input.mappingeditor;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import java.util.Optional;
-import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.ui.input.InputContract;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.SubjectPresenter;
-import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionView;
+import org.archcnl.ui.input.mappingeditor.triplet.VariableSelectionComponent;
 
 public class ConceptEditorView extends MappingEditorView {
 
     private static final long serialVersionUID = 1260768304754207599L;
     private TextField conceptNameField;
-    private SubjectPresenter subjectPresenter;
-    private VariableSelectionView subjectView;
+    private VariableSelectionComponent subjectComponent;
 
-    public ConceptEditorView(
-            MappingEditorContract.Presenter<View> presenter, InputContract.Remote inputRemote) {
-        super(presenter, inputRemote, "Concept");
+    public ConceptEditorView(AndTripletsEditorView emptyAndTripletsView) {
+        super("Concept", emptyAndTripletsView);
     }
 
     @Override
     protected void addThenTripletView() {
-        HorizontalLayout thenTriplet = new HorizontalLayout();
-        subjectPresenter = new SubjectPresenter(presenter.getVariableManager());
-        subjectView = new VariableSelectionView(subjectPresenter);
-        subjectView.setLabel("Subject");
-        thenTriplet.add(subjectView);
+        subjectComponent = new VariableSelectionComponent();
+        subjectComponent.setLabel("Subject");
+        addListenersToSubjectComponent();
         TextField predicateField = new TextField("Predicate");
         predicateField.setValue("is-of-type");
         predicateField.setReadOnly(true);
-        thenTriplet.add(predicateField);
         conceptNameField = new TextField("Object");
         conceptNameField.setReadOnly(true);
-        thenTriplet.add(conceptNameField);
+        HorizontalLayout thenTriplet = new HorizontalLayout();
+        thenTriplet.add(subjectComponent, predicateField, conceptNameField);
         add(thenTriplet);
     }
 
@@ -46,42 +40,23 @@ public class ConceptEditorView extends MappingEditorView {
         conceptNameField.setValue(newName);
     }
 
-    @Override
+    public void showThenSubjectErrorMessage(String message) {
+        subjectComponent.setErrorMessage(message);
+        subjectComponent.setInvalid(true);
+    }
+
     public Variable getThenTripletSubject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
-        return subjectPresenter.getSubject();
+        return subjectComponent.getVariable();
     }
 
-    @Override
-    public Optional<ObjectType> getThenTripletObject() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void showThenSubjectErrorMessage(String message) {
-        subjectView.setErrorMessage(message);
-        subjectView.setInvalid(true);
-    }
-
-    @Override
-    public void showThenSubjectOrObjectErrorMessage(String message) {
-        showThenSubjectErrorMessage(message);
-    }
-
-    @Override
     public void setSubjectInThenTriplet(Variable subject) {
-        subjectPresenter.setSubject(subject);
+        subjectComponent.setVariable(subject);
     }
 
-    @Override
-    public void setObjectInThenTriplet(ObjectType object) {
-        throw new UnsupportedOperationException(
-                "The object in the \"then\" part of a concept cannot be changed.");
-    }
-
-    @Override
-    public ObjectType getSelectedObjectTypeInThenTriplet() {
-        throw new UnsupportedOperationException(
-                "The selected ObjectType cannot change for a Concept.");
+    private void addListenersToSubjectComponent() {
+        subjectComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
     }
 }

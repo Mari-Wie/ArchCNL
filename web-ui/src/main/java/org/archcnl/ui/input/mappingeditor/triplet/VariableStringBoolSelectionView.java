@@ -1,7 +1,10 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +13,9 @@ import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.StringValue;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.MappingEditorContract.View;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {
@@ -22,23 +25,25 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     private static final String VARIABLE = "Variable";
     private static final long serialVersionUID = 8635404097691880603L;
 
-    private BooleanSelectionView booleanSelectionView;
-    private StringSelectionView stringSelectionView;
-    private VariableSelectionView variableSelectionView;
-    private VariableSelectionPresenter variableSelectionPresenter;
-    private VariableManager variableManager;
+    private BooleanSelectionComponent booleanSelectionComponent;
+    private StringSelectionComponent stringSelectionComponent;
+    private VariableSelectionComponent variableSelectionComponent;
     private ComboBox<String> typeSelection;
+    private Optional<String> label = Optional.empty();
 
-    public VariableStringBoolSelectionView(
-            VariableManager variableManager,
-            boolean stringsAllowed,
-            boolean booleanAllowed,
-            Optional<Presenter<View>> optional) {
-
-        this.variableManager = variableManager;
+    public VariableStringBoolSelectionView() {
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
+        updateTypeSelectionItems(true, true);
+        showVariableSelectionView();
+    }
 
-        typeSelection = new ComboBox<>();
+    public void updateTypeSelectionItems(boolean stringsAllowed, boolean booleanAllowed) {
+        String oldValue = null;
+        if (typeSelection != null) {
+            remove(typeSelection);
+            oldValue = typeSelection.getValue();
+        }
+        ComboBox<String> newTypeSelection = new ComboBox<>();
         List<String> items = new LinkedList<>();
         items.add(VARIABLE);
         if (stringsAllowed) {
@@ -47,14 +52,14 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         if (booleanAllowed) {
             items.add(BOOLEAN);
         }
-        typeSelection.setItems(items);
-        typeSelection.setValue(VARIABLE);
-        if (items.size() > 1) {
-            add(typeSelection);
+        newTypeSelection.setItems(items);
+        if (items.contains(oldValue)) {
+            newTypeSelection.setValue(oldValue);
+        } else {
+            newTypeSelection.setValue(VARIABLE);
         }
-        showVariableSelectionView();
 
-        typeSelection.addValueChangeListener(
+        newTypeSelection.addValueChangeListener(
                 event -> {
                     String value = event.getValue();
                     if (value != null) {
@@ -73,17 +78,21 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                         }
                     }
                 });
+        typeSelection = newTypeSelection;
+        if (items.size() > 1) {
+            addComponentAsFirst(typeSelection);
+        }
     }
 
     public ObjectType getObject()
             throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (booleanSelectionView != null) {
-            object = booleanSelectionView.getObject();
-        } else if (stringSelectionView != null) {
-            object = stringSelectionView.getObject();
-        } else if (variableSelectionView != null && variableSelectionPresenter != null) {
-            object = variableSelectionPresenter.getSelectedVariable();
+        if (booleanSelectionComponent != null) {
+            object = booleanSelectionComponent.getObject();
+        } else if (stringSelectionComponent != null) {
+            object = stringSelectionComponent.getObject();
+        } else if (variableSelectionComponent != null) {
+            object = variableSelectionComponent.getVariable();
         } else {
             // should never happen
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
@@ -95,15 +104,15 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         if (object instanceof StringValue) {
             typeSelection.setValue(STRING);
             showStringSelectionView();
-            stringSelectionView.setValue(((StringValue) object).getValue());
+            stringSelectionComponent.setValue(((StringValue) object).getValue());
         } else if (object instanceof BooleanValue) {
             typeSelection.setValue(BOOLEAN);
             showBooleanSelectionView();
-            booleanSelectionView.setValue(String.valueOf(((BooleanValue) object).getValue()));
+            booleanSelectionComponent.setValue(String.valueOf(((BooleanValue) object).getValue()));
         } else if (object instanceof Variable) {
             typeSelection.setValue(VARIABLE);
             showVariableSelectionView();
-            variableSelectionPresenter.setSelectedVariable((Variable) object);
+            variableSelectionComponent.setVariable((Variable) object);
         } else {
             // should never happen
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
@@ -111,51 +120,77 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
     }
 
     public void showErrorMessage(String message) {
-        variableSelectionView.showErrorMessage(message);
+        variableSelectionComponent.showErrorMessage(message);
+    }
+
+    public void setLabel(String text) {
+        label = Optional.of(text);
+        // update currently shown view
+        if (booleanSelectionComponent != null) {
+            booleanSelectionComponent.setLabel(text);
+        }
+        if (stringSelectionComponent != null) {
+            stringSelectionComponent.setLabel(text);
+        }
+        if (variableSelectionComponent != null) {
+            variableSelectionComponent.setLabel(text);
+        }
     }
 
     private void removeAllSecondaryViews() {
-        if (booleanSelectionView != null) {
-            remove(booleanSelectionView);
+        if (booleanSelectionComponent != null) {
+            remove(booleanSelectionComponent);
         }
-        if (stringSelectionView != null) {
-            remove(stringSelectionView);
+        if (stringSelectionComponent != null) {
+            remove(stringSelectionComponent);
         }
-        if (variableSelectionView != null) {
-            remove(variableSelectionView);
+        if (variableSelectionComponent != null) {
+            remove(variableSelectionComponent);
         }
-        booleanSelectionView = null;
-        stringSelectionView = null;
-        variableSelectionView = null;
-        variableSelectionPresenter = null;
+        booleanSelectionComponent = null;
+        stringSelectionComponent = null;
+        variableSelectionComponent = null;
     }
 
     private void showStringSelectionView() {
         removeAllSecondaryViews();
-        stringSelectionView = new StringSelectionView();
-        add(stringSelectionView);
+        stringSelectionComponent = new StringSelectionComponent();
+        if (label.isPresent()) {
+            stringSelectionComponent.setLabel(label.get());
+        }
+        add(stringSelectionComponent);
     }
 
     private void showBooleanSelectionView() {
         removeAllSecondaryViews();
-        booleanSelectionView = new BooleanSelectionView();
-        add(booleanSelectionView);
+        booleanSelectionComponent = new BooleanSelectionComponent();
+        if (label.isPresent()) {
+            booleanSelectionComponent.setLabel(label.get());
+        }
+        add(booleanSelectionComponent);
     }
 
     private void showVariableSelectionView() {
         removeAllSecondaryViews();
-        variableSelectionPresenter = new VariableSelectionPresenter(variableManager);
-        variableSelectionView = new VariableSelectionView(variableSelectionPresenter);
-        add(variableSelectionView);
+        variableSelectionComponent = new VariableSelectionComponent();
+        if (label.isPresent()) {
+            variableSelectionComponent.setLabel(label.get());
+        }
+        variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
+        variableSelectionComponent.addListener(
+                VariableCreationRequestedEvent.class, this::fireEvent);
+        variableSelectionComponent.addListener(
+                VariableListUpdateRequestedEvent.class, this::fireEvent);
+        add(variableSelectionComponent);
     }
 
     public ObjectType getSelectedObjectType() {
         ObjectType object;
-        if (booleanSelectionView != null) {
+        if (booleanSelectionComponent != null) {
             object = new BooleanValue(false);
-        } else if (stringSelectionView != null) {
+        } else if (stringSelectionComponent != null) {
             object = new StringValue("");
-        } else if (variableSelectionView != null && variableSelectionPresenter != null) {
+        } else if (variableSelectionComponent != null) {
             try {
                 object = new Variable("placeholder");
             } catch (InvalidVariableNameException e) {
@@ -166,5 +201,11 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");
         }
         return object;
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

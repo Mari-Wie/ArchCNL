@@ -4,10 +4,7 @@ import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.ui.input.InputContract.View;
 import org.archcnl.ui.input.mappingeditor.ConceptEditorPresenter;
-import org.archcnl.ui.input.mappingeditor.ConceptEditorView;
-import org.archcnl.ui.input.mappingeditor.MappingEditorView;
 import org.archcnl.ui.input.mappingeditor.RelationEditorPresenter;
-import org.archcnl.ui.input.mappingeditor.RelationEditorView;
 import org.archcnl.ui.input.ruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.input.ruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.input.ruleeditor.NewArchitectureRuleView;
@@ -30,30 +27,27 @@ public class InputPresenter implements InputContract.Presenter, InputContract.Re
 
     @Override
     public void switchToConceptEditorView() {
-        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
-        MappingEditorView mappingEditorView = new ConceptEditorView(conceptEditorPresenter, this);
-        view.changeCurrentlyShownView(mappingEditorView);
+        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter(this);
+        view.changeCurrentlyShownView(conceptEditorPresenter.getMappingEditorView());
     }
 
     @Override
     public void switchToConceptEditorView(CustomConcept concept) {
-        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter(concept);
-        MappingEditorView mappingEditorView = new ConceptEditorView(conceptEditorPresenter, this);
-        view.changeCurrentlyShownView(mappingEditorView);
+        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter(this, concept);
+        view.changeCurrentlyShownView(conceptEditorPresenter.getMappingEditorView());
     }
 
     @Override
     public void switchToRelationEditorView() {
-        RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
-        MappingEditorView mappingEditorView = new RelationEditorView(relationEditorPresenter, this);
-        view.changeCurrentlyShownView(mappingEditorView);
+        RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter(this);
+        view.changeCurrentlyShownView(relationEditorPresenter.getMappingEditorView());
     }
 
     @Override
     public void switchToRelationEditorView(CustomRelation relation) {
-        RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter(relation);
-        MappingEditorView mappingEditorView = new RelationEditorView(relationEditorPresenter, this);
-        view.changeCurrentlyShownView(mappingEditorView);
+        RelationEditorPresenter relationEditorPresenter =
+                new RelationEditorPresenter(this, relation);
+        view.changeCurrentlyShownView(relationEditorPresenter.getMappingEditorView());
     }
 
     @Override

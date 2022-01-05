@@ -1,70 +1,77 @@
 package org.archcnl.ui.input.mappingeditor.triplet;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
+import org.archcnl.domain.common.BooleanValue;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.StringValue;
+import org.archcnl.domain.common.TypeRelation;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.ui.input.mappingeditor.VariableManager;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.ui.input.mappingeditor.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.ConceptSelectedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.exceptions.PredicateCannotRelateToObjectException;
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.Presenter;
-import org.archcnl.ui.input.mappingeditor.triplet.ObjectContract.View;
 
-public class ObjectView extends HorizontalLayout implements ObjectContract.View {
+public class ObjectView extends HorizontalLayout {
 
     private static final long serialVersionUID = -1105253743414019620L;
-    private Presenter<View> presenter;
-    private ConceptSelectionView conceptSelectionView;
+    private static final String CONCEPT = "Concept";
+    private static final String VAR_STRING_BOOL = "VariableStringBool";
+    private ConceptSelectionComponent conceptSelectionComponent;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
+    private String currentSelectionComponentString = "";
 
-    public ObjectView(ObjectContract.Presenter<View> presenter) {
-        this.presenter = presenter;
-        this.presenter.setView(this);
-        setDefaultVerticalComponentAlignment(Alignment.BASELINE);
+    public ObjectView() {
+        conceptSelectionComponent = new ConceptSelectionComponent();
+        variableStringBoolSelectionView = new VariableStringBoolSelectionView();
+
+        conceptSelectionComponent.addListener(
+                ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        conceptSelectionComponent.addListener(ConceptSelectedEvent.class, this::fireEvent);
+
+        variableStringBoolSelectionView.addListener(
+                VariableFilterChangedEvent.class, this::fireEvent);
+        variableStringBoolSelectionView.addListener(
+                VariableCreationRequestedEvent.class, this::fireEvent);
+        variableStringBoolSelectionView.addListener(
+                VariableListUpdateRequestedEvent.class, this::fireEvent);
     }
 
-    private void resetViews() {
-        conceptSelectionView = null;
-        variableStringBoolSelectionView = null;
+    private void switchToConceptView() {
+        currentSelectionComponentString = CONCEPT;
+        add(conceptSelectionComponent);
     }
 
-    @Override
-    public void clearView() {
-        removeAll();
-        resetViews();
-    }
-
-    @Override
-    public void switchToConceptView() {
-        clearView();
-        conceptSelectionView = new ConceptSelectionView();
-        add(conceptSelectionView);
-    }
-
-    @Override
-    public void switchToVariableStringBooleanView(
-            VariableManager variableManager, boolean stringsAllowed, boolean booleansAllowed) {
-        clearView();
-        variableStringBoolSelectionView =
-                new VariableStringBoolSelectionView(
-                        variableManager,
-                        stringsAllowed,
-                        booleansAllowed,
-                        Optional.ofNullable(null));
+    private void switchToVariableStringBooleanView(
+            boolean stringsAllowed, boolean booleansAllowed) {
+        currentSelectionComponentString = VAR_STRING_BOOL;
+        variableStringBoolSelectionView.updateTypeSelectionItems(stringsAllowed, booleansAllowed);
         add(variableStringBoolSelectionView);
     }
 
-    @Override
     public ObjectType getObject()
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
                     InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (conceptSelectionView != null) {
-            object = conceptSelectionView.getObject();
-        } else if (variableStringBoolSelectionView != null) {
+        if (currentSelectionComponentString.equals(CONCEPT)
+                && conceptSelectionComponent.getSelectedItem().isPresent()) {
+            String conceptName = conceptSelectionComponent.getSelectedItem().get();
+            // TODO: The RulesConceptsAndRelations call does not belong here
+            object =
+                    RulesConceptsAndRelations.getInstance()
+                            .getConceptManager()
+                            .getConceptByName(conceptName);
+        } else if (currentSelectionComponentString.equals(VAR_STRING_BOOL)) {
             object = variableStringBoolSelectionView.getObject();
         } else {
             throw new ObjectNotDefinedException();
@@ -72,26 +79,54 @@ public class ObjectView extends HorizontalLayout implements ObjectContract.View 
         return object;
     }
 
-    @Override
-    public void setObject(ObjectType object) throws PredicateCannotRelateToObjectException {
-        if (conceptSelectionView != null && object instanceof Concept) {
-            conceptSelectionView.setObject((Concept) object);
-        } else if (variableStringBoolSelectionView != null) {
-            variableStringBoolSelectionView.setObject(object);
+    public void setObject(ObjectType object) {
+        if (object instanceof Concept) {
+            conceptSelectionComponent.setObject((Concept) object);
         } else {
-            throw new PredicateCannotRelateToObjectException(object);
+            variableStringBoolSelectionView.setObject(object);
         }
     }
 
-    @Override
-    public void showErrorMessage(String errorMessage) {
-        if (conceptSelectionView != null) {
-            conceptSelectionView.showErrorMessage(errorMessage);
-        } else if (variableStringBoolSelectionView != null) {
+    public void predicateHasChanged(Optional<Relation> relationOptional) {
+        removeAll();
+        if (relationOptional.isPresent()) {
+            Relation relation = relationOptional.get();
+            if (relation instanceof TypeRelation) {
+                switchToConceptView();
+            } else {
+                boolean stringsAllowed = relation.canRelateToObjectType(new StringValue(""));
+                boolean booleansAllowed = relation.canRelateToObjectType(new BooleanValue(false));
+                switchToVariableStringBooleanView(stringsAllowed, booleansAllowed);
+            }
+        }
+    }
+
+    public void highlightWhenEmpty() {
+        try {
+            getObject();
+        } catch (ConceptDoesNotExistException e) {
+            showErrorMessage("Concept does not exist");
+        } catch (ObjectNotDefinedException | SubjectOrObjectNotDefinedException e) {
+            showErrorMessage("Object not set");
+        } catch (InvalidVariableNameException e) {
+            showErrorMessage("Invalid Variable name");
+        }
+    }
+
+    private void showErrorMessage(String errorMessage) {
+        if (currentSelectionComponentString.equals(CONCEPT)) {
+            conceptSelectionComponent.showErrorMessage(errorMessage);
+        } else if (currentSelectionComponentString.equals(VAR_STRING_BOOL)) {
             variableStringBoolSelectionView.showErrorMessage(errorMessage);
         }
         // there is no need to show the errorMessage when both views are null
         // as in that case the predicate is not set and the actual error message
         // is shown there
+    }
+
+    @Override
+    protected <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }
