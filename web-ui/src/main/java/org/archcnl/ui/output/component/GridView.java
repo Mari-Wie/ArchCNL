@@ -5,6 +5,10 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.archcnl.application.exceptions.PropertyNotFoundException;
+import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.stardogwrapper.impl.StardogDatabase;
@@ -14,18 +18,23 @@ public class GridView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOG = LogManager.getLogger(GridView.class);
+
     private ArrayList<Violation> violationList = new ArrayList<>();
     private Grid<Violation> grid = new Grid<>(Violation.class);
     private Button clearButton = new Button("Clear", e -> this.clearGrid());
 
-    private String username = "admin";
-    private String password = "admin";
-    private String databaseName = "archcnl_it_db";
-    private String server = "http://localhost:5820";
     private StardogDatabaseAPI db;
 
-    public GridView() {
-        this.db = new StardogDatabase(server, databaseName, username, password);
+    public GridView() throws PropertyNotFoundException {
+        this.db =
+                new StardogDatabase(
+                        ConfigAppService.getDbUrl(),
+                        ConfigAppService.getDbName(),
+                        ConfigAppService.getDbUsername(),
+                        ConfigAppService.getDbPassword());
+        GridView.LOG.info(
+                "Connection to DB host '{}' will be created.", ConfigAppService.getDbUrl());
         grid.setHeightByRows(true);
         add(grid, clearButton);
     }

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.ui.common.ConfirmDialog;
 import org.archcnl.ui.input.InputPresenter;
@@ -20,15 +21,15 @@ public class MainPresenter
     private HorizontalLayout resultView;
     private HorizontalLayout inputView;
 
-    public MainPresenter() {
-        InputPresenter inputPresenter = new InputPresenter(this);
+    public MainPresenter() throws PropertyNotFoundException {
+        final InputPresenter inputPresenter = new InputPresenter(this);
         inputView = new InputView(inputPresenter);
         resultView = new QueryView(this);
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 
     @Override
-    public void setView(MainContract.View view) {
+    public void setView(final MainContract.View view) {
         this.view = view;
     }
 
@@ -128,7 +129,7 @@ public class MainPresenter
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(final PropertyChangeEvent evt) {
         view.setSaveProjectMenuItemEnabled(true);
     }
 
@@ -136,7 +137,7 @@ public class MainPresenter
     public void saveProject() {
         try {
             ProjectManager.getInstance().saveProject();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             new ConfirmDialog("Project file could not be written.").open();
         }
     }

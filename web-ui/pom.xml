@@ -6,7 +6,7 @@
 	<artifactId>web-ui</artifactId>
 	<name>Web UI</name>
 	<description>Web UI for ArchCNL</description>
-	<packaging>war</packaging>
+	<packaging>${packaging.type}</packaging>
 
 	<parent>
 		<groupId>org.archcnl</groupId>
@@ -16,6 +16,7 @@
 
 	<properties>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
+		<packaging.type>war</packaging.type>
 	</properties>
 
 	<repositories>
@@ -141,33 +142,41 @@
 			<artifactId>filesystemdataprovider</artifactId>
 			<version>2.1.0</version>
 		</dependency>
+
+		<!-- Needed for embedded jetty server -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-continuation</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>websocket-server</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>javax-websocket-server-impl</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
-		<defaultGoal>jetty:run</defaultGoal>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
 			</plugin>
-			<!-- Jetty plugin for easy testing without a server -->
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-				<configuration>
-					<!-- If using IntelliJ IDEA with autocompilation, this
-					might cause lots of unnecessary compilations in the
-					background.-->
-					<scanIntervalSeconds>2</scanIntervalSeconds>
-					<!-- Use war output directory to get the webpack files -->
-					<webAppConfig>
-						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
-					</webAppConfig>
-				</configuration>
-			</plugin>
-
 			<!--
 				Take care of synchronizing java dependencies and imports in
 				package.json and main.js files.
@@ -190,18 +199,11 @@
 
 	<profiles>
 		<profile>
-			<!-- Production mode is activated using -Pproduction -->
-			<id>production</id>
+			<id>prod</id>
 			<properties>
+				<packaging.type>jar</packaging.type>
 				<vaadin.productionMode>true</vaadin.productionMode>
 			</properties>
-
-			<dependencies>
-				<dependency>
-					<groupId>com.vaadin</groupId>
-					<artifactId>flow-server-production-mode</artifactId>
-				</dependency>
-			</dependencies>
 
 			<build>
 				<plugins>
@@ -217,12 +219,71 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<archive>
+							<manifest>
+								<mainClass>org.archcnl.application.Application</mainClass>
+							</manifest>
+							</archive>
+							<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+						<executions>
+							<execution>
+							<id>make-assembly</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>src/main</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+
+		<profile>
+			<id>develop</id>
+			<properties>
+				<packaging.type>war</packaging.type>
+			</properties>
+			<build>
+				<defaultGoal>jetty:run</defaultGoal>
+				<plugins>
+					<!-- Jetty plugin for easy testing without a server -->
+					<plugin>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>${jetty.version}</version>
+						<configuration>
+							<!-- If using IntelliJ IDEA with autocompilation, this
+							might cause lots of unnecessary compilations in the
+							background.-->
+							<scanIntervalSeconds>2</scanIntervalSeconds>
+							<!-- Use war output directory to get the webpack files -->
+							<webAppConfig>
+								<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+							</webAppConfig>
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
 
 		<profile>
 			<id>it</id>
+			<properties>
+				<packaging.type>war</packaging.type>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
