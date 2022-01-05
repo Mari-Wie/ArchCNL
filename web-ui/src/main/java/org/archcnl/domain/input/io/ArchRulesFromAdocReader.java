@@ -4,8 +4,10 @@ import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -36,14 +38,26 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private static final Logger LOG = LogManager.getLogger(ArchRulesFromAdocReader.class);
 
-    private static final Pattern RULE_PATTERN =
+    private static final Pattern CONCEPT_MAPPING_NAME = Pattern.compile("(?<=is)\\w+(?=:)");
+    private static final Pattern RELATION_MAPPING_NAME = Pattern.compile(".+(?=Mapping:)");
+    private static final Pattern CONCEPT_DESCRIPTION_PATTERN =
+            Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(is\\w+:)[\\w\\. ]+(\r\n?|\n)");
+    private static final Pattern CONCEPT_DESCRIPTION_CONTENT =
+            Pattern.compile(
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(is\\w+:))[\\w\\. ]+((?=\r\n?|\n))");
+    private static final Pattern RELATION_DESCRIPTION_PATTERN =
+            Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:)[\\w\\. ]+(\r\n?|\n)");
+    private static final Pattern RELATION_DESCRIPTION_CONTENT =
+            Pattern.compile(
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:))[\\w\\. ]+((?=\r\n?|\n))");
+    private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_MAPPING_PATTERN =
             Pattern.compile(
-                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
+                    "(?<=\\[role=\"mapping\"\\](\r\n?|\n))is\\w+\\: (.+ )?\\-\\> \\(.+ rdf:type .+\\)");
     private static final Pattern RELATION_MAPPING_PATTERN =
             Pattern.compile(
-                    "(?<=\\[role=\\\"mapping\\\"\\](\\r\\n?|\\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
+                    "(?<=\\[role=\"mapping\"\\](\r\n?|\n))\\w+Mapping\\: (.+ )?\\-\\> \\(.+\\)");
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
                     "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
@@ -53,17 +67,49 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             Pattern.compile(NORMAL_TRIPLET_PATTERN + "|" + SPECIAL_TRIPLET_PATTERN);
     private static final Pattern WHEN_PATTERN = Pattern.compile(".+(?=\\-\\>)");
     private static final Pattern THEN_PATTERN = Pattern.compile("(?<=\\-\\>).+");
-    private static final Pattern CONCEPT_MAPPING_NAME = Pattern.compile("(?<=is)\\w+(?=:)");
-    private static final Pattern RELATION_MAPPING_NAME = Pattern.compile(".+(?=Mapping:)");
 
     @Override
     public void readArchitectureRules(
             File file, RulesConceptsAndRelations rulesConceptsAndRelations) throws IOException {
 
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        Map<String, String> conceptDescriptions = new HashMap<String, String>();
+        Map<String, String> relationDescriptions = new HashMap<String, String>();
+
+        AdocIoUtils.getAllMatches(CONCEPT_DESCRIPTION_PATTERN, fileContent).stream()
+                .forEach(
+                        conceptDescription -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_MAPPING_NAME, conceptDescription);
+                                String description =
+                                        AdocIoUtils.getFirstMatch(
+                                                CONCEPT_DESCRIPTION_CONTENT, conceptDescription);
+                                conceptDescriptions.put(name, description);
+                            } catch (NoMatchFoundException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
+
+        AdocIoUtils.getAllMatches(RELATION_DESCRIPTION_PATTERN, fileContent).stream()
+                .forEach(
+                        relationDescription -> {
+                            try {
+                                String name =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_MAPPING_NAME, relationDescription);
+                                String description =
+                                        AdocIoUtils.getFirstMatch(
+                                                RELATION_DESCRIPTION_CONTENT, relationDescription);
+                                relationDescriptions.put(name, description);
+                            } catch (NoMatchFoundException e) {
+                                LOG.warn(e.getMessage());
+                            }
+                        });
 
         // Extract and add architecture rules
-        AdocIoUtils.getAllMatches(RULE_PATTERN, fileContent).stream()
+        AdocIoUtils.getAllMatches(RULE_CONTENT_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRule -> {
                             try {
@@ -82,7 +128,11 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 CONCEPT_MAPPING_NAME, potentialConceptMapping);
-                                CustomConcept concept = new CustomConcept(name, "");
+                                String description = "";
+                                if (conceptDescriptions.containsKey(name)) {
+                                    description = conceptDescriptions.get(name);
+                                }
+                                CustomConcept concept = new CustomConcept(name, description);
                                 concept.setMapping(parseMapping(potentialConceptMapping, concept));
                                 rulesConceptsAndRelations.getConceptManager().addOrAppend(concept);
                             } catch (UnrelatedMappingException
@@ -99,8 +149,12 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
                                                 RELATION_MAPPING_NAME, potentialRelationMapping);
+                                String description = "";
+                                if (relationDescriptions.containsKey(name)) {
+                                    description = relationDescriptions.get(name);
+                                }
                                 CustomRelation relation =
-                                        new CustomRelation(name, "", new LinkedList<>());
+                                        new CustomRelation(name, description, new LinkedList<>());
                                 relation.setMapping(
                                         parseMapping(potentialRelationMapping, relation));
                                 rulesConceptsAndRelations
@@ -225,7 +279,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     @VisibleForTesting
     public static Pattern getRulePattern() {
-        return RULE_PATTERN;
+        return RULE_CONTENT_PATTERN;
     }
 
     @VisibleForTesting
@@ -236,5 +290,15 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     @VisibleForTesting
     public static Pattern getRelationMappingPattern() {
         return RELATION_MAPPING_PATTERN;
+    }
+
+    @VisibleForTesting
+    public static Pattern getConceptDescriptionPattern() {
+        return CONCEPT_DESCRIPTION_PATTERN;
+    }
+
+    @VisibleForTesting
+    public static Pattern getRelationDescriptionPattern() {
+        return RELATION_DESCRIPTION_PATTERN;
     }
 }

@@ -41,7 +41,8 @@ public class TestUtils {
         Matcher matcher = regex.matcher(expected);
         while (matcher.find()) {
             String match = matcher.group();
-            if (!actual.contains(match)) {
+            String replaced = match.replaceAll("\r\n?", "\n");
+            if (!actual.contains(replaced)) {
                 return false;
             }
         }
@@ -201,7 +202,9 @@ public class TestUtils {
         useWhenTriplets.add(new AndTriplets(triplets));
         useWhenTriplets.add(new AndTriplets(triplets2));
 
-        CustomConcept aggregate = new CustomConcept("Aggregate", "");
+        CustomConcept aggregate =
+                new CustomConcept(
+                        "Aggregate", "Every class whose name ends with Aggregate is an Aggregate.");
         ConceptMapping aggregateMapping =
                 new ConceptMapping(classVariable, aggregateWhenTriplets, aggregate);
         aggregate.setMapping(aggregateMapping);
@@ -224,7 +227,11 @@ public class TestUtils {
                         resideInWhenTriplets);
         resideIn.setMapping(resideInMapping);
 
-        CustomRelation use = new CustomRelation("use", "", new LinkedList<>());
+        CustomRelation use =
+                new CustomRelation(
+                        "use",
+                        "A class uses another class if it has a field of it or if it imports it.",
+                        new LinkedList<>());
         RelationMapping useMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, use, class2Variable),
