@@ -7,6 +7,6 @@ PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 ASK
 WHERE {
     ?rule rdf:type conformance:ArchitectureRule.
-    ?rule conformance:hasRuleRepresentation "Every Aggregate must residein a DomainRing."^^xsd:string.
+    ?rule conformance:hasRuleRepresentation "Every Aggregate must resideIn a DomainRing."^^xsd:string.
     ?violation conformance:violates ?rule.
 }

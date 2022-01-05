@@ -14,7 +14,6 @@
 		<mwe2Version>2.11.3</mwe2Version>
 		<xtextVersion>2.22.0</xtextVersion>
 		<log4jVersion>2.15.0</log4jVersion>
-		<stanfordnlpVersion>3.9.1</stanfordnlpVersion>
 		<commonsioVersion>2.6</commonsioVersion>
 		<apachejenaVersion>3.3.0</apachejenaVersion>
 		<owlapiVersion>5.1.0</owlapiVersion>
