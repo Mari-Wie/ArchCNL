@@ -71,6 +71,12 @@ class ArchRulesFromAdocReaderTest {
                 rulesConceptsAndRelations.getConceptManager().getInputConcepts().size());
         for (Concept concept : rulesConceptsAndRelations.getConceptManager().getInputConcepts()) {
             assertTrue(expectedModel.getConceptManager().getInputConcepts().contains(concept));
+            assertEquals(
+                    expectedModel
+                            .getConceptManager()
+                            .getConceptByName(concept.getName())
+                            .getDescription(),
+                    concept.getDescription());
         }
 
         // Check if relations were correctly imported
@@ -80,6 +86,12 @@ class ArchRulesFromAdocReaderTest {
         for (Relation relation :
                 rulesConceptsAndRelations.getRelationManager().getInputRelations()) {
             assertTrue(expectedModel.getRelationManager().getInputRelations().contains(relation));
+            assertEquals(
+                    expectedModel
+                            .getRelationManager()
+                            .getRelationByName(relation.getName())
+                            .getDescription(),
+                    relation.getDescription());
         }
     }
 

@@ -44,12 +44,12 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
             Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(is\\w+:)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern CONCEPT_DESCRIPTION_CONTENT =
             Pattern.compile(
-                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(is\\w+:))[\\w\\. ]+((?=\r\n?|\n))");
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(is\\w+: ))[\\w\\. ]+((?=\r\n?|\n))");
     private static final Pattern RELATION_DESCRIPTION_PATTERN =
             Pattern.compile("\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:)[\\w\\. ]+(\r\n?|\n)");
     private static final Pattern RELATION_DESCRIPTION_CONTENT =
             Pattern.compile(
-                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(.+Mapping:))[\\w\\. ]+((?=\r\n?|\n))");
+                    "(?<=\\[role=\"description\"\\](\r\n?|\n)(.+Mapping: ))[\\w\\. ]+((?=\r\n?|\n))");
     private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
     private static final Pattern CONCEPT_MAPPING_PATTERN =
