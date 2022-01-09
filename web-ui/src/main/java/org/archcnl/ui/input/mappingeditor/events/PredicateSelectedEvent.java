@@ -4,13 +4,12 @@ import com.vaadin.flow.component.ComponentEvent;
 import java.util.Optional;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.ui.input.mappingeditor.triplet.ObjectView;
 import org.archcnl.ui.input.mappingeditor.triplet.PredicateComponent;
 
 public class PredicateSelectedEvent extends ComponentEvent<PredicateComponent> {
 
-    private static final long serialVersionUID = -5512289455282443156L;
+    private static final long serialVersionUID = 1L;
 
     public PredicateSelectedEvent(PredicateComponent source, boolean fromClient) {
         super(source, fromClient);
@@ -18,15 +17,11 @@ public class PredicateSelectedEvent extends ComponentEvent<PredicateComponent> {
 
     public void handleEvent(RelationManager relationManager, ObjectView objectView) {
         Optional<String> value = getSource().getSelectedItem();
-        Relation relation = null;
+        Optional<Relation> relation = null;
         if (value.isPresent()) {
             String name = value.get();
-            try {
-                relation = relationManager.getRelationByName(name);
-            } catch (RelationDoesNotExistException e) {
-                getSource().showErrorMessage("Relation does not exist");
-            }
+            relation = relationManager.getRelationByName(name);
         }
-        objectView.predicateHasChanged(Optional.ofNullable(relation));
+        objectView.predicateHasChanged(relation);
     }
 }

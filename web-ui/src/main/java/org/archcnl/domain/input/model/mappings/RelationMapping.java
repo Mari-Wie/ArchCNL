@@ -1,6 +1,7 @@
 package org.archcnl.domain.input.model.mappings;
 
 import java.util.List;
+import java.util.Optional;
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Triplet;
@@ -22,13 +23,13 @@ public class RelationMapping extends Mapping {
 
         this.thenTriplet =
                 TripletFactory.createTriplet(
-                        subject, thenTriplet.getPredicate(), thenTriplet.getObject());
+                        subject, Optional.of(thenTriplet.getPredicate()), thenTriplet.getObject());
     }
 
     public void updateObjectInThenTriplet(ObjectType object) throws UnsupportedObjectTypeInTriplet {
         this.thenTriplet =
                 TripletFactory.createTriplet(
-                        thenTriplet.getSubject(), thenTriplet.getPredicate(), object);
+                        thenTriplet.getSubject(), Optional.of(thenTriplet.getPredicate()), object);
     }
 
     @Override
