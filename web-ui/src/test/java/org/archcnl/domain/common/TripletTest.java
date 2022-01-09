@@ -1,5 +1,6 @@
 package org.archcnl.domain.common;
 
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
@@ -16,7 +17,7 @@ class TripletTest {
                     UnsupportedObjectTypeInTriplet {
         // given
         Variable subject = new Variable("name");
-        Relation predicate =
+        Optional<Relation> predicate =
                 RulesConceptsAndRelations.getInstance()
                         .getRelationManager()
                         .getRelationByName("matches");
@@ -31,8 +32,8 @@ class TripletTest {
         // then
         Assertions.assertEquals(subject, triplet1.getSubject());
         Assertions.assertEquals(subject, triplet2.getSubject());
-        Assertions.assertEquals(predicate, triplet1.getPredicate());
-        Assertions.assertEquals(predicate, triplet2.getPredicate());
+        Assertions.assertEquals(predicate.get(), triplet1.getPredicate());
+        Assertions.assertEquals(predicate.get(), triplet2.getPredicate());
         Assertions.assertEquals(validObjectType1, triplet1.getObject());
         Assertions.assertEquals(validObjectType2, triplet2.getObject());
         Assertions.assertThrows(
@@ -49,7 +50,8 @@ class TripletTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new Variable("name"));
 
         final String expectedGuiString = "?aggregate famix:hasName ?name.";
@@ -76,7 +78,8 @@ class TripletTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new StringValue("Some string value"));
 
         final String expectedGuiString = "?aggregate famix:hasName 'Some string value'.";
@@ -104,7 +107,8 @@ class TripletTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("isInterface"),
+                                .getRelationByName("isInterface")
+                                .get(),
                         new BooleanValue(true));
 
         final String expectedGuiString = "?class famix:isInterface 'true'^^xsd:boolean.";
@@ -132,10 +136,12 @@ class TripletTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
-                                .getConceptByName("FamixClass"));
+                                .getConceptByName("FamixClass")
+                                .get());
 
         final String expectedGuiString = "?class rdf:type famix:FamixClass.";
         final String expectedQueryString = "?class rdf:type famix:FamixClass.";

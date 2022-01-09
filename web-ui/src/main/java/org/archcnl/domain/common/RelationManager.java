@@ -11,7 +11,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
@@ -48,9 +47,11 @@ public class RelationManager {
             if (!doesRelationExist(relation)) {
                 addRelation(relation);
             } else {
-                Relation existingRelation = getRelationByName(relation.getName());
-                if (existingRelation instanceof CustomRelation) {
-                    CustomRelation existingCustomRelation = (CustomRelation) existingRelation;
+                Optional<Relation> existingRelationOpt = getRelationByName(relation.getName());
+                if (existingRelationOpt.isPresent()
+                        && existingRelationOpt.get() instanceof CustomRelation) {
+                    CustomRelation existingCustomRelation =
+                            (CustomRelation) existingRelationOpt.get();
                     Optional<RelationMapping> existingMapping = existingCustomRelation.getMapping();
                     Optional<RelationMapping> newMapping = relation.getMapping();
                     if (existingMapping.isPresent() && newMapping.isPresent()) {
@@ -60,7 +61,7 @@ public class RelationManager {
                     }
                 }
             }
-        } catch (RelationAlreadyExistsException | RelationDoesNotExistException e) {
+        } catch (RelationAlreadyExistsException e) {
             // cannot occur
             throw new RuntimeException(
                     "Adding and appending of of mapping \""
@@ -69,28 +70,25 @@ public class RelationManager {
         }
     }
 
-    public Relation getRelationByName(String name) throws RelationDoesNotExistException {
-        return relations.stream()
-                .filter(relation -> name.equals(relation.getName()))
-                .findAny()
-                .orElseThrow(() -> new RelationDoesNotExistException(name));
+    public Optional<Relation> getRelationByName(String name) {
+        return relations.stream().filter(relation -> name.equals(relation.getName())).findAny();
     }
 
-    public Relation getRelationByRealName(String realName) throws RelationDoesNotExistException {
+    public Optional<Relation> getRelationByRealName(String realName) {
         for (Relation relation : relations) {
             if (relation instanceof JenaBuiltinRelation) {
                 JenaBuiltinRelation specialRelation = (JenaBuiltinRelation) relation;
                 if (realName.equals(specialRelation.getRealName())) {
-                    return specialRelation;
+                    return Optional.of(specialRelation);
                 }
             } else if (relation instanceof TypeRelation) {
                 TypeRelation typeRelation = (TypeRelation) relation;
                 if (realName.equals(typeRelation.getRealName())) {
-                    return typeRelation;
+                    return Optional.of(typeRelation);
                 }
             }
         }
-        throw new RelationDoesNotExistException(realName);
+        return Optional.empty();
     }
 
     public boolean doesRelationExist(Relation relation) {
@@ -131,7 +129,10 @@ public class RelationManager {
             throws ConceptDoesNotExistException {
         // FamixClass relations
         List<ActualObjectType> famixClassConcept = new LinkedList<>();
-        famixClassConcept.add(conceptManager.getConceptByName("FamixClass"));
+        famixClassConcept.add(
+                conceptManager
+                        .getConceptByName("FamixClass")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("FamixClass")));
         relations.add(new FamixRelation("hasDefiningClass", "", famixClassConcept));
         relations.add(new FamixRelation("hasDeclaredException", "", famixClassConcept));
         relations.add(new FamixRelation("hasCaughtException", "", famixClassConcept));
@@ -141,28 +142,43 @@ public class RelationManager {
 
         // Parameter relations
         List<ActualObjectType> parameterConcept = new LinkedList<>();
-        parameterConcept.add(conceptManager.getConceptByName("Parameter"));
+        parameterConcept.add(
+                conceptManager
+                        .getConceptByName("Parameter")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Parameter")));
         relations.add(new FamixRelation("definesParameter", "", parameterConcept));
 
         // LocalVariable relations
         List<ActualObjectType> localVariableConcept = new LinkedList<>();
-        localVariableConcept.add(conceptManager.getConceptByName("LocalVariable"));
+        localVariableConcept.add(
+                conceptManager
+                        .getConceptByName("LocalVariable")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("LocalVariable")));
         relations.add(new FamixRelation("definesVariable", "", localVariableConcept));
 
         // AnnotationInstance relations
         List<ActualObjectType> annotationInstanceConcept = new LinkedList<>();
-        annotationInstanceConcept.add(conceptManager.getConceptByName("AnnotationInstance"));
+        annotationInstanceConcept.add(
+                conceptManager
+                        .getConceptByName("AnnotationInstance")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("AnnotationInstance")));
         relations.add(new FamixRelation("hasAnnotationInstance", "", annotationInstanceConcept));
 
         // AnnotationType relations
         List<ActualObjectType> annotationTypeConcept = new LinkedList<>();
-        annotationTypeConcept.add(conceptManager.getConceptByName("AnnotationType"));
+        annotationTypeConcept.add(
+                conceptManager
+                        .getConceptByName("AnnotationType")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("AnnotationType")));
         relations.add(new FamixRelation("hasAnnotationType", "", annotationTypeConcept));
 
         // AnnotationTypeAttribute relations
         List<ActualObjectType> annotationTypeAttributeConcept = new LinkedList<>();
         annotationTypeAttributeConcept.add(
-                conceptManager.getConceptByName("AnnotationTypeAttribute"));
+                conceptManager
+                        .getConceptByName("AnnotationTypeAttribute")
+                        .orElseThrow(
+                                () -> new ConceptDoesNotExistException("AnnotationTypeAttribute")));
         relations.add(
                 new FamixRelation(
                         "hasAnnotationTypeAttribute", "", annotationTypeAttributeConcept));
@@ -170,47 +186,94 @@ public class RelationManager {
         // AnnotationInstanceAttribute relations
         List<ActualObjectType> annotationInstanceAttributeConcept = new LinkedList<>();
         annotationInstanceAttributeConcept.add(
-                conceptManager.getConceptByName("AnnotationInstanceAttribute"));
+                conceptManager
+                        .getConceptByName("AnnotationInstanceAttribute")
+                        .orElseThrow(
+                                () ->
+                                        new ConceptDoesNotExistException(
+                                                "AnnotationInstanceAttribute")));
         relations.add(
                 new FamixRelation(
                         "hasAnnotationInstanceAttribute", "", annotationInstanceAttributeConcept));
 
         // Attribute relations
         List<ActualObjectType> attributeConcept = new LinkedList<>();
-        attributeConcept.add(conceptManager.getConceptByName("Attribute"));
+        attributeConcept.add(
+                conceptManager
+                        .getConceptByName("Attribute")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Attribute")));
         relations.add(new FamixRelation("definesAttribute", "", attributeConcept));
 
         // Method relations
         List<ActualObjectType> methodConcept = new LinkedList<>();
-        methodConcept.add(conceptManager.getConceptByName("Method"));
+        methodConcept.add(
+                conceptManager
+                        .getConceptByName("Method")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Method")));
         relations.add(new FamixRelation("definesMethod", "", methodConcept));
 
         // Type relations
         List<ActualObjectType> typeConcepts = new LinkedList<>();
-        typeConcepts.add(conceptManager.getConceptByName("FamixClass"));
-        typeConcepts.add(conceptManager.getConceptByName("Enum"));
-        typeConcepts.add(conceptManager.getConceptByName("AnnotationType"));
+        typeConcepts.add(
+                conceptManager
+                        .getConceptByName("FamixClass")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("FamixClass")));
+        typeConcepts.add(
+                conceptManager
+                        .getConceptByName("Enum")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Enum")));
+        typeConcepts.add(
+                conceptManager
+                        .getConceptByName("AnnotationType")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("AnnotationType")));
         relations.add(new FamixRelation("imports", "", typeConcepts));
 
         // Class and Enum relations
         List<ActualObjectType> classEnumConcepts = new LinkedList<>();
-        classEnumConcepts.add(conceptManager.getConceptByName("FamixClass"));
-        classEnumConcepts.add(conceptManager.getConceptByName("Enum"));
+        classEnumConcepts.add(
+                conceptManager
+                        .getConceptByName("FamixClass")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("FamixClass")));
+        classEnumConcepts.add(
+                conceptManager
+                        .getConceptByName("Enum")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Enum")));
         relations.add(new FamixRelation("definesNestedType", "", classEnumConcepts));
 
         // Type + NameSpace relations
         List<ActualObjectType> namespaceContainsConcepts = new LinkedList<>();
-        namespaceContainsConcepts.add(conceptManager.getConceptByName("Namespace"));
-        namespaceContainsConcepts.add(conceptManager.getConceptByName("FamixClass"));
-        namespaceContainsConcepts.add(conceptManager.getConceptByName("Enum"));
-        namespaceContainsConcepts.add(conceptManager.getConceptByName("AnnotationType"));
+        namespaceContainsConcepts.add(
+                conceptManager
+                        .getConceptByName("Namespace")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Namespace")));
+        namespaceContainsConcepts.add(
+                conceptManager
+                        .getConceptByName("FamixClass")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("FamixClass")));
+        namespaceContainsConcepts.add(
+                conceptManager
+                        .getConceptByName("Enum")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Enum")));
+        namespaceContainsConcepts.add(
+                conceptManager
+                        .getConceptByName("AnnotationType")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("AnnotationType")));
         relations.add(new FamixRelation("namespaceContains", "", namespaceContainsConcepts));
 
         // Type + Primitive relations
         List<ActualObjectType> typesAndprimitives = new LinkedList<>();
-        typesAndprimitives.add(conceptManager.getConceptByName("FamixClass"));
-        typesAndprimitives.add(conceptManager.getConceptByName("Enum"));
-        typesAndprimitives.add(conceptManager.getConceptByName("AnnotationType"));
+        typesAndprimitives.add(
+                conceptManager
+                        .getConceptByName("FamixClass")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("FamixClass")));
+        typesAndprimitives.add(
+                conceptManager
+                        .getConceptByName("Enum")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("Enum")));
+        typesAndprimitives.add(
+                conceptManager
+                        .getConceptByName("AnnotationType")
+                        .orElseThrow(() -> new ConceptDoesNotExistException("AnnotationType")));
         typesAndprimitives.add(new StringValue(""));
         typesAndprimitives.add(new BooleanValue(false));
         relations.add(new FamixRelation("hasDeclaredType", "", typesAndprimitives));
@@ -235,76 +298,138 @@ public class RelationManager {
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("NotInferredStatement")))));
+                                        conceptManager
+                                                .getConceptByName("NotInferredStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "NotInferredStatement"))))));
         relations.add(
                 new ConformanceRelation(
                         "hasAssertedStatement",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("AssertedStatement")))));
+                                        conceptManager
+                                                .getConceptByName("AssertedStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "AssertedStatement"))))));
         relations.add(
                 new ConformanceRelation(
                         "hasSubject",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("NotInferredStatement"),
-                                        conceptManager.getConceptByName("AssertedStatement")))));
+                                        conceptManager
+                                                .getConceptByName("NotInferredStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "NotInferredStatement")),
+                                        conceptManager
+                                                .getConceptByName("AssertedStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "AssertedStatement"))))));
         relations.add(
                 new ConformanceRelation(
                         "hasPredicate",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("NotInferredStatement"),
-                                        conceptManager.getConceptByName("AssertedStatement")))));
+                                        conceptManager
+                                                .getConceptByName("NotInferredStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "NotInferredStatement")),
+                                        conceptManager
+                                                .getConceptByName("AssertedStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "AssertedStatement"))))));
         relations.add(
                 new ConformanceRelation(
                         "hasObject",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("NotInferredStatement"),
-                                        conceptManager.getConceptByName("AssertedStatement")))));
+                                        conceptManager
+                                                .getConceptByName("NotInferredStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "NotInferredStatement")),
+                                        conceptManager
+                                                .getConceptByName("AssertedStatement")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "AssertedStatement"))))));
         relations.add(
                 new ConformanceRelation(
                         "proofs",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName(
-                                                "ArchitectureViolation")))));
+                                        conceptManager
+                                                .getConceptByName("ArchitectureViolation")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "ArchitectureViolation"))))));
         relations.add(
                 new ConformanceRelation(
                         "hasDetected",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName(
-                                                "ArchitectureViolation")))));
+                                        conceptManager
+                                                .getConceptByName("ArchitectureViolation")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "ArchitectureViolation"))))));
         relations.add(
                 new ConformanceRelation(
                         "hasViolation",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName(
-                                                "ArchitectureViolation")))));
+                                        conceptManager
+                                                .getConceptByName("ArchitectureViolation")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "ArchitectureViolation"))))));
         relations.add(
                 new ConformanceRelation(
                         "violates",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("ArchitectureRule")))));
+                                        conceptManager
+                                                .getConceptByName("ArchitectureRule")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "ArchitectureRule"))))));
         relations.add(
                 new ConformanceRelation(
                         "validates",
                         "",
                         new ArrayList<>(
                                 Arrays.asList(
-                                        conceptManager.getConceptByName("ArchitectureRule")))));
+                                        conceptManager
+                                                .getConceptByName("ArchitectureRule")
+                                                .orElseThrow(
+                                                        () ->
+                                                                new ConceptDoesNotExistException(
+                                                                        "ArchitectureRule"))))));
     }
 
     public List<Relation> getInputRelations() {
