@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -65,10 +64,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private static final Pattern SPECIAL_TRIPLET_PATTERN =
             Pattern.compile("\\w+\\(\\?\\w+, '.+'\\)");
     private static final Pattern TRIPLET_PATTERN =
-            Pattern.compile(
-                    ArchRulesFromAdocReader.NORMAL_TRIPLET_PATTERN
-                            + "|"
-                            + ArchRulesFromAdocReader.SPECIAL_TRIPLET_PATTERN);
+            Pattern.compile(NORMAL_TRIPLET_PATTERN + "|" + SPECIAL_TRIPLET_PATTERN);
     private static final Pattern WHEN_PATTERN = Pattern.compile(".+(?=\\-\\>)");
     private static final Pattern THEN_PATTERN = Pattern.compile("(?<=\\-\\>).+");
 
@@ -80,48 +76,40 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
         Map<String, String> conceptDescriptions = new HashMap<String, String>();
         Map<String, String> relationDescriptions = new HashMap<String, String>();
 
-        AdocIoUtils.getAllMatches(ArchRulesFromAdocReader.CONCEPT_DESCRIPTION_PATTERN, fileContent)
-                .stream()
+        AdocIoUtils.getAllMatches(CONCEPT_DESCRIPTION_PATTERN, fileContent).stream()
                 .forEach(
                         conceptDescription -> {
                             try {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
-                                                ArchRulesFromAdocReader.CONCEPT_MAPPING_NAME,
-                                                conceptDescription);
+                                                CONCEPT_MAPPING_NAME, conceptDescription);
                                 String description =
                                         AdocIoUtils.getFirstMatch(
-                                                ArchRulesFromAdocReader.CONCEPT_DESCRIPTION_CONTENT,
-                                                conceptDescription);
+                                                CONCEPT_DESCRIPTION_CONTENT, conceptDescription);
                                 conceptDescriptions.put(name, description);
                             } catch (NoMatchFoundException e) {
-                                ArchRulesFromAdocReader.LOG.warn(e.getMessage());
+                                LOG.warn(e.getMessage());
                             }
                         });
 
-        AdocIoUtils.getAllMatches(ArchRulesFromAdocReader.RELATION_DESCRIPTION_PATTERN, fileContent)
-                .stream()
+        AdocIoUtils.getAllMatches(RELATION_DESCRIPTION_PATTERN, fileContent).stream()
                 .forEach(
                         relationDescription -> {
                             try {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
-                                                ArchRulesFromAdocReader.RELATION_MAPPING_NAME,
-                                                relationDescription);
+                                                RELATION_MAPPING_NAME, relationDescription);
                                 String description =
                                         AdocIoUtils.getFirstMatch(
-                                                ArchRulesFromAdocReader
-                                                        .RELATION_DESCRIPTION_CONTENT,
-                                                relationDescription);
+                                                RELATION_DESCRIPTION_CONTENT, relationDescription);
                                 relationDescriptions.put(name, description);
                             } catch (NoMatchFoundException e) {
-                                ArchRulesFromAdocReader.LOG.warn(e.getMessage());
+                                LOG.warn(e.getMessage());
                             }
                         });
 
         // Extract and add architecture rules
-        AdocIoUtils.getAllMatches(ArchRulesFromAdocReader.RULE_CONTENT_PATTERN, fileContent)
-                .stream()
+        AdocIoUtils.getAllMatches(RULE_CONTENT_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRule -> {
                             try {
@@ -129,19 +117,17 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                                         .getArchitectureRuleManager()
                                         .addArchitectureRule(parseArchitectureRule(potentialRule));
                             } catch (NoArchitectureRuleException e) {
-                                ArchRulesFromAdocReader.LOG.warn(e.getMessage());
+                                LOG.warn(e.getMessage());
                             }
                         });
 
-        AdocIoUtils.getAllMatches(ArchRulesFromAdocReader.CONCEPT_MAPPING_PATTERN, fileContent)
-                .stream()
+        AdocIoUtils.getAllMatches(CONCEPT_MAPPING_PATTERN, fileContent).stream()
                 .forEach(
                         potentialConceptMapping -> {
                             try {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
-                                                ArchRulesFromAdocReader.CONCEPT_MAPPING_NAME,
-                                                potentialConceptMapping);
+                                                CONCEPT_MAPPING_NAME, potentialConceptMapping);
                                 String description = "";
                                 if (conceptDescriptions.containsKey(name)) {
                                     description = conceptDescriptions.get(name);
@@ -152,19 +138,17 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             } catch (UnrelatedMappingException
                                     | NoMappingException
                                     | NoMatchFoundException e) {
-                                ArchRulesFromAdocReader.LOG.warn(e.getMessage());
+                                LOG.warn(e.getMessage());
                             }
                         });
 
-        AdocIoUtils.getAllMatches(ArchRulesFromAdocReader.RELATION_MAPPING_PATTERN, fileContent)
-                .stream()
+        AdocIoUtils.getAllMatches(RELATION_MAPPING_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRelationMapping -> {
                             try {
                                 String name =
                                         AdocIoUtils.getFirstMatch(
-                                                ArchRulesFromAdocReader.RELATION_MAPPING_NAME,
-                                                potentialRelationMapping);
+                                                RELATION_MAPPING_NAME, potentialRelationMapping);
                                 String description = "";
                                 if (relationDescriptions.containsKey(name)) {
                                     description = relationDescriptions.get(name);
@@ -179,7 +163,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             } catch (UnrelatedMappingException
                                     | NoMappingException
                                     | NoMatchFoundException e) {
-                                ArchRulesFromAdocReader.LOG.warn(e.getMessage());
+                                LOG.warn(e.getMessage());
                             }
                         });
     }
@@ -187,12 +171,8 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private ConceptMapping parseMapping(String potentialMapping, CustomConcept thisConcept)
             throws NoMappingException {
         try {
-            String whenPart =
-                    AdocIoUtils.getFirstMatch(
-                            ArchRulesFromAdocReader.WHEN_PATTERN, potentialMapping);
-            String thenPart =
-                    AdocIoUtils.getFirstMatch(
-                            ArchRulesFromAdocReader.THEN_PATTERN, potentialMapping);
+            String whenPart = AdocIoUtils.getFirstMatch(WHEN_PATTERN, potentialMapping);
+            String thenPart = AdocIoUtils.getFirstMatch(THEN_PATTERN, potentialMapping);
             AndTriplets andTriplets = parseWhenPart(whenPart);
             List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
@@ -206,12 +186,8 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
     private RelationMapping parseMapping(String potentialMapping, CustomRelation thisRelation)
             throws NoMappingException {
         try {
-            String whenPart =
-                    AdocIoUtils.getFirstMatch(
-                            ArchRulesFromAdocReader.WHEN_PATTERN, potentialMapping);
-            String thenPart =
-                    AdocIoUtils.getFirstMatch(
-                            ArchRulesFromAdocReader.THEN_PATTERN, potentialMapping);
+            String whenPart = AdocIoUtils.getFirstMatch(WHEN_PATTERN, potentialMapping);
+            String thenPart = AdocIoUtils.getFirstMatch(THEN_PATTERN, potentialMapping);
             AndTriplets andTriplets = parseWhenPart(whenPart);
             List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
@@ -224,8 +200,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private AndTriplets parseWhenPart(String whenPart) throws NoTripletException {
         AndTriplets andTriplets = new AndTriplets();
-        List<String> potentialTriplets =
-                AdocIoUtils.getAllMatches(ArchRulesFromAdocReader.TRIPLET_PATTERN, whenPart);
+        List<String> potentialTriplets = AdocIoUtils.getAllMatches(TRIPLET_PATTERN, whenPart);
         for (String potentialTriplet : potentialTriplets) {
             andTriplets.addTriplet(parseTriplet(potentialTriplet, false));
         }
@@ -234,16 +209,14 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     private Triplet parseThenPart(String thenPart)
             throws NoTripletException, NoMatchFoundException {
-        String potentialThenTriplet =
-                AdocIoUtils.getFirstMatch(ArchRulesFromAdocReader.TRIPLET_PATTERN, thenPart);
+        String potentialThenTriplet = AdocIoUtils.getFirstMatch(TRIPLET_PATTERN, thenPart);
         return parseTriplet(potentialThenTriplet, true);
     }
 
     private Triplet parseTriplet(String potentialTriplet, boolean isThenTriplet)
             throws NoTripletException {
         try {
-            if (potentialTriplet.matches(
-                    ArchRulesFromAdocReader.SPECIAL_TRIPLET_PATTERN.toString())) {
+            if (potentialTriplet.matches(SPECIAL_TRIPLET_PATTERN.toString())) {
                 return parseSpecialTriplet(potentialTriplet);
             } else {
                 String subjectString =
@@ -265,7 +238,7 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                     CustomRelation customRelation = (CustomRelation) predicate;
                     customRelation.setRelatableObjectType(object);
                 }
-                return TripletFactory.createTriplet(subject, Optional.of(predicate), object);
+                return TripletFactory.createTriplet(subject, predicate, object);
             }
         } catch (NoRelationException
                 | UnsupportedObjectTypeInTriplet
@@ -288,14 +261,13 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
                             Pattern.compile("(?<= )'.+'(?=\\))"), potentialTriplet);
             return TripletFactory.createTriplet(
                     new Variable(subjectString),
-                    Optional.of(Relation.parsePredicate(predicate)),
+                    Relation.parsePredicate(predicate),
                     ObjectType.parseObject(objectString));
         } catch (Exception e) {
             throw new NoTripletException(potentialTriplet);
         }
     }
 
-    @SuppressWarnings("unused")
     private ArchitectureRule parseArchitectureRule(String potentialRule)
             throws NoArchitectureRuleException {
         if (false) {
@@ -307,26 +279,26 @@ public class ArchRulesFromAdocReader implements ArchRulesImporter {
 
     @VisibleForTesting
     public static Pattern getRulePattern() {
-        return ArchRulesFromAdocReader.RULE_CONTENT_PATTERN;
+        return RULE_CONTENT_PATTERN;
     }
 
     @VisibleForTesting
     public static Pattern getConceptMappingPattern() {
-        return ArchRulesFromAdocReader.CONCEPT_MAPPING_PATTERN;
+        return CONCEPT_MAPPING_PATTERN;
     }
 
     @VisibleForTesting
     public static Pattern getRelationMappingPattern() {
-        return ArchRulesFromAdocReader.RELATION_MAPPING_PATTERN;
+        return RELATION_MAPPING_PATTERN;
     }
 
     @VisibleForTesting
     public static Pattern getConceptDescriptionPattern() {
-        return ArchRulesFromAdocReader.CONCEPT_DESCRIPTION_PATTERN;
+        return CONCEPT_DESCRIPTION_PATTERN;
     }
 
     @VisibleForTesting
     public static Pattern getRelationDescriptionPattern() {
-        return ArchRulesFromAdocReader.RELATION_DESCRIPTION_PATTERN;
+        return RELATION_DESCRIPTION_PATTERN;
     }
 }

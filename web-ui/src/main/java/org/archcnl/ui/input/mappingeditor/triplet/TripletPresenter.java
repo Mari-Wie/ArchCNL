@@ -6,7 +6,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.Triplet;
@@ -14,6 +13,7 @@ import org.archcnl.domain.common.TripletFactory;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.ui.input.mappingeditor.events.AddTripletViewAfterButtonPressedEvent;
@@ -84,7 +84,7 @@ public class TripletPresenter extends Component {
 
     public Triplet getTriplet() throws TripletNotDefinedException, UnsupportedObjectTypeInTriplet {
         Variable subject;
-        Optional<Relation> predicate;
+        Relation predicate;
         ObjectType object;
         try {
             subject = tripletView.getSubjectComponent().getVariable();
@@ -96,6 +96,7 @@ public class TripletPresenter extends Component {
             object = tripletView.getObjectView().getObject();
         } catch (InvalidVariableNameException
                 | SubjectOrObjectNotDefinedException
+                | RelationDoesNotExistException
                 | NoSuchElementException
                 | ConceptDoesNotExistException
                 | ObjectNotDefinedException e) {
@@ -118,7 +119,7 @@ public class TripletPresenter extends Component {
             RulesConceptsAndRelations.getInstance()
                     .getRelationManager()
                     .getRelationByName(relationName);
-        } catch (NoSuchElementException e) {
+        } catch (RelationDoesNotExistException | NoSuchElementException e) {
             predicateMissing = true;
         }
         try {

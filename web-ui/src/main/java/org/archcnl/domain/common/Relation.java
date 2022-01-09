@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
@@ -57,24 +57,26 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
                 String predicateName =
                         AdocIoUtils.getFirstMatch(
                                 Pattern.compile("(?<=\\w+:).+"), potentialPredicate);
-                return RulesConceptsAndRelations.getInstance()
-                        .getRelationManager()
-                        .getRelationByName(predicateName)
-                        .orElse(
-                                RulesConceptsAndRelations.getInstance()
-                                        .getRelationManager()
-                                        .getRelationByRealName(predicateName)
-                                        .orElse(
-                                                new CustomRelation(
-                                                        predicateName, "", new LinkedList<>())));
+                try {
+                    try {
+                        return RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName(predicateName);
+                    } catch (RelationDoesNotExistException e2) {
+                        return RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByRealName(predicateName);
+                    }
+                } catch (RelationDoesNotExistException e1) {
+                    return new CustomRelation(predicateName, "", new LinkedList<>());
+                }
             } else {
                 // has to be a SpecialRelation
                 return RulesConceptsAndRelations.getInstance()
                         .getRelationManager()
-                        .getRelationByRealName(potentialPredicate)
-                        .orElseThrow(() -> new NoRelationException(potentialPredicate));
+                        .getRelationByRealName(potentialPredicate);
             }
-        } catch (NoMatchFoundException e) {
+        } catch (Exception e) {
             throw new NoRelationException(potentialPredicate);
         }
     }

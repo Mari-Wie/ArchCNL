@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.model.mappings;
 
 import java.util.List;
-import java.util.Optional;
 import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.Triplet;
@@ -29,9 +28,10 @@ public class ConceptMapping extends Mapping {
     }
 
     public void updateThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
+
         this.thenTriplet =
                 TripletFactory.createTriplet(
-                        subject, Optional.of(thenTriplet.getPredicate()), thenTriplet.getObject());
+                        subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
     @Override

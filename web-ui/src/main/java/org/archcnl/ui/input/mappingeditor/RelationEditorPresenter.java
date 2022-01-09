@@ -46,7 +46,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         addThenTripletListeners();
-        initializeView(view, RelationEditorPresenter.extractAndTriplets(relation));
+        initializeView(view, extractAndTriplets(relation));
     }
 
     private void addThenTripletListeners() {
@@ -112,9 +112,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 thenRelation.setRelatableObjectType(thenObject);
                 Triplet thenTriplet =
                         TripletFactory.createTriplet(
-                                view.getThenTripletSubject(),
-                                Optional.of(thenRelation),
-                                thenObject);
+                                view.getThenTripletSubject(), thenRelation, thenObject);
 
                 RelationMapping mapping = new RelationMapping(thenTriplet, getAndTripletsList());
 

@@ -3,7 +3,6 @@ package org.archcnl.domain;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.archcnl.domain.common.AndTriplets;
@@ -72,7 +71,7 @@ public class TestUtils {
                 TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
                 TripletFactory.createTriplet(
                         classVariable,
@@ -92,12 +91,12 @@ public class TestUtils {
                 TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("Namespace").get()));
+                        result.getConceptManager().getConceptByName("Namespace")));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
@@ -122,7 +121,7 @@ public class TestUtils {
                 TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("Namespace").get()));
+                        result.getConceptManager().getConceptByName("Namespace")));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
@@ -142,12 +141,12 @@ public class TestUtils {
                 TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("Namespace").get()));
+                        result.getConceptManager().getConceptByName("Namespace")));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
@@ -162,17 +161,17 @@ public class TestUtils {
                 TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
                 TripletFactory.createTriplet(
                         class2Variable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets.add(
                 TripletFactory.createTriplet(
                         attributeVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("Attribute").get()));
+                        result.getConceptManager().getConceptByName("Attribute")));
         triplets.add(
                 TripletFactory.createTriplet(
                         classVariable,
@@ -188,12 +187,12 @@ public class TestUtils {
                 TripletFactory.createTriplet(
                         classVariable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets2.add(
                 TripletFactory.createTriplet(
                         class2Variable,
                         result.getRelationManager().getRelationByName("is-of-type"),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        result.getConceptManager().getConceptByName("FamixClass")));
         triplets2.add(
                 TripletFactory.createTriplet(
                         classVariable,
@@ -224,8 +223,7 @@ public class TestUtils {
         CustomRelation resideIn = new CustomRelation("resideIn", "", new LinkedList<>());
         RelationMapping resideInMapping =
                 new RelationMapping(
-                        TripletFactory.createTriplet(
-                                classVariable, Optional.of(resideIn), packageVariable),
+                        TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
                         resideInWhenTriplets);
         resideIn.setMapping(resideInMapping);
 
@@ -236,8 +234,7 @@ public class TestUtils {
                         new LinkedList<>());
         RelationMapping useMapping =
                 new RelationMapping(
-                        TripletFactory.createTriplet(
-                                classVariable, Optional.of(use), class2Variable),
+                        TripletFactory.createTriplet(classVariable, use, class2Variable),
                         useWhenTriplets);
         use.setMapping(useMapping);
 
@@ -255,7 +252,7 @@ public class TestUtils {
                 new RelationMapping(
                         TripletFactory.createTriplet(
                                 varVariable,
-                                Optional.of(emptyWhenRelationString),
+                                emptyWhenRelationString,
                                 new StringValue("test string")),
                         new LinkedList<>());
         emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
@@ -268,9 +265,7 @@ public class TestUtils {
         RelationMapping emptyWhenRelationBooleanMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
-                                varVariable,
-                                Optional.of(emptyWhenRelationBoolean),
-                                new BooleanValue(false)),
+                                varVariable, emptyWhenRelationBoolean, new BooleanValue(false)),
                         new LinkedList<>());
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
@@ -279,9 +274,7 @@ public class TestUtils {
         RelationMapping emptyWhenRelationVariableMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
-                                varVariable,
-                                Optional.of(emptyWhenRelationVariable),
-                                new Variable("test")),
+                                varVariable, emptyWhenRelationVariable, new Variable("test")),
                         new LinkedList<>());
         emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping);
 
@@ -308,7 +301,7 @@ public class TestUtils {
                     RelationDoesNotExistException, ConceptDoesNotExistException,
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,
                     UnrelatedMappingException, RelationAlreadyExistsException {
-        return TestUtils.prepareModel().getConceptManager().getCustomConcepts();
+        return prepareModel().getConceptManager().getCustomConcepts();
     }
 
     public static List<CustomRelation> prepareCustomRelations()
@@ -316,6 +309,6 @@ public class TestUtils {
                     RelationDoesNotExistException, ConceptDoesNotExistException,
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,
                     UnrelatedMappingException, RelationAlreadyExistsException {
-        return TestUtils.prepareModel().getRelationManager().getCustomRelations();
+        return prepareModel().getRelationManager().getCustomRelations();
     }
 }

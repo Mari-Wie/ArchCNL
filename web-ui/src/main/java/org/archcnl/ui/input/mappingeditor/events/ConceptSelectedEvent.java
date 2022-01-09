@@ -3,6 +3,7 @@ package org.archcnl.ui.input.mappingeditor.events;
 import com.vaadin.flow.component.ComponentEvent;
 import java.util.Optional;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.ui.input.mappingeditor.triplet.ConceptSelectionComponent;
 
 public class ConceptSelectedEvent extends ComponentEvent<ConceptSelectionComponent> {
@@ -17,7 +18,11 @@ public class ConceptSelectedEvent extends ComponentEvent<ConceptSelectionCompone
         Optional<String> value = getSource().getSelectedItem();
         if (value.isPresent()) {
             String name = value.get();
-            conceptManager.getConceptByName(name);
+            try {
+                conceptManager.getConceptByName(name);
+            } catch (ConceptDoesNotExistException e) {
+                getSource().showErrorMessage("Concept does not exist");
+            }
         }
     }
 }

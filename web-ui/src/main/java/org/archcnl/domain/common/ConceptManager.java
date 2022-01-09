@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
@@ -39,10 +40,9 @@ public class ConceptManager {
             if (!doesConceptExist(concept)) {
                 addConcept(concept);
             } else {
-                Optional<Concept> existingConceptOpt = getConceptByName(concept.getName());
-                if (existingConceptOpt.isPresent()
-                        && existingConceptOpt.get() instanceof CustomConcept) {
-                    CustomConcept existingCustomConcept = (CustomConcept) existingConceptOpt.get();
+                Concept existingConcept = getConceptByName(concept.getName());
+                if (existingConcept instanceof CustomConcept) {
+                    CustomConcept existingCustomConcept = (CustomConcept) existingConcept;
                     Optional<ConceptMapping> existingMapping = existingCustomConcept.getMapping();
                     Optional<ConceptMapping> newMapping = concept.getMapping();
                     if (existingMapping.isPresent() && newMapping.isPresent()) {
@@ -52,7 +52,7 @@ public class ConceptManager {
                     }
                 }
             }
-        } catch (ConceptAlreadyExistsException e) {
+        } catch (ConceptAlreadyExistsException | ConceptDoesNotExistException e) {
             // cannot occur
             throw new RuntimeException(
                     "Adding and appending of mapping \""
@@ -61,8 +61,11 @@ public class ConceptManager {
         }
     }
 
-    public Optional<Concept> getConceptByName(String name) {
-        return concepts.stream().filter(concept -> name.equals(concept.getName())).findAny();
+    public Concept getConceptByName(String name) throws ConceptDoesNotExistException {
+        return concepts.stream()
+                .filter(concept -> name.equals(concept.getName()))
+                .findAny()
+                .orElseThrow(() -> new ConceptDoesNotExistException(name));
     }
 
     public boolean doesConceptExist(Concept concept) {

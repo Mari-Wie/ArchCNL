@@ -1,6 +1,7 @@
 package org.archcnl.domain.common;
 
 import java.util.regex.Pattern;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
 import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
@@ -23,13 +24,15 @@ public abstract class ObjectType implements FormattedDomainObject {
                         AdocIoUtils.getFirstMatch(
                                 Pattern.compile("(?<=').+(?=')"), potentialObject);
                 return new BooleanValue(Boolean.getBoolean(boolString));
-            } else if (potentialObject.matches(ObjectType.CONCEPT_RELATION_PATTERN.toString())) {
-                String objectName =
-                        AdocIoUtils.getFirstMatch(ObjectType.NAME_PATTERN, potentialObject);
-                return RulesConceptsAndRelations.getInstance()
-                        .getConceptManager()
-                        .getConceptByName(objectName)
-                        .orElse(new CustomConcept(objectName, ""));
+            } else if (potentialObject.matches(CONCEPT_RELATION_PATTERN.toString())) {
+                String objectName = AdocIoUtils.getFirstMatch(NAME_PATTERN, potentialObject);
+                try {
+                    return RulesConceptsAndRelations.getInstance()
+                            .getConceptManager()
+                            .getConceptByName(objectName);
+                } catch (ConceptDoesNotExistException e) {
+                    return new CustomConcept(objectName, "");
+                }
             } else {
                 throw new NoObjectTypeException(potentialObject);
             }

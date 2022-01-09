@@ -2,8 +2,8 @@ package org.archcnl.domain.common;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.input.exceptions.VariableDoesNotExistException;
 
 public class VariableManager {
 
@@ -21,8 +21,11 @@ public class VariableManager {
         }
     }
 
-    public Optional<Variable> getVariableByName(String name) {
-        return variables.stream().filter(variable -> name.equals(variable.getName())).findAny();
+    public Variable getVariableByName(String name) throws VariableDoesNotExistException {
+        return variables.stream()
+                .filter(variable -> name.equals(variable.getName()))
+                .findAny()
+                .orElseThrow(() -> new VariableDoesNotExistException(name));
     }
 
     public boolean doesVariableExist(Variable variable) {
