@@ -73,7 +73,7 @@ public class TripletView extends HorizontalLayout {
     }
 
     private void addCreateRemoveButtons() {
-        HorizontalLayout buttons = new HorizontalLayout();        
+        HorizontalLayout buttons = new HorizontalLayout();
         buttons.add(
                 new Button(
                         new Icon(VaadinIcon.TRASH),

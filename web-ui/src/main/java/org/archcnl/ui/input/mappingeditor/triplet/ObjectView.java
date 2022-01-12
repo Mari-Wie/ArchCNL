@@ -26,6 +26,7 @@ public class ObjectView extends HorizontalLayout {
 
     private static final long serialVersionUID = -1105253743414019620L;
     private static final String CONCEPT = "Concept";
+    private static final String OBJECT = "Object";
     private static final String VAR_STRING_BOOL = "VariableStringBool";
     private ConceptSelectionComponent conceptSelectionComponent;
     private VariableStringBoolSelectionView variableStringBoolSelectionView;
@@ -129,9 +130,9 @@ public class ObjectView extends HorizontalLayout {
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
-    
+
     public void setLabel() {
-        conceptSelectionComponent.setLabel("Object");
-        variableStringBoolSelectionView.setLabel("Object");
+        conceptSelectionComponent.setLabel(OBJECT);
+        variableStringBoolSelectionView.setLabel(OBJECT);
     }
 }

@@ -11,9 +11,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
-
 import java.util.Optional;
-
 import org.archcnl.ui.input.mappingeditor.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.input.mappingeditor.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
@@ -57,17 +55,19 @@ public class AndTripletsEditorView extends VerticalLayout {
     public void addNewTripletViewAfter(TripletView oldTripletView, TripletView newTripletView) {
         int previousIndex = boxContent.indexOf((Component) oldTripletView);
         boxContent.addComponentAtIndex(previousIndex + 1, newTripletView);
-        updateLabels();
     }
 
     public void deleteTripletView(TripletView tripletView) {
         boxContent.remove((Component) tripletView);
+
+        if (!getFirstTripletView().isPresent()) {
+            addTripletView(new TripletView());
+        }
         updateLabels();
     }
 
     public void addTripletView(TripletView tripletView) {
         boxContent.add(tripletView);
-        updateLabels();
     }
 
     public void clearContent() {
@@ -79,11 +79,13 @@ public class AndTripletsEditorView extends VerticalLayout {
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
-    
-    public void updateLabels() {
-        Optional<Component> firstComponent =
-                boxContent.getChildren().filter(TripletView.class::isInstance).findFirst();
-        TripletView firstTriplet = (TripletView) firstComponent.get();
+
+    private void updateLabels() {
+        TripletView firstTriplet = (TripletView) getFirstTripletView().get();
         firstTriplet.setLabels();
+    }
+
+    private Optional<Component> getFirstTripletView() {
+        return boxContent.getChildren().filter(TripletView.class::isInstance).findFirst();
     }
 }
