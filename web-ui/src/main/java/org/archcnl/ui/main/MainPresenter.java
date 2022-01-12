@@ -17,6 +17,7 @@ import org.archcnl.ui.main.events.ProjectOptionRequestedEvent;
 import org.archcnl.ui.main.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.main.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.output.component.QueryView;
+import org.archcnl.ui.output.events.InputViewRequestedEvent;
 
 @Tag("MainPresenter")
 public class MainPresenter extends Component implements PropertyChangeListener {
@@ -29,7 +30,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
 
     public MainPresenter() throws PropertyNotFoundException {
         inputPresenter = new InputPresenter();
-        outputView = new QueryView(this);
+        outputView = new QueryView();
         view = new MainView(inputPresenter.getView());
         addListeners();
     }
@@ -50,14 +51,12 @@ public class MainPresenter extends Component implements PropertyChangeListener {
 
         inputPresenter.addListener(
                 OutputViewRequestedEvent.class, e -> view.showContent(outputView));
+        outputView.addListener(
+                InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
     }
 
     public MainView getView() {
         return view;
-    }
-
-    public void showArchitectureRuleView() {
-        view.showContent(inputPresenter.getView());
     }
 
     public void propertyChange(final PropertyChangeEvent evt) {
