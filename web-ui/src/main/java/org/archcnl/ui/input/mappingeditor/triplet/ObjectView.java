@@ -129,4 +129,9 @@ public class ObjectView extends HorizontalLayout {
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
+    
+    public void setLabel() {
+        conceptSelectionComponent.setLabel("Object");
+        variableStringBoolSelectionView.setLabel("Object");
+    }
 }

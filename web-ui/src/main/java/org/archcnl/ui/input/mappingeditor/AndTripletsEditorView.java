@@ -10,8 +10,10 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
+
+import java.util.Optional;
+
 import org.archcnl.ui.input.mappingeditor.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.input.mappingeditor.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.triplet.TripletView;
@@ -32,25 +34,6 @@ public class AndTripletsEditorView extends VerticalLayout {
         boxContent = new VerticalLayout();
         boxContent.getStyle().set("border", "1px solid black");
         boxContent.add(new Label("OR-Block (All rows in this block are AND connected)"));
-
-        HorizontalLayout tripletLabelLayout = new HorizontalLayout();
-        tripletLabelLayout.setWidthFull();
-
-        TextField subjectLabel = new TextField();
-        subjectLabel.setValue("Subject");
-        subjectLabel.setEnabled(false);
-
-        TextField predicateLabel = new TextField();
-        predicateLabel.setValue("Predicate");
-        predicateLabel.setEnabled(false);
-
-        TextField objectLabel = new TextField();
-        objectLabel.setValue("Object");
-        objectLabel.setEnabled(false);
-
-        tripletLabelLayout.add(subjectLabel, predicateLabel, objectLabel);
-
-        boxContent.add(tripletLabelLayout);
         boxContent.add(emptyTripletView);
         boxContent.setWidth(95, Unit.PERCENTAGE);
 
@@ -68,19 +51,23 @@ public class AndTripletsEditorView extends VerticalLayout {
 
         orBlock.add(boxContent, boxButtonLayout);
         add(orBlock);
+        updateLabels();
     }
 
     public void addNewTripletViewAfter(TripletView oldTripletView, TripletView newTripletView) {
         int previousIndex = boxContent.indexOf((Component) oldTripletView);
         boxContent.addComponentAtIndex(previousIndex + 1, newTripletView);
+        updateLabels();
     }
 
     public void deleteTripletView(TripletView tripletView) {
         boxContent.remove((Component) tripletView);
+        updateLabels();
     }
 
     public void addTripletView(TripletView tripletView) {
         boxContent.add(tripletView);
+        updateLabels();
     }
 
     public void clearContent() {
@@ -91,5 +78,12 @@ public class AndTripletsEditorView extends VerticalLayout {
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
+    }
+    
+    public void updateLabels() {
+        Optional<Component> firstComponent =
+                boxContent.getChildren().filter(TripletView.class::isInstance).findFirst();
+        TripletView firstTriplet = (TripletView) firstComponent.get();
+        firstTriplet.setLabels();
     }
 }

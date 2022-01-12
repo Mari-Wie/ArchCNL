@@ -88,4 +88,10 @@ public class TripletView extends HorizontalLayout {
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
+
+    public void setLabels() {
+        objectView.setLabel();
+        subjectComponent.setLabel("Subject");
+        predicateComponent.setLabel("Predicate");
+    }
 }
