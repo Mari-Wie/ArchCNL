@@ -15,7 +15,7 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.ui.input.InputContract;
+import org.archcnl.ui.input.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
@@ -29,8 +29,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     private RelationEditorView view;
     private Optional<CustomRelation> relation;
 
-    public RelationEditorPresenter(InputContract.Remote inputRemote) {
-        super(inputRemote);
+    public RelationEditorPresenter() {
+        super();
         this.relation = Optional.empty();
         view =
                 new RelationEditorView(
@@ -39,8 +39,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         initializeView(view);
     }
 
-    public RelationEditorPresenter(InputContract.Remote inputRemote, CustomRelation relation) {
-        super(inputRemote);
+    public RelationEditorPresenter(CustomRelation relation) {
+        super();
         this.relation = Optional.of(relation);
         view =
                 new RelationEditorView(
@@ -104,7 +104,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void updateMapping(InputContract.Remote inputRemote) {
+    protected void updateMapping() {
         if (relation.isPresent()) {
             try {
                 CustomRelation thenRelation = relation.get();
@@ -124,7 +124,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                             .addRelation(relation.get());
                 }
 
-                inputRemote.switchToArchitectureRulesView();
+                fireEvent(new RuleEditorRequestedEvent(this, true));
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
                     | InvalidVariableNameException

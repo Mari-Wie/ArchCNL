@@ -1,12 +1,17 @@
 package org.archcnl.ui.input;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.CustomRelation;
+import org.archcnl.ui.input.events.ConceptEditorRequestedEvent;
+import org.archcnl.ui.input.events.RelationEditorRequestedEvent;
 
 public class MappingListEntryLayout extends HorizontalLayout {
 
@@ -14,11 +19,9 @@ public class MappingListEntryLayout extends HorizontalLayout {
     private MappingListEntry entry;
     private Button editButton;
     private Button deleteButton;
-    private InputContract.Remote inputRemote;
 
-    public MappingListEntryLayout(MappingListEntry entry, InputContract.Remote inputRemote) {
+    public MappingListEntryLayout(MappingListEntry entry) {
         this.entry = entry;
-        this.inputRemote = inputRemote;
         setWidthFull(); // TODO: Tooltip only works when hovering over the text or buttons
 
         Span text = new Span(entry.toString());
@@ -44,14 +47,24 @@ public class MappingListEntryLayout extends HorizontalLayout {
     protected void editButtonPressed() {
         if (entry instanceof ConceptListEntry) {
             ConceptListEntry conceptListEntry = (ConceptListEntry) entry;
-            inputRemote.switchToConceptEditorView((CustomConcept) conceptListEntry.getContent());
+            fireEvent(
+                    new ConceptEditorRequestedEvent(
+                            this, true, (CustomConcept) conceptListEntry.getContent()));
         } else if (entry instanceof RelationListEntry) {
             RelationListEntry relationListEntry = (RelationListEntry) entry;
-            inputRemote.switchToRelationEditorView((CustomRelation) relationListEntry.getContent());
+            fireEvent(
+                    new RelationEditorRequestedEvent(
+                            this, true, (CustomRelation) relationListEntry.getContent()));
         }
     }
 
     public void updateDescription() {
         getElement().setAttribute("title", entry.getDescription());
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

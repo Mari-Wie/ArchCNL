@@ -1,5 +1,7 @@
 package org.archcnl.ui.main;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Tag;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.apache.logging.log4j.LogManager;
@@ -7,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.ui.input.InputPresenter;
-import org.archcnl.ui.input.InputView;
+import org.archcnl.ui.input.events.OutputViewRequestedEvent;
 import org.archcnl.ui.main.events.EditOptionRequestedEvent;
 import org.archcnl.ui.main.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.main.events.HelpOptionRequestedEvent;
@@ -16,18 +18,19 @@ import org.archcnl.ui.main.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.main.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.output.component.QueryView;
 
-public class MainPresenter implements PropertyChangeListener {
+@Tag("MainPresenter")
+public class MainPresenter extends Component implements PropertyChangeListener {
 
+    private static final long serialVersionUID = -8850076288722393209L;
     private static final Logger LOG = LogManager.getLogger(MainPresenter.class);
     private final MainView view;
     private final QueryView outputView;
-    private final InputView inputView;
+    private final InputPresenter inputPresenter;
 
     public MainPresenter() throws PropertyNotFoundException {
-        final InputPresenter inputPresenter = new InputPresenter(this);
-        inputView = new InputView(inputPresenter);
+        inputPresenter = new InputPresenter();
         outputView = new QueryView(this);
-        view = new MainView(inputView);
+        view = new MainView(inputPresenter.getView());
         addListeners();
     }
 
@@ -44,6 +47,9 @@ public class MainPresenter implements PropertyChangeListener {
         view.addListener(EditOptionRequestedEvent.class, EditOptionRequestedEvent::handleEvent);
         view.addListener(RulesOptionRequestedEvent.class, RulesOptionRequestedEvent::handleEvent);
         view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
+
+        inputPresenter.addListener(
+                OutputViewRequestedEvent.class, e -> view.showContent(outputView));
     }
 
     public MainView getView() {
@@ -51,11 +57,7 @@ public class MainPresenter implements PropertyChangeListener {
     }
 
     public void showArchitectureRuleView() {
-        view.showContent(inputView);
-    }
-
-    public void showResultView() {
-        view.showContent(outputView);
+        view.showContent(inputPresenter.getView());
     }
 
     public void propertyChange(final PropertyChangeEvent evt) {

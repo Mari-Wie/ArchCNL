@@ -19,8 +19,7 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.ui.common.ButtonClickResponder;
 import org.archcnl.ui.common.OkCancelDialog;
-import org.archcnl.ui.input.InputContract;
-import org.archcnl.ui.input.InputContract.Remote;
+import org.archcnl.ui.input.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.input.mappingeditor.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.MappingCancelButtonClickedEvent;
@@ -41,10 +40,8 @@ public abstract class MappingEditorPresenter extends Component {
     private MappingEditorView view;
     private List<AndTripletsEditorPresenter> andTripletsPresenters = new LinkedList<>();
     protected VariableManager variableManager;
-    private Remote inputRemote;
 
-    protected MappingEditorPresenter(InputContract.Remote inputRemote) {
-        this.inputRemote = inputRemote;
+    protected MappingEditorPresenter() {
         this.variableManager = new VariableManager();
     }
 
@@ -62,13 +59,13 @@ public abstract class MappingEditorPresenter extends Component {
     private void addListeners() {
         view.addListener(
                 MappingCloseButtonClicked.class,
-                event -> inputRemote.switchToArchitectureRulesView());
+                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
         view.addListener(MappingNameFieldChangedEvent.class, this::nameHasChanged);
         view.addListener(MappingDescriptionFieldChangedEvent.class, this::descriptionHasChanged);
         view.addListener(MappingDoneButtonClickedEvent.class, event -> doneButtonClicked());
         view.addListener(
                 MappingCancelButtonClickedEvent.class,
-                event -> inputRemote.switchToArchitectureRulesView());
+                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
     }
 
     private void nameHasChanged(MappingNameFieldChangedEvent event) {
@@ -153,9 +150,9 @@ public abstract class MappingEditorPresenter extends Component {
 
     private void doneButtonClicked() {
         if (doIncompleteTripletsExist()) {
-            showIncompleteTripletsWarning(() -> updateMapping(inputRemote));
+            showIncompleteTripletsWarning(() -> updateMapping());
         } else {
-            updateMapping(inputRemote);
+            updateMapping();
         }
     }
 
@@ -211,12 +208,12 @@ public abstract class MappingEditorPresenter extends Component {
 
     protected abstract void initInfoFieldAndThenTriplet();
 
-    protected abstract void updateMapping(InputContract.Remote inputRemote);
+    protected abstract void updateMapping();
 
     protected abstract void descriptionHasChanged(MappingDescriptionFieldChangedEvent event);
 
     @Override
-    protected <T extends ComponentEvent<?>> Registration addListener(
+    public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
