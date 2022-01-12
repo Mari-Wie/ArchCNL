@@ -7,7 +7,7 @@ import org.archcnl.ui.input.InputContract.Presenter;
 public class InputView extends HorizontalLayout implements InputContract.View {
 
     private static final long serialVersionUID = 1L;
-    private static final float GOLDEN_RATIO = 61.8f;
+    private static final float GOLDEN_RATIO = 75.0f;
 
     private ConceptAndRelationView conceptAndRelationView;
     private RulesOrMappingEditorView currentlyShownView;
