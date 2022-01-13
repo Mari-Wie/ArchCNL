@@ -102,7 +102,7 @@ public class ConceptManager {
         concepts.add(
                 new FamixConcept(
                         "Inheritance",
-                        "Models an inheritance relation between enums, classes, or interfaces in the object-oriented programming style. Use the \"hasSuperClass\" and the \"hasSubClass\" relations to access the types involved in the inheritance."));
+                        "Models an inheritance relation between classes, or interfaces in the object-oriented programming style. Use the \"hasSuperClass\" and the \"hasSubClass\" relations to access the types involved in the inheritance."));
         concepts.add(
                 new FamixConcept(
                         "AnnotationInstance",
@@ -122,7 +122,7 @@ public class ConceptManager {
         concepts.add(
                 new FamixConcept(
                         "LocalVariable",
-                        "Models a local variable defined in a method, an interface operation, or a constructor from the object-oriented programming style."));
+                        "Models a local variable defined in a method, or a constructor from the object-oriented programming style."));
 
         // Conformance
         concepts.add(new ConformanceConcept("ConformanceCheck", ""));
