@@ -1,8 +1,11 @@
+
 package org.archcnl.ui.input.ruleeditor;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
@@ -18,72 +21,93 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
     private Button saveButton;
     private TextArea archRuleTextArea;
     private NewArchitectureRulePresenter presenter;
-    
-    private ComboBox<String> firstCombobox, secondCombobox;
+
+    private ComboBox<String> firstCombobox, secondCombobox, thirdCombobox;
     private TextField firstConcept, secondConcept, firstrelation;
+    private Checkbox statementCheckbox;
+    private VerticalLayout statementLayout;
 
     public NewArchitectureRuleView(NewArchitectureRulePresenter presenter) {
         this.presenter = presenter;
         getStyle().set("overflow", "auto");
         getStyle().set("border", "1px solid black");
-
-        saveButton = new Button("Save Rule", e -> saveRule());
-        archRuleTextArea =
-                new TextArea(
-                        "Expert mode (Freestyle)",
-                        "Every Aggregate must residein a DomainRing");
-        archRuleTextArea.setWidthFull();
         
-        HorizontalLayout newRuleCreation = new HorizontalLayout();
-                
-        List<String> firstStatements = Arrays.asList("Every","Only","If","Nothing","No","Fact:");    
+        statementLayout = new VerticalLayout();
+        saveButton = new Button("Save Rule", e -> saveRule());
+        
+        add(componentRuleCreator(), statementLayout, textareaRuleCreator(), saveButton);
+    }
+    
+    private HorizontalLayout componentRuleCreator()
+    {
+        HorizontalLayout componentRuleLayout = new HorizontalLayout();
+
+        List<String> firstStatements = Arrays.asList("Every", "Only", "If", "Nothing", "No",
+                "Fact:");
         firstCombobox = new ComboBox<String>("Modifier", firstStatements);
         firstCombobox.setValue("Every");
-                
+
         firstConcept = new TextField("Concept");
+        statementCheckbox = new Checkbox("that...");
+        componentRuleLayout.setVerticalComponentAlignment(Alignment.END, statementCheckbox);        
+
+        List<String> secondStatements = Arrays.asList("must", "can-only", "can", "must be");
+        secondCombobox = new ComboBox<String>("Modifier", secondStatements);
+        secondCombobox.setValue("must");
+
+        firstrelation = new TextField("Relation");
         
-        TextField aModifier = new TextField("Optional");
-        aModifier.setEnabled(false);
-        aModifier.setWidth("55px");
-        aModifier.setValue("a/an");
-        
-        TextField aModifier2 = new TextField("Optional");
-        aModifier2.setEnabled(false);
-        aModifier2.setWidth("55px");
-        aModifier2.setValue("a/an");
+        List<String> firstModifier = Arrays.asList("", "a", "an", "anything", "equal-to",
+                "equal-to anything", "at-most", "at-least", "exactly", "equal-to at-most",
+                "equal-to at-least", "equal-to exactly");
+        thirdCombobox = new ComboBox<String>("Modifier", firstModifier);
+        thirdCombobox.setValue("a");
         
         secondConcept = new TextField("Concept");
         
-        List<String> secondStatements = Arrays.asList("must","can-only","can","must be");    
-        secondCombobox = new ComboBox<String>("Modifier", secondStatements);
-        secondCombobox.setValue("must");
-        
-        firstrelation = new TextField("Relation");
+        componentRuleLayout.add(firstCombobox, firstConcept, statementCheckbox, secondCombobox,
+                firstrelation, thirdCombobox, secondConcept);        
+        return componentRuleLayout;
+    }
     
-        newRuleCreation.add(firstCombobox, aModifier, firstConcept, secondCombobox, firstrelation, aModifier2, secondConcept);
-        add(newRuleCreation, archRuleTextArea);
-        add(saveButton);
+    private VerticalLayout textareaRuleCreator()
+    {        
+        VerticalLayout customeRuleLayout = new VerticalLayout();
+        Checkbox activateExpertmode = new Checkbox("Write Architecture Rules");
+        activateExpertmode.addClickListener(e->archRuleTextArea.setEnabled(!archRuleTextArea.isEnabled()));
+        
+        archRuleTextArea = new TextArea(
+                "Expert mode (Freestyle)",
+                "Every Aggregate must residein a DomainRing");
+        archRuleTextArea.setWidthFull();
+        archRuleTextArea.setEnabled(false);
+        
+        customeRuleLayout.add(activateExpertmode, archRuleTextArea);
+        return customeRuleLayout;
+    }
+    
+    private void addStatement()
+    {
+        //HorizontalLayout statementLayout = new HorizontalLayout();
     }
 
     private void saveRule() {
         if (!archRuleTextArea.isEmpty()) {
             presenter.saveArchitectureRule(archRuleTextArea.getValue());
-        }
-        else
-        {
-            presenter.saveArchitectureRule(buildRule());           
+        } else {
+            presenter.saveArchitectureRule(buildRule());
         }
         presenter.returnToRulesView();
     }
-    
-    private String buildRule()
-    {
+
+    private String buildRule() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(firstCombobox.getValue() + " ");
         sBuilder.append(firstConcept.getValue() + " ");
         sBuilder.append(secondCombobox.getValue() + " ");
         sBuilder.append(firstrelation.getValue() + " ");
+        sBuilder.append(thirdCombobox.getValue() + " ");
         sBuilder.append(secondConcept.getValue() + " ");
         return sBuilder.toString();
-    }
+    }     
 }
