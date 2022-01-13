@@ -11,7 +11,7 @@ import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.InputView;
 import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
-import org.archcnl.ui.outputview.components.QueryView;
+import org.archcnl.ui.outputview.OutputView;
 
 public class MainPresenter
         implements MainContract.Presenter<MainContract.View>, PropertyChangeListener {
@@ -24,7 +24,7 @@ public class MainPresenter
     public MainPresenter() throws PropertyNotFoundException {
         final InputPresenter inputPresenter = new InputPresenter(this);
         inputView = new InputView(inputPresenter);
-        resultView = new QueryView(this);
+        resultView = new OutputView(this);
         ProjectManager.getInstance().addPropertyChangeListener(this);
     }
 

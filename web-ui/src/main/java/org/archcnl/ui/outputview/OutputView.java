@@ -1,13 +1,18 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.MainPresenter;
+import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
+import org.archcnl.ui.outputview.components.CustomQueryUiComponent;
+import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
+import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.components.SideBarLayout;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
 
-public class QueryView extends HorizontalLayout {
+public class OutputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +22,7 @@ public class QueryView extends HorizontalLayout {
     SideBarLayout sideBar;
     Component currentComponent;
 
-    public QueryView(final MainPresenter mainPresenter) throws PropertyNotFoundException {
+    public OutputView(final MainPresenter mainPresenter) throws PropertyNotFoundException {
         queryResults = new QueryResultsUiComponent();
         customQueryResults = new CustomQueryUiComponent();
         freeTextQuery = new FreeTextQueryUiComponent();

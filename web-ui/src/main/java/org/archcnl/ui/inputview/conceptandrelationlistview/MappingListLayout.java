@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.rulesormappingeditorview;
+package org.archcnl.ui.inputview.conceptandrelationlistview;
 
 import com.vaadin.flow.component.dnd.DragSource;
 import com.vaadin.flow.component.treegrid.TreeGrid;

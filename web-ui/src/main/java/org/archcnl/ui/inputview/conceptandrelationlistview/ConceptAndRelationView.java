@@ -17,7 +17,6 @@ import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.Con
 import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
 import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.MappingListEntry;
 import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.RelationListEntry;
-import org.archcnl.ui.inputview.rulesormappingeditorview.MappingListLayout;
 
 public class ConceptAndRelationView extends VerticalLayout implements PropertyChangeListener {
 
