@@ -59,11 +59,6 @@ public class AndTripletsEditorView extends VerticalLayout {
 
     public void deleteTripletView(TripletView tripletView) {
         boxContent.remove((Component) tripletView);
-
-        if (!getFirstTripletView().isPresent()) {
-            addTripletView(new TripletView());
-        }
-        updateLabels();
     }
 
     public void addTripletView(TripletView tripletView) {
@@ -80,9 +75,11 @@ public class AndTripletsEditorView extends VerticalLayout {
         return getEventBus().addListener(eventType, listener);
     }
 
-    private void updateLabels() {
-        TripletView firstTriplet = (TripletView) getFirstTripletView().get();
-        firstTriplet.setLabels();
+    public void updateLabels() {
+        if (getFirstTripletView().isPresent()) {
+            TripletView firstTriplet = (TripletView) getFirstTripletView().get();
+            firstTriplet.setLabels();
+        }
     }
 
     private Optional<Component> getFirstTripletView() {

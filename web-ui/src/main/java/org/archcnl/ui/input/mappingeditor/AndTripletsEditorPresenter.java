@@ -125,6 +125,7 @@ public class AndTripletsEditorPresenter extends Component {
         if (tripletPresenters.isEmpty()) {
             fireEvent(new DeleteAndTripletsViewRequestedEvent(view, false));
         }
+        view.updateLabels();
     }
 
     private Optional<TripletPresenter> findCorrespondingPresenter(TripletView tripletView) {
