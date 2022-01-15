@@ -267,7 +267,8 @@ class RelationManagerTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
                                 .getConceptByName("FamixClass")
@@ -276,9 +277,7 @@ class RelationManagerTest {
         final RelationMapping mapping1 =
                 new RelationMapping(
                         TripletFactory.createTriplet(
-                                new Variable("class"),
-                                Optional.of(withRelation),
-                                new Variable("x")),
+                                new Variable("class"), withRelation, new Variable("x")),
                         when1);
         withRelation.setMapping(mapping1);
         relationManager.addOrAppend(withRelation);
@@ -301,7 +300,8 @@ class RelationManagerTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
                                 .getConceptByName("Enum")
@@ -310,9 +310,7 @@ class RelationManagerTest {
         final RelationMapping mapping2 =
                 new RelationMapping(
                         TripletFactory.createTriplet(
-                                new Variable("class"),
-                                Optional.of(otherWithRelation),
-                                new Variable("x")),
+                                new Variable("class"), otherWithRelation, new Variable("x")),
                         when2);
         otherWithRelation.setMapping(mapping2);
         relationManager.addOrAppend(otherWithRelation);

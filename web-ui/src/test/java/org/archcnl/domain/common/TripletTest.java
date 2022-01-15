@@ -1,6 +1,5 @@
 package org.archcnl.domain.common;
 
-import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
@@ -16,24 +15,25 @@ class TripletTest {
             throws RelationDoesNotExistException, InvalidVariableNameException,
                     UnsupportedObjectTypeInTriplet {
         // given
-        Variable subject = new Variable("name");
-        Optional<Relation> predicate =
+        final Variable subject = new Variable("name");
+        final Relation predicate =
                 RulesConceptsAndRelations.getInstance()
                         .getRelationManager()
-                        .getRelationByName("matches");
-        ObjectType validObjectType1 = new Variable("pattern");
-        ObjectType validObjectType2 = new StringValue("someString");
-        ObjectType invalidObjectType = new BooleanValue(true);
+                        .getRelationByName("matches")
+                        .get();
+        final ObjectType validObjectType1 = new Variable("pattern");
+        final ObjectType validObjectType2 = new StringValue("someString");
+        final ObjectType invalidObjectType = new BooleanValue(true);
 
         // when
-        Triplet triplet1 = TripletFactory.createTriplet(subject, predicate, validObjectType1);
-        Triplet triplet2 = TripletFactory.createTriplet(subject, predicate, validObjectType2);
+        final Triplet triplet1 = TripletFactory.createTriplet(subject, predicate, validObjectType1);
+        final Triplet triplet2 = TripletFactory.createTriplet(subject, predicate, validObjectType2);
 
         // then
         Assertions.assertEquals(subject, triplet1.getSubject());
         Assertions.assertEquals(subject, triplet2.getSubject());
-        Assertions.assertEquals(predicate.get(), triplet1.getPredicate());
-        Assertions.assertEquals(predicate.get(), triplet2.getPredicate());
+        Assertions.assertEquals(predicate, triplet1.getPredicate());
+        Assertions.assertEquals(predicate, triplet2.getPredicate());
         Assertions.assertEquals(validObjectType1, triplet1.getObject());
         Assertions.assertEquals(validObjectType2, triplet2.getObject());
         Assertions.assertThrows(

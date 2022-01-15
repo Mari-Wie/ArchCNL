@@ -11,16 +11,17 @@ public class PredicateSelectedEvent extends ComponentEvent<PredicateComponent> {
 
     private static final long serialVersionUID = 1L;
 
-    public PredicateSelectedEvent(PredicateComponent source, boolean fromClient) {
+    public PredicateSelectedEvent(final PredicateComponent source, final boolean fromClient) {
         super(source, fromClient);
     }
 
-    public void handleEvent(RelationManager relationManager, ObjectView objectView) {
-        Optional<String> value = getSource().getSelectedItem();
+    public void handleEvent(final RelationManager relationManager, final ObjectView objectView) {
+        final Optional<String> value = getSource().getSelectedItem();
         Optional<Relation> relation = null;
         if (value.isPresent()) {
-            String name = value.get();
-            relation = relationManager.getRelationByName(name);
+            relation = relationManager.getRelationByName(value.get());
+        } else {
+            getSource().showErrorMessage("Relation does not exist");
         }
         objectView.predicateHasChanged(relation);
     }

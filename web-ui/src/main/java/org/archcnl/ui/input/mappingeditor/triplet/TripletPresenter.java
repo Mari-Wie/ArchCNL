@@ -40,7 +40,7 @@ public class TripletPresenter extends Component {
         addListeners();
     }
 
-    public void showTriplet(Triplet triplet) {
+    public void showTriplet(final Triplet triplet) {
         tripletView.getSubjectComponent().setVariable(triplet.getSubject());
         tripletView.getPredicateComponent().setPredicate(triplet.getPredicate());
         tripletView.getObjectView().setObject(triplet.getObject());
@@ -88,7 +88,7 @@ public class TripletPresenter extends Component {
         ObjectType object;
         try {
             subject = tripletView.getSubjectComponent().getVariable();
-            String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
+            final String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
             predicate =
                     RulesConceptsAndRelations.getInstance()
                             .getRelationManager()
@@ -101,7 +101,11 @@ public class TripletPresenter extends Component {
                 | ObjectNotDefinedException e) {
             throw new TripletNotDefinedException();
         }
-        return TripletFactory.createTriplet(subject, predicate, object);
+        if (predicate.isEmpty()) {
+            throw new TripletNotDefinedException();
+        } else {
+            return TripletFactory.createTriplet(subject, predicate.get(), object);
+        }
     }
 
     public boolean isIncomplete() {
@@ -114,11 +118,13 @@ public class TripletPresenter extends Component {
             subjectMissing = true;
         }
         try {
-            String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
-            RulesConceptsAndRelations.getInstance()
-                    .getRelationManager()
-                    .getRelationByName(relationName);
-        } catch (NoSuchElementException e) {
+            final String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
+            final Optional<Relation> relationOpt =
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .getRelationByName(relationName);
+            predicateMissing = relationOpt.isEmpty();
+        } catch (final NoSuchElementException e) {
             predicateMissing = true;
         }
         try {

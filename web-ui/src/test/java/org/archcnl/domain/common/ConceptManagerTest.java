@@ -143,23 +143,24 @@ class ConceptManagerTest {
         Assertions.assertEquals(inputConceptsCount + 2, conceptManager.getInputConcepts().size());
         Assertions.assertEquals(outputConceptsCount + 2, conceptManager.getOutputConcepts().size());
 
-        String conceptName = "ConceptName";
+        final String conceptName = "ConceptName";
 
-        CustomConcept concept1 = new CustomConcept(conceptName, "");
-        List<AndTriplets> when1 = new LinkedList<>();
-        List<Triplet> and1 = new LinkedList<>();
+        final CustomConcept concept1 = new CustomConcept(conceptName, "");
+        final List<AndTriplets> when1 = new LinkedList<>();
+        final List<Triplet> and1 = new LinkedList<>();
         and1.add(
                 TripletFactory.createTriplet(
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
                                 .getConceptByName("FamixClass")
                                 .get()));
         when1.add(new AndTriplets(and1));
-        ConceptMapping mapping1 = new ConceptMapping(new Variable("class"), when1, concept1);
+        final ConceptMapping mapping1 = new ConceptMapping(new Variable("class"), when1, concept1);
         concept1.setMapping(mapping1);
         conceptManager.addOrAppend(concept1);
         Assertions.assertEquals(inputConceptsCount + 3, conceptManager.getInputConcepts().size());
@@ -169,21 +170,22 @@ class ConceptManagerTest {
         Assertions.assertEquals(
                 1, extractedConcept_extracted.getMapping().get().getWhenTriplets().size());
 
-        CustomConcept concept2 = new CustomConcept(conceptName, "");
-        List<AndTriplets> when2 = new LinkedList<>();
-        List<Triplet> and2 = new LinkedList<>();
+        final CustomConcept concept2 = new CustomConcept(conceptName, "");
+        final List<AndTriplets> when2 = new LinkedList<>();
+        final List<Triplet> and2 = new LinkedList<>();
         and2.add(
                 TripletFactory.createTriplet(
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
                                 .getConceptByName("Enum")
                                 .get()));
         when2.add(new AndTriplets(and2));
-        ConceptMapping mapping2 = new ConceptMapping(new Variable("class"), when2, concept2);
+        final ConceptMapping mapping2 = new ConceptMapping(new Variable("class"), when2, concept2);
         concept2.setMapping(mapping2);
         conceptManager.addOrAppend(concept2);
         Assertions.assertEquals(inputConceptsCount + 3, conceptManager.getInputConcepts().size());

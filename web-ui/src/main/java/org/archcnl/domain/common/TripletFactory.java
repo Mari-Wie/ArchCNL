@@ -1,17 +1,16 @@
 package org.archcnl.domain.common;
 
-import java.util.Optional;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 
 public class TripletFactory {
     public static Triplet createTriplet(
-            Variable subject, Optional<Relation> predicate, ObjectType object)
+            final Variable subject, final Relation predicate, final ObjectType object)
             throws UnsupportedObjectTypeInTriplet {
 
-        if (predicate.isEmpty() || !predicate.get().canRelateToObjectType(object)) {
-            throw new UnsupportedObjectTypeInTriplet(predicate.orElseGet(null), object);
+        if (!predicate.canRelateToObjectType(object)) {
+            throw new UnsupportedObjectTypeInTriplet(predicate, object);
         }
 
-        return new Triplet(subject, predicate.get(), object);
+        return new Triplet(subject, predicate, object);
     }
 }
