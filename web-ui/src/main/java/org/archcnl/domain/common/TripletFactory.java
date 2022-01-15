@@ -3,7 +3,8 @@ package org.archcnl.domain.common;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 
 public class TripletFactory {
-    public static Triplet createTriplet(Variable subject, Relation predicate, ObjectType object)
+    public static Triplet createTriplet(
+            final Variable subject, final Relation predicate, final ObjectType object)
             throws UnsupportedObjectTypeInTriplet {
 
         if (!predicate.canRelateToObjectType(object)) {

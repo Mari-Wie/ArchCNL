@@ -12,20 +12,22 @@ public class RelationMapping extends Mapping {
 
     private Triplet thenTriplet;
 
-    public RelationMapping(Triplet thenTriplet, List<AndTriplets> whenTriplets)
+    public RelationMapping(final Triplet thenTriplet, final List<AndTriplets> whenTriplets)
             throws UnsupportedObjectTypeInTriplet {
         super(whenTriplets);
         this.thenTriplet = thenTriplet;
     }
 
-    public void updateSubjectInThenTriplet(Variable subject) throws UnsupportedObjectTypeInTriplet {
+    public void updateSubjectInThenTriplet(final Variable subject)
+            throws UnsupportedObjectTypeInTriplet {
 
         this.thenTriplet =
                 TripletFactory.createTriplet(
                         subject, thenTriplet.getPredicate(), thenTriplet.getObject());
     }
 
-    public void updateObjectInThenTriplet(ObjectType object) throws UnsupportedObjectTypeInTriplet {
+    public void updateObjectInThenTriplet(final ObjectType object)
+            throws UnsupportedObjectTypeInTriplet {
         this.thenTriplet =
                 TripletFactory.createTriplet(
                         thenTriplet.getSubject(), thenTriplet.getPredicate(), object);

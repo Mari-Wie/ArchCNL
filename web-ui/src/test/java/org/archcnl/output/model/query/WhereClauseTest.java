@@ -26,14 +26,16 @@ public class WhereClauseTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         new CustomConcept("Aggregate", ""));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new Variable("name"));
         final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
         final WhereClause whereClause = new WhereClause(triplets);
@@ -68,44 +70,51 @@ public class WhereClauseTest {
                         new Variable("rule"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
-                                .getConceptByName("ArchitectureRule"));
+                                .getConceptByName("ArchitectureRule")
+                                .get());
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("rule"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasRuleRepresentation"),
+                                .getRelationByName("hasRuleRepresentation")
+                                .get(),
                         new StringValue("string"));
         final Triplet triplet3 =
                 new Triplet(
                         new Variable("rule"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasRuleRepresentation"),
+                                .getRelationByName("hasRuleRepresentation")
+                                .get(),
                         new Variable("cnl"));
         final Triplet triplet4 =
                 new Triplet(
                         new Variable("violation"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("violates"),
+                                .getRelationByName("violates")
+                                .get(),
                         new Variable("rule"));
         final Triplet triplet5 =
                 new Triplet(
                         new Variable("proof"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("proofs"),
+                                .getRelationByName("proofs")
+                                .get(),
                         new Variable("violation"));
         final Triplet triplet6 =
                 new Triplet(
                         new Variable("proof"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasNotInferredStatement"),
+                                .getRelationByName("hasNotInferredStatement")
+                                .get(),
                         new BooleanValue(true));
         final AndTriplets triplets =
                 new AndTriplets(

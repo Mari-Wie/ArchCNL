@@ -1,8 +1,5 @@
 package org.archcnl.domain.input.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +17,7 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +48,7 @@ class ArchRulesFromAdocReaderTest {
         RulesConceptsAndRelations expectedModel = TestUtils.prepareModel();
 
         // Check if architecture rules were correctly imported
-        assertEquals(
+        Assertions.assertEquals(
                 expectedModel.getArchitectureRuleManager().getArchitectureRules().size(),
                 rulesConceptsAndRelations
                         .getArchitectureRuleManager()
@@ -58,7 +56,7 @@ class ArchRulesFromAdocReaderTest {
                         .size());
         for (ArchitectureRule rule :
                 rulesConceptsAndRelations.getArchitectureRuleManager().getArchitectureRules()) {
-            assertTrue(
+            Assertions.assertTrue(
                     expectedModel
                             .getArchitectureRuleManager()
                             .getArchitectureRules()
@@ -66,30 +64,34 @@ class ArchRulesFromAdocReaderTest {
         }
 
         // Check if concepts were correctly imported
-        assertEquals(
+        Assertions.assertEquals(
                 expectedModel.getConceptManager().getInputConcepts().size(),
                 rulesConceptsAndRelations.getConceptManager().getInputConcepts().size());
         for (Concept concept : rulesConceptsAndRelations.getConceptManager().getInputConcepts()) {
-            assertTrue(expectedModel.getConceptManager().getInputConcepts().contains(concept));
-            assertEquals(
+            Assertions.assertTrue(
+                    expectedModel.getConceptManager().getInputConcepts().contains(concept));
+            Assertions.assertEquals(
                     expectedModel
                             .getConceptManager()
                             .getConceptByName(concept.getName())
+                            .get()
                             .getDescription(),
                     concept.getDescription());
         }
 
         // Check if relations were correctly imported
-        assertEquals(
+        Assertions.assertEquals(
                 expectedModel.getRelationManager().getInputRelations().size(),
                 rulesConceptsAndRelations.getRelationManager().getInputRelations().size());
         for (Relation relation :
                 rulesConceptsAndRelations.getRelationManager().getInputRelations()) {
-            assertTrue(expectedModel.getRelationManager().getInputRelations().contains(relation));
-            assertEquals(
+            Assertions.assertTrue(
+                    expectedModel.getRelationManager().getInputRelations().contains(relation));
+            Assertions.assertEquals(
                     expectedModel
                             .getRelationManager()
                             .getRelationByName(relation.getName())
+                            .get()
                             .getDescription(),
                     relation.getDescription());
         }
@@ -102,23 +104,23 @@ class ArchRulesFromAdocReaderTest {
         final File ruleFile = new File("src/test/resources/ReaderParsingTest.adoc");
         String rulesFileString = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
         // then
-        assertEquals(
+        Assertions.assertEquals(
                 2,
                 TestUtils.numberOfMatches(
                         ArchRulesFromAdocReader.getRulePattern(), rulesFileString));
-        assertEquals(
+        Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
                         ArchRulesFromAdocReader.getConceptDescriptionPattern(), rulesFileString));
-        assertEquals(
+        Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
                         ArchRulesFromAdocReader.getRelationDescriptionPattern(), rulesFileString));
-        assertEquals(
+        Assertions.assertEquals(
                 5,
                 TestUtils.numberOfMatches(
                         ArchRulesFromAdocReader.getRelationMappingPattern(), rulesFileString));
-        assertEquals(
+        Assertions.assertEquals(
                 3,
                 TestUtils.numberOfMatches(
                         ArchRulesFromAdocReader.getConceptMappingPattern(), rulesFileString));

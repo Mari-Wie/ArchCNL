@@ -49,13 +49,13 @@ public class ObjectView extends HorizontalLayout {
     }
 
     private void switchToConceptView() {
-        currentSelectionComponentString = CONCEPT;
+        currentSelectionComponentString = ObjectView.CONCEPT;
         add(conceptSelectionComponent);
     }
 
     private void switchToVariableStringBooleanView(
             boolean stringsAllowed, boolean booleansAllowed) {
-        currentSelectionComponentString = VAR_STRING_BOOL;
+        currentSelectionComponentString = ObjectView.VAR_STRING_BOOL;
         variableStringBoolSelectionView.updateTypeSelectionItems(stringsAllowed, booleansAllowed);
         add(variableStringBoolSelectionView);
     }
@@ -64,15 +64,16 @@ public class ObjectView extends HorizontalLayout {
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
                     InvalidVariableNameException, SubjectOrObjectNotDefinedException {
         ObjectType object;
-        if (currentSelectionComponentString.equals(CONCEPT)
+        if (currentSelectionComponentString.equals(ObjectView.CONCEPT)
                 && conceptSelectionComponent.getSelectedItem().isPresent()) {
             String conceptName = conceptSelectionComponent.getSelectedItem().get();
             // TODO: The RulesConceptsAndRelations call does not belong here
             object =
                     RulesConceptsAndRelations.getInstance()
                             .getConceptManager()
-                            .getConceptByName(conceptName);
-        } else if (currentSelectionComponentString.equals(VAR_STRING_BOOL)) {
+                            .getConceptByName(conceptName)
+                            .orElseThrow(() -> new ConceptDoesNotExistException(conceptName));
+        } else if (currentSelectionComponentString.equals(ObjectView.VAR_STRING_BOOL)) {
             object = variableStringBoolSelectionView.getObject();
         } else {
             throw new ObjectNotDefinedException();
@@ -115,9 +116,9 @@ public class ObjectView extends HorizontalLayout {
     }
 
     private void showErrorMessage(String errorMessage) {
-        if (currentSelectionComponentString.equals(CONCEPT)) {
+        if (currentSelectionComponentString.equals(ObjectView.CONCEPT)) {
             conceptSelectionComponent.showErrorMessage(errorMessage);
-        } else if (currentSelectionComponentString.equals(VAR_STRING_BOOL)) {
+        } else if (currentSelectionComponentString.equals(ObjectView.VAR_STRING_BOOL)) {
             variableStringBoolSelectionView.showErrorMessage(errorMessage);
         }
         // there is no need to show the errorMessage when both views are null
