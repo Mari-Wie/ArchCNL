@@ -12,7 +12,7 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import org.archcnl.ui.inputview.InputContract;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableCreationRequestedEvent;
@@ -28,8 +28,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     private ConceptEditorView view;
     private Optional<CustomConcept> concept;
 
-    public ConceptEditorPresenter(InputContract.Remote inputRemote) {
-        super(inputRemote);
+    public ConceptEditorPresenter() {
+        super();
         this.concept = Optional.empty();
         view =
                 new ConceptEditorView(
@@ -38,14 +38,14 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         initializeView(view);
     }
 
-    public ConceptEditorPresenter(InputContract.Remote inputRemote, CustomConcept concept) {
-        super(inputRemote);
+    public ConceptEditorPresenter(final CustomConcept concept) {
+        super();
         this.concept = Optional.of(concept);
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         addThenTripletListeners();
-        initializeView(view, extractAndTriplets(concept));
+        initializeView(view, ConceptEditorPresenter.extractAndTriplets(concept));
     }
 
     private void addThenTripletListeners() {
@@ -57,7 +57,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 event -> event.handleEvent(variableManager));
     }
 
-    private static List<AndTriplets> extractAndTriplets(CustomConcept concept) {
+    private static List<AndTriplets> extractAndTriplets(final CustomConcept concept) {
         if (concept == null || concept.getMapping().isEmpty()) {
             return new LinkedList<>();
         } else {
@@ -81,13 +81,13 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
+    protected void updateMappingName(final String newName) throws MappingAlreadyExistsException {
         if (concept.isEmpty()) {
             concept = Optional.of(new CustomConcept(newName, ""));
         } else {
             try {
                 concept.get().changeName(newName);
-            } catch (ConceptAlreadyExistsException e) {
+            } catch (final ConceptAlreadyExistsException e) {
                 if (!newName.equals(concept.get().getName())) {
                     throw new MappingAlreadyExistsException(e.getMessage());
                 }
@@ -96,10 +96,10 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void updateMapping(InputContract.Remote inputRemote) {
+    protected void updateMapping() {
         if (concept.isPresent()) {
             try {
-                ConceptMapping mapping =
+                final ConceptMapping mapping =
                         new ConceptMapping(
                                 view.getThenTripletSubject(), getAndTripletsList(), concept.get());
                 concept.get().setMapping(mapping);
@@ -110,7 +110,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                             .addConcept(concept.get());
                 }
 
-                inputRemote.switchToArchitectureRulesView();
+                fireEvent(new RuleEditorRequestedEvent(this, true));
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
                     | RelationDoesNotExistException
@@ -118,7 +118,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                     | InvalidVariableNameException e) {
                 // not possible/fatal
                 throw new RuntimeException();
-            } catch (SubjectOrObjectNotDefinedException e) {
+            } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectErrorMessage("Setting a subject is required");
             }
         } else {
@@ -126,14 +126,14 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         }
     }
 
-    private boolean doesConceptExist(CustomConcept concept) {
+    private boolean doesConceptExist(final CustomConcept concept) {
         return RulesConceptsAndRelations.getInstance()
                 .getConceptManager()
                 .doesConceptExist(concept);
     }
 
     @Override
-    public void descriptionHasChanged(MappingDescriptionFieldChangedEvent event) {
+    public void descriptionHasChanged(final MappingDescriptionFieldChangedEvent event) {
         concept.get().setDescription(event.getNewDescription());
     }
 }

@@ -15,7 +15,7 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
-import org.archcnl.ui.inputview.InputContract;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableCreationRequestedEvent;
@@ -31,8 +31,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     private RelationEditorView view;
     private Optional<CustomRelation> relation;
 
-    public RelationEditorPresenter(InputContract.Remote inputRemote) {
-        super(inputRemote);
+    public RelationEditorPresenter() {
+        super();
         this.relation = Optional.empty();
         view =
                 new RelationEditorView(
@@ -41,14 +41,14 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         initializeView(view);
     }
 
-    public RelationEditorPresenter(InputContract.Remote inputRemote, CustomRelation relation) {
-        super(inputRemote);
+    public RelationEditorPresenter(final CustomRelation relation) {
+        super();
         this.relation = Optional.of(relation);
         view =
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         addThenTripletListeners();
-        initializeView(view, extractAndTriplets(relation));
+        initializeView(view, RelationEditorPresenter.extractAndTriplets(relation));
     }
 
     private void addThenTripletListeners() {
@@ -60,7 +60,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 event -> event.handleEvent(variableManager));
     }
 
-    private static List<AndTriplets> extractAndTriplets(CustomRelation relation) {
+    private static List<AndTriplets> extractAndTriplets(final CustomRelation relation) {
         if (relation == null || relation.getMapping().isEmpty()) {
             return new LinkedList<>();
         } else {
@@ -70,10 +70,10 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
     // Stub
     @Override
-    protected void updateMappingName(String newName) throws MappingAlreadyExistsException {
+    protected void updateMappingName(final String newName) throws MappingAlreadyExistsException {
         if (relation.isEmpty()) {
-            List<ActualObjectType> relatableObjectTypes = new LinkedList<>();
-            ObjectType selectedObjectType = view.getSelectedObjectTypeInThenTriplet();
+            final List<ActualObjectType> relatableObjectTypes = new LinkedList<>();
+            final ObjectType selectedObjectType = view.getSelectedObjectTypeInThenTriplet();
             if (selectedObjectType instanceof ActualObjectType) {
                 relatableObjectTypes.add((ActualObjectType) selectedObjectType);
             }
@@ -81,7 +81,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         } else {
             try {
                 relation.get().changeName(newName);
-            } catch (RelationAlreadyExistsException e) {
+            } catch (final RelationAlreadyExistsException e) {
                 if (!newName.equals(relation.get().getName())) {
                     throw new MappingAlreadyExistsException(e.getMessage());
                 }
@@ -106,17 +106,18 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void updateMapping(InputContract.Remote inputRemote) {
+    protected void updateMapping() {
         if (relation.isPresent()) {
             try {
-                CustomRelation thenRelation = relation.get();
-                ObjectType thenObject = view.getThenTripletObject();
+                final CustomRelation thenRelation = relation.get();
+                final ObjectType thenObject = view.getThenTripletObject();
                 thenRelation.setRelatableObjectType(thenObject);
-                Triplet thenTriplet =
+                final Triplet thenTriplet =
                         TripletFactory.createTriplet(
                                 view.getThenTripletSubject(), thenRelation, thenObject);
 
-                RelationMapping mapping = new RelationMapping(thenTriplet, getAndTripletsList());
+                final RelationMapping mapping =
+                        new RelationMapping(thenTriplet, getAndTripletsList());
 
                 relation.get().setMapping(mapping);
 
@@ -126,14 +127,14 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                             .addRelation(relation.get());
                 }
 
-                inputRemote.switchToArchitectureRulesView();
+                fireEvent(new RuleEditorRequestedEvent(this, true));
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
                     | InvalidVariableNameException
                     | RelationAlreadyExistsException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());
-            } catch (SubjectOrObjectNotDefinedException e) {
+            } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectOrObjectErrorMessage("Setting this is required");
             }
         } else {
@@ -141,14 +142,14 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         }
     }
 
-    private boolean doesRelationExist(CustomRelation relation) {
+    private boolean doesRelationExist(final CustomRelation relation) {
         return RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
                 .doesRelationExist(relation);
     }
 
     @Override
-    public void descriptionHasChanged(MappingDescriptionFieldChangedEvent event) {
+    public void descriptionHasChanged(final MappingDescriptionFieldChangedEvent event) {
         relation.get().setDescription(event.getNewDescription());
     }
 }

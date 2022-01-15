@@ -19,8 +19,7 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.ui.common.ButtonClickResponder;
 import org.archcnl.ui.common.OkCancelDialog;
-import org.archcnl.ui.inputview.InputContract;
-import org.archcnl.ui.inputview.InputContract.Remote;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
@@ -43,20 +42,19 @@ public abstract class MappingEditorPresenter extends Component {
     private MappingEditorView view;
     private List<AndTripletsEditorPresenter> andTripletsPresenters = new LinkedList<>();
     protected VariableManager variableManager;
-    private Remote inputRemote;
 
-    protected MappingEditorPresenter(InputContract.Remote inputRemote) {
-        this.inputRemote = inputRemote;
+    protected MappingEditorPresenter() {
         this.variableManager = new VariableManager();
     }
 
-    protected void initializeView(MappingEditorView view) {
+    protected void initializeView(final MappingEditorView view) {
         this.view = view;
         initInfoFieldAndThenTriplet();
         addListeners();
     }
 
-    protected void initializeView(MappingEditorView view, List<AndTriplets> andTripletsList) {
+    protected void initializeView(
+            final MappingEditorView view, final List<AndTriplets> andTripletsList) {
         initializeView(view);
         showAndTriplets(andTripletsList);
     }
@@ -64,33 +62,33 @@ public abstract class MappingEditorPresenter extends Component {
     private void addListeners() {
         view.addListener(
                 MappingCloseButtonClicked.class,
-                event -> inputRemote.switchToArchitectureRulesView());
+                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
         view.addListener(MappingNameFieldChangedEvent.class, this::nameHasChanged);
         view.addListener(MappingDescriptionFieldChangedEvent.class, this::descriptionHasChanged);
         view.addListener(MappingDoneButtonClickedEvent.class, event -> doneButtonClicked());
         view.addListener(
                 MappingCancelButtonClickedEvent.class,
-                event -> inputRemote.switchToArchitectureRulesView());
+                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
     }
 
-    private void nameHasChanged(MappingNameFieldChangedEvent event) {
+    private void nameHasChanged(final MappingNameFieldChangedEvent event) {
         view.updateNameField(event.getNewName());
         view.updateNameFieldInThenTriplet(event.getNewName());
         try {
             updateMappingName(event.getNewName());
-        } catch (MappingAlreadyExistsException e) {
+        } catch (final MappingAlreadyExistsException e) {
             view.showNameFieldErrorMessage("The name is already taken");
         }
     }
 
-    private void showAndTriplets(List<AndTriplets> andTripletsList) {
+    private void showAndTriplets(final List<AndTriplets> andTripletsList) {
         view.clearContent();
         andTripletsPresenters.clear();
         andTripletsList.forEach(
                 andTriplets -> {
-                    AndTripletsEditorPresenter andTripletsPresenter =
+                    final AndTripletsEditorPresenter andTripletsPresenter =
                             new AndTripletsEditorPresenter();
-                    AndTripletsEditorView andTripletsView =
+                    final AndTripletsEditorView andTripletsView =
                             prepareAndTripletsEditorView(andTripletsPresenter);
                     andTripletsPresenter.showAndTriplets(andTriplets);
                     view.addNewAndTripletsView(andTripletsView);
@@ -98,14 +96,14 @@ public abstract class MappingEditorPresenter extends Component {
     }
 
     protected AndTripletsEditorView prepareAndTripletsEditorView(
-            AndTripletsEditorPresenter andTripletsPresenter) {
+            final AndTripletsEditorPresenter andTripletsPresenter) {
         addListenersToAndTripletsPresenter(andTripletsPresenter);
         andTripletsPresenters.add(andTripletsPresenter);
         return andTripletsPresenter.getAndTripletsEditorView();
     }
 
     private void addListenersToAndTripletsPresenter(
-            AndTripletsEditorPresenter andTripletsPresenter) {
+            final AndTripletsEditorPresenter andTripletsPresenter) {
         andTripletsPresenter.addListener(
                 AddAndTripletsViewButtonPressedEvent.class,
                 event -> addNewAndTripletsViewAfter(event.getSource()));
@@ -120,18 +118,19 @@ public abstract class MappingEditorPresenter extends Component {
                 event -> event.handleEvent(variableManager));
     }
 
-    private void addNewAndTripletsViewAfter(AndTripletsEditorView oldAndTripletsView) {
+    private void addNewAndTripletsViewAfter(final AndTripletsEditorView oldAndTripletsView) {
         view.addNewAndTripletsViewAfter(
                 oldAndTripletsView, prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
     }
 
-    private void deleteAndTripletsView(AndTripletsEditorView andTripletsView) {
-        Optional<AndTripletsEditorPresenter> correspondingPresenter =
+    private void deleteAndTripletsView(final AndTripletsEditorView andTripletsView) {
+        final Optional<AndTripletsEditorPresenter> correspondingPresenter =
                 findCorrespondingPresenter(andTripletsView);
         if (correspondingPresenter.isPresent()) {
             andTripletsPresenters.remove(correspondingPresenter.get());
         } else {
-            LOG.error("No corresponding TripletView found in AndTripletsEditorPresenter.");
+            MappingEditorPresenter.LOG.error(
+                    "No corresponding TripletView found in AndTripletsEditorPresenter.");
         }
         view.deleteAndTripletsView(andTripletsView);
         if (andTripletsPresenters.isEmpty()) {
@@ -140,8 +139,8 @@ public abstract class MappingEditorPresenter extends Component {
     }
 
     private Optional<AndTripletsEditorPresenter> findCorrespondingPresenter(
-            AndTripletsEditorView andTripletsView) {
-        for (AndTripletsEditorPresenter andTripletPresenter : andTripletsPresenters) {
+            final AndTripletsEditorView andTripletsView) {
+        for (final AndTripletsEditorPresenter andTripletPresenter : andTripletsPresenters) {
             if (Objects.equals(andTripletPresenter.getAndTripletsEditorView(), andTripletsView)) {
                 return Optional.of(andTripletPresenter);
             }
@@ -155,9 +154,9 @@ public abstract class MappingEditorPresenter extends Component {
 
     private void doneButtonClicked() {
         if (doIncompleteTripletsExist()) {
-            showIncompleteTripletsWarning(() -> updateMapping(inputRemote));
+            showIncompleteTripletsWarning(() -> updateMapping());
         } else {
-            updateMapping(inputRemote);
+            updateMapping();
         }
     }
 
@@ -166,7 +165,7 @@ public abstract class MappingEditorPresenter extends Component {
                 .anyMatch(AndTripletsEditorPresenter::hasIncompleteTriplets);
     }
 
-    private void showIncompleteTripletsWarning(ButtonClickResponder okResponse) {
+    private void showIncompleteTripletsWarning(final ButtonClickResponder okResponse) {
         new OkCancelDialog(
                         "Warning: Incomplete rows will be lost",
                         "The \"When\" part of this Concept/Relation contains incomplete rows."
@@ -177,19 +176,19 @@ public abstract class MappingEditorPresenter extends Component {
                 .open();
     }
 
-    protected void addVariable(VariableCreationRequestedEvent event) {
+    protected void addVariable(final VariableCreationRequestedEvent event) {
         try {
-            Variable newVariable = new Variable(event.getVariableName());
+            final Variable newVariable = new Variable(event.getVariableName());
             try {
                 variableManager.addVariable(newVariable);
-            } catch (VariableAlreadyExistsException e) {
+            } catch (final VariableAlreadyExistsException e) {
                 // do nothing
             }
             event.getSource()
                     .setItems(variableManager.getVariables().stream().map(Variable::getName));
             event.getSource().setValue(newVariable.getName());
             view.getVariableListView().showVariableList(variableManager.getVariables());
-        } catch (InvalidVariableNameException e1) {
+        } catch (final InvalidVariableNameException e1) {
             event.getSource().showErrorMessage("Invalid variable name");
         }
     }
@@ -213,12 +212,12 @@ public abstract class MappingEditorPresenter extends Component {
 
     protected abstract void initInfoFieldAndThenTriplet();
 
-    protected abstract void updateMapping(InputContract.Remote inputRemote);
+    protected abstract void updateMapping();
 
     protected abstract void descriptionHasChanged(MappingDescriptionFieldChangedEvent event);
 
     @Override
-    protected <T extends ComponentEvent<?>> Registration addListener(
+    public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }

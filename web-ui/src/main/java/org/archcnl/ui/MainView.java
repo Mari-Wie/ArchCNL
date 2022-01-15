@@ -1,46 +1,43 @@
 package org.archcnl.ui;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.shared.Registration;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.ui.MainContract.Presenter;
-import org.archcnl.ui.MainContract.View;
+import org.archcnl.ui.events.EditOptionRequestedEvent;
+import org.archcnl.ui.events.EditOptionRequestedEvent.EditOption;
+import org.archcnl.ui.events.FooterOptionRequestedEvent;
+import org.archcnl.ui.events.FooterOptionRequestedEvent.FooterOption;
+import org.archcnl.ui.events.HelpOptionRequestedEvent;
+import org.archcnl.ui.events.ProjectOptionRequestedEvent;
+import org.archcnl.ui.events.ProjectOptionRequestedEvent.ProjectOption;
+import org.archcnl.ui.events.RulesOptionRequestedEvent;
+import org.archcnl.ui.events.RulesOptionRequestedEvent.RulesOption;
+import org.archcnl.ui.events.ViewOptionRequestedEvent;
 
-@Route
-@PWA(
-        name = "ArchCNL",
-        shortName = "ArchCNL",
-        description = "Check your software projects for architecture violations.",
-        enableInstallPrompt = false)
-@CssImport("./styles/vaadin-button-styles.css")
-public class MainView extends VerticalLayout implements MainContract.View {
+public class MainView extends VerticalLayout {
 
     private static final long serialVersionUID = -4807002363716724924L;
     private HorizontalLayout header;
     private HorizontalLayout footer;
     private HorizontalLayout content;
-    private Presenter<View> presenter;
     private MenuItem saveProjectMenuItem;
 
-    public MainView() throws PropertyNotFoundException {
-        presenter = new MainPresenter();
-        presenter.setView(this);
+    public MainView(final HorizontalLayout content) {
         setSizeFull();
         header = createHeader();
         footer = createFooter();
@@ -49,13 +46,11 @@ public class MainView extends VerticalLayout implements MainContract.View {
         setPadding(false);
 
         add(header);
-        // initializes content field
-        presenter.showArchitectureRuleView();
+        showContent(content);
         add(footer);
     }
 
-    @Override
-    public void setContent(final HorizontalLayout newContent) {
+    public void showContent(final HorizontalLayout newContent) {
         newContent.setHeight(87.4f, Unit.PERCENTAGE);
         replace(content, newContent);
         content = newContent;
@@ -73,23 +68,47 @@ public class MainView extends VerticalLayout implements MainContract.View {
         final MenuItem project = menuBar.addItem("Project");
         final MenuItem edit = menuBar.addItem("Edit");
         final MenuItem rules = menuBar.addItem("Rules");
-        menuBar.addItem("View", e -> presenter.showView());
-        menuBar.addItem("Help", e -> presenter.showHelp());
+        menuBar.addItem("View", e -> fireEvent(new ViewOptionRequestedEvent(this, true)));
+        menuBar.addItem("Help", e -> fireEvent(new HelpOptionRequestedEvent(this, true)));
 
         final SubMenu projectSubMenu = project.getSubMenu();
-        projectSubMenu.addItem("New Project", e -> presenter.showNewTab());
-        projectSubMenu.addItem("Open Project", e -> presenter.showOpenProject());
-        saveProjectMenuItem = projectSubMenu.addItem("Save", e -> presenter.saveProject());
+        projectSubMenu.addItem(
+                "New Project",
+                e -> fireEvent(new ProjectOptionRequestedEvent(this, true, ProjectOption.NEW)));
+        projectSubMenu.addItem(
+                "Open Project",
+                e -> fireEvent(new ProjectOptionRequestedEvent(this, true, ProjectOption.OPEN)));
+        saveProjectMenuItem =
+                projectSubMenu.addItem(
+                        "Save",
+                        e ->
+                                fireEvent(
+                                        new ProjectOptionRequestedEvent(
+                                                this, true, ProjectOption.SAVE)));
         saveProjectMenuItem.setEnabled(false);
-        projectSubMenu.addItem("Save As", e -> presenter.showSaveProject());
+        projectSubMenu.addItem(
+                "Save As",
+                e -> fireEvent(new ProjectOptionRequestedEvent(this, true, ProjectOption.SAVE_AS)));
 
         final SubMenu editSubMenu = edit.getSubMenu();
-        editSubMenu.addItem("Undo", e -> presenter.undo());
-        editSubMenu.addItem("Redo", e -> presenter.redo());
+        editSubMenu.addItem(
+                "Undo", e -> fireEvent(new EditOptionRequestedEvent(this, true, EditOption.UNDO)));
+        editSubMenu.addItem(
+                "Redo", e -> fireEvent(new EditOptionRequestedEvent(this, true, EditOption.REDO)));
 
         final SubMenu rulesSubMenu = rules.getSubMenu();
-        rulesSubMenu.addItem("Import from File", e -> presenter.showImportRulesFromFile());
-        rulesSubMenu.addItem("Import Rule Presets", e -> presenter.showImportRulePresets());
+        rulesSubMenu.addItem(
+                "Import from File",
+                e ->
+                        fireEvent(
+                                new RulesOptionRequestedEvent(
+                                        this, true, RulesOption.IMPORT_FROM_FILE)));
+        rulesSubMenu.addItem(
+                "Import Rule Presets",
+                e ->
+                        fireEvent(
+                                new RulesOptionRequestedEvent(
+                                        this, true, RulesOption.IMPORT_RULE_PRESETS)));
 
         headerBox.add(title, menuBar);
         headerBox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -103,9 +122,27 @@ public class MainView extends VerticalLayout implements MainContract.View {
         final Label copyright = new Label("Developed at the University of Hamburg.");
 
         final HorizontalLayout buttonHBox = new HorizontalLayout();
-        final Button contactButton = new Button("Contact", e -> presenter.showContact());
-        final Button wikiButton = new Button("Wiki", e -> presenter.showWiki());
-        final Button siteButton = new Button("Project Site", e -> presenter.showProjectSite());
+        final Button contactButton =
+                new Button(
+                        "Contact",
+                        e ->
+                                fireEvent(
+                                        new FooterOptionRequestedEvent(
+                                                this, true, FooterOption.CONTACT)));
+        final Button wikiButton =
+                new Button(
+                        "Wiki",
+                        e ->
+                                fireEvent(
+                                        new FooterOptionRequestedEvent(
+                                                this, true, FooterOption.WIKI)));
+        final Button siteButton =
+                new Button(
+                        "Project Site",
+                        e ->
+                                fireEvent(
+                                        new FooterOptionRequestedEvent(
+                                                this, true, FooterOption.PROJECT_SITE)));
         buttonHBox.add(copyright, contactButton, wikiButton, siteButton);
 
         footerHbox.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -116,7 +153,6 @@ public class MainView extends VerticalLayout implements MainContract.View {
         return footerHbox;
     }
 
-    @Override
     public void showNewTab() {
         final VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
         URI uri;
@@ -134,8 +170,13 @@ public class MainView extends VerticalLayout implements MainContract.View {
         }
     }
 
-    @Override
     public void setSaveProjectMenuItemEnabled(final boolean enabled) {
         saveProjectMenuItem.setEnabled(enabled);
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

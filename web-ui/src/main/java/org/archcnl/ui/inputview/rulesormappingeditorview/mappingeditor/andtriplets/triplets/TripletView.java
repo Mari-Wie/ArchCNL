@@ -73,19 +73,28 @@ public class TripletView extends HorizontalLayout {
     }
 
     private void addCreateRemoveButtons() {
-        add(
+        HorizontalLayout buttons = new HorizontalLayout();
+        buttons.add(
                 new Button(
                         new Icon(VaadinIcon.TRASH),
                         click -> fireEvent(new TripletViewDeleteButtonPressedEvent(this))));
-        add(
+        buttons.add(
                 new Button(
                         new Icon(VaadinIcon.PLUS),
                         click -> fireEvent(new AddTripletViewAfterButtonPressedEvent(this))));
+        add(buttons);
+        setVerticalComponentAlignment(Alignment.END, buttons);
     }
 
     @Override
     protected <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
+    }
+
+    public void setLabels() {
+        objectView.setLabel();
+        subjectComponent.setLabel("Subject");
+        predicateComponent.setLabel("Predicate");
     }
 }

@@ -1,33 +1,34 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.inputview.InputContract;
 import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 
 public class ArchitectureRulesLayout extends RulesOrMappingEditorView
         implements PropertyChangeListener {
 
     private static final long serialVersionUID = 1L;
-    private InputContract.Remote inputRemote;
 
     VerticalLayout rulesLayout = new VerticalLayout();
 
-    public ArchitectureRulesLayout(InputContract.Remote inputRemote) {
+    public ArchitectureRulesLayout() {
         RulesConceptsAndRelations.getInstance()
                 .getArchitectureRuleManager()
                 .addPropertyChangeListener(this);
-        this.inputRemote = inputRemote;
-        CreateNewLayout createNewRuleLayout =
+        final CreateNewLayout createNewRuleLayout =
                 new CreateNewLayout(
                         "Architecture Rules",
                         "Create new Arch Rule",
-                        this::switchToNewArchitectureRuleView);
+                        e -> fireEvent(new RuleCreatorRequestedEvent(this, true)));
 
         // Remove style property to makes no sense in this layout
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
@@ -40,7 +41,7 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView
 
     private void updateRules() {
         rulesLayout.removeAll();
-        List<ArchitectureRule> rules =
+        final List<ArchitectureRule> rules =
                 RulesConceptsAndRelations.getInstance()
                         .getArchitectureRuleManager()
                         .getArchitectureRules();
@@ -49,12 +50,14 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView
         }
     }
 
-    public void switchToNewArchitectureRuleView() {
-        inputRemote.switchToNewArchitectureRuleView();
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        updateRules();
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        updateRules();
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

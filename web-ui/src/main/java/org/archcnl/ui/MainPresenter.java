@@ -1,144 +1,65 @@
 package org.archcnl.ui;
 
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Tag;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.ProjectManager;
-import org.archcnl.ui.common.ConfirmDialog;
+import org.archcnl.ui.events.EditOptionRequestedEvent;
+import org.archcnl.ui.events.FooterOptionRequestedEvent;
+import org.archcnl.ui.events.HelpOptionRequestedEvent;
+import org.archcnl.ui.events.ProjectOptionRequestedEvent;
+import org.archcnl.ui.events.RulesOptionRequestedEvent;
+import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
-import org.archcnl.ui.inputview.InputView;
-import org.archcnl.ui.menudialog.OpenProjectDialog;
-import org.archcnl.ui.menudialog.SaveProjectDialog;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.outputview.OutputView;
+import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
 
-public class MainPresenter
-        implements MainContract.Presenter<MainContract.View>, PropertyChangeListener {
+@Tag("MainPresenter")
+public class MainPresenter extends Component implements PropertyChangeListener {
 
-    private static final long serialVersionUID = 2859025859553864862L;
-    private MainContract.View view;
-    private HorizontalLayout resultView;
-    private HorizontalLayout inputView;
+    private static final long serialVersionUID = -8850076288722393209L;
+    private static final Logger LOG = LogManager.getLogger(MainPresenter.class);
+    private final MainView view;
+    private final OutputView outputView;
+    private final InputPresenter inputPresenter;
 
     public MainPresenter() throws PropertyNotFoundException {
-        final InputPresenter inputPresenter = new InputPresenter(this);
-        inputView = new InputView(inputPresenter);
-        resultView = new OutputView(this);
+        inputPresenter = new InputPresenter();
+        outputView = new OutputView();
+        view = new MainView(inputPresenter.getView());
+        addListeners();
+    }
+
+    private void addListeners() {
         ProjectManager.getInstance().addPropertyChangeListener(this);
+        view.addListener(
+                ViewOptionRequestedEvent.class,
+                e -> MainPresenter.LOG.warn("ViewOptionRequested is not implemented"));
+        view.addListener(
+                HelpOptionRequestedEvent.class,
+                e -> MainPresenter.LOG.warn("HelpOptionRequested is not implemented"));
+        view.addListener(
+                ProjectOptionRequestedEvent.class, ProjectOptionRequestedEvent::handleEvent);
+        view.addListener(EditOptionRequestedEvent.class, EditOptionRequestedEvent::handleEvent);
+        view.addListener(RulesOptionRequestedEvent.class, RulesOptionRequestedEvent::handleEvent);
+        view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
+
+        inputPresenter.addListener(
+                OutputViewRequestedEvent.class, e -> view.showContent(outputView));
+        outputView.addListener(
+                InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
     }
 
-    @Override
-    public void setView(final MainContract.View view) {
-        this.view = view;
+    public MainView getView() {
+        return view;
     }
 
-    @Override
-    public void showArchitectureRuleView() {
-        view.setContent(inputView);
-    }
-
-    @Override
-    public void showResultView() {
-        view.setContent(resultView);
-    }
-
-    @Override
-    public void undo() {
-        // Undo Action
-        System.out.println("undo()");
-    }
-
-    @Override
-    public void redo() {
-        // Redo Action
-        System.out.println("redo()");
-    }
-
-    @Override
-    public void showView() {
-        // Open View Option Popup
-        System.out.println("showView()");
-    }
-
-    @Override
-    public void showHelp() {
-        // Open Help Popup
-        System.out.println("showHelp()");
-    }
-
-    @Override
-    public void showImportProject() {
-        // Open File Browser Popup
-        System.out.println("showImportProject()");
-    }
-
-    @Override
-    public void showImportRules() {
-        // Open File Browser Popup
-        System.out.println("showImportRules()");
-    }
-
-    @Override
-    public void showExportRules() {
-        // Open File Browser Popup (select save location)
-        System.out.println("showExportRules()");
-    }
-
-    @Override
-    public void showContact() {
-        // Open Contact Popup
-        System.out.println("showContact()");
-    }
-
-    @Override
-    public void showWiki() {
-        // Open Wiki Webpage
-        System.out.println("showWiki()");
-    }
-
-    @Override
-    public void showProjectSite() {
-        // Open ProjectSite Webpage
-        System.out.println("showProjectSite()");
-    }
-
-    @Override
-    public void showImportRulesFromFile() {
-        System.out.println("showImportRulesFromFile()");
-    }
-
-    @Override
-    public void showImportRulePresets() {
-        System.out.println("showImportRulePresets()");
-    }
-
-    @Override
-    public void showOpenProject() {
-        new OpenProjectDialog().open();
-    }
-
-    @Override
-    public void showSaveProject() {
-        new SaveProjectDialog().open();
-    }
-
-    @Override
-    public void showNewTab() {
-        view.showNewTab();
-    }
-
-    @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         view.setSaveProjectMenuItemEnabled(true);
-    }
-
-    @Override
-    public void saveProject() {
-        try {
-            ProjectManager.getInstance().saveProject();
-        } catch (final IOException e) {
-            new ConfirmDialog("Project file could not be written.").open();
-        }
     }
 }
