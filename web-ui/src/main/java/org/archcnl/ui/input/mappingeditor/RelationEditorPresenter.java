@@ -32,8 +32,9 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     public RelationEditorPresenter() {
         super();
         this.relation = Optional.empty();
-        view = new RelationEditorView(
-                prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        view =
+                new RelationEditorView(
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         addThenTripletListeners();
         initializeView(view);
     }
@@ -41,17 +42,19 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     public RelationEditorPresenter(final CustomRelation relation) {
         super();
         this.relation = Optional.of(relation);
-        view = new RelationEditorView(
-                prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        view =
+                new RelationEditorView(
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
         addThenTripletListeners();
         initializeView(view, RelationEditorPresenter.extractAndTriplets(relation));
     }
 
     private void addThenTripletListeners() {
-        view.addListener(VariableFilterChangedEvent.class,
-                event -> event.handleEvent(variableManager));
+        view.addListener(
+                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
-        view.addListener(VariableListUpdateRequestedEvent.class,
+        view.addListener(
+                VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
     }
 
@@ -90,10 +93,13 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
             view.updateNameField(relation.get().getName());
             view.updateDescription(relation.get().getDescription());
             view.updateNameFieldInThenTriplet(relation.get().getName());
-            relation.get().getMapping().ifPresent(mapping -> {
-                view.setSubjectInThenTriplet(mapping.getThenTriplet().getSubject());
-                view.setObjectInThenTriplet(mapping.getThenTriplet().getObject());
-            });
+            relation.get()
+                    .getMapping()
+                    .ifPresent(
+                            mapping -> {
+                                view.setSubjectInThenTriplet(mapping.getThenTriplet().getSubject());
+                                view.setObjectInThenTriplet(mapping.getThenTriplet().getObject());
+                            });
         }
     }
 
@@ -104,8 +110,9 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 final CustomRelation thenRelation = relation.get();
                 final ObjectType thenObject = view.getThenTripletObject();
                 thenRelation.setRelatableObjectType(thenObject);
-                final Triplet thenTriplet = TripletFactory
-                        .createTriplet(view.getThenTripletSubject(), thenRelation, thenObject);
+                final Triplet thenTriplet =
+                        TripletFactory.createTriplet(
+                                view.getThenTripletSubject(), thenRelation, thenObject);
 
                 final RelationMapping mapping =
                         new RelationMapping(thenTriplet, getAndTripletsList());
@@ -113,13 +120,16 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 relation.get().setMapping(mapping);
 
                 if (!doesRelationExist(relation.get())) {
-                    RulesConceptsAndRelations.getInstance().getRelationManager()
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
                             .addRelation(relation.get());
                 }
 
                 fireEvent(new RuleEditorRequestedEvent(this, true));
-            } catch (UnrelatedMappingException | UnsupportedObjectTypeInTriplet
-                    | InvalidVariableNameException | RelationAlreadyExistsException e) {
+            } catch (UnrelatedMappingException
+                    | UnsupportedObjectTypeInTriplet
+                    | InvalidVariableNameException
+                    | RelationAlreadyExistsException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
@@ -131,7 +141,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     private boolean doesRelationExist(final CustomRelation relation) {
-        return RulesConceptsAndRelations.getInstance().getRelationManager()
+        return RulesConceptsAndRelations.getInstance()
+                .getRelationManager()
                 .doesRelationExist(relation);
     }
 
