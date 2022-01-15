@@ -1,11 +1,14 @@
 package org.archcnl.ui.output.component;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.ui.main.MainPresenter;
 import org.archcnl.ui.output.events.CustomQueryInsertionRequestedEvent;
+import org.archcnl.ui.output.events.InputViewRequestedEvent;
 
 public class QueryView extends HorizontalLayout {
 
@@ -17,11 +20,11 @@ public class QueryView extends HorizontalLayout {
     SideBarLayout sideBar;
     Component currentComponent;
 
-    public QueryView(final MainPresenter mainPresenter) throws PropertyNotFoundException {
+    public QueryView() throws PropertyNotFoundException {
         queryResults = new QueryResultsUiComponent();
         customQueryResults = new CustomQueryUiComponent();
         freeTextQuery = new FreeTextQueryUiComponent();
-        sideBar = new SideBarLayout(this, mainPresenter);
+        sideBar = new SideBarLayout(this);
         initLayout();
         registerEventListeners();
         addAndExpand(sideBar, queryResults);
@@ -39,6 +42,7 @@ public class QueryView extends HorizontalLayout {
         freeTextQuery.addListener(
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
+        sideBar.addListener(InputViewRequestedEvent.class, this::fireEvent);
     }
 
     // TODO Extract into interface
@@ -61,5 +65,11 @@ public class QueryView extends HorizontalLayout {
     private void insertCustomQueryIntoFreeTextQuery() {
         final String customQuery = customQueryResults.getQuery();
         freeTextQuery.setQueryText(customQuery);
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

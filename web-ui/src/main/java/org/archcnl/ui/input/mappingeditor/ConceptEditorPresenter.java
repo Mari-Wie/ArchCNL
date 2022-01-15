@@ -12,7 +12,7 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import org.archcnl.ui.input.InputContract;
+import org.archcnl.ui.input.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.input.mappingeditor.events.VariableFilterChangedEvent;
@@ -26,8 +26,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     private ConceptEditorView view;
     private Optional<CustomConcept> concept;
 
-    public ConceptEditorPresenter(InputContract.Remote inputRemote) {
-        super(inputRemote);
+    public ConceptEditorPresenter() {
+        super();
         this.concept = Optional.empty();
         view =
                 new ConceptEditorView(
@@ -36,8 +36,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         initializeView(view);
     }
 
-    public ConceptEditorPresenter(InputContract.Remote inputRemote, CustomConcept concept) {
-        super(inputRemote);
+    public ConceptEditorPresenter(CustomConcept concept) {
+        super();
         this.concept = Optional.of(concept);
         view =
                 new ConceptEditorView(
@@ -94,7 +94,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void updateMapping(InputContract.Remote inputRemote) {
+    protected void updateMapping() {
         if (concept.isPresent()) {
             try {
                 ConceptMapping mapping =
@@ -108,7 +108,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                             .addConcept(concept.get());
                 }
 
-                inputRemote.switchToArchitectureRulesView();
+                fireEvent(new RuleEditorRequestedEvent(this, true));
             } catch (UnrelatedMappingException
                     | UnsupportedObjectTypeInTriplet
                     | RelationDoesNotExistException

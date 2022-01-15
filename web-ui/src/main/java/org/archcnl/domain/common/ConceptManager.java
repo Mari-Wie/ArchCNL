@@ -72,18 +72,54 @@ public class ConceptManager {
 
     private void initializeConcepts() {
         // Famix
-        concepts.add(new FamixConcept("FamixClass", ""));
-        concepts.add(new FamixConcept("Namespace", ""));
-        concepts.add(new FamixConcept("Enum", ""));
-        concepts.add(new FamixConcept("AnnotationType", ""));
-        concepts.add(new FamixConcept("Method", ""));
-        concepts.add(new FamixConcept("Attribute", ""));
-        concepts.add(new FamixConcept("Inheritance", ""));
-        concepts.add(new FamixConcept("AnnotationInstance", ""));
-        concepts.add(new FamixConcept("AnnotationTypeAttribute", ""));
-        concepts.add(new FamixConcept("AnnotationInstanceAttribute", ""));
-        concepts.add(new FamixConcept("Parameter", ""));
-        concepts.add(new FamixConcept("LocalVariable", ""));
+        concepts.add(
+                new FamixConcept(
+                        "FamixClass",
+                        "Models a class or an interface from the object-oriented programming style."));
+        concepts.add(
+                new FamixConcept(
+                        "Namespace",
+                        "A namespace serves as a unique identifier and can contain Enums or FamixClasses. Some programming languages call this concept a \"package\". The top-level namespace has an empty name."));
+        concepts.add(
+                new FamixConcept(
+                        "Enum",
+                        "Models an enumerated type from the object-oriented programming style."));
+        concepts.add(
+                new FamixConcept(
+                        "AnnotationType",
+                        "Models the declaration of a user-defined annotation. In Java source code they can be declared with the \"@interface\" prefix."));
+        concepts.add(
+                new FamixConcept(
+                        "Method",
+                        "Models a method, an interface operation, or a constructor from the object-oriented programming style."));
+        concepts.add(
+                new FamixConcept(
+                        "Attribute",
+                        "Models a field or attribute of an enum, class, or interface as known from the object-oriented programming style."));
+        concepts.add(
+                new FamixConcept(
+                        "Inheritance",
+                        "Models an inheritance relation between classes, or interfaces in the object-oriented programming style. Use the \"hasSuperClass\" and the \"hasSubClass\" relations to access the types involved in the inheritance."));
+        concepts.add(
+                new FamixConcept(
+                        "AnnotationInstance",
+                        "Models the use of an annotation type in the source code. For instance, in Java when some class is annotated with the annotation \"@Deprecated\", this is an annotation instance of the annotation type \"Deprecated\"."));
+        concepts.add(
+                new FamixConcept(
+                        "AnnotationTypeAttribute",
+                        "Models an attribute defined in the declaration of an annotation type."));
+        concepts.add(
+                new FamixConcept(
+                        "AnnotationInstanceAttribute",
+                        "Models an attribute-value pair present in a particular annotation (instance). In Java for example, when the annotation @Deprecated(since=\"today\") is modeled, there would be the member value pair (\"since\", \"today\")."));
+        concepts.add(
+                new FamixConcept(
+                        "Parameter",
+                        "Models a parameter of a method, an interface operation, or a constructor from the object-oriented programming style."));
+        concepts.add(
+                new FamixConcept(
+                        "LocalVariable",
+                        "Models a local variable defined in a method, or a constructor from the object-oriented programming style."));
 
         // Conformance
         concepts.add(new ConformanceConcept("ConformanceCheck", ""));
