@@ -4,29 +4,25 @@ import com.vaadin.flow.component.ComponentEvent;
 import java.util.Optional;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.ObjectView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.PredicateComponent;
 
 public class PredicateSelectedEvent extends ComponentEvent<PredicateComponent> {
 
-    private static final long serialVersionUID = -5512289455282443156L;
+    private static final long serialVersionUID = 1L;
 
-    public PredicateSelectedEvent(PredicateComponent source, boolean fromClient) {
+    public PredicateSelectedEvent(final PredicateComponent source, final boolean fromClient) {
         super(source, fromClient);
     }
 
-    public void handleEvent(RelationManager relationManager, ObjectView objectView) {
-        Optional<String> value = getSource().getSelectedItem();
-        Relation relation = null;
+    public void handleEvent(final RelationManager relationManager, final ObjectView objectView) {
+        final Optional<String> value = getSource().getSelectedItem();
+        Optional<Relation> relation = Optional.empty();
         if (value.isPresent()) {
-            String name = value.get();
-            try {
-                relation = relationManager.getRelationByName(name);
-            } catch (RelationDoesNotExistException e) {
-                getSource().showErrorMessage("Relation does not exist");
-            }
+            relation = relationManager.getRelationByName(value.get());
+        } else {
+            getSource().showErrorMessage("Relation does not exist");
         }
-        objectView.predicateHasChanged(Optional.ofNullable(relation));
+        objectView.predicateHasChanged(relation);
     }
 }

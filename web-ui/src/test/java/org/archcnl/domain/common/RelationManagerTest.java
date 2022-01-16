@@ -2,6 +2,7 @@ package org.archcnl.domain.common;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
@@ -187,34 +188,22 @@ class RelationManagerTest {
     @Test
     void givenFreshRelationManager_whenGetRelationByName_thenExpectedResults()
             throws ConceptDoesNotExistException, RelationDoesNotExistException {
-        Assertions.assertThrows(
-                RelationDoesNotExistException.class,
-                () -> {
-                    relationManager.getRelationByName("abc");
-                });
+        Assertions.assertEquals(Optional.empty(), relationManager.getRelationByName("abc"));
         Assertions.assertEquals(
-                new FamixRelation("hasModifier", "", new LinkedList<>()),
+                Optional.of(new FamixRelation("hasModifier", "", new LinkedList<>())),
                 relationManager.getRelationByName("hasModifier"));
     }
 
     @Test
     void givenRelationManager_whenGetRelationByRealName_thenExpectedResults()
             throws RelationDoesNotExistException {
-        Assertions.assertThrows(
-                RelationDoesNotExistException.class,
-                () -> {
-                    relationManager.getRelationByRealName("abc");
-                });
-        Assertions.assertThrows(
-                RelationDoesNotExistException.class,
-                () -> {
-                    relationManager.getRelationByRealName("hasName");
-                });
+        Assertions.assertEquals(Optional.empty(), relationManager.getRelationByRealName("abc"));
+        Assertions.assertEquals(Optional.empty(), relationManager.getRelationByRealName("hasName"));
         Assertions.assertEquals(
-                new JenaBuiltinRelation("matches", "regex", "", new LinkedList<>()),
+                Optional.of(new JenaBuiltinRelation("matches", "regex", "", new LinkedList<>())),
                 relationManager.getRelationByRealName("regex"));
         Assertions.assertEquals(
-                new TypeRelation("is-of-type", "type", ""),
+                Optional.of(new TypeRelation("is-of-type", "type", "")),
                 relationManager.getRelationByRealName("type"));
     }
 
@@ -278,10 +267,12 @@ class RelationManagerTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
-                                .getConceptByName("FamixClass")));
+                                .getConceptByName("FamixClass")
+                                .get()));
         when1.add(new AndTriplets(and1));
         final RelationMapping mapping1 =
                 new RelationMapping(
@@ -296,7 +287,7 @@ class RelationManagerTest {
                 outputRelationsCount + 3, relationManager.getOutputRelations().size());
 
         CustomRelation extractedWithRelation =
-                (CustomRelation) relationManager.getRelationByName(relationName);
+                (CustomRelation) relationManager.getRelationByName(relationName).get();
         Assertions.assertEquals(
                 1, extractedWithRelation.getMapping().get().getWhenTriplets().size());
 
@@ -309,10 +300,12 @@ class RelationManagerTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
-                                .getConceptByName("Enum")));
+                                .getConceptByName("Enum")
+                                .get()));
         when2.add(new AndTriplets(and2));
         final RelationMapping mapping2 =
                 new RelationMapping(
@@ -325,7 +318,8 @@ class RelationManagerTest {
                 inputRelationsCount + 3, relationManager.getInputRelations().size());
         Assertions.assertEquals(
                 outputRelationsCount + 3, relationManager.getOutputRelations().size());
-        extractedWithRelation = (CustomRelation) relationManager.getRelationByName(relationName);
+        extractedWithRelation =
+                (CustomRelation) relationManager.getRelationByName(relationName).get();
         Assertions.assertEquals(
                 2, extractedWithRelation.getMapping().get().getWhenTriplets().size());
     }

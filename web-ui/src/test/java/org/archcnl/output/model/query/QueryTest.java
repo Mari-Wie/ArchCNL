@@ -33,14 +33,16 @@ public class QueryTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         new CustomConcept("Aggregate", ""));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new Variable("name"));
         final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
         final WhereClause whereClause = new WhereClause(triplets);
@@ -85,56 +87,64 @@ public class QueryTest {
                         new Variable("rule"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasRuleRepresentation"),
+                                .getRelationByName("hasRuleRepresentation")
+                                .get(),
                         new StringValue("Every Aggregate must residein a DomainRing."));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("rule"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasRuleRepresentation"),
+                                .getRelationByName("hasRuleRepresentation")
+                                .get(),
                         new Variable("cnl"));
         final Triplet triplet3 =
                 new Triplet(
                         new Variable("violation"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("violates"),
+                                .getRelationByName("violates")
+                                .get(),
                         new Variable("rule"));
         final Triplet triplet4 =
                 new Triplet(
                         new Variable("proof"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("proofs"),
+                                .getRelationByName("proofs")
+                                .get(),
                         new Variable("violation"));
         final Triplet triplet5 =
                 new Triplet(
                         new Variable("proof"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasNotInferredStatement"),
+                                .getRelationByName("hasNotInferredStatement")
+                                .get(),
                         new Variable("notInferred"));
         final Triplet triplet6 =
                 new Triplet(
                         new Variable("notInferred"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasSubject"),
+                                .getRelationByName("hasSubject")
+                                .get(),
                         new Variable("subject"));
         final Triplet triplet7 =
                 new Triplet(
                         new Variable("notInferred"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasPredicate"),
+                                .getRelationByName("hasPredicate")
+                                .get(),
                         new Variable("predicate"));
         final Triplet triplet8 =
                 new Triplet(
                         new Variable("notInferred"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasObject"),
+                                .getRelationByName("hasObject")
+                                .get(),
                         new Variable("object"));
         final AndTriplets triplets =
                 new AndTriplets(
@@ -191,14 +201,16 @@ public class QueryTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         new CustomConcept("Aggregate", ""));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new Variable("name"));
         final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
         final WhereClause whereClause = new WhereClause(triplets);

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.Triplet;
@@ -13,7 +14,6 @@ import org.archcnl.domain.common.TripletFactory;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.AddTripletViewAfterButtonPressedEvent;
@@ -40,7 +40,7 @@ public class TripletPresenter extends Component {
         addListeners();
     }
 
-    public void showTriplet(Triplet triplet) {
+    public void showTriplet(final Triplet triplet) {
         tripletView.getSubjectComponent().setVariable(triplet.getSubject());
         tripletView.getPredicateComponent().setPredicate(triplet.getPredicate());
         tripletView.getObjectView().setObject(triplet.getObject());
@@ -84,11 +84,11 @@ public class TripletPresenter extends Component {
 
     public Triplet getTriplet() throws TripletNotDefinedException, UnsupportedObjectTypeInTriplet {
         Variable subject;
-        Relation predicate;
+        Optional<Relation> predicate;
         ObjectType object;
         try {
             subject = tripletView.getSubjectComponent().getVariable();
-            String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
+            final String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
             predicate =
                     RulesConceptsAndRelations.getInstance()
                             .getRelationManager()
@@ -96,13 +96,16 @@ public class TripletPresenter extends Component {
             object = tripletView.getObjectView().getObject();
         } catch (InvalidVariableNameException
                 | SubjectOrObjectNotDefinedException
-                | RelationDoesNotExistException
                 | NoSuchElementException
                 | ConceptDoesNotExistException
                 | ObjectNotDefinedException e) {
             throw new TripletNotDefinedException();
         }
-        return TripletFactory.createTriplet(subject, predicate, object);
+        if (predicate.isEmpty()) {
+            throw new TripletNotDefinedException();
+        } else {
+            return TripletFactory.createTriplet(subject, predicate.get(), object);
+        }
     }
 
     public boolean isIncomplete() {
@@ -115,11 +118,13 @@ public class TripletPresenter extends Component {
             subjectMissing = true;
         }
         try {
-            String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
-            RulesConceptsAndRelations.getInstance()
-                    .getRelationManager()
-                    .getRelationByName(relationName);
-        } catch (RelationDoesNotExistException | NoSuchElementException e) {
+            final String relationName = tripletView.getPredicateComponent().getSelectedItem().get();
+            final Optional<Relation> relationOpt =
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .getRelationByName(relationName);
+            predicateMissing = relationOpt.isEmpty();
+        } catch (final NoSuchElementException e) {
             predicateMissing = true;
         }
         try {

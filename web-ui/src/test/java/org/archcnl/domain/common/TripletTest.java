@@ -15,18 +15,19 @@ class TripletTest {
             throws RelationDoesNotExistException, InvalidVariableNameException,
                     UnsupportedObjectTypeInTriplet {
         // given
-        Variable subject = new Variable("name");
-        Relation predicate =
+        final Variable subject = new Variable("name");
+        final Relation predicate =
                 RulesConceptsAndRelations.getInstance()
                         .getRelationManager()
-                        .getRelationByName("matches");
-        ObjectType validObjectType1 = new Variable("pattern");
-        ObjectType validObjectType2 = new StringValue("someString");
-        ObjectType invalidObjectType = new BooleanValue(true);
+                        .getRelationByName("matches")
+                        .get();
+        final ObjectType validObjectType1 = new Variable("pattern");
+        final ObjectType validObjectType2 = new StringValue("someString");
+        final ObjectType invalidObjectType = new BooleanValue(true);
 
         // when
-        Triplet triplet1 = TripletFactory.createTriplet(subject, predicate, validObjectType1);
-        Triplet triplet2 = TripletFactory.createTriplet(subject, predicate, validObjectType2);
+        final Triplet triplet1 = TripletFactory.createTriplet(subject, predicate, validObjectType1);
+        final Triplet triplet2 = TripletFactory.createTriplet(subject, predicate, validObjectType2);
 
         // then
         Assertions.assertEquals(subject, triplet1.getSubject());
@@ -49,7 +50,8 @@ class TripletTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new Variable("name"));
 
         final String expectedGuiString = "?aggregate famix:hasName ?name.";
@@ -76,7 +78,8 @@ class TripletTest {
                         new Variable("aggregate"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("hasName"),
+                                .getRelationByName("hasName")
+                                .get(),
                         new StringValue("Some string value"));
 
         final String expectedGuiString = "?aggregate famix:hasName 'Some string value'.";
@@ -104,7 +107,8 @@ class TripletTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("isInterface"),
+                                .getRelationByName("isInterface")
+                                .get(),
                         new BooleanValue(true));
 
         final String expectedGuiString = "?class famix:isInterface 'true'^^xsd:boolean.";
@@ -132,10 +136,12 @@ class TripletTest {
                         new Variable("class"),
                         RulesConceptsAndRelations.getInstance()
                                 .getRelationManager()
-                                .getRelationByName("is-of-type"),
+                                .getRelationByName("is-of-type")
+                                .get(),
                         RulesConceptsAndRelations.getInstance()
                                 .getConceptManager()
-                                .getConceptByName("FamixClass"));
+                                .getConceptByName("FamixClass")
+                                .get());
 
         final String expectedGuiString = "?class rdf:type famix:FamixClass.";
         final String expectedQueryString = "?class rdf:type famix:FamixClass.";
