@@ -48,7 +48,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         this.concept = Optional.empty();
         view =
                 new ConceptEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
         addThenTripletListeners();
         initializeView(view);
     }
@@ -58,7 +58,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
         this.concept = Optional.of(concept);
         view =
                 new ConceptEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
         addThenTripletListeners();
         initializeView(view, ConceptEditorPresenter.extractAndTriplets(concept));
     }

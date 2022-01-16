@@ -103,9 +103,15 @@ public abstract class MappingEditorPresenter extends Component {
         andTripletsPresenters.clear();
         andTripletsList.forEach(
                 andTriplets -> {
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/rulesormappingeditorview/mappingeditor/MappingEditorPresenter.java
                     final AndTripletsEditorPresenter andTripletsPresenter =
                             new AndTripletsEditorPresenter();
                     final AndTripletsEditorView andTripletsView =
+=======
+                    AndTripletsEditorPresenter andTripletsPresenter =
+                            new AndTripletsEditorPresenter(true);
+                    AndTripletsEditorView andTripletsView =
+>>>>>>> Added input/output flag to AndTripletsEditor:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/MappingEditorPresenter.java
                             prepareAndTripletsEditorView(andTripletsPresenter);
                     andTripletsPresenter.showAndTriplets(andTriplets);
                     view.addNewAndTripletsView(andTripletsView);
@@ -137,7 +143,8 @@ public abstract class MappingEditorPresenter extends Component {
 
     private void addNewAndTripletsViewAfter(final AndTripletsEditorView oldAndTripletsView) {
         view.addNewAndTripletsViewAfter(
-                oldAndTripletsView, prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                oldAndTripletsView,
+                prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
     }
 
     private void deleteAndTripletsView(final AndTripletsEditorView andTripletsView) {
@@ -166,7 +173,8 @@ public abstract class MappingEditorPresenter extends Component {
     }
 
     private void lastAndTripletsViewDeleted() {
-        view.addNewAndTripletsView(prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        view.addNewAndTripletsView(
+                prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
     }
 
     private void doneButtonClicked() {

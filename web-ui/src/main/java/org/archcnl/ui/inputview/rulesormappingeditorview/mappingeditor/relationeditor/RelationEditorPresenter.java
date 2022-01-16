@@ -51,7 +51,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         this.relation = Optional.empty();
         view =
                 new RelationEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
         addThenTripletListeners();
         initializeView(view);
     }
@@ -61,7 +61,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         this.relation = Optional.of(relation);
         view =
                 new RelationEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
         addThenTripletListeners();
         initializeView(view, RelationEditorPresenter.extractAndTriplets(relation));
     }

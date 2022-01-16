@@ -33,9 +33,11 @@ public class AndTripletsEditorPresenter extends Component {
     private static final Logger LOG = LogManager.getLogger(AndTripletsEditorPresenter.class);
     private AndTripletsEditorView view;
     private List<TripletPresenter> tripletPresenters = new LinkedList<>();
+    private boolean inputSide;
 
-    public AndTripletsEditorPresenter() {
-        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()));
+    public AndTripletsEditorPresenter(boolean inputSide) {
+        this.inputSide = inputSide;
+        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter(this.inputSide)));
         addListeners();
     }
 
@@ -73,7 +75,7 @@ public class AndTripletsEditorPresenter extends Component {
                     .getTriplets()
                     .forEach(
                             triplet -> {
-                                TripletPresenter tripletPresenter = new TripletPresenter();
+                                TripletPresenter tripletPresenter = new TripletPresenter(inputSide);
                                 view.addTripletView(prepareTripletView(tripletPresenter));
                                 tripletPresenter.showTriplet(triplet);
                             });
@@ -111,7 +113,8 @@ public class AndTripletsEditorPresenter extends Component {
     }
 
     private void addNewTripletViewAfter(TripletView oldTripletView) {
-        view.addNewTripletViewAfter(oldTripletView, prepareTripletView(new TripletPresenter()));
+        view.addNewTripletViewAfter(
+                oldTripletView, prepareTripletView(new TripletPresenter(inputSide)));
     }
 
     private void deleteTripletView(TripletView tripletView) {

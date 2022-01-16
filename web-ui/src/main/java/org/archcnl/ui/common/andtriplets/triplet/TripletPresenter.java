@@ -34,8 +34,10 @@ public class TripletPresenter extends Component {
 
     private static final long serialVersionUID = 3517038691361279084L;
     private TripletView tripletView;
+    private boolean inputSide;
 
-    public TripletPresenter() {
+    public TripletPresenter(boolean inputSide) {
+        this.inputSide = inputSide;
         tripletView = new TripletView();
         addListeners();
     }
@@ -61,17 +63,25 @@ public class TripletPresenter extends Component {
                 RelationListUpdateRequestedEvent.class,
                 event ->
                         event.handleEvent(
-                                RulesConceptsAndRelations.getInstance()
-                                        .getRelationManager()
-                                        .getInputRelations()));
+                                inputSide
+                                        ? RulesConceptsAndRelations.getInstance()
+                                                .getRelationManager()
+                                                .getInputRelations()
+                                        : RulesConceptsAndRelations.getInstance()
+                                                .getRelationManager()
+                                                .getOutputRelations()));
 
         tripletView.addListener(
                 ConceptListUpdateRequestedEvent.class,
                 event ->
                         event.handleEvent(
-                                RulesConceptsAndRelations.getInstance()
-                                        .getConceptManager()
-                                        .getInputConcepts()));
+                                inputSide
+                                        ? RulesConceptsAndRelations.getInstance()
+                                                .getConceptManager()
+                                                .getInputConcepts()
+                                        : RulesConceptsAndRelations.getInstance()
+                                                .getConceptManager()
+                                                .getOutputConcepts()));
         tripletView.addListener(
                 ConceptSelectedEvent.class,
                 event ->
