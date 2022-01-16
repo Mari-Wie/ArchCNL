@@ -26,12 +26,14 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_EXPANSION_DEPTH = 10;
 
+    private boolean inputSide;
     private CreateNewLayout createNewConceptLayout;
     private CreateNewLayout createNewRelationLayout;
     private MappingListLayout conceptTreeGrid;
     private MappingListLayout relationTreeGrid;
 
-    public ConceptAndRelationView() {
+    public ConceptAndRelationView(boolean inputSide) {
+        this.inputSide = inputSide;
         createNewConceptLayout =
                 new CreateNewLayout(
                         "Concepts",
@@ -62,11 +64,24 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     }
 
     private void updateConceptView() {
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/conceptandrelationlistview/ConceptAndRelationView.java
         final List<Concept> concepts =
                 RulesConceptsAndRelations.getInstance().getConceptManager().getInputConcepts();
         final List<MappingListEntry> conceptData = new LinkedList<>();
         final ConceptListEntry defaultConceptsStub =
                 new ConceptListEntry("Default Concepts", concepts);
+=======
+        List<Concept> concepts;
+        if (inputSide) {
+            concepts =
+                    RulesConceptsAndRelations.getInstance().getConceptManager().getInputConcepts();
+        } else {
+            concepts =
+                    RulesConceptsAndRelations.getInstance().getConceptManager().getOutputConcepts();
+        }
+        List<MappingListEntry> conceptData = new LinkedList<>();
+        ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
+>>>>>>> Added input/output flag to ConceptAndRelationView:web-ui/src/main/java/org/archcnl/ui/input/ConceptAndRelationView.java
         conceptData.add(defaultConceptsStub);
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
@@ -79,10 +94,27 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     }
 
     private void updateRelationView() {
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/conceptandrelationlistview/ConceptAndRelationView.java
         final List<Relation> relations =
                 RulesConceptsAndRelations.getInstance().getRelationManager().getInputRelations();
         final List<MappingListEntry> relationData = new LinkedList<>();
         final RelationListEntry defaultRelationsStub =
+=======
+        List<Relation> relations;
+        if (inputSide) {
+            relations =
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .getInputRelations();
+        } else {
+            relations =
+                    RulesConceptsAndRelations.getInstance()
+                            .getRelationManager()
+                            .getOutputRelations();
+        }
+        List<MappingListEntry> relationData = new LinkedList<>();
+        RelationListEntry defaultRelationsStub =
+>>>>>>> Added input/output flag to ConceptAndRelationView:web-ui/src/main/java/org/archcnl/ui/input/ConceptAndRelationView.java
                 new RelationListEntry("Default Relations", relations);
         relationData.add(defaultRelationsStub);
         if (relationTreeGrid != null) {

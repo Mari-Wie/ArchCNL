@@ -35,8 +35,13 @@ public class InputView extends HorizontalLayout {
     }
 
     private void initConceptAndRelationView() {
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/InputView.java
         conceptAndRelationView = new ConceptAndRelationView();
         conceptAndRelationView.setWidth(100.0f - InputView.GOLDEN_RATIO, Unit.PERCENTAGE);
+=======
+        conceptAndRelationView = new ConceptAndRelationView(true);
+        conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
+>>>>>>> Added input/output flag to ConceptAndRelationView:web-ui/src/main/java/org/archcnl/ui/input/InputView.java
         conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(OutputViewRequestedEvent.class, this::fireEvent);
