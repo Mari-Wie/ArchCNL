@@ -4,6 +4,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/rulesormappingeditorview/mappingeditor/concepteditor/ConceptEditorView.java
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.VariableSelectionComponent;
@@ -11,6 +12,14 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriple
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableFilterChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
+=======
+import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
+import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
+>>>>>>> AndTripletsEditor moved to common package:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/ConceptEditorView.java
 
 public class ConceptEditorView extends MappingEditorView {
 

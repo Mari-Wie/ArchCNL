@@ -12,6 +12,7 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/rulesormappingeditorview/mappingeditor/concepteditor/ConceptEditorPresenter.java
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorPresenter;
@@ -21,6 +22,16 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriple
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.MappingAlreadyExistsException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
+=======
+import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.input.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
+import org.archcnl.ui.input.mappingeditor.exceptions.MappingAlreadyExistsException;
+import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
+>>>>>>> AndTripletsEditor moved to common package:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/ConceptEditorPresenter.java
 
 public class ConceptEditorPresenter extends MappingEditorPresenter {
 

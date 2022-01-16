@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/rulesormappingeditorview/mappingeditor/MappingEditorView.java
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCancelButtonClickedEvent;
@@ -20,6 +21,15 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.Ma
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDoneButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingNameFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.variablelist.VariableListView;
+=======
+import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
+import org.archcnl.ui.input.RulesOrMappingEditorView;
+import org.archcnl.ui.input.mappingeditor.events.MappingCancelButtonClickedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingCloseButtonClicked;
+import org.archcnl.ui.input.mappingeditor.events.MappingDescriptionFieldChangedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingDoneButtonClickedEvent;
+import org.archcnl.ui.input.mappingeditor.events.MappingNameFieldChangedEvent;
+>>>>>>> AndTripletsEditor moved to common package:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/MappingEditorView.java
 
 public abstract class MappingEditorView extends RulesOrMappingEditorView {
 
