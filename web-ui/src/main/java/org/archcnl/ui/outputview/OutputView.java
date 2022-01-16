@@ -20,14 +20,14 @@ public class OutputView extends HorizontalLayout {
     private static final long serialVersionUID = 1L;
 
     AbstractQueryResultsComponent queryResults;
-    AbstractQueryResultsComponent customQueryResults;
+    CustomQueryPresenter customQueryPresenter;
     AbstractQueryResultsComponent freeTextQuery;
     SideBarLayout sideBar;
     Component currentComponent;
 
     public OutputView() throws PropertyNotFoundException {
         queryResults = new QueryResultsUiComponent();
-        customQueryResults = new CustomQueryUiComponent();
+        customQueryPresenter = new CustomQueryPresenter();
         freeTextQuery = new FreeTextQueryUiComponent();
         sideBar = new SideBarLayout(this);
         initLayout();
@@ -43,7 +43,7 @@ public class OutputView extends HorizontalLayout {
         currentComponent = queryResults;
     }
 
-    protected void registerEventListeners() {
+    private void registerEventListeners() {
         freeTextQuery.addListener(
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
@@ -58,8 +58,8 @@ public class OutputView extends HorizontalLayout {
     }
 
     public void switchToCustomQueryView() {
-        replace(currentComponent, customQueryResults);
-        currentComponent = customQueryResults;
+        replace(currentComponent, customQueryPresenter.getView());
+        currentComponent = customQueryPresenter.getView();
     }
 
     public void switchToFreeTextQueryView() {
@@ -68,7 +68,7 @@ public class OutputView extends HorizontalLayout {
     }
 
     private void insertCustomQueryIntoFreeTextQuery() {
-        final String customQuery = customQueryResults.getQuery();
+        final String customQuery = customQueryPresenter.getQuery();
         freeTextQuery.setQueryText(customQuery);
     }
 
