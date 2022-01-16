@@ -21,7 +21,7 @@ public class AndTripletsEditorView extends VerticalLayout {
     private static final long serialVersionUID = -6056440514075289398L;
     private VerticalLayout boxContent;
 
-    public AndTripletsEditorView(TripletView emptyTripletView) {
+    public AndTripletsEditorView(TripletView emptyTripletView, boolean inputSide) {
         setPadding(false);
         setWidthFull();
 
@@ -33,7 +33,7 @@ public class AndTripletsEditorView extends VerticalLayout {
         boxContent.getStyle().set("border", "1px solid black");
         boxContent.add(new Label("OR-Block (All rows in this block are AND connected)"));
         boxContent.add(emptyTripletView);
-        boxContent.setWidth(95, Unit.PERCENTAGE);
+        boxContent.setWidth(inputSide ? 95 : 100, Unit.PERCENTAGE);
 
         VerticalLayout boxButtonLayout = new VerticalLayout();
         boxButtonLayout.setWidth(5, Unit.PERCENTAGE);
@@ -47,7 +47,10 @@ public class AndTripletsEditorView extends VerticalLayout {
                         click -> fireEvent(new DeleteAndTripletsViewRequestedEvent(this, true)));
         boxButtonLayout.add(addButton, deleteButton);
 
-        orBlock.add(boxContent, boxButtonLayout);
+        orBlock.add(boxContent);
+        if (inputSide) {
+            orBlock.add(boxButtonLayout);
+        }
         add(orBlock);
         updateLabels();
     }

@@ -37,7 +37,9 @@ public class AndTripletsEditorPresenter extends Component {
 
     public AndTripletsEditorPresenter(boolean inputSide) {
         this.inputSide = inputSide;
-        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter(this.inputSide)));
+        view =
+                new AndTripletsEditorView(
+                        prepareTripletView(new TripletPresenter(this.inputSide)), inputSide);
         addListeners();
     }
 
