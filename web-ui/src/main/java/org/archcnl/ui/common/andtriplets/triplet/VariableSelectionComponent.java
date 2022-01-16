@@ -10,6 +10,7 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableSelectionComponent extends ComboBox<String>
@@ -47,6 +48,7 @@ public class VariableSelectionComponent extends ComboBox<String>
                         fireEvent(
                                 new VariableCreationRequestedEvent(this, true, getFilterString()));
                     }
+                    fireEvent(new VariableSelectedEvent(this, true));
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
         addFocusListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
