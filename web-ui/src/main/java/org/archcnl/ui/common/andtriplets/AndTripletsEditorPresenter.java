@@ -24,7 +24,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonP
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
-import org.archcnl.ui.input.mappingeditor.exceptions.TripletNotDefinedException;
+import org.archcnl.ui.common.andtriplets.triplet.exceptions.TripletNotDefinedException;
 
 @Tag("AndTripletsEditorPresenter")
 public class AndTripletsEditorPresenter extends Component {

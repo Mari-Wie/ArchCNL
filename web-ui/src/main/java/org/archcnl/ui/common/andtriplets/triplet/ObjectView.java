@@ -19,8 +19,8 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
-import org.archcnl.ui.input.mappingeditor.exceptions.ObjectNotDefinedException;
-import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
+import org.archcnl.ui.common.andtriplets.triplet.exceptions.ObjectNotDefinedException;
+import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 
 public class ObjectView extends HorizontalLayout {
 

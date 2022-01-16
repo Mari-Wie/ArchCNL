@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.TripletView;

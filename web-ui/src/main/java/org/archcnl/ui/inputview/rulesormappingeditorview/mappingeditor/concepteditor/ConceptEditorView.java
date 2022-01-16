@@ -18,8 +18,12 @@ import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/rulesormappingeditorview/mappingeditor/concepteditor/ConceptEditorView.java
 import org.archcnl.ui.input.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 >>>>>>> AndTripletsEditor moved to common package:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/ConceptEditorView.java
+=======
+import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
+>>>>>>> Moved or deleted mappingeditor.exceptions in accordance with previous commit:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/ConceptEditorView.java
 
 public class ConceptEditorView extends MappingEditorView {
 
