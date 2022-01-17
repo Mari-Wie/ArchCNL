@@ -1,4 +1,4 @@
-package org.archcnl.ui.common;
+package org.archcnl.ui.common.dialogs;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.Unit;

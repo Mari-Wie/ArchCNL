@@ -1,4 +1,4 @@
-package org.archcnl.ui.common;
+package org.archcnl.ui.common.dialogs;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.Unit;
@@ -7,6 +7,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.archcnl.ui.common.ButtonClickResponder;
 
 public class OkCancelDialog extends Dialog {
 
