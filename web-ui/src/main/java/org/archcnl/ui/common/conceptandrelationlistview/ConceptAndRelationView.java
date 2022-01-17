@@ -34,33 +34,38 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
 
     public ConceptAndRelationView(boolean inputSide) {
         this.inputSide = inputSide;
+
+        getStyle().set("border", "1px solid black");
         createNewConceptLayout =
                 new CreateNewLayout(
                         "Concepts",
                         "Create new concept",
-                        e -> fireEvent(new ConceptEditorRequestedEvent(this, true)));
+                        e -> fireEvent(new ConceptEditorRequestedEvent(this, true)),
+                        inputSide);
         createNewRelationLayout =
                 new CreateNewLayout(
                         "Relations",
                         "Create new relation",
-                        e -> fireEvent(new RelationEditorRequestedEvent(this, true)));
+                        e -> fireEvent(new RelationEditorRequestedEvent(this, true)),
+                        inputSide);
         RulesConceptsAndRelations.getInstance().getConceptManager().addPropertyChangeListener(this);
         RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
                 .addPropertyChangeListener(this);
-        createNewConceptLayout.setHeight(46, Unit.PERCENTAGE);
-        createNewRelationLayout.setHeight(46, Unit.PERCENTAGE);
+        createNewConceptLayout.setHeight(inputSide ? 46 : 49, Unit.PERCENTAGE);
+        createNewRelationLayout.setHeight(inputSide ? 46 : 49, Unit.PERCENTAGE);
         updateConceptView();
         updateRelationView();
 
         add(createNewConceptLayout);
         add(createNewRelationLayout);
 
-        add(
-                new Button(
-                        "Check for violations",
-                        click -> fireEvent(new OutputViewRequestedEvent(this, true))));
-        getStyle().set("border", "1px solid black");
+        if (inputSide) {
+            add(
+                    new Button(
+                            "Check for violations",
+                            click -> fireEvent(new OutputViewRequestedEvent(this, true))));
+        }
     }
 
     private void updateConceptView() {

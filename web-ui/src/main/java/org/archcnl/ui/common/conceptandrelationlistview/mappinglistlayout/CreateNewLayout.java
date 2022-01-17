@@ -14,10 +14,15 @@ public class CreateNewLayout extends VerticalLayout {
     public CreateNewLayout(
             final String labelText,
             final String buttonText,
-            final ComponentEventListener<ClickEvent<Button>> clickListener) {
+            final ComponentEventListener<ClickEvent<Button>> clickListener,
+            final boolean inputSide) {
         final Label archRulesLabel = new Label(labelText);
         final Button createNewRuleButton = new Button(buttonText, clickListener);
-        add(new HorizontalLayout(archRulesLabel, createNewRuleButton));
+        HorizontalLayout buttonRow = new HorizontalLayout(archRulesLabel);
+        if (inputSide) {
+            buttonRow.add(createNewRuleButton);
+        }
+        add(buttonRow);
         getStyle().set("border", "1px solid black");
     }
 }

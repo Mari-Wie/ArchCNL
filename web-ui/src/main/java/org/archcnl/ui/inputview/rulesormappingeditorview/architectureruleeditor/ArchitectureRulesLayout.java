@@ -28,7 +28,8 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView
                 new CreateNewLayout(
                         "Architecture Rules",
                         "Create new Arch Rule",
-                        e -> fireEvent(new RuleCreatorRequestedEvent(this, true)));
+                        e -> fireEvent(new RuleCreatorRequestedEvent(this, true)),
+                        true);
 
         // Remove style property to makes no sense in this layout
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
