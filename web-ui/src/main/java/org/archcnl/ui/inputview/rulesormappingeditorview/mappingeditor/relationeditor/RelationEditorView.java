@@ -5,16 +5,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.domain.common.ObjectType;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/rulesormappingeditorview/mappingeditor/relationeditor/RelationEditorView.java
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorView;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorView;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.VariableSelectionComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.VariableStringBoolSelectionView;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableFilterChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableListUpdateRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
-=======
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.VariableStringBoolSelectionView;
@@ -22,7 +12,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequeste
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
->>>>>>> Moved or deleted mappingeditor.exceptions in accordance with previous commit:web-ui/src/main/java/org/archcnl/ui/input/mappingeditor/RelationEditorView.java
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorView;
 
 public class RelationEditorView extends MappingEditorView {
 

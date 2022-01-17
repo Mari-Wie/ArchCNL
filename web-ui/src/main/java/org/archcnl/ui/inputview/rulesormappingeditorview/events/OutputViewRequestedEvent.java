@@ -1,7 +1,7 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.inputview.conceptandrelationlistview.ConceptAndRelationView;
+import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
 
 public class OutputViewRequestedEvent extends ComponentEvent<ConceptAndRelationView> {
 

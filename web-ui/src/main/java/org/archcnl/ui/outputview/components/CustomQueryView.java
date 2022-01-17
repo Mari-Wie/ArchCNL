@@ -1,4 +1,4 @@
-package org.archcnl.ui.output.component;
+package org.archcnl.ui.outputview.components;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -12,18 +12,18 @@ import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.ui.common.VariableListView;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
-import org.archcnl.ui.input.ConceptAndRelationView;
-import org.archcnl.ui.input.events.ConceptEditorRequestedEvent;
-import org.archcnl.ui.input.events.OutputViewRequestedEvent;
-import org.archcnl.ui.input.events.RelationEditorRequestedEvent;
-import org.archcnl.ui.output.events.ResultUpdateEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
+import org.archcnl.ui.common.variablelistview.VariableListView;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
+import org.archcnl.ui.outputview.events.ResultUpdateEvent;
 
 public class CustomQueryView extends HorizontalLayout {
 

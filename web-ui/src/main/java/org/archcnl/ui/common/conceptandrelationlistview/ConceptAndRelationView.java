@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.conceptandrelationlistview;
+package org.archcnl.ui.common.conceptandrelationlistview;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -13,10 +13,10 @@ import java.util.List;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.ConceptListEntry;
-import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
-import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.MappingListEntry;
-import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.RelationListEntry;
+import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.ConceptListEntry;
+import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
+import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.MappingListEntry;
+import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.RelationListEntry;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
@@ -64,13 +64,6 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     }
 
     private void updateConceptView() {
-<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/conceptandrelationlistview/ConceptAndRelationView.java
-        final List<Concept> concepts =
-                RulesConceptsAndRelations.getInstance().getConceptManager().getInputConcepts();
-        final List<MappingListEntry> conceptData = new LinkedList<>();
-        final ConceptListEntry defaultConceptsStub =
-                new ConceptListEntry("Default Concepts", concepts);
-=======
         List<Concept> concepts;
         if (inputSide) {
             concepts =
@@ -81,7 +74,6 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         }
         List<MappingListEntry> conceptData = new LinkedList<>();
         ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
->>>>>>> Added input/output flag to ConceptAndRelationView:web-ui/src/main/java/org/archcnl/ui/input/ConceptAndRelationView.java
         conceptData.add(defaultConceptsStub);
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
@@ -94,12 +86,6 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     }
 
     private void updateRelationView() {
-<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/inputview/conceptandrelationlistview/ConceptAndRelationView.java
-        final List<Relation> relations =
-                RulesConceptsAndRelations.getInstance().getRelationManager().getInputRelations();
-        final List<MappingListEntry> relationData = new LinkedList<>();
-        final RelationListEntry defaultRelationsStub =
-=======
         List<Relation> relations;
         if (inputSide) {
             relations =
@@ -114,7 +100,6 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         }
         List<MappingListEntry> relationData = new LinkedList<>();
         RelationListEntry defaultRelationsStub =
->>>>>>> Added input/output flag to ConceptAndRelationView:web-ui/src/main/java/org/archcnl/ui/input/ConceptAndRelationView.java
                 new RelationListEntry("Default Relations", relations);
         relationData.add(defaultRelationsStub);
         if (relationTreeGrid != null) {

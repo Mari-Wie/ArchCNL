@@ -1,4 +1,4 @@
-package org.archcnl.ui.common;
+package org.archcnl.ui.common.variablelistview;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.dnd.DragSource;

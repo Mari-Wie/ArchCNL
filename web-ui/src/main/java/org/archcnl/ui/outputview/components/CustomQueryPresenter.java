@@ -1,4 +1,4 @@
-package org.archcnl.ui.output.component;
+package org.archcnl.ui.outputview.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
@@ -23,7 +23,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEve
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.output.events.ResultUpdateEvent;
+import org.archcnl.ui.outputview.events.ResultUpdateEvent;
 
 @Tag("CustomQueryPresenter")
 public class CustomQueryPresenter extends Component {

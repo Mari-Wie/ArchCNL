@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout;
+package org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout;
 
 import java.util.List;
 

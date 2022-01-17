@@ -2,10 +2,6 @@ package org.archcnl.ui.outputview.events;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
-<<<<<<< master:web-ui/src/main/java/org/archcnl/ui/outputview/events/ResultUpdateEvent.java
-import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
-=======
->>>>>>> output model integration mostly finished:web-ui/src/main/java/org/archcnl/ui/output/events/ResultUpdateEvent.java
 
 public class ResultUpdateEvent extends ComponentEvent<Component> {
 

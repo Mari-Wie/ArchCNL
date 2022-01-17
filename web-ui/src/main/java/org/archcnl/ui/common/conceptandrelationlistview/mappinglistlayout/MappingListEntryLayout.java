@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout;
+package org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

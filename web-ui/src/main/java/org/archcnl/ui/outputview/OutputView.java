@@ -8,7 +8,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
-import org.archcnl.ui.outputview.components.CustomQueryUiComponent;
+import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.components.SideBarLayout;

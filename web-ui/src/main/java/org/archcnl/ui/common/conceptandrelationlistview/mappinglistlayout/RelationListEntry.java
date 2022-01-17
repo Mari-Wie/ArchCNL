@@ -1,35 +1,35 @@
-package org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout;
+package org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.common.Concept;
-import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.CustomRelation;
+import org.archcnl.domain.common.Relation;
 
-public class ConceptListEntry implements MappingListEntry {
+public class RelationListEntry implements MappingListEntry {
 
     private List<MappingListEntry> children;
     private String name;
-    private Concept content;
+    private Relation content;
     private boolean isLeaf;
 
-    public ConceptListEntry(String name, List<Concept> list) {
+    public RelationListEntry(String name, List<Relation> list) {
         children =
                 list.stream()
-                        .map(entry -> new ConceptListEntry(entry.toString(), entry))
+                        .map(entry -> new RelationListEntry(entry.toString(), entry))
                         .collect(Collectors.toList());
         this.name = name;
         isLeaf = false;
     }
 
-    public ConceptListEntry(String name, Concept content) {
+    public RelationListEntry(String name, Relation content) {
         this.name = name;
         this.content = content;
         children = Collections.<MappingListEntry>emptyList();
         isLeaf = true;
     }
 
-    public Concept getContent() {
+    public Relation getContent() {
         return content;
     }
 
@@ -51,7 +51,7 @@ public class ConceptListEntry implements MappingListEntry {
     }
 
     public boolean isAlterable() {
-        return getContent() instanceof CustomConcept;
+        return getContent() instanceof CustomRelation;
     }
 
     @Override

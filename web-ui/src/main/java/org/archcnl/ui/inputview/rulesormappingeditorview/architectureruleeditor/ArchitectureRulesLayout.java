@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
+import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 
