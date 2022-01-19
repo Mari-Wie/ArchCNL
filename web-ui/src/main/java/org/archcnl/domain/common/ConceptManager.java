@@ -122,12 +122,31 @@ public class ConceptManager {
                         "Models a local variable defined in a method, or a constructor from the object-oriented programming style."));
 
         // Conformance
-        concepts.add(new ConformanceConcept("ConformanceCheck", ""));
-        concepts.add(new ConformanceConcept("ArchitectureRule", ""));
-        concepts.add(new ConformanceConcept("ArchitectureViolation", ""));
-        concepts.add(new ConformanceConcept("Proof", ""));
-        concepts.add(new ConformanceConcept("AssertedStatement", ""));
-        concepts.add(new ConformanceConcept("NotInferredStatement", ""));
+        concepts.add(
+                new ConformanceConcept(
+                        "ConformanceCheck",
+                        "A ConformanceCheck checks if the actual architecture conforms to the specified architecture. The architecture specification is done using ArchitectureRules. Instances where these rules are not fulfilled are modelled as ArchitectureViolations."
+                                + "A ConformanceCheck is responsible for adding rules with their violations to the architecture model"));
+        concepts.add(
+                new ConformanceConcept(
+                        "ArchitectureRule",
+                        "Models a rule about the architecture that should be satisfied. It is specified in a controlled natural language. Instances in the architecture where ArchitectureRules are not fulfilled will be modeled as ArchitectureViolations."));
+        concepts.add(
+                new ConformanceConcept(
+                        "ArchitectureViolation",
+                        "Models a violation to an ArchitectureRule. The ArchitectureViolation is proven by a proof which consists of several statments about the architecture, that in total contradict the ArchitectureRule."));
+        concepts.add(
+                new ConformanceConcept(
+                        "Proof",
+                        "Models an instance in the architecture where an ArchitectureRule is not met. A proof verifies an ArchitectureViolation by several statements about the architecture, that in total contradict the ArchitectureRule."));
+        concepts.add(
+                new ConformanceConcept(
+                        "AssertedStatement",
+                        "Models a fact about the architecture, which in combination with other statements about the architecture is used to prove ArchitectureViolations."));
+        concepts.add(
+                new ConformanceConcept(
+                        "NotInferredStatement",
+                        "Models a statement about the architecture that can not be deducted from it, which in combination with other statements about the architecture is used to prove ArchitectureViolations."));
     }
 
     public List<Concept> getInputConcepts() {
