@@ -13,13 +13,17 @@ public class SubjectComponent extends RuleComponent {
     private static final long serialVersionUID = 1L;
     private ComboBox<String> firstCombobox;
     private TextField firstConcept;
-    private Checkbox statementCheckbox;
+    private Checkbox conditionCheckbox;
     private ConditionComponent newCondition;
+    private HorizontalLayout mainSubjectBox;
+    private boolean showFirstConcept = true;
 
     public SubjectComponent() {
         this.add(new Label("Rule Subject"));
         this.getStyle().set("border", "1px solid black");
-        HorizontalLayout mainSubjectBox = new HorizontalLayout();
+        this.setMargin(false);
+        
+        mainSubjectBox = new HorizontalLayout();        
         List<String> firstStatements =
                 Arrays.asList(
                         "Every",
@@ -38,16 +42,37 @@ public class SubjectComponent extends RuleComponent {
                         "No an");
         firstCombobox = new ComboBox<String>("Modifier", firstStatements);
         firstCombobox.setValue("Every");
+        firstCombobox.addValueChangeListener(
+                e -> {
+                    firstComboboxListener(firstCombobox.getValue());
+                });
 
         firstConcept = new TextField("Concept");
-        // firstConcept.setPlaceholder("Aggregate");
-        statementCheckbox = new Checkbox("that... (add condition)");
-        mainSubjectBox.setVerticalComponentAlignment(Alignment.END, statementCheckbox);
-        statementCheckbox.addClickListener(e -> addCondition(statementCheckbox.getValue()));
-        mainSubjectBox.add(firstCombobox, firstConcept, statementCheckbox);
+
+        conditionCheckbox = new Checkbox("that... (add condition)");
+        conditionCheckbox.addClickListener(e -> addCondition(conditionCheckbox.getValue()));
+        mainSubjectBox.setVerticalComponentAlignment(Alignment.END, conditionCheckbox);       
+        mainSubjectBox.add(firstCombobox, firstConcept, conditionCheckbox);
 
         newCondition = new ConditionComponent();
         add(mainSubjectBox);
+    }
+    
+    private void firstComboboxListener(String value) {
+        if(value.equals("Nothing"))
+        {
+            mainSubjectBox.remove(firstConcept, conditionCheckbox);
+            showFirstConcept = false;
+        }
+        else if(value.equals("Fact:"))
+        {
+            mainSubjectBox.remove(conditionCheckbox);
+        }
+        else
+        {
+            mainSubjectBox.add(firstConcept, conditionCheckbox);
+            showFirstConcept = true;
+        }
     }
 
     public void addCondition(Boolean showCondition) {
@@ -61,9 +86,12 @@ public class SubjectComponent extends RuleComponent {
     public String getString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(firstCombobox.getValue() + " ");
-        sBuilder.append(firstConcept.getValue() + " ");
-        if (statementCheckbox.getValue()) {
-            sBuilder.append(newCondition.getString());
+        if(showFirstConcept)
+        {
+            sBuilder.append(firstConcept.getValue() + " ");
+            if (conditionCheckbox.getValue()) {
+                sBuilder.append(newCondition.getString());
+            }
         }
         return sBuilder.toString();
     }

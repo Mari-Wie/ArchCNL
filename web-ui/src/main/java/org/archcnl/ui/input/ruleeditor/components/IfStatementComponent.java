@@ -1,14 +1,15 @@
 package org.archcnl.ui.input.ruleeditor.components;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import java.util.Arrays;
-import java.util.List;
 
-public class VerbComponent extends RuleComponent {
+public class IfStatementComponent extends RuleComponent {
 
     private static final long serialVersionUID = 1L;
     private ComboBox<String> firstCombobox, secondCombobox;
@@ -18,7 +19,7 @@ public class VerbComponent extends RuleComponent {
     private Checkbox conditionCheckbox;
     private ConditionComponent newCondition;
 
-    public VerbComponent() {
+    public IfStatementComponent() {
         this.add(new Label("Rule Statement"));
         this.getStyle().set("border", "1px solid black");
         

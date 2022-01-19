@@ -18,7 +18,11 @@ public class ConditionComponent extends RuleComponent {
     private ConditionComponent newCondition;
 
     public ConditionComponent() {
+        setMargin(false);
+        setPadding(false);
         HorizontalLayout conditionBox = new HorizontalLayout();
+        conditionBox.setMargin(false);
+        
         startLabelTextfield = new Label("that (");
         conditionBox.setVerticalComponentAlignment(Alignment.END, startLabelTextfield);
         firstRelation = new TextField("Relation");
