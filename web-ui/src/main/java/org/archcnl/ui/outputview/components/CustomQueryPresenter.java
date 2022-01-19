@@ -1,18 +1,19 @@
 package org.archcnl.ui.outputview.components;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.output.model.query.Query;
+import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
@@ -23,17 +24,23 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEve
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.outputview.events.ResultUpdateEvent;
+import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
+import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
+import org.archcnl.ui.outputview.events.UpdateQueryTextButtonPressedEvent;
 
 @Tag("CustomQueryPresenter")
 public class CustomQueryPresenter extends Component {
 
     private static final long serialVersionUID = -2223963205535144587L;
+    private static final String DEFAULT_NAME = "Pinned Custom Query";
     private CustomQueryView view;
     private AndTripletsEditorPresenter wherePresenter;
     private VariableManager variableManager;
+    private String queryName;
 
-    public CustomQueryPresenter() throws PropertyNotFoundException {
+    public CustomQueryPresenter() {
+        queryName = DEFAULT_NAME;
         wherePresenter = new AndTripletsEditorPresenter(false);
         view = new CustomQueryView(wherePresenter.getAndTripletsEditorView());
         variableManager = new VariableManager();
@@ -49,7 +56,22 @@ public class CustomQueryPresenter extends Component {
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
         view.addListener(VariableSelectedEvent.class, this::handleEvent);
-        view.addListener(ResultUpdateEvent.class, this::handleEvent);
+        view.addListener(
+                RunButtonPressedEvent.class,
+                e -> {
+                    e.setQuery(makeQuery());
+                    fireEvent(e);
+                });
+        view.addListener(UpdateQueryTextButtonPressedEvent.class, this::handleEvent);
+        view.addListener(
+                PinQueryButtonPressedEvent.class,
+                e -> {
+                    queryName = view.getQueryName().orElse(DEFAULT_NAME);
+                    view.setQueryName(queryName);
+                    // TODO: Allow pinning after implementing cloning
+                    view.setPinButtonVisible(false);
+                    fireEvent(new PinQueryRequestedEvent(this, true));
+                });
 
         wherePresenter.addListener(
                 VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
@@ -85,12 +107,12 @@ public class CustomQueryPresenter extends Component {
         }
     }
 
-    private void handleEvent(ResultUpdateEvent event) {
-        view.getGridView().update(getQuery());
+    private void handleEvent(UpdateQueryTextButtonPressedEvent event) {
+        view.setQueryTextArea(getQuery());
     }
 
     private Query makeQuery() {
-        Set<QueryNamespace> namespaces = getNamespaces();
+        Set<QueryNamespace> namespaces = QueryUtils.getNamespaces();
         SelectClause selectClause =
                 new SelectClause(
                         view.getSelectComponents().stream()
@@ -109,27 +131,6 @@ public class CustomQueryPresenter extends Component {
         return makeQuery().transformToGui();
     }
 
-    private Set<QueryNamespace> getNamespaces() {
-        final QueryNamespace rdf =
-                new QueryNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns");
-        final QueryNamespace owl = new QueryNamespace("owl", "http://www.w3.org/2002/07/owl");
-        final QueryNamespace rdfs =
-                new QueryNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema");
-        final QueryNamespace xsd = new QueryNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
-        final QueryNamespace conformance =
-                new QueryNamespace(
-                        "conformance", "http://arch-ont.org/ontologies/architectureconformance");
-        final QueryNamespace famix =
-                new QueryNamespace("famix", "http://arch-ont.org/ontologies/famix.owl");
-        final QueryNamespace architecture =
-                new QueryNamespace(
-                        "architecture", "http://www.arch-ont.org/ontologies/architecture.owl");
-        final QueryNamespace main =
-                new QueryNamespace("main", "http://arch-ont.org/ontologies/main.owl");
-        return new LinkedHashSet<>(
-                Arrays.asList(rdf, owl, rdfs, xsd, conformance, famix, architecture, main));
-    }
-
     private Optional<Variable> getOptionalVariable(
             VariableSelectionComponent variableSelectionComponent) {
         try {
@@ -137,5 +138,15 @@ public class CustomQueryPresenter extends Component {
         } catch (SubjectOrObjectNotDefinedException | InvalidVariableNameException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
+
+    public String getQueryName() {
+        return queryName;
     }
 }

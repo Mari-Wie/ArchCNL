@@ -28,4 +28,9 @@ public class ResultRepositoryImpl implements ResultRepository {
     public Optional<Result> executeNativeSelectQuery(final Query query) {
         return db.executeSelectQuery(query.transformToSparqlQuery());
     }
+
+    @Override
+    public Optional<Result> executeNativeSelectQuery(final String query) {
+        return db.executeSelectQuery(query);
+    }
 }

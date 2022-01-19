@@ -91,7 +91,7 @@ public class ObjectView extends HorizontalLayout {
 
     public void predicateHasChanged(Optional<Relation> relationOptional) {
         removeAll();
-        if (relationOptional.isPresent()) {
+        if (relationOptional != null && relationOptional.isPresent()) {
             Relation relation = relationOptional.get();
             if (relation instanceof TypeRelation) {
                 switchToConceptView();

@@ -5,13 +5,16 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
@@ -23,7 +26,9 @@ import org.archcnl.ui.common.variablelistview.VariableListView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
-import org.archcnl.ui.outputview.events.ResultUpdateEvent;
+import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
+import org.archcnl.ui.outputview.events.UpdateQueryTextButtonPressedEvent;
 
 public class CustomQueryView extends HorizontalLayout {
 
@@ -35,9 +40,10 @@ public class CustomQueryView extends HorizontalLayout {
     private VariableListView variableListView;
     private GridView gridView;
     private TextArea queryTextArea;
+    private TextField queryName;
+    private Button pinButton;
 
-    public CustomQueryView(AndTripletsEditorView andTripletsEditorView)
-            throws PropertyNotFoundException {
+    public CustomQueryView(AndTripletsEditorView andTripletsEditorView) {
         super();
         initConceptAndRelationView();
         content = new VerticalLayout();
@@ -46,26 +52,53 @@ public class CustomQueryView extends HorizontalLayout {
         gridView = new GridView();
         queryTextArea = new TextArea("SPARQL Query");
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
+        queryName = new TextField("Name");
+        queryName.setPlaceholder("Name of this query");
+        pinButton =
+                new Button(
+                        new Icon(VaadinIcon.PIN),
+                        click -> fireEvent(new PinQueryButtonPressedEvent(this, true)));
 
         getStyle().set("overflow", "visible");
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         queryTextArea.setReadOnly(true);
+        queryTextArea.setVisible(false);
         addVariableSelectionComponent();
+        Label caption = new Label("Create a custom query");
+        HorizontalLayout topRow = new HorizontalLayout(caption, pinButton);
+        topRow.setWidthFull();
+        caption.setWidthFull();
+        Button runButton =
+                new Button("Run", e -> fireEvent(new RunButtonPressedEvent(gridView, true)));
+        Button showQueryTextButton =
+                new Button(
+                        "Update query text",
+                        e -> fireEvent(new UpdateQueryTextButtonPressedEvent(this, true)));
+        HorizontalLayout buttonRow = new HorizontalLayout(runButton, showQueryTextButton);
 
         content.getStyle().set("overflow", "auto");
         content.setWidth(CONTENT_RATIO, Unit.PERCENTAGE);
-        content.add(new Label("Create a custom query"));
+        content.add(topRow);
+        content.add(queryName);
         content.add(variableListView);
         content.add(new Label("Select"));
         content.add(select);
         content.add(new Label("Where"));
         content.add(andTripletsEditorView);
-        content.add(new Button("Run", e -> fireEvent(new ResultUpdateEvent(this, false))));
+        content.add(buttonRow);
         content.add(gridView);
         content.add(queryTextArea);
 
         addAndExpand(content, conceptAndRelationView);
+    }
+
+    public Optional<String> getQueryName() {
+        return queryName.getOptionalValue();
+    }
+
+    public void setQueryName(String name) {
+        queryName.setValue(name);
     }
 
     public VariableListView getVariableListView() {
@@ -107,6 +140,11 @@ public class CustomQueryView extends HorizontalLayout {
         select.remove(variableSelectionComponent);
     }
 
+    public void setQueryTextArea(String queryText) {
+        queryTextArea.setVisible(true);
+        queryTextArea.setValue(queryText);
+    }
+
     public boolean isAnyVariableSelectionComponentEmpty() {
         return select.getChildren()
                 .filter(VariableSelectionComponent.class::isInstance)
@@ -126,6 +164,10 @@ public class CustomQueryView extends HorizontalLayout {
                         .filter(component -> component.getOptionalValue().isPresent())
                         .count();
         return componentsCount - nonEmptyComponentsCount >= 2;
+    }
+
+    public void setPinButtonVisible(boolean visible) {
+        pinButton.setVisible(visible);
     }
 
     @Override

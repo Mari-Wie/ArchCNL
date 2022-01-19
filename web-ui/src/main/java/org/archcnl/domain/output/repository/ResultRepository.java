@@ -16,4 +16,6 @@ public interface ResultRepository {
      * @return Result or Optional.empty when nothing found
      */
     Optional<Result> executeNativeSelectQuery(final Query query);
+
+    Optional<Result> executeNativeSelectQuery(final String query);
 }

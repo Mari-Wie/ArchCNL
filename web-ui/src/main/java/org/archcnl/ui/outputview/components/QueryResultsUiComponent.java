@@ -6,13 +6,12 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
 
-    GeneralInfoLayout generalInfoLayout;
+    private GeneralInfoLayout generalInfoLayout;
 
-    public QueryResultsUiComponent() throws PropertyNotFoundException {
+    public QueryResultsUiComponent(GridView gridView) throws PropertyNotFoundException {
+        this.gridView = gridView;
         generalInfoLayout = new GeneralInfoLayout();
-        gridView.update(exampleQuery);
         queryTextArea.setReadOnly(true);
-        registerEventListeners();
         addComponents();
     }
 
