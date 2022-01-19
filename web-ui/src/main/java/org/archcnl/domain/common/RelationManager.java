@@ -102,21 +102,50 @@ public class RelationManager {
     private void initializeSpecialRelations() {
         final List<ActualObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));
-        relations.add(new JenaBuiltinRelation("matches", "regex", "", stringConcept));
+        relations.add(
+                new JenaBuiltinRelation(
+                        "matches",
+                        "regex",
+                        "This relation is used to state that a literal given as the subject matches against the regular expression pattern stated in the object. The syntax of the regular expression pattern is according to java.util.regex.",
+                        stringConcept));
     }
 
     private void initializeTypeRelation() {
-        relations.add(new TypeRelation("is-of-type", "type", ""));
+        relations.add(
+                new TypeRelation(
+                        "is-of-type",
+                        "type",
+                        "This relation is used to state that the subject is an instance of the class stated in the object."));
     }
 
     private void initializeStringRelations() {
         final List<ActualObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));
-        relations.add(new FamixRelation("hasModifier", "", stringConcept));
-        relations.add(new FamixRelation("hasName", "", stringConcept));
-        relations.add(new FamixRelation("hasSignature", "", stringConcept));
-        relations.add(new FamixRelation("hasValue", "", stringConcept));
-        relations.add(new FamixRelation("hasFullQualifiedName", "", stringConcept));
+        relations.add(
+                new FamixRelation(
+                        "hasModifier",
+                        "This relation is used to state that the subject has a modifier with the name stated in the object. Examples for modifiers are access modifiers (e.g. public) and mutability modifiers (e.g. final).",
+                        stringConcept));
+        relations.add(
+                new FamixRelation(
+                        "hasName",
+                        "This relation is used to state that the subject has the name which is stated in the object.",
+                        stringConcept));
+        relations.add(
+                new FamixRelation(
+                        "hasSignature",
+                        "This relation is used to state that a method has the signature which is stated in the object.",
+                        stringConcept));
+        relations.add(
+                new FamixRelation(
+                        "hasValue",
+                        "This relation is used to state that an AnnotationInstanceAttribute (which is an attribute-value pair) has the value which is stated in the object.",
+                        stringConcept));
+        relations.add(
+                new FamixRelation(
+                        "hasFullQualifiedName",
+                        "This relation is used to state that an entity has the name which is stated in the object.",
+                        stringConcept));
     }
 
     private void initializeBoolRelations() {
