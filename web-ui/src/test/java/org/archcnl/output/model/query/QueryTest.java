@@ -249,29 +249,29 @@ public class QueryTest {
     }
 
     private String getDefaultNamespacesAsFormattedString() {
-        return "PREFIX rdf <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
                 + System.lineSeparator()
-                + "PREFIX owl <http://www.w3.org/2002/07/owl#>"
+                + "PREFIX owl: <http://www.w3.org/2002/07/owl#>"
                 + System.lineSeparator()
-                + "PREFIX rdfs <http://www.w3.org/2000/01/rdf-schema#>"
+                + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
                 + System.lineSeparator()
-                + "PREFIX xsd <http://www.w3.org/2001/XMLSchema#>"
+                + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>"
                 + System.lineSeparator()
-                + "PREFIX conformance <http://arch-ont.org/ontologies/architectureconformance#>"
+                + "PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>"
                 + System.lineSeparator()
-                + "PREFIX famix <http://arch-ont.org/ontologies/famix.owl#>"
+                + "PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>"
                 + System.lineSeparator()
-                + "PREFIX architecture <http://www.arch-ont.org/ontologies/architecture.owl#>"
+                + "PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>"
                 + System.lineSeparator();
     }
 
     private String getDefaultNamespacesAsFormattedQuery() {
-        return "PREFIX rdf <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
-                + "PREFIX owl <http://www.w3.org/2002/07/owl#> "
-                + "PREFIX rdfs <http://www.w3.org/2000/01/rdf-schema#> "
-                + "PREFIX xsd <http://www.w3.org/2001/XMLSchema#> "
-                + "PREFIX conformance <http://arch-ont.org/ontologies/architectureconformance#> "
-                + "PREFIX famix <http://arch-ont.org/ontologies/famix.owl#> "
-                + "PREFIX architecture <http://www.arch-ont.org/ontologies/architecture.owl#>";
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+                + "PREFIX owl: <http://www.w3.org/2002/07/owl#> "
+                + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+                + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "
+                + "PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#> "
+                + "PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#> "
+                + "PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>";
     }
 }
