@@ -15,12 +15,13 @@ public class MappingListLayout extends TreeGrid<MappingListEntry> {
 
     private static final long serialVersionUID = 3L;
 
-    public MappingListLayout(final List<MappingListEntry> entries) {
+    public MappingListLayout(final List<MappingListEntry> entries, final boolean inputSide) {
         super();
         setItems(entries, MappingListEntry::getChildren);
         addComponentHierarchyColumn(
                 entry -> {
-                    final MappingListEntryLayout entryLayout = new MappingListEntryLayout(entry);
+                    final MappingListEntryLayout entryLayout =
+                            new MappingListEntryLayout(entry, inputSide);
                     entryLayout.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
                     entryLayout.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
 

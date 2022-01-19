@@ -83,7 +83,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
         }
-        conceptTreeGrid = new MappingListLayout(conceptData);
+        conceptTreeGrid = new MappingListLayout(conceptData, inputSide);
         conceptTreeGrid.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
         conceptTreeGrid.expandRecursively(
                 conceptData, ConceptAndRelationView.DEFAULT_EXPANSION_DEPTH);
@@ -110,7 +110,7 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         if (relationTreeGrid != null) {
             createNewRelationLayout.remove(relationTreeGrid);
         }
-        relationTreeGrid = new MappingListLayout(relationData);
+        relationTreeGrid = new MappingListLayout(relationData, inputSide);
         relationTreeGrid.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
         relationTreeGrid.expandRecursively(
                 relationData, ConceptAndRelationView.DEFAULT_EXPANSION_DEPTH);

@@ -20,7 +20,7 @@ public class MappingListEntryLayout extends HorizontalLayout {
     private Button editButton;
     private Button deleteButton;
 
-    public MappingListEntryLayout(final MappingListEntry entry) {
+    public MappingListEntryLayout(final MappingListEntry entry, final boolean inputSide) {
         this.entry = entry;
         setWidthFull(); // TODO: Tooltip only works when hovering over the text or buttons
 
@@ -30,8 +30,10 @@ public class MappingListEntryLayout extends HorizontalLayout {
         if (entry.isLeaf() && entry.isAlterable()) {
             editButton = new Button(new Icon(VaadinIcon.EDIT), click -> editButtonPressed());
             deleteButton = new Button(new Icon(VaadinIcon.TRASH), click -> deleteButtonPressed());
-            add(editButton);
-            add(deleteButton);
+            if (inputSide) {
+                add(editButton);
+                add(deleteButton);
+            }
             getElement().setAttribute("title", entry.getDescription());
         }
     }
