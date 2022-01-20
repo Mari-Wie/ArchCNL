@@ -2,7 +2,6 @@ package org.archcnl.ui.outputview.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
@@ -23,7 +22,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                     "Run",
                     e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
 
-    public FreeTextQueryUiComponent() throws PropertyNotFoundException {
+    public FreeTextQueryUiComponent() {
         final String query = QueryUtils.getDefaultQuery().transformToGui();
         defaultQueryButton = new Button("Default Query", e -> queryTextArea.setValue(query));
         buttonBar =

@@ -6,7 +6,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.output.model.query.QueryUtils;
 
 public abstract class AbstractQueryResultsComponent extends VerticalLayout {
@@ -16,7 +15,7 @@ public abstract class AbstractQueryResultsComponent extends VerticalLayout {
     protected GridView gridView;
     protected TextArea queryTextArea;
 
-    protected AbstractQueryResultsComponent() throws PropertyNotFoundException {
+    protected AbstractQueryResultsComponent() {
         setHeightFull();
         getStyle().set("overflow", "auto");
         gridView = new GridView();
