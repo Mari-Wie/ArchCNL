@@ -15,15 +15,15 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
+import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorPresenter;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableFilterChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.MappingAlreadyExistsException;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.SubjectOrObjectNotDefinedException;
 
 public class RelationEditorPresenter extends MappingEditorPresenter {
 
@@ -36,7 +36,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         this.relation = Optional.empty();
         view =
                 new RelationEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
         addThenTripletListeners();
         initializeView(view);
     }
@@ -46,7 +46,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
         this.relation = Optional.of(relation);
         view =
                 new RelationEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
         addThenTripletListeners();
         initializeView(view, RelationEditorPresenter.extractAndTriplets(relation));
     }

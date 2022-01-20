@@ -18,15 +18,15 @@ import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.ui.common.ButtonClickResponder;
-import org.archcnl.ui.common.OkCancelDialog;
+import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
+import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
+import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
+import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.dialogs.OkCancelDialog;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorPresenter;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.AndTripletsEditorView;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableFilterChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.andtriplets.triplets.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCancelButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCloseButtonClicked;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
@@ -86,9 +86,9 @@ public abstract class MappingEditorPresenter extends Component {
         andTripletsPresenters.clear();
         andTripletsList.forEach(
                 andTriplets -> {
-                    final AndTripletsEditorPresenter andTripletsPresenter =
-                            new AndTripletsEditorPresenter();
-                    final AndTripletsEditorView andTripletsView =
+                    AndTripletsEditorPresenter andTripletsPresenter =
+                            new AndTripletsEditorPresenter(true);
+                    AndTripletsEditorView andTripletsView =
                             prepareAndTripletsEditorView(andTripletsPresenter);
                     andTripletsPresenter.showAndTriplets(andTriplets);
                     view.addNewAndTripletsView(andTripletsView);
@@ -120,7 +120,8 @@ public abstract class MappingEditorPresenter extends Component {
 
     private void addNewAndTripletsViewAfter(final AndTripletsEditorView oldAndTripletsView) {
         view.addNewAndTripletsViewAfter(
-                oldAndTripletsView, prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+                oldAndTripletsView,
+                prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
     }
 
     private void deleteAndTripletsView(final AndTripletsEditorView andTripletsView) {
@@ -149,7 +150,8 @@ public abstract class MappingEditorPresenter extends Component {
     }
 
     private void lastAndTripletsViewDeleted() {
-        view.addNewAndTripletsView(prepareAndTripletsEditorView(new AndTripletsEditorPresenter()));
+        view.addNewAndTripletsView(
+                prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
     }
 
     private void doneButtonClicked() {
