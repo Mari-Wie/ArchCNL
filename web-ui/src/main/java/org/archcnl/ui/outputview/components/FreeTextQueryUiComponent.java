@@ -2,12 +2,7 @@ package org.archcnl.ui.outputview.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import java.util.NoSuchElementException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
@@ -15,7 +10,6 @@ import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
 public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LogManager.getLogger(FreeTextQueryUiComponent.class);
 
     private HorizontalLayout buttonBar;
     private Button clearButton = new Button("Clear", e -> queryTextArea.clear());
@@ -31,14 +25,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     public FreeTextQueryUiComponent() throws PropertyNotFoundException {
         String defaultQuery = "";
-        try {
-            defaultQuery = QueryUtils.getDefaultQuery().transformToGui();
-        } catch (NoSuchElementException
-                | UnsupportedObjectTypeInTriplet
-                | InvalidVariableNameException e) {
-            FreeTextQueryUiComponent.LOG.error(
-                    "Construction of default query failed due to {}", e.getMessage());
-        }
+        defaultQuery = QueryUtils.getDefaultQuery().transformToGui();
         final String query = defaultQuery; // The compiler complains without this line
         defaultQueryButton = new Button("Default Query", e -> queryTextArea.setValue(query));
         buttonBar =

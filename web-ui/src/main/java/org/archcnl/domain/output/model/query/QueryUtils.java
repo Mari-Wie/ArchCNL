@@ -20,61 +20,71 @@ public class QueryUtils {
 
     private QueryUtils() {}
 
-    public static Query getDefaultQuery()
-            throws UnsupportedObjectTypeInTriplet, InvalidVariableNameException,
-                    NoSuchElementException {
+    public static Query getDefaultQuery() {
 
         RelationManager relationManager =
                 RulesConceptsAndRelations.getInstance().getRelationManager();
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
 
-        Variable cnl = new Variable("cnl");
-        Variable violation = new Variable("violation");
-        Variable subject = new Variable("subject");
-        Variable rule = new Variable("rule");
-        Variable name = new Variable("name");
-        Variable statement = new Variable("statement");
-        Variable proof = new Variable("proof");
+        try {
+            Variable cnl = new Variable("cnl");
+            Variable violation = new Variable("violation");
+            Variable subject = new Variable("subject");
+            Variable rule = new Variable("rule");
+            Variable name = new Variable("name");
+            Variable statement = new Variable("statement");
+            Variable proof = new Variable("proof");
 
-        Triplet triplet1 =
-                TripletFactory.createTriplet(
-                        rule,
-                        relationManager.getRelationByName("is-of-type").get(),
-                        conceptManager.getConceptByName("ArchitectureRule").get());
-        Triplet triplet2 =
-                TripletFactory.createTriplet(
-                        rule,
-                        relationManager.getRelationByName("hasRuleRepresentation").get(),
-                        cnl);
-        Triplet triplet3 =
-                TripletFactory.createTriplet(
-                        violation, relationManager.getRelationByName("violates").get(), rule);
-        Triplet triplet4 =
-                TripletFactory.createTriplet(
-                        proof, relationManager.getRelationByName("proofs").get(), violation);
-        Triplet triplet5 =
-                TripletFactory.createTriplet(
-                        proof,
-                        relationManager.getRelationByName("hasAssertedStatement").get(),
-                        statement);
-        Triplet triplet6 =
-                TripletFactory.createTriplet(
-                        statement, relationManager.getRelationByName("hasSubject").get(), subject);
-        Triplet triplet7 =
-                TripletFactory.createTriplet(
-                        subject, relationManager.getRelationByName("hasName").get(), name);
+            Triplet triplet1 =
+                    TripletFactory.createTriplet(
+                            rule,
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("ArchitectureRule").get());
+            Triplet triplet2 =
+                    TripletFactory.createTriplet(
+                            rule,
+                            relationManager.getRelationByName("hasRuleRepresentation").get(),
+                            cnl);
+            Triplet triplet3 =
+                    TripletFactory.createTriplet(
+                            violation, relationManager.getRelationByName("violates").get(), rule);
+            Triplet triplet4 =
+                    TripletFactory.createTriplet(
+                            proof, relationManager.getRelationByName("proofs").get(), violation);
+            Triplet triplet5 =
+                    TripletFactory.createTriplet(
+                            proof,
+                            relationManager.getRelationByName("hasAssertedStatement").get(),
+                            statement);
+            Triplet triplet6 =
+                    TripletFactory.createTriplet(
+                            statement,
+                            relationManager.getRelationByName("hasSubject").get(),
+                            subject);
+            Triplet triplet7 =
+                    TripletFactory.createTriplet(
+                            subject, relationManager.getRelationByName("hasName").get(), name);
 
-        SelectClause selectClause = new SelectClause(new LinkedHashSet<>(Arrays.asList(cnl, name)));
+            SelectClause selectClause =
+                    new SelectClause(new LinkedHashSet<>(Arrays.asList(cnl, name)));
 
-        WhereClause whereClause =
-                new WhereClause(
-                        new AndTriplets(
-                                new LinkedList<>(
-                                        Arrays.asList(
-                                                triplet1, triplet2, triplet3, triplet4, triplet5,
-                                                triplet6, triplet7))));
+            WhereClause whereClause =
+                    new WhereClause(
+                            new AndTriplets(
+                                    new LinkedList<>(
+                                            Arrays.asList(
+                                                    triplet1, triplet2, triplet3, triplet4,
+                                                    triplet5, triplet6, triplet7))));
 
-        return new Query(getNamespaces(), selectClause, whereClause);
+            return new Query(getNamespaces(), selectClause, whereClause);
+
+        } catch (InvalidVariableNameException
+                | UnsupportedObjectTypeInTriplet
+                | NoSuchElementException e) {
+
+            throw new RuntimeException(
+                    "Construction of default query failed due to: " + e.getMessage());
+        }
     }
 
     public static Set<QueryNamespace> getNamespaces() {

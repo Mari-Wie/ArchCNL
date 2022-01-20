@@ -6,14 +6,11 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
@@ -124,15 +121,9 @@ public class OutputView extends HorizontalLayout {
 
     private GridView prepareDefaultQueryGridView() {
         GridView gridView = new GridView();
-        try {
-            Optional<Result> result =
-                    resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
-            gridView.update(result);
-        } catch (NoSuchElementException
-                | UnsupportedObjectTypeInTriplet
-                | InvalidVariableNameException e) {
-            OutputView.LOG.error("Construction of default query failed due to {}", e.getMessage());
-        }
+        Optional<Result> result =
+                resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
+        gridView.update(result);
         return gridView;
     }
 
