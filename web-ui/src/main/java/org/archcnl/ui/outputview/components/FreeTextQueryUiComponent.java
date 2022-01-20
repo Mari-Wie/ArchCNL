@@ -23,8 +23,10 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                     e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
 
     public FreeTextQueryUiComponent() {
-        final String query = QueryUtils.getDefaultQuery().transformToGui();
-        defaultQueryButton = new Button("Default Query", e -> queryTextArea.setValue(query));
+        defaultQueryButton =
+                new Button(
+                        "Default Query",
+                        e -> queryTextArea.setValue(QueryUtils.getDefaultQuery().transformToGui()));
         buttonBar =
                 new HorizontalLayout(
                         clearButton, defaultQueryButton, importCustomQueryButton, runButton);
