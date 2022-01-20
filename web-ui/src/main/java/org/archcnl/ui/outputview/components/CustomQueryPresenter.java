@@ -27,6 +27,7 @@ import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDe
 import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
 import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
 import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
+import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
 import org.archcnl.ui.outputview.events.UpdateQueryTextButtonPressedEvent;
 
 @Tag("CustomQueryPresenter")
@@ -58,10 +59,10 @@ public class CustomQueryPresenter extends Component {
         view.addListener(VariableSelectedEvent.class, this::handleEvent);
         view.addListener(
                 RunButtonPressedEvent.class,
-                e -> {
-                    e.setQuery(makeQuery());
-                    fireEvent(e);
-                });
+                e ->
+                        fireEvent(
+                                new RunQueryRequestedEvent(
+                                        this, true, makeQuery(), view.getGridView())));
         view.addListener(UpdateQueryTextButtonPressedEvent.class, this::handleEvent);
         view.addListener(
                 PinQueryButtonPressedEvent.class,

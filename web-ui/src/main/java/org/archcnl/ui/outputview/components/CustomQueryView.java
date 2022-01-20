@@ -69,8 +69,7 @@ public class CustomQueryView extends HorizontalLayout {
         HorizontalLayout topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
         caption.setWidthFull();
-        Button runButton =
-                new Button("Run", e -> fireEvent(new RunButtonPressedEvent(gridView, true)));
+        Button runButton = new Button("Run", e -> fireEvent(new RunButtonPressedEvent(this, true)));
         Button showQueryTextButton =
                 new Button(
                         "Update query text",

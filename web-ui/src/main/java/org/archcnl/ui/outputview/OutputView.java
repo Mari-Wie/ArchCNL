@@ -26,7 +26,7 @@ import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
-import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
+import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
 
 public class OutputView extends HorizontalLayout {
 
@@ -73,7 +73,7 @@ public class OutputView extends HorizontalLayout {
         freeTextQuery.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         sideBar.addListener(InputViewRequestedEvent.class, this::fireEvent);
         customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunButtonPressedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
     private void handleEvent(PinQueryRequestedEvent event) {
@@ -81,12 +81,12 @@ public class OutputView extends HorizontalLayout {
         switchToCustomQueryView(event.getSource().getView());
         customQueryPresenter = new CustomQueryPresenter();
         customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunButtonPressedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
-    private void handleEvent(RunButtonPressedEvent event) {
+    private void handleEvent(RunQueryRequestedEvent event) {
         Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
-        event.getSource().update(result);
+        event.getGridView().update(result);
     }
 
     private void handleEvent(FreeTextRunButtonPressedEvent event) {
