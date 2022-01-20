@@ -50,6 +50,7 @@ public class OutputView extends HorizontalLayout {
                         ConfigAppService.getDbName(),
                         ConfigAppService.getDbUsername(),
                         ConfigAppService.getDbPassword());
+        // The execution of the default query should be moved into an OnAttachEvent
         queryResults = new QueryResultsUiComponent(prepareDefaultQueryGridView());
         customQueryPresenter = new CustomQueryPresenter();
         freeTextQuery = new FreeTextQueryUiComponent();
