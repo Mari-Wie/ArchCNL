@@ -24,9 +24,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                     e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
 
     public FreeTextQueryUiComponent() throws PropertyNotFoundException {
-        String defaultQuery = "";
-        defaultQuery = QueryUtils.getDefaultQuery().transformToGui();
-        final String query = defaultQuery; // The compiler complains without this line
+        final String query = QueryUtils.getDefaultQuery().transformToGui();
         defaultQueryButton = new Button("Default Query", e -> queryTextArea.setValue(query));
         buttonBar =
                 new HorizontalLayout(

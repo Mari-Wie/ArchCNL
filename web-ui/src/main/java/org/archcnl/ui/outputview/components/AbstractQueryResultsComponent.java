@@ -22,7 +22,10 @@ public abstract class AbstractQueryResultsComponent extends VerticalLayout {
         gridView = new GridView();
         queryTextArea = new TextArea("SPARQL Query");
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
-        queryTextArea.setValue(QueryUtils.getDefaultQuery().transformToGui());
+        queryTextArea.setValue("QUERY UNINITIALIZED");
+
+        addAttachListener(
+                event -> queryTextArea.setValue(QueryUtils.getDefaultQuery().transformToGui()));
     }
 
     @Override
