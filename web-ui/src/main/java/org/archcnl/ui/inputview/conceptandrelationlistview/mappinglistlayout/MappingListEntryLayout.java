@@ -2,6 +2,7 @@ package org.archcnl.ui.inputview.conceptandrelationlistview.mappinglistlayout;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -12,7 +13,6 @@ import org.archcnl.domain.common.CustomConcept;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
-import com.vaadin.flow.component.Unit;
 
 public class MappingListEntryLayout extends HorizontalLayout {
 
@@ -26,7 +26,7 @@ public class MappingListEntryLayout extends HorizontalLayout {
         setWidthFull(); // TODO: Tooltip only works when hovering over the text or buttons
 
         final Span text = new Span(entry.toString());
-        text.setWidth(100,Unit.PERCENTAGE);
+        text.setWidth(100, Unit.PERCENTAGE);
         addAndExpand(text);
         if (entry.isLeaf() && entry.isAlterable()) {
             editButton = new Button(new Icon(VaadinIcon.EDIT), click -> editButtonPressed());
