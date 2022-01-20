@@ -17,7 +17,7 @@ public class PredicateSelectedEvent extends ComponentEvent<PredicateComponent> {
 
     public void handleEvent(final RelationManager relationManager, final ObjectView objectView) {
         final Optional<String> value = getSource().getSelectedItem();
-        Optional<Relation> relation = null;
+        Optional<Relation> relation = Optional.empty();
         if (value.isPresent()) {
             relation = relationManager.getRelationByName(value.get());
         } else {

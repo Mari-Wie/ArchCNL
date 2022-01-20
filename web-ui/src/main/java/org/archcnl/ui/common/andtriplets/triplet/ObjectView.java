@@ -91,9 +91,7 @@ public class ObjectView extends HorizontalLayout {
 
     public void predicateHasChanged(Optional<Relation> relationOptional) {
         removeAll();
-        // Null check is a temporary fix to prevent a NullPointerException
-        // that occured when a ValueChangedEvent with null is thrown during QueryEditor switching
-        if (relationOptional != null && relationOptional.isPresent()) {
+        if (relationOptional.isPresent()) {
             Relation relation = relationOptional.get();
             if (relation instanceof TypeRelation) {
                 switchToConceptView();
