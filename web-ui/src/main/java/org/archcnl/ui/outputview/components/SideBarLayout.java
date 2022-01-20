@@ -1,5 +1,6 @@
 package org.archcnl.ui.outputview.components;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -13,19 +14,19 @@ public class SideBarLayout extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    OutputView parent;
-    Button gotoQueryViewButton = new Button("General Information", e -> parent.switchToQueryView());
-    Button gotoCustomQueryViewButton =
-            new Button("Custom Queries", e -> parent.switchToCustomQueryView());
-    Button gotoFreeTextQueryViewButton =
-            new Button("Free Text Queries", e -> parent.switchToFreeTextQueryView());
+    private OutputView parent;
+    private Button gotoCustomQueryViewButton;
+    private VerticalLayout queryOptions;
 
     public SideBarLayout(final OutputView parent) {
         this.parent = parent;
-        gotoQueryViewButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        gotoCustomQueryViewButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        gotoFreeTextQueryViewButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        final VerticalLayout queryOptions =
+        Button gotoQueryViewButton =
+                prepareButton("General Information", e -> parent.switchToQueryView());
+        gotoCustomQueryViewButton =
+                prepareButton("Custom Queries", e -> parent.switchToCustomQueryView());
+        Button gotoFreeTextQueryViewButton =
+                prepareButton("Free Text Queries", e -> parent.switchToFreeTextQueryView());
+        queryOptions =
                 new VerticalLayout(
                         gotoQueryViewButton,
                         gotoCustomQueryViewButton,
@@ -42,6 +43,21 @@ public class SideBarLayout extends VerticalLayout {
         setFlexGrow(1, queryOptions);
         setFlexGrow(0, returnToRuleEditorButton);
         getStyle().set("background-color", "#3458eb");
+    }
+
+    private Button prepareButton(
+            String text, ComponentEventListener<ClickEvent<Button>> clickListener) {
+        Button newButton = new Button(text, clickListener);
+        newButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        return newButton;
+    }
+
+    public void addPinnedCustomQueryButton(CustomQueryPresenter customQueryPresenter) {
+        Button newButton =
+                prepareButton(
+                        customQueryPresenter.getQueryName(),
+                        e -> parent.switchToCustomQueryView(customQueryPresenter.getView()));
+        queryOptions.addComponentAtIndex(2, newButton); // Add after standard custom query option
     }
 
     @Override

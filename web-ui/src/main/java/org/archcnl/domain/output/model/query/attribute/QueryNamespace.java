@@ -28,7 +28,7 @@ public class QueryNamespace implements FormattedQueryDomainObject, FormattedView
         final StringBuilder sb = new StringBuilder();
         sb.append("PREFIX ");
         sb.append(alias);
-        sb.append(" <");
+        sb.append(": <");
         sb.append(uri);
         sb.append("#>");
         return sb.toString();
