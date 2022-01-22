@@ -6,6 +6,9 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +18,7 @@ import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
+import org.archcnl.toolchain.CNLToolchain;
 import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.CustomQueryView;
@@ -39,8 +43,32 @@ public class OutputView extends HorizontalLayout {
     private SideBarLayout sideBar;
     private Component currentComponent;
     private ResultRepository resultRepository;
+       
+    private final String rootDir = "./src/integration-test/resources/";
+    private final String database = "archcnl_it_db";
+    private final String server = "http://localhost:5820";
+    private final String username = "admin";
+    private final String password = "admin";
+    private final String context = "http://graphs.org/" + database + "/1.0";
+    private final String resultPath = rootDir + "result.owl";
+    private final List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
+    private final String ruleFile = rootDir + "OnionArchitectureDemo/rules.adoc";
+    private final boolean verboseLogging = false;
+    private final boolean removeDBs = true;
+    private final List<String> enabledParsers = Arrays.asList("java");
+
 
     public OutputView() throws PropertyNotFoundException {
+    	CNLToolchain.runToolchain(database,
+                server,
+                context,
+                username,
+                password,
+                sourcePaths,
+                ruleFile, 
+                verboseLogging, 
+                removeDBs,
+                enabledParsers);
         resultRepository =
                 new ResultRepositoryImpl(
                         ConfigAppService.getDbUrl(),
