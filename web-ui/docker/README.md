@@ -29,8 +29,8 @@ docker run -it -p 8081:8080 <HASH_OF_IMAGE>
 
 ### Tag and push new image to docker hub
 ```
-docker tag <HASH_OF_IMAGE> trunov/archcnl:0.0.1-SNAPSHOT
-docker push trunov/archcnl:0.0.1-SNAPSHOT
+docker tag <HASH_OF_IMAGE> mariwie/archcnl:0.0.1-SNAPSHOT
+docker push mariwie/archcnl:0.0.1-SNAPSHOT
 ```
 
 <br />
