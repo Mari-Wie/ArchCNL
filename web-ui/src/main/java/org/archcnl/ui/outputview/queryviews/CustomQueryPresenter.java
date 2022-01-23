@@ -71,7 +71,7 @@ public class CustomQueryPresenter extends Component {
                     view.setQueryName(queryName);
                     // TODO: Allow pinning after implementing cloning
                     view.setPinButtonVisible(false);
-                    fireEvent(new PinQueryRequestedEvent(this, true));
+                    fireEvent(new PinQueryRequestedEvent(this, true, getView(), queryName));
                 });
 
         wherePresenter.addListener(
@@ -145,9 +145,5 @@ public class CustomQueryPresenter extends Component {
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
-
-    public String getQueryName() {
-        return queryName;
     }
 }

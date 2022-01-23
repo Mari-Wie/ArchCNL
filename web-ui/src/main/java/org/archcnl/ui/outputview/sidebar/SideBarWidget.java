@@ -1,5 +1,6 @@
 package org.archcnl.ui.outputview.sidebar;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
@@ -20,6 +21,7 @@ public class SideBarWidget extends VerticalLayout {
     private static final long serialVersionUID = 3732746285572139979L;
     private Tabs tabs;
     private SideBarTab customQueryTab;
+    private SideBarTab freeTextQueryTab;
 
     public SideBarWidget(
             QueryResultsUiComponent defaultQueryView,
@@ -29,13 +31,14 @@ public class SideBarWidget extends VerticalLayout {
         getStyle().set("overflow", "hidden");
 
         customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
+        freeTextQueryTab =
+                new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
         tabs =
                 new Tabs(
                         new SideBarTab(
                                 "General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView),
                         customQueryTab,
-                        new SideBarTab(
-                                "Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView));
+                        freeTextQueryTab);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setHeightFull();
 
@@ -58,14 +61,18 @@ public class SideBarWidget extends VerticalLayout {
                 });
     }
 
-    public void addPinnedCustomQueryTab(CustomQueryView customQueryView, String name) {
-        SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, customQueryView);
+    public void addPinnedQueryTab(Component linkedComponent, String name) {
+        SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, linkedComponent);
         tabs.add(newTab);
         tabs.setSelectedTab(newTab);
     }
 
     public void updateCustomQueryTab(CustomQueryView customQueryView) {
         customQueryTab.setLinkedComponent(customQueryView);
+    }
+
+    public void updateFreeTextQueryTab(FreeTextQueryUiComponent freeTextQueryView) {
+        freeTextQueryTab.setLinkedComponent(freeTextQueryView);
     }
 
     @Override

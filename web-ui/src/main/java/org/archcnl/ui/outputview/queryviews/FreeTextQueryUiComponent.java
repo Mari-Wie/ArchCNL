@@ -5,18 +5,22 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
-import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinQueryRequestedEvent;
 
 public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
+    private static final String DEFAULT_NAME = "Pinned Full Text Query";
 
     private HorizontalLayout buttonBar;
     private Button clearButton = new Button("Clear", e -> queryTextArea.clear());
     private Button defaultQueryButton;
+    private TextField queryName;
+    private Button pinButton;
     private Button importCustomQueryButton =
             new Button(
                     "Use Custom Query",
@@ -29,14 +33,26 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     public FreeTextQueryUiComponent() {
         Label caption = new Label("Create a free text query");
-        topRow =
-                new HorizontalLayout(
-                        caption,
-                        new Button(
-                                new Icon(VaadinIcon.PIN),
-                                click -> fireEvent(new PinQueryButtonPressedEvent(this, true))));
+
+        pinButton =
+                new Button(
+                        new Icon(VaadinIcon.PIN),
+                        click -> {
+                            pinButton.setVisible(false);
+                            fireEvent(
+                                    new PinQueryRequestedEvent(
+                                            this,
+                                            true,
+                                            this,
+                                            queryName.getOptionalValue().orElse(DEFAULT_NAME)));
+                        });
+        topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
         caption.setWidthFull();
+
+        queryName = new TextField("Name");
+        queryName.setPlaceholder("Name of this query");
+
         defaultQueryButton =
                 new Button(
                         "Default Query",
@@ -48,6 +64,6 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
     }
 
     protected void addComponents() {
-        add(topRow, queryTextArea, buttonBar, gridView);
+        add(topRow, queryName, queryTextArea, buttonBar, gridView);
     }
 }

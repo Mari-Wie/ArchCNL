@@ -65,25 +65,38 @@ public class OutputView extends HorizontalLayout {
     }
 
     private void registerEventListeners() {
-        freeTextQueryView.addListener(
-                CustomQueryInsertionRequestedEvent.class,
-                e -> this.insertCustomQueryIntoFreeTextQuery());
-        freeTextQueryView.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        addFreeTextQueryListener();
         sideBarWidget.addListener(InputViewRequestedEvent.class, this::fireEvent);
         sideBarWidget.addListener(
                 ShowComponentRequestedEvent.class,
                 event -> switchToComponent(event.getComponent()));
+        addCustomQueryListener();
+    }
+
+    private void addFreeTextQueryListener() {
+        freeTextQueryView.addListener(
+                CustomQueryInsertionRequestedEvent.class,
+                e -> this.insertCustomQueryIntoFreeTextQuery());
+        freeTextQueryView.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        freeTextQueryView.addListener(PinQueryRequestedEvent.class, this::handleEvent);
+    }
+
+    private void addCustomQueryListener() {
         customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
         customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
     private void handleEvent(PinQueryRequestedEvent event) {
-        sideBarWidget.addPinnedCustomQueryTab(
-                event.getSource().getView(), event.getSource().getQueryName());
-        customQueryPresenter = new CustomQueryPresenter();
-        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
-        sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
+        sideBarWidget.addPinnedQueryTab(event.getLinkedComponent(), event.getQueryName());
+        if (event.getSource() instanceof CustomQueryPresenter) {
+            customQueryPresenter = new CustomQueryPresenter();
+            addCustomQueryListener();
+            sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
+        } else {
+            freeTextQueryView = new FreeTextQueryUiComponent();
+            addFreeTextQueryListener();
+            sideBarWidget.updateFreeTextQueryTab(freeTextQueryView);
+        }
     }
 
     private void handleEvent(RunQueryRequestedEvent event) {
