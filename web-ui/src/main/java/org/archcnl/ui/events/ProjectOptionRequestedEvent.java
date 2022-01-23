@@ -9,6 +9,7 @@ import org.archcnl.ui.MainView;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
+import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
 
 public class ProjectOptionRequestedEvent extends ComponentEvent<MainView> {
 
@@ -29,7 +30,7 @@ public class ProjectOptionRequestedEvent extends ComponentEvent<MainView> {
         this.option = option;
     }
 
-    public void handleEvent() {
+    public void handleEvent(MainView mainView) {
         switch (option) {
             case NEW:
                 getSource().showNewTab();
@@ -45,7 +46,11 @@ public class ProjectOptionRequestedEvent extends ComponentEvent<MainView> {
                 }
                 break;
             case SAVE_AS:
-                new SaveProjectDialog().open();
+                SaveProjectDialog dialog = new SaveProjectDialog();
+                dialog.addListener(
+                        ProjectSavedEvent.class,
+                        event -> mainView.setSaveProjectMenuItemEnabled(true));
+                dialog.open();
                 break;
             default:
                 ProjectOptionRequestedEvent.LOG.warn(

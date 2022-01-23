@@ -1,7 +1,5 @@
 package org.archcnl.domain.common;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -15,11 +13,10 @@ public class ProjectManager {
 
     private static final ProjectManager INSTANCE = new ProjectManager();
     private static final String DEFAULT_PROJECT_FILE_NAME = "ArchCNL-architecture_rules.adoc";
-    private PropertyChangeSupport propertyChangeSupport;
     private Optional<File> projectFile;
 
-    private ProjectManager() {
-        propertyChangeSupport = new PropertyChangeSupport(this);
+    public ProjectManager() {
+        this.projectFile = Optional.empty();
     }
 
     public static ProjectManager getInstance() {
@@ -30,23 +27,10 @@ public class ProjectManager {
         return projectFile;
     }
 
-    private void setProjectFile(File projectFile) {
-        propertyChangeSupport.firePropertyChange("projectFile", this.projectFile, projectFile);
-        this.projectFile = Optional.of(projectFile);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(listener);
-    }
-
     public void openProject(File file) throws IOException {
         ArchRulesImporter importer = new ArchRulesFromAdocReader();
         importer.readArchitectureRules(file, RulesConceptsAndRelations.getInstance());
-        setProjectFile(file);
+        this.projectFile = Optional.of(file);
     }
 
     /**
@@ -67,6 +51,7 @@ public class ProjectManager {
     public void saveProject(File file) throws IOException {
         ArchRulesExporter exporter = new ArchRulesToAdocWriter();
         exporter.writeArchitectureRules(file, RulesConceptsAndRelations.getInstance());
+        this.projectFile = Optional.of(file);
     }
 
     public static String getDefaultProjectFileName() {
