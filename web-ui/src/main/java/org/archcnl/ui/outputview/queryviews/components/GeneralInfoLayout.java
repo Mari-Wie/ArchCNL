@@ -4,14 +4,12 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class GeneralInfoLayout extends HorizontalLayout {
+public class GeneralInfoLayout extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    VerticalLayout mainLayout = new VerticalLayout();
     Label layoutLabel = new Label("Statistical Information");
     FormLayout formLayout = new FormLayout();
     Label numberOfViolationsValue = new Label("-1");
@@ -26,8 +24,7 @@ public class GeneralInfoLayout extends HorizontalLayout {
         formLayout.addFormItem(numberOfTypesValue, "Number of Types");
         formLayout.addFormItem(numberOfRelationshipsValue, "Number of Relationships");
         formLayout.getStyle().set("border", "1px solid black");
-        mainLayout.addAndExpand(layoutLabel, formLayout);
-        addAndExpand(mainLayout);
+        add(layoutLabel, formLayout);
     }
 
     public void updateInfo(
