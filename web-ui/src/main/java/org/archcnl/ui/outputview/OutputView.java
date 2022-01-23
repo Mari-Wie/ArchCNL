@@ -17,13 +17,13 @@ import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.components.GridView;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
-import org.archcnl.ui.outputview.components.SideBarWidget;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
-import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
 import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
-import org.archcnl.ui.outputview.events.ShowComponentRequestedEvent;
+import org.archcnl.ui.outputview.sidebar.SideBarWidget;
+import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
+import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
 
 public class OutputView extends HorizontalLayout {
 
