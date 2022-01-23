@@ -3,8 +3,8 @@ package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 import java.util.regex.Pattern;
 import org.archcnl.domain.common.FormattedDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.io.AdocIoUtils;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
-import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class ObjectType implements FormattedDomainObject {

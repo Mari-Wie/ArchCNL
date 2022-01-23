@@ -1,14 +1,14 @@
-package org.archcnl.domain.input;
+package org.archcnl.domain.common;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import org.archcnl.domain.input.io.ArchRulesExporter;
-import org.archcnl.domain.input.io.ArchRulesFromAdocReader;
-import org.archcnl.domain.input.io.ArchRulesImporter;
-import org.archcnl.domain.input.io.ArchRulesToAdocWriter;
+import org.archcnl.domain.common.io.ArchRulesExporter;
+import org.archcnl.domain.common.io.ArchRulesFromAdocReader;
+import org.archcnl.domain.common.io.ArchRulesImporter;
+import org.archcnl.domain.common.io.ArchRulesToAdocWriter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public class ProjectManager {

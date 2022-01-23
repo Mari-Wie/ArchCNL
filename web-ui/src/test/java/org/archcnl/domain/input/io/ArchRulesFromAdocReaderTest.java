@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.io.ArchRulesFromAdocReader;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;

@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.io;
+package org.archcnl.domain.common.io;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;

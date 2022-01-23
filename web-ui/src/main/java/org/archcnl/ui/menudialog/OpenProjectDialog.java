@@ -8,7 +8,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.common.ProjectManager;
 
 public class OpenProjectDialog extends Dialog implements FileSelectionDialog {
 

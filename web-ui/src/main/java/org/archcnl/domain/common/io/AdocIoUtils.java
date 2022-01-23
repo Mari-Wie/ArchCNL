@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.io;
+package org.archcnl.domain.common.io;
 
 import java.util.LinkedList;
 import java.util.List;

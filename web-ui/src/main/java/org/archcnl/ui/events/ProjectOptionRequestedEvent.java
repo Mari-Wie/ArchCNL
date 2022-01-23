@@ -4,7 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.ui.MainView;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.menudialog.OpenProjectDialog;

@@ -7,7 +7,7 @@ import java.beans.PropertyChangeListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;

@@ -9,10 +9,10 @@ import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.common.io.AdocIoUtils;
 import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.io.AdocIoUtils;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class Relation implements FormattedAdocDomainObject, FormattedViewDomainObject {

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.common.ProjectManager;
 
 public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
 
