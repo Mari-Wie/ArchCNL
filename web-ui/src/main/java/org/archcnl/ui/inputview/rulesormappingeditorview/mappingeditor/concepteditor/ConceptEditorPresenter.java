@@ -3,8 +3,8 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepte
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;

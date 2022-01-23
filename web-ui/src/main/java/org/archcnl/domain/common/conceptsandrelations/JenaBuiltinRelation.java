@@ -1,6 +1,7 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.List;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 
 public class JenaBuiltinRelation extends Relation {
 

@@ -1,9 +1,13 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 

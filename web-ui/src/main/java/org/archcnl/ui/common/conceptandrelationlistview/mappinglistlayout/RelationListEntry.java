@@ -3,8 +3,8 @@ package org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 
 public class RelationListEntry implements MappingListEntry {
 

@@ -1,9 +1,14 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import org.archcnl.domain.common.FormattedAdocDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;

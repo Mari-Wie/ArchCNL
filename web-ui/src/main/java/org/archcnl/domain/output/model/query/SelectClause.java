@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
-import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
 /** Representation of SPARQL SELECT clause */
 public class SelectClause implements FormattedQueryDomainObject, FormattedViewDomainObject {

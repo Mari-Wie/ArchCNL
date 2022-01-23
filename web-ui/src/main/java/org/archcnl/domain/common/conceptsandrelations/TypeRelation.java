@@ -1,9 +1,12 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public class TypeRelation extends Relation implements FormattedQueryDomainObject {

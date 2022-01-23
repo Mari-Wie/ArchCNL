@@ -3,8 +3,8 @@ package org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.common.Concept;
-import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 
 public class ConceptListEntry implements MappingListEntry {
 

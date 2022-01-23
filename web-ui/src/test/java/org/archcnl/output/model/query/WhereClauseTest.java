@@ -1,12 +1,12 @@
 package org.archcnl.output.model.query;
 
 import java.util.Arrays;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.domain.common.BooleanValue;
-import org.archcnl.domain.common.CustomConcept;
-import org.archcnl.domain.common.StringValue;
-import org.archcnl.domain.common.Triplet;
-import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;

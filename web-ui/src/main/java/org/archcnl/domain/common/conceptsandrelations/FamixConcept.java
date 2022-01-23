@@ -1,4 +1,4 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 public class FamixConcept extends Concept {
 

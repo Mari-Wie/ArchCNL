@@ -1,6 +1,8 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.List;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 
 public class FamixRelation extends Relation implements FormattedQueryDomainObject {
 

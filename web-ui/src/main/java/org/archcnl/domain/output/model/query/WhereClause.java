@@ -1,9 +1,9 @@
 package org.archcnl.domain.output.model.query;
 
 import java.util.Objects;
-import org.archcnl.domain.common.AndTriplets;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 
 /** Representation of SPARQL WHERE clause */
 public class WhereClause implements FormattedQueryDomainObject, FormattedViewDomainObject {

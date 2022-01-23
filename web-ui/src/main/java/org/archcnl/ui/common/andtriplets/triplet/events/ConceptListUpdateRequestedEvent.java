@@ -3,7 +3,7 @@ package org.archcnl.ui.common.andtriplets.triplet.events;
 import com.vaadin.flow.component.ComponentEvent;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.common.Concept;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 
 public class ConceptListUpdateRequestedEvent extends ComponentEvent<ConceptSelectionComponent> {

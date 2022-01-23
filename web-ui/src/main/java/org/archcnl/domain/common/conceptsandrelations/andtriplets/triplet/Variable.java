@@ -1,4 +1,4 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import java.util.Objects;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;

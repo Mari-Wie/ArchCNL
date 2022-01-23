@@ -6,7 +6,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 

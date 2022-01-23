@@ -1,4 +1,4 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.Optional;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;

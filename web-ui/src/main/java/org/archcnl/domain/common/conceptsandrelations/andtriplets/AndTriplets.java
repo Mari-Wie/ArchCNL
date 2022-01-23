@@ -1,8 +1,10 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations.andtriplets;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 
 public class AndTriplets implements FormattedQueryDomainObject {
 

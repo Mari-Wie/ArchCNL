@@ -1,6 +1,10 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import java.util.Objects;
+import org.archcnl.domain.common.FormattedDomainObject;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.JenaBuiltinRelation;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 
 public class Triplet implements FormattedDomainObject {
 

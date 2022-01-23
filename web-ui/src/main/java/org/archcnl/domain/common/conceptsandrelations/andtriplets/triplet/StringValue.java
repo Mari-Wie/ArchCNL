@@ -1,32 +1,31 @@
-package org.archcnl.domain.common;
+package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import java.util.Objects;
 
-public class BooleanValue extends ActualObjectType {
+public class StringValue extends ActualObjectType {
 
-    private boolean value;
-    private static final String XSD_BOOLEAN = "^^xsd:boolean";
+    private String value;
 
-    public BooleanValue(boolean value) {
+    public StringValue(String value) {
         this.setValue(value);
     }
 
-    public boolean getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(boolean value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
     @Override
     public String getName() {
-        return String.valueOf(getValue());
+        return getValue();
     }
 
     @Override
     public String transformToSparqlQuery() {
-        return "\"" + value + "\"" + XSD_BOOLEAN;
+        return "\"" + value + "\"" + "^^xsd:string";
     }
 
     @Override
@@ -36,13 +35,13 @@ public class BooleanValue extends ActualObjectType {
 
     @Override
     public String transformToAdoc() {
-        return "'" + value + "'" + XSD_BOOLEAN;
+        return "'" + value + "'";
     }
 
     @Override
     protected boolean requiredEqualsOverride(Object obj) {
-        if (obj instanceof BooleanValue) {
-            final BooleanValue that = (BooleanValue) obj;
+        if (obj instanceof StringValue) {
+            final StringValue that = (StringValue) obj;
             return Objects.equals(this.getValue(), that.getValue());
         }
         return false;
@@ -55,6 +54,6 @@ public class BooleanValue extends ActualObjectType {
 
     @Override
     public boolean matchesRelatableObjectType(ActualObjectType actualObjectType) {
-        return actualObjectType instanceof BooleanValue;
+        return actualObjectType instanceof StringValue;
     }
 }

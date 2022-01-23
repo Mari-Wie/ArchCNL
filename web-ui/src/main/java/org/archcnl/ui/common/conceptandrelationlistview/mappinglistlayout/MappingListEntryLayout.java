@@ -9,8 +9,8 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
-import org.archcnl.domain.common.CustomConcept;
-import org.archcnl.domain.common.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 

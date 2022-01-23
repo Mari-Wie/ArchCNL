@@ -1,8 +1,8 @@
 package org.archcnl.ui.common.andtriplets.triplet.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.domain.common.Variable;
 import org.archcnl.domain.common.VariableManager;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 
 public class VariableListUpdateRequestedEvent extends ComponentEvent<VariableSelectionComponent> {
