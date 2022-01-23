@@ -384,14 +384,14 @@ public class RelationManager {
         relations.add(
                 new ConformanceRelation(
                         "proofs",
-                        "",
+                        "This relation is used to state that the subject (proof) verifies a specified in the object violation.",
                         new ArrayList<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureViolation")))));
         relations.add(
                 new ConformanceRelation(
                         "hasDetected",
-                        "",
+                        "This relation is used to state that the subject (conformance check) has detected a specified in the object violation.",
                         new ArrayList<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureViolation")))));
