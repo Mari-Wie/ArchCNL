@@ -60,7 +60,6 @@ public class OutputView extends HorizontalLayout {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         sideBarWidget.setWidth(15, Unit.PERCENTAGE);
-        defaultQueryView.setWidth(85, Unit.PERCENTAGE);
         currentComponent = defaultQueryView;
     }
 
