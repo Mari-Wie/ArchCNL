@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.io.AdocExporter;
-import org.archcnl.domain.common.io.ArchRulesFromAdocReader;
-import org.archcnl.domain.common.io.ArchRulesImporter;
+import org.archcnl.domain.common.io.AdocImporter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
@@ -30,8 +29,12 @@ public class ProjectManager {
     }
 
     public void openProject(File file) throws IOException {
-        ArchRulesImporter importer = new ArchRulesFromAdocReader();
-        importer.readArchitectureRules(file, RulesConceptsAndRelations.getInstance());
+        AdocImporter importer = new AdocImporter();
+        importer.readFromAdoc(
+                file,
+                RulesConceptsAndRelations.getInstance().getArchitectureRuleManager(),
+                RulesConceptsAndRelations.getInstance().getConceptManager(),
+                RulesConceptsAndRelations.getInstance().getRelationManager());
         this.projectFile = Optional.of(file);
     }
 

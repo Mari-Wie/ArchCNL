@@ -16,9 +16,11 @@ public class FreeTextQuery implements FormattedAdocDomainObject {
     public String transformToAdoc() {
         StringBuilder builder = new StringBuilder();
         builder.append(name);
-        builder.append(": (((");
+        builder.append(": (");
+        builder.append(query.length());
+        builder.append(")(");
         builder.append(query);
-        builder.append(")))");
+        builder.append(")");
         return builder.toString();
     }
 }
