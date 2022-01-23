@@ -12,7 +12,7 @@ import org.archcnl.application.exceptions.PropertyNotFoundException;
         shortName = "ArchCNL",
         description = "Check your software projects for architecture violations.",
         enableInstallPrompt = false)
-@CssImport("./styles/vaadin-button-styles.css")
+@CssImport("./styles/main.css")
 public class UiEntryPoint extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;

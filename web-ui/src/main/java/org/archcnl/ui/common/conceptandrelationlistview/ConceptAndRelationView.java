@@ -32,28 +32,29 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
     private MappingListLayout conceptTreeGrid;
     private MappingListLayout relationTreeGrid;
 
-    public ConceptAndRelationView(boolean inputSide) {
+    public ConceptAndRelationView(final boolean inputSide) {
         this.inputSide = inputSide;
 
-        getStyle().set("border", "1px solid black");
         createNewConceptLayout =
                 new CreateNewLayout(
                         "Concepts",
                         "Create new concept",
                         e -> fireEvent(new ConceptEditorRequestedEvent(this, true)),
                         inputSide);
+        createNewConceptLayout.setClassName("new-concept");
         createNewRelationLayout =
                 new CreateNewLayout(
                         "Relations",
                         "Create new relation",
                         e -> fireEvent(new RelationEditorRequestedEvent(this, true)),
                         inputSide);
+        createNewRelationLayout.setClassName("new-relation");
         RulesConceptsAndRelations.getInstance().getConceptManager().addPropertyChangeListener(this);
         RulesConceptsAndRelations.getInstance()
                 .getRelationManager()
                 .addPropertyChangeListener(this);
-        createNewConceptLayout.setHeight(inputSide ? 46 : 49, Unit.PERCENTAGE);
-        createNewRelationLayout.setHeight(inputSide ? 46 : 49, Unit.PERCENTAGE);
+        createNewConceptLayout.setHeight(inputSide ? 46 : 50, Unit.PERCENTAGE);
+        createNewRelationLayout.setHeight(inputSide ? 46 : 50, Unit.PERCENTAGE);
         updateConceptView();
         updateRelationView();
 
@@ -61,10 +62,12 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
         add(createNewRelationLayout);
 
         if (inputSide) {
-            add(
+            final Button button =
                     new Button(
                             "Check for violations",
-                            click -> fireEvent(new OutputViewRequestedEvent(this, true))));
+                            click -> fireEvent(new OutputViewRequestedEvent(this, true)));
+            button.setClassName("check-violation-btn");
+            add(button);
         }
     }
 
@@ -77,8 +80,9 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
             concepts =
                     RulesConceptsAndRelations.getInstance().getConceptManager().getOutputConcepts();
         }
-        List<MappingListEntry> conceptData = new LinkedList<>();
-        ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
+        final List<MappingListEntry> conceptData = new LinkedList<>();
+        final ConceptListEntry defaultConceptsStub =
+                new ConceptListEntry("Default Concepts", concepts);
         conceptData.add(defaultConceptsStub);
         if (conceptTreeGrid != null) {
             createNewConceptLayout.remove(conceptTreeGrid);
@@ -103,8 +107,8 @@ public class ConceptAndRelationView extends VerticalLayout implements PropertyCh
                             .getRelationManager()
                             .getOutputRelations();
         }
-        List<MappingListEntry> relationData = new LinkedList<>();
-        RelationListEntry defaultRelationsStub =
+        final List<MappingListEntry> relationData = new LinkedList<>();
+        final RelationListEntry defaultRelationsStub =
                 new RelationListEntry("Default Relations", relations);
         relationData.add(defaultRelationsStub);
         if (relationTreeGrid != null) {
