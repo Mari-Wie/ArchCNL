@@ -43,38 +43,11 @@ public class OutputView extends HorizontalLayout {
     private SideBarLayout sideBar;
     private Component currentComponent;
     private ResultRepository resultRepository;
-       
-    private final String rootDir = "./src/integration-test/resources/";
-    private final String database = "archcnl_it_db";
-    private final String server = "http://localhost:5820";
-    private final String username = "admin";
-    private final String password = "admin";
-    private final String context = "http://graphs.org/" + database + "/1.0";
-    private final String resultPath = rootDir + "result.owl";
-    private final List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
-    private final String ruleFile = rootDir + "OnionArchitectureDemo/rules.adoc";
-    private final boolean verboseLogging = false;
-    private final boolean removeDBs = true;
-    private final List<String> enabledParsers = Arrays.asList("java");
-
 
     public OutputView() throws PropertyNotFoundException {
-    	CNLToolchain.runToolchain(database,
-                server,
-                context,
-                username,
-                password,
-                sourcePaths,
-                ruleFile, 
-                verboseLogging, 
-                removeDBs,
-                enabledParsers);
-        resultRepository =
-                new ResultRepositoryImpl(
-                        ConfigAppService.getDbUrl(),
-                        ConfigAppService.getDbName(),
-                        ConfigAppService.getDbUsername(),
-                        ConfigAppService.getDbPassword());
+    	OutputCtrl outputCtrl = new OutputCtrl();
+    	outputCtrl.checkForViolations();
+        resultRepository = outputCtrl.getRepository();
         // The execution of the default query should be moved into an OnAttachEvent
         queryResults = new QueryResultsUiComponent(prepareDefaultQueryGridView());
         customQueryPresenter = new CustomQueryPresenter();

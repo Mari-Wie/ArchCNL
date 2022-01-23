@@ -18,6 +18,7 @@ public class ConfigAppService {
     private static final String DB_NAME = "DB_NAME";
     private static final String DB_USER = "DB_USER";
     private static final String DB_PASSWORD = "DB_PASSWORD";
+    private static final String DB_CONTEXT = "DB_CONTEXT";
     private static final String DB_HOST = "DB_HOST";
     private static final String DB_PROTOCOL = "DB_PROTOCOL";
     private static final String DB_PORT = "DB_PORT";
@@ -47,6 +48,13 @@ public class ConfigAppService {
         return ConfigAppService.checkIfPropertyPresent(
                 ConfigAppService.getDbPropertyByName(ConfigAppService.DB_PASSWORD),
                 ConfigAppService.DB_PASSWORD);
+    }
+    
+    /** @return DB context from property file */
+    public static String getDbContext() throws PropertyNotFoundException {
+        return ConfigAppService.checkIfPropertyPresent(
+                ConfigAppService.getDbPropertyByName(ConfigAppService.DB_CONTEXT),
+                ConfigAppService.DB_CONTEXT);
     }
 
     /** @return DB URL from property file */
