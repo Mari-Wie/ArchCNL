@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.sidebar;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -9,8 +9,11 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.shared.Registration;
-import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
-import org.archcnl.ui.outputview.events.ShowComponentRequestedEvent;
+import org.archcnl.ui.outputview.components.CustomQueryView;
+import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
+import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
+import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
 
 public class SideBarWidget extends VerticalLayout {
 

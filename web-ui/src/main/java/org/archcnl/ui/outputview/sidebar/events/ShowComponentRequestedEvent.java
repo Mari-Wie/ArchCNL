@@ -1,8 +1,8 @@
-package org.archcnl.ui.outputview.events;
+package org.archcnl.ui.outputview.sidebar.events;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.outputview.components.SideBarWidget;
+import org.archcnl.ui.outputview.sidebar.SideBarWidget;
 
 public class ShowComponentRequestedEvent extends ComponentEvent<SideBarWidget> {
 

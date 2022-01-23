@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.sidebar;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
