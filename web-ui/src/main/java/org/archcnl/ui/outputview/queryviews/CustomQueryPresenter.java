@@ -6,17 +6,14 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.output.model.query.Query;
-import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
-import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
@@ -112,8 +109,7 @@ public class CustomQueryPresenter extends Component {
         view.setQueryTextArea(getQuery());
     }
 
-    private Query makeQuery() {
-        Set<QueryNamespace> namespaces = QueryUtils.getNamespaces();
+    public Query makeQuery() {
         SelectClause selectClause =
                 new SelectClause(
                         view.getSelectComponents().stream()
@@ -121,7 +117,7 @@ public class CustomQueryPresenter extends Component {
                                 .flatMap(Optional::stream)
                                 .collect(Collectors.toSet()));
         WhereClause whereClause = new WhereClause(wherePresenter.getAndTriplets());
-        return new Query(namespaces, selectClause, whereClause);
+        return new Query(queryName, selectClause, whereClause);
     }
 
     public CustomQueryView getView() {

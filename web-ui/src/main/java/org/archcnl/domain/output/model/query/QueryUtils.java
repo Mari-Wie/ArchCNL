@@ -76,7 +76,7 @@ public class QueryUtils {
                                                     triplet1, triplet2, triplet3, triplet4,
                                                     triplet5, triplet6, triplet7))));
 
-            return new Query(getNamespaces(), selectClause, whereClause);
+            return new Query("Default Query", selectClause, whereClause);
 
         } catch (InvalidVariableNameException
                 | UnsupportedObjectTypeInTriplet

@@ -1,12 +1,12 @@
 package org.archcnl.domain.output.model.query;
 
 import java.util.Objects;
-import org.archcnl.domain.common.FormattedQueryDomainObject;
-import org.archcnl.domain.common.FormattedViewDomainObject;
+import org.archcnl.domain.common.FormattedDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 
 /** Representation of SPARQL WHERE clause */
-public class WhereClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
+public class WhereClause implements FormattedDomainObject {
 
     public static final String WHERE = "WHERE";
     public static final String GRAPH = "GRAPH";
@@ -79,5 +79,16 @@ public class WhereClause implements FormattedQueryDomainObject, FormattedViewDom
         sb.append(WhereClause.CLOSE_BRACKET);
         sb.append(WhereClause.CLOSE_BRACKET);
         return sb.toString();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(WHERE ");
+        for (Triplet triplet : andTriplets.getTriplets()) {
+            builder.append(triplet.transformToAdoc());
+        }
+        builder.append(")");
+        return builder.toString();
     }
 }

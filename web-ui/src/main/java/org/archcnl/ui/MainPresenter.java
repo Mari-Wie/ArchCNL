@@ -66,13 +66,17 @@ public class MainPresenter extends Component {
                 break;
             case SAVE:
                 try {
-                    ProjectManager.getInstance().saveProject();
+                    ProjectManager.getInstance()
+                            .saveProject(
+                                    outputView.getCustomQueries(), outputView.getFreeTextQueries());
                 } catch (final IOException e) {
                     new ConfirmDialog("Project file could not be written.").open();
                 }
                 break;
             case SAVE_AS:
-                SaveProjectDialog dialog = new SaveProjectDialog();
+                SaveProjectDialog dialog =
+                        new SaveProjectDialog(
+                                outputView.getCustomQueries(), outputView.getFreeTextQueries());
                 dialog.addListener(
                         ProjectSavedEvent.class, e -> view.setSaveProjectMenuItemEnabled(true));
                 dialog.open();

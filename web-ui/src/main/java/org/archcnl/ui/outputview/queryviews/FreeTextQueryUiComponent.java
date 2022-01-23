@@ -6,6 +6,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
@@ -39,12 +40,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                         new Icon(VaadinIcon.PIN),
                         click -> {
                             pinButton.setVisible(false);
-                            fireEvent(
-                                    new PinQueryRequestedEvent(
-                                            this,
-                                            true,
-                                            this,
-                                            queryName.getOptionalValue().orElse(DEFAULT_NAME)));
+                            fireEvent(new PinQueryRequestedEvent(this, true, this, getQueryName()));
                         });
         topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
@@ -65,5 +61,13 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     protected void addComponents() {
         add(topRow, queryName, queryTextArea, buttonBar, gridView);
+    }
+
+    public FreeTextQuery makeQuery() {
+        return new FreeTextQuery(getQueryName(), getQuery());
+    }
+
+    private String getQueryName() {
+        return queryName.getOptionalValue().orElse(DEFAULT_NAME);
     }
 }

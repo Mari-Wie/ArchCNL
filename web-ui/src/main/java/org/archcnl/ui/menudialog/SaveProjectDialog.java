@@ -13,8 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.ProjectManager;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
 
 public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
@@ -22,7 +25,7 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
     private static final long serialVersionUID = 6538573408820948553L;
     private Button confirmButton;
 
-    public SaveProjectDialog() {
+    public SaveProjectDialog(List<Query> customQueries, List<FreeTextQuery> freeTextQueries) {
         setDraggable(true);
 
         Text title = new Text("Save project to another location)");
@@ -68,7 +71,9 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
                                         fileName = fileName + ".adoc";
                                     }
                                     Path path = Paths.get(file.get().getAbsolutePath(), fileName);
-                                    ProjectManager.getInstance().saveProject(path.toFile());
+                                    ProjectManager.getInstance()
+                                            .saveProject(
+                                                    path.toFile(), customQueries, freeTextQueries);
                                     close();
                                     fireEvent(new ProjectSavedEvent(this, true));
                                 } catch (IOException e) {

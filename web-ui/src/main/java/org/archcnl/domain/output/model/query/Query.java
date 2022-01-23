@@ -2,24 +2,23 @@ package org.archcnl.domain.output.model.query;
 
 import java.util.Objects;
 import java.util.Set;
-import org.archcnl.domain.common.FormattedQueryDomainObject;
-import org.archcnl.domain.common.FormattedViewDomainObject;
+import org.archcnl.domain.common.FormattedDomainObject;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 
 /** Representation of query to database. */
-public class Query implements FormattedQueryDomainObject, FormattedViewDomainObject {
+public class Query implements FormattedDomainObject {
 
     private Set<QueryNamespace> namespaces;
     private SelectClause selectClause;
     private WhereClause whereClause;
+    private String name;
 
     public Query(
-            final Set<QueryNamespace> namespaces,
-            final SelectClause selectClause,
-            final WhereClause whereClause) {
-        this.namespaces = namespaces;
+            final String name, final SelectClause selectClause, final WhereClause whereClause) {
+        this.namespaces = QueryUtils.getNamespaces();
         this.selectClause = selectClause;
         this.whereClause = whereClause;
+        this.name = name;
     }
 
     public SelectClause getSelectClause() {
@@ -32,6 +31,10 @@ public class Query implements FormattedQueryDomainObject, FormattedViewDomainObj
 
     public Set<QueryNamespace> getNamespaces() {
         return namespaces;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -52,6 +55,16 @@ public class Query implements FormattedQueryDomainObject, FormattedViewDomainObj
         sb.append(selectClause.transformToSparqlQuery());
         sb.append(whereClause.transformToSparqlQuery());
         return sb.toString();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name);
+        builder.append(": ");
+        builder.append(selectClause.transformToAdoc());
+        builder.append(whereClause.transformToAdoc());
+        return builder.toString();
     }
 
     @Override

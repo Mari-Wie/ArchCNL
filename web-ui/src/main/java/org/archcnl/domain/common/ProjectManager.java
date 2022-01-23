@@ -2,12 +2,14 @@ package org.archcnl.domain.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
-import org.archcnl.domain.common.io.ArchRulesExporter;
+import org.archcnl.domain.common.io.AdocExporter;
 import org.archcnl.domain.common.io.ArchRulesFromAdocReader;
 import org.archcnl.domain.common.io.ArchRulesImporter;
-import org.archcnl.domain.common.io.ArchRulesToAdocWriter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 
 public class ProjectManager {
 
@@ -40,17 +42,31 @@ public class ProjectManager {
      *
      * @throws IOException when file cannot be written
      */
-    public void saveProject() throws IOException {
+    public void saveProject(List<Query> customQueries, List<FreeTextQuery> freeTextQueries)
+            throws IOException {
         if (projectFile.isPresent()) {
-            ArchRulesExporter exporter = new ArchRulesToAdocWriter();
-            exporter.writeArchitectureRules(
-                    projectFile.get(), RulesConceptsAndRelations.getInstance());
+            AdocExporter exporter = new AdocExporter();
+            exporter.writeToAdoc(
+                    projectFile.get(),
+                    RulesConceptsAndRelations.getInstance().getArchitectureRuleManager(),
+                    RulesConceptsAndRelations.getInstance().getConceptManager(),
+                    RulesConceptsAndRelations.getInstance().getRelationManager(),
+                    customQueries,
+                    freeTextQueries);
         }
     }
 
-    public void saveProject(File file) throws IOException {
-        ArchRulesExporter exporter = new ArchRulesToAdocWriter();
-        exporter.writeArchitectureRules(file, RulesConceptsAndRelations.getInstance());
+    public void saveProject(
+            File file, List<Query> customQueries, List<FreeTextQuery> freeTextQueries)
+            throws IOException {
+        AdocExporter exporter = new AdocExporter();
+        exporter.writeToAdoc(
+                file,
+                RulesConceptsAndRelations.getInstance().getArchitectureRuleManager(),
+                RulesConceptsAndRelations.getInstance().getConceptManager(),
+                RulesConceptsAndRelations.getInstance().getRelationManager(),
+                customQueries,
+                freeTextQueries);
         this.projectFile = Optional.of(file);
     }
 

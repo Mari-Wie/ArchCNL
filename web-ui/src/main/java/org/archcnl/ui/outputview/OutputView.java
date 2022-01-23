@@ -6,9 +6,13 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
@@ -35,6 +39,8 @@ public class OutputView extends HorizontalLayout {
     private SideBarWidget sideBarWidget;
     private Component currentComponent;
     private ResultRepository resultRepository;
+    private List<CustomQueryPresenter> pinnedCustomQueries = new LinkedList<>();
+    private List<FreeTextQueryUiComponent> pinnedFreeTextQueries = new LinkedList<>();
 
     public OutputView() throws PropertyNotFoundException {
         resultRepository =
@@ -54,6 +60,24 @@ public class OutputView extends HorizontalLayout {
         initLayout();
         registerEventListeners();
         addAndExpand(sideBarWidget, defaultQueryView);
+    }
+
+    public List<Query> getCustomQueries() {
+        List<Query> queries = new LinkedList<>();
+        queries.add(customQueryPresenter.makeQuery());
+        for (CustomQueryPresenter presenter : pinnedCustomQueries) {
+            queries.add(presenter.makeQuery());
+        }
+        return queries;
+    }
+
+    public List<FreeTextQuery> getFreeTextQueries() {
+        List<FreeTextQuery> queries = new LinkedList<>();
+        queries.add(freeTextQueryView.makeQuery());
+        for (FreeTextQueryUiComponent queryView : pinnedFreeTextQueries) {
+            queries.add(queryView.makeQuery());
+        }
+        return queries;
     }
 
     private void initLayout() {
@@ -88,10 +112,12 @@ public class OutputView extends HorizontalLayout {
     private void handleEvent(PinQueryRequestedEvent event) {
         sideBarWidget.addPinnedQueryTab(event.getLinkedComponent(), event.getQueryName());
         if (event.getSource() instanceof CustomQueryPresenter) {
+            pinnedCustomQueries.add(customQueryPresenter);
             customQueryPresenter = new CustomQueryPresenter();
             addCustomQueryListener();
             sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
         } else {
+            pinnedFreeTextQueries.add(freeTextQueryView);
             freeTextQueryView = new FreeTextQueryUiComponent();
             addFreeTextQueryListener();
             sideBarWidget.updateFreeTextQueryTab(freeTextQueryView);
