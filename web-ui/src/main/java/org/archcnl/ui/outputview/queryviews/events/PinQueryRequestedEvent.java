@@ -1,7 +1,7 @@
-package org.archcnl.ui.outputview.events;
+package org.archcnl.ui.outputview.queryviews.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.outputview.components.CustomQueryPresenter;
+import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 
 public class PinQueryRequestedEvent extends ComponentEvent<CustomQueryPresenter> {
 

@@ -9,9 +9,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.shared.Registration;
-import org.archcnl.ui.outputview.components.CustomQueryView;
-import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
-import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.queryviews.CustomQueryView;
+import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
+import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
 

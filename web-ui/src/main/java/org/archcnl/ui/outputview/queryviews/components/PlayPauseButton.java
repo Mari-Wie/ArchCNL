@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.queryviews.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;

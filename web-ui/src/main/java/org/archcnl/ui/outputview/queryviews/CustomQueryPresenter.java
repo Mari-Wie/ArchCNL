@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.queryviews;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -24,11 +24,11 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEve
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
-import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
-import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
-import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
-import org.archcnl.ui.outputview.events.UpdateQueryTextButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.RunButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.UpdateQueryTextButtonPressedEvent;
 
 @Tag("CustomQueryPresenter")
 public class CustomQueryPresenter extends Component {

@@ -1,4 +1,7 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.queryviews;
+
+import org.archcnl.ui.outputview.queryviews.components.GeneralInfoLayout;
+import org.archcnl.ui.outputview.queryviews.components.GridView;
 
 public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 

@@ -1,7 +1,7 @@
-package org.archcnl.ui.outputview.events;
+package org.archcnl.ui.outputview.queryviews.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
+import org.archcnl.ui.outputview.queryviews.AbstractQueryResultsComponent;
 
 public class CustomQueryInsertionRequestedEvent
         extends ComponentEvent<AbstractQueryResultsComponent> {

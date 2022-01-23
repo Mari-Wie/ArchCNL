@@ -1,9 +1,9 @@
-package org.archcnl.ui.outputview.events;
+package org.archcnl.ui.outputview.queryviews.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.output.model.query.Query;
-import org.archcnl.ui.outputview.components.CustomQueryPresenter;
-import org.archcnl.ui.outputview.components.GridView;
+import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
+import org.archcnl.ui.outputview.queryviews.components.GridView;
 
 public class RunQueryRequestedEvent extends ComponentEvent<CustomQueryPresenter> {
 

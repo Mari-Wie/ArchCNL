@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview;
+package org.archcnl.ui.outputview.queryviews.components;
 
 import java.util.List;
 import java.util.Map;

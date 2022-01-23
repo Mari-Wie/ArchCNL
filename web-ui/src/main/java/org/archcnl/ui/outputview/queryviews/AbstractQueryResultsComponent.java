@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.queryviews;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.output.model.query.QueryUtils;
+import org.archcnl.ui.outputview.queryviews.components.GridView;
 
 public abstract class AbstractQueryResultsComponent extends VerticalLayout {
 

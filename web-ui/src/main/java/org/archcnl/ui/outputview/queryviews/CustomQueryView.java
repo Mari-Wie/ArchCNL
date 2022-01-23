@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.queryviews;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -26,9 +26,10 @@ import org.archcnl.ui.common.variablelistview.VariableListView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
-import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
-import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
-import org.archcnl.ui.outputview.events.UpdateQueryTextButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.components.GridView;
+import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.RunButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.UpdateQueryTextButtonPressedEvent;
 
 public class CustomQueryView extends HorizontalLayout {
 

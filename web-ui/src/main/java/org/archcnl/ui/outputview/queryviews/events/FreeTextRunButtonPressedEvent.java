@@ -1,7 +1,7 @@
-package org.archcnl.ui.outputview.events;
+package org.archcnl.ui.outputview.queryviews.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.outputview.components.GridView;
+import org.archcnl.ui.outputview.queryviews.components.GridView;
 
 public class FreeTextRunButtonPressedEvent extends ComponentEvent<GridView> {
 

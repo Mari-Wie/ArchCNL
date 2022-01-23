@@ -1,7 +1,7 @@
-package org.archcnl.ui.outputview.events;
+package org.archcnl.ui.outputview.queryviews.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.outputview.components.CustomQueryView;
+import org.archcnl.ui.outputview.queryviews.CustomQueryView;
 
 public class RunButtonPressedEvent extends ComponentEvent<CustomQueryView> {
 

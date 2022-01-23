@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview.components;
+package org.archcnl.ui.outputview.queryviews.components;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
-import org.archcnl.ui.outputview.Violation;
 
 public class GridView extends VerticalLayout {
 
