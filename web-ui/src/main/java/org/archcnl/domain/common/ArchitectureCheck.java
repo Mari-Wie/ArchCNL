@@ -22,8 +22,9 @@ public class ArchitectureCheck {
     private ResultRepository repository;
     
     private final String rootDir = "D:/Programme/ArchCNL/ArchCNL/toolchain/src/integration-test/resources/";
-    private final List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
+    private List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
     private final String ruleFile = rootDir + "OnionArchitectureDemo/rules.adoc";
+    // TODO change rule file path
     private final boolean verboseLogging = false;
     private final boolean removeDBs = true;
     private final List<String> enabledParsers = Arrays.asList("java");
@@ -60,6 +61,10 @@ public class ArchitectureCheck {
             verboseLogging, 
             removeDBs,
             enabledParsers);
+    }
+    
+    public void setProjectPath(String projectPath) {
+    	sourcePaths = Arrays.asList(projectPath);
     }
 
     public ResultRepository getRepository() {

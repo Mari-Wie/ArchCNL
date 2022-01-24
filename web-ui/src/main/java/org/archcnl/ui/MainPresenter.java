@@ -19,6 +19,8 @@ import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
+import org.archcnl.ui.menudialog.OpenProjectDialog;
+import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
 
@@ -55,15 +57,23 @@ public class MainPresenter extends Component implements PropertyChangeListener {
         view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
 
         inputPresenter.addListener(
-                OutputViewRequestedEvent.class, e -> checkViolations());
+                OutputViewRequestedEvent.class, e -> selectPathForChecking());
         outputView.addListener(
                 InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
     }
     
-    public void checkViolations() {
+    public void selectPathForChecking() {
     	// TODO ask for actual repository
+    	SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog(architectureCheck);
+    	directoryDialog.addOpenedChangeListener(e -> {if(!e.isOpened()) {
+    		checkViolations(directoryDialog.getSelectedPath());}});
+    	directoryDialog.open();
+    }
+    
+    public void checkViolations(String path) {
     	try {
     		architectureCheck.writeRuleFile();
+    		architectureCheck.setProjectPath(path);
 			architectureCheck.createDbWithViolations();
 		} catch (PropertyNotFoundException e) {
 			// TODO Handle the case where no DB was created
