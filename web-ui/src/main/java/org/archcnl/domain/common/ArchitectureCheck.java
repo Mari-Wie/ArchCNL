@@ -1,4 +1,4 @@
-package org.archcnl.ui.outputview;
+package org.archcnl.domain.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +15,9 @@ import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.toolchain.CNLToolchain;
 
-public class OutputCtrl {
+public class ArchitectureCheck {
 
-    private static final Logger LOG = LogManager.getLogger(OutputCtrl.class);
+    private static final Logger LOG = LogManager.getLogger(ArchitectureCheck.class);
 
     private ResultRepository repository;
     
@@ -28,19 +28,15 @@ public class OutputCtrl {
     private final boolean removeDBs = true;
     private final List<String> enabledParsers = Arrays.asList("java");
 
-    public OutputCtrl() {
-        try {
+    public ArchitectureCheck() throws PropertyNotFoundException {
+    	
             this.repository =
                     new ResultRepositoryImpl(
                             ConfigAppService.getDbUrl(),
                             ConfigAppService.getDbName(),
                             ConfigAppService.getDbUsername(),
                             ConfigAppService.getDbPassword());
-        } catch (final PropertyNotFoundException e) {
-            OutputCtrl.LOG.error(e.getMessage() + " Output controller can not be initialized.");
-            e.printStackTrace();
         }
-    }
     
     public void writeRuleFile() {
         final File file = new File("temp/GeneratedRuleFile.adoc");
@@ -53,7 +49,7 @@ public class OutputCtrl {
 		}
     }
     
-    public void checkForViolations() throws PropertyNotFoundException {
+    public void createDbWithViolations() throws PropertyNotFoundException {
     	CNLToolchain.runToolchain(ConfigAppService.getDbName(),
 			ConfigAppService.getDbUrl(),
 			ConfigAppService.getDbContext(),

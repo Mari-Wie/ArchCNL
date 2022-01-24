@@ -37,7 +37,7 @@ public class OutputView extends HorizontalLayout {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LogManager.getLogger(OutputView.class);
 
-    private AbstractQueryResultsComponent queryResults;
+    private QueryResultsUiComponent queryResults;
     private CustomQueryPresenter customQueryPresenter;
     private AbstractQueryResultsComponent freeTextQuery;
     private SideBarLayout sideBar;
@@ -45,11 +45,13 @@ public class OutputView extends HorizontalLayout {
     private ResultRepository resultRepository;
 
     public OutputView() throws PropertyNotFoundException {
-    	OutputCtrl outputCtrl = new OutputCtrl();
+    	/**OutputCtrl outputCtrl = new OutputCtrl();
+    	outputCtrl.writeRuleFile();
     	outputCtrl.checkForViolations();
         resultRepository = outputCtrl.getRepository();
+        */
         // The execution of the default query should be moved into an OnAttachEvent
-        queryResults = new QueryResultsUiComponent(prepareDefaultQueryGridView());
+        queryResults = new QueryResultsUiComponent();
         customQueryPresenter = new CustomQueryPresenter();
         freeTextQuery = new FreeTextQueryUiComponent();
         sideBar = new SideBarLayout(this);
@@ -119,7 +121,16 @@ public class OutputView extends HorizontalLayout {
         final String customQuery = customQueryPresenter.getQuery();
         freeTextQuery.setQueryText(customQuery);
     }
+    
+    public void displayResult(Optional<Result> result) {
+    	queryResults.updateGridView(result);
+    }
+    
+    public void setResultRepository(ResultRepository repository) {
+    	resultRepository = repository;
+    }
 
+    /**
     private GridView prepareDefaultQueryGridView() {
         GridView gridView = new GridView();
         Optional<Result> result =
@@ -127,6 +138,7 @@ public class OutputView extends HorizontalLayout {
         gridView.update(result);
         return gridView;
     }
+    */
 
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(

@@ -7,7 +7,10 @@ import java.beans.PropertyChangeListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.common.ArchitectureCheck;
 import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.output.model.query.QueryUtils;
+import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
@@ -27,11 +30,13 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     private final MainView view;
     private final OutputView outputView;
     private final InputPresenter inputPresenter;
+    private final ArchitectureCheck architectureCheck;
 
     public MainPresenter() throws PropertyNotFoundException {
         inputPresenter = new InputPresenter();
         outputView = new OutputView();
         view = new MainView(inputPresenter.getView());
+        architectureCheck = new ArchitectureCheck();
         addListeners();
     }
 
@@ -50,9 +55,24 @@ public class MainPresenter extends Component implements PropertyChangeListener {
         view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
 
         inputPresenter.addListener(
-                OutputViewRequestedEvent.class, e -> view.showContent(outputView));
+                OutputViewRequestedEvent.class, e -> checkViolations());
         outputView.addListener(
                 InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
+    }
+    
+    public void checkViolations() {
+    	// TODO ask for actual repository
+    	try {
+    		architectureCheck.writeRuleFile();
+			architectureCheck.createDbWithViolations();
+		} catch (PropertyNotFoundException e) {
+			// TODO Handle the case where no DB was created
+			e.printStackTrace();
+		}
+    	ResultRepository repository = architectureCheck.getRepository();
+    	outputView.displayResult(repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
+    	outputView.setResultRepository(repository);
+    	view.showContent(outputView);
     }
 
     public MainView getView() {
