@@ -23,8 +23,7 @@ public class ArchitectureCheck {
     
     private final String rootDir = "D:/Programme/ArchCNL/ArchCNL/toolchain/src/integration-test/resources/";
     private List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
-    private final String ruleFile = rootDir + "OnionArchitectureDemo/rules.adoc";
-    // TODO change rule file path
+    private final String ruleFile = "temp/GeneratedRuleFile.adoc";
     private final boolean verboseLogging = false;
     private final boolean removeDBs = true;
     private final List<String> enabledParsers = Arrays.asList("java");
@@ -40,7 +39,7 @@ public class ArchitectureCheck {
         }
     
     public void writeRuleFile() {
-        final File file = new File("temp/GeneratedRuleFile.adoc");
+        final File file = new File(ruleFile);
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
         try {
 			archRulesToAdocWriter.writeArchitectureRules(file, RulesConceptsAndRelations.getInstance());
