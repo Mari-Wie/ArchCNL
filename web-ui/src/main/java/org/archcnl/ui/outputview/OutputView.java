@@ -108,7 +108,7 @@ public class OutputView extends HorizontalLayout {
             newCustomQueryPresenter.setWhereClause(query.getWhereClause());
             pinnedCustomQueries.add(newCustomQueryPresenter);
             addCustomQueryListener(newCustomQueryPresenter);
-            sideBarWidget.addPinnedQueryTab(newCustomQueryPresenter, query.getName());
+            sideBarWidget.addPinnedQueryTab(newCustomQueryPresenter.getView(), query.getName());
         }
     }
 
