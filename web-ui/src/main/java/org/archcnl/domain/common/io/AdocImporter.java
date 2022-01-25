@@ -44,10 +44,10 @@ public class AdocImporter {
 
         Map<String, String> conceptDescriptions =
                 MappingDescriptionExtractor.extractConceptDescriptions(
-                        fileContent, CONCEPT_MAPPING_NAME);
+                        fileContent, AdocImporter.CONCEPT_MAPPING_NAME);
         Map<String, String> relationDescriptions =
                 MappingDescriptionExtractor.extractRelationDescriptions(
-                        fileContent, CONCEPT_MAPPING_NAME);
+                        fileContent, AdocImporter.RELATION_MAPPING_NAME);
 
         List<ArchitectureRule> rules = RuleExtractor.extractRules(fileContent);
         ruleManager.addAllArchitectureRules(rules);
