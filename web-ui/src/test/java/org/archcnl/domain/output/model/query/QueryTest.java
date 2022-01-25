@@ -225,6 +225,46 @@ public class QueryTest {
                 getDefaultNamespacesAsFormattedQuery() + expectedQueryString, queryAsString);
     }
 
+    @Test
+    public void givenSimpleQuery_whenCallTransformToAdoc_thenReturnFormattedAdocString()
+            throws InvalidVariableNameException, RelationDoesNotExistException {
+        // given
+        final Variable field = new Variable("name");
+        final Variable aggregate = new Variable("aggregate");
+        final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(field, aggregate));
+        final SelectClause selectClause = new SelectClause(objects);
+        final Triplet triplet1 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("is-of-type")
+                                .get(),
+                        new CustomConcept("Aggregate", ""));
+        final Triplet triplet2 =
+                new Triplet(
+                        new Variable("aggregate"),
+                        RulesConceptsAndRelations.getInstance()
+                                .getRelationManager()
+                                .getRelationByName("hasName")
+                                .get(),
+                        new Variable("name"));
+        final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
+        final WhereClause whereClause = new WhereClause(triplets);
+        final Query query = new Query("queryName", selectClause, whereClause);
+
+        final String expectedQueryString =
+                "queryName: (SELECT ?name ?aggregate)"
+                        + "(WHERE (?aggregate rdf:type architecture:Aggregate)"
+                        + "(?aggregate famix:hasName ?name))";
+
+        // when
+        final String queryAsString = query.transformToAdoc();
+
+        // then
+        Assert.assertEquals(expectedQueryString, queryAsString);
+    }
+
     private String getDefaultNamespacesAsFormattedString() {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
                 + System.lineSeparator()
