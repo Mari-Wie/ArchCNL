@@ -21,7 +21,7 @@ public class ArchitectureCheck {
 
     private ResultRepository repository;
     private List<String> sourcePaths;
-    private final String ruleFile = "temp/GeneratedRuleFile.adoc";
+    private final String ruleFile = ConfigAppService.getDbRuleFile();
     private final boolean verboseLogging = false;
     private final boolean removeDBs = true;
     private final List<String> enabledParsers = Arrays.asList("java");

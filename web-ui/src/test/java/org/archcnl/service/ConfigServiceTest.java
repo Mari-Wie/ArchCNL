@@ -61,4 +61,15 @@ public class ConfigServiceTest {
         // then
         Assert.assertEquals(expectedValue, dbContext);
     }
+
+    @Test
+    public void givenValidDbConfigFile_whenCallGetDbRuleFile_thenReturnDbRuleFile()
+            throws PropertyNotFoundException {
+        // given
+        final String expectedValue = "temp/GeneratedRuleFile.adoc";
+        // when
+        final String dbContext = ConfigAppService.getDbRuleFile();
+        // then
+        Assert.assertEquals(expectedValue, dbContext);
+    }
 }

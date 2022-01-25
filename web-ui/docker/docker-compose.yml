@@ -13,6 +13,7 @@ services:
       - DB_PROTOCOL=http
       - DB_PORT=5820
       - DB_CONTEXT=http://graphs.org/archcnl_it_db/1.0
+      - DB_RULEFILE=temp/GeneratedRuleFile.adoc
     depends_on:
       - archcnl-stardog.org
     ports:
