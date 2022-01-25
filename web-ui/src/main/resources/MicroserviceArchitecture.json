@@ -1,0 +1,49 @@
+{
+	"style": "MICROSERVICE_ARCHITECTURE",
+	"architectureInformation": [
+		{
+			"name": "Microservice Name",
+			"groupId": 1
+		},
+		{
+			"name": "Microservice Main Class Ending",
+			"groupId": 1
+		},
+		{
+			"name": "DB-Access Mechanism",
+			"groupId": 2
+		},
+		{
+			"name": "DB-Access Mechanism Ending",
+			"groupId": 2
+		},
+		{
+			"name": "API-Mechanism Name",
+			"groupId": 3
+		},
+		{
+			"name": "API-Mechanism Name Ending",
+			"groupId": 3
+		},
+		{
+			"name": "API Gateway Package",
+			"groupId": -1
+		},
+		{
+			"name": "MS-App Package Structure",
+			"groupId": -1
+		},
+		{
+			"name": "Service Registry Class Name",
+			"groupId": -1
+		},
+		{
+			"name": "Service Registry Import Class Name",
+			"groupId": -1
+		},
+		{
+			"name": "Circuit Breaker Import Class Name",
+			"groupId": -1
+		}
+	]
+}
