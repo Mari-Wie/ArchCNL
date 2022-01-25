@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
@@ -70,6 +71,8 @@ class AdocImporterTest {
 
         // then
         RulesConceptsAndRelations expectedModel = TestUtils.prepareModel();
+        List<Query> expectedCustomQueries = TestUtils.prepareCustomQueries();
+        List<FreeTextQuery> expectedFreeTextQueries = TestUtils.prepareFreeTextQueries();
 
         // Check if architecture rules were correctly imported
         Assertions.assertEquals(
@@ -113,6 +116,29 @@ class AdocImporterTest {
                             .get()
                             .getDescription(),
                     relation.getDescription());
+        }
+
+        Assertions.assertEquals(expectedFreeTextQueries.size(), freeTextQueryQueue.size());
+        while (!freeTextQueryQueue.isEmpty()) {
+            FreeTextQuery query = freeTextQueryQueue.poll();
+            Assertions.assertTrue(
+                    expectedFreeTextQueries.stream()
+                            .anyMatch(q -> q.getName().equals(query.getName())));
+            Assertions.assertTrue(
+                    expectedFreeTextQueries.stream()
+                            .anyMatch(q -> q.getQueryString().equals(query.getQueryString())));
+        }
+
+        Assertions.assertEquals(expectedCustomQueries.size(), customQueryQueue.size());
+        while (!customQueryQueue.isEmpty()) {
+            Query query = customQueryQueue.poll();
+            System.out.println(query.getName());
+            Assertions.assertTrue(
+                    expectedCustomQueries.stream()
+                            .anyMatch(q -> q.getName().equals(query.getName())));
+            Assertions.assertTrue(
+                    expectedCustomQueries.stream()
+                            .anyMatch(q -> q.transformToAdoc().equals(query.transformToAdoc())));
         }
     }
 
