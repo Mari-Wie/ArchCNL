@@ -170,6 +170,15 @@ public class MainView extends VerticalLayout {
         }
     }
 
+    public void showErrorMessage(String message) {
+        final Notification notification = new Notification();
+        final Text errorMessage = new Text(message);
+        final Button okButton = new Button("OK", click -> notification.close());
+        notification.add(errorMessage, okButton);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.open();
+    }
+
     public void setSaveProjectMenuItemEnabled(final boolean enabled) {
         saveProjectMenuItem.setEnabled(enabled);
     }

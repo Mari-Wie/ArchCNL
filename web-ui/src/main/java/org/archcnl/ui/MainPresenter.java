@@ -3,9 +3,6 @@ package org.archcnl.ui;
 import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.notification.Notification;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -83,29 +80,19 @@ public class MainPresenter extends Component implements PropertyChangeListener {
                     repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
             outputView.setResultRepository(repository);
             view.showContent(outputView);
-        } catch (PropertyNotFoundException | StardogException | IOException e) {
-            final Notification notification = new Notification();
-            final Text errorMessage;
-            if (e instanceof PropertyNotFoundException) {
-                errorMessage =
-                        new Text(
-                                "An error occured while running the architecture check. Properties of database could not be read.");
-            } else if (e instanceof StardogException) {
-                errorMessage =
-                        new Text(
-                                "An error occured while running the architecture check. Could not connect to the database.");
-            } else if (e instanceof IOException) {
-                errorMessage =
-                        new Text(
-                                "An error occured while running the architecture check. Rules could not be generated.");
-            } else {
-                errorMessage = new Text("Else" + e.getClass().toString());
-            }
-            final Button okButton = new Button("OK", click -> notification.close());
-            notification.add(errorMessage, okButton);
-            notification.setPosition(Notification.Position.MIDDLE);
-            notification.open();
-            // TODO remove this statement, only serves to make development of GUI easier
+        } catch (PropertyNotFoundException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Properties of database could not be read.");
+        } catch (StardogException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Could not connect to the database.");
+        } catch (IOException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Rules could not be generated.");
+        } finally {
+            // TODO Remove the finally at the end, as this should just be shown when no error is
+            // present.
+            // 		This just makes development easier.
             view.showContent(outputView);
         }
     }

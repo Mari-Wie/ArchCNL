@@ -12,6 +12,7 @@ services:
       - DB_NAME=archcnl_it_db
       - DB_PROTOCOL=http
       - DB_PORT=5820
+      - DB_CONTEXT=http://graphs.org/archcnl_it_db/1.0
     depends_on:
       - archcnl-stardog.org
     ports:

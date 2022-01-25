@@ -20,10 +20,7 @@ public class ArchitectureCheck {
     private static final Logger LOG = LogManager.getLogger(ArchitectureCheck.class);
 
     private ResultRepository repository;
-
-    private final String rootDir =
-            "D:/Programme/ArchCNL/ArchCNL/toolchain/src/integration-test/resources/";
-    private List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
+    private List<String> sourcePaths;
     private final String ruleFile = "temp/GeneratedRuleFile.adoc";
     private final boolean verboseLogging = false;
     private final boolean removeDBs = true;
