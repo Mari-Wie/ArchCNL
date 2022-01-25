@@ -1,7 +1,6 @@
 package org.archcnl.ui.outputview.components;
 
 import java.util.Optional;
-
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 
 public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
@@ -20,8 +19,8 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
     protected void addComponents() {
         add(generalInfoLayout, gridView, queryTextArea);
     }
-    
+
     public void updateGridView(Optional<Result> result) {
-    	gridView.update(result);
+        gridView.update(result);
     }
 }

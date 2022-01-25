@@ -6,7 +6,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
-
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,11 +37,10 @@ public class OutputView extends HorizontalLayout {
     private ResultRepository resultRepository;
 
     public OutputView() throws PropertyNotFoundException {
-    	/**OutputCtrl outputCtrl = new OutputCtrl();
-    	outputCtrl.writeRuleFile();
-    	outputCtrl.checkForViolations();
-        resultRepository = outputCtrl.getRepository();
-        */
+        /**
+         * OutputCtrl outputCtrl = new OutputCtrl(); outputCtrl.writeRuleFile();
+         * outputCtrl.checkForViolations(); resultRepository = outputCtrl.getRepository();
+         */
         // The execution of the default query should be moved into an OnAttachEvent
         queryResults = new QueryResultsUiComponent();
         customQueryPresenter = new CustomQueryPresenter();
@@ -114,25 +112,21 @@ public class OutputView extends HorizontalLayout {
         final String customQuery = customQueryPresenter.getQuery();
         freeTextQuery.setQueryText(customQuery);
     }
-    
+
     public void displayResult(Optional<Result> result) {
-    	queryResults.updateGridView(result);
+        queryResults.updateGridView(result);
     }
-    
+
     public void setResultRepository(ResultRepository repository) {
-    	resultRepository = repository;
+        resultRepository = repository;
     }
 
     /**
-    private GridView prepareDefaultQueryGridView() {
-        GridView gridView = new GridView();
-        Optional<Result> result =
-                resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
-        gridView.update(result);
-        return gridView;
-    }
-    */
-
+     * private GridView prepareDefaultQueryGridView() { GridView gridView = new GridView();
+     * Optional<Result> result =
+     * resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
+     * gridView.update(result); return gridView; }
+     */
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {

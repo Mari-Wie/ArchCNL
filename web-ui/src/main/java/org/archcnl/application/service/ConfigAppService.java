@@ -49,7 +49,7 @@ public class ConfigAppService {
                 ConfigAppService.getDbPropertyByName(ConfigAppService.DB_PASSWORD),
                 ConfigAppService.DB_PASSWORD);
     }
-    
+
     /** @return DB context from property file */
     public static String getDbContext() throws PropertyNotFoundException {
         return ConfigAppService.checkIfPropertyPresent(
