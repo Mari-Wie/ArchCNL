@@ -6,7 +6,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
-
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +35,6 @@ public class OutputView extends HorizontalLayout {
     private SideBarLayout sideBar;
     private Component currentComponent;
     private ResultRepository resultRepository;
-    
 
     public OutputView() throws PropertyNotFoundException {
         queryResults = new QueryResultsUiComponent();
