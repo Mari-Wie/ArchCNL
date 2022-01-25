@@ -6,11 +6,9 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
 import org.archcnl.domain.common.ArchitectureCheck;
-import org.archcnl.domain.input.ProjectManager;
 
 public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog {
 

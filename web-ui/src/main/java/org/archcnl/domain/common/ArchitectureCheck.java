@@ -15,6 +15,8 @@ import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.toolchain.CNLToolchain;
 
+import com.complexible.stardog.StardogException;
+
 public class ArchitectureCheck {
 
     private static final Logger LOG = LogManager.getLogger(ArchitectureCheck.class);
@@ -28,8 +30,7 @@ public class ArchitectureCheck {
     private final boolean removeDBs = true;
     private final List<String> enabledParsers = Arrays.asList("java");
 
-    public ArchitectureCheck() throws PropertyNotFoundException {
-    	
+    public ArchitectureCheck() throws PropertyNotFoundException, StardogException {	
             this.repository =
                     new ResultRepositoryImpl(
                             ConfigAppService.getDbUrl(),
@@ -38,15 +39,11 @@ public class ArchitectureCheck {
                             ConfigAppService.getDbPassword());
         }
     
-    public void writeRuleFile() {
+    public void writeRuleFile() throws IOException {
         final File file = new File(ruleFile);
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
-        try {
 			archRulesToAdocWriter.writeArchitectureRules(file, RulesConceptsAndRelations.getInstance());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
     }
     
     public void createDbWithViolations() throws PropertyNotFoundException {

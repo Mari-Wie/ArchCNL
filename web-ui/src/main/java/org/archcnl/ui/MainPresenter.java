@@ -1,9 +1,16 @@
 package org.archcnl.ui;
 
+import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.notification.Notification;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
@@ -19,7 +26,6 @@ import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
-import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
@@ -32,13 +38,12 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     private final MainView view;
     private final OutputView outputView;
     private final InputPresenter inputPresenter;
-    private final ArchitectureCheck architectureCheck;
+    private ArchitectureCheck architectureCheck;
 
     public MainPresenter() throws PropertyNotFoundException {
         inputPresenter = new InputPresenter();
         outputView = new OutputView();
         view = new MainView(inputPresenter.getView());
-        architectureCheck = new ArchitectureCheck();
         addListeners();
     }
 
@@ -63,7 +68,6 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     }
     
     public void selectPathForChecking() {
-    	// TODO ask for actual repository
     	SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog(architectureCheck);
     	directoryDialog.addOpenedChangeListener(e -> {if(!e.isOpened()) {
     		checkViolations(directoryDialog.getSelectedPath());}});
@@ -72,17 +76,30 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     
     public void checkViolations(String path) {
     	try {
+            architectureCheck = new ArchitectureCheck();
     		architectureCheck.writeRuleFile();
     		architectureCheck.setProjectPath(path);
 			architectureCheck.createDbWithViolations();
-		} catch (PropertyNotFoundException e) {
-			// TODO Handle the case where no DB was created
-			e.printStackTrace();
+	    	ResultRepository repository = architectureCheck.getRepository();
+	    	outputView.displayResult(repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
+	    	outputView.setResultRepository(repository);
+	    	view.showContent(outputView);
+		} catch (PropertyNotFoundException | StardogException | IOException e) {
+            final Notification notification = new Notification();
+            final Text errorMessage;
+            if(e.getClass().equals(StardogException.class)) {
+            	errorMessage = new Text("An error occured while running the architecture check. Properties of database could not be read.");
+            } else if(e.getClass().equals(PropertyNotFoundException.class)) {
+            	errorMessage = new Text("An error occured while running the architecture check. Could not connect to the database.");
+            } else {
+            	errorMessage = new Text("An error occured while running the architecture check. Rules could not be generated.");
+            }
+                
+            final Button okButton = new Button("OK", click -> notification.close());
+            notification.add(errorMessage, okButton);
+            notification.setPosition(Notification.Position.MIDDLE);
+            notification.open();
 		}
-    	ResultRepository repository = architectureCheck.getRepository();
-    	outputView.displayResult(repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
-    	outputView.setResultRepository(repository);
-    	view.showContent(outputView);
     }
 
     public MainView getView() {
