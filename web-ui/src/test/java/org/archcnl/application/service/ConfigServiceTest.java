@@ -1,7 +1,6 @@
-package org.archcnl.service;
+package org.archcnl.application.service;
 
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.application.service.ConfigAppService;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,11 +1,10 @@
-package org.archcnl.output.model.query;
+package org.archcnl.domain.output.model.query;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.output.model.query.SelectClause;
 import org.junit.Assert;
 import org.junit.Test;
 

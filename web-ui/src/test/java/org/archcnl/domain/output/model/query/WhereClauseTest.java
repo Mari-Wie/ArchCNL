@@ -1,4 +1,4 @@
-package org.archcnl.output.model.query;
+package org.archcnl.domain.output.model.query;
 
 import java.util.Arrays;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
@@ -11,7 +11,6 @@ import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.output.model.query.WhereClause;
 import org.junit.Assert;
 import org.junit.Test;
 
