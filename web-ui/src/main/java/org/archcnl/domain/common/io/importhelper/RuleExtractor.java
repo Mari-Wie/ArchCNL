@@ -1,5 +1,6 @@
 package org.archcnl.domain.common.io.importhelper;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -42,5 +43,10 @@ public class RuleExtractor {
             throw new NoArchitectureRuleException(potentialRule);
         }
         return new ArchitectureRule(potentialRule);
+    }
+
+    @VisibleForTesting
+    public static Pattern getRuleContentPattern() {
+        return RULE_CONTENT_PATTERN;
     }
 }

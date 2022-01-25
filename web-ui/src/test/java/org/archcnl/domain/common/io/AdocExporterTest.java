@@ -6,8 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
+import org.archcnl.domain.common.io.importhelper.MappingDescriptionExtractor;
+import org.archcnl.domain.common.io.importhelper.MappingExtractor;
+import org.archcnl.domain.common.io.importhelper.RuleExtractor;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -17,9 +22,11 @@ import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 import org.junit.jupiter.api.Test;
 
-class ArchRuleToAdocWriterTest {
+class AdocExporterTest {
 
     @Test
     void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
@@ -29,11 +36,19 @@ class ArchRuleToAdocWriterTest {
                     RelationAlreadyExistsException, UnrelatedMappingException {
         // given
         RulesConceptsAndRelations model = TestUtils.prepareModel();
+        List<FreeTextQuery> freeTextQueries = new LinkedList<>();
+        List<Query> customQueries = new LinkedList<>();
 
         // when
         final File file = new File("src/test/resources/WriterTest.adoc");
-        ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
-        archRulesToAdocWriter.writeArchitectureRules(file, model);
+        AdocExporter adocExporter = new AdocExporter();
+        adocExporter.writeToAdoc(
+                file,
+                model.getArchitectureRuleManager(),
+                model.getConceptManager(),
+                model.getRelationManager(),
+                customQueries,
+                freeTextQueries);
 
         // then
         String actualContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
@@ -41,51 +56,53 @@ class ArchRuleToAdocWriterTest {
         String expectedContent = FileUtils.readFileToString(expectedFile, StandardCharsets.UTF_8);
 
         assertEquals(
-                TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRulePattern(), expectedContent),
-                TestUtils.numberOfMatches(ArchRulesFromAdocReader.getRulePattern(), actualContent));
+                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), expectedContent),
+                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getConceptMappingPattern(), expectedContent),
+                        MappingExtractor.getConceptMappingPattern(), expectedContent),
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getConceptMappingPattern(), actualContent));
+                        MappingExtractor.getConceptMappingPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRelationMappingPattern(), expectedContent),
+                        MappingExtractor.getRelationMappingPattern(), expectedContent),
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRelationMappingPattern(), actualContent));
+                        MappingExtractor.getRelationMappingPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getConceptDescriptionPattern(), expectedContent),
+                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
+                        expectedContent),
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getConceptDescriptionPattern(), actualContent));
+                        MappingDescriptionExtractor.getConceptDescriptionPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRelationDescriptionPattern(), expectedContent),
+                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
+                        expectedContent),
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRelationDescriptionPattern(), actualContent));
+                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
+                        actualContent));
 
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        ArchRulesFromAdocReader.getRulePattern(), expectedContent, actualContent));
+                        RuleExtractor.getRuleContentPattern(), expectedContent, actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        ArchRulesFromAdocReader.getConceptMappingPattern(),
+                        MappingExtractor.getConceptMappingPattern(),
                         expectedContent,
                         actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        ArchRulesFromAdocReader.getRelationMappingPattern(),
+                        MappingExtractor.getRelationMappingPattern(),
                         expectedContent,
                         actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        ArchRulesFromAdocReader.getConceptDescriptionPattern(),
+                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
                         expectedContent,
                         actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        ArchRulesFromAdocReader.getRelationDescriptionPattern(),
+                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
                         expectedContent,
                         actualContent));
     }

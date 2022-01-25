@@ -3,10 +3,17 @@ package org.archcnl.domain.common.io;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.Queue;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.io.importhelper.MappingDescriptionExtractor;
+import org.archcnl.domain.common.io.importhelper.MappingExtractor;
+import org.archcnl.domain.common.io.importhelper.RuleExtractor;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -17,17 +24,28 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ArchRulesFromAdocReaderTest {
+class AdocImporterTest {
 
-    private RulesConceptsAndRelations rulesConceptsAndRelations;
+    private ArchitectureRuleManager ruleManager;
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+    private Queue<FreeTextQuery> freeTextQueryQueue;
+    private Queue<Query> customQueryQueue;
 
     @BeforeEach
     private void setup() throws ConceptDoesNotExistException {
-        rulesConceptsAndRelations = new RulesConceptsAndRelations();
+        ruleManager = new ArchitectureRuleManager();
+        conceptManager = new ConceptManager();
+        relationManager = new RelationManager(conceptManager);
+        freeTextQueryQueue = new LinkedList<>();
+        customQueryQueue = new LinkedList<>();
     }
 
     @Test
@@ -41,8 +59,14 @@ class ArchRulesFromAdocReaderTest {
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
 
         // when
-        ArchRulesFromAdocReader archRulesFromAdocReader = new ArchRulesFromAdocReader();
-        archRulesFromAdocReader.readArchitectureRules(ruleFile, rulesConceptsAndRelations);
+        AdocImporter adocImporter = new AdocImporter();
+        adocImporter.readFromAdoc(
+                ruleFile,
+                ruleManager,
+                conceptManager,
+                relationManager,
+                freeTextQueryQueue,
+                customQueryQueue);
 
         // then
         RulesConceptsAndRelations expectedModel = TestUtils.prepareModel();
@@ -50,12 +74,8 @@ class ArchRulesFromAdocReaderTest {
         // Check if architecture rules were correctly imported
         Assertions.assertEquals(
                 expectedModel.getArchitectureRuleManager().getArchitectureRules().size(),
-                rulesConceptsAndRelations
-                        .getArchitectureRuleManager()
-                        .getArchitectureRules()
-                        .size());
-        for (ArchitectureRule rule :
-                rulesConceptsAndRelations.getArchitectureRuleManager().getArchitectureRules()) {
+                ruleManager.getArchitectureRules().size());
+        for (ArchitectureRule rule : ruleManager.getArchitectureRules()) {
             Assertions.assertTrue(
                     expectedModel
                             .getArchitectureRuleManager()
@@ -66,8 +86,8 @@ class ArchRulesFromAdocReaderTest {
         // Check if concepts were correctly imported
         Assertions.assertEquals(
                 expectedModel.getConceptManager().getInputConcepts().size(),
-                rulesConceptsAndRelations.getConceptManager().getInputConcepts().size());
-        for (Concept concept : rulesConceptsAndRelations.getConceptManager().getInputConcepts()) {
+                conceptManager.getInputConcepts().size());
+        for (Concept concept : conceptManager.getInputConcepts()) {
             Assertions.assertTrue(
                     expectedModel.getConceptManager().getInputConcepts().contains(concept));
             Assertions.assertEquals(
@@ -82,9 +102,8 @@ class ArchRulesFromAdocReaderTest {
         // Check if relations were correctly imported
         Assertions.assertEquals(
                 expectedModel.getRelationManager().getInputRelations().size(),
-                rulesConceptsAndRelations.getRelationManager().getInputRelations().size());
-        for (Relation relation :
-                rulesConceptsAndRelations.getRelationManager().getInputRelations()) {
+                relationManager.getInputRelations().size());
+        for (Relation relation : relationManager.getInputRelations()) {
             Assertions.assertTrue(
                     expectedModel.getRelationManager().getInputRelations().contains(relation));
             Assertions.assertEquals(
@@ -106,23 +125,24 @@ class ArchRulesFromAdocReaderTest {
         // then
         Assertions.assertEquals(
                 2,
-                TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRulePattern(), rulesFileString));
+                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), rulesFileString));
         Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getConceptDescriptionPattern(), rulesFileString));
+                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
+                        rulesFileString));
         Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRelationDescriptionPattern(), rulesFileString));
+                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
+                        rulesFileString));
         Assertions.assertEquals(
                 5,
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getRelationMappingPattern(), rulesFileString));
+                        MappingExtractor.getRelationMappingPattern(), rulesFileString));
         Assertions.assertEquals(
                 3,
                 TestUtils.numberOfMatches(
-                        ArchRulesFromAdocReader.getConceptMappingPattern(), rulesFileString));
+                        MappingExtractor.getConceptMappingPattern(), rulesFileString));
     }
 }

@@ -1,5 +1,6 @@
 package org.archcnl.domain.common.io.importhelper;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -79,5 +80,15 @@ public class MappingDescriptionExtractor {
                         });
 
         return relationDescriptions;
+    }
+
+    @VisibleForTesting
+    public static Pattern getConceptDescriptionPattern() {
+        return CONCEPT_DESCRIPTION_PATTERN;
+    }
+
+    @VisibleForTesting
+    public static Pattern getRelationDescriptionPattern() {
+        return RELATION_DESCRIPTION_PATTERN;
     }
 }

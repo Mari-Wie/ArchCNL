@@ -1,5 +1,6 @@
 package org.archcnl.domain.common.io.importhelper;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -220,5 +221,15 @@ public class MappingExtractor {
         } catch (final Exception e) {
             throw new NoTripletException(potentialTriplet);
         }
+    }
+
+    @VisibleForTesting
+    public static Pattern getConceptMappingPattern() {
+        return CONCEPT_MAPPING_PATTERN;
+    }
+
+    @VisibleForTesting
+    public static Pattern getRelationMappingPattern() {
+        return RELATION_MAPPING_PATTERN;
     }
 }
