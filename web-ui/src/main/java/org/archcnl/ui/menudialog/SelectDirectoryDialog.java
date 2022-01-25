@@ -11,8 +11,8 @@ import org.archcnl.domain.common.ArchitectureCheck;
 
 public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog {
 
-	private static final long serialVersionUID = 5511746171215269619L;
-	private Button confirmButton;
+    private static final long serialVersionUID = 5511746171215269619L;
+    private Button confirmButton;
     private String selectedPath;
 
     public SelectDirectoryDialog(ArchitectureCheck check) {
