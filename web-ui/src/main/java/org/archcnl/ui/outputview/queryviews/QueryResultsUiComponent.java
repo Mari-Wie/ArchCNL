@@ -9,7 +9,8 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 
     private GeneralInfoLayout generalInfoLayout;
 
-    public QueryResultsUiComponent(GridView gridView) {
+    public QueryResultsUiComponent(GridView gridView, String defaultQueryText) {
+        super(defaultQueryText);
         this.gridView = gridView;
         generalInfoLayout = new GeneralInfoLayout();
         queryTextArea.setReadOnly(true);

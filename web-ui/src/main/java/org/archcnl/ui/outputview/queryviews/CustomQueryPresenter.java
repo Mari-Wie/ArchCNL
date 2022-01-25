@@ -5,6 +5,8 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
@@ -101,7 +103,8 @@ public class CustomQueryPresenter extends Component {
             view.addVariableSelectionComponent();
         } else if (event.getSource().getOptionalValue().isEmpty()
                 && view.areAtleastTwoVariableSelectionComponentsEmpty()) {
-            view.removeVariableSelectionComponent(event.getSource());
+            // TODO fix this behavior (see ArchCNL-154)
+            // view.removeVariableSelectionComponent(event.getSource());
         }
     }
 
@@ -118,6 +121,35 @@ public class CustomQueryPresenter extends Component {
                                 .collect(Collectors.toSet()));
         WhereClause whereClause = new WhereClause(wherePresenter.getAndTriplets());
         return new Query(queryName, selectClause, whereClause);
+    }
+
+    public void setQueryName(String name) {
+        queryName = name;
+        view.setQueryName(name);
+    }
+
+    public void setWhereClause(WhereClause clause) {
+        wherePresenter.showAndTriplets(clause.getAndTriplets());
+    }
+
+    public void setSelectClause(SelectClause clause) {
+        List<VariableSelectionComponent> components = new LinkedList<>();
+        clause.getObjects()
+                .forEach(
+                        variable -> {
+                            try {
+                                variableManager.addVariable(variable);
+                            } catch (VariableAlreadyExistsException e) {
+                                // do nothing
+                            }
+                            VariableSelectionComponent component = new VariableSelectionComponent();
+                            component.setItems(
+                                    variableManager.getVariables().stream().map(Variable::getName));
+                            component.setVariable(variable);
+                            components.add(component);
+                        });
+        view.showVariableSelectionComponents(components);
+        view.getVariableListView().showVariableList(variableManager.getVariables());
     }
 
     public CustomQueryView getView() {

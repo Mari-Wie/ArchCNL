@@ -126,13 +126,27 @@ public class CustomQueryView extends HorizontalLayout {
 
     public void addVariableSelectionComponent() {
         VariableSelectionComponent variableSelectionComponent = new VariableSelectionComponent();
+        addVariableSelectionComponentsListeners(variableSelectionComponent);
+        select.add(variableSelectionComponent);
+    }
+
+    public void showVariableSelectionComponents(List<VariableSelectionComponent> components) {
+        select.removeAll();
+        components.forEach(component -> select.add(component));
+        components.forEach(component -> addVariableSelectionComponentsListeners(component));
+        VariableSelectionComponent variableSelectionComponent = new VariableSelectionComponent();
+        addVariableSelectionComponentsListeners(variableSelectionComponent);
+        select.add(variableSelectionComponent);
+    }
+
+    private void addVariableSelectionComponentsListeners(
+            VariableSelectionComponent variableSelectionComponent) {
         variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableListUpdateRequestedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(VariableSelectedEvent.class, this::fireEvent);
-        select.add(variableSelectionComponent);
     }
 
     public void removeVariableSelectionComponent(

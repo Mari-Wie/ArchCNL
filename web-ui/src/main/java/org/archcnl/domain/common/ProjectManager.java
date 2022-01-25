@@ -2,8 +2,10 @@ package org.archcnl.domain.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import org.archcnl.domain.common.io.AdocExporter;
 import org.archcnl.domain.common.io.AdocImporter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
@@ -13,6 +15,8 @@ import org.archcnl.domain.output.model.query.Query;
 public class ProjectManager {
 
     private static final String DEFAULT_PROJECT_FILE_NAME = "ArchCNL-architecture_rules.adoc";
+    private final Queue<FreeTextQuery> freeTextQueryQueue = new LinkedList<>();
+    private final Queue<Query> customQueryQueue = new LinkedList<>();
     private Optional<File> projectFile;
 
     public ProjectManager() {
@@ -29,7 +33,9 @@ public class ProjectManager {
                 file,
                 RulesConceptsAndRelations.getInstance().getArchitectureRuleManager(),
                 RulesConceptsAndRelations.getInstance().getConceptManager(),
-                RulesConceptsAndRelations.getInstance().getRelationManager());
+                RulesConceptsAndRelations.getInstance().getRelationManager(),
+                freeTextQueryQueue,
+                customQueryQueue);
         this.projectFile = Optional.of(file);
     }
 
@@ -70,5 +76,13 @@ public class ProjectManager {
 
     public static String getDefaultProjectFileName() {
         return DEFAULT_PROJECT_FILE_NAME;
+    }
+
+    public Queue<FreeTextQuery> getFreeTextQueryQueue() {
+        return freeTextQueryQueue;
+    }
+
+    public Queue<Query> getCustomQueryQueue() {
+        return customQueryQueue;
     }
 }

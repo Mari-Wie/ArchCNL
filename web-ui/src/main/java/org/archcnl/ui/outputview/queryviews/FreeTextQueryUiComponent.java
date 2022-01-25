@@ -32,7 +32,8 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                     e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
     private HorizontalLayout topRow;
 
-    public FreeTextQueryUiComponent() {
+    public FreeTextQueryUiComponent(String defaultQueryText) {
+        super(defaultQueryText);
         Label caption = new Label("Create a free text query");
 
         pinButton =
@@ -69,5 +70,9 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     private String getQueryName() {
         return queryName.getOptionalValue().orElse(DEFAULT_NAME);
+    }
+
+    public void setQueryName(String name) {
+        queryName.setValue(name);
     }
 }

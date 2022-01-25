@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -13,14 +14,15 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
-import org.archcnl.domain.common.io.importhelper.FreeTextQueryExtractor;
 import org.archcnl.domain.common.io.importhelper.MappingDescriptionExtractor;
 import org.archcnl.domain.common.io.importhelper.MappingExtractor;
+import org.archcnl.domain.common.io.importhelper.QueryExtractor;
 import org.archcnl.domain.common.io.importhelper.RuleExtractor;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 
 public class AdocImporter {
 
@@ -33,7 +35,9 @@ public class AdocImporter {
             File file,
             ArchitectureRuleManager ruleManager,
             ConceptManager conceptManager,
-            RelationManager relationManager)
+            RelationManager relationManager,
+            Queue<FreeTextQuery> freeTextQueryQueue,
+            Queue<Query> customQueryQueue)
             throws IOException {
 
         final String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
@@ -72,7 +76,8 @@ public class AdocImporter {
                     }
                 });
 
-        List<FreeTextQuery> freeTextQueries =
-                FreeTextQueryExtractor.extractFreeTextQueries(fileContent);
+        freeTextQueryQueue.addAll(QueryExtractor.extractFreeTextQueries(fileContent));
+
+        customQueryQueue.addAll(QueryExtractor.extractCustomQueries(fileContent));
     }
 }

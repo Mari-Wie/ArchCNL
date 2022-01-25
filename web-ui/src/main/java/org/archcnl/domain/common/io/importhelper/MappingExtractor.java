@@ -149,7 +149,7 @@ public class MappingExtractor {
         }
     }
 
-    private static AndTriplets parseWhenPart(final String whenPart) throws NoTripletException {
+    protected static AndTriplets parseWhenPart(final String whenPart) throws NoTripletException {
         final AndTriplets andTriplets = new AndTriplets();
         final List<String> potentialTriplets =
                 AdocIoUtils.getAllMatches(MappingExtractor.TRIPLET_PATTERN, whenPart);

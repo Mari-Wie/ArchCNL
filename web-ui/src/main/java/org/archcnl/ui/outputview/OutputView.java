@@ -49,10 +49,12 @@ public class OutputView extends HorizontalLayout {
                         ConfigAppService.getDbName(),
                         ConfigAppService.getDbUsername(),
                         ConfigAppService.getDbPassword());
+
+        final String defaultQuery = QueryUtils.getDefaultQuery().transformToGui();
         // The execution of the default query should be moved into an OnAttachEvent
-        defaultQueryView = new QueryResultsUiComponent(prepareDefaultQueryGridView());
+        defaultQueryView = new QueryResultsUiComponent(prepareDefaultQueryGridView(), defaultQuery);
         customQueryPresenter = new CustomQueryPresenter();
-        freeTextQueryView = new FreeTextQueryUiComponent();
+        freeTextQueryView = new FreeTextQueryUiComponent(defaultQuery);
         sideBarWidget =
                 new SideBarWidget(
                         defaultQueryView, customQueryPresenter.getView(), freeTextQueryView);
@@ -80,6 +82,36 @@ public class OutputView extends HorizontalLayout {
         return queries;
     }
 
+    public void showFreeTextQuery(FreeTextQuery query, boolean defaultQueryTab) {
+        if (defaultQueryTab) {
+            freeTextQueryView.setQueryText(query.getQueryString());
+            freeTextQueryView.setQueryName(query.getName());
+        } else {
+            FreeTextQueryUiComponent newFreeTextQueryView = new FreeTextQueryUiComponent("");
+            newFreeTextQueryView.setQueryText(query.getQueryString());
+            newFreeTextQueryView.setQueryName(query.getName());
+            pinnedFreeTextQueries.add(newFreeTextQueryView);
+            addFreeTextQueryListener(newFreeTextQueryView);
+            sideBarWidget.addPinnedQueryTab(newFreeTextQueryView, query.getName());
+        }
+    }
+
+    public void showCustomQuery(Query query, boolean defaultQueryTab) {
+        if (defaultQueryTab) {
+            customQueryPresenter.setQueryName(query.getName());
+            customQueryPresenter.setSelectClause(query.getSelectClause());
+            customQueryPresenter.setWhereClause(query.getWhereClause());
+        } else {
+            CustomQueryPresenter newCustomQueryPresenter = new CustomQueryPresenter();
+            newCustomQueryPresenter.setQueryName(query.getName());
+            newCustomQueryPresenter.setSelectClause(query.getSelectClause());
+            newCustomQueryPresenter.setWhereClause(query.getWhereClause());
+            pinnedCustomQueries.add(newCustomQueryPresenter);
+            addCustomQueryListener(newCustomQueryPresenter);
+            sideBarWidget.addPinnedQueryTab(newCustomQueryPresenter, query.getName());
+        }
+    }
+
     private void initLayout() {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
@@ -88,15 +120,15 @@ public class OutputView extends HorizontalLayout {
     }
 
     private void registerEventListeners() {
-        addFreeTextQueryListener();
+        addFreeTextQueryListener(freeTextQueryView);
         sideBarWidget.addListener(InputViewRequestedEvent.class, this::fireEvent);
         sideBarWidget.addListener(
                 ShowComponentRequestedEvent.class,
                 event -> switchToComponent(event.getComponent()));
-        addCustomQueryListener();
+        addCustomQueryListener(customQueryPresenter);
     }
 
-    private void addFreeTextQueryListener() {
+    private void addFreeTextQueryListener(FreeTextQueryUiComponent freeTextQueryView) {
         freeTextQueryView.addListener(
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
@@ -104,7 +136,7 @@ public class OutputView extends HorizontalLayout {
         freeTextQueryView.addListener(PinQueryRequestedEvent.class, this::handleEvent);
     }
 
-    private void addCustomQueryListener() {
+    private void addCustomQueryListener(CustomQueryPresenter customQueryPresenter) {
         customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
         customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
@@ -114,12 +146,13 @@ public class OutputView extends HorizontalLayout {
         if (event.getSource() instanceof CustomQueryPresenter) {
             pinnedCustomQueries.add(customQueryPresenter);
             customQueryPresenter = new CustomQueryPresenter();
-            addCustomQueryListener();
+            addCustomQueryListener(customQueryPresenter);
             sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
         } else {
             pinnedFreeTextQueries.add(freeTextQueryView);
-            freeTextQueryView = new FreeTextQueryUiComponent();
-            addFreeTextQueryListener();
+            freeTextQueryView =
+                    new FreeTextQueryUiComponent(QueryUtils.getDefaultQuery().transformToGui());
+            addFreeTextQueryListener(freeTextQueryView);
             sideBarWidget.updateFreeTextQueryTab(freeTextQueryView);
         }
     }

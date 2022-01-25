@@ -25,7 +25,10 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
     private static final long serialVersionUID = 6538573408820948553L;
     private Button confirmButton;
 
-    public SaveProjectDialog(List<Query> customQueries, List<FreeTextQuery> freeTextQueries) {
+    public SaveProjectDialog(
+            ProjectManager projectManager,
+            List<Query> customQueries,
+            List<FreeTextQuery> freeTextQueries) {
         setDraggable(true);
 
         Text title = new Text("Save project to another location)");
@@ -71,9 +74,8 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
                                         fileName = fileName + ".adoc";
                                     }
                                     Path path = Paths.get(file.get().getAbsolutePath(), fileName);
-                                    ProjectManager.getInstance()
-                                            .saveProject(
-                                                    path.toFile(), customQueries, freeTextQueries);
+                                    projectManager.saveProject(
+                                            path.toFile(), customQueries, freeTextQueries);
                                     close();
                                     fireEvent(new ProjectSavedEvent(this, true));
                                 } catch (IOException e) {

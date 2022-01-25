@@ -6,7 +6,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
-import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.components.GridView;
 
 public abstract class AbstractQueryResultsComponent extends VerticalLayout {
@@ -16,16 +15,14 @@ public abstract class AbstractQueryResultsComponent extends VerticalLayout {
     protected GridView gridView;
     protected TextArea queryTextArea;
 
-    protected AbstractQueryResultsComponent() {
+    protected AbstractQueryResultsComponent(String defaultQueryText) {
         setHeightFull();
         getStyle().set("overflow", "auto");
         gridView = new GridView();
         queryTextArea = new TextArea("SPARQL Query");
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
         queryTextArea.setValue("QUERY UNINITIALIZED");
-
-        addAttachListener(
-                event -> queryTextArea.setValue(QueryUtils.getDefaultQuery().transformToGui()));
+        queryTextArea.setValue(defaultQueryText);
     }
 
     @Override

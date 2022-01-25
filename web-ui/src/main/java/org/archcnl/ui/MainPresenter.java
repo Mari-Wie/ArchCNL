@@ -19,6 +19,8 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
 import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
+import org.archcnl.ui.menudialog.events.ShowCustomQueryRequestedEvent;
+import org.archcnl.ui.menudialog.events.ShowFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 
@@ -30,8 +32,10 @@ public class MainPresenter extends Component {
     private final MainView view;
     private final OutputView outputView;
     private final InputPresenter inputPresenter;
+    private final ProjectManager projectManager;
 
     public MainPresenter() throws PropertyNotFoundException {
+        projectManager = new ProjectManager();
         inputPresenter = new InputPresenter();
         outputView = new OutputView();
         view = new MainView(inputPresenter.getView());
@@ -62,13 +66,19 @@ public class MainPresenter extends Component {
                 view.showNewTab();
                 break;
             case OPEN:
-                new OpenProjectDialog().open();
+                OpenProjectDialog openProjectDialog = new OpenProjectDialog(projectManager);
+                openProjectDialog.addListener(
+                        ShowFreeTextQueryRequestedEvent.class,
+                        e -> outputView.showFreeTextQuery(e.getQuery(), e.isDefaultQueryTab()));
+                openProjectDialog.addListener(
+                        ShowCustomQueryRequestedEvent.class,
+                        e -> outputView.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
+                openProjectDialog.open();
                 break;
             case SAVE:
                 try {
-                    ProjectManager.getInstance()
-                            .saveProject(
-                                    outputView.getCustomQueries(), outputView.getFreeTextQueries());
+                    projectManager.saveProject(
+                            outputView.getCustomQueries(), outputView.getFreeTextQueries());
                 } catch (final IOException e) {
                     new ConfirmDialog("Project file could not be written.").open();
                 }
@@ -76,7 +86,9 @@ public class MainPresenter extends Component {
             case SAVE_AS:
                 SaveProjectDialog dialog =
                         new SaveProjectDialog(
-                                outputView.getCustomQueries(), outputView.getFreeTextQueries());
+                                projectManager,
+                                outputView.getCustomQueries(),
+                                outputView.getFreeTextQueries());
                 dialog.addListener(
                         ProjectSavedEvent.class, e -> view.setSaveProjectMenuItemEnabled(true));
                 dialog.open();
