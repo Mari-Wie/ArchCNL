@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
@@ -20,8 +19,9 @@ public class OutputCtrl {
     private static final Logger LOG = LogManager.getLogger(OutputCtrl.class);
 
     private ResultRepository repository;
-    
-    private final String rootDir = "D:/Programme/ArchCNL/ArchCNL/toolchain/src/integration-test/resources/";
+
+    private final String rootDir =
+            "D:/Programme/ArchCNL/ArchCNL/toolchain/src/integration-test/resources/";
     private final List<String> sourcePaths = Arrays.asList(rootDir + "OnionArchitectureDemo/src/");
     private final String ruleFile = rootDir + "OnionArchitectureDemo/rules.adoc";
     private final boolean verboseLogging = false;
@@ -41,29 +41,31 @@ public class OutputCtrl {
             e.printStackTrace();
         }
     }
-    
+
     public void writeRuleFile() {
         final File file = new File("temp/GeneratedRuleFile.adoc");
         ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
         try {
-			archRulesToAdocWriter.writeArchitectureRules(file, RulesConceptsAndRelations.getInstance());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            archRulesToAdocWriter.writeArchitectureRules(
+                    file, RulesConceptsAndRelations.getInstance());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
+
     public void checkForViolations() throws PropertyNotFoundException {
-    	CNLToolchain.runToolchain(ConfigAppService.getDbName(),
-			ConfigAppService.getDbUrl(),
-			ConfigAppService.getDbContext(),
-            ConfigAppService.getDbUsername(),
-            ConfigAppService.getDbPassword(),
-            sourcePaths,
-            ruleFile,
-            verboseLogging, 
-            removeDBs,
-            enabledParsers);
+        CNLToolchain.runToolchain(
+                ConfigAppService.getDbName(),
+                ConfigAppService.getDbUrl(),
+                ConfigAppService.getDbContext(),
+                ConfigAppService.getDbUsername(),
+                ConfigAppService.getDbPassword(),
+                sourcePaths,
+                ruleFile,
+                verboseLogging,
+                removeDBs,
+                enabledParsers);
     }
 
     public ResultRepository getRepository() {

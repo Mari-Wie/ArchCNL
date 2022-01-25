@@ -7,7 +7,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.io.File;
 import java.util.Optional;
-
 import org.archcnl.domain.common.ArchitectureCheck;
 
 public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog {
@@ -30,10 +29,11 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
                             if (file.isEmpty()) {
                                 // should not be possible as button should be disabled when this is
                                 // the case
-                                fileSelectionComponent.showErrorMessage("Please select a directory.");
+                                fileSelectionComponent.showErrorMessage(
+                                        "Please select a directory.");
                             } else {
-                            	selectedPath = file.get().getPath();
-								close();
+                                selectedPath = file.get().getPath();
+                                close();
                             }
                         });
         confirmButton.setEnabled(false);
@@ -46,10 +46,10 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
     }
 
     public String getSelectedPath() {
-		return selectedPath;
-	}
+        return selectedPath;
+    }
 
-	@Override
+    @Override
     public void setConfirmButtonEnabled(boolean enabled) {
         confirmButton.setEnabled(enabled);
     }
