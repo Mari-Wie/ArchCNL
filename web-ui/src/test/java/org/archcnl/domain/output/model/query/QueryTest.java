@@ -11,7 +11,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,7 +42,7 @@ public class QueryTest {
                         new Variable("name"));
         final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
         final WhereClause whereClause = new WhereClause(triplets);
-        final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
+        final Query query = new Query("queryName", selectClause, whereClause);
 
         final String expectedQueryString =
                 "SELECT ?name "
@@ -149,7 +148,7 @@ public class QueryTest {
                                 triplet1, triplet2, triplet3, triplet4, triplet5, triplet6,
                                 triplet7, triplet8));
         final WhereClause whereClause = new WhereClause(triplets);
-        final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
+        final Query query = new Query("queryName", selectClause, whereClause);
 
         final String expectedQueryString =
                 "SELECT ?cnl ?subject ?predicate ?object "
@@ -211,7 +210,7 @@ public class QueryTest {
                         new Variable("name"));
         final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
         final WhereClause whereClause = new WhereClause(triplets);
-        final Query query = new Query(getDefaultNamespaces(), selectClause, whereClause);
+        final Query query = new Query("queryName", selectClause, whereClause);
 
         final String expectedQueryString =
                 "SELECT ?name "
@@ -223,26 +222,7 @@ public class QueryTest {
 
         // then
         Assert.assertEquals(
-                getDefaultNamespacesAsFormattedQuery() + " " + expectedQueryString, queryAsString);
-    }
-
-    private Set<QueryNamespace> getDefaultNamespaces() {
-        final QueryNamespace rdf =
-                new QueryNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns");
-        final QueryNamespace owl = new QueryNamespace("owl", "http://www.w3.org/2002/07/owl");
-        final QueryNamespace rdfs =
-                new QueryNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema");
-        final QueryNamespace xsd = new QueryNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
-        final QueryNamespace conformance =
-                new QueryNamespace(
-                        "conformance", "http://arch-ont.org/ontologies/architectureconformance");
-        final QueryNamespace famix =
-                new QueryNamespace("famix", "http://arch-ont.org/ontologies/famix.owl");
-        final QueryNamespace architecture =
-                new QueryNamespace(
-                        "architecture", "http://www.arch-ont.org/ontologies/architecture.owl");
-        return new LinkedHashSet<>(
-                Arrays.asList(rdf, owl, rdfs, xsd, conformance, famix, architecture));
+                getDefaultNamespacesAsFormattedQuery() + expectedQueryString, queryAsString);
     }
 
     private String getDefaultNamespacesAsFormattedString() {
@@ -259,6 +239,8 @@ public class QueryTest {
                 + "PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>"
                 + System.lineSeparator()
                 + "PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>"
+                + System.lineSeparator()
+                + "PREFIX main: <http://arch-ont.org/ontologies/main.owl#>"
                 + System.lineSeparator();
     }
 
@@ -269,6 +251,7 @@ public class QueryTest {
                 + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "
                 + "PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#> "
                 + "PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#> "
-                + "PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>";
+                + "PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#> "
+                + "PREFIX main: <http://arch-ont.org/ontologies/main.owl#> ";
     }
 }
