@@ -12,16 +12,11 @@ import org.archcnl.domain.output.model.query.Query;
 
 public class ProjectManager {
 
-    private static final ProjectManager INSTANCE = new ProjectManager();
     private static final String DEFAULT_PROJECT_FILE_NAME = "ArchCNL-architecture_rules.adoc";
     private Optional<File> projectFile;
 
     public ProjectManager() {
         this.projectFile = Optional.empty();
-    }
-
-    public static ProjectManager getInstance() {
-        return INSTANCE;
     }
 
     public Optional<File> getProjectFile() {
