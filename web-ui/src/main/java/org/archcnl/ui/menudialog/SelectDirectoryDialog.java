@@ -14,6 +14,7 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
     private static final long serialVersionUID = 5511746171215269619L;
     private Button confirmButton;
     private String selectedPath;
+    private boolean okButtonPressed = false;
 
     public SelectDirectoryDialog(ArchitectureCheck check) {
         setDraggable(true);
@@ -23,7 +24,7 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
 
         confirmButton =
                 new Button(
-                        "Open",
+                        "Run architecture check",
                         event -> {
                             Optional<File> file = fileSelectionComponent.getSelectedFile();
                             if (file.isEmpty()) {
@@ -33,6 +34,7 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
                                         "Please select a directory.");
                             } else {
                                 selectedPath = file.get().getPath();
+                                okButtonPressed = true;
                                 close();
                             }
                         });
@@ -47,6 +49,10 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
 
     public String getSelectedPath() {
         return selectedPath;
+    }
+
+    public boolean isOkButtonPressed() {
+        return okButtonPressed;
     }
 
     @Override
