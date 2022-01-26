@@ -45,5 +45,25 @@
 			"name": "Circuit Breaker Import Class Name",
 			"groupId": -1
 		}
+	],
+	"architectureRules": [
+		{
+			"rule": "Every Microservice must registerin ServiceRegistry."
+		},
+		{
+			"rule": "Every Microservice must haveown DatabaseAccessAbstraction."
+		},
+		{
+			"rule": "Every Microservice must use CircuitBreaker."
+		},
+		{
+			"rule": "Every Microservice must haveown API."
+		},
+		{
+			"rule": "Every ApiGateway must resideinpackage MicroserviceApp."
+		},
+		{
+			"rule": "Every Microservice must useown RuntimeEnvironment."
+		}
 	]
 }

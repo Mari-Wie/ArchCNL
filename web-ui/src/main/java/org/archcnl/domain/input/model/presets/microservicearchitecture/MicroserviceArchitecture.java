@@ -21,14 +21,7 @@ public class MicroserviceArchitecture {
 
     // rules
     private List<ArchitectureRule> architectureRules;
-    private final String SERVICE_REGISTRY_RULE =
-            "Every Microservice must registerin ServiceRegistry.";
-    private final String DECENTRALIZED_PERSISTENCE_RULE =
-            "Every Microservice must haveown DatabaseAccessAbstraction.";
-    private final String APIGATEWAY_RULE = "Every ApiGateway must resideinpackage MicroserviceApp.";
-    private final String CIRCUITBREAKER_RULE = "Every Microservice must use CircuitBreaker.";
-    private final String API_ACCESS_RULE = "Every Microservice must haveown API.";
-    private final String RUNTIME_ENV_RULE = "Every Microservice must useown RuntimeEnvironment.";
+ 
 
     private String serviceRegistryClassName;
     private String registryImportName;
@@ -50,6 +43,8 @@ public class MicroserviceArchitecture {
         this.microservices = builder.getMicroservices();
         this.apiMechanisms = builder.getApiMechanisms();
         this.dbAccessAbstractions = builder.getDbAccessAbstractions();
+
+        architectureRules = new LinkedList<>();
     }
 
     /** Adds all the rules for the microservice architectural style. */
@@ -57,27 +52,26 @@ public class MicroserviceArchitecture {
         initializeRulesAndMappings();
         RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
-        ArchitectureRule serviceRegistryRule = new ArchitectureRule(SERVICE_REGISTRY_RULE);
-        ArchitectureRule decentralizedPersistenceRule =
-                new ArchitectureRule(DECENTRALIZED_PERSISTENCE_RULE);
-        ArchitectureRule apiGatewayRule = new ArchitectureRule(APIGATEWAY_RULE);
-        ArchitectureRule circuitBreakerRule = new ArchitectureRule(CIRCUITBREAKER_RULE);
-        ArchitectureRule apiAccessRule = new ArchitectureRule(API_ACCESS_RULE);
-        ArchitectureRule runtimeEnvironmentRule = new ArchitectureRule(RUNTIME_ENV_RULE);
-
-        architectureRules.add(serviceRegistryRule);
-        architectureRules.add(decentralizedPersistenceRule);
-        architectureRules.add(apiGatewayRule);
-        architectureRules.add(circuitBreakerRule);
-        architectureRules.add(apiAccessRule);
-        architectureRules.add(runtimeEnvironmentRule);
+//        ArchitectureRule serviceRegistryRule = new ArchitectureRule(SERVICE_REGISTRY_RULE);
+//        ArchitectureRule decentralizedPersistenceRule =
+//                new ArchitectureRule(DECENTRALIZED_PERSISTENCE_RULE);
+//        ArchitectureRule apiGatewayRule = new ArchitectureRule(APIGATEWAY_RULE);
+//        ArchitectureRule circuitBreakerRule = new ArchitectureRule(CIRCUITBREAKER_RULE);
+//        ArchitectureRule apiAccessRule = new ArchitectureRule(API_ACCESS_RULE);
+//        ArchitectureRule runtimeEnvironmentRule = new ArchitectureRule(RUNTIME_ENV_RULE);
+//
+//        architectureRules.add(serviceRegistryRule);
+//        architectureRules.add(decentralizedPersistenceRule);
+//        architectureRules.add(apiGatewayRule);
+//        architectureRules.add(circuitBreakerRule);
+//        architectureRules.add(apiAccessRule);
+//        architectureRules.add(runtimeEnvironmentRule);
 
         // add all rules
         model.getArchitectureRuleManager().addAllArchitectureRules(this.architectureRules);
     }
 
     private void initializeRulesAndMappings() {
-        architectureRules = new LinkedList<>();
 
         // create Template manager
         templates = new MicroserviceArchitectureTemplateManager();
@@ -288,6 +282,12 @@ public class MicroserviceArchitecture {
 
     public List<ArchitectureRule> getArchitectureRules() {
         return architectureRules;
+    }
+    
+    public void setArchitectureRules(Set<String> set) {
+    	for (String string : set) {
+			architectureRules.add(new ArchitectureRule(string));
+		}
     }
 
     // getter & setter

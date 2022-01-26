@@ -3,9 +3,12 @@ package org.archcnl.ui.inputview.presets;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -19,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.ArchitectureInformation;
+import org.archcnl.domain.input.model.presets.ArchitectureRuleString;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitecture;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitectureBuilder;
 import org.archcnl.ui.common.TwoColumnGridAndInputTextFieldsComponent;
@@ -26,8 +30,7 @@ import org.archcnl.ui.common.TwoColumnGridEntry;
 
 /***
  * This Container creates input possibilities for the user of ArchCNL based
- * on<br>
- * the ArchitecturalStyle that is passed into the constructor.<br>
+ * on the ArchitecturalStyle that is passed into the constructor.<br>
  * It will generate input-components based on the properties of the style. <br>
  *
  * New architectural styles can easily be added in a way that only the "mapping"
@@ -46,6 +49,7 @@ public class ArchitecturalStyleInputContainer extends Component implements HasCo
     private Map<String, Binder<ArchitectureInformation>> textFieldBinders;
     private Map<Integer, Set<TwoColumnGridEntry>> groupIdgridEntriesMap;
     private ArchitecturalStyle style;
+    private MultiSelectListBox<String> rulesSelectList;
 
     public ArchitecturalStyleInputContainer(ArchitecturalStyle architecturalStyle) {
         this.style = architecturalStyle;
@@ -68,9 +72,26 @@ public class ArchitecturalStyleInputContainer extends Component implements HasCo
         }
 
         // add components to ui
+        addRuleBoxToUi(architecturalStyle.getRules());
         addGroups();
-        addTextFields();
+        addKnownTextFieldsToUi();
         addFooter();
+    }
+
+    private void addRuleBoxToUi(List<ArchitectureRuleString> rules) {
+        rulesSelectList = new MultiSelectListBox<String>();
+        Set<String> knwonRules = new HashSet<String>();
+        for (ArchitectureRuleString architectureRuleString : rules) {
+            knwonRules.add(architectureRuleString.getRule());
+        }
+        rulesSelectList.setItems(knwonRules);
+        
+        VerticalLayout box = new VerticalLayout();
+        box.add(new Text("Please choose the architectural rules you want to apply."));
+        
+        rulesSelectList.select(knwonRules);
+        box.add(rulesSelectList);
+        add(box);
     }
 
     private void addToKnownTextField(ArchitectureInformation info) {
@@ -90,7 +111,7 @@ public class ArchitecturalStyleInputContainer extends Component implements HasCo
         knownTextfields.add(textField);
     }
 
-    private void addTextFields() {
+    private void addKnownTextFieldsToUi() {
         for (TextField textField : knownTextfields) {
             add(textField);
         }
@@ -212,6 +233,7 @@ public class ArchitecturalStyleInputContainer extends Component implements HasCo
                                     // create the rules
                                     MicroserviceArchitecture microserviceArchitecture =
                                             microserviceArchitectureBuilder.build();
+                                    microserviceArchitecture.setArchitectureRules(rulesSelectList.getSelectedItems());
                                     microserviceArchitecture.createRulesAndMappings();
                                     break;
 
