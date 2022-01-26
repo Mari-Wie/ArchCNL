@@ -8,14 +8,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.application.service.ConfigAppService;
-import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
-import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
-import org.archcnl.ui.outputview.components.GridView;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.components.SideBarWidget;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
@@ -37,14 +33,7 @@ public class OutputView extends HorizontalLayout {
     private ResultRepository resultRepository;
 
     public OutputView() throws PropertyNotFoundException {
-        resultRepository =
-                new ResultRepositoryImpl(
-                        ConfigAppService.getDbUrl(),
-                        ConfigAppService.getDbName(),
-                        ConfigAppService.getDbUsername(),
-                        ConfigAppService.getDbPassword());
-        // The execution of the default query should be moved into an OnAttachEvent
-        defaultQueryView = new QueryResultsUiComponent(prepareDefaultQueryGridView());
+        queryResults = new QueryResultsUiComponent();
         customQueryPresenter = new CustomQueryPresenter();
         freeTextQueryView = new FreeTextQueryUiComponent();
         sideBarWidget =
@@ -106,12 +95,12 @@ public class OutputView extends HorizontalLayout {
         freeTextQueryView.setQueryText(customQuery);
     }
 
-    private GridView prepareDefaultQueryGridView() {
-        GridView gridView = new GridView();
-        Optional<Result> result =
-                resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
-        gridView.update(result);
-        return gridView;
+    public void displayResult(Optional<Result> result) {
+        queryResults.updateGridView(result);
+    }
+
+    public void setResultRepository(ResultRepository repository) {
+        resultRepository = repository;
     }
 
     @Override

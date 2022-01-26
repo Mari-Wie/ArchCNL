@@ -1,13 +1,16 @@
 package org.archcnl.ui.outputview.components;
 
+import java.util.Optional;
+import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
+
 public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 
     private static final long serialVersionUID = 1L;
 
     private GeneralInfoLayout generalInfoLayout;
 
-    public QueryResultsUiComponent(GridView gridView) {
-        this.gridView = gridView;
+    public QueryResultsUiComponent() {
+        gridView = new GridView();
         generalInfoLayout = new GeneralInfoLayout();
         queryTextArea.setReadOnly(true);
         addComponents();
@@ -15,5 +18,9 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 
     protected void addComponents() {
         add(generalInfoLayout, gridView, queryTextArea);
+    }
+
+    public void updateGridView(Optional<Result> result) {
+        gridView.update(result);
     }
 }
