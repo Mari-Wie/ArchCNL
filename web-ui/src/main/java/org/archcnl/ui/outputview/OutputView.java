@@ -7,7 +7,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
@@ -32,8 +31,8 @@ public class OutputView extends HorizontalLayout {
     private Component currentComponent;
     private ResultRepository resultRepository;
 
-    public OutputView() throws PropertyNotFoundException {
-        queryResults = new QueryResultsUiComponent();
+    public OutputView() {
+        defaultQueryView = new QueryResultsUiComponent();
         customQueryPresenter = new CustomQueryPresenter();
         freeTextQueryView = new FreeTextQueryUiComponent();
         sideBarWidget =
@@ -96,7 +95,7 @@ public class OutputView extends HorizontalLayout {
     }
 
     public void displayResult(Optional<Result> result) {
-        queryResults.updateGridView(result);
+        defaultQueryView.updateGridView(result);
     }
 
     public void setResultRepository(ResultRepository repository) {

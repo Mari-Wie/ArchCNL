@@ -35,7 +35,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     private final InputPresenter inputPresenter;
     private ArchitectureCheck architectureCheck;
 
-    public MainPresenter() throws PropertyNotFoundException {
+    public MainPresenter() {
         inputPresenter = new InputPresenter();
         outputView = new OutputView();
         view = new MainView(inputPresenter.getView());
