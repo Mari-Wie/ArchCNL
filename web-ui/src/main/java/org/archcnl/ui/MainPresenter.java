@@ -65,7 +65,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
         SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog(architectureCheck);
         directoryDialog.addOpenedChangeListener(
                 e -> {
-                    if (!e.isOpened()) {
+                    if (!e.isOpened() && directoryDialog.isOkButtonPressed()) {
                         checkViolations(directoryDialog.getSelectedPath());
                     }
                 });
