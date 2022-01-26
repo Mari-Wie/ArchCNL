@@ -10,16 +10,12 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.application.service.ConfigAppService;
-import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
-import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.CustomQueryView;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
-import org.archcnl.ui.outputview.components.GridView;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.components.SideBarLayout;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
@@ -33,7 +29,7 @@ public class OutputView extends HorizontalLayout {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LogManager.getLogger(OutputView.class);
 
-    private AbstractQueryResultsComponent queryResults;
+    private QueryResultsUiComponent queryResults;
     private CustomQueryPresenter customQueryPresenter;
     private AbstractQueryResultsComponent freeTextQuery;
     private SideBarLayout sideBar;
@@ -41,14 +37,7 @@ public class OutputView extends HorizontalLayout {
     private ResultRepository resultRepository;
 
     public OutputView() throws PropertyNotFoundException {
-        resultRepository =
-                new ResultRepositoryImpl(
-                        ConfigAppService.getDbUrl(),
-                        ConfigAppService.getDbName(),
-                        ConfigAppService.getDbUsername(),
-                        ConfigAppService.getDbPassword());
-        // The execution of the default query should be moved into an OnAttachEvent
-        queryResults = new QueryResultsUiComponent(prepareDefaultQueryGridView());
+        queryResults = new QueryResultsUiComponent();
         customQueryPresenter = new CustomQueryPresenter();
         freeTextQuery = new FreeTextQueryUiComponent();
         sideBar = new SideBarLayout(this);
@@ -119,12 +108,12 @@ public class OutputView extends HorizontalLayout {
         freeTextQuery.setQueryText(customQuery);
     }
 
-    private GridView prepareDefaultQueryGridView() {
-        GridView gridView = new GridView();
-        Optional<Result> result =
-                resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
-        gridView.update(result);
-        return gridView;
+    public void displayResult(Optional<Result> result) {
+        queryResults.updateGridView(result);
+    }
+
+    public void setResultRepository(ResultRepository repository) {
+        resultRepository = repository;
     }
 
     @Override
