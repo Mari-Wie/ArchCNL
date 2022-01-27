@@ -54,9 +54,9 @@ public class TwoColumnGridAndInputTextFieldsComponent extends VerticalLayout {
                     infoGrid.setItems(gridItems);
                 });
 
-        info1TextField.setWidth("45%");
-        info2TextField.setWidth("45%");
-        addInfoBtn.setWidth("10%");
+//        info1TextField.setWidth("45%");
+//        info2TextField.setWidth("45%");
+//        addInfoBtn.setWidth("10%");
         infoGrid.setHeight("200px");
         infoGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
 
