@@ -1,13 +1,13 @@
 package org.archcnl.ui.outputview.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.outputview.components.SideBarLayout;
+import org.archcnl.ui.outputview.components.SideBarWidget;
 
-public class InputViewRequestedEvent extends ComponentEvent<SideBarLayout> {
+public class InputViewRequestedEvent extends ComponentEvent<SideBarWidget> {
 
     private static final long serialVersionUID = 4180228788992640787L;
 
-    public InputViewRequestedEvent(final SideBarLayout source, final boolean fromClient) {
+    public InputViewRequestedEvent(final SideBarWidget source, final boolean fromClient) {
         super(source, fromClient);
     }
 }

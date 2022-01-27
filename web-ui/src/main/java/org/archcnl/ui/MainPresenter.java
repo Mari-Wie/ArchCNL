@@ -9,10 +9,12 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
+import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.common.ArchitectureCheck;
 import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
+import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
@@ -35,7 +37,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     private final InputPresenter inputPresenter;
     private ArchitectureCheck architectureCheck;
 
-    public MainPresenter() throws PropertyNotFoundException {
+    public MainPresenter() {
         inputPresenter = new InputPresenter();
         outputView = new OutputView();
         view = new MainView(inputPresenter.getView());
@@ -73,13 +75,10 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     }
 
     public void checkViolations(String path) {
+        ResultRepository repository = null;
         try {
             architectureCheck = new ArchitectureCheck(path);
-            ResultRepository repository = architectureCheck.getRepository();
-            outputView.displayResult(
-                    repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
-            outputView.setResultRepository(repository);
-            view.showContent(outputView);
+            repository = architectureCheck.getRepository();
         } catch (PropertyNotFoundException e) {
             view.showErrorMessage(
                     "An error occured while running the architecture check. Properties of database could not be read.");
@@ -90,9 +89,23 @@ public class MainPresenter extends Component implements PropertyChangeListener {
             view.showErrorMessage(
                     "An error occured while running the architecture check. Rules could not be generated.");
         } finally {
-            // TODO Remove the finally at the end, as this should just be shown when no error is
-            // present.
-            // 		This just makes development easier.
+            // TODO Use a different way to ensure the initialization of the repository in outputView
+            if (repository == null) {
+                try {
+                    repository =
+                            new ResultRepositoryImpl(
+                                    ConfigAppService.getDbUrl(),
+                                    ConfigAppService.getDbName(),
+                                    ConfigAppService.getDbUsername(),
+                                    ConfigAppService.getDbPassword());
+                } catch (PropertyNotFoundException e1) {
+                    view.showErrorMessage("Creation of default database access failed.");
+                }
+            }
+            outputView.displayResult(
+                    repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
+            outputView.setResultRepository(repository);
+            // TODO Show error instead of outputView and add alternative quick dev access
             view.showContent(outputView);
         }
     }
