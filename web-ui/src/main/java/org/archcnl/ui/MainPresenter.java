@@ -4,15 +4,13 @@ import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import java.io.IOException;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.common.ArchitectureCheck;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
-import org.archcnl.domain.output.repository.ResultRepository;
-import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
@@ -26,6 +24,8 @@ import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
+import org.archcnl.ui.menudialog.events.QuickOutputViewAccessRequestedEvent;
+import org.archcnl.ui.menudialog.events.RunToolchainRequestedEvent;
 import org.archcnl.ui.menudialog.events.ShowCustomQueryRequestedEvent;
 import org.archcnl.ui.menudialog.events.ShowFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.OutputView;
@@ -39,7 +39,6 @@ public class MainPresenter extends Component {
     private final MainView view;
     private final OutputView outputView;
     private final InputPresenter inputPresenter;
-    private ArchitectureCheck architectureCheck;
     private final ProjectManager projectManager;
 
     public MainPresenter() {
@@ -68,49 +67,45 @@ public class MainPresenter extends Component {
     }
 
     public void selectPathForChecking() {
-        SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog(architectureCheck);
-        directoryDialog.addOpenedChangeListener(
-                e -> {
-                    if (!e.isOpened() && directoryDialog.isOkButtonPressed()) {
-                        checkViolations(directoryDialog.getSelectedPath());
-                    }
-                });
+        SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog();
+        directoryDialog.addListener(
+                RunToolchainRequestedEvent.class,
+                event -> showOutputView(Optional.of(event.getSelectedPath())));
+        directoryDialog.addListener(
+                QuickOutputViewAccessRequestedEvent.class,
+                event -> showOutputView(Optional.empty()));
         directoryDialog.open();
     }
 
-    public void checkViolations(String path) {
-        ResultRepository repository = null;
+    public void showOutputView(Optional<String> path) {
         try {
-            architectureCheck = new ArchitectureCheck(path);
-            repository = architectureCheck.getRepository();
-        } catch (PropertyNotFoundException e) {
-            view.showErrorMessage(
-                    "An error occured while running the architecture check. Properties of database could not be read.");
+            ArchitectureCheck architectureCheck = new ArchitectureCheck();
+            outputView.setResultRepository(architectureCheck.getRepository());
+            if (path.isPresent()) {
+                runArchCnlToolchain(architectureCheck, path.get());
+            }
+            outputView.displayResult(
+                    architectureCheck
+                            .getRepository()
+                            .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
+            view.showContent(outputView);
+        } catch (PropertyNotFoundException e2) {
+            view.showErrorMessage("Failed to connect to stardog database.");
+        }
+    }
+
+    private void runArchCnlToolchain(ArchitectureCheck check, String path) {
+        try {
+            check.runToolchain(path);
         } catch (StardogException e) {
             view.showErrorMessage(
                     "An error occured while running the architecture check. Could not connect to the database.");
         } catch (IOException e) {
             view.showErrorMessage(
                     "An error occured while running the architecture check. Rules could not be generated.");
-        } finally {
-            // TODO Use a different way to ensure the initialization of the repository in outputView
-            if (repository == null) {
-                try {
-                    repository =
-                            new ResultRepositoryImpl(
-                                    ConfigAppService.getDbUrl(),
-                                    ConfigAppService.getDbName(),
-                                    ConfigAppService.getDbUsername(),
-                                    ConfigAppService.getDbPassword());
-                } catch (PropertyNotFoundException e1) {
-                    view.showErrorMessage("Creation of default database access failed.");
-                }
-            }
-            outputView.displayResult(
-                    repository.executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
-            outputView.setResultRepository(repository);
-            // TODO Show error instead of outputView and add alternative quick dev access
-            view.showContent(outputView);
+        } catch (PropertyNotFoundException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Properties of database could not be read.");
         }
     }
 
