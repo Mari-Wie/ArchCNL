@@ -22,27 +22,44 @@ public class SideBarWidget extends VerticalLayout {
             QueryResultsUiComponent defaultQueryView,
             CustomQueryView customQueryView,
             FreeTextQueryUiComponent freeTextQueryView) {
+
         setHeightFull();
         getStyle().set("overflow", "hidden");
 
-        customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
-        tabs =
-                new Tabs(
-                        new SideBarTab(
-                                "General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView),
-                        customQueryTab,
-                        new SideBarTab(
-                                "Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView));
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        tabs.setHeightFull();
-
         add(new Text("Query Options"));
-        add(tabs);
-        add(
+        addTabs(defaultQueryView, customQueryView, freeTextQueryView);
+        addReturnButton();
+    }
+
+    public void addPinnedCustomQueryTab(CustomQueryView customQueryView, String name) {
+        SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, customQueryView);
+        tabs.add(newTab);
+        tabs.setSelectedTab(newTab);
+    }
+
+    public void addReturnButton() {
+        Button returnButton =
                 new Button(
                         "Return to rule editor",
                         new Icon(VaadinIcon.CHEVRON_LEFT),
-                        click -> fireEvent(new InputViewRequestedEvent(this, true))));
+                        click -> fireEvent(new InputViewRequestedEvent(this, true)));
+
+        add(returnButton);
+    }
+
+    public void addTabs(
+            QueryResultsUiComponent defaultQueryView,
+            CustomQueryView customQueryView,
+            FreeTextQueryUiComponent freeTextQueryView) {
+
+        SideBarTab generalInformationTab =
+                new SideBarTab("General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView);
+        customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
+        SideBarTab freeTextQueryTabs =
+                new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
+        tabs = new Tabs(generalInformationTab, customQueryTab, freeTextQueryTabs);
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+        tabs.setHeightFull();
 
         tabs.addSelectedChangeListener(
                 event -> {
@@ -53,12 +70,8 @@ public class SideBarWidget extends VerticalLayout {
                                         this, true, tab.getLinkedComponent()));
                     }
                 });
-    }
 
-    public void addPinnedCustomQueryTab(CustomQueryView customQueryView, String name) {
-        SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, customQueryView);
-        tabs.add(newTab);
-        tabs.setSelectedTab(newTab);
+        add(tabs);
     }
 
     public void updateCustomQueryTab(CustomQueryView customQueryView) {
