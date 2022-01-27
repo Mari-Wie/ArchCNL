@@ -3,27 +3,27 @@ package org.archcnl.ui.inputview.presets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
-import org.archcnl.domain.input.model.presets.ArchitecturalStyles;
 
 /**
- * This is a Builder that creates ArchitecturalStyle Objects.<br>
- * These ArchiecturalStyle Objects are based on some JSON configuration-file,<br>
- * which is mapped to the model class.
+ * This Configuration Manager builds Config-Objexts based on information
+ * that is provided in specific json files.
  */
-public class ArchitecturalStyleInputBuilder {
+public class ArchitecturalStyleConfigManager {
 
-    public ArchitecturalStyle build(ArchitecturalStyles styleEnum) {
+	
+    public ArchitecturalStyleConfig build(ArchitecturalStyle styleEnum) {
         switch (styleEnum) {
             case MICROSERVICE_ARCHITECTURE:
-                ArchitecturalStyle micorserviceArchitecture = null;
+                ArchitecturalStyleConfig micorserviceArchitecture = null;
                 try {
                     micorserviceArchitecture =
                             new ObjectMapper()
                                     .readValue(
                                             new File(
                                                     "src/main/resources/MicroserviceArchitecture.json"),
-                                            ArchitecturalStyle.class);
+                                            ArchitecturalStyleConfig.class);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -31,13 +31,13 @@ public class ArchitecturalStyleInputBuilder {
                 return micorserviceArchitecture;
 
             case LAYERED_ARCHITECTURE:
-                ArchitecturalStyle layeredArchitecture = null;
+                ArchitecturalStyleConfig layeredArchitecture = null;
                 try {
                     layeredArchitecture =
                             new ObjectMapper()
                                     .readValue(
                                             new File("src/main/resources/LayeredArchitecture.json"),
-                                            ArchitecturalStyle.class);
+                                            ArchitecturalStyleConfig.class);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

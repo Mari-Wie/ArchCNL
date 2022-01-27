@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArchitecturalStyle {
+public class ArchitecturalStyleConfig {
 
     @JsonProperty("style")
-    private ArchitecturalStyles style;
+    private ArchitecturalStyle styleName;
 
     @JsonProperty("architectureInformation")
     private List<ArchitectureInformation> variableParts = new ArrayList<ArchitectureInformation>();
@@ -16,13 +16,13 @@ public class ArchitecturalStyle {
     private List<ArchitectureRuleString> rules = new ArrayList<ArchitectureRuleString>();
 
     @JsonProperty("style")
-    public ArchitecturalStyles getStyle() {
-        return style;
+    public ArchitecturalStyle getStyleName() {
+        return styleName;
     }
 
     @JsonProperty("style")
-    public void setStyle(ArchitecturalStyles name) {
-        this.style = name;
+    public void setStyleName(ArchitecturalStyle name) {
+        this.styleName = name;
     }
 
     @JsonProperty("architectureInformation")

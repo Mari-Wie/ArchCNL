@@ -1,12 +1,12 @@
 package org.archcnl.domain.input.model.presets;
 
-public enum ArchitecturalStyles {
+public enum ArchitecturalStyle {
     MICROSERVICE_ARCHITECTURE("Microservice Architecture"),
     LAYERED_ARCHITECTURE("Layered Architecture");
 
     private String architecturalStyleName;
 
-    ArchitecturalStyles(String name) {
+    ArchitecturalStyle(String name) {
         this.architecturalStyleName = name;
     }
 
