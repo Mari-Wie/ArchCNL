@@ -19,24 +19,27 @@ public class ArchitectureCheck {
     private ResultRepository repository;
     private List<String> sourcePaths;
     private final String ruleFile = ConfigAppService.getDbRuleFile();
-    private final boolean verboseLogging = false;
-    private final boolean removeDBs = true;
+    private static final boolean VERBOSE_LOGGING = false;
+    private static final boolean REMOVE_DBS = true;
     private final List<String> enabledParsers = Arrays.asList("java");
 
-    public ArchitectureCheck(String path)
-            throws PropertyNotFoundException, StardogException, IOException {
+    public ArchitectureCheck() throws PropertyNotFoundException {
         this.repository =
                 new ResultRepositoryImpl(
                         ConfigAppService.getDbUrl(),
                         ConfigAppService.getDbName(),
                         ConfigAppService.getDbUsername(),
                         ConfigAppService.getDbPassword());
+    }
+
+    public void runToolchain(String path)
+            throws IOException, PropertyNotFoundException, StardogException {
         writeRuleFile();
         setProjectPath(path);
         createDbWithViolations();
     }
 
-    public void writeRuleFile() throws IOException {
+    private void writeRuleFile() throws IOException {
         final File file = new File(ruleFile);
         AdocExporter adocExporter = new AdocExporter();
         adocExporter.writeToAdoc(
@@ -48,7 +51,7 @@ public class ArchitectureCheck {
                 new LinkedList<>());
     }
 
-    public void createDbWithViolations() throws PropertyNotFoundException {
+    private void createDbWithViolations() throws PropertyNotFoundException {
         CNLToolchain.runToolchain(
                 ConfigAppService.getDbName(),
                 ConfigAppService.getDbUrl(),
@@ -57,12 +60,12 @@ public class ArchitectureCheck {
                 ConfigAppService.getDbPassword(),
                 sourcePaths,
                 ruleFile,
-                verboseLogging,
-                removeDBs,
+                ArchitectureCheck.VERBOSE_LOGGING,
+                ArchitectureCheck.REMOVE_DBS,
                 enabledParsers);
     }
 
-    public void setProjectPath(String projectPath) {
+    private void setProjectPath(String projectPath) {
         sourcePaths = Arrays.asList(projectPath);
     }
 
