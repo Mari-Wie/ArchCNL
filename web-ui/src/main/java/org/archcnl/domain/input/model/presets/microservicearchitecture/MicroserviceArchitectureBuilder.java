@@ -3,7 +3,13 @@ package org.archcnl.domain.input.model.presets.microservicearchitecture;
 import java.util.Set;
 import org.archcnl.ui.common.TwoColumnGridEntry;
 
-public class MicroserviceArchitectureBuilder {
+/**
+ * Builder-Pattern implementation that created Microservicearchitecture-Objects with
+ * the provided properties. The properties are representing the variable Parts that
+ * the user needs to define for the specific microservice architecture implementation.
+ * 
+ * */
+public class MicroserviceArchitectureBuilder implements ArchitecturalStyleBuilder {
     private String serviceRegistryClassName;
     private String registryImportName;
     private String apiGatewayPackageName;
@@ -14,6 +20,7 @@ public class MicroserviceArchitectureBuilder {
     private Set<TwoColumnGridEntry> apiMechanisms;
     private Set<TwoColumnGridEntry> dbAccessAbstractions;
 
+    @Override
     public MicroserviceArchitecture build() {
         return new MicroserviceArchitecture(this);
     }
@@ -54,7 +61,7 @@ public class MicroserviceArchitectureBuilder {
         return this;
     }
 
-    public MicroserviceArchitectureBuilder withDbAccessAbstractions(
+    public ArchitecturalStyleBuilder withDbAccessAbstractions(
             Set<TwoColumnGridEntry> dbAccessAbstractions) {
         this.dbAccessAbstractions = dbAccessAbstractions;
         return this;
