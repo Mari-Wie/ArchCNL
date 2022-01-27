@@ -12,16 +12,17 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.common.TwoColumnGridEntry;
 
 /**
- * @author Hendrik Zevenhuizen
- *     <p>Model class for the microservice architectural style.
+ * Model class of the microservice architectural style. The properties represent 
+ * the variable parts of the architecture. Objects can be created by passing
+ * an instance of {@link MicroserviceArchitectureBuilder} to the constructor which
+ * will create the MicroserviceArchitecture with only the properties the builder contains.
  */
-public class MicroserviceArchitecture {
+public class MicroserviceArchitecture implements ArchitecturalStyle {
 
     private MicroserviceArchitectureTemplateManager templates;
 
     // rules
     private List<ArchitectureRule> architectureRules;
- 
 
     private String serviceRegistryClassName;
     private String registryImportName;
@@ -47,31 +48,24 @@ public class MicroserviceArchitecture {
         architectureRules = new LinkedList<>();
     }
 
-    /** Adds all the rules for the microservice architectural style. */
+    /** Adds all the mappings and rules for the microservice architectural style. */
+    @Override
     public void createRulesAndMappings() {
-        initializeRulesAndMappings();
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
-//        ArchitectureRule serviceRegistryRule = new ArchitectureRule(SERVICE_REGISTRY_RULE);
-//        ArchitectureRule decentralizedPersistenceRule =
-//                new ArchitectureRule(DECENTRALIZED_PERSISTENCE_RULE);
-//        ArchitectureRule apiGatewayRule = new ArchitectureRule(APIGATEWAY_RULE);
-//        ArchitectureRule circuitBreakerRule = new ArchitectureRule(CIRCUITBREAKER_RULE);
-//        ArchitectureRule apiAccessRule = new ArchitectureRule(API_ACCESS_RULE);
-//        ArchitectureRule runtimeEnvironmentRule = new ArchitectureRule(RUNTIME_ENV_RULE);
-//
-//        architectureRules.add(serviceRegistryRule);
-//        architectureRules.add(decentralizedPersistenceRule);
-//        architectureRules.add(apiGatewayRule);
-//        architectureRules.add(circuitBreakerRule);
-//        architectureRules.add(apiAccessRule);
-//        architectureRules.add(runtimeEnvironmentRule);
-
-        // add all rules
-        model.getArchitectureRuleManager().addAllArchitectureRules(this.architectureRules);
+        createMappings();
+        createArchitecturalRules();
     }
 
-    private void initializeRulesAndMappings() {
+    /** Add the architectural rules that are known. */
+    @Override
+    public void createArchitecturalRules() {
+        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
+        model.getArchitectureRuleManager().addAllArchitectureRules(this.architectureRules);
+        
+    }
+
+    /** Create the mappings by using the template manager */
+    @Override
+    public void createMappings() {
 
         // create Template manager
         templates = new MicroserviceArchitectureTemplateManager();
@@ -283,11 +277,11 @@ public class MicroserviceArchitecture {
     public List<ArchitectureRule> getArchitectureRules() {
         return architectureRules;
     }
-    
+
     public void setArchitectureRules(Set<String> set) {
-    	for (String string : set) {
-			architectureRules.add(new ArchitectureRule(string));
-		}
+        for (String string : set) {
+            architectureRules.add(new ArchitectureRule(string));
+        }
     }
 
     // getter & setter
