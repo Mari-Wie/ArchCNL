@@ -12,10 +12,10 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.common.TwoColumnGridEntry;
 
 /**
- * Model class of the microservice architectural style. The properties represent 
- * the variable parts of the architecture. Objects can be created by passing
- * an instance of {@link MicroserviceArchitectureBuilder} to the constructor which
- * will create the MicroserviceArchitecture with only the properties the builder contains.
+ * Model class of the microservice architectural style. The properties represent the variable parts
+ * of the architecture. Objects can be created by passing an instance of {@link
+ * MicroserviceArchitectureBuilder} to the constructor which will create the
+ * MicroserviceArchitecture with only the properties the builder contains.
  */
 public class MicroserviceArchitecture implements ArchitecturalStyle {
 
@@ -60,7 +60,6 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
     public void createArchitecturalRules() {
         RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
         model.getArchitectureRuleManager().addAllArchitectureRules(this.architectureRules);
-        
     }
 
     /** Create the mappings by using the template manager */

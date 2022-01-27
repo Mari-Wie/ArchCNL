@@ -4,11 +4,10 @@ import java.util.Set;
 import org.archcnl.ui.common.TwoColumnGridEntry;
 
 /**
- * Builder-Pattern implementation that created Microservicearchitecture-Objects with
- * the provided properties. The properties are representing the variable Parts that
- * the user needs to define for the specific microservice architecture implementation.
- * 
- * */
+ * Builder-Pattern implementation that created Microservicearchitecture-Objects with the provided
+ * properties. The properties are representing the variable Parts that the user needs to define for
+ * the specific microservice architecture implementation.
+ */
 public class MicroserviceArchitectureBuilder implements ArchitecturalStyleBuilder {
     private String serviceRegistryClassName;
     private String registryImportName;
