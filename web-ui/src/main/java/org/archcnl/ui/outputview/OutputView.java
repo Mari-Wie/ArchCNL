@@ -9,25 +9,21 @@ import com.vaadin.flow.shared.Registration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.application.service.ConfigAppService;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
-import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
-import org.archcnl.ui.outputview.components.CustomQueryPresenter;
-import org.archcnl.ui.outputview.components.CustomQueryView;
-import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
-import org.archcnl.ui.outputview.components.GridView;
-import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
-import org.archcnl.ui.outputview.components.SideBarLayout;
-import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
-import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
-import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
-import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
-import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
+import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
+import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
+import org.archcnl.ui.outputview.sidebar.SideBarWidget;
+import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
+import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
 
 public class OutputView extends HorizontalLayout {
 
@@ -43,9 +39,10 @@ public class OutputView extends HorizontalLayout {
     private List<FreeTextQueryUiComponent> pinnedFreeTextQueries = new LinkedList<>();
 
     public OutputView() {
-        defaultQueryView = new QueryResultsUiComponent();
+        final String defaultQuery = QueryUtils.getDefaultQuery().transformToGui();
+        defaultQueryView = new QueryResultsUiComponent(defaultQuery);
         customQueryPresenter = new CustomQueryPresenter();
-        freeTextQueryView = new FreeTextQueryUiComponent();
+        freeTextQueryView = new FreeTextQueryUiComponent(defaultQuery);
         sideBarWidget =
                 new SideBarWidget(
                         defaultQueryView, customQueryPresenter.getView(), freeTextQueryView);

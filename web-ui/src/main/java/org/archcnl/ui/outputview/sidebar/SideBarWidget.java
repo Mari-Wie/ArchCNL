@@ -30,6 +30,26 @@ public class SideBarWidget extends VerticalLayout {
         setHeightFull();
         getStyle().set("overflow", "hidden");
 
+        add(new Text("Query Options"));
+        addTabs(defaultQueryView, customQueryView, freeTextQueryView);
+        addReturnButton();
+    }
+
+    public void addReturnButton() {
+        Button returnButton =
+                new Button(
+                        "Return to rule editor",
+                        new Icon(VaadinIcon.CHEVRON_LEFT),
+                        click -> fireEvent(new InputViewRequestedEvent(this, true)));
+
+        add(returnButton);
+    }
+
+    public void addTabs(
+            QueryResultsUiComponent defaultQueryView,
+            CustomQueryView customQueryView,
+            FreeTextQueryUiComponent freeTextQueryView) {
+
         customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
         freeTextQueryTab =
                 new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
@@ -42,14 +62,6 @@ public class SideBarWidget extends VerticalLayout {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setHeightFull();
 
-        add(new Text("Query Options"));
-        add(tabs);
-        add(
-                new Button(
-                        "Return to rule editor",
-                        new Icon(VaadinIcon.CHEVRON_LEFT),
-                        click -> fireEvent(new InputViewRequestedEvent(this, true))));
-
         tabs.addSelectedChangeListener(
                 event -> {
                     if (event.getSelectedTab() instanceof SideBarTab) {
@@ -59,6 +71,8 @@ public class SideBarWidget extends VerticalLayout {
                                         this, true, tab.getLinkedComponent()));
                     }
                 });
+
+        add(tabs);
     }
 
     public void addPinnedQueryTab(Component linkedComponent, String name) {

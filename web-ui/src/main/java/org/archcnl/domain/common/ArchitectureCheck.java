@@ -4,10 +4,11 @@ import com.complexible.stardog.StardogException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
-import org.archcnl.domain.input.io.ArchRulesToAdocWriter;
+import org.archcnl.domain.common.io.AdocExporter;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
@@ -37,8 +38,14 @@ public class ArchitectureCheck {
 
     public void writeRuleFile() throws IOException {
         final File file = new File(ruleFile);
-        ArchRulesToAdocWriter archRulesToAdocWriter = new ArchRulesToAdocWriter();
-        archRulesToAdocWriter.writeArchitectureRules(file, RulesConceptsAndRelations.getInstance());
+        AdocExporter adocExporter = new AdocExporter();
+        adocExporter.writeToAdoc(
+                file,
+                RulesConceptsAndRelations.getInstance().getArchitectureRuleManager(),
+                RulesConceptsAndRelations.getInstance().getConceptManager(),
+                RulesConceptsAndRelations.getInstance().getRelationManager(),
+                new LinkedList<>(),
+                new LinkedList<>());
     }
 
     public void createDbWithViolations() throws PropertyNotFoundException {

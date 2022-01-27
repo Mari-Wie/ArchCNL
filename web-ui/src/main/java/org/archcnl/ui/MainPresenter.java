@@ -3,12 +3,17 @@ package org.archcnl.ui;
 import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
-import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.application.service.ConfigAppService;
+import org.archcnl.domain.common.ArchitectureCheck;
+import org.archcnl.domain.common.ProjectManager;
+import org.archcnl.domain.output.model.query.QueryUtils;
+import org.archcnl.domain.output.repository.ResultRepository;
+import org.archcnl.domain.output.repository.ResultRepositoryImpl;
+import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
@@ -17,6 +22,12 @@ import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
+import org.archcnl.ui.menudialog.OpenProjectDialog;
+import org.archcnl.ui.menudialog.SaveProjectDialog;
+import org.archcnl.ui.menudialog.SelectDirectoryDialog;
+import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
+import org.archcnl.ui.menudialog.events.ShowCustomQueryRequestedEvent;
+import org.archcnl.ui.menudialog.events.ShowFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 
@@ -31,7 +42,7 @@ public class MainPresenter extends Component {
     private ArchitectureCheck architectureCheck;
     private final ProjectManager projectManager;
 
-    public MainPresenter() throws PropertyNotFoundException {
+    public MainPresenter() {
         projectManager = new ProjectManager();
         inputPresenter = new InputPresenter();
         outputView = new OutputView();
