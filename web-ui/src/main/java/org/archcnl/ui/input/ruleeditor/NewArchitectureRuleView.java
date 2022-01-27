@@ -24,7 +24,7 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
         getStyle().set("border", "1px solid black");
 
         subject = new SubjectComponent();
-        verb = new VerbComponent();
+        verb = new VerbComponent(false);
 
         HorizontalLayout footer = new HorizontalLayout();
         saveButton = new Button("Save Rule", e -> saveRule());

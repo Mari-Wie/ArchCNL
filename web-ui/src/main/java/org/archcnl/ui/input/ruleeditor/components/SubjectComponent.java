@@ -4,7 +4,6 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class SubjectComponent extends RuleComponent {
 
     private static final long serialVersionUID = 1L;
     private ComboBox<String> firstCombobox;
-    private TextField firstConcept;
+    private ConceptTextfieldComponent firstConcept;
     private Checkbox conditionCheckbox;
     private ConditionComponent newCondition;
     private HorizontalLayout mainSubjectBox;
@@ -47,7 +46,8 @@ public class SubjectComponent extends RuleComponent {
                     firstComboboxListener(firstCombobox.getValue());
                 });
 
-        firstConcept = new TextField("Concept");
+        firstConcept = new ConceptTextfieldComponent();
+        firstConcept.setLabel("Concept");
 
         conditionCheckbox = new Checkbox("that... (add condition)");
         conditionCheckbox.addClickListener(e -> addCondition(conditionCheckbox.getValue()));

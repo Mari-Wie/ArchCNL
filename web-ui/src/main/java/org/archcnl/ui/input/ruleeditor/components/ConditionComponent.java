@@ -4,7 +4,6 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +11,8 @@ public class ConditionComponent extends RuleComponent {
 
     private static final long serialVersionUID = 1L;
     private Label startLabelTextfield, endLabelTextfield;
-    private TextField firstRelation, secondConcept;
+    private RelationTextfieldComponent firstVariable;
+    private ConceptTextfieldComponent secondVariable;
     private ComboBox<String> firstCombobox;
     private Checkbox andCheckbox;
     private ConditionComponent newCondition;
@@ -23,15 +23,24 @@ public class ConditionComponent extends RuleComponent {
         HorizontalLayout conditionBox = new HorizontalLayout();
         conditionBox.setMargin(false);
         
-        startLabelTextfield = new Label("that (");
+        startLabelTextfield = new Label("that(");
         conditionBox.setVerticalComponentAlignment(Alignment.END, startLabelTextfield);
-        firstRelation = new TextField("Relation");
+        firstVariable = new RelationTextfieldComponent();
+        firstVariable.setLabel("Relation");
 
         List<String> firstStatements =
                 Arrays.asList(" ", "a", "an", "equal-to", "equal-to a", "equal-to an");
         firstCombobox = new ComboBox<String>("Modifier", firstStatements);
         firstCombobox.setValue("a");
-        secondConcept = new TextField("Concept");
+        firstCombobox.addValueChangeListener(
+                e -> {
+                    firstComboboxListener(firstCombobox.getValue());
+                });
+        
+        secondVariable = new ConceptTextfieldComponent();
+        secondVariable.setLabel("Concept");
+        secondVariable.setPlaceholder("Concept");
+        
         endLabelTextfield = new Label(")");
         conditionBox.setVerticalComponentAlignment(Alignment.END, endLabelTextfield);
 
@@ -41,12 +50,22 @@ public class ConditionComponent extends RuleComponent {
 
         conditionBox.add(
                 startLabelTextfield,
-                firstRelation,
+                firstVariable,
                 firstCombobox,
-                secondConcept,
+                secondVariable,
                 endLabelTextfield,
                 andCheckbox);
         add(conditionBox);
+    }
+    
+    private void firstComboboxListener(String value) {
+        secondVariable.setLabel("Concept / Number / String");
+        secondVariable.setPlaceholder("+/- [0-9] / String");
+        if(value.equals("a") || value.equals("an"))
+        {
+            secondVariable.setLabel("Concept");
+            secondVariable.setPlaceholder("Concept");
+        }
     }
 
     private void addCondition(Boolean showCondition) {
@@ -62,10 +81,10 @@ public class ConditionComponent extends RuleComponent {
 
     public String getString() {
         StringBuilder sBuilder = new StringBuilder();
-        sBuilder.append(startLabelTextfield.getText() + " ");
-        sBuilder.append(firstRelation.getValue() + " ");
+        sBuilder.append(startLabelTextfield.getText() + "");
+        sBuilder.append(firstVariable.getValue() + " ");
         sBuilder.append(firstCombobox.getValue() + " ");
-        sBuilder.append(secondConcept.getValue() + " ");
+        sBuilder.append(secondVariable.getValue());
         sBuilder.append(endLabelTextfield.getText() + " ");
         if (andCheckbox.getValue()) {
             sBuilder.append("and " + newCondition.getString());
