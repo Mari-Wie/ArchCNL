@@ -8,7 +8,7 @@ import java.util.Set;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitecture;
+import org.archcnl.domain.input.model.presets.microservicearchitecture.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitectureBuilder;
 import org.archcnl.ui.common.TwoColumnGridEntry;
 import org.junit.jupiter.api.AfterAll;
@@ -51,7 +51,7 @@ public class MicroserviceArchitectureTest {
     // service registry
 
     // other things needed in the test
-    private static MicroserviceArchitecture msa;
+    private static ArchitecturalStyle msa;
     private static RulesConceptsAndRelations model;
 
     @BeforeAll
