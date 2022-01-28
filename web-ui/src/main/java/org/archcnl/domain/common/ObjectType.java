@@ -12,6 +12,11 @@ public abstract class ObjectType implements FormattedDomainObject {
 
     public abstract String getName();
 
+    public abstract String getDescription();
+
+    protected String name;
+    protected String description;
+
     public static ObjectType parseObject(String potentialObject) throws NoObjectTypeException {
         try {
             if (potentialObject.matches("'.*'")) {
