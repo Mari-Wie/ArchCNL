@@ -1,49 +1,52 @@
 package org.archcnl.domain.common;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
-public class HierarchyNode<T> {
-    private boolean isLeaf;
+public class HierarchyNode<T extends ObjectType> {
+    private boolean isLeaf = false;
     private T entry;
     private String text;
-    private Set<HierarchyNode<T>> children;
+    private List<HierarchyNode<T>> children;
 
     public HierarchyNode(String text) {
         isLeaf = false;
         entry = null;
         this.text = text;
-        children = new HashSet<HierarchyNode<T>>();
+        children = new ArrayList<HierarchyNode<T>>();
     }
 
-    public Set<HierarchyNode<T>> getChildren(){
+    public List<HierarchyNode<T>> getChildren() {
         return children;
     }
- 
 
-   public  HierarchyNode(Set<HierarchyNode<T>> s) {
+    public HierarchyNode(List<HierarchyNode<T>> s) {
         isLeaf = false;
         entry = null;
+        text = null;
         children = s;
     }
 
-   public  HierarchyNode(T entry) {
+    public HierarchyNode(T p_entry) {
         isLeaf = true;
-        this.entry = entry;
-        children = new HashSet<HierarchyNode<T>>();
+        this.entry = p_entry;
+        text = null;
+        children = new ArrayList<HierarchyNode<T>>();
     }
 
-   @Override
-   public String toString(){
-        if(isLeaf){
-            entry.toString();
+    public String getName() {
+        if (isLeaf) {
+            return entry.getName();
         }
         return text;
     }
-    String getDescription(){
-        return "UNIMPLEMENTED PLEASE FIX DESCRIPTIONS";
+
+    String getDescription() {
+        if (isLeaf) {
+            entry.getDescription();
+        }
+        return "";
     }
 
     public boolean isEmpty() {
@@ -64,6 +67,19 @@ public class HierarchyNode<T> {
         } else {
             for (HierarchyNode<T> node : children) {
                 add(nn, destination);
+            }
+        }
+    }
+
+    //TODO: handle case where element is not found
+    public void remove(HierarchyNode<T> hn){
+        for (HierarchyNode<T> c : children){
+            if(hn == c){
+                removeChild(c);
+                return;
+            }
+            else{
+                c.remove(hn);
             }
         }
     }
