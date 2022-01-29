@@ -1,18 +1,17 @@
 package org.archcnl.ui.input.ruleeditor.components;
 
-import java.util.Optional;
-
-import org.archcnl.domain.common.Concept;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
+import java.util.Optional;
+import org.archcnl.domain.common.Concept;
 
-public class ConceptTextfieldComponent extends TextField implements DropTarget<ConceptTextfieldComponent> {
+public class ConceptTextfieldComponent extends TextField
+        implements DropTarget<ConceptTextfieldComponent> {
 
     private static final long serialVersionUID = 1L;
-    
 
     public ConceptTextfieldComponent() {
         setActive(true);

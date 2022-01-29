@@ -1,13 +1,12 @@
 package org.archcnl.ui.input.ruleeditor.components;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import java.util.Arrays;
+import java.util.List;
 
 public class IfStatementComponent extends RuleComponent {
 
@@ -22,7 +21,7 @@ public class IfStatementComponent extends RuleComponent {
     public IfStatementComponent() {
         this.add(new Label("Rule Statement"));
         this.getStyle().set("border", "1px solid black");
-        
+
         componentRuleLayout = new HorizontalLayout();
         List<String> secondStatements =
                 Arrays.asList("must", "can-only", "can", "must be", "must be a", "must be an");
@@ -32,7 +31,7 @@ public class IfStatementComponent extends RuleComponent {
                 e -> {
                     firstComboboxListener(firstCombobox.getValue());
                 });
-        
+
         firstVariable = new TextField("Relation");
 
         List<String> firstModifier =
@@ -68,22 +67,19 @@ public class IfStatementComponent extends RuleComponent {
     }
 
     private void firstComboboxListener(String value) {
-        if (value.equals("must be") || value.equals("must be a") || value.equals("must be an"))
-        {
+        if (value.equals("must be") || value.equals("must be a") || value.equals("must be an")) {
             componentRuleLayout.remove(secondCombobox, secondVariable);
             componentRuleLayout.add(conditionCheckbox);
             showSecondCombobox = false;
             showSecondVariable = false;
-        }
-        else
-        {
+        } else {
             componentRuleLayout.add(secondCombobox, secondVariable);
             componentRuleLayout.remove(conditionCheckbox);
             showSecondCombobox = true;
             showSecondVariable = true;
         }
     }
-    
+
     private void secondComboboxListener(String value) {
         if (value.equals("at-most")
                 || value.equals("at-least")

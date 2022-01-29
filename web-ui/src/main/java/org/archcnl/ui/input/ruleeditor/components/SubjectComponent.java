@@ -21,8 +21,8 @@ public class SubjectComponent extends RuleComponent {
         this.add(new Label("Rule Subject"));
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
-        
-        mainSubjectBox = new HorizontalLayout();        
+
+        mainSubjectBox = new HorizontalLayout();
         List<String> firstStatements =
                 Arrays.asList(
                         "Every",
@@ -51,25 +51,20 @@ public class SubjectComponent extends RuleComponent {
 
         conditionCheckbox = new Checkbox("that... (add condition)");
         conditionCheckbox.addClickListener(e -> addCondition(conditionCheckbox.getValue()));
-        mainSubjectBox.setVerticalComponentAlignment(Alignment.END, conditionCheckbox);       
+        mainSubjectBox.setVerticalComponentAlignment(Alignment.END, conditionCheckbox);
         mainSubjectBox.add(firstCombobox, firstConcept, conditionCheckbox);
 
         newCondition = new ConditionComponent();
         add(mainSubjectBox);
     }
-    
+
     private void firstComboboxListener(String value) {
-        if(value.equals("Nothing"))
-        {
+        if (value.equals("Nothing")) {
             mainSubjectBox.remove(firstConcept, conditionCheckbox);
             showFirstConcept = false;
-        }
-        else if(value.equals("Fact:"))
-        {
+        } else if (value.equals("Fact:")) {
             mainSubjectBox.remove(conditionCheckbox);
-        }
-        else
-        {
+        } else {
             mainSubjectBox.add(firstConcept, conditionCheckbox);
             showFirstConcept = true;
         }
@@ -86,8 +81,7 @@ public class SubjectComponent extends RuleComponent {
     public String getString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(firstCombobox.getValue() + " ");
-        if(showFirstConcept)
-        {
+        if (showFirstConcept) {
             sBuilder.append(firstConcept.getValue() + " ");
             if (conditionCheckbox.getValue()) {
                 sBuilder.append(newCondition.getString());

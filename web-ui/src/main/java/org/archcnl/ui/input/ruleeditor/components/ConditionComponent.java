@@ -22,7 +22,7 @@ public class ConditionComponent extends RuleComponent {
         setPadding(false);
         HorizontalLayout conditionBox = new HorizontalLayout();
         conditionBox.setMargin(false);
-        
+
         startLabelTextfield = new Label("that(");
         conditionBox.setVerticalComponentAlignment(Alignment.END, startLabelTextfield);
         firstVariable = new RelationTextfieldComponent();
@@ -36,11 +36,11 @@ public class ConditionComponent extends RuleComponent {
                 e -> {
                     firstComboboxListener(firstCombobox.getValue());
                 });
-        
+
         secondVariable = new ConceptTextfieldComponent();
         secondVariable.setLabel("Concept");
         secondVariable.setPlaceholder("Concept");
-        
+
         endLabelTextfield = new Label(")");
         conditionBox.setVerticalComponentAlignment(Alignment.END, endLabelTextfield);
 
@@ -57,12 +57,11 @@ public class ConditionComponent extends RuleComponent {
                 andCheckbox);
         add(conditionBox);
     }
-    
+
     private void firstComboboxListener(String value) {
         secondVariable.setLabel("Concept / Number / String");
         secondVariable.setPlaceholder("+/- [0-9] / String");
-        if(value.equals("a") || value.equals("an"))
-        {
+        if (value.equals("a") || value.equals("an")) {
             secondVariable.setLabel("Concept");
             secondVariable.setPlaceholder("Concept");
         }

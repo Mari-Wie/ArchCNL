@@ -5,8 +5,8 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
+import org.archcnl.ui.input.ruleeditor.components.EveryOnlyNoVerbComponent;
 import org.archcnl.ui.input.ruleeditor.components.SubjectComponent;
-import org.archcnl.ui.input.ruleeditor.components.VerbComponent;
 
 public class NewArchitectureRuleView extends RulesOrMappingEditorView
         implements ArchitectureRulesContract.View {
@@ -16,7 +16,7 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
     private TextArea archRuleTextArea;
     private NewArchitectureRulePresenter presenter;
     private SubjectComponent subject;
-    private VerbComponent verb;
+    private EveryOnlyNoVerbComponent verb;
 
     public NewArchitectureRuleView(NewArchitectureRulePresenter presenter) {
         this.presenter = presenter;
@@ -24,7 +24,7 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
         getStyle().set("border", "1px solid black");
 
         subject = new SubjectComponent();
-        verb = new VerbComponent(false);
+        verb = new EveryOnlyNoVerbComponent(false);
 
         HorizontalLayout footer = new HorizontalLayout();
         saveButton = new Button("Save Rule", e -> saveRule());
