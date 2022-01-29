@@ -20,11 +20,11 @@ public class SideBarLayout extends VerticalLayout {
 
     public SideBarLayout(final OutputView parent) {
         this.parent = parent;
-        Button gotoQueryViewButton =
+        final Button gotoQueryViewButton =
                 prepareButton("General Information", e -> parent.switchToQueryView());
         gotoCustomQueryViewButton =
                 prepareButton("Custom Queries", e -> parent.switchToCustomQueryView());
-        Button gotoFreeTextQueryViewButton =
+        final Button gotoFreeTextQueryViewButton =
                 prepareButton("Free Text Queries", e -> parent.switchToFreeTextQueryView());
         queryOptions =
                 new VerticalLayout(
@@ -42,18 +42,17 @@ public class SideBarLayout extends VerticalLayout {
         returnToRuleEditorButton.setSizeUndefined();
         setFlexGrow(1, queryOptions);
         setFlexGrow(0, returnToRuleEditorButton);
-        getStyle().set("background-color", "#3458eb");
     }
 
     private Button prepareButton(
-            String text, ComponentEventListener<ClickEvent<Button>> clickListener) {
-        Button newButton = new Button(text, clickListener);
+            final String text, final ComponentEventListener<ClickEvent<Button>> clickListener) {
+        final Button newButton = new Button(text, clickListener);
         newButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         return newButton;
     }
 
-    public void addPinnedCustomQueryButton(CustomQueryPresenter customQueryPresenter) {
-        Button newButton =
+    public void addPinnedCustomQueryButton(final CustomQueryPresenter customQueryPresenter) {
+        final Button newButton =
                 prepareButton(
                         customQueryPresenter.getQueryName(),
                         e -> parent.switchToCustomQueryView(customQueryPresenter.getView()));

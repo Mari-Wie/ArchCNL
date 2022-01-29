@@ -1,7 +1,7 @@
 :root {
     --color-main-bg: rgb(245, 245, 245);
 
-    --primary: rgb(2, 113, 187);
+    --primary: rgb(63, 149, 206);
     --primary-dark: rgb(59, 81, 92);
     --primary-light: rgb(255, 255, 255);
     --secondary: rgb(0, 109, 182);
@@ -24,7 +24,7 @@
     --accept-font: var(--correct);
     --info-font: var(--info);
 
-    --btn-primary-shadow: 0px 1px 5px 1px rgba(2, 113, 187, 0.35);
+    --btn-primary-shadow: 0px 1px 5px 1px rgba(63, 149, 206, 0.35);
     --btn-primary-black-shadow: 2px 2px 1pc 1px rgba(0, 0, 0, 0.35);
     --btn-inactive-shadow: 0px 18px 45px -12px rgba(205, 208, 219, 0.35);
     --btn-accent-shadow: 0px 2px 2px 1px rgba(255, 173, 0, 0.35);

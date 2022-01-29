@@ -7,8 +7,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.output.model.query.QueryUtils;
@@ -31,7 +29,6 @@ import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
 public class OutputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LogManager.getLogger(OutputView.class);
 
     private AbstractQueryResultsComponent queryResults;
     private CustomQueryPresenter customQueryPresenter;
@@ -61,7 +58,7 @@ public class OutputView extends HorizontalLayout {
     private void initLayout() {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
-        sideBar.setWidth(20, Unit.PERCENTAGE);
+        sideBar.addClassName("side-bar");
         queryResults.setWidth(80, Unit.PERCENTAGE);
         currentComponent = queryResults;
     }
@@ -76,7 +73,7 @@ public class OutputView extends HorizontalLayout {
         customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
-    private void handleEvent(PinQueryRequestedEvent event) {
+    private void handleEvent(final PinQueryRequestedEvent event) {
         sideBar.addPinnedCustomQueryButton(event.getSource());
         switchToCustomQueryView(event.getSource().getView());
         customQueryPresenter = new CustomQueryPresenter();
@@ -84,13 +81,13 @@ public class OutputView extends HorizontalLayout {
         customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
-    private void handleEvent(RunQueryRequestedEvent event) {
-        Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
+    private void handleEvent(final RunQueryRequestedEvent event) {
+        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getGridView().update(result);
     }
 
-    private void handleEvent(FreeTextRunButtonPressedEvent event) {
-        Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
+    private void handleEvent(final FreeTextRunButtonPressedEvent event) {
+        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getSource().update(result);
     }
 
@@ -104,7 +101,7 @@ public class OutputView extends HorizontalLayout {
         currentComponent = customQueryPresenter.getView();
     }
 
-    public void switchToCustomQueryView(CustomQueryView customQueryView) {
+    public void switchToCustomQueryView(final CustomQueryView customQueryView) {
         replace(currentComponent, customQueryView);
         currentComponent = customQueryView;
     }
@@ -120,8 +117,8 @@ public class OutputView extends HorizontalLayout {
     }
 
     private GridView prepareDefaultQueryGridView() {
-        GridView gridView = new GridView();
-        Optional<Result> result =
+        final GridView gridView = new GridView();
+        final Optional<Result> result =
                 resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
         gridView.update(result);
         return gridView;

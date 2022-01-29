@@ -17,7 +17,6 @@ vaadin-button {
 
 vaadin-context-menu-item {
     font-family: var(--p-font-family-h) !important;
-    background-color: var(--secondary) !important;
 }
 
 label {
@@ -35,7 +34,8 @@ label {
     font-size: var(--p-font-size-small);
 }
 
-.architecture-rules, .new-concept, .new-relation {
+.architecture-rules, .new-concept, .new-relation, 
+.query-text-box, .general-info-box {
     background-color: var(--primary-light);
     border-radius: 1%;
     border: none !important;
@@ -56,4 +56,45 @@ label {
     margin-left: var(--p-layout-medium);
     margin-right: var(--p-layout-medium);
     box-shadow: var(--box-light-second-shadow);
+}
+
+.card-title-box {
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-title-box--title {
+    float: left;
+    font-weight: var(--p-font-weight-bold);
+    width: 60%;
+}
+
+.card-title-box--btn {
+    float: left;
+    margin-right: 0.5em;
+}
+
+.label-title {
+    font-weight: var(--p-font-weight-bold);
+}
+
+vaadin-vertical-layout {
+    margin-top: 0.2rem !important;
+}
+
+.or-block {
+    border-radius: 0.5% !important;
+    background-color: rgb(240, 240, 240);
+}
+
+.side-bar {
+    background-color: var(--primary);
+    width: 15% !important;
+    border-radius: 0.5%;
+}
+
+.general-info-box--item-lable {
+    width: 70% !important;
 }

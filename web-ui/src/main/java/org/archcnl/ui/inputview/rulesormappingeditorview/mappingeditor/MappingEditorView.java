@@ -39,6 +39,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         content.add(emptyAndTripletsView);
 
         final Label title = new Label("Create or edit a " + mappingType);
+        title.setClassName("card-title-box--title");
         final Button closeButton =
                 new Button(
                         new Icon(VaadinIcon.CLOSE),
@@ -72,9 +73,13 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         variableListView = new VariableListView();
         add(variableListView);
 
-        add(new Label("When"));
+        final Label labelWhen = new Label("When");
+        final Label labelThen = new Label("Then");
+        labelWhen.setClassName("label-title");
+        labelThen.setClassName("label-title");
+        add(labelWhen);
         add(content);
-        add(new Label("Then"));
+        add(labelThen);
         addThenTripletView();
 
         final HorizontalLayout buttonRow = new HorizontalLayout();

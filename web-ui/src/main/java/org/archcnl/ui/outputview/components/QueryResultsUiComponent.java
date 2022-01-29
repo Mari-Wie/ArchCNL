@@ -6,9 +6,10 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
 
     private GeneralInfoLayout generalInfoLayout;
 
-    public QueryResultsUiComponent(GridView gridView) {
+    public QueryResultsUiComponent(final GridView gridView) {
         this.gridView = gridView;
         generalInfoLayout = new GeneralInfoLayout();
+        queryTextArea.setClassName("query-text-box");
         queryTextArea.setReadOnly(true);
         addComponents();
     }
