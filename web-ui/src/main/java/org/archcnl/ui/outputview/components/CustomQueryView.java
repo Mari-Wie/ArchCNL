@@ -60,8 +60,8 @@ public class CustomQueryView extends HorizontalLayout {
                         click -> fireEvent(new PinQueryButtonPressedEvent(this, true)));
 
         getStyle().set("overflow", "visible");
-        setWidth(100, Unit.PERCENTAGE);
-        setHeight(100, Unit.PERCENTAGE);
+        setWidthFull();
+        setHeightFull();
         queryTextArea.setReadOnly(true);
         queryTextArea.setVisible(false);
         addVariableSelectionComponent();

@@ -4,7 +4,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 
 @Route("")
 @PWA(
@@ -17,7 +16,7 @@ public class UiEntryPoint extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    public UiEntryPoint() throws PropertyNotFoundException {
+    public UiEntryPoint() {
         setSizeFull();
         add(new MainPresenter().getView());
     }

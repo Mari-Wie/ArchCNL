@@ -41,7 +41,7 @@ public class ConfigServiceTest {
     }
 
     @Test
-    public void givenValidDbConfigFile_whenCallGetDbUserName_thenReturnDbPass()
+    public void givenValidDbConfigFile_whenCallGetDbUserName_thenReturnDbUserName()
             throws PropertyNotFoundException {
         // given
         final String expectedValue = "admin";
@@ -49,5 +49,27 @@ public class ConfigServiceTest {
         final String dbUserName = ConfigAppService.getDbUsername();
         // then
         Assert.assertEquals(expectedValue, dbUserName);
+    }
+
+    @Test
+    public void givenValidDbConfigFile_whenCallGetDbContext_thenReturnDbContext()
+            throws PropertyNotFoundException {
+        // given
+        final String expectedValue = "http://graphs.org/archcnl_it_db/1.0";
+        // when
+        final String dbContext = ConfigAppService.getDbContext();
+        // then
+        Assert.assertEquals(expectedValue, dbContext);
+    }
+
+    @Test
+    public void givenValidDbConfigFile_whenCallGetDbRuleFile_thenReturnDbRuleFile()
+            throws PropertyNotFoundException {
+        // given
+        final String expectedValue = "temp/GeneratedRuleFile.adoc";
+        // when
+        final String dbContext = ConfigAppService.getDbRuleFile();
+        // then
+        Assert.assertEquals(expectedValue, dbContext);
     }
 }

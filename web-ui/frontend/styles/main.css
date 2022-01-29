@@ -98,3 +98,7 @@ vaadin-vertical-layout {
 .general-info-box--item-lable {
     width: 70% !important;
 }
+
+.side-bar-text {
+    color: var(--primary-light-font) !important;
+}
