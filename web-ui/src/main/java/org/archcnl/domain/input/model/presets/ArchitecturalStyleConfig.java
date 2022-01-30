@@ -13,7 +13,7 @@ public class ArchitecturalStyleConfig {
     private List<ArchitectureInformation> variableParts = new ArrayList<ArchitectureInformation>();
 
     @JsonProperty("architectureRules")
-    private List<ArchitectureRuleString> rules = new ArrayList<ArchitectureRuleString>();
+    private List<ArchitectureRuleConfig> rules = new ArrayList<ArchitectureRuleConfig>();
 
     @JsonProperty("style")
     public ArchitecturalStyle getStyleName() {
@@ -36,12 +36,12 @@ public class ArchitecturalStyleConfig {
     }
 
     @JsonProperty("architectureRules")
-    public List<ArchitectureRuleString> getRules() {
+    public List<ArchitectureRuleConfig> getRules() {
         return rules;
     }
 
     @JsonProperty("architectureRules")
-    public void setRules(List<ArchitectureRuleString> rules) {
+    public void setRules(List<ArchitectureRuleConfig> rules) {
         this.rules = rules;
     }
 }

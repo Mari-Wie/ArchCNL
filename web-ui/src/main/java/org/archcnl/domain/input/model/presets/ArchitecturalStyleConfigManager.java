@@ -1,10 +1,8 @@
-package org.archcnl.ui.inputview.presets;
+package org.archcnl.domain.input.model.presets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
-import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
 
 /**
  * This Configuration Manager builds Config-Objexts based on information that is provided in
