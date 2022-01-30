@@ -27,11 +27,24 @@ public class TwoColumnGridAndInputTextFieldsComponent extends VerticalLayout {
             String column2,
             Set<TwoColumnGridEntry> gridItems,
             Binder<TwoColumnGridEntry> binder) {
-
+    	
+    	super.setHeight("40%");
+    	super.setWidthFull();
+    	
         row = new HorizontalLayout();
+        row.setSpacing(true);
+        row.setWidthFull();
+
+        
         info1TextField = new TextField(column1);
+        info1TextField.setWidth("45%");
         info2TextField = new TextField(column2);
+        info2TextField.setWidth("45%");
         addInfoBtn = new Button(new Icon(VaadinIcon.PLUS));
+        addInfoBtn.setWidth("10%");
+        row.setAlignSelf(Alignment.END, addInfoBtn);
+        row.setDefaultVerticalComponentAlignment(Alignment.END);
+        
         infoGrid = new Grid<>(TwoColumnGridEntry.class, false);
 
         binder.forField(info1TextField)
@@ -60,10 +73,8 @@ public class TwoColumnGridAndInputTextFieldsComponent extends VerticalLayout {
         infoGrid.setHeight("200px");
         infoGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
 
-        row.setSpacing(true);
+        
         row.add(info1TextField, info2TextField, addInfoBtn);
-        row.setSizeFull();
-        row.setAlignSelf(Alignment.END, addInfoBtn);
         add(row, infoGrid);
     }
 }
