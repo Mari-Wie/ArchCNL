@@ -1,14 +1,12 @@
 package org.archcnl.domain.input.model.presets;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.util.List;
 
 public class ArchitectureRuleConfig {
 
     @JsonProperty private String rule;
-    
+
     @JsonProperty private List<Integer> requiredArchitectureInformationIds;
 
     @JsonProperty
@@ -21,11 +19,12 @@ public class ArchitectureRuleConfig {
         this.rule = rule;
     }
 
-	public List<Integer> getRequiredArchitectureInformationIds() {
-		return requiredArchitectureInformationIds;
-	}
+    public List<Integer> getRequiredArchitectureInformationIds() {
+        return requiredArchitectureInformationIds;
+    }
 
-	public void setRequiredArchitectureInformationIds(List<Integer> requiredArchitectureInformationIds) {
-		this.requiredArchitectureInformationIds = requiredArchitectureInformationIds;
-	}
+    public void setRequiredArchitectureInformationIds(
+            List<Integer> requiredArchitectureInformationIds) {
+        this.requiredArchitectureInformationIds = requiredArchitectureInformationIds;
+    }
 }

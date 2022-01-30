@@ -1,68 +1,70 @@
 package org.archcnl.ui.inputview.presets.events;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfigManager;
-import org.archcnl.ui.inputview.presets.ArchitecturalStyleForm;
 import org.archcnl.ui.inputview.presets.ArchitecturalStyleRuleSelection;
 import org.archcnl.ui.menudialog.OpenRulePresetsDialog;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
-
 public class ArchitecturalStyleSelectedEvent extends ComponentEvent<OpenRulePresetsDialog> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3410874386784534179L;
-	private ArchitecturalStyle style;
-	private Component currentContent;
-	private Component newContent;
-	private Tabs tabs;
-	private Tab nextTab;
+    /** */
+    private static final long serialVersionUID = -3410874386784534179L;
 
-	public ArchitecturalStyleSelectedEvent(OpenRulePresetsDialog source, boolean fromClient,
-			ArchitecturalStyle architecturalStyle, Component currentContent, Tabs tabs, Tab nextTab) {
-		super(source, fromClient);
-		this.style = architecturalStyle;
-		this.currentContent = currentContent;
-		this.tabs = tabs;
-		this.nextTab = nextTab;
-		// TODO Auto-generated constructor stub
-	}
+    private ArchitecturalStyle style;
+    private Component currentContent;
+    private Component newContent;
+    private Tabs tabs;
+    private Tab nextTab;
 
-	public void handleEvent() {
-		ArchitecturalStyleConfig architectureConfig = new ArchitecturalStyleConfigManager().build(style);
+    public ArchitecturalStyleSelectedEvent(
+            OpenRulePresetsDialog source,
+            boolean fromClient,
+            ArchitecturalStyle architecturalStyle,
+            Component currentContent,
+            Tabs tabs,
+            Tab nextTab) {
+        super(source, fromClient);
+        this.style = architecturalStyle;
+        this.currentContent = currentContent;
+        this.tabs = tabs;
+        this.nextTab = nextTab;
+        // TODO Auto-generated constructor stub
+    }
 
-		// if style has been build update UI
-		if (architectureConfig != null) {
+    public void handleEvent() {
+        ArchitecturalStyleConfig architectureConfig =
+                new ArchitecturalStyleConfigManager().build(style);
 
-			ArchitecturalStyleRuleSelection ruleSelection = new ArchitecturalStyleRuleSelection(architectureConfig,tabs);
+        // if style has been build update UI
+        if (architectureConfig != null) {
 
-			newContent = ruleSelection;
+            ArchitecturalStyleRuleSelection ruleSelection =
+                    new ArchitecturalStyleRuleSelection(architectureConfig, tabs);
 
-			getSource().remove(currentContent);
-			getSource().add(newContent);
-			tabs.setSelectedTab(nextTab);
+            newContent = ruleSelection;
 
-		} else { // show notification
-			getSource().add(Notification.show(style + " is not yet implemented", 5000, Position.BOTTOM_START));
-		}
-	}
-	
-	public void handleRuleSelection() {
-		
-	}
-	
-	public void showTab(Tab tab) {
-		
-	}
+            getSource().remove(currentContent);
+            getSource().add(newContent);
+            tabs.setSelectedTab(nextTab);
+
+        } else { // show notification
+            getSource()
+                    .add(
+                            Notification.show(
+                                    style + " is not yet implemented",
+                                    5000,
+                                    Position.BOTTOM_START));
+        }
+    }
+
+    public void handleRuleSelection() {}
+
+    public void showTab(Tab tab) {}
 }
