@@ -78,8 +78,6 @@ public class ArchitecturalStyleForm extends Component
         // add event listeners
         addListeners();
 
-        // add components to ui
-        //        addRuleBoxToUi(architecturalStyleConfig.getRules());
         addKnownGroupsToUi();
         addKnownTextFieldsToUi();
         addFooter();
