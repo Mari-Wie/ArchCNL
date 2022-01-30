@@ -1,67 +1,105 @@
 package org.archcnl.ui.menudialog;
 
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
-import org.archcnl.ui.inputview.presets.ArchitecturalStyleConfigManager;
-import org.archcnl.ui.inputview.presets.ArchitecturalStyleForm;
+import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfigManager;
+import org.archcnl.ui.inputview.presets.ArchitecturalStyleRuleSelection;
+import org.archcnl.ui.inputview.presets.events.ArchiecturalRulesSelectedEvent;
+import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSelectedEvent;
+import org.archcnl.ui.inputview.presets.events.PresetsDialogTabRequestedEvent;
 
-public class OpenRulePresetsDialog extends Dialog {
+import com.github.andrewoma.dexx.collection.HashMap;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 
-    /** */
-    private static final long serialVersionUID = -8177194179089306020L;
+public class OpenRulePresetsDialog extends Dialog implements HasComponents, PropertyChangeListener {
 
-    private VerticalLayout dialogLayout;
+	/** */
+	private static final long serialVersionUID = -8177194179089306020L;
 
-    private Select<ArchitecturalStyle> select;
-    private Text title;
+	private RadioButtonGroup<ArchitecturalStyle> select;
+	private Text title;
+	private Component currentContent;
 
-    public OpenRulePresetsDialog() {
-        this.dialogLayout = new VerticalLayout();
-        super.add(dialogLayout);
-        setDraggable(true);
+	private Map<Tab, Component> tabsToComponent = new LinkedHashMap<>();
+	private Tabs tabs;
 
-        title = new Text("Select archictectural style to open presets for");
+	public OpenRulePresetsDialog() {
 
-        select = new Select<ArchitecturalStyle>();
+		addListeners();
+		
+		setWidth("60%");
 
-        select.setItems(ArchitecturalStyle.values());
+		title = new Text("Select archictectural style to open presets for");
 
-        dialogLayout.addComponentAtIndex(0, title);
-        dialogLayout.addComponentAtIndex(1, select);
+		select = new RadioButtonGroup<ArchitecturalStyle>();
 
-        select.addValueChangeListener(
-                event -> {
-                    // update dialog if event value changed
-                    updateDialog(select.getValue());
-                });
-    }
+		select.setItems(ArchitecturalStyle.values());
+		select.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
 
-    private void updateDialog(ArchitecturalStyle architecturalStyle) {
+		VerticalLayout selectLayout = new VerticalLayout();
+		selectLayout.add(title, select);
 
-        ArchitecturalStyleConfig architecture =
-                new ArchitecturalStyleConfigManager().build(architecturalStyle);
+		Tab rulesTab = new Tab("Architectural Rules");
 
-        // if style has been build update UI
-        if (architecture != null) {
-            dialogLayout.remove(select);
-            title.setText("Enter " + architecturalStyle.toString() + " Information");
-            ArchitecturalStyleForm form = new ArchitecturalStyleForm(architecture);
+		Tab architectureInformationTab = new Tab("Architecture Information");
 
-            dialogLayout.add(form);
-            dialogLayout.setWidth("70%");
+		Button cancelBtn = new Button("Cancel", e -> remove(this));
+		Button saveBtn = new Button("Next", e -> {
+			
+			ArchitecturalStyleConfig architectureConfig = new ArchitecturalStyleConfigManager().build(select.getValue());
+			ArchitecturalStyleRuleSelection ruleSelection = new ArchitecturalStyleRuleSelection(architectureConfig, tabs);
 
-        } else { // show notification
-            dialogLayout.add(
-                    Notification.show(
-                            architecturalStyle.toString() + " is not yet implemented",
-                            5000,
-                            Position.BOTTOM_START));
-        }
-    }
+			Component newContent = ruleSelection;
+			fireEvent(new PresetsDialogTabRequestedEvent(this, false, currentContent,newContent, tabs));
+		});
+		HorizontalLayout footer = new HorizontalLayout();
+		footer.add(cancelBtn, saveBtn);
+
+		selectLayout.add(footer);
+
+		tabsToComponent.put(new Tab("Architectural Style"), new VerticalLayout(selectLayout));
+		tabsToComponent.put(rulesTab, new VerticalLayout());
+		tabsToComponent.put(architectureInformationTab, new VerticalLayout());
+
+		tabs = new Tabs();
+		tabsToComponent.keySet().forEach(tabs::add);
+
+		currentContent = selectLayout;
+		add(tabs, currentContent);
+
+//		select.addValueChangeListener(
+//				event -> fireEvent(new ArchitecturalStyleSelectedEvent(this, false, select.getValue(), currentContent)));
+
+	}
+
+	private void addListeners() {
+		this.addListener(PresetsDialogTabRequestedEvent.class, PresetsDialogTabRequestedEvent::handleEvent);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Tabs getTabs() {
+		return this.tabs;
+	}
+
 }
