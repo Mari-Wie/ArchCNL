@@ -4,39 +4,65 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ArchitectureInformation {
 
-    @JsonProperty private String name;
+	@JsonProperty
+	private int id;
 
-    @JsonProperty private int groupId;
+	@JsonProperty
+	private String name;
 
-    private String value;
+	@JsonProperty
+	private int groupId;
 
-    public ArchitectureInformation() {}
+	private String value;
+	
+	private boolean active = true;
 
-    @JsonProperty
-    public String getName() {
-        return name;
-    }
+	public ArchitectureInformation() {
+	}
 
-    @JsonProperty
-    public void setName(String name) {
-        this.name = name;
-    }
+	@JsonProperty
+	public int getId() {
+		return id;
+	}
 
-    @JsonProperty
-    public int getGroupId() {
-        return groupId;
-    }
+	@JsonProperty
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    @JsonProperty
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
+	@JsonProperty
+	public String getName() {
+		return name;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	@JsonProperty
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	@JsonProperty
+	public int getGroupId() {
+		return groupId;
+	}
+
+	@JsonProperty
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }
