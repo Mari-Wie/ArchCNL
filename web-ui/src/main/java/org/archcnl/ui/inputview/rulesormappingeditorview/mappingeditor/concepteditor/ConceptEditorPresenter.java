@@ -107,7 +107,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 if (!doesConceptExist(concept.get())) {
                     RulesConceptsAndRelations.getInstance()
                             .getConceptManager()
-                            .addConcept(concept.get());
+                            .addConcept(concept.get(), "Custom Concepts");
                 }
 
                 fireEvent(new RuleEditorRequestedEvent(this, true));

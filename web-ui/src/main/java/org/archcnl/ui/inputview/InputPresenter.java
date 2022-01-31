@@ -5,6 +5,10 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
@@ -31,7 +35,13 @@ public class InputPresenter extends Component {
 
     private void addListeners() {
         view.addListener(ConceptEditorRequestedEvent.class, this::handleEvent);
+        view.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+
         view.addListener(RelationEditorRequestedEvent.class, this::handleEvent);
+        view.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
+        view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+
         view.addListener(OutputViewRequestedEvent.class, this::fireEvent);
         architectureRulesLayout.addListener(RuleCreatorRequestedEvent.class, this::handleEvent);
     }
@@ -39,6 +49,55 @@ public class InputPresenter extends Component {
     public InputView getView() {
         return view;
     }
+
+    //  public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
+    //      ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
+    //      cm.moveNode(event.getDraggedNode(), event.getTargetNode());
+    //      event.getSource().clearRoots();
+    //      for (HierarchyNode<Concept> node :  cm.getRoots()){
+    //          event.getSource().addRoot(node);
+    //      }
+    //      event.getSource().update();
+    //      System.out.println("Input presenter received ConceptHierarchySwapRequestedEvent");
+    //  }
+    //  public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
+    //      //TODO: add relation things (see handleEvent(final ConceptHierarchySwapRequestedEvent
+    // event));
+    //      System.out.println("Input presenter received RelationHierarchySwapRequestedEvent");
+    //  }
+
+    //  public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
+    //      System.out.println("Input presenter received ConceptGridUpdateRequest");
+    //      ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
+    //      event.getSource().clearRoots();
+    //      for (HierarchyNode<Concept> node :  cm.getRoots()){
+    //          event.getSource().addRoot(node);
+    //      }
+    //      event.getSource().update();
+    //  }
+
+    //  public void handleEvent(final RelationGridUpdateRequestedEvent event) {
+    //      //TODO: fix this (see function handleEvent(final ConceptGridUpdateRequestedEvent event))
+    //      System.out.println("Input presenter received RelationGridUpdateRequest");
+    //      RelationManager cm = RulesConceptsAndRelations.getInstance().getRelationManager();
+    //      List<Relation> c = cm.getInputRelations();
+    //      List<CustomRelation> cc = cm.getCustomRelations();
+    //      HierarchyNode<Relation> defaultRelations = new HierarchyNode<Relation>("Default
+    // Relations");
+    //      for (Relation c_loop : c) {
+    //          defaultRelations.add(c_loop);
+    //      }
+    //      HierarchyNode<Relation> customRelations = new HierarchyNode<Relation>("Custom
+    // Relation");
+    //      for (Relation c_loop : cc) {
+    //          customRelations.add(c_loop);
+    //      }
+
+    //      event.getSource().clearRoots();
+    //      event.getSource().addRoot(defaultRelations);
+    //      event.getSource().addRoot(customRelations);
+    //      event.getSource().update();
+    //  }
 
     public void handleEvent(final ConceptEditorRequestedEvent event) {
         ConceptEditorPresenter conceptEditorPresenter;

@@ -3,9 +3,15 @@ package org.archcnl.ui.inputview;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
@@ -18,28 +24,53 @@ public class InputView extends HorizontalLayout {
 
     private ConceptAndRelationView conceptAndRelationView;
     private RulesOrMappingEditorView currentlyShownView;
+    // TODO: rename, its just for spacing stuff
+    private VerticalLayout rightHandSideLayout;
 
     public InputView(final RulesOrMappingEditorView ruleEditorView) {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         initConceptAndRelationView();
+        initRightHandSideLayout(
+                conceptAndRelationView,
+                new Button(
+                        "Check for violations",
+                        click -> fireEvent(new OutputViewRequestedEvent(this, true))));
 
         changeCurrentlyShownView(ruleEditorView);
-        addAndExpand(currentlyShownView, conceptAndRelationView);
+        addAndExpand(currentlyShownView, rightHandSideLayout);
+    }
+
+    public void initRightHandSideLayout(ConceptAndRelationView hierarchies, Button but) {
+        rightHandSideLayout = new VerticalLayout();
+
+        rightHandSideLayout.getStyle().remove("border");
+        rightHandSideLayout.setPadding(false);
+        rightHandSideLayout.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
+        rightHandSideLayout.setHeight(100, Unit.PERCENTAGE);
+
+        rightHandSideLayout.addAndExpand(hierarchies);
+        rightHandSideLayout.add(but);
     }
 
     public void changeCurrentlyShownView(final RulesOrMappingEditorView newView) {
         newView.setWidth(InputView.GOLDEN_RATIO, Unit.PERCENTAGE);
         replace(currentlyShownView, newView);
+        conceptAndRelationView.update();
         currentlyShownView = newView;
     }
 
     private void initConceptAndRelationView() {
         conceptAndRelationView = new ConceptAndRelationView(true);
-        conceptAndRelationView.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
         conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(OutputViewRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                RelationHierarchySwapRequestedEvent.class, this::fireEvent);
     }
 
     @Override
