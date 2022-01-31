@@ -43,6 +43,10 @@ public class HierarchyView<T extends ObjectType> extends RulesOrMappingEditorVie
         roots.add(new HierarchyNode<T>(sectionName));
     }
 
+    public void setRoots(List<HierarchyNode<T>> l){
+        roots = l;
+    }
+
     public void clearRoots() {
         roots.clear();
     }
