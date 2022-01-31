@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import java.lang.RuntimeException;
 
-public class ConceptManager {
+public class ConceptManager extends HierarchyManager<Concept> {
 
     private TreeMap<String, Concept> concepts;
-    List<HierarchyNode<Concept>> hierarchy_roots;
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public ConceptManager() {
-        hierarchy_roots = new ArrayList<HierarchyNode<Concept>>();
+        super();
         concepts = new TreeMap<String, Concept>();
         // TODO: move this to somewhere where to ConceptManager is created and files are loaded,
         // also
@@ -39,74 +39,58 @@ public class ConceptManager {
         }
     }
 
-    public List<HierarchyNode<Concept>> getRoots() {
-        return hierarchy_roots;
-    }
-
-    public void removeFromHierarchy(HierarchyNode<Concept> node) {
-        for (HierarchyNode<Concept> hn : hierarchy_roots) {
-            hn.remove(node);
-        }
-    }
-
-    public void addConcept(Concept concept, HierarchyNode<Concept> parent)
+    public void addToParent(Concept concept, HierarchyNode<Concept> parent)
             throws ConceptAlreadyExistsException {
-        addConcept(concept);
-        parent.add(concept);
+            addConcept(concept);
+            parent.add(concept);
     }
 
-    public void addConcept(Concept concept, String parentName)
+    public void addToParent(Concept concept, String parentName)
             throws ConceptAlreadyExistsException {
-        addConcept(concept);
-        Optional<HierarchyNode<Concept>> parent =
+            addConcept(concept);
+            Optional<HierarchyNode<Concept>> parent =
                 hierarchy_roots.stream()
-                        .filter(node -> parentName.equals(node.getName()))
-                        .findAny();
-        // TODO: error handling
-        parent.get().add(concept);
+                .filter(node -> parentName.equals(node.getName()))
+                .findAny();
+            if(!parent.isPresent()){
+            // TODO: error handling
+            }
+            parent.get().add(concept);
     }
 
-    public void moveNode(HierarchyNode<Concept> node, HierarchyNode<Concept> target) {
-        removeFromHierarchy(node);
-        target.addChild(node);
-    }
-
-    public void addHierarchyRoot(String name) {
-        hierarchy_roots.add(new HierarchyNode<Concept>(name));
-    }
-
-    public void addHierarchyRoot(HierarchyNode<Concept> newRoot) {
-        hierarchy_roots.add(newRoot);
-    }
 
     public void conceptHasBeenUpdated(Concept concept) {
         propertyChangeSupport.firePropertyChange("conceptUpdated", null, concept);
     }
 
+    public void append(CustomConcept concept)throws UnrelatedMappingException{
+        Optional<Concept> existingConceptOpt = getConceptByName(concept.getName());
+        if (existingConceptOpt.isPresent()
+                && existingConceptOpt.get() instanceof CustomConcept) {
+            CustomConcept existingCustomConcept = (CustomConcept) existingConceptOpt.get();
+            Optional<ConceptMapping> existingMapping = existingCustomConcept.getMapping();
+            Optional<ConceptMapping> newMapping = concept.getMapping();
+            if (existingMapping.isPresent() && newMapping.isPresent()) {
+                existingMapping.get().addAllAndTriplets(newMapping.get().getWhenTriplets());
+            } else if (existingMapping.isEmpty() && newMapping.isPresent()) {
+                existingCustomConcept.setMapping(newMapping.get());
+            }
+        }
+    }
+
     public void addOrAppend(CustomConcept concept) throws UnrelatedMappingException {
         try {
             if (!doesConceptExist(concept)) {
-                addConcept(concept);
+                addToParent(concept, "Custom Concepts");
             } else {
-                Optional<Concept> existingConceptOpt = getConceptByName(concept.getName());
-                if (existingConceptOpt.isPresent()
-                        && existingConceptOpt.get() instanceof CustomConcept) {
-                    CustomConcept existingCustomConcept = (CustomConcept) existingConceptOpt.get();
-                    Optional<ConceptMapping> existingMapping = existingCustomConcept.getMapping();
-                    Optional<ConceptMapping> newMapping = concept.getMapping();
-                    if (existingMapping.isPresent() && newMapping.isPresent()) {
-                        existingMapping.get().addAllAndTriplets(newMapping.get().getWhenTriplets());
-                    } else if (existingMapping.isEmpty() && newMapping.isPresent()) {
-                        existingCustomConcept.setMapping(newMapping.get());
-                    }
-                }
+                append(concept);
             }
         } catch (ConceptAlreadyExistsException e) {
-            // cannot occur
+            // cannot occur << CODE SMELL
             throw new RuntimeException(
                     "Adding and appending of mapping \""
-                            + concept.getName()
-                            + "\" failed unexpectedly.");
+                    + concept.getName()
+                    + "\" failed unexpectedly.");
         }
     }
 
@@ -121,15 +105,19 @@ public class ConceptManager {
     // TODO: kick the inits out of here and load/init them from outside the manager
     private void initFamixConcept(String name, String description) {
         try {
-            addConcept(new FamixConcept(name, description), "Default Concepts");
+            addToParent(new FamixConcept(name, description), "Default Concepts");
         } catch (ConceptAlreadyExistsException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Concept Already Exitsts");
         }
     }
 
     private void initConformanceConcept(String name, String description) {
         try {
-            addConcept(new ConformanceConcept(name, description), "Default Concepts");
+            addToParent(new ConformanceConcept(name, description), "Default Concepts");
         } catch (ConceptAlreadyExistsException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Concept already exists");
         }
     }
 
@@ -175,7 +163,7 @@ public class ConceptManager {
         initConformanceConcept(
                 "ConformanceCheck",
                 "A ConformanceCheck checks if the actual architecture conforms to the specified architecture. The architecture specification is done using ArchitectureRules. Instances where these rules are not fulfilled are modelled as ArchitectureViolations."
-                        + "A ConformanceCheck is responsible for adding rules with their violations to the architecture model");
+                + "A ConformanceCheck is responsible for adding rules with their violations to the architecture model");
         initConformanceConcept(
                 "ArchitectureRule",
                 "Models a rule about the architecture that should be satisfied. It is specified in a controlled natural language. Instances in the architecture where ArchitectureRules are not fulfilled will be modeled as ArchitectureViolations.");
@@ -195,8 +183,8 @@ public class ConceptManager {
 
     public List<Concept> getInputConcepts() {
         return concepts.values().stream()
-                .filter(Predicate.not(ConformanceConcept.class::isInstance))
-                .collect(Collectors.toList());
+            .filter(Predicate.not(ConformanceConcept.class::isInstance))
+            .collect(Collectors.toList());
     }
 
     public List<Concept> getOutputConcepts() {
@@ -205,9 +193,9 @@ public class ConceptManager {
 
     public List<CustomConcept> getCustomConcepts() {
         return concepts.values().stream()
-                .filter(CustomConcept.class::isInstance)
-                .map(CustomConcept.class::cast)
-                .collect(Collectors.toList());
+            .filter(CustomConcept.class::isInstance)
+            .map(CustomConcept.class::cast)
+            .collect(Collectors.toList());
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
