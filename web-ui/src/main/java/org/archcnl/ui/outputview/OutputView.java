@@ -12,6 +12,10 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.CustomQueryView;
@@ -38,9 +42,9 @@ public class OutputView extends HorizontalLayout {
 
     public OutputView() throws PropertyNotFoundException {
         queryResults = new QueryResultsUiComponent();
-        customQueryPresenter = new CustomQueryPresenter();
         freeTextQuery = new FreeTextQueryUiComponent();
         sideBar = new SideBarLayout(this);
+        createQustomQueryPresenter();
 
         initLayout();
         registerEventListeners();
@@ -55,22 +59,29 @@ public class OutputView extends HorizontalLayout {
         currentComponent = queryResults;
     }
 
+    private void createQustomQueryPresenter() {
+        customQueryPresenter = new CustomQueryPresenter();
+        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        customQueryPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
+        customQueryPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+        customQueryPresenter.addListener(
+                RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+    }
+
     private void registerEventListeners() {
         freeTextQuery.addListener(
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
         freeTextQuery.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         sideBar.addListener(InputViewRequestedEvent.class, this::fireEvent);
-        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
     private void handleEvent(PinQueryRequestedEvent event) {
         sideBar.addPinnedCustomQueryButton(event.getSource());
         switchToCustomQueryView(event.getSource().getView());
-        customQueryPresenter = new CustomQueryPresenter();
-        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
+        createQustomQueryPresenter();
     }
 
     private void handleEvent(RunQueryRequestedEvent event) {

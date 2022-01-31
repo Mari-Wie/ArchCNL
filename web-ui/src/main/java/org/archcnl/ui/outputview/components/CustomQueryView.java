@@ -23,9 +23,10 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateReques
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
 import org.archcnl.ui.common.variablelistview.VariableListView;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
 import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
 import org.archcnl.ui.outputview.events.UpdateQueryTextButtonPressedEvent;
@@ -117,10 +118,18 @@ public class CustomQueryView extends HorizontalLayout {
 
     private void initConceptAndRelationView() {
         conceptAndRelationView = new ConceptAndRelationView(false);
-        conceptAndRelationView.setWidth(100.0f - CONTENT_RATIO, Unit.PERCENTAGE);
-        conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
-        conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
-        conceptAndRelationView.addListener(OutputViewRequestedEvent.class, this::fireEvent);
+        // conceptAndRelationView.setWidth(100.0f - CONTENT_RATIO, Unit.PERCENTAGE);
+        // conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
+        // conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
+        // conceptAndRelationView.addListener(OutputViewRequestedEvent.class, this::fireEvent);
+        //
+        conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.update();
     }
 
     public void addVariableSelectionComponent() {
