@@ -13,6 +13,7 @@ import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.common.ArchitectureCheck;
 import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.CustomRelation;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.Relation;
@@ -36,6 +37,7 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
 @Tag("MainPresenter")
 public class MainPresenter extends Component implements PropertyChangeListener {
@@ -66,51 +68,38 @@ public class MainPresenter extends Component implements PropertyChangeListener {
 
     public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
         System.out.println("Main presenter received ConceptGridUpdateRequest");
-        ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
-        event.getSource().clearRoots();
-        for (HierarchyNode<Concept> node : cm.getRoots()) {
-            event.getSource().addRoot(node);
-        }
-        event.getSource().update();
+        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
+        updateHierarchies(conceptManager,event.getSource());
+
     }
 
     public void handleEvent(final RelationGridUpdateRequestedEvent event) {
-        // TODO: fix this (see function handleEvent(final ConceptGridUpdateRequestedEvent event))
         System.out.println("Main presenter received RelationGridUpdateRequest");
-        RelationManager cm = RulesConceptsAndRelations.getInstance().getRelationManager();
-        List<Relation> c = cm.getInputRelations();
-        List<CustomRelation> cc = cm.getCustomRelations();
-        HierarchyNode<Relation> defaultRelations = new HierarchyNode<Relation>("Default Relations");
-        for (Relation c_loop : c) {
-            defaultRelations.add(c_loop);
-        }
-        HierarchyNode<Relation> customRelations = new HierarchyNode<Relation>("Custom Relation");
-        for (Relation c_loop : cc) {
-            customRelations.add(c_loop);
-        }
-
-        event.getSource().clearRoots();
-        event.getSource().addRoot(defaultRelations);
-        event.getSource().addRoot(customRelations);
-        event.getSource().update();
+        RelationManager relationManager = RulesConceptsAndRelations.getInstance().getRelationManager();
+        updateHierarchies(relationManager,event.getSource());
+ 
     }
 
     public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
-        ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
-        cm.moveNode(event.getDraggedNode(), event.getTargetNode());
-        event.getSource().clearRoots();
-        for (HierarchyNode<Concept> node : cm.getRoots()) {
-            event.getSource().addRoot(node);
-        }
-        event.getSource().update();
+        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
+        conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
+        updateHierarchies(conceptManager,event.getSource());
         System.out.println("Input presenter received ConceptHierarchySwapRequestedEvent");
     }
 
     public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
-        // TODO: add relation things (see handleEvent(final ConceptHierarchySwapRequestedEvent
-        // event));
+
+        RelationManager relationManager = RulesConceptsAndRelations.getInstance().getRelationManager();
+        relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
+        updateHierarchies(relationManager,event.getSource());
         System.out.println("Input presenter received RelationHierarchySwapRequestedEvent");
     }
+
+    public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv){
+        hv.setRoots(hierarchyManager.getRoots());
+        hv.update();
+    }
+
 
     private void addListeners() {
         ProjectManager.getInstance().addPropertyChangeListener(this);
@@ -162,7 +151,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
         } finally {
             // TODO Remove the finally at the end, as this should just be shown when no error is
             // present.
-            // 		This just makes development easier.
+            //      This just makes development easier.
             view.showContent(outputView);
         }
     }
