@@ -6,17 +6,29 @@ import com.vaadin.flow.component.Tag;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.common.ArchitectureCheck;
+import org.archcnl.domain.common.Concept;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.CustomRelation;
+import org.archcnl.domain.common.HierarchyNode;
+import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
 import org.archcnl.ui.events.ProjectOptionRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
@@ -37,9 +49,67 @@ public class MainPresenter extends Component implements PropertyChangeListener {
 
     public MainPresenter() throws PropertyNotFoundException {
         inputPresenter = new InputPresenter();
+        inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+
         outputView = new OutputView();
+        outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        outputView.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        outputView.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputView.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+
         view = new MainView(inputPresenter.getView());
         addListeners();
+    }
+
+    public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
+        System.out.println("Main presenter received ConceptGridUpdateRequest");
+        ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
+        event.getSource().clearRoots();
+        for (HierarchyNode<Concept> node : cm.getRoots()) {
+            event.getSource().addRoot(node);
+        }
+        event.getSource().update();
+    }
+
+    public void handleEvent(final RelationGridUpdateRequestedEvent event) {
+        // TODO: fix this (see function handleEvent(final ConceptGridUpdateRequestedEvent event))
+        System.out.println("Main presenter received RelationGridUpdateRequest");
+        RelationManager cm = RulesConceptsAndRelations.getInstance().getRelationManager();
+        List<Relation> c = cm.getInputRelations();
+        List<CustomRelation> cc = cm.getCustomRelations();
+        HierarchyNode<Relation> defaultRelations = new HierarchyNode<Relation>("Default Relations");
+        for (Relation c_loop : c) {
+            defaultRelations.add(c_loop);
+        }
+        HierarchyNode<Relation> customRelations = new HierarchyNode<Relation>("Custom Relation");
+        for (Relation c_loop : cc) {
+            customRelations.add(c_loop);
+        }
+
+        event.getSource().clearRoots();
+        event.getSource().addRoot(defaultRelations);
+        event.getSource().addRoot(customRelations);
+        event.getSource().update();
+    }
+
+    public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
+        ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
+        cm.moveNode(event.getDraggedNode(), event.getTargetNode());
+        event.getSource().clearRoots();
+        for (HierarchyNode<Concept> node : cm.getRoots()) {
+            event.getSource().addRoot(node);
+        }
+        event.getSource().update();
+        System.out.println("Input presenter received ConceptHierarchySwapRequestedEvent");
+    }
+
+    public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
+        // TODO: add relation things (see handleEvent(final ConceptHierarchySwapRequestedEvent
+        // event));
+        System.out.println("Input presenter received RelationHierarchySwapRequestedEvent");
     }
 
     private void addListeners() {
