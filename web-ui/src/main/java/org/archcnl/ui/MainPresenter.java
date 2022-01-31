@@ -6,22 +6,18 @@ import com.vaadin.flow.component.Tag;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.common.ArchitectureCheck;
-import org.archcnl.domain.common.Concept;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.HierarchyManager;
-import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
+import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
@@ -37,7 +33,6 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
-import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
 @Tag("MainPresenter")
 public class MainPresenter extends Component implements PropertyChangeListener {
@@ -69,37 +64,36 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
         System.out.println("Main presenter received ConceptGridUpdateRequest");
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
-        updateHierarchies(conceptManager,event.getSource());
-
+        updateHierarchies(conceptManager, event.getSource());
     }
 
     public void handleEvent(final RelationGridUpdateRequestedEvent event) {
         System.out.println("Main presenter received RelationGridUpdateRequest");
-        RelationManager relationManager = RulesConceptsAndRelations.getInstance().getRelationManager();
-        updateHierarchies(relationManager,event.getSource());
- 
+        RelationManager relationManager =
+                RulesConceptsAndRelations.getInstance().getRelationManager();
+        updateHierarchies(relationManager, event.getSource());
     }
 
     public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
-        updateHierarchies(conceptManager,event.getSource());
+        updateHierarchies(conceptManager, event.getSource());
         System.out.println("Input presenter received ConceptHierarchySwapRequestedEvent");
     }
 
     public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
 
-        RelationManager relationManager = RulesConceptsAndRelations.getInstance().getRelationManager();
+        RelationManager relationManager =
+                RulesConceptsAndRelations.getInstance().getRelationManager();
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
-        updateHierarchies(relationManager,event.getSource());
+        updateHierarchies(relationManager, event.getSource());
         System.out.println("Input presenter received RelationHierarchySwapRequestedEvent");
     }
 
-    public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv){
+    public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
         hv.setRoots(hierarchyManager.getRoots());
         hv.update();
     }
-
 
     private void addListeners() {
         ProjectManager.getInstance().addPropertyChangeListener(this);

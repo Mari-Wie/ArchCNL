@@ -1,14 +1,13 @@
 package org.archcnl.domain.common;
 
-import java.util.List;
 import java.util.ArrayList;
-import org.archcnl.domain.common.ObjectType;
+import java.util.List;
 
-public class HierarchyManager<T extends ObjectType>{
+public class HierarchyManager<T extends ObjectType> {
 
     List<HierarchyNode<T>> hierarchy_roots;
 
-    public HierarchyManager(){
+    public HierarchyManager() {
         hierarchy_roots = new ArrayList<HierarchyNode<T>>();
     }
 
@@ -19,17 +18,19 @@ public class HierarchyManager<T extends ObjectType>{
     public void addHierarchyRoot(HierarchyNode<T> newRoot) {
         hierarchy_roots.add(newRoot);
     }
+
     public void moveNode(HierarchyNode<T> node, HierarchyNode<T> target) {
         removeFromHierarchy(node);
         target.addChild(node);
     }
+
     public List<HierarchyNode<T>> getRoots() {
         return hierarchy_roots;
     }
+
     public void removeFromHierarchy(HierarchyNode<T> node) {
         for (HierarchyNode<T> hn : hierarchy_roots) {
             hn.remove(node);
         }
     }
-
 }

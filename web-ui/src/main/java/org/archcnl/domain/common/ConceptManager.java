@@ -2,7 +2,6 @@ package org.archcnl.domain.common;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -11,7 +10,6 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import java.lang.RuntimeException;
 
 public class ConceptManager extends HierarchyManager<Concept> {
 
@@ -41,32 +39,30 @@ public class ConceptManager extends HierarchyManager<Concept> {
 
     public void addToParent(Concept concept, HierarchyNode<Concept> parent)
             throws ConceptAlreadyExistsException {
-            addConcept(concept);
-            parent.add(concept);
+        addConcept(concept);
+        parent.add(concept);
     }
 
     public void addToParent(Concept concept, String parentName)
             throws ConceptAlreadyExistsException {
-            addConcept(concept);
-            Optional<HierarchyNode<Concept>> parent =
+        addConcept(concept);
+        Optional<HierarchyNode<Concept>> parent =
                 hierarchy_roots.stream()
-                .filter(node -> parentName.equals(node.getName()))
-                .findAny();
-            if(!parent.isPresent()){
+                        .filter(node -> parentName.equals(node.getName()))
+                        .findAny();
+        if (!parent.isPresent()) {
             // TODO: error handling
-            }
-            parent.get().add(concept);
+        }
+        parent.get().add(concept);
     }
-
 
     public void conceptHasBeenUpdated(Concept concept) {
         propertyChangeSupport.firePropertyChange("conceptUpdated", null, concept);
     }
 
-    public void append(CustomConcept concept)throws UnrelatedMappingException{
+    public void append(CustomConcept concept) throws UnrelatedMappingException {
         Optional<Concept> existingConceptOpt = getConceptByName(concept.getName());
-        if (existingConceptOpt.isPresent()
-                && existingConceptOpt.get() instanceof CustomConcept) {
+        if (existingConceptOpt.isPresent() && existingConceptOpt.get() instanceof CustomConcept) {
             CustomConcept existingCustomConcept = (CustomConcept) existingConceptOpt.get();
             Optional<ConceptMapping> existingMapping = existingCustomConcept.getMapping();
             Optional<ConceptMapping> newMapping = concept.getMapping();
@@ -89,8 +85,8 @@ public class ConceptManager extends HierarchyManager<Concept> {
             // cannot occur << CODE SMELL
             throw new RuntimeException(
                     "Adding and appending of mapping \""
-                    + concept.getName()
-                    + "\" failed unexpectedly.");
+                            + concept.getName()
+                            + "\" failed unexpectedly.");
         }
     }
 
@@ -163,7 +159,7 @@ public class ConceptManager extends HierarchyManager<Concept> {
         initConformanceConcept(
                 "ConformanceCheck",
                 "A ConformanceCheck checks if the actual architecture conforms to the specified architecture. The architecture specification is done using ArchitectureRules. Instances where these rules are not fulfilled are modelled as ArchitectureViolations."
-                + "A ConformanceCheck is responsible for adding rules with their violations to the architecture model");
+                        + "A ConformanceCheck is responsible for adding rules with their violations to the architecture model");
         initConformanceConcept(
                 "ArchitectureRule",
                 "Models a rule about the architecture that should be satisfied. It is specified in a controlled natural language. Instances in the architecture where ArchitectureRules are not fulfilled will be modeled as ArchitectureViolations.");
@@ -183,8 +179,8 @@ public class ConceptManager extends HierarchyManager<Concept> {
 
     public List<Concept> getInputConcepts() {
         return concepts.values().stream()
-            .filter(Predicate.not(ConformanceConcept.class::isInstance))
-            .collect(Collectors.toList());
+                .filter(Predicate.not(ConformanceConcept.class::isInstance))
+                .collect(Collectors.toList());
     }
 
     public List<Concept> getOutputConcepts() {
@@ -193,9 +189,9 @@ public class ConceptManager extends HierarchyManager<Concept> {
 
     public List<CustomConcept> getCustomConcepts() {
         return concepts.values().stream()
-            .filter(CustomConcept.class::isInstance)
-            .map(CustomConcept.class::cast)
-            .collect(Collectors.toList());
+                .filter(CustomConcept.class::isInstance)
+                .map(CustomConcept.class::cast)
+                .collect(Collectors.toList());
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
