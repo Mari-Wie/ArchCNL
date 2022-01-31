@@ -16,6 +16,7 @@ public class CustomRelation extends Relation {
     public CustomRelation(
             String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
+        editable = true;
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
