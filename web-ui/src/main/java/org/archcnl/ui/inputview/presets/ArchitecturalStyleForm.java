@@ -64,19 +64,19 @@ public class ArchitecturalStyleForm extends Component
 
         // map information of the architectural style to components in the ui
         for (ArchitectureInformation archInfo : architecturalStyleConfig.getVariableParts()) {
-            
-        	if(archInfo.isActive()) {        		
-        		// not grouped items
-        		if (archInfo.getGroupId() == -1) {
-        			addToKnownTextField(archInfo);
-        		} else { // grouped items
-        			knownArchitectureInformationGroups
-        			.computeIfAbsent(
-        					archInfo.getGroupId(),
-        					k -> new ArrayList<ArchitectureInformation>())
-        			.add(archInfo);
-        		}
-        	}
+
+            if (archInfo.isActive()) {
+                // not grouped items
+                if (archInfo.getGroupId() == -1) {
+                    addToKnownTextField(archInfo);
+                } else { // grouped items
+                    knownArchitectureInformationGroups
+                            .computeIfAbsent(
+                                    archInfo.getGroupId(),
+                                    k -> new ArrayList<ArchitectureInformation>())
+                            .add(archInfo);
+                }
+            }
         }
 
         // add event listeners
@@ -293,14 +293,14 @@ public class ArchitecturalStyleForm extends Component
                         microserviceArchitectureBuilder.build();
 
                 // only rules that are selected
-                
+
                 Set<String> rulesToCreate = new HashSet<String>();
                 for (ArchitectureRuleConfig ruleConfig : styleConfig.getRules()) {
-					if(ruleConfig.isActive()) {
-						rulesToCreate.add(ruleConfig.getRule());
-					}
-				}
-                
+                    if (ruleConfig.isActive()) {
+                        rulesToCreate.add(ruleConfig.getRule());
+                    }
+                }
+
                 microserviceArchitecture.setArchitectureRules(rulesToCreate);
 
                 microserviceArchitecture.createRulesAndMappings();
