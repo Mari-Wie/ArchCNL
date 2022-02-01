@@ -61,8 +61,6 @@
 		{
 			"rule": "Every Microservice must registerin ServiceRegistry.",
 			"requiredArchitectureInformationIds": [
-				1,
-				2,
 				9,
 				10
 			]
@@ -70,8 +68,6 @@
 		{
 			"rule": "Every Microservice must haveown DatabaseAccessAbstraction.",
 			"requiredArchitectureInformationIds": [
-				1,
-				2,
 				3,
 				4
 			]
@@ -79,16 +75,12 @@
 		{
 			"rule": "Every Microservice must use CircuitBreaker.",
 			"requiredArchitectureInformationIds": [
-				1,
-				2,
 				11
 			]
 		},
 		{
 			"rule": "Every Microservice must haveown API.",
 			"requiredArchitectureInformationIds": [
-				1,
-				2,
 				5,
 				6
 			]
@@ -96,16 +88,12 @@
 		{
 			"rule": "Every ApiGateway must resideinpackage MicroserviceApp.",
 			"requiredArchitectureInformationIds": [
-				1,
-				2,
 				7
 			]
 		},
 		{
 			"rule": "Every Microservice must useown RuntimeEnvironment.",
 			"requiredArchitectureInformationIds": [
-				1,
-				2
 			]
 		}
 	]
