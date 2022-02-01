@@ -83,10 +83,6 @@ public class OpenRulePresetsDialog extends Dialog implements HasComponents, Prop
         currentContent = selectLayout;
         add(tabs, currentContent);
 
-        //		select.addValueChangeListener(
-        //				event -> fireEvent(new ArchitecturalStyleSelectedEvent(this, false, select.getValue(),
-        // currentContent)));
-
     }
 
     private void addListeners() {
