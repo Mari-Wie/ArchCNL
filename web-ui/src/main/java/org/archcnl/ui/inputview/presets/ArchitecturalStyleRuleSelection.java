@@ -41,7 +41,7 @@ public class ArchitecturalStyleRuleSelection extends Component
     }
 
     private void addFooterToUi() {
-        Button cancelBtn = new Button("Cancel", e -> remove(this));
+        Button cancelBtn = new Button("Cancel", e -> removeAll());
         Button saveBtn =
                 new Button(
                         "Next",
