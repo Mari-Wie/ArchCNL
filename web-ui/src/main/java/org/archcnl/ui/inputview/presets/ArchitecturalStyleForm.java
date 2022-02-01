@@ -32,7 +32,7 @@ import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSaveEvent;
 
 /***
  * This UI-Component creates input possibilities for the user of ArchCNL based
- * on the ArchitecturalStyle that is passed into the constructor. It will
+ * on the ArchitecturalStyleConfig that is passed into the constructor. It will
  * generate input-components based on the properties of the style. <br>
  * <p>
  * It also holds the logic on "what to do" with the information. As this is
