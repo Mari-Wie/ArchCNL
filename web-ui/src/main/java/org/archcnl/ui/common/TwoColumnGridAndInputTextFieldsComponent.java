@@ -59,16 +59,22 @@ public class TwoColumnGridAndInputTextFieldsComponent extends VerticalLayout {
 
         addInfoBtn.addClickListener(
                 e -> {
-                    TwoColumnGridEntry entry =
-                            new TwoColumnGridEntry(
-                                    info1TextField.getValue(), info2TextField.getValue());
-                    gridItems.add(entry);
-                    infoGrid.setItems(gridItems);
+
+                    // validate input
+                    if (binder.isValid()) {
+                        TwoColumnGridEntry entry =
+                                new TwoColumnGridEntry(
+                                        info1TextField.getValue(), info2TextField.getValue());
+                        gridItems.add(entry);
+                        infoGrid.setItems(gridItems);
+                    } else { // not valid
+                        binder.validate();
+                    }
                 });
 
-        //        info1TextField.setWidth("45%");
-        //        info2TextField.setWidth("45%");
-        //        addInfoBtn.setWidth("10%");
+        // info1TextField.setWidth("45%");
+        // info2TextField.setWidth("45%");
+        // addInfoBtn.setWidth("10%");
         infoGrid.setHeight("200px");
         infoGrid.addThemeVariants(GridVariant.LUMO_COMPACT);
 
