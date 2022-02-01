@@ -82,7 +82,6 @@ public class OpenRulePresetsDialog extends Dialog implements HasComponents, Prop
 
         currentContent = selectLayout;
         add(tabs, currentContent);
-
     }
 
     private void addListeners() {
