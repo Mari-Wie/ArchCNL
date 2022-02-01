@@ -39,7 +39,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     Variable methodVariable;
 
     public MicroserviceArchitectureTemplateManager() {
-        super();
+        initializeVariables();
     }
 
     @Override
