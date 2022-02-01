@@ -23,6 +23,7 @@ import java.util.Set;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
 import org.archcnl.domain.input.model.presets.ArchitectureInformation;
+import org.archcnl.domain.input.model.presets.ArchitectureRuleConfig;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitecture;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitectureBuilder;
 import org.archcnl.ui.common.TwoColumnGridAndInputTextFieldsComponent;
@@ -63,16 +64,19 @@ public class ArchitecturalStyleForm extends Component
 
         // map information of the architectural style to components in the ui
         for (ArchitectureInformation archInfo : architecturalStyleConfig.getVariableParts()) {
-            // not grouped items
-            if (archInfo.getGroupId() == -1) {
-                addToKnownTextField(archInfo);
-            } else { // grouped items
-                knownArchitectureInformationGroups
-                        .computeIfAbsent(
-                                archInfo.getGroupId(),
-                                k -> new ArrayList<ArchitectureInformation>())
-                        .add(archInfo);
-            }
+            
+        	if(archInfo.isActive()) {        		
+        		// not grouped items
+        		if (archInfo.getGroupId() == -1) {
+        			addToKnownTextField(archInfo);
+        		} else { // grouped items
+        			knownArchitectureInformationGroups
+        			.computeIfAbsent(
+        					archInfo.getGroupId(),
+        					k -> new ArrayList<ArchitectureInformation>())
+        			.add(archInfo);
+        		}
+        	}
         }
 
         // add event listeners
@@ -289,8 +293,15 @@ public class ArchitecturalStyleForm extends Component
                         microserviceArchitectureBuilder.build();
 
                 // only rules that are selected
-                microserviceArchitecture.setArchitectureRules(
-                        architectureRulesSelect.getSelectedItems());
+                
+                Set<String> rulesToCreate = new HashSet<String>();
+                for (ArchitectureRuleConfig ruleConfig : styleConfig.getRules()) {
+					if(ruleConfig.isActive()) {
+						rulesToCreate.add(ruleConfig.getRule());
+					}
+				}
+                
+                microserviceArchitecture.setArchitectureRules(rulesToCreate);
 
                 microserviceArchitecture.createRulesAndMappings();
                 break;

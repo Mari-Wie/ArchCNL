@@ -42,6 +42,7 @@ public class ArchiecturalRulesSelectedEvent
 
             } else { // if not selected set !active
 
+            	ruleConfig.setActive(false);
                 List<Integer> idsToDeactiate = ruleConfig.getRequiredArchitectureInformationIds();
                 List<ArchitectureInformation> variableArchitectureInfomation =
                         config.getVariableParts();

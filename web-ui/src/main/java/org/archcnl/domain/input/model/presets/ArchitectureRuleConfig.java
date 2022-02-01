@@ -8,6 +8,8 @@ public class ArchitectureRuleConfig {
     @JsonProperty private String rule;
 
     @JsonProperty private List<Integer> requiredArchitectureInformationIds;
+    
+    private boolean active = true;
 
     @JsonProperty
     public String getRule() {
@@ -27,4 +29,12 @@ public class ArchitectureRuleConfig {
             List<Integer> requiredArchitectureInformationIds) {
         this.requiredArchitectureInformationIds = requiredArchitectureInformationIds;
     }
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }
