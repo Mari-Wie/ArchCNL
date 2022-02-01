@@ -5,7 +5,7 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -40,7 +40,7 @@ import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSaveEvent;
  * the current logic. This is can be done in the method
  * {@link #mapUiComponentsToArchitecturalStyle(ArchitecturalStyle)}.
  */
-@Tag("ArchitecturalStyleInputContainer")
+@Tag("ArchitecturalStyleForm")
 public class ArchitecturalStyleForm extends Component
         implements HasComponents, HasSize, PropertyChangeListener {
 
@@ -52,7 +52,6 @@ public class ArchitecturalStyleForm extends Component
     private Map<String, Binder<ArchitectureInformation>> ungroupedArchitectureInformationBinders;
     private Map<Integer, Set<TwoColumnGridEntry>> architectureInformationGroupsAndEntries;
     private ArchitecturalStyleConfig styleConfig;
-    private CheckboxGroup<String> architectureRulesSelect;
 
     public ArchitecturalStyleForm(ArchitecturalStyleConfig architecturalStyleConfig) {
 
@@ -106,9 +105,9 @@ public class ArchitecturalStyleForm extends Component
                 new Binder<>(ArchitectureInformation.class, false);
         infoBinder
                 .forField(textField)
-                .withNullRepresentation("")
                 .asRequired()
                 .bind(ArchitectureInformation::getValue, ArchitectureInformation::setValue);
+
         ungroupedArchitectureInformationBinders.put(info.getName(), infoBinder);
         ungroupedArchitectureInformation.add(textField);
     }
@@ -153,8 +152,6 @@ public class ArchitecturalStyleForm extends Component
 
             List<ArchitectureInformation> information = entry.getValue();
 
-            System.out.println("Size" + information.size());
-
             if (information.size() == 2) {
                 Binder<TwoColumnGridEntry> gridEntriesBinder =
                         new Binder<>(TwoColumnGridEntry.class);
@@ -182,10 +179,28 @@ public class ArchitecturalStyleForm extends Component
         Button saveBtn =
                 new Button(
                         "Create Rules & Mappings",
-                        e ->
+                        e -> {
+
+                            // validation of the form
+                            boolean isFormCorrect = true;
+                            for (Entry<String, Binder<ArchitectureInformation>> entry :
+                                    ungroupedArchitectureInformationBinders.entrySet()) {
+                                if (!entry.getValue().isValid()) {
+                                    isFormCorrect = false;
+                                }
+                            }
+
+                            if (isFormCorrect) {
                                 fireEvent(
                                         new ArchitecturalStyleSaveEvent(
-                                                this, true, styleConfig.getStyleName())));
+                                                this, true, styleConfig.getStyleName()));
+                            } else {
+                                new Notification();
+                                add(
+                                        Notification.show(
+                                                "Please fill out all architecture information!"));
+                            }
+                        });
         HorizontalLayout footer = new HorizontalLayout();
         footer.add(cancelBtn, saveBtn);
 
@@ -247,15 +262,19 @@ public class ArchitecturalStyleForm extends Component
                                     case "MS-App Package Structure":
                                         microserviceArchitectureBuilder.withMsAppPackageStructure(
                                                 info.getValue());
+                                        break;
                                     case "Service Registry Class Name":
                                         microserviceArchitectureBuilder
                                                 .withServiceRegistryClassName(info.getValue());
+                                        break;
                                     case "Service Registry Import Class Name":
                                         microserviceArchitectureBuilder
                                                 .withServiceRegistryClassName(info.getValue());
+                                        break;
                                     case "Circuit Breaker Import Class Name":
                                         microserviceArchitectureBuilder
                                                 .withCircuitBreakerImportClassName(info.getValue());
+                                        break;
                                     default:
                                         break;
                                 }
@@ -281,8 +300,10 @@ public class ArchitecturalStyleForm extends Component
                             break;
                         case 2: // db-access-abstractions
                             microserviceArchitectureBuilder.withDbAccessAbstractions(entries);
+                            break;
                         case 3: // api-mechanisms
                             microserviceArchitectureBuilder.withApiMechanisms(entries);
+                            break;
                         default:
                             break;
                     }
