@@ -21,7 +21,6 @@ public class QueryUtils {
             "# An error occured while trying to load the query.\r\n" + "SELECT * WHERE {}";
 
     public static String getDefaultQuery() {
-
         Path queryPath = rootDir.resolve(VIOLATIONS_SUBJECT_PREDICATE_OBJECT);
         try {
             return Files.readString(queryPath, StandardCharsets.UTF_8);
