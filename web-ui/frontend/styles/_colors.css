@@ -1,0 +1,36 @@
+:root {
+    --color-main-bg: rgb(245, 245, 245);
+
+    --primary: rgb(63, 149, 206);
+    --primary-dark: rgb(59, 81, 92);
+    --primary-light: rgb(255, 255, 255);
+    --secondary: rgb(0, 109, 182);
+    --secondary-dark: rgb(0, 0, 0);
+    --secondary-light: rgb(155, 155, 155);
+    --correct: rgb(76, 175, 80);
+    --incorrect: rgb(196, 0, 23);
+    --accent: rgb(255, 173, 0);
+    --inactive: rgb(205, 208, 219);
+    --info: rgb(2, 113, 187);
+    --bg-light: rgb(255, 255, 255);
+
+    --heade-font: var(--primary);
+    --primary-light-font: var(--primary-light);
+    --primary-dark-font: var(--primary);
+    --secondary-dark-font: var(--secondary-dark);
+    --secondary-light-font: var(--secondary-light);
+    --accent-font: var(--accent);
+    --alert-font: var(--incorrect);
+    --accept-font: var(--correct);
+    --info-font: var(--info);
+
+    --btn-primary-shadow: 0px 1px 5px 1px rgba(63, 149, 206, 0.35);
+    --btn-primary-black-shadow: 2px 2px 1pc 1px rgba(0, 0, 0, 0.35);
+    --btn-inactive-shadow: 0px 18px 45px -12px rgba(205, 208, 219, 0.35);
+    --btn-accent-shadow: 0px 2px 2px 1px rgba(255, 173, 0, 0.35);
+    --btn-incorrect-shadow: 0px 18px 45px -12px rgba(244, 67, 54, 0.35);
+    --btn-correct-shadow: 0px 18px 45px -12px rgba(76, 175, 80, 0.35);
+    --box-primary-shadow: 4px 0px 4px 1px rgba(5, 22, 77, 0.35);
+    --box-light-shadow: 4px 0px 4px 1px rgba(128, 128, 128, 0.35);
+    --box-light-second-shadow: 4px 4px 6px 1px rgba(184, 184, 184, 0.144);
+}

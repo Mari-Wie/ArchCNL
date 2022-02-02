@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,9 +20,9 @@ public class SideBarWidget extends VerticalLayout {
     private SideBarTab customQueryTab;
 
     public SideBarWidget(
-            QueryResultsUiComponent defaultQueryView,
-            CustomQueryView customQueryView,
-            FreeTextQueryUiComponent freeTextQueryView) {
+            final QueryResultsUiComponent defaultQueryView,
+            final CustomQueryView customQueryView,
+            final FreeTextQueryUiComponent freeTextQueryView) {
 
         setHeightFull();
         getStyle().set("overflow", "hidden");
@@ -31,14 +32,16 @@ public class SideBarWidget extends VerticalLayout {
         addReturnButton();
     }
 
-    public void addPinnedCustomQueryTab(CustomQueryView customQueryView, String name) {
-        SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, customQueryView);
+    public void addPinnedCustomQueryTab(final CustomQueryView customQueryView, final String name) {
+        final Span nameSpan = new Span(name);
+        nameSpan.setClassName("side-bar-text");
+        final SideBarTab newTab = new SideBarTab(nameSpan, VaadinIcon.PIN, customQueryView);
         tabs.add(newTab);
         tabs.setSelectedTab(newTab);
     }
 
     public void addReturnButton() {
-        Button returnButton =
+        final Button returnButton =
                 new Button(
                         "Return to rule editor",
                         new Icon(VaadinIcon.CHEVRON_LEFT),
@@ -48,15 +51,21 @@ public class SideBarWidget extends VerticalLayout {
     }
 
     public void addTabs(
-            QueryResultsUiComponent defaultQueryView,
-            CustomQueryView customQueryView,
-            FreeTextQueryUiComponent freeTextQueryView) {
+            final QueryResultsUiComponent defaultQueryView,
+            final CustomQueryView customQueryView,
+            final FreeTextQueryUiComponent freeTextQueryView) {
 
-        SideBarTab generalInformationTab =
-                new SideBarTab("General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView);
-        customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
-        SideBarTab freeTextQueryTabs =
-                new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
+        final Span genInfo = new Span("General Information");
+        genInfo.setClassName("side-bar-text");
+        final SideBarTab generalInformationTab =
+                new SideBarTab(genInfo, VaadinIcon.INFO_CIRCLE, defaultQueryView);
+        final Span customQuery = new Span("Custom Queries");
+        customQuery.setClassName("side-bar-text");
+        customQueryTab = new SideBarTab(customQuery, VaadinIcon.AUTOMATION, customQueryView);
+        final Span freeText = new Span("Free Text Queries");
+        freeText.setClassName("side-bar-text");
+        final SideBarTab freeTextQueryTabs =
+                new SideBarTab(freeText, VaadinIcon.TEXT_INPUT, freeTextQueryView);
         tabs = new Tabs(generalInformationTab, customQueryTab, freeTextQueryTabs);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setHeightFull();
@@ -64,7 +73,7 @@ public class SideBarWidget extends VerticalLayout {
         tabs.addSelectedChangeListener(
                 event -> {
                     if (event.getSelectedTab() instanceof SideBarTab) {
-                        SideBarTab tab = (SideBarTab) event.getSelectedTab();
+                        final SideBarTab tab = (SideBarTab) event.getSelectedTab();
                         fireEvent(
                                 new ShowComponentRequestedEvent(
                                         this, true, tab.getLinkedComponent()));
@@ -74,7 +83,7 @@ public class SideBarWidget extends VerticalLayout {
         add(tabs);
     }
 
-    public void updateCustomQueryTab(CustomQueryView customQueryView) {
+    public void updateCustomQueryTab(final CustomQueryView customQueryView) {
         customQueryTab.setLinkedComponent(customQueryView);
     }
 

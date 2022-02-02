@@ -12,6 +12,7 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
     public QueryResultsUiComponent() {
         gridView = new GridView();
         generalInfoLayout = new GeneralInfoLayout();
+        queryTextArea.setClassName("query-text-box");
         queryTextArea.setReadOnly(true);
         addComponents();
     }
@@ -20,7 +21,7 @@ public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
         add(generalInfoLayout, gridView, queryTextArea);
     }
 
-    public void updateGridView(Optional<Result> result) {
+    public void updateGridView(final Optional<Result> result) {
         gridView.update(result);
     }
 }
