@@ -8,7 +8,6 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Level;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.common.ArchitectureCheck;
@@ -36,7 +35,6 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
-
 
 @Tag("MainPresenter")
 public class MainPresenter extends Component implements PropertyChangeListener {
