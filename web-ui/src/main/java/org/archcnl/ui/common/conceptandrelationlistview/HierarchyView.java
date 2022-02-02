@@ -61,7 +61,6 @@ public class HierarchyView<T extends ObjectType> extends RulesOrMappingEditorVie
 
     @Override
     public void onAttach(AttachEvent attachEvent) {
-        System.out.println("onAttach event fired in HierarchyView");
         requestGridUpdate();
     }
 
@@ -99,7 +98,6 @@ public class HierarchyView<T extends ObjectType> extends RulesOrMappingEditorVie
                                 new HierarchySwapRequestedEvent(
                                         this, false, draggedItem, targetNode, dropLocation));
                     } else {
-                        System.out.println("TEST");
                     }
                     requestGridUpdate();
                 });

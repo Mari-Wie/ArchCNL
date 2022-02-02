@@ -104,12 +104,10 @@ public class ConceptAndRelationView extends RulesOrMappingEditorView {
     }
 
     private void requestConceptGridUpdate() {
-        System.out.println("Fireing ConceptGridUpdateRequestedEvent");
         fireEvent(new ConceptGridUpdateRequestedEvent(hv1, true));
     }
 
     private void requestRelationGridUpdate() {
-        System.out.println("Fireing RelationGridUpdateRequestedEvent");
         fireEvent(new RelationGridUpdateRequestedEvent(hv2, true));
     }
 

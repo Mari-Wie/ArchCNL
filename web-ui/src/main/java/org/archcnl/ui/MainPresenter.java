@@ -66,13 +66,11 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     }
 
     public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
-        LOG.log(Level.TRACE,"Main presenter received ConceptGridUpdateRequest");
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         updateHierarchies(conceptManager, event.getSource());
     }
 
     public void handleEvent(final RelationGridUpdateRequestedEvent event) {
-        LOG.log(Level.TRACE,"Main presenter received RelationGridUpdateRequest");
         RelationManager relationManager =
                 RulesConceptsAndRelations.getInstance().getRelationManager();
         updateHierarchies(relationManager, event.getSource());
@@ -82,7 +80,6 @@ public class MainPresenter extends Component implements PropertyChangeListener {
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(conceptManager, event.getSource());
-        LOG.log(Level.TRACE,"Input presenter received ConceptHierarchySwapRequestedEvent");
     }
 
     public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
@@ -91,7 +88,6 @@ public class MainPresenter extends Component implements PropertyChangeListener {
                 RulesConceptsAndRelations.getInstance().getRelationManager();
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(relationManager, event.getSource());
-        LOG.log(Level.TRACE,"Input presenter received RelationHierarchySwapRequestedEvent");
     }
 
     public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
