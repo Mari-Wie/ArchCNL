@@ -51,55 +51,6 @@ public class InputPresenter extends Component {
         return view;
     }
 
-    //  public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
-    //      ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
-    //      cm.moveNode(event.getDraggedNode(), event.getTargetNode());
-    //      event.getSource().clearRoots();
-    //      for (HierarchyNode<Concept> node :  cm.getRoots()){
-    //          event.getSource().addRoot(node);
-    //      }
-    //      event.getSource().update();
-    //      System.out.println("Input presenter received ConceptHierarchySwapRequestedEvent");
-    //  }
-    //  public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
-    //      //TODO: add relation things (see handleEvent(final ConceptHierarchySwapRequestedEvent
-    // event));
-    //      System.out.println("Input presenter received RelationHierarchySwapRequestedEvent");
-    //  }
-
-    //  public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
-    //      System.out.println("Input presenter received ConceptGridUpdateRequest");
-    //      ConceptManager cm = RulesConceptsAndRelations.getInstance().getConceptManager();
-    //      event.getSource().clearRoots();
-    //      for (HierarchyNode<Concept> node :  cm.getRoots()){
-    //          event.getSource().addRoot(node);
-    //      }
-    //      event.getSource().update();
-    //  }
-
-    //  public void handleEvent(final RelationGridUpdateRequestedEvent event) {
-    //      //TODO: fix this (see function handleEvent(final ConceptGridUpdateRequestedEvent event))
-    //      System.out.println("Input presenter received RelationGridUpdateRequest");
-    //      RelationManager cm = RulesConceptsAndRelations.getInstance().getRelationManager();
-    //      List<Relation> c = cm.getInputRelations();
-    //      List<CustomRelation> cc = cm.getCustomRelations();
-    //      HierarchyNode<Relation> defaultRelations = new HierarchyNode<Relation>("Default
-    // Relations");
-    //      for (Relation c_loop : c) {
-    //          defaultRelations.add(c_loop);
-    //      }
-    //      HierarchyNode<Relation> customRelations = new HierarchyNode<Relation>("Custom
-    // Relation");
-    //      for (Relation c_loop : cc) {
-    //          customRelations.add(c_loop);
-    //      }
-
-    //      event.getSource().clearRoots();
-    //      event.getSource().addRoot(defaultRelations);
-    //      event.getSource().addRoot(customRelations);
-    //      event.getSource().update();
-    //  }
-
     public void handleEvent(final ConceptEditorRequestedEvent event) {
         ConceptEditorPresenter conceptEditorPresenter;
         if (event.getConcept().isPresent()) {
