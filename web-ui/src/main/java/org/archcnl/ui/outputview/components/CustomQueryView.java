@@ -44,7 +44,7 @@ public class CustomQueryView extends HorizontalLayout {
     private TextField queryName;
     private Button pinButton;
 
-    public CustomQueryView(AndTripletsEditorView andTripletsEditorView) {
+    public CustomQueryView(final AndTripletsEditorView andTripletsEditorView) {
         super();
         initConceptAndRelationView();
         content = new VerticalLayout();
@@ -61,24 +61,26 @@ public class CustomQueryView extends HorizontalLayout {
                         click -> fireEvent(new PinQueryButtonPressedEvent(this, true)));
 
         getStyle().set("overflow", "visible");
-        setWidth(100, Unit.PERCENTAGE);
-        setHeight(100, Unit.PERCENTAGE);
+        setWidthFull();
+        setHeightFull();
         queryTextArea.setReadOnly(true);
         queryTextArea.setVisible(false);
         addVariableSelectionComponent();
-        Label caption = new Label("Create a custom query");
-        HorizontalLayout topRow = new HorizontalLayout(caption, pinButton);
+        final Label caption = new Label("Create a custom query");
+        caption.setClassName("label-title");
+        final HorizontalLayout topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
         caption.setWidthFull();
-        Button runButton = new Button("Run", e -> fireEvent(new RunButtonPressedEvent(this, true)));
-        Button showQueryTextButton =
+        final Button runButton =
+                new Button("Run", e -> fireEvent(new RunButtonPressedEvent(this, true)));
+        final Button showQueryTextButton =
                 new Button(
                         "Update query text",
                         e -> fireEvent(new UpdateQueryTextButtonPressedEvent(this, true)));
-        HorizontalLayout buttonRow = new HorizontalLayout(runButton, showQueryTextButton);
+        final HorizontalLayout buttonRow = new HorizontalLayout(runButton, showQueryTextButton);
 
         content.getStyle().set("overflow", "auto");
-        content.setWidth(CONTENT_RATIO, Unit.PERCENTAGE);
+        content.setWidth(CustomQueryView.CONTENT_RATIO, Unit.PERCENTAGE);
         content.add(topRow);
         content.add(queryName);
         content.add(variableListView);
@@ -97,7 +99,7 @@ public class CustomQueryView extends HorizontalLayout {
         return queryName.getOptionalValue();
     }
 
-    public void setQueryName(String name) {
+    public void setQueryName(final String name) {
         queryName.setValue(name);
     }
 
@@ -118,11 +120,6 @@ public class CustomQueryView extends HorizontalLayout {
 
     private void initConceptAndRelationView() {
         conceptAndRelationView = new ConceptAndRelationView(false);
-        // conceptAndRelationView.setWidth(100.0f - CONTENT_RATIO, Unit.PERCENTAGE);
-        // conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
-        // conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
-        // conceptAndRelationView.addListener(OutputViewRequestedEvent.class, this::fireEvent);
-        //
         conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(
@@ -133,7 +130,8 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     public void addVariableSelectionComponent() {
-        VariableSelectionComponent variableSelectionComponent = new VariableSelectionComponent();
+        final VariableSelectionComponent variableSelectionComponent =
+                new VariableSelectionComponent();
         variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
@@ -144,11 +142,11 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     public void removeVariableSelectionComponent(
-            VariableSelectionComponent variableSelectionComponent) {
+            final VariableSelectionComponent variableSelectionComponent) {
         select.remove(variableSelectionComponent);
     }
 
-    public void setQueryTextArea(String queryText) {
+    public void setQueryTextArea(final String queryText) {
         queryTextArea.setVisible(true);
         queryTextArea.setValue(queryText);
     }
@@ -161,20 +159,20 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     public boolean areAtleastTwoVariableSelectionComponentsEmpty() {
-        List<VariableSelectionComponent> components =
+        final List<VariableSelectionComponent> components =
                 select.getChildren()
                         .filter(VariableSelectionComponent.class::isInstance)
                         .map(VariableSelectionComponent.class::cast)
                         .collect(Collectors.toList());
-        long componentsCount = components.stream().count();
-        long nonEmptyComponentsCount =
+        final long componentsCount = components.stream().count();
+        final long nonEmptyComponentsCount =
                 components.stream()
                         .filter(component -> component.getOptionalValue().isPresent())
                         .count();
         return componentsCount - nonEmptyComponentsCount >= 2;
     }
 
-    public void setPinButtonVisible(boolean visible) {
+    public void setPinButtonVisible(final boolean visible) {
         pinButton.setVisible(visible);
     }
 

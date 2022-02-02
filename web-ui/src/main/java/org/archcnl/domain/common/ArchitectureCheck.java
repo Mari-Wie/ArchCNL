@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.input.io.ArchRulesToAdocWriter;
@@ -16,8 +14,6 @@ import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.toolchain.CNLToolchain;
 
 public class ArchitectureCheck {
-
-    private static final Logger LOG = LogManager.getLogger(ArchitectureCheck.class);
 
     private ResultRepository repository;
     private List<String> sourcePaths;

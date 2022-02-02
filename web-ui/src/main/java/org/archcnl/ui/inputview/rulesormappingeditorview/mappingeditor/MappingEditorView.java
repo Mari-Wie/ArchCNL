@@ -29,19 +29,22 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
     protected TextField mappingName;
     protected TextField description;
 
-    protected MappingEditorView(String mappingType, AndTripletsEditorView emptyAndTripletsView) {
+    protected MappingEditorView(
+            final String mappingType, final AndTripletsEditorView emptyAndTripletsView) {
         setHeightFull();
         getStyle().set("overflow", "auto");
         getStyle().set("border", "1px solid black");
+        setClassName("architecture-rules");
 
         content.add(emptyAndTripletsView);
 
-        Label title = new Label("Create or edit a " + mappingType);
-        Button closeButton =
+        final Label title = new Label("Create or edit a " + mappingType);
+        title.setClassName("card-title-box--title");
+        final Button closeButton =
                 new Button(
                         new Icon(VaadinIcon.CLOSE),
                         click -> fireEvent(new MappingCloseButtonClicked(this, true)));
-        HorizontalLayout titleBar = new HorizontalLayout(title, closeButton);
+        final HorizontalLayout titleBar = new HorizontalLayout(title, closeButton);
         titleBar.setWidthFull();
         title.setWidthFull();
         titleBar.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -70,12 +73,16 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         variableListView = new VariableListView();
         add(variableListView);
 
-        add(new Label("When"));
+        final Label labelWhen = new Label("When");
+        final Label labelThen = new Label("Then");
+        labelWhen.setClassName("label-title");
+        labelThen.setClassName("label-title");
+        add(labelWhen);
         add(content);
-        add(new Label("Then"));
+        add(labelThen);
         addThenTripletView();
 
-        HorizontalLayout buttonRow = new HorizontalLayout();
+        final HorizontalLayout buttonRow = new HorizontalLayout();
         buttonRow.setWidthFull();
         buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         buttonRow.add(
@@ -88,26 +95,27 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         add(buttonRow);
     }
 
-    public void deleteAndTripletsView(AndTripletsEditorView andTripletsView) {
+    public void deleteAndTripletsView(final AndTripletsEditorView andTripletsView) {
         content.remove((Component) andTripletsView);
     }
 
-    public void updateNameField(String newName) {
+    public void updateNameField(final String newName) {
         mappingName.setValue(newName);
     }
 
-    public void showNameFieldErrorMessage(String message) {
+    public void showNameFieldErrorMessage(final String message) {
         mappingName.setErrorMessage(message);
         mappingName.setInvalid(true);
     }
 
-    public void addNewAndTripletsView(AndTripletsEditorView andTripletsView) {
+    public void addNewAndTripletsView(final AndTripletsEditorView andTripletsView) {
         content.add(andTripletsView);
     }
 
     public void addNewAndTripletsViewAfter(
-            AndTripletsEditorView oldAndTripletsView, AndTripletsEditorView newAndTripletsView) {
-        int previousIndex = content.indexOf((Component) oldAndTripletsView);
+            final AndTripletsEditorView oldAndTripletsView,
+            final AndTripletsEditorView newAndTripletsView) {
+        final int previousIndex = content.indexOf((Component) oldAndTripletsView);
         content.addComponentAtIndex(previousIndex + 1, newAndTripletsView);
     }
 
@@ -115,7 +123,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         content.removeAll();
     }
 
-    public void updateDescription(String newDescription) {
+    public void updateDescription(final String newDescription) {
         description.setValue(newDescription);
     }
 

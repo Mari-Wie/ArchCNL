@@ -1,0 +1,104 @@
+@import './_colors';
+@import './_fonts';
+@import './_spaces.css';
+
+html {
+    background-color: var(--color-main-bg);
+}
+
+vaadin-button {
+    background-color: var(--primary);
+    font-family: var(--p-font-family);
+    font-size: var(--p-font-size-small);
+    color: var(--primary-light-font);
+    margin: var(--p-layout-x-small);
+    box-shadow: var(--btn-primary-shadow);
+}
+
+vaadin-context-menu-item {
+    font-family: var(--p-font-family-h) !important;
+}
+
+label {
+	font-family: var(--p-font-family-h);
+	padding-left: var(--p-layout-x-small);
+	padding-right: var(--p-layout-x-small);
+}
+
+.footer {
+    height: 5%;
+}
+
+.footer__text {
+    font-family: var(--p-font-size-x-small);
+    font-size: var(--p-font-size-small);
+}
+
+.architecture-rules, .new-concept, .new-relation, 
+.query-text-box, .general-info-box {
+    background-color: var(--primary-light);
+    border-radius: 1%;
+    border: none !important;
+    box-shadow: var(--color-main-bg);
+}
+
+.check-violation-btn {
+    margin-top: var(--p-layout-medium);
+}
+
+.variable-card {
+    border: none !important;
+    background-color: var(--inactive);
+    padding-top: var(--p-layout-x-small);
+    padding-left: var(--p-layout-small);
+    padding-right: var(--p-layout-small);
+    border-radius: 5%;
+    margin-left: var(--p-layout-medium);
+    margin-right: var(--p-layout-medium);
+    box-shadow: var(--box-light-second-shadow);
+}
+
+.card-title-box {
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-title-box--title {
+    float: left;
+    font-weight: var(--p-font-weight-bold);
+    width: 60%;
+}
+
+.card-title-box--btn {
+    float: left;
+    margin-right: 0.5em;
+}
+
+.label-title {
+    font-weight: var(--p-font-weight-bold);
+}
+
+vaadin-vertical-layout {
+    margin-top: 0.2rem !important;
+}
+
+.or-block {
+    border-radius: 0.5% !important;
+    background-color: rgb(240, 240, 240);
+}
+
+.side-bar {
+    background-color: var(--primary);
+    width: 15% !important;
+    border-radius: 0.5%;
+}
+
+.general-info-box--item-lable {
+    width: 70% !important;
+}
+
+.side-bar-text {
+    color: var(--primary-light-font) !important;
+}

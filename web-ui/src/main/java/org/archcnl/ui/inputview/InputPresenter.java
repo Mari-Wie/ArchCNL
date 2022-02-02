@@ -29,6 +29,7 @@ public class InputPresenter extends Component {
 
     public InputPresenter() {
         architectureRulesLayout = new ArchitectureRulesLayout();
+        architectureRulesLayout.setClassName("architecture-rules");
         view = new InputView(architectureRulesLayout);
         addListeners();
     }

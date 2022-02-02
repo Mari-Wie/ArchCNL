@@ -12,10 +12,11 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
     private TextArea archRuleTextArea;
     private NewArchitectureRulePresenter presenter;
 
-    public NewArchitectureRuleView(NewArchitectureRulePresenter presenter) {
+    public NewArchitectureRuleView(final NewArchitectureRulePresenter presenter) {
         this.presenter = presenter;
         getStyle().set("overflow", "auto");
         getStyle().set("border", "1px solid black");
+        setClassName("architecture-rules");
 
         saveButton = new Button("Save Rule", e -> saveRule());
         archRuleTextArea =

@@ -28,11 +28,8 @@ public class ConceptAndRelationView extends RulesOrMappingEditorView {
     private HierarchyView<Relation> hv2;
 
     public ConceptAndRelationView(boolean inputSide) {
-
         createConceptHierarchy();
         createRelationHierarchy();
-
-        getStyle().set("border", "1px solid black");
     }
 
     private void createConceptHierarchy() {

@@ -7,56 +7,54 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.outputview.components.AbstractQueryResultsComponent;
+import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
-import org.archcnl.ui.outputview.components.CustomQueryView;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
-import org.archcnl.ui.outputview.components.SideBarLayout;
+import org.archcnl.ui.outputview.components.SideBarWidget;
 import org.archcnl.ui.outputview.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
 import org.archcnl.ui.outputview.events.RunQueryRequestedEvent;
+import org.archcnl.ui.outputview.events.ShowComponentRequestedEvent;
 
 public class OutputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = LogManager.getLogger(OutputView.class);
 
-    private QueryResultsUiComponent queryResults;
+    private QueryResultsUiComponent defaultQueryView;
     private CustomQueryPresenter customQueryPresenter;
-    private AbstractQueryResultsComponent freeTextQuery;
-    private SideBarLayout sideBar;
+    private FreeTextQueryUiComponent freeTextQueryView;
+    private SideBarWidget sideBarWidget;
     private Component currentComponent;
     private ResultRepository resultRepository;
 
-    public OutputView() throws PropertyNotFoundException {
-        queryResults = new QueryResultsUiComponent();
-        freeTextQuery = new FreeTextQueryUiComponent();
-        sideBar = new SideBarLayout(this);
-        createQustomQueryPresenter();
+    public OutputView() {
+        defaultQueryView = new QueryResultsUiComponent();
+        customQueryPresenter = new CustomQueryPresenter();
+        freeTextQueryView = new FreeTextQueryUiComponent();
+        sideBarWidget =
+                new SideBarWidget(
+                        defaultQueryView, customQueryPresenter.getView(), freeTextQueryView);
 
         initLayout();
         registerEventListeners();
-        addAndExpand(sideBar, queryResults);
+        addAndExpand(sideBarWidget, defaultQueryView);
     }
 
     private void initLayout() {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
-        sideBar.setWidth(20, Unit.PERCENTAGE);
-        queryResults.setWidth(80, Unit.PERCENTAGE);
-        currentComponent = queryResults;
+        sideBarWidget.addClassName("side-bar");
+        defaultQueryView.setWidth(80, Unit.PERCENTAGE);
+        currentComponent = defaultQueryView;
     }
 
     private void createQustomQueryPresenter() {
@@ -71,59 +69,52 @@ public class OutputView extends HorizontalLayout {
     }
 
     private void registerEventListeners() {
-        freeTextQuery.addListener(
+        freeTextQueryView.addListener(
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
-        freeTextQuery.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
-        sideBar.addListener(InputViewRequestedEvent.class, this::fireEvent);
+
+        freeTextQueryView.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        sideBarWidget.addListener(InputViewRequestedEvent.class, this::fireEvent);
+        sideBarWidget.addListener(
+                ShowComponentRequestedEvent.class,
+                event -> switchToComponent(event.getComponent()));
+        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
+
     }
 
-    private void handleEvent(PinQueryRequestedEvent event) {
-        sideBar.addPinnedCustomQueryButton(event.getSource());
-        switchToCustomQueryView(event.getSource().getView());
+    private void handleEvent(final PinQueryRequestedEvent event) {
+        sideBarWidget.addPinnedCustomQueryTab(
+                event.getSource().getView(), event.getSource().getQueryName());
         createQustomQueryPresenter();
+        sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
     }
 
-    private void handleEvent(RunQueryRequestedEvent event) {
-        Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
+    private void handleEvent(final RunQueryRequestedEvent event) {
+        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getGridView().update(result);
     }
 
-    private void handleEvent(FreeTextRunButtonPressedEvent event) {
-        Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
+    private void handleEvent(final FreeTextRunButtonPressedEvent event) {
+        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getSource().update(result);
     }
 
-    public void switchToQueryView() {
-        replace(currentComponent, queryResults);
-        currentComponent = queryResults;
-    }
-
-    public void switchToCustomQueryView() {
-        replace(currentComponent, customQueryPresenter.getView());
-        currentComponent = customQueryPresenter.getView();
-    }
-
-    public void switchToCustomQueryView(CustomQueryView customQueryView) {
-        replace(currentComponent, customQueryView);
-        currentComponent = customQueryView;
-    }
-
-    public void switchToFreeTextQueryView() {
-        replace(currentComponent, freeTextQuery);
-        currentComponent = freeTextQuery;
+    private void switchToComponent(final Component component) {
+        replace(currentComponent, component);
+        currentComponent = component;
     }
 
     private void insertCustomQueryIntoFreeTextQuery() {
         final String customQuery = customQueryPresenter.getQuery();
-        freeTextQuery.setQueryText(customQuery);
+        freeTextQueryView.setQueryText(customQuery);
     }
 
-    public void displayResult(Optional<Result> result) {
-        queryResults.updateGridView(result);
+    public void displayResult(final Optional<Result> result) {
+        defaultQueryView.updateGridView(result);
     }
 
-    public void setResultRepository(ResultRepository repository) {
+    public void setResultRepository(final ResultRepository repository) {
         resultRepository = repository;
     }
 
