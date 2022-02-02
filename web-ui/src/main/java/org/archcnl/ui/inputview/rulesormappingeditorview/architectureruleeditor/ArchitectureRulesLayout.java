@@ -9,7 +9,6 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 
@@ -24,17 +23,13 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView
         RulesConceptsAndRelations.getInstance()
                 .getArchitectureRuleManager()
                 .addPropertyChangeListener(this);
-        final CreateNewLayout createNewRuleLayout =
-                new CreateNewLayout(
-                        "Architecture Rules",
-                        "Create new Arch Rule",
-                        e -> fireEvent(new RuleCreatorRequestedEvent(this, true)),
-                        true);
 
         // Remove style property to makes no sense in this layout
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
-        createNewRuleLayout.getStyle().remove("border");
-        add(createNewRuleLayout);
+        createCreateNewLayout(
+                "Architecture Rules",
+                "Create new Arch Rule",
+                e -> fireEvent(new RuleCreatorRequestedEvent(this, true)));
         add(rulesLayout);
         getStyle().set("border", "1px solid black");
         updateRules();

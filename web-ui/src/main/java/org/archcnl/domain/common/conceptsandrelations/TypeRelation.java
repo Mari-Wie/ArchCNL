@@ -45,11 +45,6 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
     }
 
     @Override
-    public String transformToSparqlQuery() {
-        return transformToAdoc();
-    }
-
-    @Override
     public String transformToGui() {
         return transformToAdoc();
     }

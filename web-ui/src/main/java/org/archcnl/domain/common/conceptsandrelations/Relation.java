@@ -15,10 +15,8 @@ import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Relation implements FormattedAdocDomainObject, FormattedViewDomainObject {
-
-    private String name;
-    private String description;
+public abstract class Relation extends ObjectType
+        implements FormattedAdocDomainObject, FormattedViewDomainObject {
 
     // The object types this relation relates to
     protected List<ActualObjectType> relatableObjectTypes;
@@ -52,6 +50,7 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
         return relatableObjectTypes;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -85,7 +84,7 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean requiredEqualsOverride(Object obj) {
         if (obj instanceof Relation) {
             final Relation that = (Relation) obj;
             return Objects.equals(this.getName(), that.getName());
@@ -94,7 +93,7 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
     }
 
     @Override
-    public int hashCode() {
+    public int requiredHashCodeOverride() {
         return Objects.hash(name);
     }
 
@@ -111,6 +110,7 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
         }
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
@@ -118,5 +118,10 @@ public abstract class Relation implements FormattedAdocDomainObject, FormattedVi
     public void setDescription(String description) {
         this.description = description;
         RulesConceptsAndRelations.getInstance().getRelationManager().relationHasBeenUpdated(this);
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
     }
 }

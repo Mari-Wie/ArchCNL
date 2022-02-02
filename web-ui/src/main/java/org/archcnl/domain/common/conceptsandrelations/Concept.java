@@ -7,9 +7,6 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class Concept extends ActualObjectType {
 
-    private String name;
-    private String description;
-
     protected Concept(String name, String description) {
         this.name = name;
         this.description = description;
@@ -45,6 +42,7 @@ public abstract class Concept extends ActualObjectType {
         }
     }
 
+    @Override
     public String getDescription() {
         return description;
     }

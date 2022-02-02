@@ -5,6 +5,10 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
@@ -32,7 +36,13 @@ public class InputPresenter extends Component {
 
     private void addListeners() {
         view.addListener(ConceptEditorRequestedEvent.class, this::handleEvent);
+        view.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+
         view.addListener(RelationEditorRequestedEvent.class, this::handleEvent);
+        view.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
+        view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+
         view.addListener(OutputViewRequestedEvent.class, this::fireEvent);
         architectureRulesLayout.addListener(RuleCreatorRequestedEvent.class, this::handleEvent);
     }

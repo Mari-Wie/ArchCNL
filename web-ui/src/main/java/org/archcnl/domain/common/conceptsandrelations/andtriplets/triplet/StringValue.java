@@ -24,6 +24,11 @@ public class StringValue extends ActualObjectType {
     }
 
     @Override
+    public String getDescription() {
+        return "Generic Boolean Value";
+    }
+
+    @Override
     public String transformToSparqlQuery() {
         return "\"" + value + "\"" + "^^xsd:string";
     }

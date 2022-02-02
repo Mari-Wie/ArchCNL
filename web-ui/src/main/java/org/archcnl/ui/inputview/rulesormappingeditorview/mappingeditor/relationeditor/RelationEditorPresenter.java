@@ -124,7 +124,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 if (!doesRelationExist(relation.get())) {
                     RulesConceptsAndRelations.getInstance()
                             .getRelationManager()
-                            .addRelation(relation.get());
+                            .addToParent(relation.get(), "Custom Relations");
                 }
 
                 fireEvent(new RuleEditorRequestedEvent(this, true));

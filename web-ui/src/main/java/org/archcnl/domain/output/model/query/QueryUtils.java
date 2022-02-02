@@ -1,89 +1,31 @@
 package org.archcnl.domain.output.model.query;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import java.util.Set;
-import org.archcnl.domain.common.ConceptManager;
-import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 
 public class QueryUtils {
 
     private QueryUtils() {}
 
-    public static Query getDefaultQuery() {
+    private static final Path VIOLATIONS_SUBJECT_PREDICATE_OBJECT =
+            Path.of("violationsSubjectPredicateObject.sparql");
+    private static final Path rootDir = Path.of("./src/main/resources/queries/");
 
-        RelationManager relationManager =
-                RulesConceptsAndRelations.getInstance().getRelationManager();
-        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
+    private static final String EXCEPTION_TEXT =
+            "# An error occured while trying to load the query.\r\n" + "SELECT * WHERE {}";
 
+    public static String getDefaultQuery() {
+        Path queryPath = rootDir.resolve(VIOLATIONS_SUBJECT_PREDICATE_OBJECT);
         try {
-            Variable cnl = new Variable("cnl");
-            Variable violation = new Variable("violation");
-            Variable subject = new Variable("subject");
-            Variable rule = new Variable("rule");
-            Variable name = new Variable("name");
-            Variable statement = new Variable("statement");
-            Variable proof = new Variable("proof");
-
-            Triplet triplet1 =
-                    TripletFactory.createTriplet(
-                            rule,
-                            relationManager.getRelationByName("is-of-type").get(),
-                            conceptManager.getConceptByName("ArchitectureRule").get());
-            Triplet triplet2 =
-                    TripletFactory.createTriplet(
-                            rule,
-                            relationManager.getRelationByName("hasRuleRepresentation").get(),
-                            cnl);
-            Triplet triplet3 =
-                    TripletFactory.createTriplet(
-                            violation, relationManager.getRelationByName("violates").get(), rule);
-            Triplet triplet4 =
-                    TripletFactory.createTriplet(
-                            proof, relationManager.getRelationByName("proofs").get(), violation);
-            Triplet triplet5 =
-                    TripletFactory.createTriplet(
-                            proof,
-                            relationManager.getRelationByName("hasAssertedStatement").get(),
-                            statement);
-            Triplet triplet6 =
-                    TripletFactory.createTriplet(
-                            statement,
-                            relationManager.getRelationByName("hasSubject").get(),
-                            subject);
-            Triplet triplet7 =
-                    TripletFactory.createTriplet(
-                            subject, relationManager.getRelationByName("hasName").get(), name);
-
-            SelectClause selectClause =
-                    new SelectClause(new LinkedHashSet<>(Arrays.asList(cnl, name)));
-
-            WhereClause whereClause =
-                    new WhereClause(
-                            new AndTriplets(
-                                    new LinkedList<>(
-                                            Arrays.asList(
-                                                    triplet1, triplet2, triplet3, triplet4,
-                                                    triplet5, triplet6, triplet7))));
-
-            return new Query("Default Query", selectClause, whereClause);
-
-        } catch (InvalidVariableNameException
-                | UnsupportedObjectTypeInTriplet
-                | NoSuchElementException e) {
-
-            throw new RuntimeException(
-                    "Construction of default query failed due to: " + e.getMessage());
+            return Files.readString(queryPath, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return EXCEPTION_TEXT;
         }
     }
 
