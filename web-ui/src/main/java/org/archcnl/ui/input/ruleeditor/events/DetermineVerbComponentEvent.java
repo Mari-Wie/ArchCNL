@@ -11,6 +11,5 @@ public class DetermineVerbComponentEvent extends ComponentEvent<SubjectComponent
 
     public DetermineVerbComponentEvent(SubjectComponent source, boolean fromClient) {
         super(source, fromClient);
-        System.out.println("DetermineVerbComponentEvent Fired");
     }
 }

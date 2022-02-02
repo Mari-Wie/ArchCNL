@@ -1,14 +1,13 @@
 package org.archcnl.ui.input.ruleeditor.components.verbcomponents;
 
-import org.archcnl.ui.input.ruleeditor.components.ConceptTextfieldComponent;
-import org.archcnl.ui.input.ruleeditor.components.ConditionComponent;
-import org.archcnl.ui.input.ruleeditor.components.RelationTextfieldComponent;
-import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
-
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.archcnl.ui.input.ruleeditor.components.ConceptTextfieldComponent;
+import org.archcnl.ui.input.ruleeditor.components.ConditionComponent;
+import org.archcnl.ui.input.ruleeditor.components.RelationTextfieldComponent;
+import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
 
 public class IfVerbComponent extends VerticalLayout implements RuleComponentInterface {
 

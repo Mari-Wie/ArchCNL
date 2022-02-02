@@ -20,24 +20,29 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
     private VerbComponent verb;
     private HorizontalLayout buttonsLayout;
 
+    /**
+     * Architecture rules are made up out of a subject component (Every/no/... concept) describing
+     * the topic of the rule and a verb component (Can/must/...) describing the rule the subject
+     * must follow. Refer to the architecture rule tree in the wiki for a visualization.
+     */
     public NewArchitectureRuleView(NewArchitectureRulePresenter presenter) {
         this.presenter = presenter;
         getStyle().set("overflow", "auto");
-        getStyle().set("border", "1px solid black");       
-        
+        getStyle().set("border", "1px solid black");
+
         initializeLayout();
         verb.determineVerbComponent(subject.getFirstModifier());
     }
-    
+
     private void initializeLayout() {
         subject = new SubjectComponent();
         verb = new VerbComponent();
         buttonsLayout = new HorizontalLayout();
-        
-        verb.addListener(
+
+        subject.addListener(
                 DetermineVerbComponentEvent.class,
                 event -> verb.determineVerbComponent(event.getSource().getFirstModifier()));
-        
+
         saveButton = new Button("Save Rule", e -> saveRule());
         Checkbox activateExpertmode = new Checkbox("Activate Expertmode");
         activateExpertmode.addClickListener(e -> activateExpertMode(activateExpertmode.getValue()));

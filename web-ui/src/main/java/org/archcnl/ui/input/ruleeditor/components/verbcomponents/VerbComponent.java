@@ -15,42 +15,56 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
     private ArrayList<RuleComponentInterface> verbComponentList;
     private RuleComponentInterface verbComponent;
 
+    /**
+     * There are three possible verb component, depending on what descriptor is chosen in the
+     * subject component. a) If ... b) Fact: ... c) Every/Only/No/Nothing ...
+     */
     public VerbComponent() {
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
         verbComponentList = new ArrayList<>();
     }
 
-    public void determineVerbComponent(String selectedVerb) {
-        System.out.println("Event Received");
-        
+    /**
+     * Called by DetermineVerbComponentEvent. Event is fired when a different descriptor is selected
+     * in the subject component.
+     * @param selectedDescriptor the value of the first ComboBox of the subject component.
+     */
+    public void determineVerbComponent(String selectedDescriptor) {
         removeAll();
+        verbComponentList.clear();
         add(new Label("Rule Statement"));
-        if (selectedVerb.equals("If")) {
-            verbComponent = new IfVerbComponent();      
-            verbComponentList.add(verbComponent);
-        } else if (selectedVerb.equals("Fact:")) {
+
+        if (selectedDescriptor.equals("If")) {
+            verbComponent = new IfVerbComponent();
+        } else if (selectedDescriptor.equals("Fact:")) {
             verbComponent = new FactVerbComponent();
-            verbComponentList.add(verbComponent);
         } else {
-            verbComponent = new EveryOnlyNoVerbComponent(false);
-            RuleComponentInterface andVerbComponent = new EveryOnlyNoVerbComponent(true);
-            verbComponentList.add(verbComponent);
-            verbComponentList.add(andVerbComponent);
+            verbComponent = new EveryOnlyNoVerbComponent(false);     
         }
-        
-        for (RuleComponentInterface ruleComponent : verbComponentList) {
-            add((Component)ruleComponent);
-        }
+        verbComponentList.add(verbComponent);
+        add((Component)verbComponent);
     }
     
+    private void addAndOrVerbComponent() {
+        EveryOnlyNoVerbComponent andOrVerbComponent = new EveryOnlyNoVerbComponent(true);
+        add(andOrVerbComponent);
+        verbComponentList.add(andOrVerbComponent);
+    }
+
+    private void removeAndOrVerbComponent() {
+        RuleComponentInterface vc = verbComponentList.get(verbComponentList.size() - 1);
+        verbComponentList.remove(vc);
+        remove((Component) vc);
+    }
+
     @Override
     public String getString() {
         StringBuilder sBuilder = new StringBuilder();
         for (RuleComponentInterface ruleComponent : verbComponentList) {
             sBuilder.append(ruleComponent.getString());
         }
-        return null;
+        return sBuilder.toString();
     }
 
     @Override
@@ -59,9 +73,4 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
         System.out.println("Listener Added");
         return getEventBus().addListener(eventType, listener);
     }
-
-    //    public Registration addChangeListener(
-    //            ComponentEventListener<DetermineVerbComponentEvent> listener) {
-    //           return addListener(DetermineVerbComponentEvent.class, listener);
-    //       }
 }

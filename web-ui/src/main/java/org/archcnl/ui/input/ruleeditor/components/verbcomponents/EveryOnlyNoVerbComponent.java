@@ -1,18 +1,23 @@
 package org.archcnl.ui.input.ruleeditor.components.verbcomponents;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
+import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.archcnl.ui.input.ruleeditor.components.ConceptTextfieldComponent;
 import org.archcnl.ui.input.ruleeditor.components.ConditionComponent;
 import org.archcnl.ui.input.ruleeditor.components.RelationTextfieldComponent;
 import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.input.ruleeditor.events.AddAndOrVerbComponentEvent;
 
 public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -25,7 +30,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
     private SelectionState currentState;
-    private boolean isAndOrBlock = false;   
+    private boolean isAndOrBlock = false;
     private ArrayList<String> secondModifierList =
             new ArrayList<>(
                     Arrays.asList(
@@ -39,6 +44,11 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
                             "equal-to at-least",
                             "equal-to exactly"));
 
+    /**
+     * SelectionState enumeration is used to determine how to update the UI. Each state has six
+     * booleans corresponding to the six possible components. Different SelectionState require the
+     * showing of different components.
+     */
     private enum SelectionState {
         ONE(true, false, false, false, false, false),
         ONETWO(true, true, false, false, false, true),
@@ -50,31 +60,29 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         ONETWOTHREEFOURB(true, true, true, true, false, true),
         ONETWOTHREEFOURSIX(true, true, true, true, false, true);
 
-        private boolean[] showComponentsArray;
+        private boolean[] showComponentsBooleanArray;
 
         private SelectionState(
                 boolean one, boolean two, boolean three, boolean four, boolean five, boolean six) {
-            showComponentsArray = new boolean[6];
-            showComponentsArray[0] = one;
-            showComponentsArray[1] = two;
-            showComponentsArray[2] = three;
-            showComponentsArray[3] = four;
-            showComponentsArray[4] = five;
-            showComponentsArray[5] = six;
+            showComponentsBooleanArray = new boolean[6];
+            showComponentsBooleanArray[0] = one;
+            showComponentsBooleanArray[1] = two;
+            showComponentsBooleanArray[2] = three;
+            showComponentsBooleanArray[3] = four;
+            showComponentsBooleanArray[4] = five;
+            showComponentsBooleanArray[5] = six;
         }
 
-        /** @return a boolean array describing what UI components are to be shown in the current state */
         public final boolean[] getShowComponentBooleanArray() {
-            return showComponentsArray;
+            return showComponentsBooleanArray;
         }
 
         /**
-         * Can only be called in a state that shows the "addCondition" check box.
-         *
-         * @return The state of current state when the "addCondition" check box is checked. e.g
-         *     State ONETWO -> ONETWOSIX
+         * Is only called when the "addCondition" check box is visible and has been checked. Returns
+         * the antecedent state which in the case of "ONETWO", "ONETWOTHREEFOURFIVE" and
+         * "ONETWOTHREEFOURB" means the equivalent state with an active condition.
          */
-        public SelectionState addCondition() {
+        public SelectionState switchToStateWithActivatedCondition() {
             return values()[ordinal() + 1];
         }
     }
@@ -119,12 +127,21 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
 
     private void initializeFirstCombobox() {
         if (isAndOrBlock) {
-            one_firstCombobox = new ComboBox<String>("And / Or (Optional)", Arrays.asList("-", "and", "or"));
+            one_firstCombobox =
+                    new ComboBox<String>("And / Or (Optional)", Arrays.asList("-", "and", "or"));
             one_firstCombobox.setValue("-");
         } else {
-            one_firstCombobox = new ComboBox<String>("Modifier", Arrays.asList("must", "can-only", "can", "must be", "must be a", "must be an"));
+            one_firstCombobox =
+                    new ComboBox<String>(
+                            "Modifier",
+                            Arrays.asList(
+                                    "must",
+                                    "can-only",
+                                    "can",
+                                    "must be",
+                                    "must be a",
+                                    "must be an"));
             one_firstCombobox.setValue("must");
-            //These options aren't available for a AndOrComponent
             secondModifierList.addAll(Arrays.asList("anything", "equal-to", "equal-to anything"));
         }
         one_firstCombobox.addValueChangeListener(
@@ -141,7 +158,9 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
                 || firstModifier.equals("must be a")
                 || firstModifier.equals("must be an")) {
             currentState = SelectionState.ONETWO;
+            fireEvent(new AddAndOrVerbComponentEvent(this, true));
         } else {
+            fireEvent(new AddAndOrVerbComponentEvent(this, true));
             String secondModifier = three_secondCombobox.getValue();
             if (secondModifier.equals("equal-to anything") || secondModifier.equals("anything")) {
                 currentState = SelectionState.ONETWOTHREE;
@@ -159,9 +178,9 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
             }
         }
 
-        if (currentState.showComponentsArray[5]) {
+        if (currentState.showComponentsBooleanArray[5]) {
             if (six_addConditionCheckbox.getValue()) {
-                currentState = currentState.addCondition();
+                currentState = currentState.switchToStateWithActivatedCondition();
             }
         }
         updateUI();
@@ -182,12 +201,27 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         if (boolArray[4]) {
             four_secondVariable.setPlaceholder("+/- [0-9]");
             four_secondVariable.setLabel("Number");
-            
+
             if (currentState == SelectionState.ONETWOTHREEFOUR) {
                 four_secondVariable.setPlaceholder("+/- [0-9] / String");
                 four_secondVariable.setLabel("Number or String");
             }
-        }      
+        }
+    }
+    
+    private HorizontalLayout getButtons()
+    {
+        HorizontalLayout boxButtonLayout = new HorizontalLayout();
+        Button addButton =
+                new Button(
+                        new Icon(VaadinIcon.PLUS),
+                        click -> addAndOrVerbComponent());
+        Button deleteButton =
+                new Button(
+                        new Icon(VaadinIcon.TRASH),
+                        click -> removeAndOrVerbComponent());
+        boxButtonLayout.add(addButton, deleteButton);
+        return boxButtonLayout;
     }
 
     private void addConditionBlock(Boolean showCondition) {
@@ -199,7 +233,17 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
     }
 
     @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
+
+    @Override
     public String getString() {
+        if (one_firstCombobox.getValue().equals("-")) {
+            return "";
+        }
+
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(one_firstCombobox.getValue() + " ");
         sBuilder.append(two_firstVariable.getValue() + " ");
