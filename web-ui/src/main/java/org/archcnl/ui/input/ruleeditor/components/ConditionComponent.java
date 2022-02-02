@@ -4,10 +4,12 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
 import java.util.Arrays;
 import java.util.List;
 
-public class ConditionComponent extends RuleComponent {
+public class ConditionComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private Label startLabelTextfield, endLabelTextfield;
@@ -78,6 +80,7 @@ public class ConditionComponent extends RuleComponent {
         }
     }
 
+    @Override
     public String getString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(startLabelTextfield.getText() + "");

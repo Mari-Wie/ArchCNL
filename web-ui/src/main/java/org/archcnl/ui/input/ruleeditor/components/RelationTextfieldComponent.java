@@ -16,6 +16,7 @@ public class RelationTextfieldComponent extends TextField
     public RelationTextfieldComponent() {
         setActive(true);
         setPlaceholder("Relation");
+        setLabel("Relation");
         setClearButtonVisible(true);
 
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));

@@ -4,25 +4,34 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
 import java.util.Arrays;
 import java.util.List;
+import org.archcnl.ui.input.ruleeditor.events.DetermineVerbComponentEvent;
 
-public class SubjectComponent extends RuleComponent {
+public class SubjectComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
-    private ComboBox<String> firstCombobox;
-    private ConceptTextfieldComponent firstConcept;
-    private Checkbox conditionCheckbox;
+    private HorizontalLayout subjectLayout;
     private ConditionComponent newCondition;
-    private HorizontalLayout mainSubjectBox;
+    private ComboBox<String> one_firstCombobox;
+    private ConceptTextfieldComponent two_firstConcept;
+    private Checkbox three_conditionCheckbox;   
     private boolean showFirstConcept = true;
 
     public SubjectComponent() {
         this.add(new Label("Rule Subject"));
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
-
-        mainSubjectBox = new HorizontalLayout();
+        
+        initializeLayout();        
+    }
+    
+    private void initializeLayout() {
+        newCondition = new ConditionComponent();
+        
+        subjectLayout = new HorizontalLayout();
         List<String> firstStatements =
                 Arrays.asList(
                         "Every",
@@ -39,35 +48,33 @@ public class SubjectComponent extends RuleComponent {
                         "If an",
                         "No a",
                         "No an");
-        firstCombobox = new ComboBox<String>("Modifier", firstStatements);
-        firstCombobox.setValue("Every");
-        firstCombobox.addValueChangeListener(
+        one_firstCombobox = new ComboBox<String>("Modifier", firstStatements);
+        one_firstCombobox.setValue("Every");
+        one_firstCombobox.addValueChangeListener(
                 e -> {
-                    firstComboboxListener(firstCombobox.getValue());
+                    updateUI(one_firstCombobox.getValue());
                 });
-
-        firstConcept = new ConceptTextfieldComponent();
-        firstConcept.setLabel("Concept");
-
-        conditionCheckbox = new Checkbox("that... (add condition)");
-        conditionCheckbox.addClickListener(e -> addCondition(conditionCheckbox.getValue()));
-        mainSubjectBox.setVerticalComponentAlignment(Alignment.END, conditionCheckbox);
-        mainSubjectBox.add(firstCombobox, firstConcept, conditionCheckbox);
-
-        newCondition = new ConditionComponent();
-        add(mainSubjectBox);
+        two_firstConcept = new ConceptTextfieldComponent();
+        two_firstConcept.setLabel("Concept");
+        three_conditionCheckbox = new Checkbox("that... (add condition)");
+        three_conditionCheckbox.addClickListener(e -> addCondition(three_conditionCheckbox.getValue()));
+        subjectLayout.setVerticalComponentAlignment(Alignment.END, three_conditionCheckbox);
+        subjectLayout.add(one_firstCombobox, two_firstConcept, three_conditionCheckbox);
+       
+        add(subjectLayout);
     }
 
-    private void firstComboboxListener(String value) {
+    private void updateUI(String value) {
         if (value.equals("Nothing")) {
-            mainSubjectBox.remove(firstConcept, conditionCheckbox);
+            subjectLayout.remove(two_firstConcept, three_conditionCheckbox);
             showFirstConcept = false;
         } else if (value.equals("Fact:")) {
-            mainSubjectBox.remove(conditionCheckbox);
+            subjectLayout.remove(three_conditionCheckbox);
         } else {
-            mainSubjectBox.add(firstConcept, conditionCheckbox);
+            subjectLayout.add(two_firstConcept, three_conditionCheckbox);
             showFirstConcept = true;
         }
+        fireEvent(new DetermineVerbComponentEvent(this, true));
     }
 
     public void addCondition(Boolean showCondition) {
@@ -78,12 +85,17 @@ public class SubjectComponent extends RuleComponent {
         }
     }
 
+    public String getFirstModifier() {
+        return one_firstCombobox.getValue();
+    }
+
+    @Override
     public String getString() {
         StringBuilder sBuilder = new StringBuilder();
-        sBuilder.append(firstCombobox.getValue() + " ");
+        sBuilder.append(one_firstCombobox.getValue() + " ");
         if (showFirstConcept) {
-            sBuilder.append(firstConcept.getValue() + " ");
-            if (conditionCheckbox.getValue()) {
+            sBuilder.append(two_firstConcept.getValue() + " ");
+            if (three_conditionCheckbox.getValue()) {
                 sBuilder.append(newCondition.getString());
             }
         }

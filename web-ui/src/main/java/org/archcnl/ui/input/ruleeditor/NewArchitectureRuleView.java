@@ -5,8 +5,9 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import org.archcnl.ui.input.RulesOrMappingEditorView;
-import org.archcnl.ui.input.ruleeditor.components.EveryOnlyNoVerbComponent;
 import org.archcnl.ui.input.ruleeditor.components.SubjectComponent;
+import org.archcnl.ui.input.ruleeditor.components.verbcomponents.VerbComponent;
+import org.archcnl.ui.input.ruleeditor.events.DetermineVerbComponentEvent;
 
 public class NewArchitectureRuleView extends RulesOrMappingEditorView
         implements ArchitectureRulesContract.View {
@@ -16,27 +17,37 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
     private TextArea archRuleTextArea;
     private NewArchitectureRulePresenter presenter;
     private SubjectComponent subject;
-    private EveryOnlyNoVerbComponent verb;
+    private VerbComponent verb;
+    private HorizontalLayout buttonsLayout;
 
     public NewArchitectureRuleView(NewArchitectureRulePresenter presenter) {
         this.presenter = presenter;
         getStyle().set("overflow", "auto");
-        getStyle().set("border", "1px solid black");
-
+        getStyle().set("border", "1px solid black");       
+        
+        initializeLayout();
+        verb.determineVerbComponent(subject.getFirstModifier());
+    }
+    
+    private void initializeLayout() {
         subject = new SubjectComponent();
-        verb = new EveryOnlyNoVerbComponent(false);
-
-        HorizontalLayout footer = new HorizontalLayout();
+        verb = new VerbComponent();
+        buttonsLayout = new HorizontalLayout();
+        
+        verb.addListener(
+                DetermineVerbComponentEvent.class,
+                event -> verb.determineVerbComponent(event.getSource().getFirstModifier()));
+        
         saveButton = new Button("Save Rule", e -> saveRule());
         Checkbox activateExpertmode = new Checkbox("Activate Expertmode");
         activateExpertmode.addClickListener(e -> activateExpertMode(activateExpertmode.getValue()));
-        footer.setVerticalComponentAlignment(Alignment.CENTER, activateExpertmode);
+        buttonsLayout.setVerticalComponentAlignment(Alignment.CENTER, activateExpertmode);
         archRuleTextArea =
                 new TextArea("Freetext mode", "Every Aggregate must residein a DomainRing");
         archRuleTextArea.setWidthFull();
-        footer.add(saveButton, activateExpertmode);
+        buttonsLayout.add(saveButton, activateExpertmode);
 
-        add(subject, verb, footer);
+        add(subject, verb, buttonsLayout);
     }
 
     private void activateExpertMode(Boolean show) {

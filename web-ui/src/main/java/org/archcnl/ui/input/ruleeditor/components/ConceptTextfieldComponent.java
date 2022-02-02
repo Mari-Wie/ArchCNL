@@ -16,6 +16,7 @@ public class ConceptTextfieldComponent extends TextField
     public ConceptTextfieldComponent() {
         setActive(true);
         setPlaceholder("Concept");
+        setLabel("Concept");
         setClearButtonVisible(true);
 
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
