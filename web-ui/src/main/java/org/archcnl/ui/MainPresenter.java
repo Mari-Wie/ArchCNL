@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.common.ArchitectureCheck;
@@ -35,6 +36,7 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
+
 
 @Tag("MainPresenter")
 public class MainPresenter extends Component implements PropertyChangeListener {
@@ -64,13 +66,13 @@ public class MainPresenter extends Component implements PropertyChangeListener {
     }
 
     public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
-        System.out.println("Main presenter received ConceptGridUpdateRequest");
+        LOG.log(Level.TRACE,"Main presenter received ConceptGridUpdateRequest");
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         updateHierarchies(conceptManager, event.getSource());
     }
 
     public void handleEvent(final RelationGridUpdateRequestedEvent event) {
-        System.out.println("Main presenter received RelationGridUpdateRequest");
+        LOG.log(Level.TRACE,"Main presenter received RelationGridUpdateRequest");
         RelationManager relationManager =
                 RulesConceptsAndRelations.getInstance().getRelationManager();
         updateHierarchies(relationManager, event.getSource());
@@ -80,7 +82,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
         ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(conceptManager, event.getSource());
-        System.out.println("Input presenter received ConceptHierarchySwapRequestedEvent");
+        LOG.log(Level.TRACE,"Input presenter received ConceptHierarchySwapRequestedEvent");
     }
 
     public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
@@ -89,7 +91,7 @@ public class MainPresenter extends Component implements PropertyChangeListener {
                 RulesConceptsAndRelations.getInstance().getRelationManager();
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(relationManager, event.getSource());
-        System.out.println("Input presenter received RelationHierarchySwapRequestedEvent");
+        LOG.log(Level.TRACE,"Input presenter received RelationHierarchySwapRequestedEvent");
     }
 
     public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
