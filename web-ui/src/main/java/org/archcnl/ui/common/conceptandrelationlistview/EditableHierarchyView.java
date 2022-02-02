@@ -1,7 +1,7 @@
 package org.archcnl.ui.common.conceptandrelationlistview;
 
 import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.ui.events.EditorRequestedEvent;
 
 public class EditableHierarchyView<T extends ObjectType> extends HierarchyView {

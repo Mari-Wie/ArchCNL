@@ -2,6 +2,7 @@ package org.archcnl.domain.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 
 public class HierarchyNode<T extends ObjectType> {
     private T entry;

@@ -1,7 +1,7 @@
 package org.archcnl.ui.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.domain.common.Concept;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
 public class ConceptGridUpdateRequestedEvent extends ComponentEvent<HierarchyView<Concept>> {

@@ -10,7 +10,7 @@ import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.domain.common.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.ui.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.events.HierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;

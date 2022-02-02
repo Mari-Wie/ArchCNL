@@ -1,7 +1,7 @@
 package org.archcnl.ui.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
 public class RelationGridUpdateRequestedEvent extends ComponentEvent<HierarchyView<Relation>> {
