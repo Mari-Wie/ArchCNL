@@ -13,16 +13,16 @@ public class QueryUtils {
 
     private QueryUtils() {}
 
-    private static final String VIOLATIONS_SUBJECT_PREDICATE_OBJECT =
-            "violationsSubjectPredicateObject.sparql";
-    private static final String rootDir = "./src/main/resources/queries/";
+    private static final Path VIOLATIONS_SUBJECT_PREDICATE_OBJECT =
+            Path.of("violationsSubjectPredicateObject.sparql");
+    private static final Path rootDir = Path.of("./src/main/resources/queries/");
 
     private static final String EXCEPTION_TEXT =
             "# An error occured while trying to load the query.\r\n" + "SELECT * WHERE {}";
 
     public static String getDefaultQuery() {
 
-        Path queryPath = Path.of(rootDir + VIOLATIONS_SUBJECT_PREDICATE_OBJECT);
+        Path queryPath = rootDir.resolve(VIOLATIONS_SUBJECT_PREDICATE_OBJECT);
         try {
             return Files.readString(queryPath, StandardCharsets.UTF_8);
         } catch (IOException e) {
