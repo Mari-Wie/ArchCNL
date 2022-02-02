@@ -24,6 +24,10 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEve
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.events.PinQueryButtonPressedEvent;
 import org.archcnl.ui.outputview.events.PinQueryRequestedEvent;
 import org.archcnl.ui.outputview.events.RunButtonPressedEvent;
@@ -44,6 +48,11 @@ public class CustomQueryPresenter extends Component {
         queryName = DEFAULT_NAME;
         wherePresenter = new AndTripletsEditorPresenter(false);
         view = new CustomQueryView(wherePresenter.getAndTripletsEditorView());
+        view.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        view.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
+
+        view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+        view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
         variableManager = new VariableManager();
 
         addListeners();

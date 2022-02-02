@@ -11,14 +11,23 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.common.ArchitectureCheck;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.HierarchyManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
+import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
 import org.archcnl.ui.events.ProjectOptionRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
@@ -39,9 +48,49 @@ public class MainPresenter extends Component implements PropertyChangeListener {
 
     public MainPresenter() {
         inputPresenter = new InputPresenter();
+        inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+
         outputView = new OutputView();
+        outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        outputView.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        outputView.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputView.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+
         view = new MainView(inputPresenter.getView());
         addListeners();
+    }
+
+    public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
+        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
+        updateHierarchies(conceptManager, event.getSource());
+    }
+
+    public void handleEvent(final RelationGridUpdateRequestedEvent event) {
+        RelationManager relationManager =
+                RulesConceptsAndRelations.getInstance().getRelationManager();
+        updateHierarchies(relationManager, event.getSource());
+    }
+
+    public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
+        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
+        conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
+        updateHierarchies(conceptManager, event.getSource());
+    }
+
+    public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
+
+        RelationManager relationManager =
+                RulesConceptsAndRelations.getInstance().getRelationManager();
+        relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
+        updateHierarchies(relationManager, event.getSource());
+    }
+
+    public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
+        hv.setRoots(hierarchyManager.getRoots());
+        hv.update();
     }
 
     private void addListeners() {

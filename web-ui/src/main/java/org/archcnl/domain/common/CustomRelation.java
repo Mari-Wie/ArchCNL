@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
-public class CustomRelation extends Relation implements FormattedQueryDomainObject {
+public class CustomRelation extends Relation {
 
     private static final String RELATION_TYPE = "architecture";
 
@@ -16,6 +16,7 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
     public CustomRelation(
             String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
+        editable = true;
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {

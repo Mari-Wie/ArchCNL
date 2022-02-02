@@ -5,8 +5,6 @@ import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 
 public class Variable extends ObjectType {
 
-    private String name;
-
     public Variable(String name) throws InvalidVariableNameException {
         if (name.startsWith("?")) {
             name = name.substring(1);
@@ -20,6 +18,11 @@ public class Variable extends ObjectType {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return "This is a Variable";
     }
 
     @Override

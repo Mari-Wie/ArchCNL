@@ -9,6 +9,10 @@ import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
@@ -33,7 +37,7 @@ public class OutputView extends HorizontalLayout {
 
     public OutputView() {
         defaultQueryView = new QueryResultsUiComponent();
-        customQueryPresenter = new CustomQueryPresenter();
+        createQustomQueryPresenter();
         freeTextQueryView = new FreeTextQueryUiComponent();
         sideBarWidget =
                 new SideBarWidget(
@@ -52,25 +56,33 @@ public class OutputView extends HorizontalLayout {
         currentComponent = defaultQueryView;
     }
 
+    private void createQustomQueryPresenter() {
+        customQueryPresenter = new CustomQueryPresenter();
+        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
+        customQueryPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
+        customQueryPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
+        customQueryPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+        customQueryPresenter.addListener(
+                RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+    }
+
     private void registerEventListeners() {
         freeTextQueryView.addListener(
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
+
         freeTextQueryView.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         sideBarWidget.addListener(InputViewRequestedEvent.class, this::fireEvent);
         sideBarWidget.addListener(
                 ShowComponentRequestedEvent.class,
                 event -> switchToComponent(event.getComponent()));
-        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
     private void handleEvent(final PinQueryRequestedEvent event) {
         sideBarWidget.addPinnedCustomQueryTab(
                 event.getSource().getView(), event.getSource().getQueryName());
-        customQueryPresenter = new CustomQueryPresenter();
-        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
+        createQustomQueryPresenter();
         sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
     }
 
