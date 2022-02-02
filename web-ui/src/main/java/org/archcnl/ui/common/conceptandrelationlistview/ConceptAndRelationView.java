@@ -28,6 +28,7 @@ public class ConceptAndRelationView extends RulesOrMappingEditorView {
     private HierarchyView<Relation> hv2;
 
     public ConceptAndRelationView(boolean inputSide) {
+        setHeightFull();
         createConceptHierarchy();
         createRelationHierarchy();
     }
