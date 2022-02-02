@@ -36,15 +36,4 @@ public class GeneralInfoLayout extends VerticalLayout {
         layoutLabel.setClassName("label-title");
         add(layoutLabel, formLayout);
     }
-
-    public void updateInfo(
-            final int numVio,
-            final int numPackages,
-            final int numTypes,
-            final int numRelationships) {
-        numberOfViolationsValue.setText(String.valueOf(numVio));
-        numberOfPackagesValue.setText(String.valueOf(numPackages));
-        numberOfTypesValue.setText(String.valueOf(numTypes));
-        numberOfRelationshipsValue.setText(String.valueOf(numRelationships));
-    }
 }
