@@ -5,7 +5,10 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Actual
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Concept extends ActualObjectType {
+public abstract class Concept extends ActualObjectType implements ConceptAndRelation {
+
+    private String name;
+    private String description;
 
     protected Concept(String name, String description) {
         this.name = name;

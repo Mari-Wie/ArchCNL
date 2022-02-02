@@ -15,11 +15,13 @@ import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Relation extends ObjectType
-        implements FormattedAdocDomainObject, FormattedViewDomainObject {
+public abstract class Relation
+        implements ConceptAndRelation, FormattedAdocDomainObject, FormattedViewDomainObject {
 
     // The object types this relation relates to
     protected List<ActualObjectType> relatableObjectTypes;
+    private String name;
+    private String description;
 
     /**
      * Constructs a relation that can relate to the given object types
@@ -84,7 +86,7 @@ public abstract class Relation extends ObjectType
     }
 
     @Override
-    public boolean requiredEqualsOverride(Object obj) {
+    public boolean equals(Object obj) {
         if (obj instanceof Relation) {
             final Relation that = (Relation) obj;
             return Objects.equals(this.getName(), that.getName());
@@ -93,7 +95,7 @@ public abstract class Relation extends ObjectType
     }
 
     @Override
-    public int requiredHashCodeOverride() {
+    public int hashCode() {
         return Objects.hash(name);
     }
 
@@ -118,10 +120,5 @@ public abstract class Relation extends ObjectType
     public void setDescription(String description) {
         this.description = description;
         RulesConceptsAndRelations.getInstance().getRelationManager().relationHasBeenUpdated(this);
-    }
-
-    @Override
-    public String transformToSparqlQuery() {
-        return transformToAdoc();
     }
 }

@@ -14,16 +14,6 @@ public abstract class ObjectType implements FormattedDomainObject {
 
     public abstract String getName();
 
-    public abstract String getDescription();
-
-    public boolean isEditable() {
-        return editable;
-    }
-
-    protected String name;
-    protected String description;
-    protected boolean editable = false;
-
     public static ObjectType parseObject(String potentialObject) throws NoObjectTypeException {
         try {
             if (potentialObject.matches("'.*'")) {
