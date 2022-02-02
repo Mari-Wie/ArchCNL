@@ -13,7 +13,6 @@ import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.outputview.components.CustomQueryPresenter;
 import org.archcnl.ui.outputview.components.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.components.QueryResultsUiComponent;
@@ -80,7 +79,6 @@ public class OutputView extends HorizontalLayout {
                 event -> switchToComponent(event.getComponent()));
         customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
         customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
-
     }
 
     private void handleEvent(final PinQueryRequestedEvent event) {

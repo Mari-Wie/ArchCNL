@@ -18,10 +18,11 @@ import org.archcnl.domain.input.ProjectManager;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
+import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
-import org.archcnl.domain.output.repository.ResultRepositoryImpl;
+import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
 import org.archcnl.ui.events.ProjectOptionRequestedEvent;
@@ -34,7 +35,6 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
 import org.archcnl.ui.outputview.OutputView;
 import org.archcnl.ui.outputview.events.InputViewRequestedEvent;
-import org.archcnl.ui.events.EditOptionRequestedEvent;
 
 @Tag("MainPresenter")
 public class MainPresenter extends Component implements PropertyChangeListener {
