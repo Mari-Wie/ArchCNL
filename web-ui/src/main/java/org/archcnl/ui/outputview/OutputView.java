@@ -37,7 +37,7 @@ public class OutputView extends HorizontalLayout {
 
     public OutputView() {
         defaultQueryView = new QueryResultsUiComponent();
-        customQueryPresenter = new CustomQueryPresenter();
+        createQustomQueryPresenter();
         freeTextQueryView = new FreeTextQueryUiComponent();
         sideBarWidget =
                 new SideBarWidget(
@@ -77,8 +77,6 @@ public class OutputView extends HorizontalLayout {
         sideBarWidget.addListener(
                 ShowComponentRequestedEvent.class,
                 event -> switchToComponent(event.getComponent()));
-        customQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
-        customQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
     }
 
     private void handleEvent(final PinQueryRequestedEvent event) {
