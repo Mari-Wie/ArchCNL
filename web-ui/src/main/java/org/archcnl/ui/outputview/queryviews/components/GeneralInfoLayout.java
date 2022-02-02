@@ -4,9 +4,9 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-public class GeneralInfoLayout extends VerticalLayout {
+public class GeneralInfoLayout extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,11 +19,21 @@ public class GeneralInfoLayout extends VerticalLayout {
 
     public GeneralInfoLayout() {
         formLayout.setResponsiveSteps(new ResponsiveStep("0", 2, LabelsPosition.ASIDE));
-        formLayout.addFormItem(numberOfViolationsValue, "Number of Violations");
-        formLayout.addFormItem(numberOfPackagesValue, "Number of Packages");
-        formLayout.addFormItem(numberOfTypesValue, "Number of Types");
-        formLayout.addFormItem(numberOfRelationshipsValue, "Number of Relationships");
-        formLayout.getStyle().set("border", "1px solid black");
+        final String formItemCssClass = "general-info-box--item-lable";
+        final Label violationsNumber = new Label("Number of Violations");
+        violationsNumber.addClassName(formItemCssClass);
+        final Label packagesNumber = new Label("Number of Packages");
+        packagesNumber.addClassName(formItemCssClass);
+        final Label typesNumber = new Label("Number of Types");
+        typesNumber.addClassName(formItemCssClass);
+        final Label relationshipsNumber = new Label("Number of Relationships");
+        relationshipsNumber.addClassName(formItemCssClass);
+        formLayout.addFormItem(numberOfViolationsValue, violationsNumber);
+        formLayout.addFormItem(numberOfPackagesValue, packagesNumber);
+        formLayout.addFormItem(numberOfTypesValue, typesNumber);
+        formLayout.addFormItem(numberOfRelationshipsValue, relationshipsNumber);
+        formLayout.setClassName("general-info-box");
+        layoutLabel.setClassName("label-title");
         add(layoutLabel, formLayout);
     }
 
