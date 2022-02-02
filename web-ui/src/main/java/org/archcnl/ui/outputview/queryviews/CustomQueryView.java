@@ -118,14 +118,15 @@ public class CustomQueryView extends HorizontalLayout {
 
     private void initConceptAndRelationView() {
         conceptAndRelationView = new ConceptAndRelationView(false);
-        conceptAndRelationView.setWidth(100.0f - CONTENT_RATIO, Unit.PERCENTAGE);
+        conceptAndRelationView.setWidth(100.0f - CustomQueryView.CONTENT_RATIO, Unit.PERCENTAGE);
         conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(OutputViewRequestedEvent.class, this::fireEvent);
     }
 
     public void addVariableSelectionComponent() {
-        VariableSelectionComponent variableSelectionComponent = new VariableSelectionComponent();
+        final VariableSelectionComponent variableSelectionComponent =
+                new VariableSelectionComponent();
         addVariableSelectionComponentsListeners(variableSelectionComponent);
         select.add(variableSelectionComponent);
     }
@@ -150,11 +151,11 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     public void removeVariableSelectionComponent(
-            VariableSelectionComponent variableSelectionComponent) {
+            final VariableSelectionComponent variableSelectionComponent) {
         select.remove(variableSelectionComponent);
     }
 
-    public void setQueryTextArea(String queryText) {
+    public void setQueryTextArea(final String queryText) {
         queryTextArea.setVisible(true);
         queryTextArea.setValue(queryText);
     }
@@ -167,20 +168,20 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     public boolean areAtleastTwoVariableSelectionComponentsEmpty() {
-        List<VariableSelectionComponent> components =
+        final List<VariableSelectionComponent> components =
                 select.getChildren()
                         .filter(VariableSelectionComponent.class::isInstance)
                         .map(VariableSelectionComponent.class::cast)
                         .collect(Collectors.toList());
-        long componentsCount = components.stream().count();
-        long nonEmptyComponentsCount =
+        final long componentsCount = components.stream().count();
+        final long nonEmptyComponentsCount =
                 components.stream()
                         .filter(component -> component.getOptionalValue().isPresent())
                         .count();
         return componentsCount - nonEmptyComponentsCount >= 2;
     }
 
-    public void setPinButtonVisible(boolean visible) {
+    public void setPinButtonVisible(final boolean visible) {
         pinButton.setVisible(visible);
     }
 
