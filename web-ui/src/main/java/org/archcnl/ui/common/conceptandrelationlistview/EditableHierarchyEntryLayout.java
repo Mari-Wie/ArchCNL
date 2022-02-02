@@ -4,10 +4,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.ConceptAndRelation;
 import org.archcnl.ui.events.EditorRequestedEvent;
 
-public class EditableHierarchyEntryLayout<T extends ObjectType> extends HierarchyEntryLayout<T> {
+public class EditableHierarchyEntryLayout<T extends ConceptAndRelation>
+        extends HierarchyEntryLayout<T> {
 
     private Button editButton;
     private Button deleteButton;

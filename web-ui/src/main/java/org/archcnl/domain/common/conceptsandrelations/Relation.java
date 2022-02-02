@@ -117,6 +117,11 @@ public abstract class Relation
         return description;
     }
 
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
     public void setDescription(String description) {
         this.description = description;
         RulesConceptsAndRelations.getInstance().getRelationManager().relationHasBeenUpdated(this);

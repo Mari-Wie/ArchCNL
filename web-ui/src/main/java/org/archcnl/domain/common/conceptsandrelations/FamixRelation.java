@@ -1,9 +1,10 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.List;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 
-public class FamixRelation extends Relation {
+public class FamixRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "famix";
 
@@ -20,5 +21,10 @@ public class FamixRelation extends Relation {
     @Override
     public String transformToAdoc() {
         return RELATION_TYPE + ":" + getName();
+    }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
     }
 }

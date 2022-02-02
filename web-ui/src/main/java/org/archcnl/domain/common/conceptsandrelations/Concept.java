@@ -50,6 +50,11 @@ public abstract class Concept extends ActualObjectType implements ConceptAndRela
         return description;
     }
 
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
     public void setDescription(String description) {
         this.description = description;
         RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);

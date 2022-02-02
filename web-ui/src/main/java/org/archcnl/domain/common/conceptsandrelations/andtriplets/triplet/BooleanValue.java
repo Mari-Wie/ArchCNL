@@ -30,11 +30,6 @@ public class BooleanValue extends ActualObjectType {
     }
 
     @Override
-    public String getDescription() {
-        return "Generic Boolean Value";
-    }
-
-    @Override
     public String transformToGui() {
         return transformToAdoc();
     }

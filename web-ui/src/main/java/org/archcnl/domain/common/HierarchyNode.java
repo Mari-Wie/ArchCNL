@@ -2,9 +2,9 @@ package org.archcnl.domain.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.ConceptAndRelation;
 
-public class HierarchyNode<T extends ObjectType> {
+public class HierarchyNode<T extends ConceptAndRelation> {
     private T entry;
     private String text;
     private List<HierarchyNode<T>> children;

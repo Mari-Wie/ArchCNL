@@ -53,4 +53,9 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
     public String transformToAdoc() {
         return RELATION_TYPE + ":" + getRealName();
     }
+
+    @Override
+    public String transformToSparqlQuery() {
+        return transformToAdoc();
+    }
 }

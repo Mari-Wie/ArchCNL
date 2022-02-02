@@ -7,9 +7,9 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.ConceptAndRelation;
 
-public class HierarchyEntryLayout<T extends ObjectType> extends HorizontalLayout {
+public class HierarchyEntryLayout<T extends ConceptAndRelation> extends HorizontalLayout {
 
     private static final long serialVersionUID = 2L;
     private HierarchyNode<T> entry;

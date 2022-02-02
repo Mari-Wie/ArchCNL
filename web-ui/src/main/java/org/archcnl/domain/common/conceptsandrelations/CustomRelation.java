@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
-public class CustomRelation extends Relation {
+public class CustomRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "architecture";
 
@@ -19,7 +20,6 @@ public class CustomRelation extends Relation {
     public CustomRelation(
             String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
-        editable = true;
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
@@ -60,5 +60,10 @@ public class CustomRelation extends Relation {
     @Override
     public String transformToAdoc() {
         return RELATION_TYPE + ":" + getName();
+    }
+
+    @Override
+    public boolean isEditable() {
+        return true;
     }
 }

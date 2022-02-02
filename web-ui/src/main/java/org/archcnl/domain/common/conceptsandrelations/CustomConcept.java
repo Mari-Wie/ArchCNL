@@ -12,7 +12,6 @@ public class CustomConcept extends Concept {
 
     public CustomConcept(String name, String description) {
         super(name, description);
-        editable = true;
     }
 
     public void setMapping(ConceptMapping mapping) throws UnrelatedMappingException {
@@ -31,5 +30,10 @@ public class CustomConcept extends Concept {
     @Override
     protected String getConceptType() {
         return CONCEPT_TYPE;
+    }
+
+    @Override
+    public boolean isEditable() {
+        return true;
     }
 }

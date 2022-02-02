@@ -2,9 +2,9 @@ package org.archcnl.domain.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.ConceptAndRelation;
 
-public class HierarchyManager<T extends ObjectType> {
+public class HierarchyManager<T extends ConceptAndRelation> {
 
     List<HierarchyNode<T>> hierarchy_roots;
 
