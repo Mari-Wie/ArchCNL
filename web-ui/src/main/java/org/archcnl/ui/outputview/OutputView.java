@@ -23,7 +23,8 @@ import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
-import org.archcnl.ui.outputview.queryviews.events.PinQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.SideBarWidget;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
@@ -112,7 +113,7 @@ public class OutputView extends HorizontalLayout {
 
     private CustomQueryPresenter createCustomQueryPresenter() {
         CustomQueryPresenter newCustomQueryPresenter = new CustomQueryPresenter();
-        newCustomQueryPresenter.addListener(PinQueryRequestedEvent.class, this::handleEvent);
+        newCustomQueryPresenter.addListener(PinCustomQueryRequestedEvent.class, this::handleEvent);
         newCustomQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
         newCustomQueryPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
@@ -137,21 +138,22 @@ public class OutputView extends HorizontalLayout {
                 CustomQueryInsertionRequestedEvent.class,
                 e -> this.insertCustomQueryIntoFreeTextQuery());
         newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
-        newComponent.addListener(PinQueryRequestedEvent.class, this::handleEvent);
+        newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
         return newComponent;
     }
 
-    private void handleEvent(PinQueryRequestedEvent event) {
-        sideBarWidget.addPinnedQueryTab(event.getLinkedComponent(), event.getQueryName());
-        if (event.getSource() instanceof CustomQueryPresenter) {
-            pinnedCustomQueries.add(customQueryPresenter);
-            customQueryPresenter = createCustomQueryPresenter();
-            sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
-        } else {
-            pinnedFreeTextQueries.add(freeTextQueryView);
-            freeTextQueryView = createFreeTextQueryView(QueryUtils.getDefaultQuery());
-            sideBarWidget.updateFreeTextQueryTab(freeTextQueryView);
-        }
+    private void handleEvent(PinCustomQueryRequestedEvent event) {
+        sideBarWidget.addPinnedQueryTab(event.getLinkedView(), event.getQueryName());
+        pinnedCustomQueries.add(customQueryPresenter);
+        customQueryPresenter = createCustomQueryPresenter();
+        sideBarWidget.updateCustomQueryTab(customQueryPresenter.getView());
+    }
+
+    private void handleEvent(PinFreeTextQueryRequestedEvent event) {
+        sideBarWidget.addPinnedQueryTab(event.getSource(), event.getQueryName());
+        pinnedFreeTextQueries.add(freeTextQueryView);
+        freeTextQueryView = createFreeTextQueryView(QueryUtils.getDefaultQuery());
+        sideBarWidget.updateFreeTextQueryTab(freeTextQueryView);
     }
 
     private void handleEvent(final RunQueryRequestedEvent event) {

@@ -27,8 +27,8 @@ import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
-import org.archcnl.ui.outputview.queryviews.events.PinQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.UpdateQueryTextButtonPressedEvent;
@@ -80,7 +80,7 @@ public class CustomQueryPresenter extends Component {
                     view.setQueryName(queryName);
                     // TODO: Allow pinning after implementing cloning
                     view.setPinButtonVisible(false);
-                    fireEvent(new PinQueryRequestedEvent(this, true, getView(), queryName));
+                    fireEvent(new PinCustomQueryRequestedEvent(this, true, getView(), queryName));
                 });
 
         wherePresenter.addListener(

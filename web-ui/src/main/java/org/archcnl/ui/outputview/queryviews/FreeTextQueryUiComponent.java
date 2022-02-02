@@ -10,7 +10,7 @@ import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
-import org.archcnl.ui.outputview.queryviews.events.PinQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
 
 public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
@@ -41,7 +41,8 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                         new Icon(VaadinIcon.PIN),
                         click -> {
                             pinButton.setVisible(false);
-                            fireEvent(new PinQueryRequestedEvent(this, true, this, getQueryName()));
+                            fireEvent(
+                                    new PinFreeTextQueryRequestedEvent(this, true, getQueryName()));
                         });
         topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
