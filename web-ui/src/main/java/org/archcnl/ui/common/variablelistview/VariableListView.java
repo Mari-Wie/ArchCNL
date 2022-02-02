@@ -21,7 +21,7 @@ public class VariableListView extends VerticalLayout {
         content.getStyle().set("overflow-x", "auto");
     }
 
-    public void showVariableList(List<Variable> variables) {
+    public void showVariableList(final List<Variable> variables) {
         content.removeAll();
         if (getComponentCount() == 0) {
             addBasicView();
@@ -29,8 +29,10 @@ public class VariableListView extends VerticalLayout {
         variables.forEach(this::addVariableView);
     }
 
-    private void addVariableView(Variable variable) {
-        content.add(createVariableCard(variable));
+    private void addVariableView(final Variable variable) {
+        final Div createVariableCard = createVariableCard(variable);
+        createVariableCard.setClassName("variable-card");
+        content.add(createVariableCard);
     }
 
     private void addBasicView() {
@@ -38,11 +40,11 @@ public class VariableListView extends VerticalLayout {
         add(content);
     }
 
-    private Div createVariableCard(Variable variable) {
-        Div card = new Div();
+    private Div createVariableCard(final Variable variable) {
+        final Div card = new Div();
         card.add(new Text(variable.getName()));
         card.getStyle().set("border", "1px solid black");
-        DragSource<Div> cardDragSource = DragSource.configure(card);
+        final DragSource<Div> cardDragSource = DragSource.configure(card);
         cardDragSource.setDragData(variable);
         cardDragSource.setDraggable(true);
         return card;

@@ -11,8 +11,8 @@ public class SideBarTab extends Tab {
     private static final long serialVersionUID = 8246935861159358702L;
     private Component linkedComponent;
 
-    public SideBarTab(String text, VaadinIcon icon, Component linkedComponent) {
-        super(new Icon(icon), new Span(text));
+    public SideBarTab(final Span text, final VaadinIcon icon, final Component linkedComponent) {
+        super(new Icon(icon), text);
         this.linkedComponent = linkedComponent;
     }
 
@@ -20,7 +20,7 @@ public class SideBarTab extends Tab {
         return linkedComponent;
     }
 
-    public void setLinkedComponent(Component component) {
+    public void setLinkedComponent(final Component component) {
         this.linkedComponent = component;
     }
 }

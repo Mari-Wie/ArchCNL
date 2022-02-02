@@ -18,11 +18,13 @@ public class CreateNewLayout extends VerticalLayout {
             final boolean inputSide) {
         final Label archRulesLabel = new Label(labelText);
         final Button createNewRuleButton = new Button(buttonText, clickListener);
-        HorizontalLayout buttonRow = new HorizontalLayout(archRulesLabel);
+        final HorizontalLayout buttonRow = new HorizontalLayout(archRulesLabel);
+        buttonRow.setClassName("card-title-box");
+        archRulesLabel.setClassName("card-title-box--title");
+        createNewRuleButton.setClassName("card-title-box--btn");
         if (inputSide) {
             buttonRow.add(createNewRuleButton);
         }
         add(buttonRow);
-        getStyle().set("border", "1px solid black");
     }
 }

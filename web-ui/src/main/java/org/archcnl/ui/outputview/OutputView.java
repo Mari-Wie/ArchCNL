@@ -104,6 +104,7 @@ public class OutputView extends HorizontalLayout {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         sideBarWidget.setWidth(15, Unit.PERCENTAGE);
+        sideBarWidget.addClassName("side-bar");
         currentComponent = defaultQueryView;
     }
 
@@ -145,17 +146,17 @@ public class OutputView extends HorizontalLayout {
         }
     }
 
-    private void handleEvent(RunQueryRequestedEvent event) {
-        Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
+    private void handleEvent(final RunQueryRequestedEvent event) {
+        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getGridView().update(result);
     }
 
-    private void handleEvent(FreeTextRunButtonPressedEvent event) {
-        Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
+    private void handleEvent(final FreeTextRunButtonPressedEvent event) {
+        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getSource().update(result);
     }
 
-    private void switchToComponent(Component component) {
+    private void switchToComponent(final Component component) {
         replace(currentComponent, component);
         currentComponent = component;
     }
@@ -165,11 +166,11 @@ public class OutputView extends HorizontalLayout {
         freeTextQueryView.setQueryText(customQuery);
     }
 
-    public void displayResult(Optional<Result> result) {
+    public void displayResult(final Optional<Result> result) {
         defaultQueryView.updateGridView(result);
     }
 
-    public void setResultRepository(ResultRepository repository) {
+    public void setResultRepository(final ResultRepository repository) {
         resultRepository = repository;
     }
 

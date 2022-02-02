@@ -1,0 +1,7 @@
+:root {
+    --p-layout-x-small: 0.25rem;
+    --p-layout-small: 0.5rem;
+    --p-layout-medium: 1rem;
+    --p-layout-large: 2rem;
+    --p-layout-x-large: 3rem;
+}
