@@ -23,8 +23,7 @@ public abstract class AbstractQueryResultsComponent extends VerticalLayout {
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
         queryTextArea.setValue("QUERY UNINITIALIZED");
 
-        addAttachListener(
-                event -> queryTextArea.setValue(QueryUtils.getDefaultQuery().transformToGui()));
+        addAttachListener(event -> queryTextArea.setValue(QueryUtils.getDefaultQuery()));
     }
 
     @Override

@@ -1,0 +1,28 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
+PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
+PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
+SELECT DISTINCT ?Rule ?Violation ?StatementType ?Subject ?Predicate ?Object
+WHERE {
+GRAPH ?g
+  {
+    ?rule rdf:type conformance:ArchitectureRule.
+    ?rule conformance:hasRuleRepresentation ?Rule.
+    ?Violation conformance:violates ?rule.
+    ?proof conformance:proofs ?Violation.
+    OPTIONAL {
+      {?proof conformance:hasAssertedStatement ?aStatement.}
+      UNION
+      {?proof conformance:hasNotInferredStatement ?nStatement.}
+       FILTER(?statement in (?aStatement, ?nStatement))
+       BIND(IF(BOUND(?aStatement), "Asserted", "NotInferred") AS ?StatementType)
+      ?statement conformance:hasSubject ?Subject .
+      ?statement conformance:hasPredicate ?Predicate .
+      ?statement conformance:hasObject ?Object.
+    }
+  }
+}
+ORDER BY ?violation
