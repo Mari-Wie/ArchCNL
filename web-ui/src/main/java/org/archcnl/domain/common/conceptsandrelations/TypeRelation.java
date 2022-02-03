@@ -7,10 +7,11 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 public class TypeRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "rdf";
+    private static final TypeRelation typeRelation = new TypeRelation("is-of-type", "type", "");
 
     private String realName;
 
-    public TypeRelation(String name, String realName, String description) {
+    private TypeRelation(String name, String realName, String description) {
         super(name, description, new LinkedList<>());
         this.realName = realName;
     }
@@ -37,5 +38,9 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
     @Override
     public String transformToSparqlQuery() {
         return transformToAdoc();
+    }
+
+    public static TypeRelation getTyperelation() {
+        return typeRelation;
     }
 }

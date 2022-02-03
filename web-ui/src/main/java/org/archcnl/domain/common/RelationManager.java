@@ -151,11 +151,10 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeTypeRelation() {
-        addToDefault(
-                new TypeRelation(
-                        "is-of-type",
-                        "type",
-                        "This relation is used to state that the subject is an instance of the class stated in the object."));
+        TypeRelation typeRelation = TypeRelation.getTyperelation();
+        typeRelation.setDescription(
+                "This relation is used to state that the subject is an instance of the class stated in the object.");
+        addToDefault(typeRelation);
     }
 
     private void initializeStringRelations() {

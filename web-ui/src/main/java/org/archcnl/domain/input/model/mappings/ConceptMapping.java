@@ -18,8 +18,7 @@ public class ConceptMapping extends Mapping {
             final List<AndTriplets> whenTriplets,
             final CustomConcept thisConcept) {
         super(whenTriplets);
-        thenTriplet =
-                new Triplet(thenVariable, new TypeRelation("is-of-type", "type", ""), thisConcept);
+        thenTriplet = new Triplet(thenVariable, TypeRelation.getTyperelation(), thisConcept);
     }
 
     public void updateThenTriplet(final Variable subject) throws UnsupportedObjectTypeInTriplet {
