@@ -5,7 +5,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Actual
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
-public abstract class Concept extends ActualObjectType implements ConceptAndRelation {
+public abstract class Concept extends ActualObjectType implements HierarchyObject {
 
     private String name;
     private String description;
