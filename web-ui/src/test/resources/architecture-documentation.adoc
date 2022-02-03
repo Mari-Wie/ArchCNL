@@ -1,22 +1,8 @@
-== Building Block View
-
-This section describes the PlantUML Plugin modules which you will also find in the
-Java package structure.
-
-=== Level 1
-
-The following UML package diagram shows the main building blocks of the software system...
-
-
-==== Architecture Rules
 [role="rule"]
 Every Aggregate must resideIn a DomainRing.
 
 [role="rule"]
 No Aggregate can use an ApplicationService.
-
-
-==== Mapping for Concepts
 
 [role="description"]
 isAggregate: Every class whose name ends with Aggregate is an Aggregate.
@@ -30,6 +16,9 @@ isApplicationService: (?class rdf:type famix:FamixClass) (?package rdf:type fami
 isDomainRing: (?package rdf:type famix:Namespace) (?package famix:hasName ?name) regex(?name, 'domain') -> (?package rdf:type architecture:DomainRing)
 
 [role="mapping"]
+isEmptyWhenConcept: -> (?var rdf:type architecture:EmptyWhenConcept)
+
+[role="mapping"]
 resideInMapping: (?class rdf:type famix:FamixClass) (?package rdf:type famix:Namespace) (?package famix:namespaceContains ?class) -> (?class architecture:resideIn ?package)
 
 [role="description"]
@@ -41,9 +30,6 @@ useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClas
 useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
 
 [role="mapping"]
-isEmptyWhenConcept: -> (?var rdf:type architecture:EmptyWhenConcept)
-
-[role="mapping"]
 emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'test string')
 
 [role="mapping"]
@@ -51,3 +37,35 @@ emptyWhenRelationBooleanMapping: -> (?var architecture:emptyWhenRelationBoolean 
 
 [role="mapping"]
 emptyWhenRelationVariableMapping: -> (?var architecture:emptyWhenRelationVariable ?test)
+
+[role="customQuery"]
+classes: (SELECT ?class ?name)(WHERE (?class rdf:type famix:FamixClass)(?class famix:hasName ?name))
+
+[role="customQuery"]
+Pinned Custom Query: (SELECT ?test1 ?test2)(WHERE )
+
+[role="customQuery"]
+testQuery: (SELECT)(WHERE )
+
+[role="freeTextQuery"]
+default FreeTextQueryTab: (21)(A random test string.)
+
+[role="freeTextQuery"]
+testQuery: (550)(PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
+PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
+PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
+PREFIX main: <http://arch-ont.org/ontologies/main.owl#>
+SELECT ?class
+WHERE {
+  GRAPH ?g {
+    ?class rdf:type famix:FamixClass.
+  }
+})
+
+[role="freeTextQuery"]
+emptyTestQuery: (0)()
+

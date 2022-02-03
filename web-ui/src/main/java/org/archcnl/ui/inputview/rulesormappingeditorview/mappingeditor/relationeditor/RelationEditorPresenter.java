@@ -3,12 +3,12 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relation
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import org.archcnl.domain.common.ActualObjectType;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.ObjectType;
-import org.archcnl.domain.common.Triplet;
-import org.archcnl.domain.common.TripletFactory;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
@@ -124,7 +124,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 if (!doesRelationExist(relation.get())) {
                     RulesConceptsAndRelations.getInstance()
                             .getRelationManager()
-                            .addRelation(relation.get());
+                            .addToParent(relation.get(), "Custom Relations");
                 }
 
                 fireEvent(new RuleEditorRequestedEvent(this, true));

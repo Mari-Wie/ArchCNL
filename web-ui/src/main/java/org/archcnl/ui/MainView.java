@@ -118,8 +118,10 @@ public class MainView extends VerticalLayout {
 
     private HorizontalLayout createFooter() {
         final HorizontalLayout footerHbox = new HorizontalLayout();
+        footerHbox.setClassName("footer");
 
         final Label copyright = new Label("Developed at the University of Hamburg.");
+        copyright.setClassName("footer__text");
 
         final HorizontalLayout buttonHBox = new HorizontalLayout();
         final Button contactButton =

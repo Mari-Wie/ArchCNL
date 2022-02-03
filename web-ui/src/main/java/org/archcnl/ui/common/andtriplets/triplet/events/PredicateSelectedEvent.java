@@ -2,8 +2,8 @@ package org.archcnl.ui.common.andtriplets.triplet.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import java.util.Optional;
-import org.archcnl.domain.common.Relation;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.andtriplets.triplet.ObjectView;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateComponent;
 

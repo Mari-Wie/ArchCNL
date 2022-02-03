@@ -1,7 +1,7 @@
 package org.archcnl.ui.common.andtriplets.triplet;
 
 import com.vaadin.flow.component.combobox.ComboBox;
-import org.archcnl.domain.common.BooleanValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 
 public class BooleanSelectionComponent extends ComboBox<String> {
 

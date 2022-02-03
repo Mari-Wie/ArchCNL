@@ -1,7 +1,7 @@
 vaadin-button {
-  background-color: #76d0f1;
+  background-color: red;
   font-family: Montserrat;
-  color: Black;
+  color: rgb(255, 255, 255);
   margin-bottom: 5px;
   margin-top: 5px;
   margin-left: 2px;

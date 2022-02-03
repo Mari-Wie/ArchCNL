@@ -3,7 +3,7 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.events;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import java.util.Optional;
-import org.archcnl.domain.common.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 
 public class ConceptEditorRequestedEvent extends ComponentEvent<Component> {
 

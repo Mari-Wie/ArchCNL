@@ -1,5 +1,12 @@
 package org.archcnl.domain.common;
 
+import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;

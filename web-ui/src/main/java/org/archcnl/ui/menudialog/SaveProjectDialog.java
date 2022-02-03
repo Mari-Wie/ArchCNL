@@ -1,24 +1,34 @@
 package org.archcnl.ui.menudialog;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.shared.Registration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
-import org.archcnl.domain.input.ProjectManager;
+import org.archcnl.domain.common.ProjectManager;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
+import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
 
 public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
 
     private static final long serialVersionUID = 6538573408820948553L;
     private Button confirmButton;
 
-    public SaveProjectDialog() {
+    public SaveProjectDialog(
+            ProjectManager projectManager,
+            List<Query> customQueries,
+            List<FreeTextQuery> freeTextQueries) {
         setDraggable(true);
 
         Text title = new Text("Save project to another location)");
@@ -64,8 +74,10 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
                                         fileName = fileName + ".adoc";
                                     }
                                     Path path = Paths.get(file.get().getAbsolutePath(), fileName);
-                                    ProjectManager.getInstance().saveProject(path.toFile());
+                                    projectManager.saveProject(
+                                            path.toFile(), customQueries, freeTextQueries);
                                     close();
+                                    fireEvent(new ProjectSavedEvent(this, true));
                                 } catch (IOException e) {
                                     fileSelectionComponent.showErrorMessage(
                                             "File could not be written.");
@@ -84,5 +96,11 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
     @Override
     public void setConfirmButtonEnabled(boolean enabled) {
         confirmButton.setEnabled(enabled);
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

@@ -3,124 +3,121 @@ package org.archcnl.ui.common.conceptandrelationlistview;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.LinkedList;
-import java.util.List;
-import org.archcnl.domain.common.Concept;
-import org.archcnl.domain.common.Relation;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
-import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.ConceptListEntry;
-import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.CreateNewLayout;
-import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.MappingListEntry;
-import org.archcnl.ui.common.conceptandrelationlistview.mappinglistlayout.RelationListEntry;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.EditorRequestedEvent;
+import org.archcnl.ui.events.GridUpdateRequestedEvent;
+import org.archcnl.ui.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 
-public class ConceptAndRelationView extends VerticalLayout implements PropertyChangeListener {
+public class ConceptAndRelationView extends RulesOrMappingEditorView {
 
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_EXPANSION_DEPTH = 10;
 
-    private boolean inputSide;
-    private CreateNewLayout createNewConceptLayout;
-    private CreateNewLayout createNewRelationLayout;
-    private MappingListLayout conceptTreeGrid;
-    private MappingListLayout relationTreeGrid;
+    private HierarchyView<Concept> hv1;
+    private HierarchyView<Relation> hv2;
 
     public ConceptAndRelationView(boolean inputSide) {
-        this.inputSide = inputSide;
-
-        getStyle().set("border", "1px solid black");
-        createNewConceptLayout =
-                new CreateNewLayout(
-                        "Concepts",
-                        "Create new concept",
-                        e -> fireEvent(new ConceptEditorRequestedEvent(this, true)),
-                        inputSide);
-        createNewRelationLayout =
-                new CreateNewLayout(
-                        "Relations",
-                        "Create new relation",
-                        e -> fireEvent(new RelationEditorRequestedEvent(this, true)),
-                        inputSide);
-        RulesConceptsAndRelations.getInstance().getConceptManager().addPropertyChangeListener(this);
-        RulesConceptsAndRelations.getInstance()
-                .getRelationManager()
-                .addPropertyChangeListener(this);
-        createNewConceptLayout.setHeight(inputSide ? 46 : 49, Unit.PERCENTAGE);
-        createNewRelationLayout.setHeight(inputSide ? 46 : 49, Unit.PERCENTAGE);
-        updateConceptView();
-        updateRelationView();
-
-        add(createNewConceptLayout);
-        add(createNewRelationLayout);
-
-        if (inputSide) {
-            add(
-                    new Button(
-                            "Check for violations",
-                            click -> fireEvent(new OutputViewRequestedEvent(this, true))));
-        }
+        setHeightFull();
+        createConceptHierarchy();
+        createRelationHierarchy();
     }
 
-    private void updateConceptView() {
-        List<Concept> concepts;
-        if (inputSide) {
-            concepts =
-                    RulesConceptsAndRelations.getInstance().getConceptManager().getInputConcepts();
-        } else {
-            concepts =
-                    RulesConceptsAndRelations.getInstance().getConceptManager().getOutputConcepts();
-        }
-        List<MappingListEntry> conceptData = new LinkedList<>();
-        ConceptListEntry defaultConceptsStub = new ConceptListEntry("Default Concepts", concepts);
-        conceptData.add(defaultConceptsStub);
-        if (conceptTreeGrid != null) {
-            createNewConceptLayout.remove(conceptTreeGrid);
-        }
-        conceptTreeGrid = new MappingListLayout(conceptData, inputSide);
-        conceptTreeGrid.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
-        conceptTreeGrid.expandRecursively(
-                conceptData, ConceptAndRelationView.DEFAULT_EXPANSION_DEPTH);
-        createNewConceptLayout.add(conceptTreeGrid);
+    private void createConceptHierarchy() {
+        hv1 = new EditableHierarchyView<Concept>();
+        hv1.setHeight(50, Unit.PERCENTAGE);
+
+        hv1.addListener(
+                GridUpdateRequestedEvent.class,
+                e -> {
+                    requestConceptGridUpdate();
+                });
+        hv1.addListener(
+                HierarchySwapRequestedEvent.class,
+                e -> {
+                    requestConceptSwap(e);
+                });
+
+        hv1.createCreateNewLayout(
+                "Concepts",
+                "Create New Concept",
+                e -> {
+                    fireEvent(new ConceptEditorRequestedEvent(this, true));
+                });
+
+        // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
+        // part of concepts but are mapped to each other externally
+        hv1.addListener(
+                EditorRequestedEvent.class,
+                e -> {
+                    fireEvent(
+                            new ConceptEditorRequestedEvent(
+                                    this, true, (CustomConcept) e.getSource().get()));
+                });
+        add(hv1);
     }
 
-    private void updateRelationView() {
-        List<Relation> relations;
-        if (inputSide) {
-            relations =
-                    RulesConceptsAndRelations.getInstance()
-                            .getRelationManager()
-                            .getInputRelations();
-        } else {
-            relations =
-                    RulesConceptsAndRelations.getInstance()
-                            .getRelationManager()
-                            .getOutputRelations();
-        }
-        List<MappingListEntry> relationData = new LinkedList<>();
-        RelationListEntry defaultRelationsStub =
-                new RelationListEntry("Default Relations", relations);
-        relationData.add(defaultRelationsStub);
-        if (relationTreeGrid != null) {
-            createNewRelationLayout.remove(relationTreeGrid);
-        }
-        relationTreeGrid = new MappingListLayout(relationData, inputSide);
-        relationTreeGrid.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
-        relationTreeGrid.expandRecursively(
-                relationData, ConceptAndRelationView.DEFAULT_EXPANSION_DEPTH);
-        createNewRelationLayout.add(relationTreeGrid);
+    private void createRelationHierarchy() {
+        hv2 = new EditableHierarchyView<Relation>();
+        hv2.setHeight(50, Unit.PERCENTAGE);
+        hv2.addListener(
+                GridUpdateRequestedEvent.class,
+                e -> {
+                    requestRelationGridUpdate();
+                });
+        hv2.addListener(
+                HierarchySwapRequestedEvent.class,
+                e -> {
+                    requestRelationSwap(e);
+                });
+        hv2.createCreateNewLayout(
+                "Relations",
+                "Create New Relation",
+                e -> {
+                    fireEvent(new RelationEditorRequestedEvent(this, true));
+                });
+
+        // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
+        // part of concepts but are mapped to each other externally
+        hv2.addListener(
+                EditorRequestedEvent.class,
+                e -> {
+                    fireEvent(
+                            new RelationEditorRequestedEvent(
+                                    this, true, (CustomRelation) e.getSource().get()));
+                });
+        add(hv2);
     }
 
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        updateConceptView();
-        updateRelationView();
+    public void update() {
+        hv1.requestGridUpdate();
+        hv2.requestGridUpdate();
+    }
+
+    private void requestConceptGridUpdate() {
+        fireEvent(new ConceptGridUpdateRequestedEvent(hv1, true));
+    }
+
+    private void requestRelationGridUpdate() {
+        fireEvent(new RelationGridUpdateRequestedEvent(hv2, true));
+    }
+
+    private void requestConceptSwap(HierarchySwapRequestedEvent e) {
+        fireEvent(new ConceptHierarchySwapRequestedEvent(e));
+    }
+
+    private void requestRelationSwap(HierarchySwapRequestedEvent e) {
+        fireEvent(new RelationHierarchySwapRequestedEvent(e));
     }
 
     @Override
