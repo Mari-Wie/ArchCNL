@@ -1,7 +1,5 @@
 package org.archcnl.domain.common;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -27,7 +25,6 @@ import org.archcnl.domain.input.model.mappings.RelationMapping;
 public class RelationManager extends HierarchyManager<Relation> {
 
     private List<Relation> relations;
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public RelationManager(final ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
@@ -48,17 +45,12 @@ public class RelationManager extends HierarchyManager<Relation> {
             throw new RelationAlreadyExistsException(relation.getName());
         }
         relations.add(relation);
-        propertyChangeSupport.firePropertyChange("newRelation", null, relation);
     }
 
     public void add(Relation relation, HierarchyNode<Relation> parent)
             throws RelationAlreadyExistsException {
         addRelation(relation);
         parent.add(relation);
-    }
-
-    public void relationHasBeenUpdated(final Relation relation) {
-        propertyChangeSupport.firePropertyChange("relationUpdated", null, relation);
     }
 
     public void addToParent(Relation relation, HierarchyNode<Relation> parent)
@@ -490,9 +482,5 @@ public class RelationManager extends HierarchyManager<Relation> {
                 .filter(CustomRelation.class::isInstance)
                 .map(CustomRelation.class::cast)
                 .collect(Collectors.toList());
-    }
-
-    public void addPropertyChangeListener(final PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 }
