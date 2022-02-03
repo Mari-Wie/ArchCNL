@@ -168,7 +168,7 @@ public class MappingExtractor {
             whenTriplets.add(andTriplets);
             final Triplet thenTriplet = parseThenPart(thenPart, relationManager, conceptManager);
             return new RelationMapping(thenTriplet, whenTriplets);
-        } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
+        } catch (NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
     }

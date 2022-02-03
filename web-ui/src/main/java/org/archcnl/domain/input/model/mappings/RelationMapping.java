@@ -12,8 +12,7 @@ public class RelationMapping extends Mapping {
 
     private Triplet thenTriplet;
 
-    public RelationMapping(final Triplet thenTriplet, final List<AndTriplets> whenTriplets)
-            throws UnsupportedObjectTypeInTriplet {
+    public RelationMapping(final Triplet thenTriplet, final List<AndTriplets> whenTriplets) {
         super(whenTriplets);
         this.thenTriplet = thenTriplet;
     }
