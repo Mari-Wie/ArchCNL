@@ -44,10 +44,6 @@ public abstract class Relation
         }
     }
 
-    public List<ActualObjectType> getRelatableObjectTypes() {
-        return relatableObjectTypes;
-    }
-
     @Override
     public String getName() {
         return name;
