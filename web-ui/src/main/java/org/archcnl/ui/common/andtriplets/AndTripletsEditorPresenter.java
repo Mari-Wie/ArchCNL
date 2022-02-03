@@ -44,7 +44,17 @@ public class AndTripletsEditorPresenter extends Component {
     }
 
     public void showAndTriplets(AndTriplets andTriplets) {
-        showTriplets(andTriplets);
+        if (!andTriplets.getTriplets().isEmpty()) {
+            view.clearContent();
+            andTriplets
+                    .getTriplets()
+                    .forEach(
+                            triplet -> {
+                                TripletPresenter tripletPresenter = new TripletPresenter();
+                                view.addTripletView(prepareTripletView(tripletPresenter));
+                                tripletPresenter.showTriplet(triplet);
+                            });
+        }
     }
 
     private void addListeners() {
@@ -68,20 +78,6 @@ public class AndTripletsEditorPresenter extends Component {
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
         return new AndTriplets(triplets);
-    }
-
-    private void showTriplets(AndTriplets andTriplets) {
-        if (!andTriplets.getTriplets().isEmpty()) {
-            view.clearContent();
-            andTriplets
-                    .getTriplets()
-                    .forEach(
-                            triplet -> {
-                                TripletPresenter tripletPresenter = new TripletPresenter();
-                                view.addTripletView(prepareTripletView(tripletPresenter));
-                                tripletPresenter.showTriplet(triplet);
-                            });
-        }
     }
 
     public boolean hasIncompleteTriplets() {
