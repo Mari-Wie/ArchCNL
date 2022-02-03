@@ -99,7 +99,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 fireEvent(new RuleEditorRequestedEvent(this, true));
             } catch (UnrelatedMappingException | InvalidVariableNameException e) {
                 // not possible/fatal
-                throw new RuntimeException();
+                throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectErrorMessage("Setting a subject is required");
             }
