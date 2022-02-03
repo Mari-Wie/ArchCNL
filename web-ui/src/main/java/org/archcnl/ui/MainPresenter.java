@@ -14,7 +14,6 @@ import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
@@ -78,26 +77,19 @@ public class MainPresenter extends Component {
     }
 
     public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
-        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         updateHierarchies(conceptManager, event.getSource());
     }
 
     public void handleEvent(final RelationGridUpdateRequestedEvent event) {
-        RelationManager relationManager =
-                RulesConceptsAndRelations.getInstance().getRelationManager();
         updateHierarchies(relationManager, event.getSource());
     }
 
     public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
-        ConceptManager conceptManager = RulesConceptsAndRelations.getInstance().getConceptManager();
         conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(conceptManager, event.getSource());
     }
 
     public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
-
-        RelationManager relationManager =
-                RulesConceptsAndRelations.getInstance().getRelationManager();
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(relationManager, event.getSource());
     }
@@ -154,7 +146,7 @@ public class MainPresenter extends Component {
 
     private void runArchCnlToolchain(ArchitectureCheck check, String path) {
         try {
-            check.runToolchain(path);
+            check.runToolchain(path, ruleManager, conceptManager, relationManager);
         } catch (StardogException e) {
             view.showErrorMessage(
                     "An error occured while running the architecture check. Could not connect to the database.");
@@ -185,7 +177,11 @@ public class MainPresenter extends Component {
             case SAVE:
                 try {
                     projectManager.saveProject(
-                            outputView.getCustomQueries(), outputView.getFreeTextQueries());
+                            ruleManager,
+                            conceptManager,
+                            relationManager,
+                            outputView.getCustomQueries(),
+                            outputView.getFreeTextQueries());
                 } catch (final IOException e) {
                     new ConfirmDialog("Project file could not be written.").open();
                 }
