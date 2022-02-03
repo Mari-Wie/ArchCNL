@@ -1,7 +1,7 @@
 package org.archcnl.ui.common.andtriplets.triplet;
 
 import com.vaadin.flow.component.textfield.TextField;
-import org.archcnl.domain.common.StringValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 
 public class StringSelectionComponent extends TextField {
 

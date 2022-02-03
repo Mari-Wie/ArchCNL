@@ -1,22 +1,24 @@
 package org.archcnl.ui.menudialog;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.io.File;
 import java.util.Optional;
-import org.archcnl.domain.common.ArchitectureCheck;
+import org.archcnl.ui.menudialog.events.QuickOutputViewAccessRequestedEvent;
+import org.archcnl.ui.menudialog.events.RunToolchainRequestedEvent;
 
 public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog {
 
     private static final long serialVersionUID = 5511746171215269619L;
     private Button confirmButton;
-    private String selectedPath;
-    private boolean okButtonPressed = false;
 
-    public SelectDirectoryDialog(ArchitectureCheck check) {
+    public SelectDirectoryDialog() {
         setDraggable(true);
 
         Text title = new Text("Select project directory to check for architecture violations");
@@ -33,30 +35,37 @@ public class SelectDirectoryDialog extends Dialog implements FileSelectionDialog
                                 fileSelectionComponent.showErrorMessage(
                                         "Please select a directory.");
                             } else {
-                                selectedPath = file.get().getPath();
-                                okButtonPressed = true;
+                                fireEvent(
+                                        new RunToolchainRequestedEvent(
+                                                this, true, file.get().getPath()));
                                 close();
                             }
                         });
         confirmButton.setEnabled(false);
         Button cancelButton = new Button("Cancel", event -> close());
-        HorizontalLayout buttonRow = new HorizontalLayout(confirmButton, cancelButton);
+        Button quickOutputAccessButton =
+                new Button(
+                        "View queries without scan",
+                        event -> {
+                            fireEvent(new QuickOutputViewAccessRequestedEvent(this, true));
+                            close();
+                        });
+        HorizontalLayout buttonRow =
+                new HorizontalLayout(quickOutputAccessButton, confirmButton, cancelButton);
         buttonRow.setWidthFull();
         buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 
         add(title, fileSelectionComponent, buttonRow);
     }
 
-    public String getSelectedPath() {
-        return selectedPath;
-    }
-
-    public boolean isOkButtonPressed() {
-        return okButtonPressed;
-    }
-
     @Override
     public void setConfirmButtonEnabled(boolean enabled) {
         confirmButton.setEnabled(enabled);
+    }
+
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

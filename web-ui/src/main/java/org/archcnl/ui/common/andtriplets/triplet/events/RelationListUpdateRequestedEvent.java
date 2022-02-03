@@ -3,7 +3,7 @@ package org.archcnl.ui.common.andtriplets.triplet.events;
 import com.vaadin.flow.component.ComponentEvent;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.archcnl.domain.common.Relation;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateComponent;
 
 public class RelationListUpdateRequestedEvent extends ComponentEvent<PredicateComponent> {

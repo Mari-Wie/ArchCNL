@@ -1,18 +1,21 @@
 package org.archcnl.domain;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.archcnl.domain.common.AndTriplets;
-import org.archcnl.domain.common.BooleanValue;
-import org.archcnl.domain.common.CustomConcept;
-import org.archcnl.domain.common.CustomRelation;
-import org.archcnl.domain.common.StringValue;
-import org.archcnl.domain.common.Triplet;
-import org.archcnl.domain.common.TripletFactory;
-import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -25,6 +28,10 @@ import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
+import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.Query;
+import org.archcnl.domain.output.model.query.SelectClause;
+import org.archcnl.domain.output.model.query.WhereClause;
 
 public class TestUtils {
 
@@ -310,5 +317,79 @@ public class TestUtils {
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,
                     UnrelatedMappingException, RelationAlreadyExistsException {
         return TestUtils.prepareModel().getRelationManager().getCustomRelations();
+    }
+
+    public static List<Query> prepareCustomQueries()
+            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
+                    ConceptDoesNotExistException {
+        ConceptManager conceptManager = new ConceptManager();
+        RelationManager relationManager = new RelationManager(conceptManager);
+        Query query1 =
+                new Query(
+                        "classes",
+                        new SelectClause(
+                                new HashSet<Variable>(
+                                        Arrays.asList(
+                                                new Variable("class"), new Variable("name")))),
+                        new WhereClause(
+                                new AndTriplets(
+                                        new LinkedList<Triplet>(
+                                                Arrays.asList(
+                                                        TripletFactory.createTriplet(
+                                                                new Variable("class"),
+                                                                relationManager
+                                                                        .getRelationByName(
+                                                                                "is-of-type")
+                                                                        .get(),
+                                                                conceptManager
+                                                                        .getConceptByName(
+                                                                                "FamixClass")
+                                                                        .get()),
+                                                        TripletFactory.createTriplet(
+                                                                new Variable("class"),
+                                                                relationManager
+                                                                        .getRelationByName(
+                                                                                "hasName")
+                                                                        .get(),
+                                                                new Variable("name")))))));
+        Query query2 =
+                new Query(
+                        "Pinned Custom Query",
+                        new SelectClause(
+                                new HashSet<Variable>(
+                                        Arrays.asList(
+                                                new Variable("test1"), new Variable("test2")))),
+                        new WhereClause(new AndTriplets(new LinkedList<Triplet>())));
+        Query query3 =
+                new Query(
+                        "testQuery",
+                        new SelectClause(new HashSet<Variable>()),
+                        new WhereClause(new AndTriplets(new LinkedList<Triplet>())));
+
+        return new LinkedList<>(Arrays.asList(query1, query2, query3));
+    }
+
+    public static List<FreeTextQuery> prepareFreeTextQueries() {
+        FreeTextQuery query1 =
+                new FreeTextQuery("default FreeTextQueryTab", "A random test string.");
+        FreeTextQuery query2 =
+                new FreeTextQuery(
+                        "testQuery",
+                        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                                + "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
+                                + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                                + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n"
+                                + "PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>\n"
+                                + "PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>\n"
+                                + "PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>\n"
+                                + "PREFIX main: <http://arch-ont.org/ontologies/main.owl#>\n"
+                                + "SELECT ?class\n"
+                                + "WHERE {\n"
+                                + "  GRAPH ?g {\n"
+                                + "    ?class rdf:type famix:FamixClass.\n"
+                                + "  }\n"
+                                + "}");
+        FreeTextQuery query3 = new FreeTextQuery("emptyTestQuery", "");
+        return new LinkedList<>(Arrays.asList(query1, query2, query3));
     }
 }

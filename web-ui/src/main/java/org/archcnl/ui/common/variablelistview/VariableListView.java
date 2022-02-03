@@ -7,7 +7,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.List;
-import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
 public class VariableListView extends VerticalLayout {
 

@@ -49,8 +49,7 @@ public class InputView extends HorizontalLayout {
         rightHandSideLayout.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
         rightHandSideLayout.setHeight(100, Unit.PERCENTAGE);
 
-        rightHandSideLayout.addAndExpand(hierarchies);
-        rightHandSideLayout.add(but);
+        rightHandSideLayout.add(hierarchies, but);
     }
 
     public void changeCurrentlyShownView(final RulesOrMappingEditorView newView) {
