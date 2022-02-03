@@ -20,6 +20,10 @@ import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEv
 import org.archcnl.ui.common.andtriplets.triplet.TripletPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.TripletView;
 import org.archcnl.ui.common.andtriplets.triplet.events.AddTripletViewAfterButtonPressedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
@@ -37,9 +41,7 @@ public class AndTripletsEditorPresenter extends Component {
 
     public AndTripletsEditorPresenter(boolean inputSide) {
         this.inputSide = inputSide;
-        view =
-                new AndTripletsEditorView(
-                        prepareTripletView(new TripletPresenter(this.inputSide)), inputSide);
+        view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()), inputSide);
         addListeners();
     }
 
@@ -77,7 +79,7 @@ public class AndTripletsEditorPresenter extends Component {
                     .getTriplets()
                     .forEach(
                             triplet -> {
-                                TripletPresenter tripletPresenter = new TripletPresenter(inputSide);
+                                TripletPresenter tripletPresenter = new TripletPresenter();
                                 view.addTripletView(prepareTripletView(tripletPresenter));
                                 tripletPresenter.showTriplet(triplet);
                             });
@@ -112,11 +114,15 @@ public class AndTripletsEditorPresenter extends Component {
         tripletPresenter.addListener(
                 AddTripletViewAfterButtonPressedEvent.class,
                 event -> addNewTripletViewAfter(event.getSource()));
+
+        tripletPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
     }
 
     private void addNewTripletViewAfter(TripletView oldTripletView) {
-        view.addNewTripletViewAfter(
-                oldTripletView, prepareTripletView(new TripletPresenter(inputSide)));
+        view.addNewTripletViewAfter(oldTripletView, prepareTripletView(new TripletPresenter()));
     }
 
     private void deleteTripletView(TripletView tripletView) {

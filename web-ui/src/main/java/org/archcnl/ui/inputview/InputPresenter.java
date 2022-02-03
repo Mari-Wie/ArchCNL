@@ -7,6 +7,10 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
@@ -20,6 +24,7 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.ConceptEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
@@ -65,7 +70,7 @@ public class InputPresenter extends Component {
         } else {
             conceptEditorPresenter = new ConceptEditorPresenter();
         }
-        conceptEditorPresenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        addListenersToMappingEditor(conceptEditorPresenter);
         conceptEditorPresenter.addListener(ChangeConceptNameRequestedEvent.class, this::fireEvent);
         conceptEditorPresenter.addListener(AddCustomConceptRequestedEvent.class, this::fireEvent);
         view.changeCurrentlyShownView(conceptEditorPresenter.getMappingEditorView());
@@ -78,7 +83,7 @@ public class InputPresenter extends Component {
         } else {
             relationEditorPresenter = new RelationEditorPresenter();
         }
-        relationEditorPresenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        addListenersToMappingEditor(relationEditorPresenter);
         relationEditorPresenter.addListener(
                 ChangeRelationNameRequestedEvent.class, this::fireEvent);
         relationEditorPresenter.addListener(AddCustomRelationRequestedEvent.class, this::fireEvent);
@@ -100,6 +105,14 @@ public class InputPresenter extends Component {
 
     public void updateArchitectureRulesLayout(final List<ArchitectureRule> rules) {
         architectureRulesLayout.updateRules(rules);
+    }
+
+    private void addListenersToMappingEditor(MappingEditorPresenter presenter) {
+        presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        presenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        presenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        presenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        presenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
     }
 
     @Override

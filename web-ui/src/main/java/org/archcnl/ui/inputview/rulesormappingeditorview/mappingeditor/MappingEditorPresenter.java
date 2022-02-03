@@ -22,6 +22,10 @@ import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
@@ -115,6 +119,11 @@ public abstract class MappingEditorPresenter extends Component {
         andTripletsPresenter.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
+
+        andTripletsPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
     }
 
     private void addNewAndTripletsViewAfter(final AndTripletsEditorView oldAndTripletsView) {

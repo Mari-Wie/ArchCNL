@@ -18,6 +18,10 @@ import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
@@ -82,6 +86,17 @@ public class MainPresenter extends Component {
                 ChangeRelationNameRequestedEvent.class, e -> e.handleEvent(relationManager));
         inputPresenter.addListener(
                 AddCustomRelationRequestedEvent.class, e -> e.handleEvent(relationManager));
+        inputPresenter.addListener(
+                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
+        inputPresenter.addListener(
+                RelationListUpdateRequestedEvent.class,
+                event -> event.handleEvent(relationManager.getInputRelations()));
+
+        inputPresenter.addListener(
+                ConceptListUpdateRequestedEvent.class,
+                event -> event.handleEvent(conceptManager.getInputConcepts()));
+        inputPresenter.addListener(
+                ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
 
         outputView = new OutputView();
         outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
