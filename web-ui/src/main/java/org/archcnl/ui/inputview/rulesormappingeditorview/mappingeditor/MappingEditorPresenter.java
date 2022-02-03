@@ -32,7 +32,6 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.Ma
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDoneButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingNameFieldChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.MappingAlreadyExistsException;
 
 @Tag("Editor")
 public abstract class MappingEditorPresenter extends Component {
@@ -74,11 +73,11 @@ public abstract class MappingEditorPresenter extends Component {
     private void nameHasChanged(final MappingNameFieldChangedEvent event) {
         view.updateNameField(event.getNewName());
         view.updateNameFieldInThenTriplet(event.getNewName());
-        try {
-            updateMappingName(event.getNewName());
-        } catch (final MappingAlreadyExistsException e) {
-            view.showNameFieldErrorMessage("The name is already taken");
-        }
+        updateMappingName(event.getNewName());
+    }
+
+    public void showNameAlreadyTakenErrorMessage() {
+        view.showNameFieldErrorMessage("The name is already taken");
     }
 
     private void showAndTriplets(final List<AndTriplets> andTripletsList) {
@@ -210,7 +209,7 @@ public abstract class MappingEditorPresenter extends Component {
         return view;
     }
 
-    protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
+    protected abstract void updateMappingName(String newName);
 
     protected abstract void initInfoFieldAndThenTriplet();
 
