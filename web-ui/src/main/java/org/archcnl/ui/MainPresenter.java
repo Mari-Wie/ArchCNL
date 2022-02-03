@@ -13,7 +13,9 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
@@ -49,9 +51,16 @@ public class MainPresenter extends Component {
     private final OutputView outputView;
     private final InputPresenter inputPresenter;
     private final ProjectManager projectManager;
+    private final ArchitectureRuleManager ruleManager;
+    private final ConceptManager conceptManager;
+    private final RelationManager relationManager;
 
-    public MainPresenter() {
+    public MainPresenter() throws ConceptDoesNotExistException {
         projectManager = new ProjectManager();
+        ruleManager = new ArchitectureRuleManager();
+        conceptManager = new ConceptManager();
+        relationManager = new RelationManager(conceptManager);
+
         inputPresenter = new InputPresenter();
         inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);

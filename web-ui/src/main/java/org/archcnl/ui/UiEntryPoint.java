@@ -4,6 +4,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
+import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 
 @Route("")
 @PWA(
@@ -16,7 +17,7 @@ public class UiEntryPoint extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    public UiEntryPoint() {
+    public UiEntryPoint() throws ConceptDoesNotExistException {
         setSizeFull();
         add(new MainPresenter().getView());
     }
