@@ -91,7 +91,6 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(
                 RelationListUpdateRequestedEvent.class,
                 event -> event.handleEvent(relationManager.getInputRelations()));
-
         inputPresenter.addListener(
                 ConceptListUpdateRequestedEvent.class,
                 event -> event.handleEvent(conceptManager.getInputConcepts()));
@@ -103,6 +102,16 @@ public class MainPresenter extends Component {
         outputView.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
         outputView.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
         outputView.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputView.addListener(
+                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
+        outputView.addListener(
+                RelationListUpdateRequestedEvent.class,
+                event -> event.handleEvent(relationManager.getOutputRelations()));
+        outputView.addListener(
+                ConceptListUpdateRequestedEvent.class,
+                event -> event.handleEvent(conceptManager.getOutputConcepts()));
+        outputView.addListener(
+                ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
 
         view = new MainView(inputPresenter.getView());
         addListeners();
