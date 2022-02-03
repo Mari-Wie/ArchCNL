@@ -37,10 +37,8 @@ public class AndTripletsEditorPresenter extends Component {
     private static final Logger LOG = LogManager.getLogger(AndTripletsEditorPresenter.class);
     private AndTripletsEditorView view;
     private List<TripletPresenter> tripletPresenters = new LinkedList<>();
-    private boolean inputSide;
 
     public AndTripletsEditorPresenter(boolean inputSide) {
-        this.inputSide = inputSide;
         view = new AndTripletsEditorView(prepareTripletView(new TripletPresenter()), inputSide);
         addListeners();
     }
