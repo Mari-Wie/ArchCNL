@@ -24,6 +24,8 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepted
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.RelationEditorPresenter;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.AddCustomRelationRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.ChangeRelationNameRequestedEvent;
 
 @Tag("InputPresenter")
 public class InputPresenter extends Component {
@@ -77,6 +79,9 @@ public class InputPresenter extends Component {
             relationEditorPresenter = new RelationEditorPresenter();
         }
         relationEditorPresenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        relationEditorPresenter.addListener(
+                ChangeRelationNameRequestedEvent.class, this::fireEvent);
+        relationEditorPresenter.addListener(AddCustomRelationRequestedEvent.class, this::fireEvent);
         view.changeCurrentlyShownView(relationEditorPresenter.getMappingEditorView());
     }
 

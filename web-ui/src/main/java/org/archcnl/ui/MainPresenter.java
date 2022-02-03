@@ -35,6 +35,8 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.AddCustomRelationRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.ChangeRelationNameRequestedEvent;
 import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
@@ -76,6 +78,10 @@ public class MainPresenter extends Component {
                 ChangeConceptNameRequestedEvent.class, e -> e.handleEvent(conceptManager));
         inputPresenter.addListener(
                 AddCustomConceptRequestedEvent.class, e -> e.handleEvent(conceptManager));
+        inputPresenter.addListener(
+                ChangeRelationNameRequestedEvent.class, e -> e.handleEvent(relationManager));
+        inputPresenter.addListener(
+                AddCustomRelationRequestedEvent.class, e -> e.handleEvent(relationManager));
 
         outputView = new OutputView();
         outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
