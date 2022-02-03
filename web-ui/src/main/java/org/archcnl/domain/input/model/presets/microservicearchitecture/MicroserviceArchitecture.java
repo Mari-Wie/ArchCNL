@@ -3,8 +3,9 @@ package org.archcnl.domain.input.model.presets.microservicearchitecture;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.archcnl.domain.common.CustomConcept;
-import org.archcnl.domain.common.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
@@ -110,7 +111,7 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
     }
 
     private void createCircuitBreaker(String circuitBreakerImportClassName) {
-        CustomConcept circuitBreaker =
+        Concept circuitBreaker =
                 templates.createCircuitBreakerConceptAndMapping(circuitBreakerImportClassName);
 
         if (circuitBreaker != null) {
@@ -125,7 +126,7 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
     }
 
     private void createMicroserviceApp(String msAppPackageStructure) {
-        CustomConcept app = templates.createMicroserviceAppConceptAndMapping(msAppPackageStructure);
+        Concept app = templates.createMicroserviceAppConceptAndMapping(msAppPackageStructure);
 
         if (app != null) {
             RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
