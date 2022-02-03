@@ -12,7 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Queue;
+import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.ProjectManager;
+import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.ui.menudialog.events.ProjectOpenedEvent;
@@ -24,7 +27,11 @@ public class OpenProjectDialog extends Dialog implements FileSelectionDialog {
     private static final long serialVersionUID = 6550339926202761828L;
     private Button confirmButton;
 
-    public OpenProjectDialog(ProjectManager projectManager) {
+    public OpenProjectDialog(
+            ProjectManager projectManager,
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager) {
         setDraggable(true);
 
         Text title = new Text("Select project file to open");
@@ -41,7 +48,11 @@ public class OpenProjectDialog extends Dialog implements FileSelectionDialog {
                                 fileSelectionComponent.showErrorMessage("Please select a file.");
                             } else {
                                 try {
-                                    projectManager.openProject(file.get());
+                                    projectManager.openProject(
+                                            file.get(),
+                                            ruleManager,
+                                            conceptManager,
+                                            relationManager);
                                     fireShowQueryEvents(
                                             projectManager.getFreeTextQueryQueue(),
                                             projectManager.getCustomQueryQueue());

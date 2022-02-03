@@ -182,7 +182,9 @@ public class MainPresenter extends Component {
                 view.showNewTab();
                 break;
             case OPEN:
-                OpenProjectDialog openProjectDialog = new OpenProjectDialog(projectManager);
+                OpenProjectDialog openProjectDialog =
+                        new OpenProjectDialog(
+                                projectManager, ruleManager, conceptManager, relationManager);
                 openProjectDialog.addListener(
                         ShowFreeTextQueryRequestedEvent.class,
                         e -> outputView.showFreeTextQuery(e.getQuery(), e.isDefaultQueryTab()));
@@ -211,6 +213,9 @@ public class MainPresenter extends Component {
                 SaveProjectDialog dialog =
                         new SaveProjectDialog(
                                 projectManager,
+                                ruleManager,
+                                conceptManager,
+                                relationManager,
                                 outputView.getCustomQueries(),
                                 outputView.getFreeTextQueries());
                 dialog.addListener(
