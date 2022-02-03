@@ -147,7 +147,7 @@ public class MappingExtractor {
             whenTriplets.add(andTriplets);
             final Triplet thenTriplet = parseThenPart(thenPart, relationManager, conceptManager);
             return new ConceptMapping(thenTriplet.getSubject(), whenTriplets, thisConcept);
-        } catch (final Exception e) {
+        } catch (final NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
     }
@@ -257,7 +257,11 @@ public class MappingExtractor {
                     new Variable(subjectString),
                     PredicateParser.parsePredicate(predicate, relationManager),
                     ObjectParser.parseObject(objectString, conceptManager));
-        } catch (final Exception e) {
+        } catch (final UnsupportedObjectTypeInTriplet
+                | InvalidVariableNameException
+                | NoRelationException
+                | NoObjectTypeException
+                | NoMatchFoundException e) {
             throw new NoTripletException(potentialTriplet);
         }
     }
