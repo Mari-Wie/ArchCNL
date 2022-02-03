@@ -5,6 +5,8 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
+import java.util.List;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
@@ -85,6 +87,10 @@ public class InputPresenter extends Component {
         final NewArchitectureRuleView newArchitectureRuleView =
                 new NewArchitectureRuleView(presenter);
         view.changeCurrentlyShownView(newArchitectureRuleView);
+    }
+
+    public void updateArchitectureRulesLayout(final List<ArchitectureRule> rules) {
+        architectureRulesLayout.updateRules(rules);
     }
 
     @Override

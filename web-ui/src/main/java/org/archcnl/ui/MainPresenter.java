@@ -4,6 +4,7 @@ import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,7 @@ import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
@@ -34,6 +36,7 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
+import org.archcnl.ui.menudialog.events.ProjectOpenedEvent;
 import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
 import org.archcnl.ui.menudialog.events.QuickOutputViewAccessRequestedEvent;
 import org.archcnl.ui.menudialog.events.RunToolchainRequestedEvent;
@@ -66,8 +69,7 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(
-                AddArchitectureRuleRequestedEvent.class, e -> e.handleEvent(ruleManager));
+        inputPresenter.addListener(AddArchitectureRuleRequestedEvent.class, this::handleEvent);
 
         outputView = new OutputView();
         outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
@@ -79,25 +81,25 @@ public class MainPresenter extends Component {
         addListeners();
     }
 
-    public void handleEvent(final ConceptGridUpdateRequestedEvent event) {
+    private void handleEvent(final ConceptGridUpdateRequestedEvent event) {
         updateHierarchies(conceptManager, event.getSource());
     }
 
-    public void handleEvent(final RelationGridUpdateRequestedEvent event) {
+    private void handleEvent(final RelationGridUpdateRequestedEvent event) {
         updateHierarchies(relationManager, event.getSource());
     }
 
-    public void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
+    private void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
         conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(conceptManager, event.getSource());
     }
 
-    public void handleEvent(final RelationHierarchySwapRequestedEvent event) {
+    private void handleEvent(final RelationHierarchySwapRequestedEvent event) {
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(relationManager, event.getSource());
     }
 
-    public void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
+    private void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
         hv.setRoots(hierarchyManager.getRoots());
         hv.update();
     }
@@ -175,6 +177,10 @@ public class MainPresenter extends Component {
                 openProjectDialog.addListener(
                         ShowCustomQueryRequestedEvent.class,
                         e -> outputView.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
+                List<ArchitectureRule> rules = ruleManager.getArchitectureRules();
+                openProjectDialog.addListener(
+                        ProjectOpenedEvent.class,
+                        e -> inputPresenter.updateArchitectureRulesLayout(rules));
                 openProjectDialog.open();
                 break;
             case SAVE:
@@ -205,6 +211,11 @@ public class MainPresenter extends Component {
                         event.getOption());
                 break;
         }
+    }
+
+    private void handleEvent(AddArchitectureRuleRequestedEvent event) {
+        ruleManager.addArchitectureRule(event.getRule());
+        inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 
     public MainView getView() {

@@ -15,6 +15,7 @@ import java.util.Queue;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
+import org.archcnl.ui.menudialog.events.ProjectOpenedEvent;
 import org.archcnl.ui.menudialog.events.ShowCustomQueryRequestedEvent;
 import org.archcnl.ui.menudialog.events.ShowFreeTextQueryRequestedEvent;
 
@@ -44,6 +45,7 @@ public class OpenProjectDialog extends Dialog implements FileSelectionDialog {
                                     fireShowQueryEvents(
                                             projectManager.getFreeTextQueryQueue(),
                                             projectManager.getCustomQueryQueue());
+                                    fireEvent(new ProjectOpenedEvent(this, true));
                                     close();
                                 } catch (IOException e) {
                                     fileSelectionComponent.showErrorMessage(

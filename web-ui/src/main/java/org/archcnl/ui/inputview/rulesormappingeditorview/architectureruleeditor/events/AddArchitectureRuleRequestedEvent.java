@@ -2,7 +2,6 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor
 
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
 
 public class AddArchitectureRuleRequestedEvent
@@ -17,7 +16,7 @@ public class AddArchitectureRuleRequestedEvent
         this.rule = rule;
     }
 
-    public void handleEvent(ArchitectureRuleManager ruleManager) {
-        ruleManager.addArchitectureRule(rule);
+    public ArchitectureRule getRule() {
+        return rule;
     }
 }
