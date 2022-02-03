@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
@@ -57,7 +59,9 @@ public class MappingExtractor {
     public static List<CustomConcept> extractCustomConcepts(
             String fileContent,
             Pattern conceptMappingName,
-            Map<String, String> conceptDescriptions) {
+            Map<String, String> conceptDescriptions,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager) {
         List<CustomConcept> concepts = new LinkedList<>();
 
         AdocIoUtils.getAllMatches(MappingExtractor.CONCEPT_MAPPING_PATTERN, fileContent).stream()
@@ -72,7 +76,12 @@ public class MappingExtractor {
                                     description = conceptDescriptions.get(name);
                                 }
                                 final CustomConcept concept = new CustomConcept(name, description);
-                                concept.setMapping(parseMapping(potentialConceptMapping, concept));
+                                concept.setMapping(
+                                        parseMapping(
+                                                potentialConceptMapping,
+                                                concept,
+                                                relationManager,
+                                                conceptManager));
                                 concepts.add(concept);
                             } catch (UnrelatedMappingException
                                     | NoMappingException
@@ -87,7 +96,9 @@ public class MappingExtractor {
     public static List<CustomRelation> extractCustomRelations(
             String fileContent,
             Pattern relationMappingName,
-            Map<String, String> relationDescriptions) {
+            Map<String, String> relationDescriptions,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager) {
         List<CustomRelation> relations = new LinkedList<>();
 
         AdocIoUtils.getAllMatches(MappingExtractor.RELATION_MAPPING_PATTERN, fileContent).stream()
@@ -103,7 +114,11 @@ public class MappingExtractor {
                                 }
                                 final CustomRelation relation =
                                         new CustomRelation(name, description, new LinkedList<>());
-                                relation.setMapping(parseMapping(potentialRelationMapping));
+                                relation.setMapping(
+                                        parseMapping(
+                                                potentialRelationMapping,
+                                                relationManager,
+                                                conceptManager));
                                 relations.add(relation);
                             } catch (UnrelatedMappingException
                                     | NoMappingException
@@ -116,62 +131,82 @@ public class MappingExtractor {
     }
 
     private static ConceptMapping parseMapping(
-            final String potentialMapping, final CustomConcept thisConcept)
+            final String potentialMapping,
+            final CustomConcept thisConcept,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager)
             throws NoMappingException {
         try {
             final String whenPart =
                     AdocIoUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
             final String thenPart =
                     AdocIoUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
-            final AndTriplets andTriplets = parseWhenPart(whenPart);
+            final AndTriplets andTriplets =
+                    parseWhenPart(whenPart, relationManager, conceptManager);
             final List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
-            final Triplet thenTriplet = parseThenPart(thenPart);
+            final Triplet thenTriplet = parseThenPart(thenPart, relationManager, conceptManager);
             return new ConceptMapping(thenTriplet.getSubject(), whenTriplets, thisConcept);
         } catch (final Exception e) {
             throw new NoMappingException(potentialMapping);
         }
     }
 
-    private static RelationMapping parseMapping(final String potentialMapping)
+    private static RelationMapping parseMapping(
+            final String potentialMapping,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager)
             throws NoMappingException {
         try {
             final String whenPart =
                     AdocIoUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
             final String thenPart =
                     AdocIoUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
-            final AndTriplets andTriplets = parseWhenPart(whenPart);
+            final AndTriplets andTriplets =
+                    parseWhenPart(whenPart, relationManager, conceptManager);
             final List<AndTriplets> whenTriplets = new LinkedList<>();
             whenTriplets.add(andTriplets);
-            final Triplet thenTriplet = parseThenPart(thenPart);
+            final Triplet thenTriplet = parseThenPart(thenPart, relationManager, conceptManager);
             return new RelationMapping(thenTriplet, whenTriplets);
         } catch (UnsupportedObjectTypeInTriplet | NoTripletException | NoMatchFoundException e) {
             throw new NoMappingException(potentialMapping);
         }
     }
 
-    protected static AndTriplets parseWhenPart(final String whenPart) throws NoTripletException {
+    protected static AndTriplets parseWhenPart(
+            final String whenPart,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager)
+            throws NoTripletException {
         final AndTriplets andTriplets = new AndTriplets();
         final List<String> potentialTriplets =
                 AdocIoUtils.getAllMatches(MappingExtractor.TRIPLET_PATTERN, whenPart);
         for (final String potentialTriplet : potentialTriplets) {
-            andTriplets.addTriplet(parseTriplet(potentialTriplet, false));
+            andTriplets.addTriplet(
+                    parseTriplet(potentialTriplet, false, relationManager, conceptManager));
         }
         return andTriplets;
     }
 
-    private static Triplet parseThenPart(final String thenPart)
+    private static Triplet parseThenPart(
+            final String thenPart,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager)
             throws NoTripletException, NoMatchFoundException {
         final String potentialThenTriplet =
                 AdocIoUtils.getFirstMatch(MappingExtractor.TRIPLET_PATTERN, thenPart);
-        return parseTriplet(potentialThenTriplet, true);
+        return parseTriplet(potentialThenTriplet, true, relationManager, conceptManager);
     }
 
-    private static Triplet parseTriplet(final String potentialTriplet, final boolean isThenTriplet)
+    private static Triplet parseTriplet(
+            final String potentialTriplet,
+            final boolean isThenTriplet,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager)
             throws NoTripletException {
         try {
             if (potentialTriplet.matches(MappingExtractor.SPECIAL_TRIPLET_PATTERN.toString())) {
-                return parseSpecialTriplet(potentialTriplet);
+                return parseSpecialTriplet(potentialTriplet, relationManager, conceptManager);
             } else {
                 final String subjectString =
                         AdocIoUtils.getFirstMatch(
@@ -186,8 +221,9 @@ public class MappingExtractor {
                                 potentialTriplet);
 
                 final Variable subject = new Variable(subjectString);
-                final ObjectType object = ObjectType.parseObject(objectString);
-                final Relation predicate = Relation.parsePredicate(predicateString);
+                final ObjectType object = ObjectParser.parseObject(objectString, conceptManager);
+                final Relation predicate =
+                        PredicateParser.parsePredicate(predicateString, relationManager);
                 if (isThenTriplet && predicate instanceof CustomRelation) {
                     final CustomRelation customRelation = (CustomRelation) predicate;
                     customRelation.setRelatableObjectType(object);
@@ -203,7 +239,10 @@ public class MappingExtractor {
         }
     }
 
-    private static Triplet parseSpecialTriplet(final String potentialTriplet)
+    private static Triplet parseSpecialTriplet(
+            final String potentialTriplet,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager)
             throws NoTripletException {
         try {
             final String predicate =
@@ -216,8 +255,8 @@ public class MappingExtractor {
                             Pattern.compile("(?<= )'.+'(?=\\))"), potentialTriplet);
             return TripletFactory.createTriplet(
                     new Variable(subjectString),
-                    Relation.parsePredicate(predicate),
-                    ObjectType.parseObject(objectString));
+                    PredicateParser.parsePredicate(predicate, relationManager),
+                    ObjectParser.parseObject(objectString, conceptManager));
         } catch (final Exception e) {
             throw new NoTripletException(potentialTriplet);
         }
