@@ -29,6 +29,7 @@ import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.menudialog.OpenProjectDialog;
 import org.archcnl.ui.menudialog.SaveProjectDialog;
@@ -65,6 +66,8 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(
+                AddArchitectureRuleRequestedEvent.class, e -> e.handleEvent(ruleManager));
 
         outputView = new OutputView();
         outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
