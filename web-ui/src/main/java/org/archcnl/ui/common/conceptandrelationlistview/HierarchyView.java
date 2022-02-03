@@ -10,12 +10,12 @@ import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.domain.common.conceptsandrelations.ConceptAndRelation;
+import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.events.HierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 
-public class HierarchyView<T extends ConceptAndRelation> extends RulesOrMappingEditorView {
+public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEditorView {
     private TreeGrid<HierarchyNode<T>> treeGrid;
     List<HierarchyNode<T>> roots;
     private HierarchyNode<T> draggedItem;

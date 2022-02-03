@@ -16,7 +16,7 @@ import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class Relation
-        implements ConceptAndRelation, FormattedAdocDomainObject, FormattedViewDomainObject {
+        implements HierarchyObject, FormattedAdocDomainObject, FormattedViewDomainObject {
 
     // The object types this relation relates to
     protected List<ActualObjectType> relatableObjectTypes;

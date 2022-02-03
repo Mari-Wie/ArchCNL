@@ -1,6 +1,6 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
-public interface ConceptAndRelation {
+public interface HierarchyObject {
 
     public String getDescription();
 
