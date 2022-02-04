@@ -13,16 +13,16 @@ import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 public class WhereClauseTest {
 
     private ConceptManager conceptManager;
     private RelationManager relationManager;
 
-    @BeforeEach
-    private void setup() throws ConceptDoesNotExistException {
+    @Before
+    public void setup() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
     }
