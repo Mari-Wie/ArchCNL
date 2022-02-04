@@ -52,14 +52,7 @@ public abstract class MappingEditorPresenter extends Component {
 
     protected void initializeView(final MappingEditorView view) {
         this.view = view;
-        initInfoFieldAndThenTriplet();
         addListeners();
-    }
-
-    protected void initializeView(
-            final MappingEditorView view, final List<AndTriplets> andTripletsList) {
-        initializeView(view);
-        showAndTriplets(andTripletsList);
     }
 
     private void addListeners() {
@@ -84,7 +77,7 @@ public abstract class MappingEditorPresenter extends Component {
         view.showNameFieldErrorMessage("The name is already taken");
     }
 
-    private void showAndTriplets(final List<AndTriplets> andTripletsList) {
+    protected void showAndTriplets(final List<AndTriplets> andTripletsList) {
         view.clearContent();
         andTripletsPresenters.clear();
         andTripletsList.forEach(
@@ -220,7 +213,7 @@ public abstract class MappingEditorPresenter extends Component {
 
     protected abstract void updateMappingName(String newName);
 
-    protected abstract void initInfoFieldAndThenTriplet();
+    protected abstract void updateInfoFieldsAndThenTriplet();
 
     protected abstract void updateMapping();
 

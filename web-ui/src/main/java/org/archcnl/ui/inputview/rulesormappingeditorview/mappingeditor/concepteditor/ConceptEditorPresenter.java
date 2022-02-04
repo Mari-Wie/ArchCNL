@@ -23,29 +23,24 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
 
     private static final long serialVersionUID = 1636256374259524105L;
     private ConceptEditorView view;
-    private Optional<CustomConcept> concept;
+    private Optional<CustomConcept> concept = Optional.empty();
 
     public ConceptEditorPresenter() {
         super();
-        this.concept = Optional.empty();
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
-        addThenTripletListeners();
         initializeView(view);
+        addConceptViewListeners();
     }
 
-    public ConceptEditorPresenter(final CustomConcept concept) {
-        super();
+    public void showConcept(final CustomConcept concept) {
         this.concept = Optional.of(concept);
-        view =
-                new ConceptEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
-        addThenTripletListeners();
-        initializeView(view, ConceptEditorPresenter.extractAndTriplets(concept));
+        showAndTriplets(extractAndTriplets(concept));
+        updateInfoFieldsAndThenTriplet();
     }
 
-    private void addThenTripletListeners() {
+    private void addConceptViewListeners() {
         view.addListener(
                 VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
@@ -54,7 +49,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 event -> event.handleEvent(variableManager));
     }
 
-    private static List<AndTriplets> extractAndTriplets(final CustomConcept concept) {
+    private List<AndTriplets> extractAndTriplets(final CustomConcept concept) {
         if (concept == null || concept.getMapping().isEmpty()) {
             return new LinkedList<>();
         } else {
@@ -63,7 +58,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void initInfoFieldAndThenTriplet() {
+    protected void updateInfoFieldsAndThenTriplet() {
         if (concept.isPresent()) {
             view.updateDescription(concept.get().getDescription());
             view.updateNameField(concept.get().getName());

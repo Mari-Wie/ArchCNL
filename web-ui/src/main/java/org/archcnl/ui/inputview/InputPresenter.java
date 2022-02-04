@@ -6,6 +6,9 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.List;
+import java.util.Optional;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
@@ -63,38 +66,36 @@ public class InputPresenter extends Component {
         return view;
     }
 
-    public void handleEvent(final ConceptEditorRequestedEvent event) {
-        ConceptEditorPresenter conceptEditorPresenter;
-        if (event.getConcept().isPresent()) {
-            conceptEditorPresenter = new ConceptEditorPresenter(event.getConcept().get());
-        } else {
-            conceptEditorPresenter = new ConceptEditorPresenter();
-        }
+    private void handleEvent(final ConceptEditorRequestedEvent event) {
+        Optional<CustomConcept> concept = event.getConcept();
+        ConceptEditorPresenter conceptEditorPresenter = new ConceptEditorPresenter();
         addListenersToMappingEditor(conceptEditorPresenter);
         conceptEditorPresenter.addListener(ChangeConceptNameRequestedEvent.class, this::fireEvent);
         conceptEditorPresenter.addListener(AddCustomConceptRequestedEvent.class, this::fireEvent);
+        if (concept.isPresent()) {
+            conceptEditorPresenter.showConcept(concept.get());
+        }
         view.changeCurrentlyShownView(conceptEditorPresenter.getMappingEditorView());
     }
 
-    public void handleEvent(final RelationEditorRequestedEvent event) {
-        RelationEditorPresenter relationEditorPresenter;
-        if (event.getRelation().isPresent()) {
-            relationEditorPresenter = new RelationEditorPresenter(event.getRelation().get());
-        } else {
-            relationEditorPresenter = new RelationEditorPresenter();
-        }
+    private void handleEvent(final RelationEditorRequestedEvent event) {
+        Optional<CustomRelation> relation = event.getRelation();
+        RelationEditorPresenter relationEditorPresenter = new RelationEditorPresenter();
         addListenersToMappingEditor(relationEditorPresenter);
         relationEditorPresenter.addListener(
                 ChangeRelationNameRequestedEvent.class, this::fireEvent);
         relationEditorPresenter.addListener(AddCustomRelationRequestedEvent.class, this::fireEvent);
+        if (relation.isPresent()) {
+            relationEditorPresenter.showRelation(relation.get());
+        }
         view.changeCurrentlyShownView(relationEditorPresenter.getMappingEditorView());
     }
 
-    public void handleEvent(final RuleEditorRequestedEvent event) {
+    private void handleEvent(final RuleEditorRequestedEvent event) {
         view.changeCurrentlyShownView(architectureRulesLayout);
     }
 
-    public void handleEvent(final RuleCreatorRequestedEvent event) {
+    private void handleEvent(final RuleCreatorRequestedEvent event) {
         final NewArchitectureRulePresenter presenter = new NewArchitectureRulePresenter();
         presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
         presenter.addListener(AddArchitectureRuleRequestedEvent.class, this::fireEvent);

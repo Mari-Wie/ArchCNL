@@ -26,29 +26,24 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
     private static final long serialVersionUID = -8403313455385623145L;
     private RelationEditorView view;
-    private Optional<CustomRelation> relation;
+    private Optional<CustomRelation> relation = Optional.empty();
 
     public RelationEditorPresenter() {
         super();
-        this.relation = Optional.empty();
         view =
                 new RelationEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
-        addThenTripletListeners();
         initializeView(view);
+        addRelationViewListeners();
     }
 
-    public RelationEditorPresenter(final CustomRelation relation) {
-        super();
+    public void showRelation(final CustomRelation relation) {
         this.relation = Optional.of(relation);
-        view =
-                new RelationEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
-        addThenTripletListeners();
-        initializeView(view, RelationEditorPresenter.extractAndTriplets(relation));
+        showAndTriplets(extractAndTriplets(relation));
+        updateInfoFieldsAndThenTriplet();
     }
 
-    private void addThenTripletListeners() {
+    private void addRelationViewListeners() {
         view.addListener(
                 VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
@@ -57,7 +52,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 event -> event.handleEvent(variableManager));
     }
 
-    private static List<AndTriplets> extractAndTriplets(final CustomRelation relation) {
+    private List<AndTriplets> extractAndTriplets(final CustomRelation relation) {
         if (relation == null || relation.getMapping().isEmpty()) {
             return new LinkedList<>();
         } else {
@@ -81,7 +76,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void initInfoFieldAndThenTriplet() {
+    protected void updateInfoFieldsAndThenTriplet() {
         if (relation.isPresent()) {
             view.updateNameField(relation.get().getName());
             view.updateDescription(relation.get().getDescription());
