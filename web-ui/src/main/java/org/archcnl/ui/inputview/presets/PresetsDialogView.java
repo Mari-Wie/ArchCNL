@@ -49,9 +49,6 @@ public class PresetsDialogView extends Dialog implements HasComponents, FlexComp
         dialogLayout.add(tabs, currentContent, footer);
         dialogLayout.setWidthFull();
         add(dialogLayout);
-
-        // tabs.addSelectedChangeListener(event ->{ fireEvent(new TabSelectedEvent(this,
-        // false, event.getSelectedTab()));});
     }
 
     public void updateFooter(TabOptions tab) {
