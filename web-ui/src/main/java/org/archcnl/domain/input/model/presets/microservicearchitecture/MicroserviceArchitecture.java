@@ -99,7 +99,7 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         }
 
         // API Mechanisms
-        if (circuitBreakerImportClassName != null) {
+        if (apiMechanisms != null) {
             createApiMechanisms(apiMechanisms);
         }
 
