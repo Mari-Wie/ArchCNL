@@ -4,12 +4,10 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.dom.Element;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,48 +18,52 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
 import org.archcnl.domain.input.model.presets.ArchitectureInformation;
-import org.archcnl.domain.input.model.presets.ArchitectureRuleConfig;
-import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitecture;
-import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitectureBuilder;
 import org.archcnl.ui.common.TwoColumnGridAndInputTextFieldsComponent;
 import org.archcnl.ui.common.TwoColumnGridEntry;
-import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSaveEvent;
 
 /***
  * This UI-Component creates input possibilities for the user of ArchCNL based
  * on the ArchitecturalStyleConfig that is passed into the constructor. It will
  * generate input-components based on the properties of the style. <br>
  * <p>
- * It also holds the logic on "what to do" with the information. As this is
- * specific for every architectural style, new styles require an extension of
- * the current logic. This is can be done in the method
- * {@link #mapUiComponentsToArchitecturalStyle(ArchitecturalStyle)}.
  */
 @Tag("ArchitecturalStyleForm")
 public class ArchitecturalStyleForm extends Component
         implements HasComponents, HasSize, PropertyChangeListener {
 
-    /** */
     private static final long serialVersionUID = -880067698454481506L;
 
-    private Map<Integer, List<ArchitectureInformation>> knownArchitectureInformationGroups;
-    private List<TextField> ungroupedArchitectureInformation;
-    private Map<String, Binder<ArchitectureInformation>> ungroupedArchitectureInformationBinders;
+    private Map<Integer, List<ArchitectureInformation>> knownArchitectureInformationGroups =
+            new HashMap<Integer, List<ArchitectureInformation>>();
+    ;
+    private List<TextField> ungroupedArchitectureInformation = new ArrayList<TextField>();
+
+    private Map<String, Binder<ArchitectureInformation>> ungroupedArchitectureInformationBinders =
+            new HashMap<String, Binder<ArchitectureInformation>>();
+
     private Map<Integer, Set<TwoColumnGridEntry>> architectureInformationGroupsAndEntries;
-    private ArchitecturalStyleConfig styleConfig;
 
     public ArchitecturalStyleForm(ArchitecturalStyleConfig architecturalStyleConfig) {
+        createUIComponentsFromArchitectureConfig(architecturalStyleConfig);
+        addUiComponents();
+        setWidthFull();
+    }
 
-        this.styleConfig = architecturalStyleConfig;
+    private void addUiComponents() {
+        addKnownGroupsToUi();
+        addKnownTextFieldsToUi();
+    }
 
-        knownArchitectureInformationGroups = new HashMap<Integer, List<ArchitectureInformation>>();
-
-        ungroupedArchitectureInformation = new ArrayList<TextField>();
-
-        // map information of the architectural style to components in the ui
+    /**
+     * Creates UI Components from and ArchitecturalStyleConfig. If an ArchitectureInformation within
+     * that configuration is belonging to a group (meaning it has a group id that is not -1) it will
+     * be added to the group. If the ArchitectureInformation does not have a group, it will be added
+     * as TextField.
+     */
+    private void createUIComponentsFromArchitectureConfig(
+            ArchitecturalStyleConfig architecturalStyleConfig) {
         for (ArchitectureInformation archInfo : architecturalStyleConfig.getVariableParts()) {
 
             if (archInfo.isActive()) {
@@ -77,28 +79,14 @@ public class ArchitecturalStyleForm extends Component
                 }
             }
         }
-
-        // add event listeners
-        addListeners();
-
-        addKnownGroupsToUi();
-        addKnownTextFieldsToUi();
-        addFooter();
     }
 
-    private void addListeners() {
-        this.addListener(
-                ArchitecturalStyleSaveEvent.class, ArchitecturalStyleSaveEvent::handleEvent);
-    }
-
-    // adds an architecture information as textfield including a binder
+    /**
+     * Creates a TextField for an ArchitectureInformation including a Binder that holds the value.
+     * The Binder is added to the Map of known Binders so that the values can be retrieved from
+     * there.
+     */
     private void addToKnownTextField(ArchitectureInformation info) {
-
-        // create map if null
-        if (ungroupedArchitectureInformationBinders == null) {
-            ungroupedArchitectureInformationBinders =
-                    new HashMap<String, Binder<ArchitectureInformation>>();
-        } // map not null
         TextField textField = new TextField(info.getName());
 
         Binder<ArchitectureInformation> infoBinder =
@@ -112,6 +100,7 @@ public class ArchitecturalStyleForm extends Component
         ungroupedArchitectureInformation.add(textField);
     }
 
+    /** Adds not-grouped architecture information to the UI as TextFields. */
     private void addKnownTextFieldsToUi() {
         HorizontalLayout layout = new HorizontalLayout();
         for (TextField textField : ungroupedArchitectureInformation) {
@@ -135,7 +124,7 @@ public class ArchitecturalStyleForm extends Component
         }
     }
 
-    // add the input groups specified in the config
+    /** Adds known groups of architecture information to the UI. */
     private void addKnownGroupsToUi() {
 
         // initialize Map
@@ -150,8 +139,11 @@ public class ArchitecturalStyleForm extends Component
                 knownArchitectureInformationGroups.entrySet()) {
             Integer key = entry.getKey();
 
+            // list of ArchitectureInformation belonging to the same group
             List<ArchitectureInformation> information = entry.getValue();
 
+            // currently only 2 ArchitectureInformations can be grouped together
+            // if needed UI Components to group more ArchitectureInformation need to be created
             if (information.size() == 2) {
                 Binder<TwoColumnGridEntry> gridEntriesBinder =
                         new Binder<>(TwoColumnGridEntry.class);
@@ -174,38 +166,25 @@ public class ArchitecturalStyleForm extends Component
         }
     }
 
-    private void addFooter() {
-        Button cancelBtn = new Button("Cancel", e -> remove(this));
-        Button saveBtn =
-                new Button(
-                        "Create Rules & Mappings",
-                        e -> {
+    /** Validates the ArchitectureStyleForm-Inputs and returns true if validation is successful. */
+    public boolean validateForm() {
+        boolean isFormCorrect = true;
+        for (Entry<String, Binder<ArchitectureInformation>> entry :
+                ungroupedArchitectureInformationBinders.entrySet()) {
+            if (!entry.getValue().isValid()) {
+                isFormCorrect = false;
+            }
+        }
 
-                            // validation of the form
-                            boolean isFormCorrect = true;
-                            for (Entry<String, Binder<ArchitectureInformation>> entry :
-                                    ungroupedArchitectureInformationBinders.entrySet()) {
-                                if (!entry.getValue().isValid()) {
-                                    isFormCorrect = false;
-                                }
-                            }
-
-                            if (isFormCorrect) {
-                                fireEvent(
-                                        new ArchitecturalStyleSaveEvent(
-                                                this, true, styleConfig.getStyleName()));
-                            } else {
-                                new Notification();
-                                add(
-                                        Notification.show(
-                                                "Please fill out all architecture information!"));
-                            }
-                        });
-        HorizontalLayout footer = new HorizontalLayout();
-        footer.add(cancelBtn, saveBtn);
-
-        add(footer);
+        if (!isFormCorrect) {
+            new Notification();
+            add(Notification.show("Please fill out all architecture information!"));
+        }
+        return isFormCorrect;
     }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {}
 
     public void addComponents(List<Component> components) {
         for (Component component : components) {
@@ -223,119 +202,16 @@ public class ArchitecturalStyleForm extends Component
         wrapper.removeFromParent();
     }
 
-    /**
-     * This method maps the values from the UI Components to the information they hold for the
-     * respective architectural style.
-     */
-    public void mapUiComponentsToArchitecturalStyle(ArchitecturalStyle styleName) {
-        switch (styleName) {
-            case MICROSERVICE_ARCHITECTURE:
-                MicroserviceArchitectureBuilder microserviceArchitectureBuilder =
-                        new MicroserviceArchitectureBuilder();
-
-                // loop through known textfields (not grouped architecture information from
-                // config)
-                for (Map.Entry<String, Binder<ArchitectureInformation>> entry :
-                        ungroupedArchitectureInformationBinders.entrySet()) {
-                    String key = entry.getKey();
-
-                    // loop through variable Parts of the architectural style
-                    for (int i = 0; i < styleConfig.getVariableParts().size(); i++) {
-
-                        // get the architecture information
-                        ArchitectureInformation info = styleConfig.getVariableParts().get(i);
-
-                        // check if it has been created
-                        if (key.equals(info.getName())) {
-                            try {
-
-                                // write the bound value from the ui to the architecture information
-                                entry.getValue().writeBean(info);
-
-                                // map the architecture information to the architectural style
-                                // information
-                                switch (info.getName()) {
-                                    case "API Gateway Package":
-                                        microserviceArchitectureBuilder.withApiGatewayPackageName(
-                                                info.getValue());
-                                        break;
-                                    case "MS-App Package Structure":
-                                        microserviceArchitectureBuilder.withMsAppPackageStructure(
-                                                info.getValue());
-                                        break;
-                                    case "Service Registry Class Name":
-                                        microserviceArchitectureBuilder
-                                                .withServiceRegistryClassName(info.getValue());
-                                        break;
-                                    case "Service Registry Import Class Name":
-                                        microserviceArchitectureBuilder
-                                                .withServiceRegistryClassName(info.getValue());
-                                        break;
-                                    case "Circuit Breaker Import Class Name":
-                                        microserviceArchitectureBuilder
-                                                .withCircuitBreakerImportClassName(info.getValue());
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            } catch (ValidationException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
-                        }
-                    }
-                }
-
-                // loop through the sets that hold the data for the groups specified in the
-                // config
-                for (Entry<Integer, Set<TwoColumnGridEntry>> entry :
-                        architectureInformationGroupsAndEntries.entrySet()) {
-                    Integer groupId = entry.getKey();
-                    Set<TwoColumnGridEntry> entries = entry.getValue();
-
-                    // map groups to the specific architectural style information they contain
-                    switch (groupId) {
-                        case 1: // microservices
-                            microserviceArchitectureBuilder.withMicroservices(entries);
-                            break;
-                        case 2: // db-access-abstractions
-                            microserviceArchitectureBuilder.withDbAccessAbstractions(entries);
-                            break;
-                        case 3: // api-mechanisms
-                            microserviceArchitectureBuilder.withApiMechanisms(entries);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                // create the rules
-                MicroserviceArchitecture microserviceArchitecture =
-                        microserviceArchitectureBuilder.build();
-
-                // only rules that are selected
-
-                Set<String> rulesToCreate = new HashSet<String>();
-                for (ArchitectureRuleConfig ruleConfig : styleConfig.getRules()) {
-                    if (ruleConfig.isActive()) {
-                        rulesToCreate.add(ruleConfig.getRule());
-                    }
-                }
-
-                microserviceArchitecture.setArchitectureRules(rulesToCreate);
-
-                microserviceArchitecture.createRulesAndMappings();
-                break;
-
-                // Other cases for other styles required
-            default:
-                break;
-        }
+    public List<TextField> getUngroupedArchitectureInformation() {
+        return ungroupedArchitectureInformation;
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        // TODO Auto-generated method stub
+    public Map<String, Binder<ArchitectureInformation>>
+            getUngroupedArchitectureInformationBinders() {
+        return ungroupedArchitectureInformationBinders;
+    }
 
+    public Map<Integer, Set<TwoColumnGridEntry>> getArchitectureInformationGroupsAndEntries() {
+        return architectureInformationGroupsAndEntries;
     }
 }

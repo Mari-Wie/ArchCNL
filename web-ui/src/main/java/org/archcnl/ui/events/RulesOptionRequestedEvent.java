@@ -4,7 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.ui.MainView;
-import org.archcnl.ui.menudialog.OpenRulePresetsDialog;
+import org.archcnl.ui.inputview.presets.PresetsDialogPresenter;
 
 public class RulesOptionRequestedEvent extends ComponentEvent<MainView> {
 
@@ -29,7 +29,9 @@ public class RulesOptionRequestedEvent extends ComponentEvent<MainView> {
                 RulesOptionRequestedEvent.LOG.warn("{} is not implemented", option);
                 break;
             case IMPORT_RULE_PRESETS:
-                new OpenRulePresetsDialog().open();
+                PresetsDialogPresenter presenter = new PresetsDialogPresenter();
+                // open dialog
+                presenter.getView().open();
                 break;
             default:
                 RulesOptionRequestedEvent.LOG.warn(
