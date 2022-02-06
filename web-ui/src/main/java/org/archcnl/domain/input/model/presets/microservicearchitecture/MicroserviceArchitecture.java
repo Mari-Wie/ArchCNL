@@ -20,7 +20,8 @@ import org.archcnl.ui.common.TwoColumnGridEntry;
  */
 public class MicroserviceArchitecture implements ArchitecturalStyle {
 
-    private MicroserviceArchitectureTemplateManager templates;
+    private MicroserviceArchitectureTemplateManager templates =
+            new MicroserviceArchitectureTemplateManager();
 
     // rules
     private List<ArchitectureRule> architectureRules;
@@ -63,12 +64,9 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         model.getArchitectureRuleManager().addAllArchitectureRules(architectureRules);
     }
 
-    /** Create the mappings by using the template manager */
+    /** Create the mappings for the concepts that are not null. */
     @Override
     public void createMappings() {
-
-        // create Template manager
-        templates = new MicroserviceArchitectureTemplateManager();
 
         // microservices
         if (microservices != null) {
@@ -234,7 +232,6 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         }
     }
 
-    /** Creates the Microservice architecture concept and the respective mapping. */
     private void createMicroservices(Set<TwoColumnGridEntry> services) {
         RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
         CustomConcept microservices = templates.createMicroservicesConceptAndMapping(services);
