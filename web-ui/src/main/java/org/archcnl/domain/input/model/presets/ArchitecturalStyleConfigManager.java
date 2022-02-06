@@ -5,12 +5,12 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This Configuration Manager builds Config-Objexts based on information that is provided in
+ * This Configuration Manager builds Config-Objects based on information that is provided in
  * specific json files.
  */
 public class ArchitecturalStyleConfigManager {
 
-    public ArchitecturalStyleConfig build(ArchitecturalStyle styleEnum) {
+    public ArchitecturalStyleConfig getConfig(ArchitecturalStyle styleEnum) {
         switch (styleEnum) {
             case MICROSERVICE_ARCHITECTURE:
                 ArchitecturalStyleConfig micorserviceArchitecture = null;

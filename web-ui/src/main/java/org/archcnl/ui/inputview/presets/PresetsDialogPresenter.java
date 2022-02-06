@@ -88,7 +88,7 @@ public class PresetsDialogPresenter extends Dialog {
     }
 
     private void handleEvent(RuleSelectionTabRequestedEvent event) {
-        architectureConfig = new ArchitecturalStyleConfigManager().build(selectedStyle);
+        architectureConfig = new ArchitecturalStyleConfigManager().getConfig(selectedStyle);
         ArchitectureRuleSelection ruleSelection;
 
         if (tabsToComponent.get(ruleSelectionTab) == null) {
