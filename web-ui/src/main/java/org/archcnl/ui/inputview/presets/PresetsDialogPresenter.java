@@ -154,6 +154,11 @@ public class PresetsDialogPresenter extends Dialog {
         }
     }
 
+    /**
+     * Creates Rules and Mappings for the selected Architectural Sytle.
+     * This is also the Method that needs to be extended in case
+     * new architectural styles are added in the future.
+     * */
     private void createRulesAndMappingsFromUiComponents(ArchitecturalStyle selectedStyle) {
         switch (selectedStyle) {
             case MICROSERVICE_ARCHITECTURE:
@@ -177,9 +182,12 @@ public class PresetsDialogPresenter extends Dialog {
         Map<Integer, Set<TwoColumnGridEntry>> architectureInformationGroupsAndEntries =
                 form.getArchitectureInformationGroupsAndEntries();
 
+        // map ungrouped architecture information
         mapUiInputToArchitectureInformation(
                 microserviceArchitectureBuilder, architectureInfoBinders);
 
+        
+        // map grouped architecture information
         mapGroupedUIInputsToArchitectureInformation(
                 microserviceArchitectureBuilder, architectureInformationGroupsAndEntries);
 
