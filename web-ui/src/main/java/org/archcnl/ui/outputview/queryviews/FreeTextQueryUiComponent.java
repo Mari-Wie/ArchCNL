@@ -9,6 +9,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
@@ -23,6 +24,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
     private Button defaultQueryButton;
     private TextField queryName;
     private Button pinButton;
+    private Button deleteButton;
     private Button importCustomQueryButton =
             new Button(
                     "Use Custom Query",
@@ -36,18 +38,22 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
     public FreeTextQueryUiComponent(String defaultQueryText) {
         super(defaultQueryText);
         Label caption = new Label("Create a free text query");
+        caption.setWidthFull();
 
         pinButton =
                 new Button(
                         new Icon(VaadinIcon.PIN),
                         click -> {
-                            pinButton.setVisible(false);
+                            replacePinButtonWithDeleteButton();
                             fireEvent(
                                     new PinFreeTextQueryRequestedEvent(this, true, getQueryName()));
                         });
+        deleteButton =
+                new Button(
+                        new Icon(VaadinIcon.TRASH),
+                        click -> fireEvent(new DeleteButtonPressedEvent(this, true)));
         topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
-        caption.setWidthFull();
 
         queryName = new TextField("Name");
         queryName.setPlaceholder("Name of this query");
@@ -79,6 +85,10 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     private String getQueryName() {
         return queryName.getOptionalValue().orElse(DEFAULT_NAME);
+    }
+
+    public void replacePinButtonWithDeleteButton() {
+        topRow.replace(pinButton, deleteButton);
     }
 
     public void setQueryName(String name) {

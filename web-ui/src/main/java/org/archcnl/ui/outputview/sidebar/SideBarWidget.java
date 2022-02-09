@@ -13,6 +13,7 @@ import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.outputview.queryviews.CustomQueryView;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
@@ -21,6 +22,7 @@ public class SideBarWidget extends VerticalLayout {
 
     private static final long serialVersionUID = 3732746285572139979L;
     private Tabs tabs;
+    private SideBarTab generalInformationTab;
     private SideBarTab customQueryTab;
     private SideBarTab freeTextQueryTab;
 
@@ -51,7 +53,7 @@ public class SideBarWidget extends VerticalLayout {
             final CustomQueryView customQueryView,
             final FreeTextQueryUiComponent freeTextQueryView) {
 
-        final SideBarTab generalInformationTab =
+        generalInformationTab =
                 new SideBarTab("General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView);
         customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
         freeTextQueryTab =
@@ -96,6 +98,18 @@ public class SideBarWidget extends VerticalLayout {
                 .filter(tab -> tab.getLinkedComponent().equals(event.getSource()))
                 .findFirst()
                 .ifPresent(tab -> tab.updateLabel(event.getName()));
+    }
+
+    public void deletePinnedQuery(DeleteButtonPressedEvent event) {
+        generalInformationTab.setSelected(true);
+        tabs.getChildren()
+                .filter(SideBarTab.class::isInstance)
+                .map(SideBarTab.class::cast)
+                .filter(tab -> !tab.equals(customQueryTab))
+                .filter(tab -> !tab.equals(freeTextQueryTab))
+                .filter(tab -> tab.getLinkedComponent().equals(event.getSource()))
+                .findFirst()
+                .ifPresent(tab -> tabs.remove(tab));
     }
 
     @Override

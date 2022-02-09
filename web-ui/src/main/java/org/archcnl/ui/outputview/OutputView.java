@@ -26,6 +26,7 @@ import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
@@ -133,6 +134,12 @@ public class OutputView extends HorizontalLayout {
         newCustomQueryPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
+        newCustomQueryPresenter.addListener(
+                DeleteButtonPressedEvent.class,
+                event -> {
+                    pinnedCustomQueries.remove(newCustomQueryPresenter);
+                    sideBarWidget.deletePinnedQuery(event);
+                });
         return newCustomQueryPresenter;
     }
 
@@ -151,6 +158,12 @@ public class OutputView extends HorizontalLayout {
         newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
         newComponent.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
+        newComponent.addListener(
+                DeleteButtonPressedEvent.class,
+                event -> {
+                    pinnedFreeTextQueries.remove(newComponent);
+                    sideBarWidget.deletePinnedQuery(event);
+                });
         return newComponent;
     }
 
