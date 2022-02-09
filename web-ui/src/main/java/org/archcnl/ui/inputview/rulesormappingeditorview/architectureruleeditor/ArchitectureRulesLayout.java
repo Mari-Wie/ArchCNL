@@ -16,14 +16,12 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView {
     VerticalLayout rulesLayout = new VerticalLayout();
 
     public ArchitectureRulesLayout() {
-        // Remove style property to makes no sense in this layout
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
         createCreateNewLayout(
                 "Architecture Rules",
                 "Create new Arch Rule",
                 e -> fireEvent(new RuleCreatorRequestedEvent(this, true)));
         add(rulesLayout);
-        getStyle().set("border", "1px solid black");
     }
 
     public void updateRules(final List<ArchitectureRule> rules) {
