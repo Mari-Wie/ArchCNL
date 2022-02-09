@@ -94,6 +94,11 @@ public class ConceptManager extends HierarchyManager<Concept> {
         return concepts.containsValue(concept);
     }
 
+    public void removeConcept(Concept concept) {
+        concepts.remove(concept.getName());
+        removeFromHierarchy(new HierarchyNode<>(concept));
+    }
+
     // TODO: kick the inits out of here and load/init them from outside the manager
     private void initFamixConcept(String name, String description) {
         try {
