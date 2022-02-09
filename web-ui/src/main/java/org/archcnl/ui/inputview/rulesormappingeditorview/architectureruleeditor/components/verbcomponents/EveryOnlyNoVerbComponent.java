@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.ruleeditor.components.verbcomponents;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -13,13 +13,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.archcnl.ui.input.ruleeditor.components.ConceptTextfieldComponent;
-import org.archcnl.ui.input.ruleeditor.components.ConditionComponent;
-import org.archcnl.ui.input.ruleeditor.components.RelationTextfieldComponent;
-import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.input.ruleeditor.events.AddAndOrVerbComponentEvent;
-import org.archcnl.ui.input.ruleeditor.events.RemoveAndOrVerbComponentEvent;
-import org.archcnl.ui.input.ruleeditor.events.ShowAndOrBlockEvent;
+
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConceptTextfieldComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RelationTextfieldComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
 
 public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComponentInterface {
 

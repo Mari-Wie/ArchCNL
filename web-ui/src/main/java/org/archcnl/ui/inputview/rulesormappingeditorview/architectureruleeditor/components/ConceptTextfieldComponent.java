@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.ruleeditor.components;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -7,17 +7,17 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 
-import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
 
-public class RelationTextfieldComponent extends TextField
+public class ConceptTextfieldComponent extends TextField
         implements DropTarget<ConceptTextfieldComponent> {
 
     private static final long serialVersionUID = 1L;
 
-    public RelationTextfieldComponent() {
+    public ConceptTextfieldComponent() {
         setActive(true);
-        setPlaceholder("Relation");
-        setLabel("Relation");
+        setPlaceholder("Concept");
+        setLabel("Concept");
         setClearButtonVisible(true);
 
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
@@ -28,11 +28,11 @@ public class RelationTextfieldComponent extends TextField
     }
 
     private void handleDropEvent(Object data) {
-        if (data instanceof Relation) {
-            Relation concept = (Relation) data;
+        if (data instanceof Concept) {
+            Concept concept = (Concept) data;
             setValue(concept.getName());
         } else {
-            showErrorMessage("Not a Relation");
+            showErrorMessage("Not a Concept");
         }
     }
 

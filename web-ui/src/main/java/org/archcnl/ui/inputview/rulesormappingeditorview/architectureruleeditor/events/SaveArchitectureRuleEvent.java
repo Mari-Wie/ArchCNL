@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.ruleeditor.events;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events;
 
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
 

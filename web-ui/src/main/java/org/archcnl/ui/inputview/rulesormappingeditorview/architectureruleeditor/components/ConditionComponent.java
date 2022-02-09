@@ -1,4 +1,4 @@
-package org.archcnl.ui.input.ruleeditor.components;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components;
 
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;

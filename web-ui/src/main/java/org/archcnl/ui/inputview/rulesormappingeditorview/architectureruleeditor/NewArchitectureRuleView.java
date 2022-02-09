@@ -5,9 +5,9 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
-import org.archcnl.ui.input.ruleeditor.components.SubjectComponent;
-import org.archcnl.ui.input.ruleeditor.components.verbcomponents.VerbComponent;
-import org.archcnl.ui.input.ruleeditor.events.DetermineVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.SubjectComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.VerbComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
 
 public class NewArchitectureRuleView extends RulesOrMappingEditorView
         implements ArchitectureRulesContract.View {

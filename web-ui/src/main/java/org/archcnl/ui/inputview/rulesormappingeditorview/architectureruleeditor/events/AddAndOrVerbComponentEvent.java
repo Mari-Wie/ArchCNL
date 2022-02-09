@@ -1,7 +1,8 @@
-package org.archcnl.ui.input.ruleeditor.events;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events;
+
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.EveryOnlyNoVerbComponent;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.archcnl.ui.input.ruleeditor.components.verbcomponents.EveryOnlyNoVerbComponent;
 
 public class AddAndOrVerbComponentEvent extends ComponentEvent<EveryOnlyNoVerbComponent> {
 

@@ -1,12 +1,13 @@
-package org.archcnl.ui.input.ruleeditor.components.verbcomponents;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.Arrays;
-import org.archcnl.ui.input.ruleeditor.components.ConceptTextfieldComponent;
-import org.archcnl.ui.input.ruleeditor.components.RelationTextfieldComponent;
-import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
+
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConceptTextfieldComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RelationTextfieldComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 
 public class FactVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
