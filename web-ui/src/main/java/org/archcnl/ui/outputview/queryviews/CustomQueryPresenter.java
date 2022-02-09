@@ -33,6 +33,7 @@ import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.UpdateQueryTextButtonPressedEvent;
@@ -80,12 +81,11 @@ public class CustomQueryPresenter extends Component {
         view.addListener(
                 PinQueryButtonPressedEvent.class,
                 e -> {
-                    queryName = view.getQueryName().orElse(DEFAULT_NAME);
-                    view.setQueryName(queryName);
                     // TODO: Allow pinning after implementing cloning
                     view.setPinButtonVisible(false);
                     fireEvent(new PinCustomQueryRequestedEvent(this, true, getView(), queryName));
                 });
+        view.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
 
         wherePresenter.addListener(
                 VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
@@ -114,6 +114,11 @@ public class CustomQueryPresenter extends Component {
         } catch (InvalidVariableNameException e1) {
             event.getSource().showErrorMessage("Invalid variable name");
         }
+    }
+
+    private void handleEvent(QueryNameUpdateRequestedEvent event) {
+        queryName = event.getName();
+        fireEvent(event);
     }
 
     private void handleEvent(VariableSelectedEvent event) {

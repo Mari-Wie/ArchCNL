@@ -13,6 +13,7 @@ import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.outputview.queryviews.CustomQueryView;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
 
@@ -84,6 +85,17 @@ public class SideBarWidget extends VerticalLayout {
 
     public void updateFreeTextQueryTab(final FreeTextQueryUiComponent freeTextQueryView) {
         freeTextQueryTab.setLinkedComponent(freeTextQueryView);
+    }
+
+    public void updatePinnedQueryName(QueryNameUpdateRequestedEvent event) {
+        tabs.getChildren()
+                .filter(SideBarTab.class::isInstance)
+                .map(SideBarTab.class::cast)
+                .filter(tab -> !tab.equals(customQueryTab))
+                .filter(tab -> !tab.equals(freeTextQueryTab))
+                .filter(tab -> tab.getLinkedComponent().equals(event.getSource()))
+                .findFirst()
+                .ifPresent(tab -> tab.updateLabel(event.getName()));
     }
 
     @Override

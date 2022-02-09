@@ -29,6 +29,7 @@ import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequested
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.SideBarWidget;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
@@ -131,6 +132,7 @@ public class OutputView extends HorizontalLayout {
                 RelationListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
         return newCustomQueryPresenter;
     }
 
@@ -173,6 +175,10 @@ public class OutputView extends HorizontalLayout {
     private void handleEvent(final FreeTextRunButtonPressedEvent event) {
         final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getSource().update(result);
+    }
+
+    private void handleEvent(final QueryNameUpdateRequestedEvent event) {
+        sideBarWidget.updatePinnedQueryName(event);
     }
 
     private void switchToComponent(final Component component) {

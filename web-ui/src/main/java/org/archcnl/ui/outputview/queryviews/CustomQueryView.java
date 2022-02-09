@@ -13,7 +13,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
@@ -29,6 +28,7 @@ import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.components.GridView;
 import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.UpdateQueryTextButtonPressedEvent;
 
@@ -56,6 +56,14 @@ public class CustomQueryView extends HorizontalLayout {
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
         queryName = new TextField("Name");
         queryName.setPlaceholder("Name of this query");
+        queryName.addValueChangeListener(
+                event -> {
+                    if (queryName.getOptionalValue().isPresent()) {
+                        fireEvent(
+                                new QueryNameUpdateRequestedEvent(
+                                        this, true, queryName.getValue()));
+                    }
+                });
         pinButton =
                 new Button(
                         new Icon(VaadinIcon.PIN),
@@ -92,10 +100,6 @@ public class CustomQueryView extends HorizontalLayout {
         content.add(queryTextArea);
 
         addAndExpand(content, conceptAndRelationView);
-    }
-
-    public Optional<String> getQueryName() {
-        return queryName.getOptionalValue();
     }
 
     public void setQueryName(String name) {
