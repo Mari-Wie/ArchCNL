@@ -3,12 +3,11 @@ package org.archcnl.domain.output.model.query;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import org.archcnl.domain.common.FormattedQueryDomainObject;
-import org.archcnl.domain.common.FormattedViewDomainObject;
-import org.archcnl.domain.common.Variable;
+import org.archcnl.domain.common.FormattedDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
 /** Representation of SPARQL SELECT clause */
-public class SelectClause implements FormattedQueryDomainObject, FormattedViewDomainObject {
+public class SelectClause implements FormattedDomainObject {
 
     public static final String SELECT = "SELECT";
 
@@ -45,7 +44,7 @@ public class SelectClause implements FormattedQueryDomainObject, FormattedViewDo
 
     @Override
     public String transformToGui() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(SelectClause.SELECT);
         sb.append(" ");
         objects.stream().forEach(o -> sb.append(o.transformToGui() + " "));
@@ -54,10 +53,22 @@ public class SelectClause implements FormattedQueryDomainObject, FormattedViewDo
 
     @Override
     public String transformToSparqlQuery() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(SelectClause.SELECT);
         sb.append(" ");
         objects.stream().forEach(o -> sb.append(o.transformToSparqlQuery() + " "));
         return sb.toString();
+    }
+
+    @Override
+    public String transformToAdoc() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(SELECT");
+        for (Variable variable : objects) {
+            builder.append(" ");
+            builder.append(variable.transformToAdoc());
+        }
+        builder.append(")");
+        return builder.toString();
     }
 }

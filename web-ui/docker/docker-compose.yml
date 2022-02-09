@@ -1,7 +1,7 @@
 version: "2.4"
 services:
   archcnl-ui.org:
-    image: trunov/archcnl:0.0.1-SNAPSHOT
+    image: mariwie/archcnl:0.0.1-SNAPSHOT
     restart: always
     container_name: archcnl-ui.org
     environment:
@@ -12,6 +12,8 @@ services:
       - DB_NAME=archcnl_it_db
       - DB_PROTOCOL=http
       - DB_PORT=5820
+      - DB_CONTEXT=http://graphs.org/archcnl_it_db/1.0
+      - DB_RULEFILE=temp/GeneratedRuleFile.adoc
     depends_on:
       - archcnl-stardog.org
     ports:
