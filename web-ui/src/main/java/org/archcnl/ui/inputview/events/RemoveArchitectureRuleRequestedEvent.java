@@ -1,7 +1,8 @@
-package org.archcnl.ui.inputview;
+package org.archcnl.ui.inputview.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.ui.inputview.InputPresenter;
 
 public class RemoveArchitectureRuleRequestedEvent extends ComponentEvent<InputPresenter> {
 
