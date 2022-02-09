@@ -10,6 +10,10 @@ public class ArchitectureRule {
         this.ruleString = rule;
     }
 
+    public void setRuleString(String ruleString) {
+        this.ruleString = ruleString;
+    }
+
     public String toStringRepresentation() {
         return ruleString;
     }

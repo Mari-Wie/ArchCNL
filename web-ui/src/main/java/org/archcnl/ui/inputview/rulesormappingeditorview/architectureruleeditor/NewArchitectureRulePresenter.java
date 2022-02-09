@@ -7,8 +7,8 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddArchitectureRuleRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddRuleButtonPressedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 
 @Tag("NewArchitectureRulePresenter")
@@ -29,10 +29,10 @@ public class NewArchitectureRulePresenter extends Component {
 
     private void addListeners() {
         view.addListener(
-                AddRuleButtonPressedEvent.class,
+                SaveRuleButtonPressedEvent.class,
                 event ->
                         fireEvent(
-                                new AddArchitectureRuleRequestedEvent(
+                                new SaveArchitectureRuleRequestedEvent(
                                         this, true, new ArchitectureRule(event.getRuleString()))));
         view.addListener(RuleEditorRequestedEvent.class, this::fireEvent);
     }

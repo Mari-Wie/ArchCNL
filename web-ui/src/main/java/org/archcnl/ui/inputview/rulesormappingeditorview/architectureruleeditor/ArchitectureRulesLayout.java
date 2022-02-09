@@ -7,6 +7,8 @@ import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 
 public class ArchitectureRulesLayout extends RulesOrMappingEditorView {
@@ -16,6 +18,7 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView {
     VerticalLayout rulesLayout = new VerticalLayout();
 
     public ArchitectureRulesLayout() {
+        setWidthFull();
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
         createCreateNewLayout(
                 "Architecture Rules",
@@ -27,7 +30,10 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView {
     public void updateRules(final List<ArchitectureRule> rules) {
         rulesLayout.removeAll();
         for (int i = 0; i < rules.size(); i++) {
-            rulesLayout.add(new RuleView(rules.get(i), i + 1));
+            RuleView ruleView = new RuleView(rules.get(i), i + 1);
+            ruleView.addListener(EditRuleButtonPressedEvent.class, this::fireEvent);
+            ruleView.addListener(DeleteRuleButtonPressedEvent.class, this::fireEvent);
+            rulesLayout.add(ruleView);
         }
     }
 

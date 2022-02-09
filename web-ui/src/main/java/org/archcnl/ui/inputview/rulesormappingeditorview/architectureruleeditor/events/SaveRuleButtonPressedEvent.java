@@ -3,12 +3,12 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
 
-public class AddRuleButtonPressedEvent extends ComponentEvent<NewArchitectureRuleView> {
+public class SaveRuleButtonPressedEvent extends ComponentEvent<NewArchitectureRuleView> {
 
     private static final long serialVersionUID = 366316698961954929L;
     private String ruleString;
 
-    public AddRuleButtonPressedEvent(
+    public SaveRuleButtonPressedEvent(
             NewArchitectureRuleView source, boolean fromClient, String ruleString) {
         super(source, fromClient);
         this.ruleString = ruleString;

@@ -4,13 +4,13 @@ import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
 
-public class AddArchitectureRuleRequestedEvent
+public class SaveArchitectureRuleRequestedEvent
         extends ComponentEvent<NewArchitectureRulePresenter> {
 
     private static final long serialVersionUID = 366316698961954929L;
     private ArchitectureRule rule;
 
-    public AddArchitectureRuleRequestedEvent(
+    public SaveArchitectureRuleRequestedEvent(
             NewArchitectureRulePresenter source, boolean fromClient, ArchitectureRule rule) {
         super(source, fromClient);
         this.rule = rule;

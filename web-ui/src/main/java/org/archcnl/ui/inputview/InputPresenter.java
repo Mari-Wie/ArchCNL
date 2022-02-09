@@ -20,7 +20,9 @@ import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddArchitectureRuleRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
@@ -59,6 +61,8 @@ public class InputPresenter extends Component {
 
         view.addListener(OutputViewRequestedEvent.class, this::fireEvent);
         architectureRulesLayout.addListener(RuleCreatorRequestedEvent.class, this::handleEvent);
+        architectureRulesLayout.addListener(EditRuleButtonPressedEvent.class, this::handleEvent);
+        architectureRulesLayout.addListener(DeleteRuleButtonPressedEvent.class, this::fireEvent);
     }
 
     public InputView getView() {
@@ -97,7 +101,21 @@ public class InputPresenter extends Component {
     private void handleEvent(final RuleCreatorRequestedEvent event) {
         final NewArchitectureRulePresenter presenter = new NewArchitectureRulePresenter();
         presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
-        presenter.addListener(AddArchitectureRuleRequestedEvent.class, this::fireEvent);
+        presenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::fireEvent);
+        view.changeCurrentlyShownView(presenter.getView());
+    }
+
+    private void handleEvent(final EditRuleButtonPressedEvent event) {
+        final NewArchitectureRulePresenter presenter =
+                new NewArchitectureRulePresenter(event.getRule());
+        presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        presenter.addListener(
+                SaveArchitectureRuleRequestedEvent.class,
+                e -> {
+                    fireEvent(
+                            new RemoveArchitectureRuleRequestedEvent(this, false, event.getRule()));
+                    fireEvent(e);
+                });
         view.changeCurrentlyShownView(presenter.getView());
     }
 
