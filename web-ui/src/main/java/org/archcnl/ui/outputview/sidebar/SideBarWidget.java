@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -51,16 +50,11 @@ public class SideBarWidget extends VerticalLayout {
             final CustomQueryView customQueryView,
             final FreeTextQueryUiComponent freeTextQueryView) {
 
-        final Span genInfo = new Span("General Information");
-        genInfo.setClassName("side-bar-text");
         final SideBarTab generalInformationTab =
-                new SideBarTab(genInfo, VaadinIcon.INFO_CIRCLE, defaultQueryView);
-        final Span customQuery = new Span("Custom Queries");
-        customQuery.setClassName("side-bar-text");
-        customQueryTab = new SideBarTab(customQuery, VaadinIcon.AUTOMATION, customQueryView);
-        final Span freeText = new Span("Free Text Queries");
-        freeText.setClassName("side-bar-text");
-        freeTextQueryTab = new SideBarTab(freeText, VaadinIcon.TEXT_INPUT, freeTextQueryView);
+                new SideBarTab("General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView);
+        customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
+        freeTextQueryTab =
+                new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
         tabs = new Tabs(generalInformationTab, customQueryTab, freeTextQueryTab);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setHeightFull();
@@ -79,9 +73,7 @@ public class SideBarWidget extends VerticalLayout {
     }
 
     public void addPinnedQueryTab(Component linkedComponent, String name) {
-        final Span nameSpan = new Span(name);
-        nameSpan.setClassName("side-bar-text");
-        final SideBarTab newTab = new SideBarTab(nameSpan, VaadinIcon.PIN, linkedComponent);
+        final SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, linkedComponent);
         tabs.add(newTab);
         tabs.setSelectedTab(newTab);
     }
