@@ -150,6 +150,7 @@ public class OutputView extends HorizontalLayout {
                 e -> this.insertCustomQueryIntoFreeTextQuery());
         newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
+        newComponent.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
         return newComponent;
     }
 

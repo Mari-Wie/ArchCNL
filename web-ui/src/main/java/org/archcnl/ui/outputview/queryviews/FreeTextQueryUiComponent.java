@@ -11,6 +11,7 @@ import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 
 public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
@@ -50,6 +51,14 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
         queryName = new TextField("Name");
         queryName.setPlaceholder("Name of this query");
+        queryName.addValueChangeListener(
+                event -> {
+                    if (queryName.getOptionalValue().isPresent()) {
+                        fireEvent(
+                                new QueryNameUpdateRequestedEvent(
+                                        this, true, queryName.getValue()));
+                    }
+                });
 
         defaultQueryButton =
                 new Button(
