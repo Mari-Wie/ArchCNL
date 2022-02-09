@@ -18,11 +18,13 @@ import org.archcnl.ui.input.ruleeditor.components.ConditionComponent;
 import org.archcnl.ui.input.ruleeditor.components.RelationTextfieldComponent;
 import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.input.ruleeditor.events.AddAndOrVerbComponentEvent;
+import org.archcnl.ui.input.ruleeditor.events.RemoveAndOrVerbComponentEvent;
+import org.archcnl.ui.input.ruleeditor.events.ShowAndOrBlockEvent;
 
 public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
-    private HorizontalLayout componentRuleLayout;
+    private HorizontalLayout horizontalRowLayout, componentRuleLayout;
     private ConditionComponent newCondition;
     private ComboBox<String> one_firstCombobox, three_secondCombobox;
     private RelationTextfieldComponent two_firstVariable;
@@ -40,6 +42,9 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
                             "at-most",
                             "at-least",
                             "exactly",
+                            "equal-to",
+                            "equal-to a",
+                            "equal-to an",
                             "equal-to at-most",
                             "equal-to at-least",
                             "equal-to exactly"));
@@ -98,6 +103,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
     private void initializeLayout() {
         newCondition = new ConditionComponent();
 
+        horizontalRowLayout = new HorizontalLayout();
         componentRuleLayout = new HorizontalLayout();
         initializeFirstCombobox();
         two_firstVariable = new RelationTextfieldComponent();
@@ -111,7 +117,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         five_thirdVariable = new ConceptTextfieldComponent();
         six_addConditionCheckbox = new Checkbox("that... (add condition)");
         six_addConditionCheckbox.addClickListener(
-                e -> addConditionBlock(six_addConditionCheckbox.getValue()));
+                e -> showConditionBlock(six_addConditionCheckbox.getValue()));
         componentRuleLayout.setVerticalComponentAlignment(Alignment.END, six_addConditionCheckbox);
 
         buildingBlock = new Component[6];
@@ -122,7 +128,9 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         buildingBlock[4] = five_thirdVariable;
         buildingBlock[5] = six_addConditionCheckbox;
 
-        add(componentRuleLayout);
+        horizontalRowLayout.add(componentRuleLayout);
+        initializeAndOrButtons();
+        add(horizontalRowLayout);
     }
 
     private void initializeFirstCombobox() {
@@ -142,7 +150,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
                                     "must be a",
                                     "must be an"));
             one_firstCombobox.setValue("must");
-            secondModifierList.addAll(Arrays.asList("anything", "equal-to", "equal-to anything"));
+            secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
         }
         one_firstCombobox.addValueChangeListener(
                 e -> {
@@ -158,9 +166,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
                 || firstModifier.equals("must be a")
                 || firstModifier.equals("must be an")) {
             currentState = SelectionState.ONETWO;
-            fireEvent(new AddAndOrVerbComponentEvent(this, true));
         } else {
-            fireEvent(new AddAndOrVerbComponentEvent(this, true));
             String secondModifier = three_secondCombobox.getValue();
             if (secondModifier.equals("equal-to anything") || secondModifier.equals("anything")) {
                 currentState = SelectionState.ONETWOTHREE;
@@ -183,6 +189,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
                 currentState = currentState.switchToStateWithActivatedCondition();
             }
         }
+
         updateUI();
     }
 
@@ -191,6 +198,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         four_secondVariable.setPlaceholder("Concept");
         four_secondVariable.setLabel("Concept");
 
+        // Show all UI elements according to current state
         boolean[] boolArray = currentState.getShowComponentBooleanArray();
         for (int i = 0; i < boolArray.length; i++) {
             if (boolArray[i]) {
@@ -198,33 +206,53 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
             }
         }
 
-        if (boolArray[4]) {
-            four_secondVariable.setPlaceholder("+/- [0-9]");
-            four_secondVariable.setLabel("Number");
+        // Change component descriptors if necessary
+        if (boolArray[3]) {
+            if (currentState == SelectionState.ONETWOTHREEFOURFIVE
+                    || currentState == SelectionState.ONETWOTHREEFOURFIVESIX) {
+                four_secondVariable.setPlaceholder("+/- [0-9]");
+                four_secondVariable.setLabel("Number");
+            }
 
             if (currentState == SelectionState.ONETWOTHREEFOUR) {
                 four_secondVariable.setPlaceholder("+/- [0-9] / String");
                 four_secondVariable.setLabel("Number or String");
             }
         }
-    }
-    
-    private HorizontalLayout getButtons()
-    {
-        HorizontalLayout boxButtonLayout = new HorizontalLayout();
-        Button addButton =
-                new Button(
-                        new Icon(VaadinIcon.PLUS),
-                        click -> addAndOrVerbComponent());
-        Button deleteButton =
-                new Button(
-                        new Icon(VaadinIcon.TRASH),
-                        click -> removeAndOrVerbComponent());
-        boxButtonLayout.add(addButton, deleteButton);
-        return boxButtonLayout;
+        // Hide / Show condition
+        showConditionBlock(boolArray[5] && six_addConditionCheckbox.getValue());
+
+        // Hide / Show AndOr Block
+        switch (currentState) {
+            case ONETWO:
+            case ONETWOSIX:
+            case ONETWOTHREE:
+                fireEvent(new ShowAndOrBlockEvent(this, true, false));
+                break;
+            default:
+                fireEvent(new ShowAndOrBlockEvent(this, true, true));
+                break;
+        }
     }
 
-    private void addConditionBlock(Boolean showCondition) {
+    private void initializeAndOrButtons() {
+        if (isAndOrBlock) {
+            HorizontalLayout boxButtonLayout = new HorizontalLayout();
+            Button addButton =
+                    new Button(
+                            new Icon(VaadinIcon.PLUS),
+                            click -> fireEvent(new AddAndOrVerbComponentEvent(this, true)));
+            Button deleteButton =
+                    new Button(
+                            new Icon(VaadinIcon.TRASH),
+                            click -> fireEvent(new RemoveAndOrVerbComponentEvent(this, true)));
+            boxButtonLayout.add(addButton, deleteButton);
+            horizontalRowLayout.add(boxButtonLayout);
+            horizontalRowLayout.setVerticalComponentAlignment(Alignment.END, boxButtonLayout);
+        }
+    }
+
+    private void showConditionBlock(Boolean showCondition) {
         if (showCondition) {
             add(newCondition);
         } else {
@@ -240,6 +268,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
 
     @Override
     public String getString() {
+        // This is an empty AndOr Block and is ignored
         if (one_firstCombobox.getValue().equals("-")) {
             return "";
         }

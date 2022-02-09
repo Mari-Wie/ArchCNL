@@ -50,6 +50,7 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
         archRuleTextArea =
                 new TextArea("Freetext mode", "Every Aggregate must residein a DomainRing");
         archRuleTextArea.setWidthFull();
+        buttonsLayout.setPadding(true);
         buttonsLayout.add(saveButton, activateExpertmode);
 
         add(subject, verb, buttonsLayout);
@@ -71,4 +72,20 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView
         }
         presenter.returnToRulesView();
     }
+
+    // TODO Use Events to save architecture rule once merged into the master
+    //    private void saveRule() {
+    //        if (!archRuleTextArea.isEmpty()) {
+    //            fireEvent(new SaveArchitectureRuleEvent(this, true, archRuleTextArea.getValue()));
+    //        } else {
+    //            fireEvent(new SaveArchitectureRuleEvent(this, true, subject.getString() +
+    // verb.getString()));
+    //        }
+    //    }
+    //
+    //    @Override
+    //    public <T extends ComponentEvent<?>> Registration addListener(
+    //            final Class<T> eventType, final ComponentEventListener<T> listener) {
+    //        return getEventBus().addListener(eventType, listener);
+    //    }
 }

@@ -1,6 +1,5 @@
 package org.archcnl.ui.input.ruleeditor.components.verbcomponents;
 
-import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -8,12 +7,17 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
+import org.archcnl.ui.input.ruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.input.ruleeditor.events.AddAndOrVerbComponentEvent;
+import org.archcnl.ui.input.ruleeditor.events.RemoveAndOrVerbComponentEvent;
+import org.archcnl.ui.input.ruleeditor.events.ShowAndOrBlockEvent;
 
 public class VerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private ArrayList<RuleComponentInterface> verbComponentList;
-    private RuleComponentInterface verbComponent;
+    private boolean showAndOrComponent = true;
+    private String currentSubjectSelection;
 
     /**
      * There are three possible verb component, depending on what descriptor is chosen in the
@@ -23,39 +27,82 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
         verbComponentList = new ArrayList<>();
+        currentSubjectSelection = "";
     }
 
     /**
      * Called by DetermineVerbComponentEvent. Event is fired when a different descriptor is selected
      * in the subject component.
+     *
      * @param selectedDescriptor the value of the first ComboBox of the subject component.
      */
     public void determineVerbComponent(String selectedDescriptor) {
+        // TODO Quality-of-Life: also return when the new descriptor doesn't change the verb
+        // component
+        if (currentSubjectSelection.equals(selectedDescriptor)) {
+            return;
+        }
+
         removeAll();
         verbComponentList.clear();
         add(new Label("Rule Statement"));
 
-        if (selectedDescriptor.equals("If")) {
-            verbComponent = new IfVerbComponent();
+        if (selectedDescriptor.equals("If")
+                || selectedDescriptor.equals("If a")
+                || selectedDescriptor.equals("If an")) {
+            IfVerbComponent verbComponent = new IfVerbComponent();
+            verbComponentList.add(verbComponent);
+            add(verbComponent);
         } else if (selectedDescriptor.equals("Fact:")) {
-            verbComponent = new FactVerbComponent();
+            FactVerbComponent verbComponent = new FactVerbComponent();
+            verbComponentList.add(verbComponent);
+            add(verbComponent);
         } else {
-            verbComponent = new EveryOnlyNoVerbComponent(false);     
+            EveryOnlyNoVerbComponent verbComponent = new EveryOnlyNoVerbComponent(false);
+            verbComponent.addListener(
+                    ShowAndOrBlockEvent.class,
+                    event -> showAndOrComponent(event.getShowAndOrBlock()));
+            verbComponentList.add(verbComponent);
+            add(verbComponent);
+            addAndOrVerbComponent();
         }
-        verbComponentList.add(verbComponent);
-        add((Component)verbComponent);
+        currentSubjectSelection = selectedDescriptor;
     }
-    
+
+    private void showAndOrComponent(boolean showComponent) {
+        if (!showComponent) {
+            ArrayList<RuleComponentInterface> verbComponentsToRemoveList = new ArrayList<>();
+            verbComponentList.stream()
+                    .skip(1)
+                    .forEach(
+                            item -> {
+                                verbComponentsToRemoveList.add(item);
+                                remove((Component) item);
+                            });
+            verbComponentList.removeAll(verbComponentsToRemoveList);
+        } else if (verbComponentList.size() < 2) {
+            addAndOrVerbComponent();
+        }
+        showAndOrComponent = showComponent;
+    }
+
     private void addAndOrVerbComponent() {
         EveryOnlyNoVerbComponent andOrVerbComponent = new EveryOnlyNoVerbComponent(true);
+        andOrVerbComponent.addListener(
+                AddAndOrVerbComponentEvent.class, event -> addAndOrVerbComponent());
+        andOrVerbComponent.addListener(
+                RemoveAndOrVerbComponentEvent.class,
+                event -> removeAndOrVerbComponent(event.getSource()));
         add(andOrVerbComponent);
         verbComponentList.add(andOrVerbComponent);
     }
 
-    private void removeAndOrVerbComponent() {
-        RuleComponentInterface vc = verbComponentList.get(verbComponentList.size() - 1);
-        verbComponentList.remove(vc);
-        remove((Component) vc);
+    private void removeAndOrVerbComponent(EveryOnlyNoVerbComponent source) {
+        verbComponentList.remove(source);
+        remove((Component) source);
+        if (verbComponentList.size() == 1 && showAndOrComponent) {
+            addAndOrVerbComponent();
+        }
     }
 
     @Override
