@@ -8,7 +8,6 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorVie
 import org.archcnl.ui.input.ruleeditor.components.SubjectComponent;
 import org.archcnl.ui.input.ruleeditor.components.verbcomponents.VerbComponent;
 import org.archcnl.ui.input.ruleeditor.events.DetermineVerbComponentEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 
 public class NewArchitectureRuleView extends RulesOrMappingEditorView
         implements ArchitectureRulesContract.View {
