@@ -20,7 +20,6 @@ import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
@@ -99,9 +98,7 @@ public class InputPresenter extends Component {
         final NewArchitectureRulePresenter presenter = new NewArchitectureRulePresenter();
         presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
         presenter.addListener(AddArchitectureRuleRequestedEvent.class, this::fireEvent);
-        final NewArchitectureRuleView newArchitectureRuleView =
-                new NewArchitectureRuleView(presenter);
-        view.changeCurrentlyShownView(newArchitectureRuleView);
+        view.changeCurrentlyShownView(presenter.getView());
     }
 
     public void updateArchitectureRulesLayout(final List<ArchitectureRule> rules) {

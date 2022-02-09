@@ -5,31 +5,40 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
+import java.util.Optional;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesContract.View;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddArchitectureRuleRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
 
 @Tag("NewArchitectureRulePresenter")
-public class NewArchitectureRulePresenter extends Component
-        implements ArchitectureRulesContract.Presenter<View> {
+public class NewArchitectureRulePresenter extends Component {
 
     private static final long serialVersionUID = -5047059702637257819L;
+    private NewArchitectureRuleView view;
 
-    @Override
-    public void saveArchitectureRule(final String potentialRule) {
-        final ArchitectureRule newRule = parseArchitectureRule(potentialRule);
-        fireEvent(new AddArchitectureRuleRequestedEvent(this, true, newRule));
+    public NewArchitectureRulePresenter() {
+        view = new NewArchitectureRuleView(Optional.empty());
+        addListeners();
     }
 
-    private ArchitectureRule parseArchitectureRule(final String potentialRule) {
-        // TODO implement actual parsing
-        return new ArchitectureRule(potentialRule);
+    public NewArchitectureRulePresenter(ArchitectureRule rule) {
+        view = new NewArchitectureRuleView(Optional.of(rule.toStringRepresentation()));
+        addListeners();
     }
 
-    @Override
-    public void returnToRulesView() {
-        fireEvent(new RuleEditorRequestedEvent(this, true));
+    private void addListeners() {
+        view.addListener(
+                AddRuleButtonPressedEvent.class,
+                event ->
+                        fireEvent(
+                                new AddArchitectureRuleRequestedEvent(
+                                        this, true, new ArchitectureRule(event.getRuleString()))));
+        view.addListener(RuleEditorRequestedEvent.class, this::fireEvent);
+    }
+
+    public NewArchitectureRuleView getView() {
+        return view;
     }
 
     @Override
