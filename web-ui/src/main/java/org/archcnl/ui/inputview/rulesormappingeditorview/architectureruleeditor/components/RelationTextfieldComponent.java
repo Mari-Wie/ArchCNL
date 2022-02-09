@@ -6,7 +6,6 @@ import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
-
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 
 public class RelationTextfieldComponent extends TextField

@@ -1,9 +1,8 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events;
 
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.SubjectComponent;
-
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.DomEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.SubjectComponent;
 
 @DomEvent("change")
 public class DetermineVerbComponentEvent extends ComponentEvent<SubjectComponent> {

@@ -1,8 +1,7 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events;
 
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
-
 import com.vaadin.flow.component.ComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRuleView;
 
 public class SaveArchitectureRuleEvent extends ComponentEvent<NewArchitectureRuleView> {
 
