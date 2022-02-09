@@ -8,6 +8,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
@@ -70,6 +72,8 @@ public class InputView extends HorizontalLayout {
                 ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(
                 RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(DeleteConceptRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(DeleteRelationRequestedEvent.class, this::fireEvent);
     }
 
     @Override

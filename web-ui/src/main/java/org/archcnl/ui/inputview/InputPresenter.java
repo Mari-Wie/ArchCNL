@@ -14,6 +14,8 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
@@ -60,6 +62,8 @@ public class InputPresenter extends Component {
         view.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
         view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
 
+        view.addListener(DeleteConceptRequestedEvent.class, this::fireEvent);
+        view.addListener(DeleteRelationRequestedEvent.class, this::fireEvent);
         view.addListener(OutputViewRequestedEvent.class, this::fireEvent);
         architectureRulesLayout.addListener(RuleCreatorRequestedEvent.class, this::handleEvent);
         architectureRulesLayout.addListener(EditRuleButtonPressedEvent.class, this::handleEvent);
