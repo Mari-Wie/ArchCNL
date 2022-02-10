@@ -20,7 +20,6 @@ import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.inputview.events.RemoveArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
@@ -114,13 +113,7 @@ public class InputPresenter extends Component {
         final NewArchitectureRulePresenter presenter =
                 new NewArchitectureRulePresenter(event.getRule());
         presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
-        presenter.addListener(
-                SaveArchitectureRuleRequestedEvent.class,
-                e -> {
-                    fireEvent(
-                            new RemoveArchitectureRuleRequestedEvent(this, false, event.getRule()));
-                    fireEvent(e);
-                });
+        presenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::fireEvent);
         view.changeCurrentlyShownView(presenter.getView());
     }
 

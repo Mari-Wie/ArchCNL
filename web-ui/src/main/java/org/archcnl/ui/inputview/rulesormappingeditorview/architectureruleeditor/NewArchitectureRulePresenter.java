@@ -16,13 +16,16 @@ public class NewArchitectureRulePresenter extends Component {
 
     private static final long serialVersionUID = -5047059702637257819L;
     private NewArchitectureRuleView view;
+    Optional<ArchitectureRule> oldRule;
 
     public NewArchitectureRulePresenter() {
+        oldRule = Optional.empty();
         view = new NewArchitectureRuleView(Optional.empty());
         addListeners();
     }
 
     public NewArchitectureRulePresenter(ArchitectureRule rule) {
+        oldRule = Optional.of(rule);
         view = new NewArchitectureRuleView(Optional.of(rule.toStringRepresentation()));
         addListeners();
     }
@@ -33,7 +36,10 @@ public class NewArchitectureRulePresenter extends Component {
                 event ->
                         fireEvent(
                                 new SaveArchitectureRuleRequestedEvent(
-                                        this, true, new ArchitectureRule(event.getRuleString()))));
+                                        this,
+                                        true,
+                                        new ArchitectureRule(event.getRuleString()),
+                                        oldRule)));
         view.addListener(RuleEditorRequestedEvent.class, this::fireEvent);
     }
 

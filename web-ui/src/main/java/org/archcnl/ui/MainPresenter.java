@@ -280,7 +280,12 @@ public class MainPresenter extends Component {
     }
 
     private void handleEvent(SaveArchitectureRuleRequestedEvent event) {
-        ruleManager.addArchitectureRule(event.getRule());
+        Optional<ArchitectureRule> oldRule = event.getOldRule();
+        if (oldRule.isEmpty()) {
+            ruleManager.addArchitectureRule(event.getNewRule());
+        } else {
+            ruleManager.updateArchitectureRule(oldRule.get(), event.getNewRule());
+        }
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 
