@@ -31,6 +31,6 @@ public class ArchitectureRuleManager {
         architectureRules.stream()
                 .filter(rule -> rule.equals(oldRule))
                 .findFirst()
-                .ifPresent(rule -> rule.setRuleString(newRule.toStringRepresentation()));
+                .ifPresent(rule -> rule.setRuleString(newRule.transformToAdoc()));
     }
 }

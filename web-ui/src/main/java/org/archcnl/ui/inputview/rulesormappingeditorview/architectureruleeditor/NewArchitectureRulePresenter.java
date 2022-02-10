@@ -26,7 +26,7 @@ public class NewArchitectureRulePresenter extends Component {
 
     public NewArchitectureRulePresenter(ArchitectureRule rule) {
         oldRule = Optional.of(rule);
-        view = new NewArchitectureRuleView(Optional.of(rule.toStringRepresentation()));
+        view = new NewArchitectureRuleView(Optional.of(rule.transformToGui()));
         addListeners();
     }
 

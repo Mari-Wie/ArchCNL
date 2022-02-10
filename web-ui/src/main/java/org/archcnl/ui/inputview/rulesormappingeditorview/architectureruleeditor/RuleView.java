@@ -36,7 +36,7 @@ public class RuleView extends HorizontalLayout {
         vDivider.setHeight(100, Unit.PERCENTAGE);
         vDivider.setSpacing(true);
         vDivider.setMargin(true);
-        Text ruleText = new Text(rule.toStringRepresentation());
+        Text ruleText = new Text(rule.transformToGui());
         HorizontalLayout content = new HorizontalLayout(number, vDivider, ruleText);
         content.setWidthFull();
 
