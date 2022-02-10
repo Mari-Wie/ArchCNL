@@ -55,15 +55,15 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
      * showing of different components.
      */
     private enum SelectionState {
-        ONE(true, false, false, false, false, false),
-        ONETWO(true, true, false, false, false, true),
-        ONETWOSIX(true, true, false, false, false, true),
-        ONETWOTHREE(true, true, true, false, false, false),
-        ONETWOTHREEFOURFIVE(true, true, true, true, true, true),
-        ONETWOTHREEFOURFIVESIX(true, true, true, true, true, true),
-        ONETWOTHREEFOUR(true, true, true, true, false, false),
-        ONETWOTHREEFOURB(true, true, true, true, false, true),
-        ONETWOTHREEFOURSIX(true, true, true, true, false, true);
+        EMPTYANDORBLOCK(true, false, false, false, false, false),
+        MUSTBEBRANCH(true, true, false, false, false, true),
+        MUSTBEBRANCHWITHCONDITION(true, true, false, false, false, true),
+        ANYTHINGBRANCH(true, true, true, false, false, false),
+        DEFAULTNUMBERBRANCH(true, true, true, true, true, true),
+        DEFAULTNUMBERBRANCHWITHCONDITION(true, true, true, true, true, true),
+        EQUALTOVARIABLEBRANCH(true, true, true, true, false, false),
+        DEFAULTBRANCH(true, true, true, true, false, true),
+        DEFAULTBRANCHWITHCONDITION(true, true, true, true, false, true);
 
         private boolean[] showComponentsBooleanArray;
 
@@ -161,26 +161,26 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
     private void determineState() {
         String firstModifier = one_firstCombobox.getValue();
         if (firstModifier.equals("-")) {
-            currentState = SelectionState.ONE;
+            currentState = SelectionState.EMPTYANDORBLOCK;
         } else if (firstModifier.equals("must be")
                 || firstModifier.equals("must be a")
                 || firstModifier.equals("must be an")) {
-            currentState = SelectionState.ONETWO;
+            currentState = SelectionState.MUSTBEBRANCH;
         } else {
             String secondModifier = three_secondCombobox.getValue();
             if (secondModifier.equals("equal-to anything") || secondModifier.equals("anything")) {
-                currentState = SelectionState.ONETWOTHREE;
+                currentState = SelectionState.ANYTHINGBRANCH;
             } else if (secondModifier.equals("equal-to")) {
-                currentState = SelectionState.ONETWOTHREEFOUR;
+                currentState = SelectionState.EQUALTOVARIABLEBRANCH;
             } else if (secondModifier.equals("at-most")
                     || secondModifier.equals("at-least")
                     || secondModifier.equals("exactly")
                     || secondModifier.equals("equal-to at-most")
                     || secondModifier.equals("equal-to at-least")
                     || secondModifier.equals("equal-to exactly")) {
-                currentState = SelectionState.ONETWOTHREEFOURFIVE;
+                currentState = SelectionState.DEFAULTNUMBERBRANCH;
             } else {
-                currentState = SelectionState.ONETWOTHREEFOURB;
+                currentState = SelectionState.DEFAULTBRANCH;
             }
         }
 
@@ -208,13 +208,13 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
 
         // Change component descriptors if necessary
         if (boolArray[3]) {
-            if (currentState == SelectionState.ONETWOTHREEFOURFIVE
-                    || currentState == SelectionState.ONETWOTHREEFOURFIVESIX) {
+            if (currentState == SelectionState.DEFAULTNUMBERBRANCH
+                    || currentState == SelectionState.DEFAULTNUMBERBRANCHWITHCONDITION) {
                 four_secondVariable.setPlaceholder("+/- [0-9]");
                 four_secondVariable.setLabel("Number");
             }
 
-            if (currentState == SelectionState.ONETWOTHREEFOUR) {
+            if (currentState == SelectionState.EQUALTOVARIABLEBRANCH) {
                 four_secondVariable.setPlaceholder("+/- [0-9] / String");
                 four_secondVariable.setLabel("Number or String");
             }
@@ -224,9 +224,9 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
 
         // Hide / Show AndOr Block
         switch (currentState) {
-            case ONETWO:
-            case ONETWOSIX:
-            case ONETWOTHREE:
+            case MUSTBEBRANCH:
+            case MUSTBEBRANCHWITHCONDITION:
+            case ANYTHINGBRANCH:
                 fireEvent(new ShowAndOrBlockEvent(this, true, false));
                 break;
             default:
