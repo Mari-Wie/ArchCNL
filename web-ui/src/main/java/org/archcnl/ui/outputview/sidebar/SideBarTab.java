@@ -9,13 +9,14 @@ import com.vaadin.flow.component.tabs.Tab;
 public class SideBarTab extends Tab {
 
     private static final long serialVersionUID = 8246935861159358702L;
-    private final VaadinIcon icon;
+    private final Span label;
     private Component linkedComponent;
 
     public SideBarTab(final String text, final VaadinIcon icon, final Component linkedComponent) {
-        super(new Icon(icon), SideBarTab.createLabel(text));
-        this.icon = icon;
+        super(new Icon(icon));
+        this.label = createLabel(text);
         this.linkedComponent = linkedComponent;
+        add(label);
     }
 
     public Component getLinkedComponent() {
@@ -27,13 +28,12 @@ public class SideBarTab extends Tab {
     }
 
     public void updateLabel(String text) {
-        removeAll();
-        add(new Icon(icon), createLabel(text));
+        label.setText(text);
     }
 
-    private static Span createLabel(String text) {
-        Span label = new Span(text);
-        label.setClassName("side-bar-text");
-        return label;
+    private Span createLabel(String text) {
+        Span newlabel = new Span(text);
+        newlabel.setClassName("side-bar-text");
+        return newlabel;
     }
 }
