@@ -15,7 +15,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.ProjectManager;
+import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
@@ -27,6 +30,9 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
 
     public SaveProjectDialog(
             ProjectManager projectManager,
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager,
             List<Query> customQueries,
             List<FreeTextQuery> freeTextQueries) {
         setDraggable(true);
@@ -75,7 +81,12 @@ public class SaveProjectDialog extends Dialog implements FileSelectionDialog {
                                     }
                                     Path path = Paths.get(file.get().getAbsolutePath(), fileName);
                                     projectManager.saveProject(
-                                            path.toFile(), customQueries, freeTextQueries);
+                                            path.toFile(),
+                                            ruleManager,
+                                            conceptManager,
+                                            relationManager,
+                                            customQueries,
+                                            freeTextQueries);
                                     close();
                                     fireEvent(new ProjectSavedEvent(this, true));
                                 } catch (IOException e) {

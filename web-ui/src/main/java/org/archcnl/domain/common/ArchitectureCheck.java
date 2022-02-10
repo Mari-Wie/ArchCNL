@@ -9,7 +9,7 @@ import java.util.List;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.application.service.ConfigAppService;
 import org.archcnl.domain.common.io.AdocExporter;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.domain.output.repository.ResultRepositoryImpl;
 import org.archcnl.toolchain.CNLToolchain;
@@ -32,21 +32,29 @@ public class ArchitectureCheck {
                         ConfigAppService.getDbPassword());
     }
 
-    public void runToolchain(String path)
+    public void runToolchain(
+            String path,
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager)
             throws IOException, PropertyNotFoundException, StardogException {
-        writeRuleFile();
+        writeRuleFile(ruleManager, conceptManager, relationManager);
         setProjectPath(path);
         createDbWithViolations();
     }
 
-    private void writeRuleFile() throws IOException {
+    private void writeRuleFile(
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager)
+            throws IOException {
         final File file = new File(ruleFile);
         AdocExporter adocExporter = new AdocExporter();
         adocExporter.writeToAdoc(
                 file,
-                RulesConceptsAndRelations.getInstance().getArchitectureRuleManager(),
-                RulesConceptsAndRelations.getInstance().getConceptManager(),
-                RulesConceptsAndRelations.getInstance().getRelationManager(),
+                ruleManager,
+                conceptManager,
+                relationManager,
                 new LinkedList<>(),
                 new LinkedList<>());
     }

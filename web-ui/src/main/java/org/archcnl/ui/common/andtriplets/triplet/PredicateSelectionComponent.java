@@ -10,11 +10,13 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 
-public class PredicateComponent extends ComboBox<String> implements DropTarget<PredicateComponent> {
+public class PredicateSelectionComponent extends ComboBox<String>
+        implements DropTarget<PredicateSelectionComponent> {
 
     private static final long serialVersionUID = -5423813782732362932L;
+    private Optional<Relation> selectedRelation = Optional.empty();
 
-    public PredicateComponent() {
+    public PredicateSelectionComponent() {
         setActive(true);
         setPlaceholder("Relation");
         setClearButtonVisible(true);
@@ -38,7 +40,17 @@ public class PredicateComponent extends ComboBox<String> implements DropTarget<P
         } catch (IllegalStateException e) {
             fireEvent(new RelationListUpdateRequestedEvent(this, false));
             setValue(predicate.getName());
+        } finally {
+            selectedRelation = Optional.of(predicate);
         }
+    }
+
+    public void setInternalRelation(Relation relation) {
+        selectedRelation = Optional.of(relation);
+    }
+
+    public Optional<Relation> getRelation() {
+        return selectedRelation;
     }
 
     private void handleDropEvent(Object data) {
