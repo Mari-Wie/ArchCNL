@@ -59,14 +59,7 @@ public class CustomQueryView extends HorizontalLayout {
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
         queryName = new TextField("Name");
         queryName.setPlaceholder("Name of this query");
-        queryName.addValueChangeListener(
-                event -> {
-                    if (queryName.getOptionalValue().isPresent()) {
-                        fireEvent(
-                                new QueryNameUpdateRequestedEvent(
-                                        this, true, queryName.getValue()));
-                    }
-                });
+        queryName.addValueChangeListener(event -> fireNameUpdateEventIfNameNotEmpty());
         pinButton =
                 new Button(
                         new Icon(VaadinIcon.PIN),
@@ -199,6 +192,12 @@ public class CustomQueryView extends HorizontalLayout {
 
     public void replacePinButtonWithDeleteButton() {
         topRow.replace(pinButton, deleteButton);
+    }
+
+    private void fireNameUpdateEventIfNameNotEmpty() {
+        if (queryName.getOptionalValue().isPresent()) {
+            fireEvent(new QueryNameUpdateRequestedEvent(this, true, queryName.getValue()));
+        }
     }
 
     @Override

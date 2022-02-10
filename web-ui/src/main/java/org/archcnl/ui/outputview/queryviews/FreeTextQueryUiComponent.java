@@ -57,14 +57,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
         queryName = new TextField("Name");
         queryName.setPlaceholder("Name of this query");
-        queryName.addValueChangeListener(
-                event -> {
-                    if (queryName.getOptionalValue().isPresent()) {
-                        fireEvent(
-                                new QueryNameUpdateRequestedEvent(
-                                        this, true, queryName.getValue()));
-                    }
-                });
+        queryName.addValueChangeListener(event -> fireNameUpdateEventIfNameNotEmpty());
 
         defaultQueryButton =
                 new Button(
@@ -93,5 +86,11 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
 
     public void setQueryName(String name) {
         queryName.setValue(name);
+    }
+
+    private void fireNameUpdateEventIfNameNotEmpty() {
+        if (queryName.getOptionalValue().isPresent()) {
+            fireEvent(new QueryNameUpdateRequestedEvent(this, true, queryName.getValue()));
+        }
     }
 }
