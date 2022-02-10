@@ -57,16 +57,16 @@ class RelationMappingTest {
 
         // then
         assertEquals(5, actual.size());
-        assertEquals(1, actual.get(0).toStringRepresentation().size());
-        assertEquals(expectedResideIn, actual.get(0).toStringRepresentation().get(0));
-        assertEquals(2, actual.get(1).toStringRepresentation().size());
-        assertEquals(expectedUse1, actual.get(1).toStringRepresentation().get(0));
-        assertEquals(expectedUse2, actual.get(1).toStringRepresentation().get(1));
-        assertEquals(1, actual.get(2).toStringRepresentation().size());
-        assertEquals(expectedEmptyVariableMapping, actual.get(2).toStringRepresentation().get(0));
-        assertEquals(1, actual.get(3).toStringRepresentation().size());
-        assertEquals(expectedEmptyStringMapping, actual.get(3).toStringRepresentation().get(0));
-        assertEquals(1, actual.get(4).toStringRepresentation().size());
-        assertEquals(expectedEmptyBooleanMapping, actual.get(4).toStringRepresentation().get(0));
+        assertEquals(1, actual.get(0).transformToAdoc().size());
+        assertEquals(expectedResideIn, actual.get(0).transformToAdoc().get(0));
+        assertEquals(2, actual.get(1).transformToAdoc().size());
+        assertEquals(expectedUse1, actual.get(1).transformToAdoc().get(0));
+        assertEquals(expectedUse2, actual.get(1).transformToAdoc().get(1));
+        assertEquals(1, actual.get(2).transformToAdoc().size());
+        assertEquals(expectedEmptyVariableMapping, actual.get(2).transformToAdoc().get(0));
+        assertEquals(1, actual.get(3).transformToAdoc().size());
+        assertEquals(expectedEmptyStringMapping, actual.get(3).transformToAdoc().get(0));
+        assertEquals(1, actual.get(4).transformToAdoc().size());
+        assertEquals(expectedEmptyBooleanMapping, actual.get(4).transformToAdoc().get(0));
     }
 }

@@ -25,7 +25,7 @@ public abstract class Mapping {
 
     public abstract String getMappingNameRepresentation();
 
-    public List<String> toStringRepresentation() {
+    public List<String> transformToAdoc() {
         if (orStatements.isEmpty()) {
             return new LinkedList<>(
                     Arrays.asList(
@@ -57,15 +57,14 @@ public abstract class Mapping {
             return false;
         }
         Mapping otherMapping = (Mapping) o;
-        if (toStringRepresentation().size() != otherMapping.toStringRepresentation().size()) {
+        if (transformToAdoc().size() != otherMapping.transformToAdoc().size()) {
             return false;
         }
-        return toStringRepresentation().stream()
-                .allMatch(s -> otherMapping.toStringRepresentation().contains(s));
+        return transformToAdoc().stream().allMatch(s -> otherMapping.transformToAdoc().contains(s));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(toStringRepresentation());
+        return Objects.hash(transformToAdoc());
     }
 }

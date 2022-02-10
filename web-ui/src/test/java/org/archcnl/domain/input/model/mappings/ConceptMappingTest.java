@@ -60,8 +60,8 @@ class ConceptMappingTest {
         // then
         assertEquals(4, actual.size());
         for (ConceptMapping mapping : actual) {
-            assertEquals(1, mapping.toStringRepresentation().size());
-            assertTrue(expected.contains(mapping.toStringRepresentation().get(0)));
+            assertEquals(1, mapping.transformToAdoc().size());
+            assertTrue(expected.contains(mapping.transformToAdoc().get(0)));
         }
     }
 }
