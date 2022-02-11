@@ -20,6 +20,8 @@ public class ConceptSelectedEvent extends ComponentEvent<ConceptSelectionCompone
             final Optional<Concept> conceptOpt = conceptManager.getConceptByName(value.get());
             if (conceptOpt.isEmpty()) {
                 getSource().showErrorMessage("Concept does not exist");
+            } else {
+                getSource().setInternalConcept(conceptOpt.get());
             }
         }
     }

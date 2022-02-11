@@ -3,17 +3,13 @@ package org.archcnl.domain.common.conceptsandrelations;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import org.archcnl.domain.common.FormattedAdocDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.io.AdocIoUtils;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
-import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 
 public abstract class Relation
         implements HierarchyObject, FormattedAdocDomainObject, FormattedViewDomainObject {
@@ -48,41 +44,9 @@ public abstract class Relation
         }
     }
 
-    public List<ActualObjectType> getRelatableObjectTypes() {
-        return relatableObjectTypes;
-    }
-
     @Override
     public String getName() {
         return name;
-    }
-
-    public static Relation parsePredicate(String potentialPredicate) throws NoRelationException {
-        try {
-            if (potentialPredicate.contains(":")) {
-                String predicateName =
-                        AdocIoUtils.getFirstMatch(
-                                Pattern.compile("(?<=\\w+:).+"), potentialPredicate);
-                return RulesConceptsAndRelations.getInstance()
-                        .getRelationManager()
-                        .getRelationByName(predicateName)
-                        .orElse(
-                                RulesConceptsAndRelations.getInstance()
-                                        .getRelationManager()
-                                        .getRelationByRealName(predicateName)
-                                        .orElse(
-                                                new CustomRelation(
-                                                        predicateName, "", new LinkedList<>())));
-            } else {
-                // has to be a SpecialRelation
-                return RulesConceptsAndRelations.getInstance()
-                        .getRelationManager()
-                        .getRelationByRealName(potentialPredicate)
-                        .orElseThrow(() -> new NoRelationException(potentialPredicate));
-            }
-        } catch (NoMatchFoundException e) {
-            throw new NoRelationException(potentialPredicate);
-        }
     }
 
     @Override
@@ -99,14 +63,11 @@ public abstract class Relation
         return Objects.hash(name);
     }
 
-    public void changeName(String newName) throws RelationAlreadyExistsException {
-        if (!RulesConceptsAndRelations.getInstance()
-                .getRelationManager()
-                .doesRelationExist(new CustomRelation(newName, "", new LinkedList<>()))) {
+    public void changeName(String newName, RelationManager relationManager)
+            throws RelationAlreadyExistsException {
+        if (!relationManager.doesRelationExist(
+                new CustomRelation(newName, "", new LinkedList<>()))) {
             this.name = newName;
-            RulesConceptsAndRelations.getInstance()
-                    .getRelationManager()
-                    .relationHasBeenUpdated(this);
         } else {
             throw new RelationAlreadyExistsException(newName);
         }
@@ -122,8 +83,8 @@ public abstract class Relation
         return false;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
-        RulesConceptsAndRelations.getInstance().getRelationManager().relationHasBeenUpdated(this);
     }
 }

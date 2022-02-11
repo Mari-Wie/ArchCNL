@@ -4,6 +4,8 @@ public interface HierarchyObject {
 
     public String getDescription();
 
+    public void setDescription(String description);
+
     public String getName();
 
     public boolean isEditable();

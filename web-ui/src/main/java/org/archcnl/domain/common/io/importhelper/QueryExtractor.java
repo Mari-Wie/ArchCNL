@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.common.io.AdocIoUtils;
@@ -65,7 +67,10 @@ public class QueryExtractor {
         return queries;
     }
 
-    public static List<Query> extractCustomQueries(String fileContent) {
+    public static List<Query> extractCustomQueries(
+            final String fileContent,
+            final RelationManager relationManager,
+            final ConceptManager conceptManager) {
         List<Query> queries = new LinkedList<>();
 
         AdocIoUtils.getAllMatches(QueryExtractor.CUSTOM_QUERY, fileContent).stream()
@@ -82,7 +87,9 @@ public class QueryExtractor {
                                         MappingExtractor.parseWhenPart(
                                                 AdocIoUtils.getFirstMatch(
                                                         QueryExtractor.WHERE_CONTENT_PATTERN,
-                                                        potentialCustomQuery));
+                                                        potentialCustomQuery),
+                                                relationManager,
+                                                conceptManager);
                                 queries.add(
                                         new Query(
                                                 name,

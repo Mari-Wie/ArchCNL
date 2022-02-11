@@ -14,6 +14,10 @@ import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
@@ -122,6 +126,11 @@ public class OutputView extends HorizontalLayout {
                 ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
                 RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(
+                RelationListUpdateRequestedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
         return newCustomQueryPresenter;
     }
 

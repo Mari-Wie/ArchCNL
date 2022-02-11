@@ -13,7 +13,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
@@ -67,12 +66,11 @@ public class ObjectView extends HorizontalLayout {
         if (currentSelectionComponentString.equals(ObjectView.CONCEPT)
                 && conceptSelectionComponent.getSelectedItem().isPresent()) {
             String conceptName = conceptSelectionComponent.getSelectedItem().get();
-            // TODO: The RulesConceptsAndRelations call does not belong here
             object =
-                    RulesConceptsAndRelations.getInstance()
-                            .getConceptManager()
-                            .getConceptByName(conceptName)
+                    conceptSelectionComponent
+                            .getConcept()
                             .orElseThrow(() -> new ConceptDoesNotExistException(conceptName));
+
         } else if (currentSelectionComponentString.equals(ObjectView.VAR_STRING_BOOL)) {
             object = variableStringBoolSelectionView.getObject();
         } else {

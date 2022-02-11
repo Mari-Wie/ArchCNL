@@ -22,6 +22,10 @@ import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
@@ -32,7 +36,6 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.Ma
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDoneButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingNameFieldChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.MappingAlreadyExistsException;
 
 @Tag("Editor")
 public abstract class MappingEditorPresenter extends Component {
@@ -49,14 +52,7 @@ public abstract class MappingEditorPresenter extends Component {
 
     protected void initializeView(final MappingEditorView view) {
         this.view = view;
-        initInfoFieldAndThenTriplet();
         addListeners();
-    }
-
-    protected void initializeView(
-            final MappingEditorView view, final List<AndTriplets> andTripletsList) {
-        initializeView(view);
-        showAndTriplets(andTripletsList);
     }
 
     private void addListeners() {
@@ -74,14 +70,14 @@ public abstract class MappingEditorPresenter extends Component {
     private void nameHasChanged(final MappingNameFieldChangedEvent event) {
         view.updateNameField(event.getNewName());
         view.updateNameFieldInThenTriplet(event.getNewName());
-        try {
-            updateMappingName(event.getNewName());
-        } catch (final MappingAlreadyExistsException e) {
-            view.showNameFieldErrorMessage("The name is already taken");
-        }
+        updateMappingName(event.getNewName());
     }
 
-    private void showAndTriplets(final List<AndTriplets> andTripletsList) {
+    public void showNameAlreadyTakenErrorMessage() {
+        view.showNameFieldErrorMessage("The name is already taken");
+    }
+
+    protected void showAndTriplets(final List<AndTriplets> andTripletsList) {
         view.clearContent();
         andTripletsPresenters.clear();
         andTripletsList.forEach(
@@ -116,6 +112,11 @@ public abstract class MappingEditorPresenter extends Component {
         andTripletsPresenter.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
+
+        andTripletsPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
     }
 
     private void addNewAndTripletsViewAfter(final AndTripletsEditorView oldAndTripletsView) {
@@ -210,9 +211,9 @@ public abstract class MappingEditorPresenter extends Component {
         return view;
     }
 
-    protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
+    protected abstract void updateMappingName(String newName);
 
-    protected abstract void initInfoFieldAndThenTriplet();
+    protected abstract void updateInfoFieldsAndThenTriplet();
 
     protected abstract void updateMapping();
 

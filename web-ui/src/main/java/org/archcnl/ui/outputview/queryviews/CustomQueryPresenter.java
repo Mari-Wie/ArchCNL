@@ -18,6 +18,10 @@ import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
@@ -89,6 +93,10 @@ public class CustomQueryPresenter extends Component {
         wherePresenter.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
+        wherePresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        wherePresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        wherePresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        wherePresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
     }
 
     private void addVariable(VariableCreationRequestedEvent event) {

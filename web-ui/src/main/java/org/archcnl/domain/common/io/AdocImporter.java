@@ -54,7 +54,11 @@ public class AdocImporter {
 
         List<CustomConcept> concepts =
                 MappingExtractor.extractCustomConcepts(
-                        fileContent, CONCEPT_MAPPING_NAME, conceptDescriptions);
+                        fileContent,
+                        CONCEPT_MAPPING_NAME,
+                        conceptDescriptions,
+                        relationManager,
+                        conceptManager);
         concepts.forEach(
                 concept -> {
                     try {
@@ -66,7 +70,11 @@ public class AdocImporter {
 
         List<CustomRelation> relations =
                 MappingExtractor.extractCustomRelations(
-                        fileContent, RELATION_MAPPING_NAME, relationDescriptions);
+                        fileContent,
+                        RELATION_MAPPING_NAME,
+                        relationDescriptions,
+                        relationManager,
+                        conceptManager);
         relations.forEach(
                 relation -> {
                     try {
@@ -78,6 +86,7 @@ public class AdocImporter {
 
         freeTextQueryQueue.addAll(QueryExtractor.extractFreeTextQueries(fileContent));
 
-        customQueryQueue.addAll(QueryExtractor.extractCustomQueries(fileContent));
+        customQueryQueue.addAll(
+                QueryExtractor.extractCustomQueries(fileContent, relationManager, conceptManager));
     }
 }
