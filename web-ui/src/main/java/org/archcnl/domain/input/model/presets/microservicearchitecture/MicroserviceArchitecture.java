@@ -58,7 +58,6 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         architectureRules = new LinkedList<>();
     }
 
-    
     @Override
     public void createRulesAndMappings(
             ArchitectureRuleManager ruleManager,
