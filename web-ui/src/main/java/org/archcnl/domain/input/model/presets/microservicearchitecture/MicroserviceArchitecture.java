@@ -3,11 +3,15 @@ package org.archcnl.domain.input.model.presets.microservicearchitecture;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.ui.common.TwoColumnGridEntry;
 
 /**
@@ -18,8 +22,7 @@ import org.archcnl.ui.common.TwoColumnGridEntry;
  */
 public class MicroserviceArchitecture implements ArchitecturalStyle {
 
-    private MicroserviceArchitectureTemplateManager templates =
-            new MicroserviceArchitectureTemplateManager();
+    private MicroserviceArchitectureTemplateManager templates;
 
     // rules
     private List<ArchitectureRule> architectureRules;
@@ -33,6 +36,13 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
     private Set<TwoColumnGridEntry> microservices;
     private Set<TwoColumnGridEntry> apiMechanisms;
     private Set<TwoColumnGridEntry> dbAccessAbstractions;
+
+    private ArchitectureRuleManager ruleManager;
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+
+    private Set<CustomConcept> architecturalStyleConcepts;
+    private Set<CustomRelation> architecturalStyleRelations;
 
     public MicroserviceArchitecture(MicroserviceArchitectureBuilder builder) {
         this.serviceRegistryClassName = builder.getServiceRegistryClassName();
@@ -48,9 +58,20 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         architectureRules = new LinkedList<>();
     }
 
-    /** Adds all the mappings and rules for the microservice architectural style. */
+    
     @Override
-    public void createRulesAndMappings() {
+    public void createRulesAndMappings(
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager) {
+        this.ruleManager = ruleManager;
+        this.conceptManager = conceptManager;
+        this.relationManager = relationManager;
+
+        templates =
+                new MicroserviceArchitectureTemplateManager(
+                        ruleManager, conceptManager, relationManager);
+
         createMappings();
         createArchitecturalRules();
     }
@@ -58,8 +79,7 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
     /** Add the architectural rules that are known. */
     @Override
     public void createArchitecturalRules() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-        model.getArchitectureRuleManager().addAllArchitectureRules(architectureRules);
+        ruleManager.addAllArchitectureRules(architectureRules);
     }
 
     /** Create the mappings for the concepts that are not null. */
@@ -109,13 +129,10 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
     private void createCircuitBreaker(String circuitBreakerImportClassName) {
         CustomConcept circuitBreaker =
                 templates.createCircuitBreakerConceptAndMapping(circuitBreakerImportClassName);
-
         if (circuitBreaker != null) {
-            RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
             try {
-                // add to known concepts
-                model.getConceptManager().addOrAppend(circuitBreaker);
-            } catch (UnrelatedMappingException e) {
+                addConcept(circuitBreaker);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
@@ -123,13 +140,10 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
 
     private void createMicroserviceApp(String msAppPackageStructure) {
         CustomConcept app = templates.createMicroserviceAppConceptAndMapping(msAppPackageStructure);
-
         if (app != null) {
-            RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
             try {
-                // add to known concepts
-                model.getConceptManager().addOrAppend(app);
-            } catch (UnrelatedMappingException e) {
+                addConcept(app);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
@@ -137,119 +151,94 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
 
     private void createApiGateway(String apiGatewayPackageName) {
         CustomConcept gateway = templates.createApiGatewayConceptAndMapping(apiGatewayPackageName);
-
         if (gateway != null) {
-            RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
+            // add to known concepts
             try {
-                // add to known concepts
-                model.getConceptManager().addOrAppend(gateway);
-            } catch (UnrelatedMappingException e) {
+                addConcept(gateway);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void createResideInPackageRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         CustomRelation resideInPackage = templates.createResideInPackageRelationAndMapping();
-
         if (resideInPackage != null) {
             try {
-                model.getRelationManager().addOrAppend(resideInPackage);
-            } catch (UnrelatedMappingException e) {
-                // TODO Auto-generated catch block
+                addRelation(resideInPackage);
+            } catch (RelationAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void createUseRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         CustomRelation use = templates.createUseRelationAndMapping();
-
         if (use != null) {
             try {
-                model.getRelationManager().addOrAppend(use);
-            } catch (UnrelatedMappingException e) {
-                // TODO Auto-generated catch block
+                addRelation(use);
+            } catch (RelationAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void createRuntimeEnviornmentConceptAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         CustomConcept runtimeEnvironment = templates.createRuntimeEnvironmentConceptAndMapping();
-
         if (runtimeEnvironment != null) {
             try {
-                model.getConceptManager().addOrAppend(runtimeEnvironment);
-            } catch (UnrelatedMappingException e) {
-                // TODO Auto-generated catch block
+                addConcept(runtimeEnvironment);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void createUseOwnRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         CustomRelation useown = templates.createUseownRelationAndMapping();
-
         try {
-            model.getRelationManager().addOrAppend(useown);
-        } catch (UnrelatedMappingException e) {
+            addRelation(useown);
+        } catch (RelationAlreadyExistsException | UnrelatedMappingException e) {
             e.printStackTrace();
         }
     }
 
     private void createDataBaseAbstractions(Set<TwoColumnGridEntry> set) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
         CustomConcept abstractions = templates.createDbAccessAbstractionConceptAndMapping(set);
         if (abstractions != null) {
             try {
-                model.getConceptManager().addOrAppend(abstractions);
-            } catch (UnrelatedMappingException e) {
+                addConcept(abstractions);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void createHaveownRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         CustomRelation haveown = templates.createHaveownRelationAndMapping();
-
         try {
-            model.getRelationManager().addOrAppend(haveown);
-        } catch (UnrelatedMappingException e) {
+            addRelation(haveown);
+        } catch (RelationAlreadyExistsException | UnrelatedMappingException e) {
             e.printStackTrace();
         }
     }
 
     private void createMicroservices(Set<TwoColumnGridEntry> services) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
         CustomConcept microservices = templates.createMicroservicesConceptAndMapping(services);
         if (microservices != null) {
-
             try {
-                model.getConceptManager().addOrAppend(microservices);
-            } catch (UnrelatedMappingException e) {
-                // TODO Auto-generated catch block
+                addConcept(microservices);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void createApiMechanisms(Set<TwoColumnGridEntry> set) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
         CustomConcept apiMechanisms = templates.createApiMechanismsConceptAndMapping(set);
         if (apiMechanisms != null) {
             try {
-                model.getConceptManager().addOrAppend(apiMechanisms);
+                addConcept(apiMechanisms);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -260,12 +249,10 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         CustomConcept registry =
                 templates.createServiceRegistryConceptAndMapping(serviceRegistryClassName);
         if (registry != null) {
-            RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
             // add to known concepts
             try {
-                model.getConceptManager().addOrAppend(registry);
-            } catch (UnrelatedMappingException e) {
-                // TODO Auto-generated catch block
+                addConcept(registry);
+            } catch (ConceptAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
@@ -275,10 +262,9 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         CustomRelation registerin =
                 templates.createRegisterinRelationAndMapping(registryImportName);
         if (registerin != null) {
-            RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
             try {
-                model.getRelationManager().addOrAppend(registerin);
-            } catch (UnrelatedMappingException e) {
+                addRelation(registerin);
+            } catch (RelationAlreadyExistsException | UnrelatedMappingException e) {
                 e.printStackTrace();
             }
         }
@@ -294,7 +280,38 @@ public class MicroserviceArchitecture implements ArchitecturalStyle {
         }
     }
 
-    // getter & setter
+    /**
+     * Adds the CustomConcept conceptManager so that they are known.
+     *
+     * @throws UnrelatedMappingException
+     * @throws ConceptAlreadyExistsException
+     */
+    private void addConcept(CustomConcept concept)
+            throws ConceptAlreadyExistsException, UnrelatedMappingException {
+        conceptManager.addOrAppend(concept);
+    }
+
+    /**
+     * Adds the CustomRelation to the relationManager so that they are known.
+     *
+     * @throws UnrelatedMappingException
+     * @throws RelationAlreadyExistsException
+     */
+    private void addRelation(CustomRelation relation)
+            throws RelationAlreadyExistsException, UnrelatedMappingException {
+        relationManager.addToParent(relation, "Custom Relations");
+    }
+
+    // getter for concepts
+    public Set<CustomConcept> getArchitecturalStyleConcepts() {
+        return architecturalStyleConcepts;
+    }
+
+    public Set<CustomRelation> getArchitecturalStyleRelations() {
+        return architecturalStyleRelations;
+    }
+
+    // getter & setter for variable parts
     public String getServiceRegistryClassName() {
         return serviceRegistryClassName;
     }

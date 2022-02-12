@@ -3,9 +3,11 @@ package org.archcnl.domain.input.presets;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.ArchitecturalStyle;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,18 +17,23 @@ public class MicroserviceArchitectureTest {
 
     // other things needed in the test
     private static ArchitecturalStyle msa;
-    private static RulesConceptsAndRelations model;
+    private static ConceptManager conceptManager;
+    private static RelationManager relationManager;
+    private static ArchitectureRuleManager ruleManager;
 
     @BeforeAll
-    static void init() {
+    static void init() throws ConceptDoesNotExistException {
 
         // given
         msa = PresetsTestUtils.prepareMicroserviceArchitecture();
 
         // when
-        msa.createRulesAndMappings();
 
-        model = RulesConceptsAndRelations.getInstance();
+        conceptManager = new ConceptManager();
+        relationManager = new RelationManager(conceptManager);
+        ruleManager = new ArchitectureRuleManager();
+
+        msa.createRulesAndMappings(ruleManager, conceptManager, relationManager);
     }
 
     @AfterAll
@@ -46,13 +53,13 @@ public class MicroserviceArchitectureTest {
 
         // given + when is given from beforeAll-Method
 
-        assertNotNull(model.getConceptManager().getConceptByName("Microservice"));
+        assertNotNull(conceptManager.getConceptByName("Microservice"));
 
         // ServiceRegistry should be automatically added
-        assertNotNull(model.getConceptManager().getConceptByName("ServiceRegistry"));
+        assertNotNull(conceptManager.getConceptByName("ServiceRegistry"));
 
         // registerin Relation should be automatically added
-        assertNotNull(model.getRelationManager().getRelationByName("registerin"));
+        assertNotNull(relationManager.getRelationByName("registerin"));
     }
 
     /**
@@ -67,13 +74,13 @@ public class MicroserviceArchitectureTest {
 
         // given + when is given from beforeAll-Method
 
-        assertNotNull(model.getConceptManager().getConceptByName("Microservice"));
+        assertNotNull(conceptManager.getConceptByName("Microservice"));
 
         // DatabaseAccessAbstraction should be automatically added
-        assertNotNull(model.getConceptManager().getConceptByName("DatabaseAccessAbstraction"));
+        assertNotNull(conceptManager.getConceptByName("DatabaseAccessAbstraction"));
 
         // haveown Relation should be automatically added
-        assertNotNull(model.getRelationManager().getRelationByName("haveown"));
+        assertNotNull(relationManager.getRelationByName("haveown"));
     }
 
     /**
@@ -88,13 +95,13 @@ public class MicroserviceArchitectureTest {
 
         // given + when is given from beforeAll-Method
 
-        assertNotNull(model.getConceptManager().getConceptByName("Microservice"));
+        assertNotNull(conceptManager.getConceptByName("Microservice"));
 
         // DatabaseAccessAbstraction should be automatically added
-        assertNotNull(model.getConceptManager().getConceptByName("ApiGateway"));
+        assertNotNull(conceptManager.getConceptByName("ApiGateway"));
 
         // haveown Relation should be automatically added
-        assertNotNull(model.getRelationManager().getRelationByName("resideinpackage"));
+        assertNotNull(relationManager.getRelationByName("resideinpackage"));
     }
 
     /**
@@ -109,13 +116,13 @@ public class MicroserviceArchitectureTest {
 
         // given + when is given from beforeAll-Method
 
-        assertNotNull(model.getConceptManager().getConceptByName("Microservice"));
+        assertNotNull(conceptManager.getConceptByName("Microservice"));
 
         // DatabaseAccessAbstraction should be automatically added
-        assertNotNull(model.getConceptManager().getConceptByName("CircuitBreaker"));
+        assertNotNull(conceptManager.getConceptByName("CircuitBreaker"));
 
         // haveown Relation should be automatically added
-        assertNotNull(model.getRelationManager().getRelationByName("use"));
+        assertNotNull(relationManager.getRelationByName("use"));
     }
 
     /**
@@ -130,12 +137,12 @@ public class MicroserviceArchitectureTest {
 
         // given + when is given from beforeAll-Method
 
-        assertNotNull(model.getConceptManager().getConceptByName("Microservice"));
+        assertNotNull(conceptManager.getConceptByName("Microservice"));
 
-        assertNotNull(model.getConceptManager().getConceptByName("API"));
+        assertNotNull(conceptManager.getConceptByName("API"));
 
         // haveown Relation should be automatically added
-        assertNotNull(model.getRelationManager().getRelationByName("haveown"));
+        assertNotNull(relationManager.getRelationByName("haveown"));
     }
 
     /**
@@ -150,11 +157,11 @@ public class MicroserviceArchitectureTest {
 
         // given + when is given from beforeAll-Method
 
-        assertNotNull(model.getConceptManager().getConceptByName("Microservice"));
+        assertNotNull(conceptManager.getConceptByName("Microservice"));
 
-        assertNotNull(model.getConceptManager().getConceptByName("RuntimeEnvironment"));
+        assertNotNull(conceptManager.getConceptByName("RuntimeEnvironment"));
 
         // haveown Relation should be automatically added
-        assertNotNull(model.getRelationManager().getRelationByName("useown"));
+        assertNotNull(relationManager.getRelationByName("useown"));
     }
 }

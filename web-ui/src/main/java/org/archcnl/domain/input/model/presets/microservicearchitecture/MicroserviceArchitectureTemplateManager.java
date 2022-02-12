@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
@@ -13,10 +15,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.common.TwoColumnGridEntry;
@@ -38,7 +39,15 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     Variable registryImportNameVariable;
     Variable methodVariable;
 
-    public MicroserviceArchitectureTemplateManager() {
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+
+    public MicroserviceArchitectureTemplateManager(
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager) {
+        this.conceptManager = conceptManager;
+        this.relationManager = relationManager;
         initializeVariables();
     }
 
@@ -94,9 +103,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             microservice.setMapping(mapping);
 
             return microservice;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             e.printStackTrace();
         }
         return null;
@@ -104,7 +111,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Contains the body of the swrl rule for the microservice mapping. */
     private List<AndTriplets> createMicroserviceTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         try {
             List<Triplet> createdTriplets = new LinkedList<>();
@@ -113,21 +119,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?class famix:hasName ?name)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             // regex(?name, 'NotificationServiceApplication$')
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
             List<AndTriplets> microserviceWhenTriplets = new LinkedList<>();
@@ -160,9 +166,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             ConceptMapping mapping = new ConceptMapping(classVariable, whenTriplets, registry);
             registry.setMapping(mapping);
             return registry;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -171,7 +175,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Creates the body of the swrl rule for the ServiceRegistry mapping. */
     private List<AndTriplets> createServiceRegistryWhenTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
         try {
             List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -179,21 +182,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?class famix:hasName ?name)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             // e.g. regex(?name, '(\\w||\\W)*RegistryApplication$')
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
             List<AndTriplets> serviceRegistryWhenTriplets = new LinkedList<>();
@@ -238,8 +241,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Creates the body of the swrl rule for the registerin mapping. */
     private List<AndTriplets> createRegisterinWhenTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         List<Triplet> createdTriplets = new LinkedList<>();
 
         // (?class rdf:type famix:FamixClass)
@@ -247,42 +248,42 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             registryVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("ServiceRegistry").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("ServiceRegistry").get()));
 
             // (?class rdf:type famix:FamixClass)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?registryImport rdf:type famix:FamixClass)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             registryImportVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?class famix:imports ?registryImport)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("imports").get(),
+                            relationManager.getRelationByName("imports").get(),
                             registryImportVariable));
 
             // (?registryImport famix:hasName ?registryImportName)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             registryImportVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             registryImportNameVariable));
 
             // e.g. regex(?name, '(\\w||\\W)*RegistryApplication$')
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             registryImportNameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
         } catch (UnsupportedObjectTypeInTriplet e) {
             // TODO Auto-generated catch block
@@ -333,9 +334,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             abstraction.setMapping(mapping);
 
             return abstraction;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -344,33 +343,31 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Creates the body of the swrl rule for the DatabaseAccessAbstraction mapping */
     private List<AndTriplets> createDbAccessAbstractionTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         List<Triplet> createdTriplets = new LinkedList<>();
 
         try {
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("isExternal").get(),
+                            relationManager.getRelationByName("isExternal").get(),
                             new BooleanValue(false)));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
         } catch (UnsupportedObjectTypeInTriplet e) {
@@ -393,7 +390,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
      * <p>
      */
     public CustomRelation createHaveownRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         CustomRelation haveown = new CustomRelation("haveown", "", new LinkedList<>());
 
@@ -404,49 +400,49 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?class2 rdf:type famix:FamixClass)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             class2Variable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?classPackage rdf:type famix:Namespace)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Namespace").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Namespace").get()));
 
             // (?classPackage famix:namespaceContains ?class1)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("namespaceContains").get(),
+                            relationManager.getRelationByName("namespaceContains").get(),
                             classVariable));
 
             // (?class2Package rdf:type famix:Namespace)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             class2Package,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Namespace").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Namespace").get()));
 
             // (?classPackage famix:namespaceContains ?class2Package)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             class2Package,
-                            model.getRelationManager().getRelationByName("namespaceContains").get(),
+                            relationManager.getRelationByName("namespaceContains").get(),
                             class2Variable));
 
             // (?classPackage famix:namespaceContains ?class2Package)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("namespaceContains").get(),
+                            relationManager.getRelationByName("namespaceContains").get(),
                             class2Package));
 
         } catch (UnsupportedObjectTypeInTriplet e) {
@@ -490,9 +486,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             ConceptMapping mapping = new ConceptMapping(classPackage, whenTriplets, gateway);
             gateway.setMapping(mapping);
             return gateway;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -501,7 +495,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Creates the body of the swrl rule for the 'ApiGateway' mapping */
     private List<AndTriplets> createApiGatewayWhenTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         try {
             List<Triplet> createdTriplets = new LinkedList<>();
@@ -510,21 +503,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Namespace").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Namespace").get()));
 
             // (?package famix:hasName ?name)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             // e.g. regex(?name, '(\\w||\\W)*RegistryApplication$')
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
             List<AndTriplets> apiGatewayWhenTriplets = new LinkedList<>();
@@ -562,9 +555,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             ConceptMapping mapping = new ConceptMapping(classPackage, whenTriplets, app);
             app.setMapping(mapping);
             return app;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -573,7 +564,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Creates the body of the swrl rule for the 'MicroserviceApp' concept */
     private List<AndTriplets> createMicroserviceAppWhenTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         try {
             List<Triplet> createdTriplets = new LinkedList<>();
@@ -582,21 +572,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Namespace").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Namespace").get()));
 
             // (?class famix:hasName ?name)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             // e.g. regex(?packageName, 'com\\.piggymetrics(\\w||\\W)*')
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
             List<AndTriplets> microserviceAppWhenTriplets = new LinkedList<>();
@@ -632,9 +622,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                     new ConceptMapping(classVariable, whenTriplets, circuitBreaker);
             circuitBreaker.setMapping(mapping);
             return circuitBreaker;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -643,8 +631,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     /** Creates the body of the swrl rule for the 'CircuitBreaker' concept */
     private List<AndTriplets> createCircuitBreakerWhenTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         try {
             List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -652,21 +638,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?class famix:hasName ?name)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             // e.g. regex(?name, '(\\w||\\W)*RegistryApplication$')
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
             List<AndTriplets> circuitBreakerWhenTriplets = new LinkedList<>();
@@ -703,9 +689,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             ConceptMapping mapping = new ConceptMapping(classVariable, whenTriplets, apiMechanism);
             apiMechanism.setMapping(mapping);
             return apiMechanism;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -713,7 +697,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     }
 
     private List<AndTriplets> createApiMechanismWhenTriplets(String regexInput) {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         try {
 
@@ -722,19 +705,19 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
             List<AndTriplets> apiMechanismWhenTriplets = new LinkedList<>();
@@ -758,9 +741,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             ConceptMapping mapping = new ConceptMapping(methodVariable, whenTriplets, runtime);
             runtime.setMapping(mapping);
             return runtime;
-        } catch (UnsupportedObjectTypeInTriplet
-                | RelationDoesNotExistException
-                | UnrelatedMappingException e) {
+        } catch (UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -769,7 +750,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     }
 
     private List<AndTriplets> createRuntimeEnvironmentWhenTriplets() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         try {
 
@@ -778,25 +758,25 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Microservice").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Microservice").get()));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("definesMethod").get(),
+                            relationManager.getRelationByName("definesMethod").get(),
                             methodVariable));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             methodVariable,
-                            model.getRelationManager().getRelationByName("hasName").get(),
+                            relationManager.getRelationByName("hasName").get(),
                             nameVariable));
 
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             nameVariable,
-                            model.getRelationManager().getRelationByName("matches").get(),
+                            relationManager.getRelationByName("matches").get(),
                             new StringValue("main")));
 
             List<AndTriplets> runtimeEnvironmentWhenTriplets = new LinkedList<>();
@@ -811,7 +791,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     }
 
     public CustomRelation createUseownRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         CustomRelation useown = new CustomRelation("useown", "", new LinkedList<>());
 
@@ -822,23 +801,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Microservice").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Microservice").get()));
 
             // (?class2 rdf:type famix:FamixClass)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             class2Variable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager()
-                                    .getConceptByName("RuntimeEnvironment")
-                                    .get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("RuntimeEnvironment").get()));
 
             // (?classPackage rdf:type famix:Namespace)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("definesMethod").get(),
+                            relationManager.getRelationByName("definesMethod").get(),
                             class2Variable));
 
         } catch (UnsupportedObjectTypeInTriplet e) {
@@ -865,8 +842,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createResideInPackageRelationAndMapping() {
 
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
-
         CustomRelation resideInPackage =
                 new CustomRelation("resideinpackage", "", new LinkedList<>());
 
@@ -877,21 +852,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Namespace").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Namespace").get()));
 
             // (?package2 rdf:type famix:Namespace)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             class2Package,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("Namespace").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("Namespace").get()));
 
             // (?package famix:namespaceContains ?package2)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classPackage,
-                            model.getRelationManager().getRelationByName("namespaceContains").get(),
+                            relationManager.getRelationByName("namespaceContains").get(),
                             class2Package));
 
         } catch (UnsupportedObjectTypeInTriplet e) {
@@ -918,7 +893,6 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     }
 
     public CustomRelation createUseRelationAndMapping() {
-        RulesConceptsAndRelations model = RulesConceptsAndRelations.getInstance();
 
         CustomRelation use = new CustomRelation("use", "", new LinkedList<>());
 
@@ -929,21 +903,21 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?package2 rdf:type famix:Namespace)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             class2Variable,
-                            model.getRelationManager().getRelationByName("is-of-type").get(),
-                            model.getConceptManager().getConceptByName("FamixClass").get()));
+                            relationManager.getRelationByName("is-of-type").get(),
+                            conceptManager.getConceptByName("FamixClass").get()));
 
             // (?package famix:namespaceContains ?package2)
             createdTriplets.add(
                     TripletFactory.createTriplet(
                             classVariable,
-                            model.getRelationManager().getRelationByName("imports").get(),
+                            relationManager.getRelationByName("imports").get(),
                             class2Variable));
 
         } catch (UnsupportedObjectTypeInTriplet e) {

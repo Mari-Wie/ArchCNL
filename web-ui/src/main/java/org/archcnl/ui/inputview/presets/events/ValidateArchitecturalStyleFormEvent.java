@@ -17,19 +17,4 @@ public class ValidateArchitecturalStyleFormEvent extends ComponentEvent<PresetsD
     public ValidateArchitecturalStyleFormEvent(PresetsDialogView source, boolean fromClient) {
         super(source, fromClient);
     }
-
-    //    public void handleEvent() {
-    //        switch (style) {
-    //            case MICROSERVICE_ARCHITECTURE:
-    //                getSource().mapUiComponentsToArchitecturalStyle(style);
-    //                break;
-    //            case LAYERED_ARCHITECTURE:
-    //                new Notification();
-    //                getSource().add(Notification.show("Not yet Implemented"));
-    //                ArchitecturalStyleSaveEvent.LOG.warn("{} is not implemented", style);
-    //                break;
-    //            default:
-    //                break;
-    //        }
-    //    }
 }

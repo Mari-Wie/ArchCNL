@@ -1,18 +1,26 @@
 package org.archcnl.ui.inputview.presets;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.shared.Registration;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyle;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfig;
 import org.archcnl.domain.input.model.presets.ArchitecturalStyleConfigManager;
@@ -24,6 +32,7 @@ import org.archcnl.ui.common.TwoColumnGridEntry;
 import org.archcnl.ui.inputview.presets.events.ArchiecturalRulesSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.RuleSelectionTabRequestedEvent;
+import org.archcnl.ui.inputview.presets.events.UpdateHierarchiesRequestedEvent;
 import org.archcnl.ui.inputview.presets.events.ValidateArchitecturalStyleFormEvent;
 
 @Tag("PresetsPresenter")
@@ -37,6 +46,8 @@ public class PresetsDialogPresenter extends Dialog {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOG = LogManager.getLogger(PresetsDialogPresenter.class);
+
     private final PresetsDialogView view;
 
     private Tabs tabs = new Tabs();
@@ -48,8 +59,22 @@ public class PresetsDialogPresenter extends Dialog {
     private ArchitecturalStyle selectedStyle;
     private ArchitecturalStyleConfig architectureConfig;
 
-    public PresetsDialogPresenter() {
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+    private ArchitectureRuleManager ruleManager;
+
+    public PresetsDialogPresenter(
+            ConceptManager conceptManager,
+            RelationManager relationManager,
+            ArchitectureRuleManager ruleManager) {
+
+        this.conceptManager = conceptManager;
+        this.relationManager = relationManager;
+        this.ruleManager = ruleManager;
+
         view = new PresetsDialogView();
+
+        // handle inside this presenter
         view.addListener(RuleSelectionTabRequestedEvent.class, this::handleEvent);
         view.addListener(ArchiecturalRulesSelectedEvent.class, this::handleEvent);
         view.addListener(ValidateArchitecturalStyleFormEvent.class, this::handleEvent);
@@ -150,25 +175,38 @@ public class PresetsDialogPresenter extends Dialog {
                 (ArchitecturalStyleForm) tabsToComponent.get(architectureInformationTab);
 
         if (form.validateForm()) {
-            createRulesAndMappingsFromUiComponents(selectedStyle);
+            createRulesAndMappingsFromUiComponents(
+                    selectedStyle, ruleManager, conceptManager, relationManager);
         }
     }
 
     /**
      * Creates Rules and Mappings for the selected Architectural Sytle. This is also the Method that
      * needs to be extended in case new architectural styles are added in the future.
+     *
+     * @param relationManager
+     * @param conceptManager
+     * @param ruleManager
      */
-    private void createRulesAndMappingsFromUiComponents(ArchitecturalStyle selectedStyle) {
+    private void createRulesAndMappingsFromUiComponents(
+            ArchitecturalStyle selectedStyle,
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager) {
         switch (selectedStyle) {
             case MICROSERVICE_ARCHITECTURE:
-                createRulesAndMappingsForMicroserviceArchitecture();
+                createRulesAndMappingsForMicroserviceArchitecture(
+                        ruleManager, conceptManager, relationManager);
                 break;
             default:
                 break;
         }
     }
 
-    private void createRulesAndMappingsForMicroserviceArchitecture() {
+    private void createRulesAndMappingsForMicroserviceArchitecture(
+            ArchitectureRuleManager ruleManager,
+            ConceptManager conceptManager,
+            RelationManager relationManager) {
         MicroserviceArchitectureBuilder microserviceArchitectureBuilder =
                 new MicroserviceArchitectureBuilder();
 
@@ -203,7 +241,11 @@ public class PresetsDialogPresenter extends Dialog {
 
         microserviceArchitecture.setArchitectureRules(rulesToCreate);
 
-        microserviceArchitecture.createRulesAndMappings();
+        microserviceArchitecture.createRulesAndMappings(
+                ruleManager, conceptManager, relationManager);
+
+        // this updates Concepts/Rules/Relations in the MainView
+        fireEvent(new UpdateHierarchiesRequestedEvent(this, false));
     }
 
     // loop through the sets that hold the data for the groups specified in the
@@ -287,6 +329,11 @@ public class PresetsDialogPresenter extends Dialog {
         }
     }
 
+    /**
+     * Enables the tab and disables all others.
+     *
+     * @param tab the tab to enable.
+     */
     public void enableTab(Tab tab) {
         tabs.getChildren()
                 .forEach(
@@ -301,8 +348,13 @@ public class PresetsDialogPresenter extends Dialog {
         view.updateTabs(tabs);
     }
 
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
+
     public PresetsDialogView getView() {
-        // TODO Auto-generated method stub
         return view;
     }
 }
