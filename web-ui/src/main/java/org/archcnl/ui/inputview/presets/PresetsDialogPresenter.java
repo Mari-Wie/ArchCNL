@@ -149,7 +149,7 @@ public class PresetsDialogPresenter extends Dialog {
                 List<ArchitectureInformation> variableArchitectureInfomation =
                         architectureConfig.getVariableParts();
 
-                // loop all Architecture Informations
+                // loop all Architecture Information
                 for (ArchitectureInformation architectureInformation :
                         variableArchitectureInfomation) {
 
@@ -177,6 +177,7 @@ public class PresetsDialogPresenter extends Dialog {
         if (form.validateForm()) {
             createRulesAndMappingsFromUiComponents(
                     selectedStyle, ruleManager, conceptManager, relationManager);
+            view.close();
         }
     }
 
@@ -231,7 +232,6 @@ public class PresetsDialogPresenter extends Dialog {
         MicroserviceArchitecture microserviceArchitecture = microserviceArchitectureBuilder.build();
 
         // only rules that are selected
-
         Set<String> rulesToCreate = new HashSet<String>();
         for (ArchitectureRuleConfig ruleConfig : architectureConfig.getRules()) {
             if (ruleConfig.isActive()) {
