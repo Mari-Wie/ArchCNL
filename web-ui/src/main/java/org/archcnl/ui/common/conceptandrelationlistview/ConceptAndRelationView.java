@@ -3,6 +3,7 @@ package org.archcnl.ui.common.conceptandrelationlistview;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
@@ -18,11 +19,10 @@ import org.archcnl.ui.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.events.HierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 
-public class ConceptAndRelationView extends RulesOrMappingEditorView {
+public class ConceptAndRelationView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_EXPANSION_DEPTH = 10;
@@ -30,7 +30,7 @@ public class ConceptAndRelationView extends RulesOrMappingEditorView {
     private HierarchyView<Concept> hv1;
     private HierarchyView<Relation> hv2;
 
-    public ConceptAndRelationView(boolean inputSide) {
+    public ConceptAndRelationView() {
         setHeightFull();
         createConceptHierarchy();
         createRelationHierarchy();
