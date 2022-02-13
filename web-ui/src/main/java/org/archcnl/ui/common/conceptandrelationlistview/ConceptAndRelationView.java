@@ -27,111 +27,111 @@ public class ConceptAndRelationView extends VerticalLayout {
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_EXPANSION_DEPTH = 10;
 
-    private HierarchyView<Concept> hv1;
-    private HierarchyView<Relation> hv2;
+    protected HierarchyView<Concept> conceptHierarchyView;
+    protected HierarchyView<Relation> relationHierarchyView;
 
     public ConceptAndRelationView() {
         setHeightFull();
+        initHierarchies();
         createConceptHierarchy();
         createRelationHierarchy();
+        addElements();
     }
 
-    private void createConceptHierarchy() {
-        hv1 = new EditableHierarchyView<Concept>();
-        hv1.setHeight(50, Unit.PERCENTAGE);
+    // Overriden in the editable version of this
+    protected void addElements() {
+        add(conceptHierarchyView);
+        add(relationHierarchyView);
+    }
 
-        hv1.addListener(
+    protected void createConceptHierarchy() {
+        conceptHierarchyView.setHeight(50, Unit.PERCENTAGE);
+
+        conceptHierarchyView.addListener(
                 GridUpdateRequestedEvent.class,
                 e -> {
                     requestConceptGridUpdate();
                 });
-        hv1.addListener(
+        conceptHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class,
                 e -> {
                     requestConceptSwap(e);
                 });
 
-        hv1.createCreateNewLayout(
-                "Concepts",
-                "Create New Concept",
-                e -> {
-                    fireEvent(new ConceptEditorRequestedEvent(this, true));
-                });
-
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of concepts but are mapped to each other externally
-        hv1.addListener(
+        conceptHierarchyView.addListener(
                 EditorRequestedEvent.class,
                 e -> {
                     fireEvent(
                             new ConceptEditorRequestedEvent(
                                     this, true, (CustomConcept) e.getSource().get()));
                 });
-        hv1.addListener(
+        conceptHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
                         fireEvent(
                                 new DeleteConceptRequestedEvent(
-                                        hv1, true, (Concept) event.getHierarchyObject())));
-        add(hv1);
+                                        conceptHierarchyView,
+                                        true,
+                                        (Concept) event.getHierarchyObject())));
     }
 
-    private void createRelationHierarchy() {
-        hv2 = new EditableHierarchyView<Relation>();
-        hv2.setHeight(50, Unit.PERCENTAGE);
-        hv2.addListener(
+    protected void initHierarchies() {
+        conceptHierarchyView = new HierarchyView<Concept>();
+        relationHierarchyView = new HierarchyView<Relation>();
+    }
+
+    protected void createRelationHierarchy() {
+        relationHierarchyView.setHeight(50, Unit.PERCENTAGE);
+        relationHierarchyView.addListener(
                 GridUpdateRequestedEvent.class,
                 e -> {
                     requestRelationGridUpdate();
                 });
-        hv2.addListener(
+        relationHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class,
                 e -> {
                     requestRelationSwap(e);
                 });
-        hv2.createCreateNewLayout(
-                "Relations",
-                "Create New Relation",
-                e -> {
-                    fireEvent(new RelationEditorRequestedEvent(this, true));
-                });
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
-        // part of concepts but are mapped to each other externally
-        hv2.addListener(
+        // part of relations but are mapped to each other externally
+        relationHierarchyView.addListener(
                 EditorRequestedEvent.class,
                 e -> {
                     fireEvent(
                             new RelationEditorRequestedEvent(
                                     this, true, (CustomRelation) e.getSource().get()));
                 });
-        hv2.addListener(
+        relationHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
                         fireEvent(
                                 new DeleteRelationRequestedEvent(
-                                        hv2, true, (Relation) event.getHierarchyObject())));
-        add(hv2);
+                                        relationHierarchyView,
+                                        true,
+                                        (Relation) event.getHierarchyObject())));
     }
 
     public void update() {
-        hv1.requestGridUpdate();
-        hv2.requestGridUpdate();
+        relationHierarchyView.requestGridUpdate();
+        conceptHierarchyView.requestGridUpdate();
     }
 
-    private void requestConceptGridUpdate() {
-        fireEvent(new ConceptGridUpdateRequestedEvent(hv1, true));
+    protected void requestConceptGridUpdate() {
+        fireEvent(new ConceptGridUpdateRequestedEvent(conceptHierarchyView, true));
     }
 
-    private void requestRelationGridUpdate() {
-        fireEvent(new RelationGridUpdateRequestedEvent(hv2, true));
+    protected void requestRelationGridUpdate() {
+        fireEvent(new RelationGridUpdateRequestedEvent(relationHierarchyView, true));
     }
 
-    private void requestConceptSwap(HierarchySwapRequestedEvent e) {
+    protected void requestConceptSwap(HierarchySwapRequestedEvent e) {
         fireEvent(new ConceptHierarchySwapRequestedEvent(e));
     }
 
-    private void requestRelationSwap(HierarchySwapRequestedEvent e) {
+    protected void requestRelationSwap(HierarchySwapRequestedEvent e) {
         fireEvent(new RelationHierarchySwapRequestedEvent(e));
     }
 
