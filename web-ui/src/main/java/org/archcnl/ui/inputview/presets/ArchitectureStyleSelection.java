@@ -19,7 +19,7 @@ public class ArchitectureStyleSelection extends VerticalLayout {
     private ArchitecturalStyle selectedStyle;
 
     public ArchitectureStyleSelection() {
-        title = new Text("Select archictectural style to open presets for");
+        title = new Text("Please select an archictectural style to open presets for.");
 
         select = new RadioButtonGroup<ArchitecturalStyle>();
 

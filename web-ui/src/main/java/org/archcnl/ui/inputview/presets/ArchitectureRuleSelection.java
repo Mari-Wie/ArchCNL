@@ -46,7 +46,7 @@ public class ArchitectureRuleSelection extends Component
 
         VerticalLayout layout = new VerticalLayout();
 
-        layout.add(new Text("Please choose the architectural rules you want to apply."));
+        layout.add(new Text("Please choose the architecture rules you want to apply."));
 
         architectureRulesSelect.select(knownRules);
         layout.setWidthFull();
