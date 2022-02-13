@@ -21,7 +21,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     private HierarchyNode<T> draggedItem;
 
     public HierarchyView() {
-        getStyle().set("border", "1px solid black");
+        setClassName("hierarchy");
         roots = new ArrayList<HierarchyNode<T>>();
         treeGrid = new TreeGrid<HierarchyNode<T>>();
         treeGrid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
