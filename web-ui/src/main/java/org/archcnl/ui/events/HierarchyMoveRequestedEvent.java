@@ -5,12 +5,12 @@ import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
-public class HierarchySwapRequestedEvent extends ComponentEvent<HierarchyView> {
+public class HierarchyMoveRequestedEvent extends ComponentEvent<HierarchyView> {
     HierarchyNode dragged;
     HierarchyNode target;
     GridDropLocation location;
 
-    public HierarchySwapRequestedEvent(
+    public HierarchyMoveRequestedEvent(
             HierarchyView source,
             boolean fromClient,
             HierarchyNode draggedNode,

@@ -19,9 +19,9 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchyMoveRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchyMoveRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
@@ -125,9 +125,9 @@ public class OutputView extends HorizontalLayout {
         newCustomQueryPresenter.addListener(
                 RelationGridUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
-                ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+                ConceptHierarchyMoveRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
-                RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+                RelationHierarchyMoveRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
                 RelationListUpdateRequestedEvent.class, this::fireEvent);

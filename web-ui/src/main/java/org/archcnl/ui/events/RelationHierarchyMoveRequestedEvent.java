@@ -4,9 +4,9 @@ import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
-public class ConceptHierarchySwapRequestedEvent extends HierarchySwapRequestedEvent {
+public class RelationHierarchyMoveRequestedEvent extends HierarchyMoveRequestedEvent {
 
-    public ConceptHierarchySwapRequestedEvent(
+    public RelationHierarchyMoveRequestedEvent(
             HierarchyView source,
             boolean fromClient,
             HierarchyNode draggedNode,
@@ -15,7 +15,7 @@ public class ConceptHierarchySwapRequestedEvent extends HierarchySwapRequestedEv
         super(source, fromClient, draggedNode, targetNode, gridDropLocation);
     }
 
-    public ConceptHierarchySwapRequestedEvent(HierarchySwapRequestedEvent e) {
+    public RelationHierarchyMoveRequestedEvent(HierarchyMoveRequestedEvent e) {
         super(e.getSource(), true, e.getDraggedNode(), e.getTargetNode(), e.getGridDropLocation());
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.events.GridUpdateRequestedEvent;
-import org.archcnl.ui.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.events.HierarchyMoveRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 
 public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEditorView {
@@ -95,7 +95,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
 
                     if (dropLocation == GridDropLocation.BELOW) {
                         fireEvent(
-                                new HierarchySwapRequestedEvent(
+                                new HierarchyMoveRequestedEvent(
                                         this, false, draggedItem, targetNode, dropLocation));
                     } else {
                     }

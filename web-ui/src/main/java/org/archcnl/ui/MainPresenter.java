@@ -27,13 +27,13 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequ
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchyMoveRequestedEvent;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
 import org.archcnl.ui.events.ProjectOptionRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchyMoveRequestedEvent;
 import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
@@ -79,8 +79,8 @@ public class MainPresenter extends Component {
         inputPresenter = new InputPresenter();
         inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(ConceptHierarchyMoveRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationHierarchyMoveRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(
                 ChangeConceptNameRequestedEvent.class, e -> e.handleEvent(conceptManager));
@@ -107,8 +107,8 @@ public class MainPresenter extends Component {
         outputView = new OutputView();
         outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
         outputView.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
-        outputView.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
-        outputView.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputView.addListener(ConceptHierarchyMoveRequestedEvent.class, this::handleEvent);
+        outputView.addListener(RelationHierarchyMoveRequestedEvent.class, this::handleEvent);
         outputView.addListener(
                 PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
         outputView.addListener(
@@ -132,12 +132,12 @@ public class MainPresenter extends Component {
         updateHierarchies(relationManager, event.getSource());
     }
 
-    private void handleEvent(final ConceptHierarchySwapRequestedEvent event) {
+    private void handleEvent(final ConceptHierarchyMoveRequestedEvent event) {
         conceptManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(conceptManager, event.getSource());
     }
 
-    private void handleEvent(final RelationHierarchySwapRequestedEvent event) {
+    private void handleEvent(final RelationHierarchyMoveRequestedEvent event) {
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(relationManager, event.getSource());
     }

@@ -13,12 +13,12 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequ
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchyMoveRequestedEvent;
 import org.archcnl.ui.events.EditorRequestedEvent;
 import org.archcnl.ui.events.GridUpdateRequestedEvent;
-import org.archcnl.ui.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.events.HierarchyMoveRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchyMoveRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 
@@ -53,7 +53,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                     requestConceptGridUpdate();
                 });
         conceptHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class,
+                HierarchyMoveRequestedEvent.class,
                 e -> {
                     requestConceptSwap(e);
                 });
@@ -90,7 +90,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                     requestRelationGridUpdate();
                 });
         relationHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class,
+                HierarchyMoveRequestedEvent.class,
                 e -> {
                     requestRelationSwap(e);
                 });
@@ -127,12 +127,12 @@ public class ConceptAndRelationView extends VerticalLayout {
         fireEvent(new RelationGridUpdateRequestedEvent(relationHierarchyView, true));
     }
 
-    protected void requestConceptSwap(HierarchySwapRequestedEvent e) {
-        fireEvent(new ConceptHierarchySwapRequestedEvent(e));
+    protected void requestConceptSwap(HierarchyMoveRequestedEvent e) {
+        fireEvent(new ConceptHierarchyMoveRequestedEvent(e));
     }
 
-    protected void requestRelationSwap(HierarchySwapRequestedEvent e) {
-        fireEvent(new RelationHierarchySwapRequestedEvent(e));
+    protected void requestRelationSwap(HierarchyMoveRequestedEvent e) {
+        fireEvent(new RelationHierarchyMoveRequestedEvent(e));
     }
 
     @Override

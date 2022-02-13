@@ -17,9 +17,9 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.ConceptHierarchyMoveRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.events.RelationHierarchyMoveRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
@@ -55,11 +55,11 @@ public class InputPresenter extends Component {
     private void addListeners() {
         view.addListener(ConceptEditorRequestedEvent.class, this::handleEvent);
         view.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
-        view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
+        view.addListener(ConceptHierarchyMoveRequestedEvent.class, this::fireEvent);
 
         view.addListener(RelationEditorRequestedEvent.class, this::handleEvent);
         view.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
-        view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+        view.addListener(RelationHierarchyMoveRequestedEvent.class, this::fireEvent);
 
         view.addListener(DeleteConceptRequestedEvent.class, this::fireEvent);
         view.addListener(DeleteRelationRequestedEvent.class, this::fireEvent);
