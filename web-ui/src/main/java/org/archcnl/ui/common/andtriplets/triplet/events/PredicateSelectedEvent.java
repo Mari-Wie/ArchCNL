@@ -26,9 +26,11 @@ public class PredicateSelectedEvent extends ComponentEvent<PredicateSelectionCom
         Optional<Relation> relation = Optional.empty();
         if (value.isPresent()) {
             relation = relationManager.getRelationByName(value.get());
-            getSource().setInternalRelation(relation.get());
-        } else {
-            getSource().showErrorMessage("Relation does not exist");
+            if (relation.isEmpty()) {
+                getSource().showErrorMessage("Relation does not exist");
+            } else {
+                getSource().setInternalRelation(relation.get());
+            }
         }
         objectView.predicateHasChanged(relation);
     }

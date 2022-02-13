@@ -40,7 +40,7 @@ import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.presets.PresetsDialogPresenter;
 import org.archcnl.ui.inputview.presets.events.UpdateHierarchiesRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddArchitectureRuleRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
@@ -87,7 +87,7 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(AddArchitectureRuleRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(
                 ChangeConceptNameRequestedEvent.class, e -> e.handleEvent(conceptManager));
         inputPresenter.addListener(
@@ -266,8 +266,13 @@ public class MainPresenter extends Component {
         }
     }
 
-    private void handleEvent(AddArchitectureRuleRequestedEvent event) {
-        ruleManager.addArchitectureRule(event.getRule());
+    private void handleEvent(SaveArchitectureRuleRequestedEvent event) {
+        Optional<ArchitectureRule> oldRule = event.getOldRule();
+        if (oldRule.isEmpty()) {
+            ruleManager.addArchitectureRule(event.getNewRule());
+        } else {
+            ruleManager.updateArchitectureRule(oldRule.get(), event.getNewRule());
+        }
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 
@@ -296,9 +301,7 @@ public class MainPresenter extends Component {
 
     private void handleEvent(UpdateHierarchiesRequestedEvent event) {
         hierachyManagerToView.get(conceptManager).requestGridUpdate();
-        MainPresenter.LOG.info("Updated Hierarchy View for Concepts from {}", event.getSource());
         hierachyManagerToView.get(relationManager).requestGridUpdate();
-        MainPresenter.LOG.info("Updated Hierarchy View for Relations from {}", event.getSource());
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 

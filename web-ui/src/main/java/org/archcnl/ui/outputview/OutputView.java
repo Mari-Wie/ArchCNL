@@ -26,9 +26,11 @@ import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.SideBarWidget;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
@@ -131,6 +133,13 @@ public class OutputView extends HorizontalLayout {
                 RelationListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
+        newCustomQueryPresenter.addListener(
+                DeleteButtonPressedEvent.class,
+                event -> {
+                    pinnedCustomQueries.remove(newCustomQueryPresenter);
+                    sideBarWidget.deletePinnedQuery(event);
+                });
         return newCustomQueryPresenter;
     }
 
@@ -148,6 +157,13 @@ public class OutputView extends HorizontalLayout {
                 e -> this.insertCustomQueryIntoFreeTextQuery());
         newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
+        newComponent.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
+        newComponent.addListener(
+                DeleteButtonPressedEvent.class,
+                event -> {
+                    pinnedFreeTextQueries.remove(newComponent);
+                    sideBarWidget.deletePinnedQuery(event);
+                });
         return newComponent;
     }
 
@@ -173,6 +189,10 @@ public class OutputView extends HorizontalLayout {
     private void handleEvent(final FreeTextRunButtonPressedEvent event) {
         final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getSource().update(result);
+    }
+
+    private void handleEvent(final QueryNameUpdateRequestedEvent event) {
+        sideBarWidget.updatePinnedQueryName(event);
     }
 
     private void switchToComponent(final Component component) {
