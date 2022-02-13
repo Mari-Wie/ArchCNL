@@ -93,7 +93,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
 
                     if (targetNode == null || personWasDroppedOntoItself) return;
 
-                    if (dropLocation == GridDropLocation.BELOW) {
+                    if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
                                 new HierarchySwapRequestedEvent(
                                         this, false, draggedItem, targetNode, dropLocation));
