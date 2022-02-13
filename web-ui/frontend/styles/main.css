@@ -34,8 +34,7 @@ label {
     font-size: var(--p-font-size-small);
 }
 
-.architecture-rules, .new-concept, .new-relation, 
-.query-text-box, .general-info-box {
+.architecture-rules, .query-text-box, .general-info-box, .hierarchy {
     background-color: var(--primary-light);
     border-radius: 1%;
     border: none !important;
