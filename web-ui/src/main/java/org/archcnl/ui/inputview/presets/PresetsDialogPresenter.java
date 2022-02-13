@@ -310,7 +310,7 @@ public class PresetsDialogPresenter extends Dialog {
                                         info.getValue());
                                 break;
                             case "Service Registry Import Class Name":
-                                microserviceArchitectureBuilder.withServiceRegistryClassName(
+                                microserviceArchitectureBuilder.withRegistryImportName(
                                         info.getValue());
                                 break;
                             case "Circuit Breaker Import Class Name":
