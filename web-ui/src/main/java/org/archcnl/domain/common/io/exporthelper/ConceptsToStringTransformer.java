@@ -21,7 +21,7 @@ public class ConceptsToStringTransformer {
                 builder.append(concept.getDescription());
                 builder.append("\n");
             }
-            for (String oneMapping : mapping.toStringRepresentation()) {
+            for (String oneMapping : mapping.transformToAdoc()) {
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);

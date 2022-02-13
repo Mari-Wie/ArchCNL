@@ -139,6 +139,11 @@ public class RelationManager extends HierarchyManager<Relation> {
                         existingRelation -> relation.getName().equals(existingRelation.getName()));
     }
 
+    public void removeRelation(Relation relation) {
+        relations.remove(relation);
+        removeFromHierarchy(new HierarchyNode<>(relation));
+    }
+
     private void initializeSpecialRelations() {
         final List<ActualObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));

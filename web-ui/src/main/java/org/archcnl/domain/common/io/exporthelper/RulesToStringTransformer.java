@@ -13,7 +13,7 @@ public class RulesToStringTransformer {
         for (ArchitectureRule rule : rules) {
             builder.append("[role=\"rule\"]");
             builder.append("\n");
-            builder.append(rule.toStringRepresentation());
+            builder.append(rule.transformToAdoc());
             builder.append("\n\n");
         }
         return builder.toString();

@@ -8,6 +8,9 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditorRequestedEvent;
@@ -64,6 +67,12 @@ public class ConceptAndRelationView extends RulesOrMappingEditorView {
                             new ConceptEditorRequestedEvent(
                                     this, true, (CustomConcept) e.getSource().get()));
                 });
+        hv1.addListener(
+                DeleteHierarchyObjectRequestedEvent.class,
+                event ->
+                        fireEvent(
+                                new DeleteConceptRequestedEvent(
+                                        hv1, true, (Concept) event.getHierarchyObject())));
         add(hv1);
     }
 
@@ -96,6 +105,12 @@ public class ConceptAndRelationView extends RulesOrMappingEditorView {
                             new RelationEditorRequestedEvent(
                                     this, true, (CustomRelation) e.getSource().get()));
                 });
+        hv2.addListener(
+                DeleteHierarchyObjectRequestedEvent.class,
+                event ->
+                        fireEvent(
+                                new DeleteRelationRequestedEvent(
+                                        hv2, true, (Relation) event.getHierarchyObject())));
         add(hv2);
     }
 
