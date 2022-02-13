@@ -60,7 +60,7 @@ public class InputView extends HorizontalLayout {
     }
 
     private void initConceptAndRelationView() {
-        conceptAndRelationView = new ConceptAndRelationView(true);
+        conceptAndRelationView = new ConceptAndRelationView();
         conceptAndRelationView.addListener(ConceptEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationEditorRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);

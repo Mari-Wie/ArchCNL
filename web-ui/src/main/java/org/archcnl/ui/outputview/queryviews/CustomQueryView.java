@@ -118,7 +118,7 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     private void initConceptAndRelationView() {
-        conceptAndRelationView = new ConceptAndRelationView(false);
+        conceptAndRelationView = new ConceptAndRelationView();
         conceptAndRelationView.setWidth(100.0f - CustomQueryView.CONTENT_RATIO, Unit.PERCENTAGE);
         conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
