@@ -4,9 +4,7 @@ import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +14,6 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
@@ -71,16 +68,11 @@ public class MainPresenter extends Component {
     private final ConceptManager conceptManager;
     private final RelationManager relationManager;
 
-    private final Map<HierarchyManager<HierarchyObject>, HierarchyView<HierarchyObject>>
-            hierachyManagerToView;
-
     public MainPresenter() throws ConceptDoesNotExistException {
         projectManager = new ProjectManager();
         ruleManager = new ArchitectureRuleManager();
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
-        hierachyManagerToView =
-                new HashMap<HierarchyManager<HierarchyObject>, HierarchyView<HierarchyObject>>();
 
         inputPresenter = new InputPresenter();
         inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
@@ -147,7 +139,6 @@ public class MainPresenter extends Component {
     }
 
     private void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
-        hierachyManagerToView.put(hierarchyManager, hv);
         hv.setRoots(hierarchyManager.getRoots());
         hv.update();
     }
@@ -300,8 +291,7 @@ public class MainPresenter extends Component {
     }
 
     private void handleEvent(UpdateHierarchiesRequestedEvent event) {
-        hierachyManagerToView.get(conceptManager).requestGridUpdate();
-        hierachyManagerToView.get(relationManager).requestGridUpdate();
+        inputPresenter.getView().updateConceptAndRelations();
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 
