@@ -278,7 +278,8 @@ public class MainPresenter extends Component {
 
                 // listen to Update-Events so that Concepts/Relations/Rules that are
                 // created from presets are also added to the UI
-                presenter.addListener(UpdateRulesConceptsAndRelationsRequestedEvent.class, this::handleEvent);
+                presenter.addListener(
+                        UpdateRulesConceptsAndRelationsRequestedEvent.class, this::handleEvent);
                 // open dialog
                 presenter.getView().open();
                 break;
