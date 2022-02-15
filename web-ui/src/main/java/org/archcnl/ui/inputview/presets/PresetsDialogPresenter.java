@@ -29,7 +29,7 @@ import org.archcnl.domain.input.model.presets.ArchitectureRuleConfig;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitecture;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.MicroserviceArchitectureBuilder;
 import org.archcnl.ui.common.TwoColumnGridEntry;
-import org.archcnl.ui.inputview.presets.events.ArchiecturalRulesSelectedEvent;
+import org.archcnl.ui.inputview.presets.events.ArchitectureRulesSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.RuleSelectionTabRequestedEvent;
 import org.archcnl.ui.inputview.presets.events.UpdateRulesConceptsAndRelationsRequestedEvent;
@@ -76,7 +76,7 @@ public class PresetsDialogPresenter extends Dialog {
 
         // handle inside this presenter
         view.addListener(RuleSelectionTabRequestedEvent.class, this::handleEvent);
-        view.addListener(ArchiecturalRulesSelectedEvent.class, this::handleEvent);
+        view.addListener(ArchitectureRulesSelectedEvent.class, this::handleEvent);
         view.addListener(ValidateArchitecturalStyleFormEvent.class, this::handleEvent);
 
         initializeTabs();
@@ -134,7 +134,7 @@ public class PresetsDialogPresenter extends Dialog {
         this.selectedStyle = event.getStyle();
     }
 
-    private void handleEvent(ArchiecturalRulesSelectedEvent event) {
+    private void handleEvent(ArchitectureRulesSelectedEvent event) {
         ArchitectureRuleSelection ruleSelection =
                 (ArchitectureRuleSelection) tabsToComponent.get(ruleSelectionTab);
         Set<String> selectedRules = ruleSelection.getSelectedRules();

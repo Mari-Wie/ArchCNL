@@ -18,7 +18,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.ui.inputview.presets.PresetsDialogPresenter.TabOptions;
-import org.archcnl.ui.inputview.presets.events.ArchiecturalRulesSelectedEvent;
+import org.archcnl.ui.inputview.presets.events.ArchitectureRulesSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.RuleSelectionTabRequestedEvent;
 import org.archcnl.ui.inputview.presets.events.ValidateArchitecturalStyleFormEvent;
 
@@ -67,7 +67,7 @@ public class PresetsDialogView extends Dialog implements HasComponents, FlexComp
             case RULE_SELECTION:
                 confirm.addClickListener(
                         e -> {
-                            fireEvent(new ArchiecturalRulesSelectedEvent(this, false));
+                            fireEvent(new ArchitectureRulesSelectedEvent(this, false));
                         });
                 break;
             case ARCHITECTURE_INFORMATION:
