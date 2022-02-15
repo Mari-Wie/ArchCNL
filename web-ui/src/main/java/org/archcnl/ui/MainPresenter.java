@@ -36,7 +36,7 @@ import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.presets.PresetsDialogPresenter;
-import org.archcnl.ui.inputview.presets.events.UpdateHierarchiesRequestedEvent;
+import org.archcnl.ui.inputview.presets.events.UpdateRulesConceptsAndRelationsRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
@@ -278,7 +278,7 @@ public class MainPresenter extends Component {
 
                 // listen to Update-Events so that Concepts/Relations/Rules that are
                 // created from presets are also added to the UI
-                presenter.addListener(UpdateHierarchiesRequestedEvent.class, this::handleEvent);
+                presenter.addListener(UpdateRulesConceptsAndRelationsRequestedEvent.class, this::handleEvent);
                 // open dialog
                 presenter.getView().open();
                 break;
@@ -290,7 +290,7 @@ public class MainPresenter extends Component {
         }
     }
 
-    private void handleEvent(UpdateHierarchiesRequestedEvent event) {
+    private void handleEvent(UpdateRulesConceptsAndRelationsRequestedEvent event) {
         inputPresenter.getView().updateConceptAndRelations();
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }

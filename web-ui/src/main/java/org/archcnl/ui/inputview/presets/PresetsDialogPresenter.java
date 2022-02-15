@@ -32,7 +32,7 @@ import org.archcnl.ui.common.TwoColumnGridEntry;
 import org.archcnl.ui.inputview.presets.events.ArchiecturalRulesSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.ArchitecturalStyleSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.RuleSelectionTabRequestedEvent;
-import org.archcnl.ui.inputview.presets.events.UpdateHierarchiesRequestedEvent;
+import org.archcnl.ui.inputview.presets.events.UpdateRulesConceptsAndRelationsRequestedEvent;
 import org.archcnl.ui.inputview.presets.events.ValidateArchitecturalStyleFormEvent;
 
 @Tag("PresetsPresenter")
@@ -245,7 +245,7 @@ public class PresetsDialogPresenter extends Dialog {
                 ruleManager, conceptManager, relationManager);
 
         // this updates Concepts/Rules/Relations in the MainView
-        fireEvent(new UpdateHierarchiesRequestedEvent(this, false));
+        fireEvent(new UpdateRulesConceptsAndRelationsRequestedEvent(this, false));
     }
 
     // loop through the sets that hold the data for the groups specified in the
