@@ -22,18 +22,7 @@ public class RulesOptionRequestedEvent extends ComponentEvent<MainView> {
         this.option = option;
     }
 
-    public void handleEvent() {
-        switch (option) {
-            case IMPORT_FROM_FILE:
-                RulesOptionRequestedEvent.LOG.warn("{} is not implemented", option);
-                break;
-            case IMPORT_RULE_PRESETS:
-                RulesOptionRequestedEvent.LOG.warn("{} is not implemented", option);
-                break;
-            default:
-                RulesOptionRequestedEvent.LOG.warn(
-                        "Unhandled RulesOption {} appeared in RulesOptionRequestedEvent.", option);
-                break;
-        }
+    public RulesOption getOption() {
+        return option;
     }
 }

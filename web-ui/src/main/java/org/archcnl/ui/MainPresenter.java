@@ -37,7 +37,8 @@ import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
-import org.archcnl.ui.inputview.events.RemoveArchitectureRuleRequestedEvent;
+import org.archcnl.ui.inputview.presets.PresetsDialogPresenter;
+import org.archcnl.ui.inputview.presets.events.UpdateRulesConceptsAndRelationsRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
@@ -100,9 +101,6 @@ public class MainPresenter extends Component {
                 event -> event.handleEvent(conceptManager.getInputConcepts()));
         inputPresenter.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
-        inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
-        inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(DeleteRelationRequestedEvent.class, this::handleEvent);
 
         outputView = new OutputView();
         outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
@@ -119,8 +117,12 @@ public class MainPresenter extends Component {
                 event -> event.handleEvent(conceptManager.getOutputConcepts()));
         outputView.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
+        inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteRelationRequestedEvent.class, this::handleEvent);
 
         view = new MainView(inputPresenter.getView());
+
         addListeners();
     }
 
@@ -171,13 +173,10 @@ public class MainPresenter extends Component {
                 e -> MainPresenter.LOG.warn("HelpOptionRequested is not implemented"));
         view.addListener(ProjectOptionRequestedEvent.class, this::handleEvent);
         view.addListener(EditOptionRequestedEvent.class, EditOptionRequestedEvent::handleEvent);
-        view.addListener(RulesOptionRequestedEvent.class, RulesOptionRequestedEvent::handleEvent);
+        view.addListener(RulesOptionRequestedEvent.class, this::handleEvent);
         view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
 
         inputPresenter.addListener(OutputViewRequestedEvent.class, e -> selectPathForChecking());
-        inputPresenter.addListener(
-                RemoveArchitectureRuleRequestedEvent.class,
-                e -> ruleManager.deleteArchitectureRule(e.getRule()));
         outputView.addListener(
                 InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
     }
@@ -286,6 +285,35 @@ public class MainPresenter extends Component {
         } else {
             ruleManager.updateArchitectureRule(oldRule.get(), event.getNewRule());
         }
+        inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
+    }
+
+    private void handleEvent(RulesOptionRequestedEvent event) {
+        switch (event.getOption()) {
+            case IMPORT_FROM_FILE:
+                MainPresenter.LOG.warn("{} is not implemented", event.getOption());
+                break;
+            case IMPORT_RULE_PRESETS:
+                PresetsDialogPresenter presenter =
+                        new PresetsDialogPresenter(conceptManager, relationManager, ruleManager);
+
+                // listen to Update-Events so that Concepts/Relations/Rules that are
+                // created from presets are also added to the UI
+                presenter.addListener(
+                        UpdateRulesConceptsAndRelationsRequestedEvent.class, this::handleEvent);
+                // open dialog
+                presenter.getView().open();
+                break;
+            default:
+                MainPresenter.LOG.warn(
+                        "Unhandled RulesOption {} appeared in RulesOptionRequestedEvent.",
+                        event.getOption());
+                break;
+        }
+    }
+
+    private void handleEvent(UpdateRulesConceptsAndRelationsRequestedEvent event) {
+        inputPresenter.getView().updateConceptAndRelations();
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 

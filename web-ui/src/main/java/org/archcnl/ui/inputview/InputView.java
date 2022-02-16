@@ -77,6 +77,10 @@ public class InputView extends HorizontalLayout {
         conceptAndRelationView.addListener(DeleteRelationRequestedEvent.class, this::fireEvent);
     }
 
+    public void updateConceptAndRelations() {
+        conceptAndRelationView.update();
+    }
+
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
