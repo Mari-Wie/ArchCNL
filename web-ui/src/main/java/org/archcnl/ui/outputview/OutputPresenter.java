@@ -142,8 +142,7 @@ public class OutputPresenter extends Component {
 
     private FreeTextQueryUiComponent createFreeTextQueryView(String query) {
         FreeTextQueryUiComponent newComponent = new FreeTextQueryUiComponent(query);
-        newComponent.addListener(
-                CustomQueryInsertionRequestedEvent.class, this::handleEvent);
+        newComponent.addListener(CustomQueryInsertionRequestedEvent.class, this::handleEvent);
         newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
         newComponent.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
@@ -157,18 +156,19 @@ public class OutputPresenter extends Component {
     }
 
     private void handleEvent(PinCustomQueryRequestedEvent event) {
-    	view.getSideBarWidget().addPinnedQueryTab(event.getLinkedView(), event.getQueryName());
+        view.getSideBarWidget().addPinnedQueryTab(event.getLinkedView(), event.getQueryName());
         pinnedCustomQueries.add(customQueryPresenter);
         customQueryPresenter = createCustomQueryPresenter();
         view.getSideBarWidget().updateCustomQueryTab(customQueryPresenter.getView());
     }
 
     private void handleEvent(PinFreeTextQueryRequestedEvent event) {
-    	view.getSideBarWidget().addPinnedQueryTab(event.getSource(), event.getQueryName());
+        view.getSideBarWidget().addPinnedQueryTab(event.getSource(), event.getQueryName());
         pinnedFreeTextQueries.add(freeTextQueryView);
         freeTextQueryView = createFreeTextQueryView(QueryUtils.getDefaultQuery());
         view.getSideBarWidget().updateFreeTextQueryTab(freeTextQueryView);
     }
+
     private void handleEvent(final RunQueryRequestedEvent event) {
         final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getGridView().update(result);
@@ -182,9 +182,9 @@ public class OutputPresenter extends Component {
         final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
         event.getSource().update(result);
     }
-    
+
     private void handleEvent(final QueryNameUpdateRequestedEvent event) {
-    	view.getSideBarWidget().updatePinnedQueryName(event);
+        view.getSideBarWidget().updatePinnedQueryName(event);
     }
 
     public void displayResult(final Optional<Result> result) {

@@ -102,7 +102,6 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
 
-
         outputPresenter = new OutputPresenter();
         outputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
@@ -236,7 +235,8 @@ public class MainPresenter extends Component {
                                 projectManager, ruleManager, conceptManager, relationManager);
                 openProjectDialog.addListener(
                         ShowFreeTextQueryRequestedEvent.class,
-                        e -> outputPresenter.showFreeTextQuery(
+                        e ->
+                                outputPresenter.showFreeTextQuery(
                                         e.getQuery(), e.isDefaultQueryTab()));
                 openProjectDialog.addListener(
                         ShowCustomQueryRequestedEvent.class,
