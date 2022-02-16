@@ -137,7 +137,7 @@ public class MainPresenter extends Component {
                     architectureCheck
                             .getRepository()
                             .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
-            view.showContent(outputPresenter);
+            view.showContent(outputPresenter.getView());
         } catch (PropertyNotFoundException e2) {
             view.showErrorMessage("Failed to connect to stardog database.");
         }
@@ -167,7 +167,9 @@ public class MainPresenter extends Component {
                 OpenProjectDialog openProjectDialog = new OpenProjectDialog(projectManager);
                 openProjectDialog.addListener(
                         ShowFreeTextQueryRequestedEvent.class,
-                        e -> outputPresenter.showFreeTextQuery(e.getQuery(), e.isDefaultQueryTab()));
+                        e ->
+                                outputPresenter.showFreeTextQuery(
+                                        e.getQuery(), e.isDefaultQueryTab()));
                 openProjectDialog.addListener(
                         ShowCustomQueryRequestedEvent.class,
                         e -> outputPresenter.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
@@ -176,7 +178,8 @@ public class MainPresenter extends Component {
             case SAVE:
                 try {
                     projectManager.saveProject(
-                            outputPresenter.getCustomQueries(), outputPresenter.getFreeTextQueries());
+                            outputPresenter.getCustomQueries(),
+                            outputPresenter.getFreeTextQueries());
                 } catch (final IOException e) {
                     new ConfirmDialog("Project file could not be written.").open();
                 }
