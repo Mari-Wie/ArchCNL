@@ -23,6 +23,8 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.common.dialogs.ConfirmDialog;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
@@ -37,6 +39,7 @@ import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
 import org.archcnl.ui.inputview.presets.PresetsDialogPresenter;
 import org.archcnl.ui.inputview.presets.events.UpdateRulesConceptsAndRelationsRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
@@ -114,6 +117,9 @@ public class MainPresenter extends Component {
                 event -> event.handleEvent(conceptManager.getOutputConcepts()));
         outputView.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
+        inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteRelationRequestedEvent.class, this::handleEvent);
 
         view = new MainView(inputPresenter.getView());
 
@@ -135,6 +141,21 @@ public class MainPresenter extends Component {
 
     private void handleEvent(final RelationHierarchySwapRequestedEvent event) {
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
+        updateHierarchies(relationManager, event.getSource());
+    }
+    
+    private void handleEvent(final DeleteRuleButtonPressedEvent event) {
+        ruleManager.deleteArchitectureRule(event.getRule());
+        inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
+    }
+
+    private void handleEvent(final DeleteConceptRequestedEvent event) {
+        conceptManager.removeConcept(event.getConcept());
+        updateHierarchies(conceptManager, event.getSource());
+    }
+
+    private void handleEvent(final DeleteRelationRequestedEvent event) {
+        relationManager.removeRelation(event.getRelation());
         updateHierarchies(relationManager, event.getSource());
     }
 
