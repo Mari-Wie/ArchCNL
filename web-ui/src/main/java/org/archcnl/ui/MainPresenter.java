@@ -143,7 +143,7 @@ public class MainPresenter extends Component {
         relationManager.moveNode(event.getDraggedNode(), event.getTargetNode());
         updateHierarchies(relationManager, event.getSource());
     }
-    
+
     private void handleEvent(final DeleteRuleButtonPressedEvent event) {
         ruleManager.deleteArchitectureRule(event.getRule());
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
