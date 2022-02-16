@@ -3,11 +3,15 @@ package org.archcnl.ui.common.conceptandrelationlistview;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditorRequestedEvent;
@@ -15,108 +19,119 @@ import org.archcnl.ui.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.events.HierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 
-public class ConceptAndRelationView extends RulesOrMappingEditorView {
+public class ConceptAndRelationView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_EXPANSION_DEPTH = 10;
 
-    private HierarchyView<Concept> hv1;
-    private HierarchyView<Relation> hv2;
+    protected HierarchyView<Concept> conceptHierarchyView;
+    protected HierarchyView<Relation> relationHierarchyView;
 
-    public ConceptAndRelationView(boolean inputSide) {
+    public ConceptAndRelationView() {
         setHeightFull();
+        initHierarchies();
         createConceptHierarchy();
         createRelationHierarchy();
+        addElements();
     }
 
-    private void createConceptHierarchy() {
-        hv1 = new EditableHierarchyView<Concept>();
-        hv1.setHeight(50, Unit.PERCENTAGE);
+    // Overriden in the editable version of this
+    protected void addElements() {
+        add(conceptHierarchyView);
+        add(relationHierarchyView);
+    }
 
-        hv1.addListener(
+    protected void createConceptHierarchy() {
+        conceptHierarchyView.setHeight(50, Unit.PERCENTAGE);
+
+        conceptHierarchyView.addListener(
                 GridUpdateRequestedEvent.class,
                 e -> {
                     requestConceptGridUpdate();
                 });
-        hv1.addListener(
+        conceptHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class,
                 e -> {
                     requestConceptSwap(e);
                 });
 
-        hv1.createCreateNewLayout(
-                "Concepts",
-                "Create New Concept",
-                e -> {
-                    fireEvent(new ConceptEditorRequestedEvent(this, true));
-                });
-
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of concepts but are mapped to each other externally
-        hv1.addListener(
+        conceptHierarchyView.addListener(
                 EditorRequestedEvent.class,
                 e -> {
                     fireEvent(
                             new ConceptEditorRequestedEvent(
                                     this, true, (CustomConcept) e.getSource().get()));
                 });
-        add(hv1);
+        conceptHierarchyView.addListener(
+                DeleteHierarchyObjectRequestedEvent.class,
+                event ->
+                        fireEvent(
+                                new DeleteConceptRequestedEvent(
+                                        conceptHierarchyView,
+                                        true,
+                                        (Concept) event.getHierarchyObject())));
     }
 
-    private void createRelationHierarchy() {
-        hv2 = new EditableHierarchyView<Relation>();
-        hv2.setHeight(50, Unit.PERCENTAGE);
-        hv2.addListener(
+    protected void initHierarchies() {
+        conceptHierarchyView = new HierarchyView<Concept>();
+        relationHierarchyView = new HierarchyView<Relation>();
+    }
+
+    protected void createRelationHierarchy() {
+        relationHierarchyView.setHeight(50, Unit.PERCENTAGE);
+        relationHierarchyView.addListener(
                 GridUpdateRequestedEvent.class,
                 e -> {
                     requestRelationGridUpdate();
                 });
-        hv2.addListener(
+        relationHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class,
                 e -> {
                     requestRelationSwap(e);
                 });
-        hv2.createCreateNewLayout(
-                "Relations",
-                "Create New Relation",
-                e -> {
-                    fireEvent(new RelationEditorRequestedEvent(this, true));
-                });
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
-        // part of concepts but are mapped to each other externally
-        hv2.addListener(
+        // part of relations but are mapped to each other externally
+        relationHierarchyView.addListener(
                 EditorRequestedEvent.class,
                 e -> {
                     fireEvent(
                             new RelationEditorRequestedEvent(
                                     this, true, (CustomRelation) e.getSource().get()));
                 });
-        add(hv2);
+        relationHierarchyView.addListener(
+                DeleteHierarchyObjectRequestedEvent.class,
+                event ->
+                        fireEvent(
+                                new DeleteRelationRequestedEvent(
+                                        relationHierarchyView,
+                                        true,
+                                        (Relation) event.getHierarchyObject())));
     }
 
     public void update() {
-        hv1.requestGridUpdate();
-        hv2.requestGridUpdate();
+        relationHierarchyView.requestGridUpdate();
+        conceptHierarchyView.requestGridUpdate();
     }
 
-    private void requestConceptGridUpdate() {
-        fireEvent(new ConceptGridUpdateRequestedEvent(hv1, true));
+    protected void requestConceptGridUpdate() {
+        fireEvent(new ConceptGridUpdateRequestedEvent(conceptHierarchyView, true));
     }
 
-    private void requestRelationGridUpdate() {
-        fireEvent(new RelationGridUpdateRequestedEvent(hv2, true));
+    protected void requestRelationGridUpdate() {
+        fireEvent(new RelationGridUpdateRequestedEvent(relationHierarchyView, true));
     }
 
-    private void requestConceptSwap(HierarchySwapRequestedEvent e) {
+    protected void requestConceptSwap(HierarchySwapRequestedEvent e) {
         fireEvent(new ConceptHierarchySwapRequestedEvent(e));
     }
 
-    private void requestRelationSwap(HierarchySwapRequestedEvent e) {
+    protected void requestRelationSwap(HierarchySwapRequestedEvent e) {
         fireEvent(new RelationHierarchySwapRequestedEvent(e));
     }
 

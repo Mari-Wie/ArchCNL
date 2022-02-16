@@ -21,7 +21,7 @@ public class RelationsToStringTransformer {
                 builder.append(relation.getDescription());
                 builder.append("\n");
             }
-            for (String oneMapping : mapping.toStringRepresentation()) {
+            for (String oneMapping : mapping.transformToAdoc()) {
                 builder.append("[role=\"mapping\"]");
                 builder.append("\n");
                 builder.append(oneMapping);

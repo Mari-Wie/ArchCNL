@@ -13,7 +13,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
@@ -28,7 +27,9 @@ import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.components.GridView;
+import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.RunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.UpdateQueryTextButtonPressedEvent;
 
@@ -44,6 +45,8 @@ public class CustomQueryView extends HorizontalLayout {
     private TextArea queryTextArea;
     private TextField queryName;
     private Button pinButton;
+    private Button deleteButton;
+    private HorizontalLayout topRow;
 
     public CustomQueryView(AndTripletsEditorView andTripletsEditorView) {
         super();
@@ -56,10 +59,15 @@ public class CustomQueryView extends HorizontalLayout {
         queryTextArea.setWidth(100, Unit.PERCENTAGE);
         queryName = new TextField("Name");
         queryName.setPlaceholder("Name of this query");
+        queryName.addValueChangeListener(event -> fireNameUpdateEventIfNameNotEmpty());
         pinButton =
                 new Button(
                         new Icon(VaadinIcon.PIN),
                         click -> fireEvent(new PinQueryButtonPressedEvent(this, true)));
+        deleteButton =
+                new Button(
+                        new Icon(VaadinIcon.TRASH),
+                        click -> fireEvent(new DeleteButtonPressedEvent(this, true)));
 
         getStyle().set("overflow", "visible");
         setWidthFull();
@@ -68,7 +76,7 @@ public class CustomQueryView extends HorizontalLayout {
         queryTextArea.setVisible(false);
         addVariableSelectionComponent();
         Label caption = new Label("Create a custom query");
-        HorizontalLayout topRow = new HorizontalLayout(caption, pinButton);
+        topRow = new HorizontalLayout(caption, pinButton);
         topRow.setWidthFull();
         caption.setWidthFull();
         Button runButton = new Button("Run", e -> fireEvent(new RunButtonPressedEvent(this, true)));
@@ -94,10 +102,6 @@ public class CustomQueryView extends HorizontalLayout {
         addAndExpand(content, conceptAndRelationView);
     }
 
-    public Optional<String> getQueryName() {
-        return queryName.getOptionalValue();
-    }
-
     public void setQueryName(String name) {
         queryName.setValue(name);
     }
@@ -118,7 +122,7 @@ public class CustomQueryView extends HorizontalLayout {
     }
 
     private void initConceptAndRelationView() {
-        conceptAndRelationView = new ConceptAndRelationView(false);
+        conceptAndRelationView = new ConceptAndRelationView();
         conceptAndRelationView.setWidth(100.0f - CustomQueryView.CONTENT_RATIO, Unit.PERCENTAGE);
         conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
@@ -186,8 +190,14 @@ public class CustomQueryView extends HorizontalLayout {
         return componentsCount - nonEmptyComponentsCount >= 2;
     }
 
-    public void setPinButtonVisible(final boolean visible) {
-        pinButton.setVisible(visible);
+    public void replacePinButtonWithDeleteButton() {
+        topRow.replace(pinButton, deleteButton);
+    }
+
+    private void fireNameUpdateEventIfNameNotEmpty() {
+        if (queryName.getOptionalValue().isPresent()) {
+            fireEvent(new QueryNameUpdateRequestedEvent(this, true, queryName.getValue()));
+        }
     }
 
     @Override

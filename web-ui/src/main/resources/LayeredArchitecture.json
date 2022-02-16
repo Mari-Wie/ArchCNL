@@ -1,0 +1,18 @@
+{
+	"style": "LAYERED_ARCHITECTURE",
+	"architectureInformation": [
+		{
+			"name": "UI-Layer Package",
+			"groupId": -1
+		},
+		{
+			"name": "Logic-Layer Package",
+			"groupId": -1
+		},
+		{
+			"name": "DB-Layer Package",
+			"groupId": -1
+		}
+		
+	]
+}

@@ -1,14 +1,11 @@
 package org.archcnl.domain.input.model.architecturerules;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ArchitectureRuleManager {
 
     private List<ArchitectureRule> architectureRules;
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public ArchitectureRuleManager() {
         architectureRules = new LinkedList<>();
@@ -16,7 +13,6 @@ public class ArchitectureRuleManager {
 
     public void addArchitectureRule(ArchitectureRule architectureRule) {
         architectureRules.add(architectureRule);
-        propertyChangeSupport.firePropertyChange("newArchRule", null, architectureRule);
     }
 
     public void addAllArchitectureRules(List<ArchitectureRule> architectureRules) {
@@ -31,7 +27,10 @@ public class ArchitectureRuleManager {
         return architectureRules;
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
+    public void updateArchitectureRule(ArchitectureRule oldRule, ArchitectureRule newRule) {
+        architectureRules.stream()
+                .filter(rule -> rule.equals(oldRule))
+                .findFirst()
+                .ifPresent(rule -> rule.setRuleString(newRule.transformToAdoc()));
     }
 }

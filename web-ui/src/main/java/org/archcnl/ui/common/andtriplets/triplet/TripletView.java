@@ -22,7 +22,7 @@ public class TripletView extends HorizontalLayout {
     private static final long serialVersionUID = -547117976123681486L;
 
     private VariableSelectionComponent subjectComponent;
-    private PredicateComponent predicateComponent;
+    private PredicateSelectionComponent predicateComponent;
     private ObjectView objectView;
 
     public TripletView() {
@@ -30,7 +30,7 @@ public class TripletView extends HorizontalLayout {
         setWidthFull();
 
         subjectComponent = new VariableSelectionComponent();
-        predicateComponent = new PredicateComponent();
+        predicateComponent = new PredicateSelectionComponent();
         objectView = new ObjectView();
 
         HorizontalLayout tripletLayout = new HorizontalLayout();
@@ -49,7 +49,7 @@ public class TripletView extends HorizontalLayout {
         return subjectComponent;
     }
 
-    public PredicateComponent getPredicateComponent() {
+    public PredicateSelectionComponent getPredicateComponent() {
         return predicateComponent;
     }
 

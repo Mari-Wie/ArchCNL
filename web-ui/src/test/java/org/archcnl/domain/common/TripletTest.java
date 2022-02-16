@@ -11,11 +11,20 @@ import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TripletTest {
+
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+
+    @BeforeEach
+    private void setup() throws ConceptDoesNotExistException {
+        conceptManager = new ConceptManager();
+        relationManager = new RelationManager(conceptManager);
+    }
 
     @Test
     void givenTripletInput_whenCallTripletFactory_thenExpectedResults()
@@ -23,11 +32,7 @@ class TripletTest {
                     UnsupportedObjectTypeInTriplet {
         // given
         final Variable subject = new Variable("name");
-        final Relation predicate =
-                RulesConceptsAndRelations.getInstance()
-                        .getRelationManager()
-                        .getRelationByName("matches")
-                        .get();
+        final Relation predicate = relationManager.getRelationByName("matches").get();
         final ObjectType validObjectType1 = new Variable("pattern");
         final ObjectType validObjectType2 = new StringValue("someString");
         final ObjectType invalidObjectType = new BooleanValue(true);
@@ -55,10 +60,7 @@ class TripletTest {
         final Triplet triplet =
                 new Triplet(
                         new Variable("aggregate"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("hasName")
-                                .get(),
+                        relationManager.getRelationByName("hasName").get(),
                         new Variable("name"));
 
         final String expectedGuiString = "?aggregate famix:hasName ?name.";
@@ -83,10 +85,7 @@ class TripletTest {
         final Triplet triplet =
                 new Triplet(
                         new Variable("aggregate"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("hasName")
-                                .get(),
+                        relationManager.getRelationByName("hasName").get(),
                         new StringValue("Some string value"));
 
         final String expectedGuiString = "?aggregate famix:hasName 'Some string value'.";
@@ -112,10 +111,7 @@ class TripletTest {
         final Triplet triplet =
                 new Triplet(
                         new Variable("class"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("isInterface")
-                                .get(),
+                        relationManager.getRelationByName("isInterface").get(),
                         new BooleanValue(true));
 
         final String expectedGuiString = "?class famix:isInterface 'true'^^xsd:boolean.";
@@ -141,14 +137,8 @@ class TripletTest {
         final Triplet triplet =
                 new Triplet(
                         new Variable("class"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("is-of-type")
-                                .get(),
-                        RulesConceptsAndRelations.getInstance()
-                                .getConceptManager()
-                                .getConceptByName("FamixClass")
-                                .get());
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get());
 
         final String expectedGuiString = "?class rdf:type famix:FamixClass.";
         final String expectedQueryString = "?class rdf:type famix:FamixClass.";

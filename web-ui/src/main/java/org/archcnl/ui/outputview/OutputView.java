@@ -38,7 +38,6 @@ public class OutputView extends HorizontalLayout {
         sideBarWidget.setWidth(15, Unit.PERCENTAGE);
         sideBarWidget.addClassName("side-bar");
         currentComponent = defaultQueryView;
-
         addAndExpand(sideBarWidget, defaultQueryView);
     }
 
@@ -51,7 +50,7 @@ public class OutputView extends HorizontalLayout {
     public SideBarWidget getSideBarWidget() {
         return sideBarWidget;
     }
-
+    
     public void switchToComponent(final Component component) {
         replace(currentComponent, component);
         currentComponent = component;

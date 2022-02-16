@@ -24,8 +24,8 @@ import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
@@ -56,20 +56,31 @@ public class TestUtils {
         return true;
     }
 
-    public static RulesConceptsAndRelations prepareModel()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
-        final RulesConceptsAndRelations result = new RulesConceptsAndRelations();
+    public static ArchitectureRuleManager prepareRuleManager() {
+        final ArchitectureRuleManager ruleManager = new ArchitectureRuleManager();
 
-        // prepare model with rules and mappings from OnionArchitectureDemo example
+        // prepare ArchitectureRuleManager with rules from the OnionArchitectureDemo example
+
+        ruleManager.addArchitectureRule(
+                new ArchitectureRule("Every Aggregate must resideIn a DomainRing."));
+        ruleManager.addArchitectureRule(
+                new ArchitectureRule("No Aggregate can use an ApplicationService."));
+        return ruleManager;
+    }
+
+    public static ConceptManager prepareConceptManager()
+            throws UnrelatedMappingException, UnsupportedObjectTypeInTriplet,
+                    ConceptDoesNotExistException, InvalidVariableNameException,
+                    ConceptAlreadyExistsException {
+
+        final ConceptManager conceptManager = new ConceptManager();
+        final RelationManager relationManager = new RelationManager(conceptManager);
+
+        // prepare conceptManager with concepts from the OnionArchitectureDemo example
 
         final Variable classVariable = new Variable("class");
-        final Variable class2Variable = new Variable("class2");
         final Variable nameVariable = new Variable("name");
         final Variable packageVariable = new Variable("package");
-        final Variable attributeVariable = new Variable("f");
         final Variable varVariable = new Variable("var");
 
         // isAggregate Mapping
@@ -77,17 +88,17 @@ public class TestUtils {
         triplets.add(
                 TripletFactory.createTriplet(
                         classVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
         triplets.add(
                 TripletFactory.createTriplet(
                         classVariable,
-                        result.getRelationManager().getRelationByName("hasName").get(),
+                        relationManager.getRelationByName("hasName").get(),
                         nameVariable));
         triplets.add(
                 TripletFactory.createTriplet(
                         nameVariable,
-                        result.getRelationManager().getRelationByName("matches").get(),
+                        relationManager.getRelationByName("matches").get(),
                         new StringValue("(\\\\w||\\\\W)*\\\\.(\\\\w||\\\\W)*Aggregate")));
         final List<AndTriplets> aggregateWhenTriplets = new LinkedList<>();
         aggregateWhenTriplets.add(new AndTriplets(triplets));
@@ -97,27 +108,27 @@ public class TestUtils {
         triplets.add(
                 TripletFactory.createTriplet(
                         classVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("Namespace").get()));
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("Namespace").get()));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
-                        result.getRelationManager().getRelationByName("hasName").get(),
+                        relationManager.getRelationByName("hasName").get(),
                         nameVariable));
         triplets.add(
                 TripletFactory.createTriplet(
                         nameVariable,
-                        result.getRelationManager().getRelationByName("matches").get(),
+                        relationManager.getRelationByName("matches").get(),
                         new StringValue("api")));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
-                        result.getRelationManager().getRelationByName("namespaceContains").get(),
+                        relationManager.getRelationByName("namespaceContains").get(),
                         classVariable));
         final List<AndTriplets> applicationServiceWhenTriplets = new LinkedList<>();
         applicationServiceWhenTriplets.add(new AndTriplets(triplets));
@@ -127,87 +138,20 @@ public class TestUtils {
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("Namespace").get()));
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("Namespace").get()));
         triplets.add(
                 TripletFactory.createTriplet(
                         packageVariable,
-                        result.getRelationManager().getRelationByName("hasName").get(),
+                        relationManager.getRelationByName("hasName").get(),
                         nameVariable));
         triplets.add(
                 TripletFactory.createTriplet(
                         nameVariable,
-                        result.getRelationManager().getRelationByName("matches").get(),
+                        relationManager.getRelationByName("matches").get(),
                         new StringValue("domain")));
         final List<AndTriplets> domainRingWhenTriplets = new LinkedList<>();
         domainRingWhenTriplets.add(new AndTriplets(triplets));
-
-        // resideIn Mapping
-        triplets = new LinkedList<>();
-        triplets.add(
-                TripletFactory.createTriplet(
-                        classVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
-        triplets.add(
-                TripletFactory.createTriplet(
-                        packageVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("Namespace").get()));
-        triplets.add(
-                TripletFactory.createTriplet(
-                        packageVariable,
-                        result.getRelationManager().getRelationByName("namespaceContains").get(),
-                        classVariable));
-        final List<AndTriplets> resideInWhenTriplets = new LinkedList<>();
-        resideInWhenTriplets.add(new AndTriplets(triplets));
-
-        // use Mapping
-        triplets = new LinkedList<>();
-        triplets.add(
-                TripletFactory.createTriplet(
-                        classVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
-        triplets.add(
-                TripletFactory.createTriplet(
-                        class2Variable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
-        triplets.add(
-                TripletFactory.createTriplet(
-                        attributeVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("Attribute").get()));
-        triplets.add(
-                TripletFactory.createTriplet(
-                        classVariable,
-                        result.getRelationManager().getRelationByName("definesAttribute").get(),
-                        attributeVariable));
-        triplets.add(
-                TripletFactory.createTriplet(
-                        attributeVariable,
-                        result.getRelationManager().getRelationByName("hasDeclaredType").get(),
-                        class2Variable));
-        final List<Triplet> triplets2 = new LinkedList<>();
-        triplets2.add(
-                TripletFactory.createTriplet(
-                        classVariable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
-        triplets2.add(
-                TripletFactory.createTriplet(
-                        class2Variable,
-                        result.getRelationManager().getRelationByName("is-of-type").get(),
-                        result.getConceptManager().getConceptByName("FamixClass").get()));
-        triplets2.add(
-                TripletFactory.createTriplet(
-                        classVariable,
-                        result.getRelationManager().getRelationByName("imports").get(),
-                        class2Variable));
-        final List<AndTriplets> useWhenTriplets = new LinkedList<>();
-        useWhenTriplets.add(new AndTriplets(triplets));
-        useWhenTriplets.add(new AndTriplets(triplets2));
 
         final CustomConcept aggregate =
                 new CustomConcept(
@@ -227,6 +171,102 @@ public class TestUtils {
                 new ConceptMapping(packageVariable, domainRingWhenTriplets, domainRing);
         domainRing.setMapping(domainRingMapping);
 
+        final CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept", "");
+        final ConceptMapping emptyWhenConceptMapping =
+                new ConceptMapping(varVariable, new LinkedList<>(), emptyWhenConcept);
+        emptyWhenConcept.setMapping(emptyWhenConceptMapping);
+
+        conceptManager.addConcept(aggregate);
+        conceptManager.addConcept(applicationService);
+        conceptManager.addConcept(domainRing);
+        conceptManager.addConcept(emptyWhenConcept);
+        return conceptManager;
+    }
+
+    public static RelationManager prepareRelationManager()
+            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
+                    RelationDoesNotExistException, ConceptDoesNotExistException,
+                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
+                    UnrelatedMappingException, RelationAlreadyExistsException {
+
+        final ConceptManager conceptManager = new ConceptManager();
+        final RelationManager relationManager = new RelationManager(conceptManager);
+
+        // prepare relationManager with relations from the OnionArchitectureDemo example
+
+        final Variable classVariable = new Variable("class");
+        final Variable class2Variable = new Variable("class2");
+        final Variable packageVariable = new Variable("package");
+        final Variable attributeVariable = new Variable("f");
+        final Variable varVariable = new Variable("var");
+
+        // resideIn Mapping
+        List<Triplet> triplets = new LinkedList<>();
+        triplets.add(
+                TripletFactory.createTriplet(
+                        classVariable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
+        triplets.add(
+                TripletFactory.createTriplet(
+                        packageVariable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("Namespace").get()));
+        triplets.add(
+                TripletFactory.createTriplet(
+                        packageVariable,
+                        relationManager.getRelationByName("namespaceContains").get(),
+                        classVariable));
+        final List<AndTriplets> resideInWhenTriplets = new LinkedList<>();
+        resideInWhenTriplets.add(new AndTriplets(triplets));
+
+        // use Mapping
+        triplets = new LinkedList<>();
+        triplets.add(
+                TripletFactory.createTriplet(
+                        classVariable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
+        triplets.add(
+                TripletFactory.createTriplet(
+                        class2Variable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
+        triplets.add(
+                TripletFactory.createTriplet(
+                        attributeVariable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("Attribute").get()));
+        triplets.add(
+                TripletFactory.createTriplet(
+                        classVariable,
+                        relationManager.getRelationByName("definesAttribute").get(),
+                        attributeVariable));
+        triplets.add(
+                TripletFactory.createTriplet(
+                        attributeVariable,
+                        relationManager.getRelationByName("hasDeclaredType").get(),
+                        class2Variable));
+        final List<Triplet> triplets2 = new LinkedList<>();
+        triplets2.add(
+                TripletFactory.createTriplet(
+                        classVariable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
+        triplets2.add(
+                TripletFactory.createTriplet(
+                        class2Variable,
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
+        triplets2.add(
+                TripletFactory.createTriplet(
+                        classVariable,
+                        relationManager.getRelationByName("imports").get(),
+                        class2Variable));
+        final List<AndTriplets> useWhenTriplets = new LinkedList<>();
+        useWhenTriplets.add(new AndTriplets(triplets));
+        useWhenTriplets.add(new AndTriplets(triplets2));
+
         final CustomRelation resideIn = new CustomRelation("resideIn", "", new LinkedList<>());
         final RelationMapping resideInMapping =
                 new RelationMapping(
@@ -244,11 +284,6 @@ public class TestUtils {
                         TripletFactory.createTriplet(classVariable, use, class2Variable),
                         useWhenTriplets);
         use.setMapping(useMapping);
-
-        final CustomConcept emptyWhenConcept = new CustomConcept("EmptyWhenConcept", "");
-        final ConceptMapping emptyWhenConceptMapping =
-                new ConceptMapping(varVariable, new LinkedList<>(), emptyWhenConcept);
-        emptyWhenConcept.setMapping(emptyWhenConceptMapping);
 
         final CustomRelation emptyWhenRelationString =
                 new CustomRelation(
@@ -285,22 +320,12 @@ public class TestUtils {
                         new LinkedList<>());
         emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping);
 
-        result.getArchitectureRuleManager()
-                .addArchitectureRule(
-                        new ArchitectureRule("Every Aggregate must resideIn a DomainRing."));
-        result.getArchitectureRuleManager()
-                .addArchitectureRule(
-                        new ArchitectureRule("No Aggregate can use an ApplicationService."));
-        result.getConceptManager().addConcept(aggregate);
-        result.getConceptManager().addConcept(applicationService);
-        result.getConceptManager().addConcept(domainRing);
-        result.getConceptManager().addConcept(emptyWhenConcept);
-        result.getRelationManager().addRelation(resideIn);
-        result.getRelationManager().addRelation(use);
-        result.getRelationManager().addRelation(emptyWhenRelationVariable);
-        result.getRelationManager().addRelation(emptyWhenRelationString);
-        result.getRelationManager().addRelation(emptyWhenRelationBoolean);
-        return result;
+        relationManager.addRelation(resideIn);
+        relationManager.addRelation(use);
+        relationManager.addRelation(emptyWhenRelationVariable);
+        relationManager.addRelation(emptyWhenRelationString);
+        relationManager.addRelation(emptyWhenRelationBoolean);
+        return relationManager;
     }
 
     public static List<CustomConcept> prepareCustomConcepts()
@@ -308,7 +333,7 @@ public class TestUtils {
                     RelationDoesNotExistException, ConceptDoesNotExistException,
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,
                     UnrelatedMappingException, RelationAlreadyExistsException {
-        return TestUtils.prepareModel().getConceptManager().getCustomConcepts();
+        return TestUtils.prepareConceptManager().getCustomConcepts();
     }
 
     public static List<CustomRelation> prepareCustomRelations()
@@ -316,7 +341,7 @@ public class TestUtils {
                     RelationDoesNotExistException, ConceptDoesNotExistException,
                     VariableAlreadyExistsException, ConceptAlreadyExistsException,
                     UnrelatedMappingException, RelationAlreadyExistsException {
-        return TestUtils.prepareModel().getRelationManager().getCustomRelations();
+        return TestUtils.prepareRelationManager().getCustomRelations();
     }
 
     public static List<Query> prepareCustomQueries()
