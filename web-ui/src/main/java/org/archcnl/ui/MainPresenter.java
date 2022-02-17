@@ -55,7 +55,7 @@ import org.archcnl.ui.menudialog.events.QuickOutputViewAccessRequestedEvent;
 import org.archcnl.ui.menudialog.events.RunToolchainRequestedEvent;
 import org.archcnl.ui.menudialog.events.ShowCustomQueryRequestedEvent;
 import org.archcnl.ui.menudialog.events.ShowFreeTextQueryRequestedEvent;
-import org.archcnl.ui.outputview.OutputView;
+import org.archcnl.ui.outputview.OutputPresenter;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 
 @Tag("MainPresenter")
@@ -64,7 +64,7 @@ public class MainPresenter extends Component {
     private static final long serialVersionUID = -8850076288722393209L;
     private static final Logger LOG = LogManager.getLogger(MainPresenter.class);
     private final MainView view;
-    private final OutputView outputView;
+    private final OutputPresenter outputPresenter;
     private final InputPresenter inputPresenter;
     private final ProjectManager projectManager;
     private final ArchitectureRuleManager ruleManager;
@@ -102,20 +102,20 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
 
-        outputView = new OutputView();
-        outputView.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
-        outputView.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
-        outputView.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
-        outputView.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
-        outputView.addListener(
+        outputPresenter = new OutputPresenter();
+        outputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(
                 PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
-        outputView.addListener(
+        outputPresenter.addListener(
                 RelationListUpdateRequestedEvent.class,
                 event -> event.handleEvent(relationManager.getOutputRelations()));
-        outputView.addListener(
+        outputPresenter.addListener(
                 ConceptListUpdateRequestedEvent.class,
                 event -> event.handleEvent(conceptManager.getOutputConcepts()));
-        outputView.addListener(
+        outputPresenter.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
         inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
         inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
@@ -177,7 +177,7 @@ public class MainPresenter extends Component {
         view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
 
         inputPresenter.addListener(OutputViewRequestedEvent.class, e -> selectPathForChecking());
-        outputView.addListener(
+        outputPresenter.addListener(
                 InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
     }
 
@@ -195,15 +195,15 @@ public class MainPresenter extends Component {
     public void showOutputView(Optional<String> path) {
         try {
             ArchitectureCheck architectureCheck = new ArchitectureCheck();
-            outputView.setResultRepository(architectureCheck.getRepository());
+            outputPresenter.setResultRepository(architectureCheck.getRepository());
             if (path.isPresent()) {
                 runArchCnlToolchain(architectureCheck, path.get());
             }
-            outputView.displayResult(
+            outputPresenter.displayResult(
                     architectureCheck
                             .getRepository()
                             .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
-            view.showContent(outputView);
+            view.showContent(outputPresenter.getView());
         } catch (PropertyNotFoundException e2) {
             view.showErrorMessage("Failed to connect to stardog database.");
         }
@@ -235,10 +235,12 @@ public class MainPresenter extends Component {
                                 projectManager, ruleManager, conceptManager, relationManager);
                 openProjectDialog.addListener(
                         ShowFreeTextQueryRequestedEvent.class,
-                        e -> outputView.showFreeTextQuery(e.getQuery(), e.isDefaultQueryTab()));
+                        e ->
+                                outputPresenter.showFreeTextQuery(
+                                        e.getQuery(), e.isDefaultQueryTab()));
                 openProjectDialog.addListener(
                         ShowCustomQueryRequestedEvent.class,
-                        e -> outputView.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
+                        e -> outputPresenter.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
                 List<ArchitectureRule> rules = ruleManager.getArchitectureRules();
                 openProjectDialog.addListener(
                         ProjectOpenedEvent.class,
@@ -251,8 +253,8 @@ public class MainPresenter extends Component {
                             ruleManager,
                             conceptManager,
                             relationManager,
-                            outputView.getCustomQueries(),
-                            outputView.getFreeTextQueries());
+                            outputPresenter.getCustomQueries(),
+                            outputPresenter.getFreeTextQueries());
                 } catch (final IOException e) {
                     new ConfirmDialog("Project file could not be written.").open();
                 }
@@ -264,8 +266,8 @@ public class MainPresenter extends Component {
                                 ruleManager,
                                 conceptManager,
                                 relationManager,
-                                outputView.getCustomQueries(),
-                                outputView.getFreeTextQueries());
+                                outputPresenter.getCustomQueries(),
+                                outputPresenter.getFreeTextQueries());
                 dialog.addListener(
                         ProjectSavedEvent.class, e -> view.setSaveProjectMenuItemEnabled(true));
                 dialog.open();
