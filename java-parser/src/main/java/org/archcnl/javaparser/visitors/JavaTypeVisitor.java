@@ -114,8 +114,8 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Method> processAllMethods(
             List<MethodDeclaration> methods, List<ConstructorDeclaration> constructors) {
-        MethodDeclarationVisitor methodVisitor = new MethodDeclarationVisitor();
-        ConstructorDeclarationVisitor constructorVisitor = new ConstructorDeclarationVisitor();
+        MethodDeclarationVisitor methodVisitor = new MethodDeclarationVisitor(path);
+        ConstructorDeclarationVisitor constructorVisitor = new ConstructorDeclarationVisitor(path);
 
         methods.forEach(declaration -> declaration.accept(methodVisitor, null));
         constructors.forEach(declaration -> declaration.accept(constructorVisitor, null));

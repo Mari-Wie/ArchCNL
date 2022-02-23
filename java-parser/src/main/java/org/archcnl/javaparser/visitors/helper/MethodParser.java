@@ -42,13 +42,14 @@ public class MethodParser {
     private List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers;
 
     /** Parses the given method declaration. */
-    public MethodParser(MethodDeclaration n) {
+    public MethodParser(MethodDeclaration n, String path) {
     	if(n.getBegin().isPresent()) {
-    		//position = String.valueOf(n.getBegin().get().line);
-    		position = n.getParentNode().get().toString();
+    		position = String.valueOf(n.getBegin().get().line);
+    		//position = n.getParentNode().get().toString();
     	} else {
     		position = "42";
     	}
+    	position = path + " Line " + position;
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
@@ -70,12 +71,13 @@ public class MethodParser {
     }
 
     /** Parses the given constructor declaration. */
-    public MethodParser(ConstructorDeclaration n) {
+    public MethodParser(ConstructorDeclaration n, String path) {
     	if(n.getBegin().isPresent()) {
     		position = String.valueOf(n.getBegin().get().line);    		
     	} else {
     		position = "42";
     	}
+    	position = path + " Line " + position;
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
@@ -93,7 +95,7 @@ public class MethodParser {
         method = createMethodModel(true);
     }
 
-    /** Returns a Method object which models the gvien constructor/method declaration. */
+    /** Returns a Method object which models the given constructor/method declaration. */
     public Method getMethod() {
         return method;
     }

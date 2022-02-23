@@ -11,14 +11,16 @@ import org.archcnl.owlify.famix.codemodel.Method;
 public class MethodDeclarationVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Method> visitedMethods;
+	private String path;
 
-    public MethodDeclarationVisitor() {
+    public MethodDeclarationVisitor(String path) {
         visitedMethods = new ArrayList<>();
+        this.path = path;
     }
 
     @Override
     public void visit(MethodDeclaration n, Void arg) {
-        visitedMethods.add(new MethodParser(n).getMethod());
+        visitedMethods.add(new MethodParser(n, path).getMethod());
     }
 
     /** @return all encountered methods (excluding constructors) */
