@@ -1,5 +1,6 @@
 package org.archcnl.javaparser.visitors.helper;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -28,6 +29,7 @@ import org.archcnl.owlify.famix.codemodel.Type;
 public class MethodParser {
     private Method method;
 
+    private String position;
     private String name;
     private String signature;
     private List<Type> caughtExceptions;
@@ -41,6 +43,12 @@ public class MethodParser {
 
     /** Parses the given method declaration. */
     public MethodParser(MethodDeclaration n) {
+    	if(n.getBegin().isPresent()) {
+    		//position = String.valueOf(n.getBegin().get().line);
+    		position = n.getParentNode().get().toString();
+    	} else {
+    		position = "42";
+    	}
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
@@ -63,6 +71,11 @@ public class MethodParser {
 
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n) {
+    	if(n.getBegin().isPresent()) {
+    		position = String.valueOf(n.getBegin().get().line);    		
+    	} else {
+    		position = "42";
+    	}
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
@@ -87,6 +100,7 @@ public class MethodParser {
 
     private Method createMethodModel(boolean isConstructor) {
         return new Method(
+        		position,
                 name,
                 signature,
                 modifiers,

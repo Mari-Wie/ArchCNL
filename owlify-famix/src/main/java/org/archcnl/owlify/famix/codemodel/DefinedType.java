@@ -2,6 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
 
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import org.archcnl.owlify.famix.ontology.FamixOntology;
 public abstract class DefinedType {
     private final String fullyQualifiedName;
     private final String simpleName;
+    private final String path;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
 
@@ -30,12 +32,14 @@ public abstract class DefinedType {
      * @param modifiers List of annotation instances for the type.
      */
     protected DefinedType(
+    		String path,
             String fullyQualifiedName,
             String simpleName,
             List<AnnotationInstance> annotations,
             List<Modifier> modifiers) {
         this.fullyQualifiedName = fullyQualifiedName;
         this.simpleName = simpleName;
+        this.path = path;
         this.annotations = annotations;
         this.modifiers = modifiers;
     }
@@ -72,6 +76,7 @@ public abstract class DefinedType {
         individual.addLiteral(ontology.get(hasName), simpleName);
         individual.addLiteral(ontology.get(hasFullQualifiedName), fullyQualifiedName);
         individual.addLiteral(ontology.get(isExternal), false);
+        individual.addLiteral(ontology.get(hasPath), path);
 
         ontology.typeCache().addDefinedType(fullyQualifiedName, individual);
 

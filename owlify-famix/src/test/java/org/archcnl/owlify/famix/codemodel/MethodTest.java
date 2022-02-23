@@ -88,6 +88,7 @@ public class MethodTest {
 
         Method method =
                 new Method(
+                		"not-defined",
                         name,
                         signature,
                         Arrays.asList(new Modifier("private")),
@@ -160,6 +161,7 @@ public class MethodTest {
 
         Method method =
                 new Method(
+                		"not-defined",
                         name,
                         signature,
                         new ArrayList<>(),
@@ -216,6 +218,7 @@ public class MethodTest {
 
         Method method1 =
                 new Method(
+                		"not-defined",
                         name,
                         signature,
                         new ArrayList<>(),
@@ -229,6 +232,7 @@ public class MethodTest {
                         new ArrayList<>());
         Method method2 =
                 new Method(
+                		"not-defined",
                         name,
                         signature2,
                         new ArrayList<>(),

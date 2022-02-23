@@ -24,12 +24,13 @@ public class Annotation extends DefinedType {
      * @param attributes List of annotation attributes defined in the declaration.
      */
     public Annotation(
+    		String path,
             String name,
             String simpleName,
             List<AnnotationInstance> annotations,
             List<Modifier> modifiers,
             List<AnnotationAttribute> attributes) {
-        super(name, simpleName, annotations, modifiers);
+        super(path, name, simpleName, annotations, modifiers);
         this.attributes = attributes;
     }
 

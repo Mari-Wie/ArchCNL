@@ -25,6 +25,7 @@ public class Enumeration extends ClassInterfaceEnum {
      * @param annotations List of annotation instances for this enumeration.
      */
     public Enumeration(
+    		String path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,
@@ -32,7 +33,7 @@ public class Enumeration extends ClassInterfaceEnum {
             List<Field> fields,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations) {
-        super(name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
+        super(path, name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
     }
 
     @Override

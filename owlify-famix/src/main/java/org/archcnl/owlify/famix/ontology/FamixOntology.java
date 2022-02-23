@@ -126,8 +126,10 @@ public class FamixOntology {
     public enum FamixDatatypeProperties {
         // names match the URIs in the base ontology (minus the namespace)
         isExternal,
+        hasPosition,
         hasName,
         hasFullQualifiedName,
+        hasPath,
         hasValue,
         hasModifier,
         hasSignature,

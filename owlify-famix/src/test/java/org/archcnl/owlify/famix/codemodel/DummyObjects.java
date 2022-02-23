@@ -36,7 +36,7 @@ public class DummyObjects {
     }
 
     public static DefinedType definedType() {
-        return new ClassOrInterface(
+        return new ClassOrInterface("TODO", 
                 "dummies.DummyClass",
                 "DummyClass",
                 new ArrayList<>(),
@@ -50,6 +50,7 @@ public class DummyObjects {
 
     public static Method method() {
         return new Method(
+        		"not-defined",
                 "dummies.DummyClass.DummyClass",
                 "dummies.DUmmyClass.DummyClass(int)",
                 new ArrayList<>(),

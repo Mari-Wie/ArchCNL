@@ -26,6 +26,7 @@ public abstract class ClassInterfaceEnum extends DefinedType {
      * @param annotations List of annotation instances for this type's declaration.
      */
     protected ClassInterfaceEnum(
+    		String path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,
@@ -33,7 +34,7 @@ public abstract class ClassInterfaceEnum extends DefinedType {
             List<Field> fields,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations) {
-        super(name, simpleName, annotations, modifiers);
+        super(path, name, simpleName, annotations, modifiers);
         this.nestedTypes = nestedTypes;
         this.methods = methods;
         this.fields = fields;

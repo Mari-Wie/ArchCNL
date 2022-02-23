@@ -11,6 +11,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +29,11 @@ import org.archcnl.owlify.famix.codemodel.Type;
 public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private List<DefinedType> definedTypes;
+    private String path;
 
-    public JavaTypeVisitor() {
+    public JavaTypeVisitor(String path) {
         definedTypes = new ArrayList<>();
+        this.path = path;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
         definedTypes.add(
                 new ClassOrInterface(
+                		path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         processNestedTypes(n.getMembers()),
@@ -60,6 +64,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
         definedTypes.add(
                 new Enumeration(
+                		path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         processNestedTypes(n.getMembers()),
@@ -73,6 +78,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
     public void visit(AnnotationDeclaration n, Void arg) {
         definedTypes.add(
                 new Annotation(
+                		path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         VisitorHelpers.processAnnotations(n.getAnnotations()),
@@ -127,7 +133,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
     }
 
     private List<DefinedType> processNestedTypes(NodeList<BodyDeclaration<?>> declarations) {
-        JavaTypeVisitor typeVisitor = new JavaTypeVisitor();
+        JavaTypeVisitor typeVisitor = new JavaTypeVisitor(path);
         declarations.accept(typeVisitor, null);
         return typeVisitor.getDefinedTypes();
     }

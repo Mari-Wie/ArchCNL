@@ -46,7 +46,7 @@ public class ClassOrInterfaceTest {
         final boolean isInterface = false;
         DefinedType type =
                 new ClassOrInterface(
-                        fullName,
+                		"TODO", fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
                         Arrays.asList(DummyObjects.method()),
@@ -78,7 +78,7 @@ public class ClassOrInterfaceTest {
     public void testFirstPassNestedTypesAreVisited() {
         final boolean isInterface = false;
         DefinedType type =
-                new ClassOrInterface(
+                new ClassOrInterface("TODO", 
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -117,7 +117,7 @@ public class ClassOrInterfaceTest {
     public void testSecondPass() {
         final boolean isInterfaceFlag = false;
         DefinedType type =
-                new ClassOrInterface(
+                new ClassOrInterface("TODO", 
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -162,7 +162,7 @@ public class ClassOrInterfaceTest {
     public void testGetNestedTypeNames() {
         final boolean isInterface = false;
         DefinedType type =
-                new ClassOrInterface(
+                new ClassOrInterface("TODO", 
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),

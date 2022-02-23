@@ -33,6 +33,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
      * @param supertypes List of supertypes for this type.
      */
     public ClassOrInterface(
+    		String path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,
@@ -42,7 +43,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
             List<AnnotationInstance> annotations,
             boolean isInterface,
             List<Type> supertypes) {
-        super(name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
+        super(path, name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
         this.isInterface = isInterface;
         this.supertypes = supertypes;
     }
