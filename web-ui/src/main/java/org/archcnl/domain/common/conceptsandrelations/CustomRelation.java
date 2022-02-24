@@ -27,7 +27,7 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
             this.mapping = mapping;
             ObjectType thenTripletObject = mapping.getThenTriplet().getObject();
             if (thenTripletObject instanceof ActualObjectType) {
-                setRelatableObjectType((ActualObjectType) thenTripletObject);
+                setRelatableObjectType(thenTripletObject);
             }
         } else {
             throw new UnrelatedMappingException(
