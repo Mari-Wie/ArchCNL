@@ -12,9 +12,11 @@ import org.archcnl.owlify.famix.codemodel.Field;
 public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Field> fields;
+	private String path;
 
-    public JavaFieldVisitor() {
+    public JavaFieldVisitor(String path) {
         this.fields = new ArrayList<>();
+        this.path = path;
     }
 
     @Override
@@ -23,11 +25,16 @@ public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 
         for (VariableDeclarator variableDeclarator : n.getVariables()) {
             variableDeclarator.accept(visitor, null);
+            String location = path;
+            if(variableDeclarator.getBegin().isPresent()) {
+            	location += ", Line: " + String.valueOf(variableDeclarator.getBegin().get().line);
+            }
             fields.add(
                     new Field(
+                    		location,
                             variableDeclarator.getNameAsString(),
                             visitor.getType(),
-                            VisitorHelpers.processAnnotations(n.getAnnotations()),
+                            VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                             VisitorHelpers.processModifiers(n.getModifiers())));
         }
     }

@@ -4,6 +4,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Annot
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
@@ -21,6 +22,7 @@ import org.archcnl.owlify.famix.ontology.FamixOntology;
 public class AnnotationInstance {
     private final String name;
     private List<AnnotationMemberValuePair> values;
+    private String path;
 
     /**
      * Constructor.
@@ -28,10 +30,11 @@ public class AnnotationInstance {
      * @param name Fully qualified name of the instantiated annotation type.
      * @param values List of member value pairs present in the instance.
      */
-    public AnnotationInstance(String name, List<AnnotationMemberValuePair> values) {
+    public AnnotationInstance(String name, List<AnnotationMemberValuePair> values, String path) {
         super();
         this.name = name;
         this.values = values;
+        this.path = path;
     }
 
     /** @return the name */
@@ -75,6 +78,7 @@ public class AnnotationInstance {
         Individual annotationType = ontology.createIndividual(AnnotationType, name);
         annotationType.addLiteral(ontology.get(isExternal), true);
         annotationType.addLiteral(ontology.get(hasFullQualifiedName), name);
+        annotationType.addLiteral(ontology.get(hasPath), path);
         ontology.typeCache().addDefinedType(name, annotationType);
     }
 }

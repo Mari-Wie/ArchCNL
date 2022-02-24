@@ -20,7 +20,7 @@ public class LocalVariableVisitorTest {
 
     @Before
     public void initializeVisitor() {
-        visitor = new LocalVariableVisitor();
+        visitor = new LocalVariableVisitor("TODO");
         declarator = new VariableDeclarator(PrimitiveType.intType(), "x");
         var = new VariableDeclarationExpr(declarator, Modifier.privateModifier());
 

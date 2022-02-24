@@ -9,12 +9,15 @@ import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 public class MarkerAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
+    private String path;
 
-    public MarkerAnnotationExpressionVisitor() {}
+    public MarkerAnnotationExpressionVisitor(String path) {
+    	this.path = path;
+    }
 
     @Override
     public void visit(MarkerAnnotationExpr n, Void arg) {
-        annotationInstance = new AnnotationInstance(n.getName().asString(), new ArrayList<>());
+        annotationInstance = new AnnotationInstance(n.getName().asString(), new ArrayList<>(), path);
     }
 
     /** @return the parsed annotation instance */

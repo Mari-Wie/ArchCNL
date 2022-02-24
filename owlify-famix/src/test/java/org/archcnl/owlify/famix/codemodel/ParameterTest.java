@@ -39,9 +39,9 @@ public class ParameterTest {
         final Type type = new Type("boolean", "boolean", true);
         final List<Modifier> modifiers = Arrays.asList(new Modifier("final"));
         final List<AnnotationInstance> annotations =
-                Arrays.asList(new AnnotationInstance("Deprecated", new ArrayList<>()));
+                Arrays.asList(new AnnotationInstance("Deprecated", new ArrayList<>(), "TODO"));
 
-        Parameter param = new Parameter(name, type, modifiers, annotations);
+        Parameter param = new Parameter(name, type, modifiers, annotations, "TODO");
         Individual method = ontology.createIndividual(Method, parentName);
 
         param.modelIn(ontology, parentName, method);

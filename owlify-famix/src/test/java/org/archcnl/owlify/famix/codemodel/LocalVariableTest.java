@@ -37,7 +37,7 @@ public class LocalVariableTest {
         Type type = new Type("Type", "Type", false);
         final String parentUri = "SomeClass.someMethod";
         final List<Modifier> modifiers = Arrays.asList(new Modifier("final"));
-        LocalVariable variable = new LocalVariable(type, "i", modifiers);
+        LocalVariable variable = new LocalVariable("TODO", type, "i", modifiers);
         Individual method = ontology.createIndividual(Method, parentUri);
 
         variable.modelIn(ontology, parentUri, method);

@@ -69,13 +69,13 @@ public class MethodTest {
                         "param",
                         new Type("namespace.A", "A", false),
                         new ArrayList<>(),
-                        new ArrayList<>());
+                        new ArrayList<>(), "TODO");
         declaredException = new Type("namespace.MyException", "MyException", false);
-        annotation = new AnnotationInstance("Deprecated", new ArrayList<>());
+        annotation = new AnnotationInstance("Deprecated", new ArrayList<>(), "TODO");
         thrownException = new Type("namespace.MyError", "MyError", false);
         caughtException = new Type("java.lang.Exception", "Exception", false);
         localVariable =
-                new LocalVariable(
+                new LocalVariable("TODO", 
                         new Type("namespace.C", "C", false),
                         "variable",
                         Arrays.asList(new Modifier("public")));

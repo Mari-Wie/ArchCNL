@@ -69,8 +69,9 @@ public class ModelExtractor {
     }
 
     private void visitFile(Path path, CompilationUnit unit) {
+    	String pathString = path.toString();
         LOG.info("Parsing java file: " + path.toString());
-        JavaTypeVisitor typeVisitor = new JavaTypeVisitor(path.toString());
+        JavaTypeVisitor typeVisitor = new JavaTypeVisitor(pathString);
 
         unit.getTypes().forEach(type -> type.accept(typeVisitor, null));
 

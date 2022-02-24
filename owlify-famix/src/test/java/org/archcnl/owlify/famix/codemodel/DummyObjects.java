@@ -32,7 +32,7 @@ public class DummyObjects {
     }
 
     public static AnnotationInstance annotationInstance() {
-        return new AnnotationInstance("dummies.DummyAnnotation", new ArrayList<>());
+        return new AnnotationInstance("dummies.DummyAnnotation", new ArrayList<>(), "TODO");
     }
 
     public static DefinedType definedType() {
@@ -66,16 +66,16 @@ public class DummyObjects {
 
     public static LocalVariable localVariable() {
         return new LocalVariable(
-                primitiveType(), "dummyVariable", Arrays.asList(new Modifier("public")));
+                "TODO", primitiveType(), "dummyVariable", Arrays.asList(new Modifier("public")));
     }
 
     public static Parameter parameter() {
         return new Parameter(
-                "dummyParameter", primitiveType(), new ArrayList<>(), new ArrayList<>());
+                "dummyParameter", primitiveType(), new ArrayList<>(), new ArrayList<>(), "TODO");
     }
 
     public static Field field() {
-        return new Field("dummyField", primitiveType(), new ArrayList<>(), new ArrayList<>());
+        return new Field("TODO", "dummyField", primitiveType(), new ArrayList<>(), new ArrayList<>());
     }
 
     public static Namespace namespace() {

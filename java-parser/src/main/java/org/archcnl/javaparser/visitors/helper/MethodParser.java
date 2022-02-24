@@ -1,6 +1,5 @@
 package org.archcnl.javaparser.visitors.helper;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -40,20 +39,20 @@ public class MethodParser {
     private List<Type> declaredExceptions;
     private Type returnType;
     private List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers;
+	private String path;
 
     /** Parses the given method declaration. */
     public MethodParser(MethodDeclaration n, String path) {
+    	this.path = path;
+    	position = path;
     	if(n.getBegin().isPresent()) {
-    		position = String.valueOf(n.getBegin().get().line);
-    		//position = n.getParentNode().get().toString();
-    	} else {
-    		position = "42";
+    		position +=  ", Line " + String.valueOf(n.getBegin().get().line);
     	}
     	position = path + " Line " + position;
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
-        annotations = VisitorHelpers.processAnnotations(n.getAnnotations());
+        annotations = VisitorHelpers.processAnnotations(n.getAnnotations(), path);
         parameters = processParameters(n.getParameters());
         declaredExceptions = processDeclaredExceptions(n.getThrownExceptions());
         modifiers = VisitorHelpers.processModifiers(n.getModifiers());
@@ -64,7 +63,7 @@ public class MethodParser {
         Optional<BlockStmt> body = n.getBody();
 
         if (body.isPresent()) {
-            processBody(body.get().getStatements());
+            processBody(body.get().getStatements(), path);
         }
 
         method = createMethodModel(false);
@@ -72,16 +71,15 @@ public class MethodParser {
 
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, String path) {
+    	this.path = path;
+    	position = path;
     	if(n.getBegin().isPresent()) {
-    		position = String.valueOf(n.getBegin().get().line);    		
-    	} else {
-    		position = "42";
+    		position +=  ", Line " + String.valueOf(n.getBegin().get().line);
     	}
-    	position = path + " Line " + position;
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
-        annotations = VisitorHelpers.processAnnotations(n.getAnnotations());
+        annotations = VisitorHelpers.processAnnotations(n.getAnnotations(), path);
         parameters = processParameters(n.getParameters());
         declaredExceptions = processDeclaredExceptions(n.getThrownExceptions());
         modifiers = VisitorHelpers.processModifiers(n.getModifiers());
@@ -90,7 +88,7 @@ public class MethodParser {
         localVariables = new ArrayList<>();
 
         // constructors body is mandatory in Java
-        processBody(n.getBody().getStatements());
+        processBody(n.getBody().getStatements(), path);
 
         method = createMethodModel(true);
     }
@@ -122,11 +120,11 @@ public class MethodParser {
         return visitor.getType();
     }
 
-    private void processBody(List<Statement> bodyStatements) {
+    private void processBody(List<Statement> bodyStatements, String path) {
         for (Statement statement : bodyStatements) {
             TryCatchVisitor v1 = new TryCatchVisitor();
             ThrowStatementVisitor v2 = new ThrowStatementVisitor();
-            LocalVariableVisitor v3 = new LocalVariableVisitor();
+            LocalVariableVisitor v3 = new LocalVariableVisitor(path);
 
             statement.accept(v1, null);
             statement.accept(v2, null);
@@ -143,7 +141,7 @@ public class MethodParser {
         List<org.archcnl.owlify.famix.codemodel.Parameter> parameters = new ArrayList<>();
 
         for (Parameter parameter : p) {
-            ParameterVisitor v = new ParameterVisitor();
+            ParameterVisitor v = new ParameterVisitor(path);
             parameter.accept(v, null);
             parameters.add(v.getParameter());
         }

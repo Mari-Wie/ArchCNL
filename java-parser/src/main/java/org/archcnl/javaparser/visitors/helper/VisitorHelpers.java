@@ -21,14 +21,14 @@ public class VisitorHelpers {
      * AnnotationInstances.
      */
     public static List<AnnotationInstance> processAnnotations(
-            NodeList<AnnotationExpr> annotationList) {
+            NodeList<AnnotationExpr> annotationList, String path) {
         List<AnnotationInstance> annotations = new ArrayList<>();
 
         for (AnnotationExpr annotationExpr : annotationList) {
-            MarkerAnnotationExpressionVisitor v1 = new MarkerAnnotationExpressionVisitor();
+            MarkerAnnotationExpressionVisitor v1 = new MarkerAnnotationExpressionVisitor(path);
             SingleMemberAnnotationExpressionVisitor v2 =
-                    new SingleMemberAnnotationExpressionVisitor();
-            NormalAnnotationExpressionVisitor v3 = new NormalAnnotationExpressionVisitor();
+                    new SingleMemberAnnotationExpressionVisitor(path);
+            NormalAnnotationExpressionVisitor v3 = new NormalAnnotationExpressionVisitor(path);
 
             annotationExpr.accept(v1, null);
             annotationExpr.accept(v2, null);

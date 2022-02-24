@@ -13,9 +13,11 @@ import org.archcnl.owlify.famix.codemodel.Modifier;
 public class LocalVariableVisitor extends VoidVisitorAdapter<Void> {
 
     private List<LocalVariable> localVariables;
+	private String path;
 
-    public LocalVariableVisitor() {
+    public LocalVariableVisitor(String path) {
         localVariables = new ArrayList<>();
+        this.path = path;
     }
 
     @Override
@@ -24,11 +26,15 @@ public class LocalVariableVisitor extends VoidVisitorAdapter<Void> {
         for (VariableDeclarator variableDeclarator : n.getVariables()) {
             DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
             variableDeclarator.accept(visitor, null);
+            String location = path;
+            if(variableDeclarator.getBegin().isPresent()) {
+            	location += ", Line " + String.valueOf(variableDeclarator.getBegin().get().line);
+            }
 
             List<Modifier> modifiers = VisitorHelpers.processModifiers(n.getModifiers());
             localVariables.add(
                     new LocalVariable(
-                            visitor.getType(), variableDeclarator.getNameAsString(), modifiers));
+                    		location, visitor.getType(), variableDeclarator.getNameAsString(), modifiers));
         }
     }
 

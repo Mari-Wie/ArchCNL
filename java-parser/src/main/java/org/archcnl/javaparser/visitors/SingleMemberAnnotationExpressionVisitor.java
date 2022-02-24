@@ -9,12 +9,15 @@ import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 public class SingleMemberAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
+	private String path;
 
-    public SingleMemberAnnotationExpressionVisitor() {}
+    public SingleMemberAnnotationExpressionVisitor(String path) {
+    	this.path = path;
+    }
 
     @Override
     public void visit(SingleMemberAnnotationExpr n, Void arg) {
-        annotationInstance = new AnnotationInstance(n.getNameAsString(), new ArrayList<>());
+        annotationInstance = new AnnotationInstance(n.getNameAsString(), new ArrayList<>(), path);
 
         // TODO Annotation Attributes
     }

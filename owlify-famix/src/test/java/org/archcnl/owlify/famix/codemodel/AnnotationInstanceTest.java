@@ -38,7 +38,7 @@ public class AnnotationInstanceTest {
         final String name = "namespace.SomeAnnotation";
         final List<AnnotationMemberValuePair> values =
                 Arrays.asList(new AnnotationMemberValuePair("attribute", "value"));
-        AnnotationInstance instance = new AnnotationInstance(name, values);
+        AnnotationInstance instance = new AnnotationInstance(name, values, "TODO");
         String parentName = "namespace.Class.method";
         Individual parent = ontology.createIndividual(Method, parentName);
         Individual type = ontology.createIndividual(AnnotationType, name);
@@ -65,7 +65,7 @@ public class AnnotationInstanceTest {
         final String name = "namespace.SomeAnnotation";
         final List<AnnotationMemberValuePair> values =
                 Arrays.asList(new AnnotationMemberValuePair("attribute", "value"));
-        AnnotationInstance instance = new AnnotationInstance(name, values);
+        AnnotationInstance instance = new AnnotationInstance(name, values, "TODO");
         String parentName = "namespace.Class.method";
         Individual parent = ontology.createIndividual(Method, parentName);
 

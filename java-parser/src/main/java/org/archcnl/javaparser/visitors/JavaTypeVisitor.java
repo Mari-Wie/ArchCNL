@@ -51,7 +51,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                         processAllMethods(n.getMethods(), n.getConstructors()),
                         processFields(n.getFields()),
                         VisitorHelpers.processModifiers(n.getModifiers()),
-                        VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                         n.isInterface(),
                         supertypes));
     }
@@ -71,7 +71,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                         processAllMethods(n.getMethods(), n.getConstructors()),
                         processFields(n.getFields()),
                         VisitorHelpers.processModifiers(n.getModifiers()),
-                        VisitorHelpers.processAnnotations(n.getAnnotations())));
+                        VisitorHelpers.processAnnotations(n.getAnnotations(), path)));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
                 		path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
-                        VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                         VisitorHelpers.processModifiers(n.getModifiers()),
                         processAnnotationAttributes(n.getMembers())));
     }
@@ -127,7 +127,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
     }
 
     private List<Field> processFields(List<FieldDeclaration> fields) {
-        JavaFieldVisitor fieldVisitor = new JavaFieldVisitor();
+        JavaFieldVisitor fieldVisitor = new JavaFieldVisitor(path);
         fields.forEach(declaration -> declaration.accept(fieldVisitor, null));
         return fieldVisitor.getFields();
     }

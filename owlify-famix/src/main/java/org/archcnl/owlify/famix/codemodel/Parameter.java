@@ -1,6 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesParameter;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
@@ -19,6 +20,7 @@ public class Parameter {
     private final Type type;
     private List<Modifier> modifiers;
     private List<AnnotationInstance> annotations;
+	private String location;
 
     /**
      * Constructor.
@@ -32,12 +34,14 @@ public class Parameter {
             String name,
             Type type,
             List<Modifier> modifiers,
-            List<AnnotationInstance> annotations) {
+            List<AnnotationInstance> annotations,
+            String location) {
         super();
         this.name = name;
         this.type = type;
         this.modifiers = modifiers;
         this.annotations = annotations;
+        this.location = location;
     }
 
     /** @return the simple name */
@@ -72,6 +76,7 @@ public class Parameter {
         Individual individual = ontology.createIndividual(FamixClasses.Parameter, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
+        individual.addLiteral(ontology.get(hasPath), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
         annotations.forEach(anno -> anno.modelIn(ontology, uri, individual));

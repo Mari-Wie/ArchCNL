@@ -39,9 +39,9 @@ public class FieldTest {
         final String name = "field";
         final Type type = new Type("double", "double", true);
         final List<AnnotationInstance> annotations =
-                Arrays.asList(new AnnotationInstance("Deprecated", new ArrayList<>()));
+                Arrays.asList(new AnnotationInstance("Deprecated", new ArrayList<>(), "TODO"));
         final List<Modifier> modifiers = Arrays.asList(new Modifier("private"));
-        Field field = new Field(name, type, annotations, modifiers);
+        Field field = new Field("TODO", name, type, annotations, modifiers);
 
         Individual parent = ontology.createIndividual(FamixClass, parentName);
 

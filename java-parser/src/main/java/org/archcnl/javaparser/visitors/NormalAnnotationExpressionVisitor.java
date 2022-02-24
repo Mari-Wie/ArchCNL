@@ -17,6 +17,11 @@ import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
+	private String path;
+    
+    public NormalAnnotationExpressionVisitor(String path) {
+    	this.path = path;
+    }
 
     @Override
     public void visit(final NormalAnnotationExpr n, final Void arg) {
@@ -25,7 +30,7 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
                         .map(pair -> createAnnotationPairFromPair(pair, n))
                         .collect(Collectors.toList());
 
-        annotationInstance = new AnnotationInstance(n.getName().asString(), values);
+        annotationInstance = new AnnotationInstance(n.getName().asString(), values, path);
     }
 
     /** @return the parsed annotation instance */

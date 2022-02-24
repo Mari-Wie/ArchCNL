@@ -1,6 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesVariable;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
@@ -18,6 +19,7 @@ public class LocalVariable {
     private final Type type;
     private final String name;
     private List<Modifier> modifiers;
+	private String location;
 
     /**
      * Constructor.
@@ -26,11 +28,12 @@ public class LocalVariable {
      * @param name The name of the variable.
      * @param modifiers A list of variable modifers (e.g. "static", "private" , etc.)
      */
-    public LocalVariable(Type type, String name, List<Modifier> modifiers) {
+    public LocalVariable(String location, Type type, String name, List<Modifier> modifiers) {
         super();
         this.type = type;
         this.name = name;
         this.modifiers = modifiers;
+        this.location = location;
     }
 
     /** @return the declared type */
@@ -60,6 +63,7 @@ public class LocalVariable {
         Individual individual = ontology.createIndividual(FamixClasses.LocalVariable, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
+        individual.addLiteral(ontology.get(hasPath), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
 

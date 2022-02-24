@@ -2,6 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Attribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
@@ -19,6 +20,7 @@ public class Field {
     private final Type type;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
+    private String location;
 
     /**
      * Constructor.
@@ -29,6 +31,7 @@ public class Field {
      * @param modifiers List of modifiers for this field.
      */
     public Field(
+    		String location,
             String name,
             Type type,
             List<AnnotationInstance> annotations,
@@ -38,6 +41,7 @@ public class Field {
         this.type = type;
         this.annotations = annotations;
         this.modifiers = modifiers;
+        this.location = location;
     }
 
     /** @return the simple name */
@@ -73,6 +77,7 @@ public class Field {
         parent.addProperty(ontology.get(definesAttribute), attribute);
         attribute.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         attribute.addLiteral(ontology.get(hasName), name);
+        attribute.addLiteral(ontology.get(hasPath), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, attribute));
         annotations.forEach(anno -> anno.modelIn(ontology, uri, attribute));
