@@ -29,9 +29,9 @@ import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
-public class MappingExtractor {
+public class MappingParser {
 
-    private static final Logger LOG = LogManager.getLogger(MappingExtractor.class);
+    private static final Logger LOG = LogManager.getLogger(MappingParser.class);
 
     private static final Pattern CONCEPT_MAPPING_PATTERN =
             Pattern.compile(
@@ -50,11 +50,11 @@ public class MappingExtractor {
             Pattern.compile("\\w+\\(\\?\\w+, '.+'\\)");
     private static final Pattern TRIPLET_PATTERN =
             Pattern.compile(
-                    MappingExtractor.NORMAL_TRIPLET_PATTERN
+                    MappingParser.NORMAL_TRIPLET_PATTERN
                             + "|"
-                            + MappingExtractor.SPECIAL_TRIPLET_PATTERN);
+                            + MappingParser.SPECIAL_TRIPLET_PATTERN);
 
-    private MappingExtractor() {}
+    private MappingParser() {}
 
     public static List<CustomConcept> extractCustomConcepts(
             String fileContent,
@@ -64,7 +64,7 @@ public class MappingExtractor {
             final ConceptManager conceptManager) {
         List<CustomConcept> concepts = new LinkedList<>();
 
-        RegexUtils.getAllMatches(MappingExtractor.CONCEPT_MAPPING_PATTERN, fileContent).stream()
+        RegexUtils.getAllMatches(MappingParser.CONCEPT_MAPPING_PATTERN, fileContent).stream()
                 .forEach(
                         potentialConceptMapping -> {
                             try {
@@ -86,7 +86,7 @@ public class MappingExtractor {
                             } catch (UnrelatedMappingException
                                     | NoMappingException
                                     | NoMatchFoundException e) {
-                                MappingExtractor.LOG.warn(e.getMessage());
+                                MappingParser.LOG.warn(e.getMessage());
                             }
                         });
 
@@ -101,7 +101,7 @@ public class MappingExtractor {
             final ConceptManager conceptManager) {
         List<CustomRelation> relations = new LinkedList<>();
 
-        RegexUtils.getAllMatches(MappingExtractor.RELATION_MAPPING_PATTERN, fileContent).stream()
+        RegexUtils.getAllMatches(MappingParser.RELATION_MAPPING_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRelationMapping -> {
                             try {
@@ -123,7 +123,7 @@ public class MappingExtractor {
                             } catch (UnrelatedMappingException
                                     | NoMappingException
                                     | NoMatchFoundException e) {
-                                MappingExtractor.LOG.warn(e.getMessage());
+                                MappingParser.LOG.warn(e.getMessage());
                             }
                         });
 
@@ -138,9 +138,9 @@ public class MappingExtractor {
             throws NoMappingException {
         try {
             final String whenPart =
-                    RegexUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingParser.WHEN_PATTERN, potentialMapping);
             final String thenPart =
-                    RegexUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingParser.THEN_PATTERN, potentialMapping);
             final AndTriplets andTriplets =
                     parseWhenPart(whenPart, relationManager, conceptManager);
             final List<AndTriplets> whenTriplets = new LinkedList<>();
@@ -159,9 +159,9 @@ public class MappingExtractor {
             throws NoMappingException {
         try {
             final String whenPart =
-                    RegexUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingParser.WHEN_PATTERN, potentialMapping);
             final String thenPart =
-                    RegexUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingParser.THEN_PATTERN, potentialMapping);
             final AndTriplets andTriplets =
                     parseWhenPart(whenPart, relationManager, conceptManager);
             final List<AndTriplets> whenTriplets = new LinkedList<>();
@@ -180,7 +180,7 @@ public class MappingExtractor {
             throws NoTripletException {
         final AndTriplets andTriplets = new AndTriplets();
         final List<String> potentialTriplets =
-                RegexUtils.getAllMatches(MappingExtractor.TRIPLET_PATTERN, whenPart);
+                RegexUtils.getAllMatches(MappingParser.TRIPLET_PATTERN, whenPart);
         for (final String potentialTriplet : potentialTriplets) {
             andTriplets.addTriplet(
                     parseTriplet(potentialTriplet, false, relationManager, conceptManager));
@@ -194,7 +194,7 @@ public class MappingExtractor {
             final ConceptManager conceptManager)
             throws NoTripletException, NoMatchFoundException {
         final String potentialThenTriplet =
-                RegexUtils.getFirstMatch(MappingExtractor.TRIPLET_PATTERN, thenPart);
+                RegexUtils.getFirstMatch(MappingParser.TRIPLET_PATTERN, thenPart);
         return parseTriplet(potentialThenTriplet, true, relationManager, conceptManager);
     }
 
@@ -205,7 +205,7 @@ public class MappingExtractor {
             final ConceptManager conceptManager)
             throws NoTripletException {
         try {
-            if (potentialTriplet.matches(MappingExtractor.SPECIAL_TRIPLET_PATTERN.toString())) {
+            if (potentialTriplet.matches(MappingParser.SPECIAL_TRIPLET_PATTERN.toString())) {
                 return parseSpecialTriplet(potentialTriplet, relationManager, conceptManager);
             } else {
                 final String subjectString =

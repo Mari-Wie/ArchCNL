@@ -12,9 +12,9 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.io.importhelper.MappingDescriptionExtractor;
-import org.archcnl.domain.common.io.importhelper.MappingExtractor;
-import org.archcnl.domain.common.io.importhelper.RuleExtractor;
+import org.archcnl.domain.common.io.importhelper.DescriptionParser;
+import org.archcnl.domain.common.io.importhelper.MappingParser;
+import org.archcnl.domain.common.io.importhelper.RuleParser;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -143,25 +143,22 @@ class AdocImporterTest {
         String rulesFileString = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
         // then
         Assertions.assertEquals(
-                2,
-                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), rulesFileString));
+                2, TestUtils.numberOfMatches(RuleParser.getRuleContentPattern(), rulesFileString));
         Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
-                        rulesFileString));
+                        DescriptionParser.getConceptDescriptionPattern(), rulesFileString));
         Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
-                        rulesFileString));
+                        DescriptionParser.getRelationDescriptionPattern(), rulesFileString));
         Assertions.assertEquals(
                 5,
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getRelationMappingPattern(), rulesFileString));
+                        MappingParser.getRelationMappingPattern(), rulesFileString));
         Assertions.assertEquals(
                 3,
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getConceptMappingPattern(), rulesFileString));
+                        MappingParser.getConceptMappingPattern(), rulesFileString));
     }
 }

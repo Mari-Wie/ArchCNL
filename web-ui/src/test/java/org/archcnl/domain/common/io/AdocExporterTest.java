@@ -12,9 +12,9 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.io.importhelper.MappingDescriptionExtractor;
-import org.archcnl.domain.common.io.importhelper.MappingExtractor;
-import org.archcnl.domain.common.io.importhelper.RuleExtractor;
+import org.archcnl.domain.common.io.importhelper.DescriptionParser;
+import org.archcnl.domain.common.io.importhelper.MappingParser;
+import org.archcnl.domain.common.io.importhelper.RuleParser;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -55,53 +55,45 @@ class AdocExporterTest {
         String expectedContent = FileUtils.readFileToString(expectedFile, StandardCharsets.UTF_8);
 
         assertEquals(
-                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), expectedContent),
-                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), actualContent));
+                TestUtils.numberOfMatches(RuleParser.getRuleContentPattern(), expectedContent),
+                TestUtils.numberOfMatches(RuleParser.getRuleContentPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getConceptMappingPattern(), expectedContent),
-                TestUtils.numberOfMatches(
-                        MappingExtractor.getConceptMappingPattern(), actualContent));
+                        MappingParser.getConceptMappingPattern(), expectedContent),
+                TestUtils.numberOfMatches(MappingParser.getConceptMappingPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getRelationMappingPattern(), expectedContent),
+                        MappingParser.getRelationMappingPattern(), expectedContent),
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getRelationMappingPattern(), actualContent));
+                        MappingParser.getRelationMappingPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
-                        expectedContent),
+                        DescriptionParser.getConceptDescriptionPattern(), expectedContent),
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getConceptDescriptionPattern(), actualContent));
+                        DescriptionParser.getConceptDescriptionPattern(), actualContent));
         assertEquals(
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
-                        expectedContent),
+                        DescriptionParser.getRelationDescriptionPattern(), expectedContent),
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
-                        actualContent));
+                        DescriptionParser.getRelationDescriptionPattern(), actualContent));
 
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        RuleExtractor.getRuleContentPattern(), expectedContent, actualContent));
+                        RuleParser.getRuleContentPattern(), expectedContent, actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        MappingExtractor.getConceptMappingPattern(),
+                        MappingParser.getConceptMappingPattern(), expectedContent, actualContent));
+        assertTrue(
+                TestUtils.doAllMatchesExistInSecondString(
+                        MappingParser.getRelationMappingPattern(), expectedContent, actualContent));
+        assertTrue(
+                TestUtils.doAllMatchesExistInSecondString(
+                        DescriptionParser.getConceptDescriptionPattern(),
                         expectedContent,
                         actualContent));
         assertTrue(
                 TestUtils.doAllMatchesExistInSecondString(
-                        MappingExtractor.getRelationMappingPattern(),
-                        expectedContent,
-                        actualContent));
-        assertTrue(
-                TestUtils.doAllMatchesExistInSecondString(
-                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
-                        expectedContent,
-                        actualContent));
-        assertTrue(
-                TestUtils.doAllMatchesExistInSecondString(
-                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
+                        DescriptionParser.getRelationDescriptionPattern(),
                         expectedContent,
                         actualContent));
     }

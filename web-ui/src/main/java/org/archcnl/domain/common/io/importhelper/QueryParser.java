@@ -21,9 +21,9 @@ import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
 
-public class QueryExtractor {
+public class QueryParser {
 
-    private static final Logger LOG = LogManager.getLogger(QueryExtractor.class);
+    private static final Logger LOG = LogManager.getLogger(QueryParser.class);
 
     private static final Pattern FREE_TEXT_QUERY_BEGIN =
             Pattern.compile("(?<=\\[role=\"freeTextQuery\"\\](\r\n?|\n)).+: \\([0-9]+\\)");
@@ -40,12 +40,12 @@ public class QueryExtractor {
 
     private static final Pattern WHERE_CONTENT_PATTERN = Pattern.compile("(?<=\\(WHERE ).*(?=\\))");
 
-    private QueryExtractor() {}
+    private QueryParser() {}
 
     public static List<FreeTextQuery> extractFreeTextQueries(String fileContent) {
         List<FreeTextQuery> queries = new LinkedList<>();
 
-        RegexUtils.getAllMatches(QueryExtractor.FREE_TEXT_QUERY_BEGIN, fileContent).stream()
+        RegexUtils.getAllMatches(QueryParser.FREE_TEXT_QUERY_BEGIN, fileContent).stream()
                 .forEach(
                         queryStart -> {
                             try {
@@ -53,14 +53,14 @@ public class QueryExtractor {
                                 int length =
                                         Integer.parseInt(
                                                 RegexUtils.getFirstMatch(
-                                                        QueryExtractor.FREE_TEXT_QUERY_LENGTH,
+                                                        QueryParser.FREE_TEXT_QUERY_LENGTH,
                                                         queryStart));
                                 String query =
                                         fileContent.split(Pattern.quote(queryStart))[1].substring(
                                                 1, length + 1);
                                 queries.add(new FreeTextQuery(name, query));
                             } catch (NumberFormatException | NoMatchFoundException e) {
-                                QueryExtractor.LOG.warn(e.getMessage());
+                                QueryParser.LOG.warn(e.getMessage());
                             }
                         });
 
@@ -73,7 +73,7 @@ public class QueryExtractor {
             final ConceptManager conceptManager) {
         List<Query> queries = new LinkedList<>();
 
-        RegexUtils.getAllMatches(QueryExtractor.CUSTOM_QUERY, fileContent).stream()
+        RegexUtils.getAllMatches(QueryParser.CUSTOM_QUERY, fileContent).stream()
                 .forEach(
                         potentialCustomQuery -> {
                             String name = potentialCustomQuery.split(":")[0];
@@ -81,12 +81,12 @@ public class QueryExtractor {
                                 Set<Variable> select =
                                         parseSelectVariables(
                                                 RegexUtils.getFirstMatch(
-                                                        QueryExtractor.SELECT_CONTENT_PATTERN,
+                                                        QueryParser.SELECT_CONTENT_PATTERN,
                                                         potentialCustomQuery));
                                 AndTriplets where =
-                                        MappingExtractor.parseWhenPart(
+                                        MappingParser.parseWhenPart(
                                                 RegexUtils.getFirstMatch(
-                                                        QueryExtractor.WHERE_CONTENT_PATTERN,
+                                                        QueryParser.WHERE_CONTENT_PATTERN,
                                                         potentialCustomQuery),
                                                 relationManager,
                                                 conceptManager);
@@ -97,7 +97,7 @@ public class QueryExtractor {
                                                 new WhereClause(where)));
 
                             } catch (NoMatchFoundException | NoTripletException e) {
-                                QueryExtractor.LOG.warn(e.getMessage());
+                                QueryParser.LOG.warn(e.getMessage());
                             }
                         });
 
@@ -112,7 +112,7 @@ public class QueryExtractor {
             try {
                 variables.add(new Variable(variableName));
             } catch (InvalidVariableNameException e) {
-                QueryExtractor.LOG.warn(e.getMessage());
+                QueryParser.LOG.warn(e.getMessage());
             }
         }
         return variables;

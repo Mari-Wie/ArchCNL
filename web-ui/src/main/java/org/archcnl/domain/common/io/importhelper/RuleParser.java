@@ -10,25 +10,25 @@ import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 
-public class RuleExtractor {
+public class RuleParser {
 
-    private static final Logger LOG = LogManager.getLogger(RuleExtractor.class);
+    private static final Logger LOG = LogManager.getLogger(RuleParser.class);
 
     private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
 
-    private RuleExtractor() {}
+    private RuleParser() {}
 
     public static List<ArchitectureRule> extractRules(String fileContent) {
         List<ArchitectureRule> rules = new LinkedList<>();
 
-        RegexUtils.getAllMatches(RuleExtractor.RULE_CONTENT_PATTERN, fileContent).stream()
+        RegexUtils.getAllMatches(RuleParser.RULE_CONTENT_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRule -> {
                             try {
                                 rules.add(parseArchitectureRule(potentialRule));
                             } catch (final NoArchitectureRuleException e) {
-                                RuleExtractor.LOG.warn(e.getMessage());
+                                RuleParser.LOG.warn(e.getMessage());
                             }
                         });
 
