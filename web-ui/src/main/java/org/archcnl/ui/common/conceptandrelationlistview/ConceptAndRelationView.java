@@ -9,6 +9,7 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
@@ -17,10 +18,9 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationReq
 import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 
 public class ConceptAndRelationView extends VerticalLayout {
 

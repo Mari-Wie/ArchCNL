@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.rulesormappingeditorview.events;
+package org.archcnl.ui.common.conceptandrelationlistview.events;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;

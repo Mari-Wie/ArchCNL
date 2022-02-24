@@ -2,8 +2,8 @@ package org.archcnl.ui.common.conceptandrelationlistview;
 
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 
 public class EditableConceptAndRelationView extends ConceptAndRelationView {
     public EditableConceptAndRelationView() {
