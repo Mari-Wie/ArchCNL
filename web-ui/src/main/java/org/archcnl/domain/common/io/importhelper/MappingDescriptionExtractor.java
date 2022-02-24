@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.archcnl.domain.common.io.AdocIoUtils;
+import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 
 public class MappingDescriptionExtractor {
@@ -32,17 +32,17 @@ public class MappingDescriptionExtractor {
             String fileContent, Pattern conceptMappingName) {
         final Map<String, String> conceptDescriptions = new HashMap<>();
 
-        AdocIoUtils.getAllMatches(
+        RegexUtils.getAllMatches(
                         MappingDescriptionExtractor.CONCEPT_DESCRIPTION_PATTERN, fileContent)
                 .stream()
                 .forEach(
                         conceptDescription -> {
                             try {
                                 final String name =
-                                        AdocIoUtils.getFirstMatch(
+                                        RegexUtils.getFirstMatch(
                                                 conceptMappingName, conceptDescription);
                                 final String description =
-                                        AdocIoUtils.getFirstMatch(
+                                        RegexUtils.getFirstMatch(
                                                 MappingDescriptionExtractor
                                                         .CONCEPT_DESCRIPTION_CONTENT,
                                                 conceptDescription);
@@ -59,17 +59,17 @@ public class MappingDescriptionExtractor {
             String fileContent, Pattern relationMappingName) {
         final Map<String, String> relationDescriptions = new HashMap<>();
 
-        AdocIoUtils.getAllMatches(
+        RegexUtils.getAllMatches(
                         MappingDescriptionExtractor.RELATION_DESCRIPTION_PATTERN, fileContent)
                 .stream()
                 .forEach(
                         relationDescription -> {
                             try {
                                 final String name =
-                                        AdocIoUtils.getFirstMatch(
+                                        RegexUtils.getFirstMatch(
                                                 relationMappingName, relationDescription);
                                 final String description =
-                                        AdocIoUtils.getFirstMatch(
+                                        RegexUtils.getFirstMatch(
                                                 MappingDescriptionExtractor
                                                         .RELATION_DESCRIPTION_CONTENT,
                                                 relationDescription);

@@ -7,7 +7,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Boolea
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.io.AdocIoUtils;
+import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
 
 public class ObjectParser {
@@ -27,12 +27,11 @@ public class ObjectParser {
                 return new Variable(potentialObject.substring(1));
             } else if (potentialObject.matches("'.+'\\^\\^xsd:boolean")) {
                 String boolString =
-                        AdocIoUtils.getFirstMatch(
-                                Pattern.compile("(?<=').+(?=')"), potentialObject);
+                        RegexUtils.getFirstMatch(Pattern.compile("(?<=').+(?=')"), potentialObject);
                 return new BooleanValue(Boolean.getBoolean(boolString));
             } else if (potentialObject.matches(ObjectParser.CONCEPT_RELATION_PATTERN.toString())) {
                 String objectName =
-                        AdocIoUtils.getFirstMatch(ObjectParser.NAME_PATTERN, potentialObject);
+                        RegexUtils.getFirstMatch(ObjectParser.NAME_PATTERN, potentialObject);
                 return conceptManager
                         .getConceptByName(objectName)
                         .orElse(new CustomConcept(objectName, ""));

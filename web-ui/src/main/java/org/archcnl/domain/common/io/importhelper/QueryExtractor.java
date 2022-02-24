@@ -12,7 +12,7 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.io.AdocIoUtils;
+import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoTripletException;
@@ -45,14 +45,14 @@ public class QueryExtractor {
     public static List<FreeTextQuery> extractFreeTextQueries(String fileContent) {
         List<FreeTextQuery> queries = new LinkedList<>();
 
-        AdocIoUtils.getAllMatches(QueryExtractor.FREE_TEXT_QUERY_BEGIN, fileContent).stream()
+        RegexUtils.getAllMatches(QueryExtractor.FREE_TEXT_QUERY_BEGIN, fileContent).stream()
                 .forEach(
                         queryStart -> {
                             try {
                                 String name = queryStart.split(":")[0];
                                 int length =
                                         Integer.parseInt(
-                                                AdocIoUtils.getFirstMatch(
+                                                RegexUtils.getFirstMatch(
                                                         QueryExtractor.FREE_TEXT_QUERY_LENGTH,
                                                         queryStart));
                                 String query =
@@ -73,19 +73,19 @@ public class QueryExtractor {
             final ConceptManager conceptManager) {
         List<Query> queries = new LinkedList<>();
 
-        AdocIoUtils.getAllMatches(QueryExtractor.CUSTOM_QUERY, fileContent).stream()
+        RegexUtils.getAllMatches(QueryExtractor.CUSTOM_QUERY, fileContent).stream()
                 .forEach(
                         potentialCustomQuery -> {
                             String name = potentialCustomQuery.split(":")[0];
                             try {
                                 Set<Variable> select =
                                         parseSelectVariables(
-                                                AdocIoUtils.getFirstMatch(
+                                                RegexUtils.getFirstMatch(
                                                         QueryExtractor.SELECT_CONTENT_PATTERN,
                                                         potentialCustomQuery));
                                 AndTriplets where =
                                         MappingExtractor.parseWhenPart(
-                                                AdocIoUtils.getFirstMatch(
+                                                RegexUtils.getFirstMatch(
                                                         QueryExtractor.WHERE_CONTENT_PATTERN,
                                                         potentialCustomQuery),
                                                 relationManager,

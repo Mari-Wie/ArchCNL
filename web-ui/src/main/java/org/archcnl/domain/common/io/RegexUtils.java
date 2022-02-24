@@ -6,9 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 
-public class AdocIoUtils {
+public class RegexUtils {
 
-    private AdocIoUtils() {
+    private RegexUtils() {
         throw new IllegalStateException("Utility class");
     }
 

@@ -17,7 +17,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.io.AdocIoUtils;
+import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.NoMappingException;
 import org.archcnl.domain.input.exceptions.NoMatchFoundException;
@@ -64,12 +64,12 @@ public class MappingExtractor {
             final ConceptManager conceptManager) {
         List<CustomConcept> concepts = new LinkedList<>();
 
-        AdocIoUtils.getAllMatches(MappingExtractor.CONCEPT_MAPPING_PATTERN, fileContent).stream()
+        RegexUtils.getAllMatches(MappingExtractor.CONCEPT_MAPPING_PATTERN, fileContent).stream()
                 .forEach(
                         potentialConceptMapping -> {
                             try {
                                 final String name =
-                                        AdocIoUtils.getFirstMatch(
+                                        RegexUtils.getFirstMatch(
                                                 conceptMappingName, potentialConceptMapping);
                                 String description = "";
                                 if (conceptDescriptions.containsKey(name)) {
@@ -101,12 +101,12 @@ public class MappingExtractor {
             final ConceptManager conceptManager) {
         List<CustomRelation> relations = new LinkedList<>();
 
-        AdocIoUtils.getAllMatches(MappingExtractor.RELATION_MAPPING_PATTERN, fileContent).stream()
+        RegexUtils.getAllMatches(MappingExtractor.RELATION_MAPPING_PATTERN, fileContent).stream()
                 .forEach(
                         potentialRelationMapping -> {
                             try {
                                 final String name =
-                                        AdocIoUtils.getFirstMatch(
+                                        RegexUtils.getFirstMatch(
                                                 relationMappingName, potentialRelationMapping);
                                 String description = "";
                                 if (relationDescriptions.containsKey(name)) {
@@ -138,9 +138,9 @@ public class MappingExtractor {
             throws NoMappingException {
         try {
             final String whenPart =
-                    AdocIoUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
             final String thenPart =
-                    AdocIoUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
             final AndTriplets andTriplets =
                     parseWhenPart(whenPart, relationManager, conceptManager);
             final List<AndTriplets> whenTriplets = new LinkedList<>();
@@ -159,9 +159,9 @@ public class MappingExtractor {
             throws NoMappingException {
         try {
             final String whenPart =
-                    AdocIoUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingExtractor.WHEN_PATTERN, potentialMapping);
             final String thenPart =
-                    AdocIoUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
+                    RegexUtils.getFirstMatch(MappingExtractor.THEN_PATTERN, potentialMapping);
             final AndTriplets andTriplets =
                     parseWhenPart(whenPart, relationManager, conceptManager);
             final List<AndTriplets> whenTriplets = new LinkedList<>();
@@ -180,7 +180,7 @@ public class MappingExtractor {
             throws NoTripletException {
         final AndTriplets andTriplets = new AndTriplets();
         final List<String> potentialTriplets =
-                AdocIoUtils.getAllMatches(MappingExtractor.TRIPLET_PATTERN, whenPart);
+                RegexUtils.getAllMatches(MappingExtractor.TRIPLET_PATTERN, whenPart);
         for (final String potentialTriplet : potentialTriplets) {
             andTriplets.addTriplet(
                     parseTriplet(potentialTriplet, false, relationManager, conceptManager));
@@ -194,7 +194,7 @@ public class MappingExtractor {
             final ConceptManager conceptManager)
             throws NoTripletException, NoMatchFoundException {
         final String potentialThenTriplet =
-                AdocIoUtils.getFirstMatch(MappingExtractor.TRIPLET_PATTERN, thenPart);
+                RegexUtils.getFirstMatch(MappingExtractor.TRIPLET_PATTERN, thenPart);
         return parseTriplet(potentialThenTriplet, true, relationManager, conceptManager);
     }
 
@@ -209,13 +209,13 @@ public class MappingExtractor {
                 return parseSpecialTriplet(potentialTriplet, relationManager, conceptManager);
             } else {
                 final String subjectString =
-                        AdocIoUtils.getFirstMatch(
+                        RegexUtils.getFirstMatch(
                                 Pattern.compile("(?<=\\(\\?)\\w+(?= )"), potentialTriplet);
                 final String predicateString =
-                        AdocIoUtils.getFirstMatch(
+                        RegexUtils.getFirstMatch(
                                 Pattern.compile("(?<= )\\w+:\\w+(?= )"), potentialTriplet);
                 final String objectString =
-                        AdocIoUtils.getFirstMatch(
+                        RegexUtils.getFirstMatch(
                                 Pattern.compile(
                                         "(?<= )(\\w+:\\w+|\\?\\w+|'.+'(\\^\\^xsd:boolean)?)(?=\\))"),
                                 potentialTriplet);
@@ -246,12 +246,12 @@ public class MappingExtractor {
             throws NoTripletException {
         try {
             final String predicate =
-                    AdocIoUtils.getFirstMatch(Pattern.compile("\\w+(?=\\()"), potentialTriplet);
+                    RegexUtils.getFirstMatch(Pattern.compile("\\w+(?=\\()"), potentialTriplet);
             final String subjectString =
-                    AdocIoUtils.getFirstMatch(
+                    RegexUtils.getFirstMatch(
                             Pattern.compile("(?<=\\(\\?)\\w+(?=, )"), potentialTriplet);
             final String objectString =
-                    AdocIoUtils.getFirstMatch(
+                    RegexUtils.getFirstMatch(
                             Pattern.compile("(?<= )'.+'(?=\\))"), potentialTriplet);
             return TripletFactory.createTriplet(
                     new Variable(subjectString),
