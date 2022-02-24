@@ -11,13 +11,13 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 
-public class ArchitectureRulesLayout extends RulesOrMappingEditorView {
+public class RulesWidget extends RulesOrMappingEditorView {
 
     private static final long serialVersionUID = 1L;
 
     VerticalLayout rulesLayout = new VerticalLayout();
 
-    public ArchitectureRulesLayout() {
+    public RulesWidget() {
         setWidthFull();
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
         createCreateNewLayout(
@@ -30,7 +30,7 @@ public class ArchitectureRulesLayout extends RulesOrMappingEditorView {
     public void updateRules(final List<ArchitectureRule> rules) {
         rulesLayout.removeAll();
         for (int i = 0; i < rules.size(); i++) {
-            RuleView ruleView = new RuleView(rules.get(i), i + 1);
+            RuleComponent ruleView = new RuleComponent(rules.get(i), i + 1);
             ruleView.addListener(EditRuleButtonPressedEvent.class, this::fireEvent);
             ruleView.addListener(DeleteRuleButtonPressedEvent.class, this::fireEvent);
             rulesLayout.add(ruleView);

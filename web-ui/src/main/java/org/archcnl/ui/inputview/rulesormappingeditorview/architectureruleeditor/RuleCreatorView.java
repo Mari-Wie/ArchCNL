@@ -9,23 +9,23 @@ import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 
-public class NewArchitectureRuleView extends RulesOrMappingEditorView {
+public class RuleCreatorView extends RulesOrMappingEditorView {
 
     private static final long serialVersionUID = -2966045554441002128L;
     private Button saveButton;
     private Button cancelButton;
     private TextArea archRuleTextArea;
 
-    public NewArchitectureRuleView(Optional<String> ruleString) {
+    public RuleCreatorView(Optional<String> ruleString) {
         getStyle().set("overflow", "auto");
         getStyle().set("border", "1px solid black");
         setClassName("architecture-rules");
 
         saveButton = new Button("Save Rule", e -> saveRule());
         cancelButton =
-                new Button("Cancel", click -> fireEvent(new RuleEditorRequestedEvent(this, true)));
+                new Button("Cancel", click -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
         archRuleTextArea = new TextArea("Create new architecture rule ");
         archRuleTextArea.setWidthFull();
         ruleString.ifPresent(rule -> archRuleTextArea.setValue(rule));
@@ -38,7 +38,7 @@ public class NewArchitectureRuleView extends RulesOrMappingEditorView {
         if (!archRuleTextArea.isEmpty()) {
             fireEvent(new SaveRuleButtonPressedEvent(this, true, archRuleTextArea.getValue()));
         }
-        fireEvent(new RuleEditorRequestedEvent(this, true));
+        fireEvent(new RulesWidgetRequestedEvent(this, true));
     }
 
     @Override

@@ -2,15 +2,15 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor
 
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.RuleView;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.RuleComponent;
 
-public class DeleteRuleButtonPressedEvent extends ComponentEvent<RuleView> {
+public class DeleteRuleButtonPressedEvent extends ComponentEvent<RuleComponent> {
 
     private static final long serialVersionUID = 6088361727035198579L;
     private ArchitectureRule rule;
 
     public DeleteRuleButtonPressedEvent(
-            RuleView source, boolean fromClient, ArchitectureRule rule) {
+            RuleComponent source, boolean fromClient, ArchitectureRule rule) {
         super(source, fromClient);
         this.rule = rule;
     }

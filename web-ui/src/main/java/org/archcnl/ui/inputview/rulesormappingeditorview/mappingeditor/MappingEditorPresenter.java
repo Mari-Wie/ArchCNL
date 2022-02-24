@@ -29,7 +29,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEve
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.dialogs.ButtonClickResponder;
 import org.archcnl.ui.common.dialogs.OkCancelDialog;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCancelButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCloseButtonClicked;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
@@ -57,13 +57,13 @@ public abstract class MappingEditorPresenter extends Component {
     private void addListeners() {
         view.addListener(
                 MappingCloseButtonClicked.class,
-                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
+                event -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
         view.addListener(MappingNameFieldChangedEvent.class, this::nameHasChanged);
         view.addListener(MappingDescriptionFieldChangedEvent.class, this::descriptionHasChanged);
         view.addListener(MappingDoneButtonClickedEvent.class, event -> doneButtonClicked());
         view.addListener(
                 MappingCancelButtonClickedEvent.class,
-                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
+                event -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
     }
 
     private void nameHasChanged(final MappingNameFieldChangedEvent event) {

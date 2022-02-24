@@ -16,7 +16,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequeste
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.AddCustomRelationRequestedEvent;
@@ -107,7 +107,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 relation.get().setMapping(mapping);
                 fireEvent(new AddCustomRelationRequestedEvent(this, true, relation.get()));
 
-                fireEvent(new RuleEditorRequestedEvent(this, true));
+                fireEvent(new RulesWidgetRequestedEvent(this, true));
             } catch (UnrelatedMappingException | InvalidVariableNameException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());

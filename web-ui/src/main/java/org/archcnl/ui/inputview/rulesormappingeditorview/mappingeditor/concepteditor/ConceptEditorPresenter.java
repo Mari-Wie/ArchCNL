@@ -13,7 +13,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequeste
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
@@ -91,7 +91,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 concept.get().setMapping(mapping);
                 fireEvent(new AddCustomConceptRequestedEvent(this, true, concept.get()));
 
-                fireEvent(new RuleEditorRequestedEvent(this, true));
+                fireEvent(new RulesWidgetRequestedEvent(this, true));
             } catch (UnrelatedMappingException | InvalidVariableNameException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());

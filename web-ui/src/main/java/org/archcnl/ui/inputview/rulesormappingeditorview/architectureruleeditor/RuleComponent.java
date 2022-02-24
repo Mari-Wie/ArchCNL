@@ -14,11 +14,11 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
 
-public class RuleView extends HorizontalLayout {
+public class RuleComponent extends HorizontalLayout {
 
     private static final long serialVersionUID = 4720863166018087691L;
 
-    public RuleView(ArchitectureRule rule, int ruleIndex) {
+    public RuleComponent(ArchitectureRule rule, int ruleIndex) {
         setWidthFull();
         Button editButton =
                 new Button(
