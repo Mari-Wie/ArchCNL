@@ -4,15 +4,10 @@ import com.google.common.annotations.VisibleForTesting;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.io.RegexUtils;
-import org.archcnl.domain.input.exceptions.NoArchitectureRuleException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 
 public class RuleParser {
-
-    private static final Logger LOG = LogManager.getLogger(RuleParser.class);
 
     private static final Pattern RULE_CONTENT_PATTERN =
             Pattern.compile("(?<=\\[role=\"rule\"\\](\r\n?|\n)).+\\.");
@@ -23,25 +18,12 @@ public class RuleParser {
         List<ArchitectureRule> rules = new LinkedList<>();
 
         RegexUtils.getAllMatches(RuleParser.RULE_CONTENT_PATTERN, fileContent).stream()
-                .forEach(
-                        potentialRule -> {
-                            try {
-                                rules.add(parseArchitectureRule(potentialRule));
-                            } catch (final NoArchitectureRuleException e) {
-                                RuleParser.LOG.warn(e.getMessage());
-                            }
-                        });
+                .forEach(potentialRule -> rules.add(parseArchitectureRule(potentialRule)));
 
         return rules;
     }
 
-    @SuppressWarnings("unused")
-    private static ArchitectureRule parseArchitectureRule(final String potentialRule)
-            throws NoArchitectureRuleException {
-        if (false) {
-            // TODO implement actual parsing once data model for rules exists
-            throw new NoArchitectureRuleException(potentialRule);
-        }
+    private static ArchitectureRule parseArchitectureRule(final String potentialRule) {
         return new ArchitectureRule(potentialRule);
     }
 
