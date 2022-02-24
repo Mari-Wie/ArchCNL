@@ -8,11 +8,11 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class ConfirmDialog extends Dialog {
+public class OkDialog extends Dialog {
 
     private static final long serialVersionUID = -7499231869322025697L;
 
-    public ConfirmDialog(String message) {
+    public OkDialog(String message) {
         VerticalLayout vl = new VerticalLayout();
         vl.add(new Text(message));
         HorizontalLayout buttonRow = new HorizontalLayout();

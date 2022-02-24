@@ -25,7 +25,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
-import org.archcnl.ui.common.dialogs.ConfirmDialog;
+import org.archcnl.ui.common.dialogs.OkDialog;
 import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
@@ -256,7 +256,7 @@ public class MainPresenter extends Component {
                             outputPresenter.getCustomQueries(),
                             outputPresenter.getFreeTextQueries());
                 } catch (final IOException e) {
-                    new ConfirmDialog("Project file could not be written.").open();
+                    new OkDialog("Project file could not be written.").open();
                 }
                 break;
             case SAVE_AS:
