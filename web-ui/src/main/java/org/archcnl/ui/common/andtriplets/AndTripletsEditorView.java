@@ -57,12 +57,12 @@ public class AndTripletsEditorView extends VerticalLayout {
 
     public void addNewTripletViewAfter(
             final TripletView oldTripletView, final TripletView newTripletView) {
-        final int previousIndex = boxContent.indexOf((Component) oldTripletView);
+        final int previousIndex = boxContent.indexOf(oldTripletView);
         boxContent.addComponentAtIndex(previousIndex + 1, newTripletView);
     }
 
     public void deleteTripletView(final TripletView tripletView) {
-        boxContent.remove((Component) tripletView);
+        boxContent.remove(tripletView);
     }
 
     public void addTripletView(final TripletView tripletView) {
