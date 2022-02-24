@@ -15,17 +15,13 @@ public class EditableConceptAndRelationView extends ConceptAndRelationView {
         conceptHierarchyView.createCreateNewLayout(
                 "Concepts",
                 "Create New Concept",
-                e -> {
-                    fireEvent(new ConceptEditorRequestedEvent(this, true));
-                });
+                e -> fireEvent(new ConceptEditorRequestedEvent(this, true)));
         add(conceptHierarchyView);
 
         relationHierarchyView.createCreateNewLayout(
                 "Relations",
                 "Create New Relation",
-                e -> {
-                    fireEvent(new RelationEditorRequestedEvent(this, true));
-                });
+                e -> fireEvent(new RelationEditorRequestedEvent(this, true)));
 
         add(relationHierarchyView);
     }
