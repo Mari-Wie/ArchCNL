@@ -14,7 +14,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.io.RegexUtils;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
+import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoTripletException;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;

@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.exceptions;
+package org.archcnl.domain.common.io.exceptions;
 
 import java.util.regex.Pattern;
 

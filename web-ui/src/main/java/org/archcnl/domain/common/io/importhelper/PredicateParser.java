@@ -6,7 +6,7 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.io.RegexUtils;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
+import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 
 public class PredicateParser {

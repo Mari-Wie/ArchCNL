@@ -21,8 +21,8 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.except
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.RegexUtils;
+import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 import org.archcnl.domain.common.io.importhelper.exceptions.NoMappingException;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
 import org.archcnl.domain.input.exceptions.NoObjectTypeException;
 import org.archcnl.domain.input.exceptions.NoRelationException;
 import org.archcnl.domain.input.exceptions.NoTripletException;

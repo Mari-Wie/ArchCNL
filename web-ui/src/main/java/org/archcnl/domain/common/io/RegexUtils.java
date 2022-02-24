@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
+import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 
 public class RegexUtils {
 

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.io.RegexUtils;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
+import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 
 public class DescriptionParser {
 
