@@ -11,7 +11,7 @@ import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;

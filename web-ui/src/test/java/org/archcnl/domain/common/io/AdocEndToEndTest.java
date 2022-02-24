@@ -11,7 +11,7 @@ import java.util.Queue;
 import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;

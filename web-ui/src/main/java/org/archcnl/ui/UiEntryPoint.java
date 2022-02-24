@@ -4,7 +4,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 
 @Route("")
 @PWA(

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.ArchitecturalStyle;
 import org.junit.jupiter.api.AfterAll;

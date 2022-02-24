@@ -14,7 +14,7 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
