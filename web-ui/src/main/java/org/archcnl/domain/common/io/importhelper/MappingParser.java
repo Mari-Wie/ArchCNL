@@ -17,7 +17,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -231,7 +231,7 @@ public class MappingParser {
                 return TripletFactory.createTriplet(subject, predicate, object);
             }
         } catch (NoRelationException
-                | UnsupportedObjectTypeInTriplet
+                | UnsupportedObjectTypeException
                 | NoObjectTypeException
                 | InvalidVariableNameException
                 | NoMatchFoundException e) {
@@ -257,7 +257,7 @@ public class MappingParser {
                     new Variable(subjectString),
                     PredicateParser.parsePredicate(predicate, relationManager),
                     ObjectParser.parseObject(objectString, conceptManager));
-        } catch (final UnsupportedObjectTypeInTriplet
+        } catch (final UnsupportedObjectTypeException
                 | InvalidVariableNameException
                 | NoRelationException
                 | NoObjectTypeException

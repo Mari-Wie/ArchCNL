@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.DescriptionParser;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
@@ -31,7 +31,7 @@ class AdocExporterTest {
 
     @Test
     void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
-            throws IOException, UnsupportedObjectTypeInTriplet, ConceptDoesNotExistException,
+            throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
                     InvalidVariableNameException, ConceptAlreadyExistsException,
                     VariableAlreadyExistsException, RelationAlreadyExistsException,
                     UnrelatedMappingException {

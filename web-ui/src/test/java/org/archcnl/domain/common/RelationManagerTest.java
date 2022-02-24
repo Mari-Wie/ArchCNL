@@ -13,7 +13,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
@@ -218,7 +218,7 @@ class RelationManagerTest {
     @Test
     void givenRelationManager_whenCustomRelationAdded_thenGetCustomRelationsAsExpected()
             throws RelationAlreadyExistsException, VariableAlreadyExistsException,
-                    UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
+                    UnsupportedObjectTypeException, InvalidVariableNameException {
         Assertions.assertEquals(0, relationManager.getCustomRelations().size());
         relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
         relationManager.addRelation(new FamixRelation("abc", "", new LinkedList<>()));
@@ -228,7 +228,7 @@ class RelationManagerTest {
     @Test
     void givenRelationManager_whenRelationsAreAdded_thenExpectedResults()
             throws RelationAlreadyExistsException, VariableAlreadyExistsException,
-                    UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
+                    UnsupportedObjectTypeException, InvalidVariableNameException {
         Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());
         Assertions.assertEquals(outputRelationsCount, relationManager.getOutputRelations().size());
         relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
@@ -254,7 +254,7 @@ class RelationManagerTest {
 
     @Test
     void givenRelationManager_whenAddOrAppendIsCalled_thenExpectedResults()
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
+            throws VariableAlreadyExistsException, UnsupportedObjectTypeException,
                     InvalidVariableNameException, ConceptDoesNotExistException,
                     RelationAlreadyExistsException, UnrelatedMappingException {
         Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());

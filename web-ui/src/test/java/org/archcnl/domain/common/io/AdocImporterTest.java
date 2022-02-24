@@ -12,7 +12,7 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.DescriptionParser;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
@@ -49,7 +49,7 @@ class AdocImporterTest {
 
     @Test
     void givenRuleFile_whenImportingIntoModel_thenModelIsLikeExpected()
-            throws IOException, UnsupportedObjectTypeInTriplet, ConceptDoesNotExistException,
+            throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
                     InvalidVariableNameException, ConceptAlreadyExistsException,
                     VariableAlreadyExistsException, RelationAlreadyExistsException,
                     UnrelatedMappingException {

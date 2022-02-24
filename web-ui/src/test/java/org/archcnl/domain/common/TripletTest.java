@@ -7,7 +7,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +27,7 @@ class TripletTest {
 
     @Test
     void givenTripletInput_whenCallTripletFactory_thenExpectedResults()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet {
+            throws InvalidVariableNameException, UnsupportedObjectTypeException {
         // given
         final Variable subject = new Variable("name");
         final Relation predicate = relationManager.getRelationByName("matches").get();
@@ -47,7 +47,7 @@ class TripletTest {
         Assertions.assertEquals(validObjectType1, triplet1.getObject());
         Assertions.assertEquals(validObjectType2, triplet2.getObject());
         Assertions.assertThrows(
-                UnsupportedObjectTypeInTriplet.class,
+                UnsupportedObjectTypeException.class,
                 () -> TripletFactory.createTriplet(subject, predicate, invalidObjectType));
     }
 

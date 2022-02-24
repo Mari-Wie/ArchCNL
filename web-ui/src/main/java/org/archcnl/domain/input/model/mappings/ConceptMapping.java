@@ -7,7 +7,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 
 public class ConceptMapping extends Mapping {
 
@@ -21,7 +21,7 @@ public class ConceptMapping extends Mapping {
         thenTriplet = new Triplet(thenVariable, TypeRelation.getTyperelation(), thisConcept);
     }
 
-    public void updateThenTriplet(final Variable subject) throws UnsupportedObjectTypeInTriplet {
+    public void updateThenTriplet(final Variable subject) throws UnsupportedObjectTypeException {
         this.thenTriplet =
                 TripletFactory.createTriplet(
                         subject, thenTriplet.getPredicate(), thenTriplet.getObject());
