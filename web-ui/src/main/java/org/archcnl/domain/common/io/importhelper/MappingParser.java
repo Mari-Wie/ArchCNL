@@ -23,9 +23,9 @@ import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 import org.archcnl.domain.common.io.importhelper.exceptions.NoMappingException;
-import org.archcnl.domain.input.exceptions.NoObjectTypeException;
-import org.archcnl.domain.input.exceptions.NoRelationException;
-import org.archcnl.domain.input.exceptions.NoTripletException;
+import org.archcnl.domain.common.io.importhelper.exceptions.NoObjectTypeException;
+import org.archcnl.domain.common.io.importhelper.exceptions.NoRelationException;
+import org.archcnl.domain.common.io.importhelper.exceptions.NoTripletException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 

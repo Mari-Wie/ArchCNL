@@ -8,7 +8,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.common.io.RegexUtils;
-import org.archcnl.domain.input.exceptions.NoObjectTypeException;
+import org.archcnl.domain.common.io.importhelper.exceptions.NoObjectTypeException;
 
 public class ObjectParser {
 

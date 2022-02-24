@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.exceptions;
+package org.archcnl.domain.common.io.importhelper.exceptions;
 
 public class NoObjectTypeException extends Exception {
 
