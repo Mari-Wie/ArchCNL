@@ -53,20 +53,16 @@ public class ConceptAndRelationView extends VerticalLayout {
                     requestConceptGridUpdate();
                 });
         conceptHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class,
-                e -> {
-                    requestConceptSwap(e);
-                });
+                HierarchySwapRequestedEvent.class, this::requestConceptSwap);
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of concepts but are mapped to each other externally
         conceptHierarchyView.addListener(
                 EditorRequestedEvent.class,
-                e -> {
-                    fireEvent(
-                            new ConceptEditorRequestedEvent(
-                                    this, true, (CustomConcept) e.getSource().get()));
-                });
+                e ->
+                        fireEvent(
+                                new ConceptEditorRequestedEvent(
+                                        this, true, (CustomConcept) e.getSource().get())));
         conceptHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
@@ -78,32 +74,25 @@ public class ConceptAndRelationView extends VerticalLayout {
     }
 
     protected void initHierarchies() {
-        conceptHierarchyView = new HierarchyView<Concept>();
-        relationHierarchyView = new HierarchyView<Relation>();
+        conceptHierarchyView = new HierarchyView<>();
+        relationHierarchyView = new HierarchyView<>();
     }
 
     protected void createRelationHierarchy() {
         relationHierarchyView.setHeight(50, Unit.PERCENTAGE);
         relationHierarchyView.addListener(
-                GridUpdateRequestedEvent.class,
-                e -> {
-                    requestRelationGridUpdate();
-                });
+                GridUpdateRequestedEvent.class, e -> requestRelationGridUpdate());
         relationHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class,
-                e -> {
-                    requestRelationSwap(e);
-                });
+                HierarchySwapRequestedEvent.class, this::requestRelationSwap);
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of relations but are mapped to each other externally
         relationHierarchyView.addListener(
                 EditorRequestedEvent.class,
-                e -> {
-                    fireEvent(
-                            new RelationEditorRequestedEvent(
-                                    this, true, (CustomRelation) e.getSource().get()));
-                });
+                e ->
+                        fireEvent(
+                                new RelationEditorRequestedEvent(
+                                        this, true, (CustomRelation) e.getSource().get())));
         relationHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
