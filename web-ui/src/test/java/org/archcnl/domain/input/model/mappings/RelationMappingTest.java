@@ -12,7 +12,6 @@ import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 
 class RelationMappingTest {
@@ -20,9 +19,8 @@ class RelationMappingTest {
     @Test
     void givenRelations_whenToStringRepresentation_thenGetExpectedResult()
             throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, VariableAlreadyExistsException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException,
-                    RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
+                    UnrelatedMappingException, RelationAlreadyExistsException {
         // given
         List<CustomRelation> customRelations = TestUtils.prepareCustomRelations();
 

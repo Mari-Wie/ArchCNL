@@ -21,7 +21,6 @@ import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.DescriptionParser;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
 import org.archcnl.domain.common.io.importhelper.RuleParser;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
@@ -33,8 +32,7 @@ class AdocExporterTest {
     void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
             throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
                     InvalidVariableNameException, ConceptAlreadyExistsException,
-                    VariableAlreadyExistsException, RelationAlreadyExistsException,
-                    UnrelatedMappingException {
+                    RelationAlreadyExistsException, UnrelatedMappingException {
         // given
         ArchitectureRuleManager ruleManager = TestUtils.prepareRuleManager();
         ConceptManager conceptManager = TestUtils.prepareConceptManager();

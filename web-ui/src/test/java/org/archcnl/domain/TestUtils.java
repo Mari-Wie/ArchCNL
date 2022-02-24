@@ -22,7 +22,6 @@ import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
@@ -184,9 +183,8 @@ public class TestUtils {
 
     public static RelationManager prepareRelationManager()
             throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, VariableAlreadyExistsException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException,
-                    RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
+                    UnrelatedMappingException, RelationAlreadyExistsException {
 
         final ConceptManager conceptManager = new ConceptManager();
         final RelationManager relationManager = new RelationManager(conceptManager);
@@ -329,17 +327,15 @@ public class TestUtils {
 
     public static List<CustomConcept> prepareCustomConcepts()
             throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, VariableAlreadyExistsException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException,
-                    RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
+                    UnrelatedMappingException, RelationAlreadyExistsException {
         return TestUtils.prepareConceptManager().getCustomConcepts();
     }
 
     public static List<CustomRelation> prepareCustomRelations()
             throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, VariableAlreadyExistsException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException,
-                    RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
+                    UnrelatedMappingException, RelationAlreadyExistsException {
         return TestUtils.prepareRelationManager().getCustomRelations();
     }
 

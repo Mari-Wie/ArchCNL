@@ -21,7 +21,6 @@ import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.DescriptionParser;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
 import org.archcnl.domain.common.io.importhelper.RuleParser;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
@@ -51,8 +50,7 @@ class AdocImporterTest {
     void givenRuleFile_whenImportingIntoModel_thenModelIsLikeExpected()
             throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
                     InvalidVariableNameException, ConceptAlreadyExistsException,
-                    VariableAlreadyExistsException, RelationAlreadyExistsException,
-                    UnrelatedMappingException {
+                    RelationAlreadyExistsException, UnrelatedMappingException {
 
         // given
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");

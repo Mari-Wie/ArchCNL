@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
@@ -104,11 +103,8 @@ public class CustomQueryPresenter extends Component {
     private void addVariable(VariableCreationRequestedEvent event) {
         try {
             Variable newVariable = new Variable(event.getVariableName());
-            try {
-                variableManager.addVariable(newVariable);
-            } catch (VariableAlreadyExistsException e) {
-                // do nothing
-            }
+            variableManager.addVariable(newVariable);
+
             event.getSource()
                     .setItems(variableManager.getVariables().stream().map(Variable::getName));
             event.getSource().setValue(newVariable.getName());
@@ -162,11 +158,7 @@ public class CustomQueryPresenter extends Component {
         clause.getObjects()
                 .forEach(
                         variable -> {
-                            try {
-                                variableManager.addVariable(variable);
-                            } catch (VariableAlreadyExistsException e) {
-                                // do nothing
-                            }
+                            variableManager.addVariable(variable);
                             VariableSelectionComponent component = new VariableSelectionComponent();
                             component.setItems(
                                     variableManager.getVariables().stream().map(Variable::getName));

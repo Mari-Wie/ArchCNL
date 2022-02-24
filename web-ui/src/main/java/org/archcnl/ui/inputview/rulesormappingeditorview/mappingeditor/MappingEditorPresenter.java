@@ -16,7 +16,6 @@ import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.ui.common.ButtonClickResponder;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
@@ -182,11 +181,8 @@ public abstract class MappingEditorPresenter extends Component {
     protected void addVariable(final VariableCreationRequestedEvent event) {
         try {
             final Variable newVariable = new Variable(event.getVariableName());
-            try {
-                variableManager.addVariable(newVariable);
-            } catch (final VariableAlreadyExistsException e) {
-                // do nothing
-            }
+            variableManager.addVariable(newVariable);
+
             event.getSource()
                     .setItems(variableManager.getVariables().stream().map(Variable::getName));
             event.getSource().setValue(newVariable.getName());
