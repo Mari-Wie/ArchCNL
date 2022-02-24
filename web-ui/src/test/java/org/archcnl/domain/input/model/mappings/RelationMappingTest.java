@@ -6,12 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 

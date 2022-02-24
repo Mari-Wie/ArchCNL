@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.exceptions;
+package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions;
 
 public class InvalidVariableNameException extends Exception {
 

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 
 public class VariableFilterChangedEvent extends ComponentEvent<VariableSelectionComponent> {
