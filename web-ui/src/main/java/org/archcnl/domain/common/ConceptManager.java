@@ -19,7 +19,7 @@ public class ConceptManager extends HierarchyManager<Concept> {
 
     public ConceptManager() {
         super();
-        concepts = new TreeMap<String, Concept>();
+        concepts = new TreeMap<>();
         // TODO: move this to somewhere where to ConceptManager is created and files are loaded,
         // also
         // this has to be in something like: create empty project
