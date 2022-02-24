@@ -3,7 +3,7 @@ package org.archcnl.domain.common.conceptsandrelations;
 import java.util.Objects;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 
 public abstract class Concept extends ActualObjectType implements HierarchyObject {
 

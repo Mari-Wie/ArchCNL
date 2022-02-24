@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.exceptions;
+package org.archcnl.domain.common.exceptions;
 
 public class RelationAlreadyExistsException extends Exception {
 
