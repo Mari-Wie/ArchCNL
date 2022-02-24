@@ -1,4 +1,4 @@
-package org.archcnl.ui.common;
+package org.archcnl.ui.common.dialogs;
 
 public interface ButtonClickResponder {
 
