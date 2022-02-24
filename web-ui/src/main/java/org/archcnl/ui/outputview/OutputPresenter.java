@@ -17,10 +17,10 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
-import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;

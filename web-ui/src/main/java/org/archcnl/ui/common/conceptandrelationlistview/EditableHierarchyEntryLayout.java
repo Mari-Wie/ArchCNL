@@ -6,7 +6,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
-import org.archcnl.ui.events.EditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 
 public class EditableHierarchyEntryLayout<T extends HierarchyObject>
         extends HierarchyEntryLayout<T> {

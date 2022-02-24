@@ -1,4 +1,4 @@
-package org.archcnl.ui.events;
+package org.archcnl.ui.common.conceptandrelationlistview.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;

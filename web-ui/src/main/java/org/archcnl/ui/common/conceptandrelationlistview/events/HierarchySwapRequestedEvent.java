@@ -1,4 +1,4 @@
-package org.archcnl.ui.events;
+package org.archcnl.ui.common.conceptandrelationlistview.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
