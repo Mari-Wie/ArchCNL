@@ -11,7 +11,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class WhereClauseTest {
 
     @Test
     public void givenSimpleWhereClause_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException, RelationDoesNotExistException {
+            throws InvalidVariableNameException {
         // given
         final Triplet triplet1 =
                 new Triplet(
@@ -66,8 +65,7 @@ public class WhereClauseTest {
 
     @Test
     public void givenWhereClause_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException, RelationDoesNotExistException,
-                    ConceptDoesNotExistException {
+            throws InvalidVariableNameException, ConceptDoesNotExistException {
         // given
         final Triplet triplet1 =
                 new Triplet(

@@ -12,7 +12,6 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
@@ -39,7 +38,7 @@ class AdocEndToEndTest {
     @SuppressWarnings("unchecked")
     @Test
     void givenRuleFile_whenImportingAndExportingFile_thenWrittenFileIsAsExpected()
-            throws IOException, RelationDoesNotExistException {
+            throws IOException {
         // given
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
 

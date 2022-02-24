@@ -12,6 +12,8 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.DescriptionParser;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
 import org.archcnl.domain.common.io.importhelper.RuleParser;
@@ -19,9 +21,6 @@ import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
@@ -32,10 +31,10 @@ class AdocExporterTest {
 
     @Test
     void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
-            throws IOException, UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
-                    ConceptDoesNotExistException, InvalidVariableNameException,
-                    ConceptAlreadyExistsException, VariableAlreadyExistsException,
-                    RelationAlreadyExistsException, UnrelatedMappingException {
+            throws IOException, UnsupportedObjectTypeInTriplet, ConceptDoesNotExistException,
+                    InvalidVariableNameException, ConceptAlreadyExistsException,
+                    VariableAlreadyExistsException, RelationAlreadyExistsException,
+                    UnrelatedMappingException {
         // given
         ArchitectureRuleManager ruleManager = TestUtils.prepareRuleManager();
         ConceptManager conceptManager = TestUtils.prepareConceptManager();

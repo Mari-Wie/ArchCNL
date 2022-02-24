@@ -16,13 +16,12 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
@@ -185,9 +184,9 @@ public class TestUtils {
 
     public static RelationManager prepareRelationManager()
             throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, VariableAlreadyExistsException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
 
         final ConceptManager conceptManager = new ConceptManager();
         final RelationManager relationManager = new RelationManager(conceptManager);
@@ -330,17 +329,17 @@ public class TestUtils {
 
     public static List<CustomConcept> prepareCustomConcepts()
             throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, VariableAlreadyExistsException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         return TestUtils.prepareConceptManager().getCustomConcepts();
     }
 
     public static List<CustomRelation> prepareCustomRelations()
             throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+                    ConceptDoesNotExistException, VariableAlreadyExistsException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         return TestUtils.prepareRelationManager().getCustomRelations();
     }
 
