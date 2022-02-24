@@ -14,9 +14,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;

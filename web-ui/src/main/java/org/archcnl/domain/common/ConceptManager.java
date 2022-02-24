@@ -9,8 +9,8 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.ConformanceConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class ConceptManager extends HierarchyManager<Concept> {

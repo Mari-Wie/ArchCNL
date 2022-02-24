@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.TripletPresenter;

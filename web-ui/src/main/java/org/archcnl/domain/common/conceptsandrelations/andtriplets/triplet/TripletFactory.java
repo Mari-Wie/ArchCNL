@@ -1,7 +1,7 @@
 package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeInTriplet;
 
 public class TripletFactory {
     public static Triplet createTriplet(

@@ -1,7 +1,7 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.Optional;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class CustomConcept extends Concept {

@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.exceptions;
+package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions;
 
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
