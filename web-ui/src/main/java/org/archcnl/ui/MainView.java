@@ -145,7 +145,7 @@ public class MainView extends VerticalLayout {
                                                 this, true, FooterOption.WIKI)));
         final Button siteButton =
                 new Button(
-                        "Project Site",
+                        "Repository",
                         e ->
                                 fireEvent(
                                         new FooterOptionRequestedEvent(
