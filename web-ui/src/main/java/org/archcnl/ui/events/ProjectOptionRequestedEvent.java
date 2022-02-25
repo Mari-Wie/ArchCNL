@@ -40,10 +40,6 @@ public class ProjectOptionRequestedEvent extends ComponentEvent<MainView> {
         this.option = option;
     }
 
-    public ProjectOption getOption() {
-        return option;
-    }
-
     public void handleEvent(
             MainView mainView,
             ProjectManager projectManager,
