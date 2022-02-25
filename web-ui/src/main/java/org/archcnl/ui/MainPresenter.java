@@ -106,6 +106,7 @@ public class MainPresenter extends Component {
                             .getRepository()
                             .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
             view.showContent(outputPresenter.getView());
+            view.setOpenProjectMenuItemEnabled(false);
         } catch (PropertyNotFoundException e2) {
             view.showErrorMessage("Failed to connect to stardog database.");
         }
@@ -257,7 +258,11 @@ public class MainPresenter extends Component {
         outputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(
-                InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
+                InputViewRequestedEvent.class,
+                e -> {
+                    view.showContent(inputPresenter.getView());
+                    view.setOpenProjectMenuItemEnabled(true);
+                });
         outputPresenter.addListener(
                 PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
         outputPresenter.addListener(
