@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.io.AdocIoUtils;
-import org.archcnl.domain.input.exceptions.NoMatchFoundException;
-import org.archcnl.domain.input.exceptions.NoRelationException;
+import org.archcnl.domain.common.io.RegexUtils;
+import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
+import org.archcnl.domain.common.io.importhelper.exceptions.NoRelationException;
 
 public class PredicateParser {
 
@@ -18,7 +18,7 @@ public class PredicateParser {
         try {
             if (potentialPredicate.contains(":")) {
                 String predicateName =
-                        AdocIoUtils.getFirstMatch(
+                        RegexUtils.getFirstMatch(
                                 Pattern.compile("(?<=\\w+:).+"), potentialPredicate);
                 return relationManager
                         .getRelationByName(predicateName)

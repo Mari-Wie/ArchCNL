@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
 
 public class VariableManager {
 
@@ -14,11 +13,9 @@ public class VariableManager {
         variables = new LinkedList<>();
     }
 
-    public void addVariable(Variable variable) throws VariableAlreadyExistsException {
+    public void addVariable(Variable variable) {
         if (!doesVariableExist(variable)) {
             variables.add(variable);
-        } else {
-            throw new VariableAlreadyExistsException(variable.getName());
         }
     }
 

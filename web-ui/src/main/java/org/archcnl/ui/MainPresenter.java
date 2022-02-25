@@ -14,7 +14,7 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.QueryUtils;
@@ -23,17 +23,17 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
-import org.archcnl.ui.common.dialogs.ConfirmDialog;
-import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.dialogs.OkDialog;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
 import org.archcnl.ui.events.ProjectOptionRequestedEvent;
-import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.RulesOptionRequestedEvent;
 import org.archcnl.ui.events.ViewOptionRequestedEvent;
 import org.archcnl.ui.inputview.InputPresenter;
@@ -256,7 +256,7 @@ public class MainPresenter extends Component {
                             outputPresenter.getCustomQueries(),
                             outputPresenter.getFreeTextQueries());
                 } catch (final IOException e) {
-                    new ConfirmDialog("Project file could not be written.").open();
+                    new OkDialog("Project file could not be written.").open();
                 }
                 break;
             case SAVE_AS:

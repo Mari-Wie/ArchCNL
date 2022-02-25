@@ -9,7 +9,7 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 
 public abstract class Relation
         implements HierarchyObject, FormattedAdocDomainObject, FormattedViewDomainObject {

@@ -11,8 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
@@ -27,10 +26,10 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEve
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
-import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
@@ -104,11 +103,8 @@ public class CustomQueryPresenter extends Component {
     private void addVariable(VariableCreationRequestedEvent event) {
         try {
             Variable newVariable = new Variable(event.getVariableName());
-            try {
-                variableManager.addVariable(newVariable);
-            } catch (VariableAlreadyExistsException e) {
-                // do nothing
-            }
+            variableManager.addVariable(newVariable);
+
             event.getSource()
                     .setItems(variableManager.getVariables().stream().map(Variable::getName));
             event.getSource().setValue(newVariable.getName());
@@ -162,11 +158,7 @@ public class CustomQueryPresenter extends Component {
         clause.getObjects()
                 .forEach(
                         variable -> {
-                            try {
-                                variableManager.addVariable(variable);
-                            } catch (VariableAlreadyExistsException e) {
-                                // do nothing
-                            }
+                            variableManager.addVariable(variable);
                             VariableSelectionComponent component = new VariableSelectionComponent();
                             component.setItems(
                                     variableManager.getVariables().stream().map(Variable::getName));

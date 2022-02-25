@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
@@ -91,7 +91,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 concept.get().setMapping(mapping);
                 fireEvent(new AddCustomConceptRequestedEvent(this, true, concept.get()));
 
-                fireEvent(new RuleEditorRequestedEvent(this, true));
+                fireEvent(new RulesWidgetRequestedEvent(this, true));
             } catch (UnrelatedMappingException | InvalidVariableNameException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());

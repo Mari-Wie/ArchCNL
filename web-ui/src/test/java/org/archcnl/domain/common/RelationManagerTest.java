@@ -13,13 +13,11 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -197,7 +195,7 @@ class RelationManagerTest {
 
     @Test
     void givenFreshRelationManager_whenGetRelationByName_thenExpectedResults()
-            throws ConceptDoesNotExistException, RelationDoesNotExistException {
+            throws ConceptDoesNotExistException {
         Assertions.assertEquals(Optional.empty(), relationManager.getRelationByName("abc"));
         Assertions.assertEquals(
                 Optional.of(new FamixRelation("hasModifier", "", new LinkedList<>())),
@@ -205,8 +203,7 @@ class RelationManagerTest {
     }
 
     @Test
-    void givenRelationManager_whenGetRelationByRealName_thenExpectedResults()
-            throws RelationDoesNotExistException {
+    void givenRelationManager_whenGetRelationByRealName_thenExpectedResults() {
         Assertions.assertEquals(Optional.empty(), relationManager.getRelationByRealName("abc"));
         Assertions.assertEquals(Optional.empty(), relationManager.getRelationByRealName("hasName"));
         Assertions.assertEquals(
@@ -219,8 +216,8 @@ class RelationManagerTest {
 
     @Test
     void givenRelationManager_whenCustomRelationAdded_thenGetCustomRelationsAsExpected()
-            throws RelationAlreadyExistsException, VariableAlreadyExistsException,
-                    UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
+            throws RelationAlreadyExistsException, UnsupportedObjectTypeException,
+                    InvalidVariableNameException {
         Assertions.assertEquals(0, relationManager.getCustomRelations().size());
         relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
         relationManager.addRelation(new FamixRelation("abc", "", new LinkedList<>()));
@@ -229,8 +226,8 @@ class RelationManagerTest {
 
     @Test
     void givenRelationManager_whenRelationsAreAdded_thenExpectedResults()
-            throws RelationAlreadyExistsException, VariableAlreadyExistsException,
-                    UnsupportedObjectTypeInTriplet, InvalidVariableNameException {
+            throws RelationAlreadyExistsException, UnsupportedObjectTypeException,
+                    InvalidVariableNameException {
         Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());
         Assertions.assertEquals(outputRelationsCount, relationManager.getOutputRelations().size());
         relationManager.addRelation(new CustomRelation("test", "", new LinkedList<>()));
@@ -256,8 +253,7 @@ class RelationManagerTest {
 
     @Test
     void givenRelationManager_whenAddOrAppendIsCalled_thenExpectedResults()
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
-                    InvalidVariableNameException, RelationDoesNotExistException,
+            throws UnsupportedObjectTypeException, InvalidVariableNameException,
                     ConceptDoesNotExistException, RelationAlreadyExistsException,
                     UnrelatedMappingException {
         Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());

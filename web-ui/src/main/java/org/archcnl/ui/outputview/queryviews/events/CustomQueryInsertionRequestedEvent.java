@@ -11,6 +11,5 @@ public class CustomQueryInsertionRequestedEvent
     public CustomQueryInsertionRequestedEvent(
             final AbstractQueryResultsComponent source, final boolean fromClient) {
         super(source, fromClient);
-        // TODO add logger call for event creation
     }
 }

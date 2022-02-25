@@ -12,9 +12,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.ui.common.andtriplets.triplet.events.AddTripletViewAfterButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
@@ -65,7 +65,7 @@ public class TripletPresenter extends Component {
         tripletView.addListener(AddTripletViewAfterButtonPressedEvent.class, this::fireEvent);
     }
 
-    public Triplet getTriplet() throws TripletNotDefinedException, UnsupportedObjectTypeInTriplet {
+    public Triplet getTriplet() throws TripletNotDefinedException, UnsupportedObjectTypeException {
         Variable subject;
         Optional<Relation> predicate;
         ObjectType object;

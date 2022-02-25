@@ -3,7 +3,7 @@ package org.archcnl.ui.common.conceptandrelationlistview;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
-import org.archcnl.ui.events.EditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 
 public class EditableHierarchyView<T extends HierarchyObject> extends HierarchyView {
     public EditableHierarchyView() {

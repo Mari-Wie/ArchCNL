@@ -3,7 +3,7 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepte
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.ConceptEditorPresenter;
 
 public class ChangeConceptNameRequestedEvent extends ComponentEvent<ConceptEditorPresenter> {

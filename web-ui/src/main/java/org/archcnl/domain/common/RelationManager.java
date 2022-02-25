@@ -17,9 +17,9 @@ import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
 public class RelationManager extends HierarchyManager<Relation> {
