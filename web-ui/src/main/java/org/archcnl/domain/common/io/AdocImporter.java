@@ -41,7 +41,7 @@ public class AdocImporter {
             throws IOException {
 
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-        fileContent = fileContent.replaceAll("\r", "");
+        fileContent = fileContent.replace("\r", "");
 
         Map<String, String> conceptDescriptions =
                 DescriptionParser.extractConceptDescriptions(
