@@ -63,7 +63,8 @@ class AdocEndToEndTest {
                 (List<FreeTextQuery>) freeTextQueryQueue);
 
         // then
-        String expectedContent = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
+        String expectedContent =
+                FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8).replaceAll("\r", "");
         String actualContent = FileUtils.readFileToString(writtenFile, StandardCharsets.UTF_8);
 
         assertEquals(expectedContent, actualContent);
