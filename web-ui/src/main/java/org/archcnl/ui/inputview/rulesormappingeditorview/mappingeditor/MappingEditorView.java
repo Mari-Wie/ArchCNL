@@ -51,7 +51,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         add(titleBar);
 
         mappingName = new TextField("Name");
-        mappingName.setPlaceholder("Unique name");
+        mappingName.setPreventInvalidInput(true);
         mappingName.addValueChangeListener(
                 event -> {
                     mappingName.setInvalid(false);
