@@ -45,13 +45,13 @@ public class MappingParser {
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
                     "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
-    private static final Pattern SPECIAL_TRIPLET_PATTERN =
+    private static final Pattern JENA_BUILTIN_TRIPLET_PATTERN =
             Pattern.compile("\\w+\\(\\?\\w+, '.+'\\)");
     private static final Pattern TRIPLET_PATTERN =
             Pattern.compile(
                     MappingParser.NORMAL_TRIPLET_PATTERN
                             + "|"
-                            + MappingParser.SPECIAL_TRIPLET_PATTERN);
+                            + MappingParser.JENA_BUILTIN_TRIPLET_PATTERN);
 
     private MappingParser() {}
 
@@ -204,8 +204,8 @@ public class MappingParser {
             final ConceptManager conceptManager)
             throws NoTripletException {
         try {
-            if (potentialTriplet.matches(MappingParser.SPECIAL_TRIPLET_PATTERN.toString())) {
-                return parseSpecialTriplet(potentialTriplet, relationManager, conceptManager);
+            if (potentialTriplet.matches(MappingParser.JENA_BUILTIN_TRIPLET_PATTERN.toString())) {
+                return parseJenaBuiltinTriplet(potentialTriplet, relationManager, conceptManager);
             } else {
                 final String subjectString =
                         RegexUtils.getFirstMatch(
@@ -237,7 +237,7 @@ public class MappingParser {
         }
     }
 
-    private static Triplet parseSpecialTriplet(
+    private static Triplet parseJenaBuiltinTriplet(
             final String potentialTriplet,
             final RelationManager relationManager,
             final ConceptManager conceptManager)
