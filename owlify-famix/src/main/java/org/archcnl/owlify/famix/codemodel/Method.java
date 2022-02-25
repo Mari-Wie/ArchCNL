@@ -1,7 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPosition;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasSignature;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasCaughtException;
@@ -15,15 +15,13 @@ import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties;
 
-import com.github.javaparser.Position;
-
 /**
  * Models a method (or interface operation or constructor).
  *
  * <p>Represented by the "Method" ontology class.
  */
 public class Method {
-	private final String position;
+	private final String location;
     private final String name;
     private final String signature;
     private List<Modifier> modifiers;
@@ -55,7 +53,7 @@ public class Method {
      * @param localVariables List of local variables defined in this method's body.
      */
     public Method(
-    		String position,
+    		String location,
             String name,
             String signature,
             List<Modifier> modifiers,
@@ -67,7 +65,7 @@ public class Method {
             List<Type> thrownExceptions,
             List<Type> caughtExceptions,
             List<LocalVariable> localVariables) {
-    	this.position = position;
+    	this.location = location;
         this.name = name;
         this.signature = signature;
         this.modifiers = modifiers;
@@ -83,7 +81,7 @@ public class Method {
 
     /** @return the simple name */
     public String getPosition() {
-        return position;
+        return location;
     }
     
     /** @return the simple name */
@@ -153,7 +151,7 @@ public class Method {
 
         Individual m = ontology.createIndividual(FamixClasses.Method, uri);
 
-        m.addLiteral(ontology.get(hasPosition), position);
+        m.addLiteral(ontology.get(isLocatedAt), location);
         m.addLiteral(ontology.get(hasName), name);
         m.addLiteral(ontology.get(hasSignature), signature);
         parent.addProperty(ontology.get(definesMethod), m);

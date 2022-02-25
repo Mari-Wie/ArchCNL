@@ -2,7 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Attribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
@@ -77,7 +77,7 @@ public class Field {
         parent.addProperty(ontology.get(definesAttribute), attribute);
         attribute.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         attribute.addLiteral(ontology.get(hasName), name);
-        attribute.addLiteral(ontology.get(hasPath), location);
+        attribute.addLiteral(ontology.get(isLocatedAt), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, attribute));
         annotations.forEach(anno -> anno.modelIn(ontology, uri, attribute));

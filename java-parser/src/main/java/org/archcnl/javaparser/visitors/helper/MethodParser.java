@@ -28,9 +28,10 @@ import org.archcnl.owlify.famix.codemodel.Type;
 public class MethodParser {
     private Method method;
 
-    private String position;
     private String name;
     private String signature;
+    private String location;
+    private String path;
     private List<Type> caughtExceptions;
     private List<Type> thrownExceptions;
     private List<LocalVariable> localVariables;
@@ -39,16 +40,15 @@ public class MethodParser {
     private List<Type> declaredExceptions;
     private Type returnType;
     private List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers;
-	private String path;
 
     /** Parses the given method declaration. */
     public MethodParser(MethodDeclaration n, String path) {
     	this.path = path;
-    	position = path;
+    	location = path;
     	if(n.getBegin().isPresent()) {
-    		position +=  ", Line " + String.valueOf(n.getBegin().get().line);
+    		location +=  ", Line " + String.valueOf(n.getBegin().get().line);
     	}
-    	position = path + " Line " + position;
+    	location = path + " Line " + location;
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
@@ -72,9 +72,9 @@ public class MethodParser {
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, String path) {
     	this.path = path;
-    	position = path;
+    	location = path;
     	if(n.getBegin().isPresent()) {
-    		position +=  ", Line " + String.valueOf(n.getBegin().get().line);
+    		location +=  ", Line " + String.valueOf(n.getBegin().get().line);
     	}
         name = n.getName().asString();
         signature = n.getSignature().asString();
@@ -100,7 +100,7 @@ public class MethodParser {
 
     private Method createMethodModel(boolean isConstructor) {
         return new Method(
-        		position,
+        		location,
                 name,
                 signature,
                 modifiers,

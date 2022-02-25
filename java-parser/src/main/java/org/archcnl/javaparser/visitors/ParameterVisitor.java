@@ -28,7 +28,7 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
                 VisitorHelpers.processModifiers(n.getModifiers());
         String location = path;
         if(n.getBegin().isPresent()) {
-        	location += ", Line " + String.valueOf(n.getBegin().get().line);
+        	location += ", Line: " + String.valueOf(n.getBegin().get().line);
         }
         parameter =
                 new org.archcnl.owlify.famix.codemodel.Parameter(

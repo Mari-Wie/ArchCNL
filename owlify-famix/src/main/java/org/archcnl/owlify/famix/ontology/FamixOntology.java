@@ -129,7 +129,7 @@ public class FamixOntology {
         hasPosition,
         hasName,
         hasFullQualifiedName,
-        hasPath,
+        isLocatedAt,
         hasValue,
         hasModifier,
         hasSignature,

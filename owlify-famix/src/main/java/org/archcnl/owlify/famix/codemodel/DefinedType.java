@@ -2,7 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
 
 import java.util.Arrays;
@@ -76,7 +76,7 @@ public abstract class DefinedType {
         individual.addLiteral(ontology.get(hasName), simpleName);
         individual.addLiteral(ontology.get(hasFullQualifiedName), fullyQualifiedName);
         individual.addLiteral(ontology.get(isExternal), false);
-        individual.addLiteral(ontology.get(hasPath), path);
+        individual.addLiteral(ontology.get(isLocatedAt), path);
 
         ontology.typeCache().addDefinedType(fullyQualifiedName, individual);
 

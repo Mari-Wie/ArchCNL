@@ -28,7 +28,7 @@ public class LocalVariableVisitor extends VoidVisitorAdapter<Void> {
             variableDeclarator.accept(visitor, null);
             String location = path;
             if(variableDeclarator.getBegin().isPresent()) {
-            	location += ", Line " + String.valueOf(variableDeclarator.getBegin().get().line);
+            	location += ", Line: " + String.valueOf(variableDeclarator.getBegin().get().line);
             }
 
             List<Modifier> modifiers = VisitorHelpers.processModifiers(n.getModifiers());

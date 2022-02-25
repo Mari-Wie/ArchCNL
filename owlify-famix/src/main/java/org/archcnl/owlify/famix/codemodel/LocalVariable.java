@@ -1,7 +1,7 @@
 package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesVariable;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
@@ -63,7 +63,7 @@ public class LocalVariable {
         Individual individual = ontology.createIndividual(FamixClasses.LocalVariable, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
-        individual.addLiteral(ontology.get(hasPath), location);
+        individual.addLiteral(ontology.get(isLocatedAt), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
 

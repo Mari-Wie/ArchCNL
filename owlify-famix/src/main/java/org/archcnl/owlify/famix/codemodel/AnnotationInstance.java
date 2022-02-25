@@ -4,7 +4,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Annot
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasPath;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
@@ -78,7 +78,7 @@ public class AnnotationInstance {
         Individual annotationType = ontology.createIndividual(AnnotationType, name);
         annotationType.addLiteral(ontology.get(isExternal), true);
         annotationType.addLiteral(ontology.get(hasFullQualifiedName), name);
-        annotationType.addLiteral(ontology.get(hasPath), path);
+        annotationType.addLiteral(ontology.get(isLocatedAt), path);
         ontology.typeCache().addDefinedType(name, annotationType);
     }
 }
