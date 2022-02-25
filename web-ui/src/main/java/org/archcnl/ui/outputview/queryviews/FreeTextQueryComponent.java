@@ -14,7 +14,7 @@ import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 
-public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
+public class FreeTextQueryComponent extends AbstractQueryComponent {
 
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_NAME = "Pinned Full Text Query";
@@ -35,7 +35,7 @@ public class FreeTextQueryUiComponent extends AbstractQueryResultsComponent {
                     e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
     private HorizontalLayout topRow;
 
-    public FreeTextQueryUiComponent(String defaultQueryText) {
+    public FreeTextQueryComponent(String defaultQueryText) {
         super(defaultQueryText);
         Label caption = new Label("Create a free text query");
         caption.setWidthFull();
