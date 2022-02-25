@@ -4,6 +4,9 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 
 public class TripletFactory {
+
+    private TripletFactory() {}
+
     public static Triplet createTriplet(
             final Variable subject, final Relation predicate, final ObjectType object)
             throws UnsupportedObjectTypeException {
