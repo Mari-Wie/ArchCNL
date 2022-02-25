@@ -22,8 +22,8 @@ public class RelationEditorView extends MappingEditorView {
 
     public RelationEditorView(AndTripletsEditorView emptyAndTripletsView) {
         super("Relation", emptyAndTripletsView);
-        mappingName.setPlaceholder("e.g. hasName");
-        mappingName.setPattern("[a-z][a-zA-Z]*");
+        mappingNameField.setPlaceholder("e.g. hasName");
+        mappingNameField.setPattern("[a-z][a-zA-Z]*");
     }
 
     @Override

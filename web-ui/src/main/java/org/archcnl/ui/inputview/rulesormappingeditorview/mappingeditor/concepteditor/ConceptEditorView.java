@@ -19,8 +19,8 @@ public class ConceptEditorView extends MappingEditorView {
 
     public ConceptEditorView(AndTripletsEditorView emptyAndTripletsView) {
         super("Concept", emptyAndTripletsView);
-        mappingName.setPlaceholder("e.g. FamixClass");
-        mappingName.setPattern("[A-Z][a-zA-Z]*");
+        mappingNameField.setPlaceholder("e.g. FamixClass");
+        mappingNameField.setPattern("[A-Z][a-zA-Z]*");
     }
 
     @Override

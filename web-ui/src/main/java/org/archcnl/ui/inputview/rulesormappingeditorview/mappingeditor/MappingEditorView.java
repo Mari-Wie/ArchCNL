@@ -24,10 +24,10 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.Ma
 public abstract class MappingEditorView extends RulesOrMappingEditorView {
 
     private static final long serialVersionUID = 156879235315976468L;
-    private VerticalLayout content = new VerticalLayout();
+    private VerticalLayout content;
     private VariableListView variableListView;
-    protected TextField mappingName;
-    protected TextField description;
+    protected TextField mappingNameField;
+    protected TextField descriptionField;
 
     protected MappingEditorView(
             final String mappingType, final AndTripletsEditorView emptyAndTripletsView) {
@@ -36,8 +36,73 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         getStyle().set("border", "1px solid black");
         setClassName("architecture-rules");
 
-        content.add(emptyAndTripletsView);
+        add(createTitleBar(mappingType));
 
+        initMappingNameField();
+        add(mappingNameField);
+
+        initDescriptionField(mappingType);
+        add(descriptionField);
+
+        // TODO: add "used in" functionality
+
+        variableListView = new VariableListView();
+        add(variableListView);
+
+        final Label labelWhen = new Label("When");
+        final Label labelThen = new Label("Then");
+        labelWhen.setClassName("label-title");
+        labelThen.setClassName("label-title");
+        add(labelWhen);
+        content = new VerticalLayout(emptyAndTripletsView);
+        add(content);
+        add(labelThen);
+        addThenTripletView();
+
+        add(createButtonRow());
+    }
+
+    public void deleteAndTripletsView(final AndTripletsEditorView andTripletsView) {
+        content.remove((Component) andTripletsView);
+    }
+
+    public void updateNameField(final String newName) {
+        mappingNameField.setValue(newName);
+    }
+
+    public void showNameFieldErrorMessage(final String message) {
+        mappingNameField.setErrorMessage(message);
+        mappingNameField.setInvalid(true);
+    }
+
+    public void addNewAndTripletsView(final AndTripletsEditorView andTripletsView) {
+        content.add(andTripletsView);
+    }
+
+    public void addNewAndTripletsViewAfter(
+            final AndTripletsEditorView oldAndTripletsView,
+            final AndTripletsEditorView newAndTripletsView) {
+        final int previousIndex = content.indexOf(oldAndTripletsView);
+        content.addComponentAtIndex(previousIndex + 1, newAndTripletsView);
+    }
+
+    public void clearContent() {
+        content.removeAll();
+    }
+
+    public void updateDescription(final String newDescription) {
+        descriptionField.setValue(newDescription);
+    }
+
+    public String getDescription() {
+        return descriptionField.getValue();
+    }
+
+    public VariableListView getVariableListView() {
+        return variableListView;
+    }
+
+    private HorizontalLayout createTitleBar(String mappingType) {
         final Label title = new Label("Create or edit a " + mappingType);
         title.setClassName("card-title-box--title");
         final Button closeButton =
@@ -48,40 +113,31 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
         titleBar.setWidthFull();
         title.setWidthFull();
         titleBar.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-        add(titleBar);
+        return titleBar;
+    }
 
-        mappingName = new TextField("Name");
-        mappingName.setPreventInvalidInput(true);
-        mappingName.addValueChangeListener(
+    private void initMappingNameField() {
+        mappingNameField = new TextField("Name");
+        mappingNameField.setPreventInvalidInput(true);
+        mappingNameField.addValueChangeListener(
                 event -> {
-                    mappingName.setInvalid(false);
+                    mappingNameField.setInvalid(false);
                     fireEvent(new MappingNameFieldChangedEvent(this, true, event.getValue()));
                 });
-        add(mappingName);
+    }
 
-        description = new TextField("Description");
-        description.setWidthFull();
-        description.setPlaceholder("What does this " + mappingType + " represent?");
-        description.addValueChangeListener(
+    private void initDescriptionField(String mappingType) {
+        descriptionField = new TextField("Description");
+        descriptionField.setWidthFull();
+        descriptionField.setPlaceholder("What does this " + mappingType + " represent?");
+        descriptionField.addValueChangeListener(
                 event ->
                         fireEvent(
                                 new MappingDescriptionFieldChangedEvent(
                                         this, true, event.getValue())));
-        add(description);
+    }
 
-        // TODO: add "used in" functionality
-        variableListView = new VariableListView();
-        add(variableListView);
-
-        final Label labelWhen = new Label("When");
-        final Label labelThen = new Label("Then");
-        labelWhen.setClassName("label-title");
-        labelThen.setClassName("label-title");
-        add(labelWhen);
-        add(content);
-        add(labelThen);
-        addThenTripletView();
-
+    private HorizontalLayout createButtonRow() {
         final HorizontalLayout buttonRow = new HorizontalLayout();
         buttonRow.setWidthFull();
         buttonRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
@@ -92,47 +148,7 @@ public abstract class MappingEditorView extends RulesOrMappingEditorView {
                 new Button(
                         "Cancel",
                         click -> fireEvent(new MappingCancelButtonClickedEvent(this, true))));
-        add(buttonRow);
-    }
-
-    public void deleteAndTripletsView(final AndTripletsEditorView andTripletsView) {
-        content.remove((Component) andTripletsView);
-    }
-
-    public void updateNameField(final String newName) {
-        mappingName.setValue(newName);
-    }
-
-    public void showNameFieldErrorMessage(final String message) {
-        mappingName.setErrorMessage(message);
-        mappingName.setInvalid(true);
-    }
-
-    public void addNewAndTripletsView(final AndTripletsEditorView andTripletsView) {
-        content.add(andTripletsView);
-    }
-
-    public void addNewAndTripletsViewAfter(
-            final AndTripletsEditorView oldAndTripletsView,
-            final AndTripletsEditorView newAndTripletsView) {
-        final int previousIndex = content.indexOf((Component) oldAndTripletsView);
-        content.addComponentAtIndex(previousIndex + 1, newAndTripletsView);
-    }
-
-    public void clearContent() {
-        content.removeAll();
-    }
-
-    public void updateDescription(final String newDescription) {
-        description.setValue(newDescription);
-    }
-
-    public String getDescription() {
-        return description.getValue();
-    }
-
-    public VariableListView getVariableListView() {
-        return variableListView;
+        return buttonRow;
     }
 
     protected abstract void addThenTripletView();
