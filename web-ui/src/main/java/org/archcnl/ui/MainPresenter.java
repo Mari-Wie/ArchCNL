@@ -78,52 +78,60 @@ public class MainPresenter extends Component {
         relationManager = new RelationManager(conceptManager);
 
         inputPresenter = new InputPresenter();
-        inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(
-                ChangeConceptNameRequestedEvent.class, e -> e.handleEvent(conceptManager));
-        inputPresenter.addListener(
-                AddCustomConceptRequestedEvent.class, e -> e.handleEvent(conceptManager));
-        inputPresenter.addListener(
-                ChangeRelationNameRequestedEvent.class, e -> e.handleEvent(relationManager));
-        inputPresenter.addListener(
-                AddCustomRelationRequestedEvent.class, e -> e.handleEvent(relationManager));
-        inputPresenter.addListener(
-                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
-        inputPresenter.addListener(
-                RelationListUpdateRequestedEvent.class,
-                event -> event.handleEvent(relationManager.getInputRelations()));
-        inputPresenter.addListener(
-                ConceptListUpdateRequestedEvent.class,
-                event -> event.handleEvent(conceptManager.getInputConcepts()));
-        inputPresenter.addListener(
-                ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
-
         outputPresenter = new OutputPresenter();
-        outputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
-        outputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
-        outputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
-        outputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
-        outputPresenter.addListener(
-                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
-        outputPresenter.addListener(
-                RelationListUpdateRequestedEvent.class,
-                event -> event.handleEvent(relationManager.getOutputRelations()));
-        outputPresenter.addListener(
-                ConceptListUpdateRequestedEvent.class,
-                event -> event.handleEvent(conceptManager.getOutputConcepts()));
-        outputPresenter.addListener(
-                ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
-        inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
-        inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(DeleteRelationRequestedEvent.class, this::handleEvent);
-
         view = new MainView(inputPresenter.getView());
 
-        addListeners();
+        addViewListeners();
+        addInputListeners();
+        addOutputListeners();
+    }
+
+    private void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
+        hv.setRoots(hierarchyManager.getRoots());
+        hv.update();
+    }
+
+    private void selectPathForChecking() {
+        SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog();
+        directoryDialog.addListener(
+                RunToolchainRequestedEvent.class,
+                event -> showOutputView(Optional.of(event.getSelectedPath())));
+        directoryDialog.addListener(
+                QuickOutputViewAccessRequestedEvent.class,
+                event -> showOutputView(Optional.empty()));
+        directoryDialog.open();
+    }
+
+    private void showOutputView(Optional<String> path) {
+        try {
+            ArchitectureCheck architectureCheck = new ArchitectureCheck();
+            outputPresenter.setResultRepository(architectureCheck.getRepository());
+            if (path.isPresent()) {
+                runArchCnlToolchain(architectureCheck, path.get());
+            }
+            outputPresenter.displayResult(
+                    architectureCheck
+                            .getRepository()
+                            .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
+            view.showContent(outputPresenter.getView());
+        } catch (PropertyNotFoundException e2) {
+            view.showErrorMessage("Failed to connect to stardog database.");
+        }
+    }
+
+    private void runArchCnlToolchain(ArchitectureCheck check, String path) {
+        try {
+            check.runToolchain(path, ruleManager, conceptManager, relationManager);
+        } catch (StardogException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Could not connect to the database.");
+        } catch (IOException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Rules could not be generated.");
+        } catch (PropertyNotFoundException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Properties of database could not be read.");
+        }
     }
 
     private void handleEvent(final ConceptGridUpdateRequestedEvent event) {
@@ -157,71 +165,6 @@ public class MainPresenter extends Component {
     private void handleEvent(final DeleteRelationRequestedEvent event) {
         relationManager.removeRelation(event.getRelation());
         updateHierarchies(relationManager, event.getSource());
-    }
-
-    private void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
-        hv.setRoots(hierarchyManager.getRoots());
-        hv.update();
-    }
-
-    private void addListeners() {
-        view.addListener(
-                ViewOptionRequestedEvent.class,
-                e -> MainPresenter.LOG.warn("ViewOptionRequested is not implemented"));
-        view.addListener(
-                HelpOptionRequestedEvent.class,
-                e -> MainPresenter.LOG.warn("HelpOptionRequested is not implemented"));
-        view.addListener(ProjectOptionRequestedEvent.class, this::handleEvent);
-        view.addListener(EditOptionRequestedEvent.class, EditOptionRequestedEvent::handleEvent);
-        view.addListener(RulesOptionRequestedEvent.class, this::handleEvent);
-        view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
-
-        inputPresenter.addListener(OutputViewRequestedEvent.class, e -> selectPathForChecking());
-        outputPresenter.addListener(
-                InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
-    }
-
-    public void selectPathForChecking() {
-        SelectDirectoryDialog directoryDialog = new SelectDirectoryDialog();
-        directoryDialog.addListener(
-                RunToolchainRequestedEvent.class,
-                event -> showOutputView(Optional.of(event.getSelectedPath())));
-        directoryDialog.addListener(
-                QuickOutputViewAccessRequestedEvent.class,
-                event -> showOutputView(Optional.empty()));
-        directoryDialog.open();
-    }
-
-    public void showOutputView(Optional<String> path) {
-        try {
-            ArchitectureCheck architectureCheck = new ArchitectureCheck();
-            outputPresenter.setResultRepository(architectureCheck.getRepository());
-            if (path.isPresent()) {
-                runArchCnlToolchain(architectureCheck, path.get());
-            }
-            outputPresenter.displayResult(
-                    architectureCheck
-                            .getRepository()
-                            .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
-            view.showContent(outputPresenter.getView());
-        } catch (PropertyNotFoundException e2) {
-            view.showErrorMessage("Failed to connect to stardog database.");
-        }
-    }
-
-    private void runArchCnlToolchain(ArchitectureCheck check, String path) {
-        try {
-            check.runToolchain(path, ruleManager, conceptManager, relationManager);
-        } catch (StardogException e) {
-            view.showErrorMessage(
-                    "An error occured while running the architecture check. Could not connect to the database.");
-        } catch (IOException e) {
-            view.showErrorMessage(
-                    "An error occured while running the architecture check. Rules could not be generated.");
-        } catch (PropertyNotFoundException e) {
-            view.showErrorMessage(
-                    "An error occured while running the architecture check. Properties of database could not be read.");
-        }
     }
 
     private void handleEvent(ProjectOptionRequestedEvent event) {
@@ -317,6 +260,68 @@ public class MainPresenter extends Component {
     private void handleEvent(UpdateRulesConceptsAndRelationsRequestedEvent event) {
         inputPresenter.getView().updateConceptAndRelations();
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
+    }
+
+    private void addViewListeners() {
+        view.addListener(
+                ViewOptionRequestedEvent.class,
+                e -> MainPresenter.LOG.warn("ViewOptionRequested is not implemented"));
+        view.addListener(
+                HelpOptionRequestedEvent.class,
+                e -> MainPresenter.LOG.warn("HelpOptionRequested is not implemented"));
+        view.addListener(ProjectOptionRequestedEvent.class, this::handleEvent);
+        view.addListener(EditOptionRequestedEvent.class, EditOptionRequestedEvent::handleEvent);
+        view.addListener(RulesOptionRequestedEvent.class, this::handleEvent);
+        view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
+    }
+
+    private void addInputListeners() {
+        inputPresenter.addListener(OutputViewRequestedEvent.class, e -> selectPathForChecking());
+        inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(DeleteRelationRequestedEvent.class, this::handleEvent);
+        inputPresenter.addListener(
+                ChangeConceptNameRequestedEvent.class, e -> e.handleEvent(conceptManager));
+        inputPresenter.addListener(
+                AddCustomConceptRequestedEvent.class, e -> e.handleEvent(conceptManager));
+        inputPresenter.addListener(
+                ChangeRelationNameRequestedEvent.class, e -> e.handleEvent(relationManager));
+        inputPresenter.addListener(
+                AddCustomRelationRequestedEvent.class, e -> e.handleEvent(relationManager));
+        inputPresenter.addListener(
+                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
+        inputPresenter.addListener(
+                RelationListUpdateRequestedEvent.class,
+                event -> event.handleEvent(relationManager.getInputRelations()));
+        inputPresenter.addListener(
+                ConceptListUpdateRequestedEvent.class,
+                event -> event.handleEvent(conceptManager.getInputConcepts()));
+        inputPresenter.addListener(
+                ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
+    }
+
+    private void addOutputListeners() {
+        outputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
+        outputPresenter.addListener(
+                InputViewRequestedEvent.class, e -> view.showContent(inputPresenter.getView()));
+        outputPresenter.addListener(
+                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
+        outputPresenter.addListener(
+                RelationListUpdateRequestedEvent.class,
+                event -> event.handleEvent(relationManager.getOutputRelations()));
+        outputPresenter.addListener(
+                ConceptListUpdateRequestedEvent.class,
+                event -> event.handleEvent(conceptManager.getOutputConcepts()));
+        outputPresenter.addListener(
+                ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
     }
 
     public MainView getView() {
