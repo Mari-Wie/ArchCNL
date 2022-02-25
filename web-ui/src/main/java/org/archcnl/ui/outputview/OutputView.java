@@ -9,8 +9,8 @@ import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.outputview.queryviews.CustomQueryView;
-import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
-import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
+import org.archcnl.ui.outputview.queryviews.QueryResultsComponent;
 import org.archcnl.ui.outputview.sidebar.SideBarWidget;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
@@ -19,17 +19,17 @@ public class OutputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    private QueryResultsUiComponent defaultQueryView;
-    private FreeTextQueryUiComponent freeTextQueryView;
+    private QueryResultsComponent defaultQueryView;
+    private FreeTextQueryComponent freeTextQueryView;
     private CustomQueryView customQueryView;
     private SideBarWidget sideBarWidget;
     private Component currentComponent;
 
     public OutputView(
             CustomQueryView customQueryView,
-            FreeTextQueryUiComponent freeTextQueryView,
+            FreeTextQueryComponent freeTextQueryView,
             String defaultQuery) {
-        defaultQueryView = new QueryResultsUiComponent(defaultQuery);
+        defaultQueryView = new QueryResultsComponent(defaultQuery);
         this.customQueryView = customQueryView;
         this.freeTextQueryView = freeTextQueryView;
         initSideBarWidget();
