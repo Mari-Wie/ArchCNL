@@ -4,7 +4,6 @@ import com.complexible.stardog.StardogException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +28,6 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequ
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.common.dialogs.OkDialog;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
 import org.archcnl.ui.events.FooterOptionRequestedEvent;
 import org.archcnl.ui.events.HelpOptionRequestedEvent;
@@ -46,15 +44,9 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepted
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.AddCustomRelationRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.ChangeRelationNameRequestedEvent;
-import org.archcnl.ui.menudialog.OpenProjectDialog;
-import org.archcnl.ui.menudialog.SaveProjectDialog;
 import org.archcnl.ui.menudialog.SelectDirectoryDialog;
-import org.archcnl.ui.menudialog.events.ProjectOpenedEvent;
-import org.archcnl.ui.menudialog.events.ProjectSavedEvent;
 import org.archcnl.ui.menudialog.events.QuickOutputViewAccessRequestedEvent;
 import org.archcnl.ui.menudialog.events.RunToolchainRequestedEvent;
-import org.archcnl.ui.menudialog.events.ShowCustomQueryRequestedEvent;
-import org.archcnl.ui.menudialog.events.ShowFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.OutputPresenter;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 
@@ -167,62 +159,6 @@ public class MainPresenter extends Component {
         updateHierarchies(relationManager, event.getSource());
     }
 
-    private void handleEvent(ProjectOptionRequestedEvent event) {
-        switch (event.getOption()) {
-            case NEW:
-                view.showNewTab();
-                break;
-            case OPEN:
-                OpenProjectDialog openProjectDialog =
-                        new OpenProjectDialog(
-                                projectManager, ruleManager, conceptManager, relationManager);
-                openProjectDialog.addListener(
-                        ShowFreeTextQueryRequestedEvent.class,
-                        e ->
-                                outputPresenter.showFreeTextQuery(
-                                        e.getQuery(), e.isDefaultQueryTab()));
-                openProjectDialog.addListener(
-                        ShowCustomQueryRequestedEvent.class,
-                        e -> outputPresenter.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
-                List<ArchitectureRule> rules = ruleManager.getArchitectureRules();
-                openProjectDialog.addListener(
-                        ProjectOpenedEvent.class,
-                        e -> inputPresenter.updateArchitectureRulesLayout(rules));
-                openProjectDialog.open();
-                break;
-            case SAVE:
-                try {
-                    projectManager.saveProject(
-                            ruleManager,
-                            conceptManager,
-                            relationManager,
-                            outputPresenter.getCustomQueries(),
-                            outputPresenter.getFreeTextQueries());
-                } catch (final IOException e) {
-                    new OkDialog("Project file could not be written.").open();
-                }
-                break;
-            case SAVE_AS:
-                SaveProjectDialog dialog =
-                        new SaveProjectDialog(
-                                projectManager,
-                                ruleManager,
-                                conceptManager,
-                                relationManager,
-                                outputPresenter.getCustomQueries(),
-                                outputPresenter.getFreeTextQueries());
-                dialog.addListener(
-                        ProjectSavedEvent.class, e -> view.setSaveProjectMenuItemEnabled(true));
-                dialog.open();
-                break;
-            default:
-                MainPresenter.LOG.warn(
-                        "Unhandled ProjectOption {} appeared in ProjectOptionRequestedEvent.",
-                        event.getOption());
-                break;
-        }
-    }
-
     private void handleEvent(SaveArchitectureRuleRequestedEvent event) {
         Optional<ArchitectureRule> oldRule = event.getOldRule();
         if (oldRule.isEmpty()) {
@@ -269,7 +205,17 @@ public class MainPresenter extends Component {
         view.addListener(
                 HelpOptionRequestedEvent.class,
                 e -> MainPresenter.LOG.warn("HelpOptionRequested is not implemented"));
-        view.addListener(ProjectOptionRequestedEvent.class, this::handleEvent);
+        view.addListener(
+                ProjectOptionRequestedEvent.class,
+                e ->
+                        e.handleEvent(
+                                view,
+                                projectManager,
+                                ruleManager,
+                                conceptManager,
+                                relationManager,
+                                outputPresenter,
+                                inputPresenter));
         view.addListener(EditOptionRequestedEvent.class, EditOptionRequestedEvent::handleEvent);
         view.addListener(RulesOptionRequestedEvent.class, this::handleEvent);
         view.addListener(FooterOptionRequestedEvent.class, FooterOptionRequestedEvent::handleEvent);
