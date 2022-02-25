@@ -21,7 +21,6 @@ import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
@@ -45,7 +44,6 @@ public class TripletPresenter extends Component {
     }
 
     private void addListeners() {
-        tripletView.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         tripletView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         tripletView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
 

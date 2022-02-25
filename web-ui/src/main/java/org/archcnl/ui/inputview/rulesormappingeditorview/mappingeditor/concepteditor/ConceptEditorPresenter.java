@@ -9,7 +9,6 @@ import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
@@ -40,8 +39,6 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     private void addConceptViewListeners() {
-        view.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,

@@ -6,7 +6,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorView;
@@ -57,7 +56,6 @@ public class ConceptEditorView extends MappingEditorView {
     }
 
     private void addListenersToSubjectComponent() {
-        subjectComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
     }

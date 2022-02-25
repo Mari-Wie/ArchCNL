@@ -15,7 +15,6 @@ import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
@@ -38,8 +37,6 @@ public class ObjectView extends HorizontalLayout {
                 ConceptListUpdateRequestedEvent.class, this::fireEvent);
         conceptSelectionComponent.addListener(ConceptSelectedEvent.class, this::fireEvent);
 
-        variableStringBoolSelectionView.addListener(
-                VariableFilterChangedEvent.class, this::fireEvent);
         variableStringBoolSelectionView.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableStringBoolSelectionView.addListener(

@@ -13,7 +13,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -174,7 +173,6 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         if (label.isPresent()) {
             variableSelectionComponent.setLabel(label.get());
         }
-        variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(

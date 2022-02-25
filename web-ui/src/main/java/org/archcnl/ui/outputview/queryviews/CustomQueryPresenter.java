@@ -21,7 +21,6 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
@@ -63,8 +62,6 @@ public class CustomQueryPresenter extends Component {
         view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
         view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
 
-        view.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,
@@ -87,8 +84,6 @@ public class CustomQueryPresenter extends Component {
         view.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
         view.addListener(DeleteButtonPressedEvent.class, this::fireEvent);
 
-        wherePresenter.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         wherePresenter.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         wherePresenter.addListener(
                 VariableListUpdateRequestedEvent.class,

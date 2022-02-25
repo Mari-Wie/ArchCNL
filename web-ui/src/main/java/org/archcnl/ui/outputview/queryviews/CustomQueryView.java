@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
@@ -151,7 +150,6 @@ public class CustomQueryView extends HorizontalLayout {
 
     private void addVariableSelectionComponentsListeners(
             VariableSelectionComponent variableSelectionComponent) {
-        variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
