@@ -2,6 +2,7 @@ package org.archcnl.javaparser.visitors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
@@ -220,5 +221,12 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
     @Override
     protected Class<JavaTypeVisitor> getVisitorClass() {
         return JavaTypeVisitor.class;
+    }
+    
+    @Override
+    protected JavaTypeVisitor createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    	Object[] paramValues = {"TODO"};
+    	Class<?>[] paramClasses = {String.class};
+    	return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

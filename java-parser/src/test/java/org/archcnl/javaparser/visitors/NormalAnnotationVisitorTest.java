@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
@@ -188,5 +189,12 @@ public class NormalAnnotationVisitorTest
     @Override
     protected Class<NormalAnnotationExpressionVisitor> getVisitorClass() {
         return NormalAnnotationExpressionVisitor.class;
+    }
+    
+    @Override
+    protected NormalAnnotationExpressionVisitor createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    	Object[] paramValues = {"TODO"};
+    	Class<?>[] paramClasses = {String.class};
+    	return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

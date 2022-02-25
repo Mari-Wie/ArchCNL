@@ -46,7 +46,7 @@ public abstract class GenericVisitorTest<E extends VoidVisitorAdapter<Void>> {
 
     private void createVisitor() {
         try {
-            visitor = getVisitorClass().getDeclaredConstructor().newInstance();
+            visitor = createInstance();
         } catch (InstantiationException
                 | IllegalAccessException
                 | IllegalArgumentException
@@ -57,6 +57,10 @@ public abstract class GenericVisitorTest<E extends VoidVisitorAdapter<Void>> {
                     "{} can not be initialized.", getVisitorClass().toString());
             e.printStackTrace();
         }
+    }
+    
+    protected E createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    	return getVisitorClass().getDeclaredConstructor().newInstance();
     }
 
     protected abstract Class<E> getVisitorClass();

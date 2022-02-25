@@ -18,7 +18,7 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
 
     private AnnotationInstance annotationInstance;
 	private String path;
-    
+	
     public NormalAnnotationExpressionVisitor(String path) {
     	this.path = path;
     }
