@@ -111,10 +111,8 @@ public class CustomQueryPresenter extends Component {
     private void handleEvent(VariableSelectedEvent event) {
         if (!view.isAnyVariableSelectionComponentEmpty()) {
             view.addVariableSelectionComponent();
-        } else if (event.getSource().getOptionalValue().isEmpty()
-                && view.areAtleastTwoVariableSelectionComponentsEmpty()) {
-            // TODO fix this behavior (see ArchCNL-154)
-            // view.removeVariableSelectionComponent(event.getSource());
+        } else if (event.getSource().getOptionalValue().isEmpty()) {
+            view.removeNeighboringComponentsIfEmpty(event.getSource());
         }
     }
 

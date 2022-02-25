@@ -174,18 +174,24 @@ public class CustomQueryView extends HorizontalLayout {
                 .anyMatch(VariableSelectionComponent::isEmpty);
     }
 
-    public boolean areAtleastTwoVariableSelectionComponentsEmpty() {
-        final List<VariableSelectionComponent> components =
-                select.getChildren()
-                        .filter(VariableSelectionComponent.class::isInstance)
-                        .map(VariableSelectionComponent.class::cast)
-                        .collect(Collectors.toList());
-        final long componentsCount = components.stream().count();
-        final long nonEmptyComponentsCount =
-                components.stream()
-                        .filter(component -> component.getOptionalValue().isPresent())
-                        .count();
-        return componentsCount - nonEmptyComponentsCount >= 2;
+    public void removeNeighboringComponentsIfEmpty(
+            VariableSelectionComponent variableSelectionComponent) {
+        int index = select.indexOf(variableSelectionComponent);
+        if (index > 0 && select.getComponentAt(index - 1) instanceof VariableSelectionComponent) {
+            VariableSelectionComponent previousComponent =
+                    (VariableSelectionComponent) select.getComponentAt(index - 1);
+            if (previousComponent.isEmpty()) {
+                removeVariableSelectionComponent(previousComponent);
+            }
+        }
+        if (index < select.getComponentCount() - 1
+                && select.getComponentAt(index + 1) instanceof VariableSelectionComponent) {
+            VariableSelectionComponent nextComponent =
+                    (VariableSelectionComponent) select.getComponentAt(index + 1);
+            if (nextComponent.isEmpty()) {
+                removeVariableSelectionComponent(nextComponent);
+            }
+        }
     }
 
     public void replacePinButtonWithDeleteButton() {
