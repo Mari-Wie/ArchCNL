@@ -3,8 +3,8 @@ package org.archcnl.ui.outputview.sidebar;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -33,7 +33,9 @@ public class SideBarWidget extends VerticalLayout {
         setHeightFull();
         getStyle().set("overflow", "hidden");
 
-        add(new Text("Query Options"));
+        Span header = new Span("Query Options");
+        header.setClassName("side-bar-text");
+        add(header);
         addTabs(defaultQueryView, customQueryView, freeTextQueryView);
         addReturnButton();
     }
