@@ -8,7 +8,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
@@ -108,7 +107,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 fireEvent(new AddCustomRelationRequestedEvent(this, true, relation.get()));
 
                 fireEvent(new RulesWidgetRequestedEvent(this, true));
-            } catch (UnrelatedMappingException | InvalidVariableNameException e) {
+            } catch (UnrelatedMappingException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {

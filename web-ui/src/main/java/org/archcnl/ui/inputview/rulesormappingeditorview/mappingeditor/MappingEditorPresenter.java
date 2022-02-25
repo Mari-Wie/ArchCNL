@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
@@ -179,17 +178,12 @@ public abstract class MappingEditorPresenter extends Component {
     }
 
     protected void addVariable(final VariableCreationRequestedEvent event) {
-        try {
-            final Variable newVariable = new Variable(event.getVariableName());
-            variableManager.addVariable(newVariable);
+        final Variable newVariable = new Variable(event.getVariableName());
+        variableManager.addVariable(newVariable);
 
-            event.getSource()
-                    .setItems(variableManager.getVariables().stream().map(Variable::getName));
-            event.getSource().setValue(newVariable.getName());
-            view.getVariableListView().showVariableList(variableManager.getVariables());
-        } catch (final InvalidVariableNameException e1) {
-            event.getSource().showErrorMessage("Invalid variable name");
-        }
+        event.getSource().setItems(variableManager.getVariables().stream().map(Variable::getName));
+        event.getSource().setValue(newVariable.getName());
+        view.getVariableListView().showVariableList(variableManager.getVariables());
     }
 
     protected void hightlightIncompleteTriplets() {

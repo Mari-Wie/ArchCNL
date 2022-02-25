@@ -14,7 +14,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
@@ -53,19 +52,15 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     @Override
     public void initializeVariables() {
-        try {
-            classVariable = new Variable("class");
-            class2Variable = new Variable("class2");
-            classPackage = new Variable("classPackage");
-            class2Package = new Variable("class2Package");
-            nameVariable = new Variable("name");
-            registryVariable = new Variable("registry");
-            registryImportVariable = new Variable("registryImport");
-            registryImportNameVariable = new Variable("registryImportName");
-            methodVariable = new Variable("method");
-        } catch (InvalidVariableNameException e) {
-            e.printStackTrace();
-        }
+        classVariable = new Variable("class");
+        class2Variable = new Variable("class2");
+        classPackage = new Variable("classPackage");
+        class2Package = new Variable("class2Package");
+        nameVariable = new Variable("name");
+        registryVariable = new Variable("registry");
+        registryImportVariable = new Variable("registryImport");
+        registryImportNameVariable = new Variable("registryImportName");
+        methodVariable = new Variable("method");
     }
 
     /**

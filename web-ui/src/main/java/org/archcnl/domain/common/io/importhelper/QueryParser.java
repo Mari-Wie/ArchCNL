@@ -12,7 +12,6 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.io.RegexUtils;
 import org.archcnl.domain.common.io.exceptions.NoMatchFoundException;
 import org.archcnl.domain.common.io.importhelper.exceptions.NoTripletException;
@@ -109,11 +108,10 @@ public class QueryParser {
         String[] variableNames = selectContentString.split(" ");
         variableNames = Arrays.copyOfRange(variableNames, 1, variableNames.length);
         for (String variableName : variableNames) {
-            try {
-                variables.add(new Variable(variableName));
-            } catch (InvalidVariableNameException e) {
-                QueryParser.LOG.warn(e.getMessage());
+            if (variableName.startsWith("?")) {
+                variableName = variableName.substring(1);
             }
+            variables.add(new Variable(variableName));
         }
         return variables;
     }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 
 public class VariableFilterChangedEvent extends ComponentEvent<VariableSelectionComponent> {
@@ -39,10 +38,6 @@ public class VariableFilterChangedEvent extends ComponentEvent<VariableSelection
     }
 
     private boolean doesVariableExist(String variableName, VariableManager variableManager) {
-        try {
-            return variableManager.doesVariableExist(new Variable(variableName));
-        } catch (InvalidVariableNameException e) {
-            return false;
-        }
+        return variableManager.doesVariableExist(new Variable(variableName));
     }
 }

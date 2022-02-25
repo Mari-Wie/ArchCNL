@@ -11,7 +11,6 @@ import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
@@ -61,7 +60,7 @@ public class ObjectView extends HorizontalLayout {
 
     public ObjectType getObject()
             throws ConceptDoesNotExistException, ObjectNotDefinedException,
-                    InvalidVariableNameException, SubjectOrObjectNotDefinedException {
+                    SubjectOrObjectNotDefinedException {
         ObjectType object;
         if (currentSelectionComponentString.equals(ObjectView.CONCEPT)
                 && conceptSelectionComponent.getSelectedItem().isPresent()) {
@@ -108,8 +107,6 @@ public class ObjectView extends HorizontalLayout {
             showErrorMessage("Concept does not exist");
         } catch (ObjectNotDefinedException | SubjectOrObjectNotDefinedException e) {
             showErrorMessage("Object not set");
-        } catch (InvalidVariableNameException e) {
-            showErrorMessage("Invalid Variable name");
         }
     }
 

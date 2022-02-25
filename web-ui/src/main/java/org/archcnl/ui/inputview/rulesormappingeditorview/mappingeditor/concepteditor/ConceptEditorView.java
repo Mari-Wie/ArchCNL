@@ -3,7 +3,6 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepte
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
@@ -47,8 +46,7 @@ public class ConceptEditorView extends MappingEditorView {
         subjectComponent.setInvalid(true);
     }
 
-    public Variable getThenTripletSubject()
-            throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
+    public Variable getThenTripletSubject() throws SubjectOrObjectNotDefinedException {
         return subjectComponent.getVariable();
     }
 

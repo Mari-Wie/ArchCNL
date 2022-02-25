@@ -12,7 +12,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Boolea
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
@@ -84,8 +83,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         }
     }
 
-    public ObjectType getObject()
-            throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
+    public ObjectType getObject() throws SubjectOrObjectNotDefinedException {
         ObjectType object;
         if (booleanSelectionComponent != null) {
             object = booleanSelectionComponent.getObject();
@@ -191,11 +189,8 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         } else if (stringSelectionComponent != null) {
             object = new StringValue("");
         } else if (variableSelectionComponent != null) {
-            try {
-                object = new Variable("placeholder");
-            } catch (InvalidVariableNameException e) {
-                throw new RuntimeException(e.getMessage());
-            }
+            object = new Variable("placeholder");
+
         } else {
             // should never happen
             throw new RuntimeException("VariableStringBoolSelectionView implementation is faulty.");

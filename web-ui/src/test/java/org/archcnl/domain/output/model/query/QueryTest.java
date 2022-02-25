@@ -10,7 +10,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,8 +25,7 @@ public class QueryTest {
     }
 
     @Test
-    public void givenSimpleQuery_whenCallAsFormattedString_thenReturnFormattedQueryString()
-            throws InvalidVariableNameException {
+    public void givenSimpleQuery_whenCallAsFormattedString_thenReturnFormattedQueryString() {
         // given
         final Variable field = new Variable("name");
         final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(field));
@@ -71,8 +69,7 @@ public class QueryTest {
     }
 
     @Test
-    public void givenDifficultQuery_whenCallAsFormattedString_thenReturnFormattedQueryString()
-            throws InvalidVariableNameException {
+    public void givenDifficultQuery_whenCallAsFormattedString_thenReturnFormattedQueryString() {
         // given
         final Variable field1 = new Variable("cnl");
         final Variable field2 = new Variable("subject");
@@ -165,8 +162,7 @@ public class QueryTest {
     }
 
     @Test
-    public void givenSimpleQuery_whenCallAsFormattedQuery_thenReturnFormattedQueryString()
-            throws InvalidVariableNameException {
+    public void givenSimpleQuery_whenCallAsFormattedQuery_thenReturnFormattedQueryString() {
         // given
         final Variable field = new Variable("name");
         final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(field));
@@ -199,8 +195,7 @@ public class QueryTest {
     }
 
     @Test
-    public void givenSimpleQuery_whenCallTransformToAdoc_thenReturnFormattedAdocString()
-            throws InvalidVariableNameException {
+    public void givenSimpleQuery_whenCallTransformToAdoc_thenReturnFormattedAdocString() {
         // given
         final Variable field = new Variable("name");
         final Variable aggregate = new Variable("aggregate");

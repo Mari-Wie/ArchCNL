@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
@@ -92,7 +91,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                 fireEvent(new AddCustomConceptRequestedEvent(this, true, concept.get()));
 
                 fireEvent(new RulesWidgetRequestedEvent(this, true));
-            } catch (UnrelatedMappingException | InvalidVariableNameException e) {
+            } catch (UnrelatedMappingException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
