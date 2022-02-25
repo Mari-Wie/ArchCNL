@@ -16,6 +16,7 @@ public class SideBarTab extends Tab {
         super(new Icon(icon));
         this.label = createLabel(text);
         this.linkedComponent = linkedComponent;
+        setClassName("side-bar-tab");
         add(label);
     }
 
