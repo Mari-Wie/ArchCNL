@@ -35,8 +35,6 @@ public class OutputView extends HorizontalLayout {
         initSideBarWidget();
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
-        sideBarWidget.setWidth(15, Unit.PERCENTAGE);
-        sideBarWidget.addClassName("side-bar");
         currentComponent = defaultQueryView;
         addAndExpand(sideBarWidget, defaultQueryView);
     }
@@ -45,6 +43,8 @@ public class OutputView extends HorizontalLayout {
         sideBarWidget = new SideBarWidget(defaultQueryView, customQueryView, freeTextQueryView);
         sideBarWidget.addListener(InputViewRequestedEvent.class, this::fireEvent);
         sideBarWidget.addListener(ShowComponentRequestedEvent.class, this::fireEvent);
+        sideBarWidget.setWidth(15, Unit.PERCENTAGE);
+        sideBarWidget.addClassName("side-bar");
     }
 
     public SideBarWidget getSideBarWidget() {
