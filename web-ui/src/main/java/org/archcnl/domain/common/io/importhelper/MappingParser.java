@@ -114,7 +114,10 @@ public class MappingParser {
                                 }
                                 final CustomRelation relation =
                                         new CustomRelation(
-                                                name, description, new LinkedHashSet<>());
+                                                name,
+                                                description,
+                                                new LinkedHashSet<>(),
+                                                new LinkedHashSet<>());
                                 relation.setMapping(
                                         parseMapping(
                                                 potentialRelationMapping,

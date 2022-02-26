@@ -263,7 +263,8 @@ public class TestUtils {
         useWhenTriplets.add(new AndTriplets(triplets));
         useWhenTriplets.add(new AndTriplets(triplets2));
 
-        final CustomRelation resideIn = new CustomRelation("resideIn", "", new LinkedHashSet<>());
+        final CustomRelation resideIn =
+                new CustomRelation("resideIn", "", new LinkedHashSet<>(), new LinkedHashSet<>());
         final RelationMapping resideInMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
@@ -274,6 +275,7 @@ public class TestUtils {
                 new CustomRelation(
                         "use",
                         "A class uses another class if it has a field of it or if it imports it.",
+                        new LinkedHashSet<>(),
                         new LinkedHashSet<>());
         final RelationMapping useMapping =
                 new RelationMapping(
@@ -285,6 +287,7 @@ public class TestUtils {
                 new CustomRelation(
                         "emptyWhenRelationString",
                         "",
+                        new LinkedHashSet<>(),
                         new LinkedHashSet<>(Arrays.asList(new StringValue(""))));
         final RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
@@ -299,6 +302,7 @@ public class TestUtils {
                 new CustomRelation(
                         "emptyWhenRelationBoolean",
                         "",
+                        new LinkedHashSet<>(),
                         new LinkedHashSet<>(Arrays.asList(new BooleanValue(false))));
         final RelationMapping emptyWhenRelationBooleanMapping =
                 new RelationMapping(
@@ -308,7 +312,11 @@ public class TestUtils {
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
         final CustomRelation emptyWhenRelationVariable =
-                new CustomRelation("emptyWhenRelationVariable", "", new LinkedHashSet<>());
+                new CustomRelation(
+                        "emptyWhenRelationVariable",
+                        "",
+                        new LinkedHashSet<>(),
+                        new LinkedHashSet<>());
         final RelationMapping emptyWhenRelationVariableMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(

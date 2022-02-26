@@ -216,7 +216,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
         String regexInput = registryImportName;
 
         CustomRelation registerinRelation =
-                new CustomRelation("registerin", "", new LinkedHashSet<>());
+                new CustomRelation("registerin", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<AndTriplets> whenTriplets = createRegisterinWhenTriplets(regexInput);
 
@@ -387,7 +387,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
      */
     public CustomRelation createHaveownRelationAndMapping() {
 
-        CustomRelation haveown = new CustomRelation("haveown", "", new LinkedHashSet<>());
+        CustomRelation haveown =
+                new CustomRelation("haveown", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -788,7 +789,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createUseownRelationAndMapping() {
 
-        CustomRelation useown = new CustomRelation("useown", "", new LinkedHashSet<>());
+        CustomRelation useown =
+                new CustomRelation("useown", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -839,7 +841,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     public CustomRelation createResideInPackageRelationAndMapping() {
 
         CustomRelation resideInPackage =
-                new CustomRelation("resideinpackage", "", new LinkedHashSet<>());
+                new CustomRelation(
+                        "resideinpackage", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -890,7 +893,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createUseRelationAndMapping() {
 
-        CustomRelation use = new CustomRelation("use", "", new LinkedHashSet<>());
+        CustomRelation use =
+                new CustomRelation("use", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 

@@ -27,7 +27,10 @@ public class PredicateParser {
                                         .getRelationByRealName(predicateName)
                                         .orElse(
                                                 new CustomRelation(
-                                                        predicateName, "", new LinkedHashSet<>())));
+                                                        predicateName,
+                                                        "",
+                                                        new LinkedHashSet<>(),
+                                                        new LinkedHashSet<>())));
             } else {
                 // has to be a SpecialRelation
                 return relationManager

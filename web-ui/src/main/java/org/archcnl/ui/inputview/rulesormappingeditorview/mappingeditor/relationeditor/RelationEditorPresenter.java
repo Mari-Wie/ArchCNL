@@ -67,7 +67,10 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
             if (selectedObjectType instanceof ActualObjectType) {
                 relatableObjectTypes.add((ActualObjectType) selectedObjectType);
             }
-            relation = Optional.of(new CustomRelation(newName, "", relatableObjectTypes));
+            relation =
+                    Optional.of(
+                            new CustomRelation(
+                                    newName, "", new LinkedHashSet<>(), relatableObjectTypes));
         } else {
             fireEvent(new ChangeRelationNameRequestedEvent(this, true, relation.get(), newName));
         }
