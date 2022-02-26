@@ -2,6 +2,7 @@ package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.Objects;
 import java.util.Set;
+
 import org.archcnl.domain.common.FormattedAdocDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.common.RelationManager;
@@ -43,7 +44,7 @@ public abstract class Relation
             // Checks for a compatible dynamic type could be added
             // but might cause problems when inheritance between concepts is used.
             // E.g. (?a rdf:type architecture:Aggregate)(?a famix:hasName ?name)
-            // is valid when Aggregate is a super-type of FamixClass
+            // is valid when Aggregate is a sub-type of FamixClass
             // but hasName is not defined on aggregate itself.
             return true;
         } else {
