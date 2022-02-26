@@ -1,13 +1,24 @@
 package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class Variable extends ObjectType {
 
     private String name;
+    private Optional<ActualObjectType> dynamicType;
 
     public Variable(String name) {
         this.name = name;
+        this.dynamicType = Optional.empty();
+    }
+
+    public Optional<ActualObjectType> getDynamicType() {
+        return dynamicType;
+    }
+
+    protected void setDynamicType(ActualObjectType dynamicType) {
+        this.dynamicType = Optional.of(dynamicType);
     }
 
     @Override
