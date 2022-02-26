@@ -30,4 +30,8 @@ public class VariableManager {
     public Set<Variable> getVariables() {
         return variables;
     }
+
+    private void clearAllDynamicTypes() {
+        variables.forEach(Variable::clearDynamicTypes);
+    }
 }

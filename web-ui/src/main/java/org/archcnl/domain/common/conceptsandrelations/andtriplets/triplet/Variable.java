@@ -1,24 +1,29 @@
 package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.Set;
 
 public class Variable extends ObjectType {
 
     private String name;
-    private Optional<ActualObjectType> dynamicType;
+    private Set<ActualObjectType> dynamicTypes;
 
     public Variable(String name) {
         this.name = name;
-        this.dynamicType = Optional.empty();
+        this.dynamicTypes = new LinkedHashSet<>();
     }
 
-    public Optional<ActualObjectType> getDynamicType() {
-        return dynamicType;
+    public Set<ActualObjectType> getDynamicType() {
+        return dynamicTypes;
     }
 
-    protected void setDynamicType(ActualObjectType dynamicType) {
-        this.dynamicType = Optional.of(dynamicType);
+    public void clearDynamicTypes() {
+        dynamicTypes.clear();
+    }
+
+    public void addDynamicType(ActualObjectType dynamicType) {
+        dynamicTypes.add(dynamicType);
     }
 
     @Override
