@@ -1,22 +1,20 @@
 package org.archcnl.domain.common;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
 public class VariableManager {
 
-    private List<Variable> variables;
+    private Set<Variable> variables;
 
     public VariableManager() {
-        variables = new LinkedList<>();
+        variables = new LinkedHashSet<>();
     }
 
     public void addVariable(Variable variable) {
-        if (!doesVariableExist(variable)) {
-            variables.add(variable);
-        }
+        variables.add(variable);
     }
 
     public Optional<Variable> getVariableByName(String name) {
@@ -29,7 +27,7 @@ public class VariableManager {
                         existingVariable -> variable.getName().equals(existingVariable.getName()));
     }
 
-    public List<Variable> getVariables() {
+    public Set<Variable> getVariables() {
         return variables;
     }
 }
