@@ -34,8 +34,8 @@ public class RelationManager extends HierarchyManager<Relation> {
         addHierarchyRoot("Default Relations");
         addHierarchyRoot("Custom Relations");
         initializeTypeRelation();
-        initializeBoolRelations();
-        initializeStringRelations();
+        initializeBoolRelations(conceptManager);
+        initializeStringRelations(conceptManager);
         initializeSpecialRelations();
         initializeObjectRelations(conceptManager);
         initializeConformanceRelations(conceptManager);
@@ -163,53 +163,80 @@ public class RelationManager extends HierarchyManager<Relation> {
         addToDefault(typeRelation);
     }
 
-    private void initializeStringRelations() {
+    private void initializeStringRelations(ConceptManager conceptManager)
+            throws ConceptDoesNotExistException {
         final Set<ActualObjectType> stringConcept = new LinkedHashSet<>();
         stringConcept.add(new StringValue(""));
+        final Set<ActualObjectType> namedEntity = new LinkedHashSet<>();
+        namedEntity.add(extractConcept(conceptManager, "Namespace"));
+        namedEntity.add(extractConcept(conceptManager, "AnnotationType"));
+        namedEntity.add(extractConcept(conceptManager, "Enum"));
+        namedEntity.add(extractConcept(conceptManager, "FamixClass"));
         addToDefault(
                 new FamixRelation(
                         "hasModifier",
                         "This relation is used to state that the subject has a modifier with the name stated in the object. Examples for modifiers are access modifiers (e.g. public) and mutability modifiers (e.g. final).",
+                        namedEntity,
                         stringConcept));
         addToDefault(
                 new FamixRelation(
                         "hasName",
                         "This relation is used to state that the subject has the name which is stated in the object.",
+                        namedEntity,
                         stringConcept));
         addToDefault(
                 new FamixRelation(
                         "hasSignature",
                         "This relation is used to state that a method has the signature which is stated in the object.",
-                        stringConcept));
-        addToDefault(
-                new FamixRelation(
-                        "hasValue",
-                        "This relation is used to state that an AnnotationInstanceAttribute (which is an attribute-value pair) has the value which is stated in the object.",
+                        namedEntity,
                         stringConcept));
         addToDefault(
                 new FamixRelation(
                         "hasFullQualifiedName",
                         "This relation is used to state that an entity has the name which is stated in the object.",
+                        namedEntity,
+                        stringConcept));
+        final Set<ActualObjectType> annotationInstanceAttribute =
+                new LinkedHashSet<>(
+                        Arrays.asList(
+                                extractConcept(conceptManager, "AnnotationInstanceAttribute")));
+        addToDefault(
+                new FamixRelation(
+                        "hasValue",
+                        "This relation is used to state that an AnnotationInstanceAttribute (which is an attribute-value pair) has the value which is stated in the object.",
+                        annotationInstanceAttribute,
                         stringConcept));
     }
 
-    private void initializeBoolRelations() {
+    private void initializeBoolRelations(ConceptManager conceptManager)
+            throws ConceptDoesNotExistException {
         final Set<ActualObjectType> boolConcept = new LinkedHashSet<>();
         boolConcept.add(new BooleanValue(false));
+        final Set<ActualObjectType> method =
+                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "Method")));
         addToDefault(
                 new FamixRelation(
                         "isConstructor",
                         "This relation is used to state that the subject is or isn't a constructor (based on a value in the object). A constructor is special method that is called when an object is instantiated.",
+                        method,
                         boolConcept));
+        final Set<ActualObjectType> typeConcepts = new LinkedHashSet<>();
+        typeConcepts.add(extractConcept(conceptManager, "FamixClass"));
+        typeConcepts.add(extractConcept(conceptManager, "Enum"));
+        typeConcepts.add(extractConcept(conceptManager, "AnnotationType"));
         addToDefault(
                 new FamixRelation(
                         "isExternal",
                         "This relation is used to state that the subject is or isn't an external type (based on a value in the object).",
+                        typeConcepts,
                         boolConcept));
+        final Set<ActualObjectType> famixClass =
+                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "FamixClass")));
         addToDefault(
                 new FamixRelation(
                         "isInterface",
                         "This relation is used to state that the subject is or isn't an interface (based on a value in the object). An interface is an abstract type that is used to specify a behavior that classes must implement.",
+                        famixClass,
                         boolConcept));
     }
 
