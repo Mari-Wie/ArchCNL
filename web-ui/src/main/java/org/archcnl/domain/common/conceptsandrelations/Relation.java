@@ -13,7 +13,7 @@ import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 public abstract class Relation
         implements HierarchyObject, FormattedAdocDomainObject, FormattedViewDomainObject {
 
-    // The object types this relation relates to
+    protected Set<ActualObjectType> relatableSubjectTypes;
     protected Set<ActualObjectType> relatableObjectTypes;
     private String name;
     private String description;
@@ -23,24 +23,42 @@ public abstract class Relation
      *
      * @param name The name of the relation used in the UI and in written files
      * @param description A description for this Relation
+     * @param relatableSubjectTypes The subject types this relation can related to
      * @param relatableObjectTypes The object types this relation can relate to
      */
     protected Relation(
-            String name, String description, Set<ActualObjectType> relatableObjectTypes) {
+            String name,
+            String description,
+            Set<ActualObjectType> relatableSubjectTypes,
+            Set<ActualObjectType> relatableObjectTypes) {
         this.name = name;
         this.description = description;
+        this.relatableSubjectTypes = relatableSubjectTypes;
         this.relatableObjectTypes = relatableObjectTypes;
     }
 
     public boolean canRelateToObjectType(ObjectType objectType) {
         if (objectType instanceof Variable) {
-            // at the moment a Relation can always relate to a Variable
+            // At the moment a Relation can always relate to a Variable.
+            // Checks for a compatible dynamic type could be added
+            // but might cause problems when inheritance between concepts is used.
+            // E.g. (?a rdf:type architecture:Aggregate)(?a famix:hasName ?name)
+            // is valid when Aggregate is a super-type of FamixClass
+            // but hasName is not defined on aggregate itself.
             return true;
         } else {
             ActualObjectType actualObjectType = (ActualObjectType) objectType;
             return relatableObjectTypes.stream()
                     .anyMatch(actualObjectType::matchesRelatableObjectType);
         }
+    }
+
+    public Set<ActualObjectType> getRelatableObjectTypes() {
+        return relatableObjectTypes;
+    }
+
+    public Set<ActualObjectType> getRelatableSubjectTypes() {
+        return relatableSubjectTypes;
     }
 
     @Override

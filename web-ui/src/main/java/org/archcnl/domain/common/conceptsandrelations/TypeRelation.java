@@ -1,7 +1,9 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 
 public class TypeRelation extends Relation implements FormattedQueryDomainObject {
@@ -23,6 +25,12 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
 
     public String getRealName() {
         return realName;
+    }
+
+    @Override
+    public Set<ActualObjectType> getRelatableObjectTypes() {
+        throw new UnsupportedOperationException(
+                "The type relation can relate to all possible concepts.");
     }
 
     @Override
