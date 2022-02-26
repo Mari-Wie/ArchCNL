@@ -1,6 +1,7 @@
 package org.archcnl.domain.common.io.importhelper;
 
 import com.google.common.annotations.VisibleForTesting;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -112,7 +113,8 @@ public class MappingParser {
                                     description = relationDescriptions.get(name);
                                 }
                                 final CustomRelation relation =
-                                        new CustomRelation(name, description, new LinkedList<>());
+                                        new CustomRelation(
+                                                name, description, new LinkedHashSet<>());
                                 relation.setMapping(
                                         parseMapping(
                                                 potentialRelationMapping,

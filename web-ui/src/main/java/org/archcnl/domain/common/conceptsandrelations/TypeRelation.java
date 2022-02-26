@@ -1,6 +1,6 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 
@@ -12,7 +12,7 @@ public class TypeRelation extends Relation implements FormattedQueryDomainObject
     private String realName;
 
     private TypeRelation(String name, String realName, String description) {
-        super(name, description, new LinkedList<>());
+        super(name, description, new LinkedHashSet<>());
         this.realName = realName;
     }
 

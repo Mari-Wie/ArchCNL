@@ -1,9 +1,9 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
@@ -18,7 +18,7 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
     private Optional<RelationMapping> mapping;
 
     public CustomRelation(
-            String name, String description, List<ActualObjectType> relatableObjectTypes) {
+            String name, String description, Set<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
         this.mapping = Optional.empty();
     }
@@ -42,9 +42,10 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
 
     public void setRelatableObjectType(ObjectType objectType) {
         if (objectType instanceof Variable) {
-            relatableObjectTypes = new ArrayList<>();
+            relatableObjectTypes = new LinkedHashSet<>();
         } else {
-            relatableObjectTypes = new ArrayList<>(Arrays.asList((ActualObjectType) objectType));
+            relatableObjectTypes =
+                    new LinkedHashSet<>(Arrays.asList((ActualObjectType) objectType));
         }
     }
 

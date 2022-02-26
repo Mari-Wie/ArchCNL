@@ -1,8 +1,7 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import org.archcnl.domain.common.FormattedAdocDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.common.RelationManager;
@@ -15,7 +14,7 @@ public abstract class Relation
         implements HierarchyObject, FormattedAdocDomainObject, FormattedViewDomainObject {
 
     // The object types this relation relates to
-    protected List<ActualObjectType> relatableObjectTypes;
+    protected Set<ActualObjectType> relatableObjectTypes;
     private String name;
     private String description;
 
@@ -27,7 +26,7 @@ public abstract class Relation
      * @param relatableObjectTypes The object types this relation can relate to
      */
     protected Relation(
-            String name, String description, List<ActualObjectType> relatableObjectTypes) {
+            String name, String description, Set<ActualObjectType> relatableObjectTypes) {
         this.name = name;
         this.description = description;
         this.relatableObjectTypes = relatableObjectTypes;
@@ -65,8 +64,7 @@ public abstract class Relation
 
     public void changeName(String newName, RelationManager relationManager)
             throws RelationAlreadyExistsException {
-        if (!relationManager.doesRelationExist(
-                new CustomRelation(newName, "", new LinkedList<>()))) {
+        if (relationManager.getRelationByName(newName).isEmpty()) {
             this.name = newName;
         } else {
             throw new RelationAlreadyExistsException(newName);

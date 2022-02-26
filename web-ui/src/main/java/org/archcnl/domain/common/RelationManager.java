@@ -1,10 +1,11 @@
 package org.archcnl.domain.common;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
@@ -145,7 +146,7 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeSpecialRelations() {
-        final List<ActualObjectType> stringConcept = new LinkedList<>();
+        final Set<ActualObjectType> stringConcept = new LinkedHashSet<>();
         stringConcept.add(new StringValue(""));
         addToDefault(
                 new JenaBuiltinRelation(
@@ -163,7 +164,7 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeStringRelations() {
-        final List<ActualObjectType> stringConcept = new LinkedList<>();
+        final Set<ActualObjectType> stringConcept = new LinkedHashSet<>();
         stringConcept.add(new StringValue(""));
         addToDefault(
                 new FamixRelation(
@@ -193,7 +194,7 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeBoolRelations() {
-        final List<ActualObjectType> boolConcept = new LinkedList<>();
+        final Set<ActualObjectType> boolConcept = new LinkedHashSet<>();
         boolConcept.add(new BooleanValue(false));
         addToDefault(
                 new FamixRelation(
@@ -215,7 +216,7 @@ public class RelationManager extends HierarchyManager<Relation> {
     private void initializeObjectRelations(final ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
         // FamixClass relations
-        final List<ActualObjectType> famixClassConcept = new LinkedList<>();
+        final Set<ActualObjectType> famixClassConcept = new LinkedHashSet<>();
         famixClassConcept.add(
                 conceptManager
                         .getConceptByName("FamixClass")
@@ -252,7 +253,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         famixClassConcept));
 
         // Parameter relations
-        final List<ActualObjectType> parameterConcept = new LinkedList<>();
+        final Set<ActualObjectType> parameterConcept = new LinkedHashSet<>();
         parameterConcept.add(extractConcept(conceptManager, "Parameter"));
         addToDefault(
                 new FamixRelation(
@@ -261,7 +262,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         parameterConcept));
 
         // LocalVariable relations
-        final List<ActualObjectType> localVariableConcept = new LinkedList<>();
+        final Set<ActualObjectType> localVariableConcept = new LinkedHashSet<>();
         localVariableConcept.add(extractConcept(conceptManager, "LocalVariable"));
         addToDefault(
                 new FamixRelation(
@@ -270,7 +271,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         localVariableConcept));
 
         // AnnotationInstance relations
-        final List<ActualObjectType> annotationInstanceConcept = new LinkedList<>();
+        final Set<ActualObjectType> annotationInstanceConcept = new LinkedHashSet<>();
         annotationInstanceConcept.add(extractConcept(conceptManager, "AnnotationInstance"));
         addToDefault(
                 new FamixRelation(
@@ -279,7 +280,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         annotationInstanceConcept));
 
         // AnnotationType relations
-        final List<ActualObjectType> annotationTypeConcept = new LinkedList<>();
+        final Set<ActualObjectType> annotationTypeConcept = new LinkedHashSet<>();
         annotationTypeConcept.add(extractConcept(conceptManager, "AnnotationType"));
         addToDefault(
                 new FamixRelation(
@@ -288,7 +289,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         annotationTypeConcept));
 
         // AnnotationTypeAttribute relations
-        final List<ActualObjectType> annotationTypeAttributeConcept = new LinkedList<>();
+        final Set<ActualObjectType> annotationTypeAttributeConcept = new LinkedHashSet<>();
         annotationTypeAttributeConcept.add(
                 extractConcept(conceptManager, "AnnotationTypeAttribute"));
         addToDefault(
@@ -298,7 +299,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         annotationTypeAttributeConcept));
 
         // AnnotationInstanceAttribute relations
-        final List<ActualObjectType> annotationInstanceAttributeConcept = new LinkedList<>();
+        final Set<ActualObjectType> annotationInstanceAttributeConcept = new LinkedHashSet<>();
         annotationInstanceAttributeConcept.add(
                 extractConcept(conceptManager, "AnnotationInstanceAttribute"));
         addToDefault(
@@ -308,7 +309,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         annotationInstanceAttributeConcept));
 
         // Attribute relations
-        final List<ActualObjectType> attributeConcept = new LinkedList<>();
+        final Set<ActualObjectType> attributeConcept = new LinkedHashSet<>();
         attributeConcept.add(extractConcept(conceptManager, "Attribute"));
         addToDefault(
                 new FamixRelation(
@@ -317,7 +318,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         attributeConcept));
 
         // Method relations
-        final List<ActualObjectType> methodConcept = new LinkedList<>();
+        final Set<ActualObjectType> methodConcept = new LinkedHashSet<>();
         methodConcept.add(extractConcept(conceptManager, "Method"));
         addToDefault(
                 new FamixRelation(
@@ -326,7 +327,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         methodConcept));
 
         // Type relations
-        final List<ActualObjectType> typeConcepts = new LinkedList<>();
+        final Set<ActualObjectType> typeConcepts = new LinkedHashSet<>();
         typeConcepts.add(extractConcept(conceptManager, "FamixClass"));
         typeConcepts.add(extractConcept(conceptManager, "Enum"));
         typeConcepts.add(extractConcept(conceptManager, "AnnotationType"));
@@ -337,7 +338,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         typeConcepts));
 
         // Class and Enum relations
-        final List<ActualObjectType> classEnumConcepts = new LinkedList<>();
+        final Set<ActualObjectType> classEnumConcepts = new LinkedHashSet<>();
         classEnumConcepts.add(extractConcept(conceptManager, "FamixClass"));
         classEnumConcepts.add(extractConcept(conceptManager, "Enum"));
         addToDefault(
@@ -347,7 +348,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         classEnumConcepts));
 
         // Type + NameSpace relations
-        final List<ActualObjectType> namespaceContainsConcepts = new LinkedList<>();
+        final Set<ActualObjectType> namespaceContainsConcepts = new LinkedHashSet<>();
         namespaceContainsConcepts.add(extractConcept(conceptManager, "Namespace"));
         namespaceContainsConcepts.add(extractConcept(conceptManager, "FamixClass"));
         namespaceContainsConcepts.add(extractConcept(conceptManager, "Enum"));
@@ -359,7 +360,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         namespaceContainsConcepts));
 
         // Type + Primitive relations
-        final List<ActualObjectType> typesAndprimitives = new LinkedList<>();
+        final Set<ActualObjectType> typesAndprimitives = new LinkedHashSet<>();
         typesAndprimitives.add(extractConcept(conceptManager, "FamixClass"));
         typesAndprimitives.add(extractConcept(conceptManager, "Enum"));
         typesAndprimitives.add(extractConcept(conceptManager, "AnnotationType"));
@@ -381,31 +382,31 @@ public class RelationManager extends HierarchyManager<Relation> {
                 new ConformanceRelation(
                         "hasRuleRepresentation",
                         "This relation is used to state that the subject (for example architecture rule) has a specified in the object representation (in most cases string representation).",
-                        new ArrayList<>(Arrays.asList(new StringValue("")))));
+                        new LinkedHashSet<>(Arrays.asList(new StringValue("")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasRuleType",
                         "This relation is used to state that the subject (for example architecture rule) has a specified in the object rule type.",
-                        new ArrayList<>(Arrays.asList(new StringValue("")))));
+                        new LinkedHashSet<>(Arrays.asList(new StringValue("")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasNotInferredStatement",
                         "This relation is used to state that the subject hasn't / doesn't correspond to the specified in the object statements.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "NotInferredStatement")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasAssertedStatement",
                         "This relation is used to state that the subject has / corresponds to the specified in the object statements.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "AssertedStatement")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasSubject",
                         "This relation is used to state that the subject (for example statement) has a specified subject.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "NotInferredStatement"),
                                         extractConcept(conceptManager, "AssertedStatement")))));
@@ -413,7 +414,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                 new ConformanceRelation(
                         "hasPredicate",
                         "This relation is used to state that the subject (for example statement) has a specified predicate.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "NotInferredStatement"),
                                         extractConcept(conceptManager, "AssertedStatement")))));
@@ -421,7 +422,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                 new ConformanceRelation(
                         "hasObject",
                         "This relation is used to state that the subject (for example statement) has a specified object.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "NotInferredStatement"),
                                         extractConcept(conceptManager, "AssertedStatement")))));
@@ -429,35 +430,35 @@ public class RelationManager extends HierarchyManager<Relation> {
                 new ConformanceRelation(
                         "proofs",
                         "This relation is used to state that the subject (proof) verifies a specified in the object violation.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureViolation")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasDetected",
                         "This relation is used to state that the subject (conformance check) has detected a specified in the object violation.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureViolation")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasViolation",
                         "This relation is used to state that the subject has a specified in the object violation.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureViolation")))));
         addToDefault(
                 new ConformanceRelation(
                         "violates",
                         "This relation is used to state that the subject violates a specified in the object rule.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureRule")))));
         addToDefault(
                 new ConformanceRelation(
                         "validates",
                         "This relation is used to state that the subject validates a specified in the object rule or conformance check.",
-                        new ArrayList<>(
+                        new LinkedHashSet<>(
                                 Arrays.asList(
                                         extractConcept(conceptManager, "ArchitectureRule")))));
     }

@@ -1,6 +1,6 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
-import java.util.List;
+import java.util.Set;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 
@@ -9,7 +9,7 @@ public class ConformanceRelation extends Relation implements FormattedQueryDomai
     private static final String RELATION_TYPE = "conformance";
 
     public ConformanceRelation(
-            String name, String description, List<ActualObjectType> relatableObjectTypes) {
+            String name, String description, Set<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
     }
 

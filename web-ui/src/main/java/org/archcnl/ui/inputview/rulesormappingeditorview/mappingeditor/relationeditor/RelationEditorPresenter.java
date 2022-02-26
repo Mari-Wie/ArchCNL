@@ -1,8 +1,10 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
@@ -60,7 +62,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void updateMappingName(final String newName) {
         if (relation.isEmpty()) {
-            final List<ActualObjectType> relatableObjectTypes = new LinkedList<>();
+            final Set<ActualObjectType> relatableObjectTypes = new LinkedHashSet<>();
             final ObjectType selectedObjectType = view.getSelectedObjectTypeInThenTriplet();
             if (selectedObjectType instanceof ActualObjectType) {
                 relatableObjectTypes.add((ActualObjectType) selectedObjectType);

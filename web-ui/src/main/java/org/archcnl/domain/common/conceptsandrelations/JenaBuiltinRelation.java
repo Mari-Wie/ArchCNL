@@ -1,6 +1,6 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
-import java.util.List;
+import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 
 public class JenaBuiltinRelation extends Relation {
@@ -11,7 +11,7 @@ public class JenaBuiltinRelation extends Relation {
             String name,
             String realName,
             String description,
-            List<ActualObjectType> relatableObjectTypes) {
+            Set<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
         this.realName = realName;
     }
