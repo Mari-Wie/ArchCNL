@@ -8,10 +8,12 @@ public class Variable extends ObjectType {
 
     private String name;
     private Set<ActualObjectType> dynamicTypes;
+    private boolean conflictingDynamicTypes;
 
     public Variable(String name) {
         this.name = name;
         this.dynamicTypes = new LinkedHashSet<>();
+        this.conflictingDynamicTypes = false;
     }
 
     public Set<ActualObjectType> getDynamicType() {
@@ -20,10 +22,22 @@ public class Variable extends ObjectType {
 
     public void clearDynamicTypes() {
         dynamicTypes.clear();
+        conflictingDynamicTypes = false;
     }
 
-    public void addDynamicType(ActualObjectType dynamicType) {
-        dynamicTypes.add(dynamicType);
+    public void refineDynamicTypes(Set<ActualObjectType> dynamicTypes) {
+        if (this.dynamicTypes.isEmpty()) {
+            this.dynamicTypes = dynamicTypes;
+        } else {
+            this.dynamicTypes.retainAll(dynamicTypes);
+            if (this.dynamicTypes.isEmpty()) {
+                conflictingDynamicTypes = true;
+            }
+        }
+    }
+
+    public boolean hasConflictingDynamicTypes() {
+        return conflictingDynamicTypes;
     }
 
     @Override
