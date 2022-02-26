@@ -2,7 +2,6 @@ package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.Objects;
 import java.util.Set;
-
 import org.archcnl.domain.common.FormattedAdocDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
 import org.archcnl.domain.common.RelationManager;

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
@@ -19,7 +18,10 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
     private Optional<RelationMapping> mapping;
 
     public CustomRelation(
-            String name, String description, Set<ActualObjectType> relatableSubjectTypes, Set<ActualObjectType> relatableObjectTypes) {
+            String name,
+            String description,
+            Set<ActualObjectType> relatableSubjectTypes,
+            Set<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableSubjectTypes, relatableObjectTypes);
         this.mapping = Optional.empty();
     }
