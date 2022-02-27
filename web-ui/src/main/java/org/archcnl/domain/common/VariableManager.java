@@ -43,6 +43,14 @@ public class VariableManager {
         variables.forEach(Variable::clearDynamicTypes);
     }
 
+    /**
+     * Checks whether potentially conflicting dynamic types exist Parses and sets dynamic types for
+     * all Variables in the VariableManager. Any missing variables from the mapping will be added to
+     * this manager.
+     *
+     * @param andTriplets The triplets whose syntax will be checked
+     * @return true if there are conflicting dynamic types
+     */
     public boolean hasConflictingDynamicTypes(AndTriplets andTriplets) {
         parseVariableTypes(andTriplets);
         for (Variable v : variables) {
@@ -53,13 +61,7 @@ public class VariableManager {
         return false;
     }
 
-    /**
-     * Parses and sets dynamic types for all Variables in the VariableManager. Any missing variables
-     * from the mapping will be added to this manager.
-     *
-     * @param andTriplets The triplets whose syntax will be checked
-     */
-    private void parseVariableTypes(AndTriplets andTriplets) {
+    public void parseVariableTypes(AndTriplets andTriplets) {
         clearAllDynamicTypes();
         for (Triplet triplet : andTriplets.getTriplets()) {
             if (triplet.getPredicate() instanceof TypeRelation) {

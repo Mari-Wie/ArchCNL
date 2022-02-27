@@ -96,11 +96,11 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     protected void updateMapping() {
         if (relation.isPresent()) {
             try {
-                final CustomRelation thenRelation = relation.get();
-                final ObjectType thenObject = view.getThenTripletObject();
-                thenRelation.setRelatableObjectType(thenObject);
                 final Triplet thenTriplet =
-                        new Triplet(view.getThenTripletSubject(), thenRelation, thenObject);
+                        new Triplet(
+                                view.getThenTripletSubject(),
+                                relation.get(),
+                                view.getThenTripletObject());
 
                 final RelationMapping mapping =
                         new RelationMapping(thenTriplet, getAndTripletsList());
@@ -110,7 +110,6 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
                 fireEvent(new RulesWidgetRequestedEvent(this, true));
             } catch (UnrelatedMappingException e) {
-                // not possible/fatal
                 throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectOrObjectErrorMessage("Setting this is required");

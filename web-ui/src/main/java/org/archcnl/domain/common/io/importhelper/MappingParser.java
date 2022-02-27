@@ -186,8 +186,7 @@ public class MappingParser {
         final List<String> potentialTriplets =
                 RegexUtils.getAllMatches(MappingParser.TRIPLET_PATTERN, whenPart);
         for (final String potentialTriplet : potentialTriplets) {
-            andTriplets.addTriplet(
-                    parseTriplet(potentialTriplet, false, relationManager, conceptManager));
+            andTriplets.addTriplet(parseTriplet(potentialTriplet, relationManager, conceptManager));
         }
         return andTriplets;
     }
@@ -199,12 +198,11 @@ public class MappingParser {
             throws NoTripletException, NoMatchFoundException {
         final String potentialThenTriplet =
                 RegexUtils.getFirstMatch(MappingParser.TRIPLET_PATTERN, thenPart);
-        return parseTriplet(potentialThenTriplet, true, relationManager, conceptManager);
+        return parseTriplet(potentialThenTriplet, relationManager, conceptManager);
     }
 
     private static Triplet parseTriplet(
             final String potentialTriplet,
-            final boolean isThenTriplet,
             final RelationManager relationManager,
             final ConceptManager conceptManager)
             throws NoTripletException {
@@ -228,16 +226,9 @@ public class MappingParser {
                 final ObjectType object = ObjectParser.parseObject(objectString, conceptManager);
                 final Relation predicate =
                         PredicateParser.parsePredicate(predicateString, relationManager);
-                if (isThenTriplet && predicate instanceof CustomRelation) {
-                    final CustomRelation customRelation = (CustomRelation) predicate;
-                    customRelation.setRelatableObjectType(object);
-                }
-                return TripletFactory.createTriplet(subject, predicate, object);
+                return new Triplet(subject, predicate, object);
             }
-        } catch (NoRelationException
-                | UnsupportedObjectTypeException
-                | NoObjectTypeException
-                | NoMatchFoundException e) {
+        } catch (NoRelationException | NoObjectTypeException | NoMatchFoundException e) {
             throw new NoTripletException(potentialTriplet);
         }
     }
