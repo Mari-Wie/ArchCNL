@@ -18,16 +18,11 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
     private Optional<RelationMapping> mapping;
 
     public CustomRelation(
-<<<<<<< HEAD
             String name,
             String description,
             Set<ActualObjectType> relatableSubjectTypes,
             Set<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableSubjectTypes, relatableObjectTypes);
-=======
-            String name, String description, List<ActualObjectType> relatableObjectTypes) {
-        super(name, description, relatableObjectTypes);
->>>>>>> master
         this.mapping = Optional.empty();
     }
 
