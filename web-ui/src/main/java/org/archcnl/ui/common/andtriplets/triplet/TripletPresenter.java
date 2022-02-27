@@ -12,7 +12,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.ui.common.andtriplets.triplet.events.AddTripletViewAfterButtonPressedEvent;
@@ -22,7 +21,6 @@ import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
@@ -46,7 +44,6 @@ public class TripletPresenter extends Component {
     }
 
     private void addListeners() {
-        tripletView.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         tripletView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         tripletView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
 
@@ -73,8 +70,7 @@ public class TripletPresenter extends Component {
             subject = tripletView.getSubjectComponent().getVariable();
             predicate = tripletView.getPredicateComponent().getRelation();
             object = tripletView.getObjectView().getObject();
-        } catch (InvalidVariableNameException
-                | SubjectOrObjectNotDefinedException
+        } catch (SubjectOrObjectNotDefinedException
                 | NoSuchElementException
                 | ConceptDoesNotExistException
                 | ObjectNotDefinedException e) {
@@ -93,7 +89,7 @@ public class TripletPresenter extends Component {
         boolean objectMissing = false;
         try {
             tripletView.getSubjectComponent().getVariable();
-        } catch (InvalidVariableNameException | SubjectOrObjectNotDefinedException e1) {
+        } catch (SubjectOrObjectNotDefinedException e1) {
             subjectMissing = true;
         }
         predicateMissing = tripletView.getPredicateComponent().getRelation().isEmpty();
@@ -101,7 +97,6 @@ public class TripletPresenter extends Component {
             tripletView.getObjectView().getObject();
         } catch (ConceptDoesNotExistException
                 | ObjectNotDefinedException
-                | InvalidVariableNameException
                 | SubjectOrObjectNotDefinedException e) {
             objectMissing = true;
         }

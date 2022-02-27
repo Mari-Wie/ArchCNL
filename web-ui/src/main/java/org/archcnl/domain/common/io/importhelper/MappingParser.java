@@ -17,7 +17,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.RegexUtils;
@@ -46,13 +45,13 @@ public class MappingParser {
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
                     "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
-    private static final Pattern SPECIAL_TRIPLET_PATTERN =
+    private static final Pattern JENA_BUILTIN_TRIPLET_PATTERN =
             Pattern.compile("\\w+\\(\\?\\w+, '.+'\\)");
     private static final Pattern TRIPLET_PATTERN =
             Pattern.compile(
                     MappingParser.NORMAL_TRIPLET_PATTERN
                             + "|"
-                            + MappingParser.SPECIAL_TRIPLET_PATTERN);
+                            + MappingParser.JENA_BUILTIN_TRIPLET_PATTERN);
 
     private MappingParser() {}
 
@@ -205,8 +204,8 @@ public class MappingParser {
             final ConceptManager conceptManager)
             throws NoTripletException {
         try {
-            if (potentialTriplet.matches(MappingParser.SPECIAL_TRIPLET_PATTERN.toString())) {
-                return parseSpecialTriplet(potentialTriplet, relationManager, conceptManager);
+            if (potentialTriplet.matches(MappingParser.JENA_BUILTIN_TRIPLET_PATTERN.toString())) {
+                return parseJenaBuiltinTriplet(potentialTriplet, relationManager, conceptManager);
             } else {
                 final String subjectString =
                         RegexUtils.getFirstMatch(
@@ -233,13 +232,12 @@ public class MappingParser {
         } catch (NoRelationException
                 | UnsupportedObjectTypeException
                 | NoObjectTypeException
-                | InvalidVariableNameException
                 | NoMatchFoundException e) {
             throw new NoTripletException(potentialTriplet);
         }
     }
 
-    private static Triplet parseSpecialTriplet(
+    private static Triplet parseJenaBuiltinTriplet(
             final String potentialTriplet,
             final RelationManager relationManager,
             final ConceptManager conceptManager)
@@ -258,7 +256,6 @@ public class MappingParser {
                     PredicateParser.parsePredicate(predicate, relationManager),
                     ObjectParser.parseObject(objectString, conceptManager));
         } catch (final UnsupportedObjectTypeException
-                | InvalidVariableNameException
                 | NoRelationException
                 | NoObjectTypeException
                 | NoMatchFoundException e) {

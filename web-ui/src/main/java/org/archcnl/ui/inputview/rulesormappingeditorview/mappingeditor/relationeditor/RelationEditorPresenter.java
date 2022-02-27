@@ -8,12 +8,10 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
@@ -44,8 +42,6 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     private void addRelationViewListeners() {
-        view.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,
@@ -108,7 +104,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 fireEvent(new AddCustomRelationRequestedEvent(this, true, relation.get()));
 
                 fireEvent(new RulesWidgetRequestedEvent(this, true));
-            } catch (UnrelatedMappingException | InvalidVariableNameException e) {
+            } catch (UnrelatedMappingException e) {
                 // not possible/fatal
                 throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {

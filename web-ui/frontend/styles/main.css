@@ -102,3 +102,12 @@ vaadin-vertical-layout {
 .side-bar-text {
     color: var(--primary-light-font) !important;
 }
+
+
+.side-bar-tab[selected] {
+    color: White;
+}
+
+.side-bar-tab[selected]::before, .side-bar-tab[selected]::after  {
+    background-color: White;
+}

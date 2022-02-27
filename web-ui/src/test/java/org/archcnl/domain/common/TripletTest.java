@@ -7,7 +7,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +26,7 @@ class TripletTest {
 
     @Test
     void givenTripletInput_whenCallTripletFactory_thenExpectedResults()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException {
+            throws UnsupportedObjectTypeException {
         // given
         final Variable subject = new Variable("name");
         final Relation predicate = relationManager.getRelationByName("matches").get();
@@ -52,8 +51,7 @@ class TripletTest {
     }
 
     @Test
-    void givenWhereTripletWithVariable_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException {
+    void givenWhereTripletWithVariable_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
         final Triplet triplet =
                 new Triplet(
@@ -77,8 +75,7 @@ class TripletTest {
     }
 
     @Test
-    void givenWhereTripletWithStringValue_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException {
+    void givenWhereTripletWithStringValue_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
         final Triplet triplet =
                 new Triplet(
@@ -103,8 +100,7 @@ class TripletTest {
     }
 
     @Test
-    void givenWhereTripleWithBooleanValue_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException {
+    void givenWhereTripleWithBooleanValue_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
         final Triplet triplet =
                 new Triplet(
@@ -129,7 +125,7 @@ class TripletTest {
 
     @Test
     void givenWhereTripleWithConcept_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException, ConceptDoesNotExistException {
+            throws ConceptDoesNotExistException {
         // given
         final Triplet triplet =
                 new Triplet(

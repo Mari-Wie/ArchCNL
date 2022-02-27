@@ -22,7 +22,7 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchyS
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
-import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
+import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
@@ -40,10 +40,10 @@ public class OutputPresenter extends Component {
 
     private OutputView view;
     private CustomQueryPresenter customQueryPresenter;
-    private FreeTextQueryUiComponent freeTextQueryView;
+    private FreeTextQueryComponent freeTextQueryView;
     private ResultRepository resultRepository;
     private List<CustomQueryPresenter> pinnedCustomQueries = new LinkedList<>();
-    private List<FreeTextQueryUiComponent> pinnedFreeTextQueries = new LinkedList<>();
+    private List<FreeTextQueryComponent> pinnedFreeTextQueries = new LinkedList<>();
 
     public OutputPresenter() {
         final String defaultQuery = QueryUtils.getDefaultQuery();
@@ -79,7 +79,7 @@ public class OutputPresenter extends Component {
     public List<FreeTextQuery> getFreeTextQueries() {
         List<FreeTextQuery> queries = new LinkedList<>();
         queries.add(freeTextQueryView.makeQuery());
-        for (FreeTextQueryUiComponent queryView : pinnedFreeTextQueries) {
+        for (FreeTextQueryComponent queryView : pinnedFreeTextQueries) {
             queries.add(queryView.makeQuery());
         }
         return queries;
@@ -90,7 +90,7 @@ public class OutputPresenter extends Component {
             freeTextQueryView.setQueryText(query.getQueryString());
             freeTextQueryView.setQueryName(query.getName());
         } else {
-            FreeTextQueryUiComponent newFreeTextQueryView = createFreeTextQueryView("");
+            FreeTextQueryComponent newFreeTextQueryView = createFreeTextQueryView("");
             newFreeTextQueryView.setQueryText(query.getQueryString());
             newFreeTextQueryView.setQueryName(query.getName());
             pinnedFreeTextQueries.add(newFreeTextQueryView);
@@ -140,8 +140,8 @@ public class OutputPresenter extends Component {
         return newCustomQueryPresenter;
     }
 
-    private FreeTextQueryUiComponent createFreeTextQueryView(String query) {
-        FreeTextQueryUiComponent newComponent = new FreeTextQueryUiComponent(query);
+    private FreeTextQueryComponent createFreeTextQueryView(String query) {
+        FreeTextQueryComponent newComponent = new FreeTextQueryComponent(query);
         newComponent.addListener(CustomQueryInsertionRequestedEvent.class, this::handleEvent);
         newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
         newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);

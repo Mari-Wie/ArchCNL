@@ -4,13 +4,13 @@ import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.outputview.queryviews.components.GeneralInfoLayout;
 
-public class QueryResultsUiComponent extends AbstractQueryResultsComponent {
+public class QueryResultsComponent extends AbstractQueryComponent {
 
     private static final long serialVersionUID = 1L;
 
     private GeneralInfoLayout generalInfoLayout;
 
-    public QueryResultsUiComponent(String defaultQueryText) {
+    public QueryResultsComponent(String defaultQueryText) {
         super(defaultQueryText);
         generalInfoLayout = new GeneralInfoLayout();
         queryTextArea.setClassName("query-text-box");

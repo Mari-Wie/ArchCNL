@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
@@ -18,9 +17,9 @@ class RelationMappingTest {
 
     @Test
     void givenRelations_whenToStringRepresentation_thenGetExpectedResult()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         // given
         List<CustomRelation> customRelations = TestUtils.prepareCustomRelations();
 

@@ -12,7 +12,6 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
@@ -49,8 +48,8 @@ class AdocImporterTest {
     @Test
     void givenRuleFile_whenImportingIntoModel_thenModelIsLikeExpected()
             throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
-                    InvalidVariableNameException, ConceptAlreadyExistsException,
-                    RelationAlreadyExistsException, UnrelatedMappingException {
+                    ConceptAlreadyExistsException, RelationAlreadyExistsException,
+                    UnrelatedMappingException {
 
         // given
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
@@ -122,7 +121,6 @@ class AdocImporterTest {
         Assertions.assertEquals(expectedCustomQueries.size(), customQueryQueue.size());
         while (!customQueryQueue.isEmpty()) {
             Query query = customQueryQueue.poll();
-            System.out.println(query.getName());
             Assertions.assertTrue(
                     expectedCustomQueries.stream()
                             .anyMatch(q -> q.getName().equals(query.getName())));

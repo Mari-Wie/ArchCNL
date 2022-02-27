@@ -12,7 +12,6 @@ import org.apache.commons.io.FileUtils;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
@@ -31,8 +30,8 @@ class AdocExporterTest {
     @Test
     void givenRulesAndMappings_whenWritingAdocFile_thenExpectedResult()
             throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
-                    InvalidVariableNameException, ConceptAlreadyExistsException,
-                    RelationAlreadyExistsException, UnrelatedMappingException {
+                    ConceptAlreadyExistsException, RelationAlreadyExistsException,
+                    UnrelatedMappingException {
         // given
         ArchitectureRuleManager ruleManager = TestUtils.prepareRuleManager();
         ConceptManager conceptManager = TestUtils.prepareConceptManager();

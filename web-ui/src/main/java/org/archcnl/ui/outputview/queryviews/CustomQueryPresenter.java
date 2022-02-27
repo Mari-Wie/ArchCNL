@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
@@ -22,7 +21,6 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
@@ -64,8 +62,6 @@ public class CustomQueryPresenter extends Component {
         view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
         view.addListener(RelationHierarchySwapRequestedEvent.class, this::fireEvent);
 
-        view.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,
@@ -88,8 +84,6 @@ public class CustomQueryPresenter extends Component {
         view.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
         view.addListener(DeleteButtonPressedEvent.class, this::fireEvent);
 
-        wherePresenter.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         wherePresenter.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         wherePresenter.addListener(
                 VariableListUpdateRequestedEvent.class,
@@ -101,17 +95,12 @@ public class CustomQueryPresenter extends Component {
     }
 
     private void addVariable(VariableCreationRequestedEvent event) {
-        try {
-            Variable newVariable = new Variable(event.getVariableName());
-            variableManager.addVariable(newVariable);
+        Variable newVariable = new Variable(event.getVariableName());
+        variableManager.addVariable(newVariable);
 
-            event.getSource()
-                    .setItems(variableManager.getVariables().stream().map(Variable::getName));
-            event.getSource().setValue(newVariable.getName());
-            view.getVariableListView().showVariableList(variableManager.getVariables());
-        } catch (InvalidVariableNameException e1) {
-            event.getSource().showErrorMessage("Invalid variable name");
-        }
+        event.getSource().setItems(variableManager.getVariables().stream().map(Variable::getName));
+        event.getSource().setValue(newVariable.getName());
+        view.getVariableListView().showVariableList(variableManager.getVariables());
     }
 
     private void handleEvent(QueryNameUpdateRequestedEvent event) {
@@ -122,10 +111,8 @@ public class CustomQueryPresenter extends Component {
     private void handleEvent(VariableSelectedEvent event) {
         if (!view.isAnyVariableSelectionComponentEmpty()) {
             view.addVariableSelectionComponent();
-        } else if (event.getSource().getOptionalValue().isEmpty()
-                && view.areAtleastTwoVariableSelectionComponentsEmpty()) {
-            // TODO fix this behavior (see ArchCNL-154)
-            // view.removeVariableSelectionComponent(event.getSource());
+        } else if (event.getSource().getOptionalValue().isEmpty()) {
+            view.removeNeighboringComponentsIfEmpty(event.getSource());
         }
     }
 
@@ -181,7 +168,7 @@ public class CustomQueryPresenter extends Component {
             VariableSelectionComponent variableSelectionComponent) {
         try {
             return Optional.of(variableSelectionComponent.getVariable());
-        } catch (SubjectOrObjectNotDefinedException | InvalidVariableNameException e) {
+        } catch (SubjectOrObjectNotDefinedException e) {
             return Optional.empty();
         }
     }

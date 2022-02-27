@@ -40,7 +40,8 @@ public class AdocImporter {
             Queue<Query> customQueryQueue)
             throws IOException {
 
-        final String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        fileContent = fileContent.replace("\r", "");
 
         Map<String, String> conceptDescriptions =
                 DescriptionParser.extractConceptDescriptions(

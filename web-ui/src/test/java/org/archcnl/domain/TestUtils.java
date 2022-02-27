@@ -16,7 +16,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
@@ -68,8 +67,7 @@ public class TestUtils {
 
     public static ConceptManager prepareConceptManager()
             throws UnrelatedMappingException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, InvalidVariableNameException,
-                    ConceptAlreadyExistsException {
+                    ConceptDoesNotExistException, ConceptAlreadyExistsException {
 
         final ConceptManager conceptManager = new ConceptManager();
         final RelationManager relationManager = new RelationManager(conceptManager);
@@ -182,9 +180,9 @@ public class TestUtils {
     }
 
     public static RelationManager prepareRelationManager()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
 
         final ConceptManager conceptManager = new ConceptManager();
         final RelationManager relationManager = new RelationManager(conceptManager);
@@ -326,22 +324,21 @@ public class TestUtils {
     }
 
     public static List<CustomConcept> prepareCustomConcepts()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         return TestUtils.prepareConceptManager().getCustomConcepts();
     }
 
     public static List<CustomRelation> prepareCustomRelations()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         return TestUtils.prepareRelationManager().getCustomRelations();
     }
 
     public static List<Query> prepareCustomQueries()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException {
         ConceptManager conceptManager = new ConceptManager();
         RelationManager relationManager = new RelationManager(conceptManager);
         Query query1 =

@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.InvalidVariableNameException;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
@@ -19,9 +18,9 @@ class ConceptMappingTest {
 
     @Test
     void givenConcepts_whenToStringRepresentation_thenGetExpectedResult()
-            throws InvalidVariableNameException, UnsupportedObjectTypeException,
-                    ConceptDoesNotExistException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         // given
         List<CustomConcept> customConcepts = TestUtils.prepareCustomConcepts();
 

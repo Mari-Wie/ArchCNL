@@ -8,15 +8,16 @@ public class CustomConcept extends Concept {
 
     private static final String CONCEPT_TYPE = "architecture";
 
-    private ConceptMapping mapping;
+    private Optional<ConceptMapping> mapping;
 
     public CustomConcept(String name, String description) {
         super(name, description);
+        this.mapping = Optional.empty();
     }
 
     public void setMapping(ConceptMapping mapping) throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getObject())) {
-            this.mapping = mapping;
+            this.mapping = Optional.of(mapping);
         } else {
             throw new UnrelatedMappingException(
                     getName(), mapping.getThenTriplet().getObject().getName());
@@ -24,7 +25,7 @@ public class CustomConcept extends Concept {
     }
 
     public Optional<ConceptMapping> getMapping() {
-        return Optional.ofNullable(mapping);
+        return mapping;
     }
 
     @Override

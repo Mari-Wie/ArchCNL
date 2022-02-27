@@ -8,14 +8,14 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.outputview.queryviews.components.GridView;
 
-public abstract class AbstractQueryResultsComponent extends VerticalLayout {
+public abstract class AbstractQueryComponent extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
     protected GridView gridView;
     protected TextArea queryTextArea;
 
-    protected AbstractQueryResultsComponent(String defaultQueryText) {
+    protected AbstractQueryComponent(String defaultQueryText) {
         setHeightFull();
         getStyle().set("overflow", "auto");
         gridView = new GridView();
