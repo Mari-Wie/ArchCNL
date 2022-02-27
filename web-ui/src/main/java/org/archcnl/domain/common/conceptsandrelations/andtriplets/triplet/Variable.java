@@ -2,7 +2,10 @@ package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
+<<<<<<< HEAD
 import java.util.Set;
+=======
+>>>>>>> master
 
 public class Variable extends ObjectType {
 
