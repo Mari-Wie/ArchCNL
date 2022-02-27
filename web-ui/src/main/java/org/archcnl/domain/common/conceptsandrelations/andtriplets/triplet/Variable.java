@@ -16,7 +16,7 @@ public class Variable extends ObjectType {
         this.conflictingDynamicTypes = false;
     }
 
-    public Set<ActualObjectType> getDynamicType() {
+    public Set<ActualObjectType> getDynamicTypes() {
         return dynamicTypes;
     }
 
