@@ -12,7 +12,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Actual
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.model.mappings.Mapping;
 
 public class VariableManager {
 
@@ -44,21 +43,29 @@ public class VariableManager {
         variables.forEach(Variable::clearDynamicTypes);
     }
 
+    public boolean hasConflictingDynamicTypes(AndTriplets andTriplets) {
+        parseVariableTypes(andTriplets);
+        for (Variable v : variables) {
+            if (v.hasConflictingDynamicTypes()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Parses and sets dynamic types for all Variables in the VariableManager. Any missing variables
      * from the mapping will be added to this manager.
      *
-     * @param mapping The Mapping used as a parsing source
+     * @param andTriplets The triplets whose syntax will be checked
      */
-    public void parseVariableTypes(Mapping mapping) {
+    private void parseVariableTypes(AndTriplets andTriplets) {
         clearAllDynamicTypes();
-        for (AndTriplets andTriplets : mapping.getWhenTriplets()) {
-            for (Triplet triplet : andTriplets.getTriplets()) {
-                if (triplet.getPredicate() instanceof TypeRelation) {
-                    handleTypeRelationTriplet(triplet);
-                } else {
-                    handleTripletWithoutTypeRelation(triplet);
-                }
+        for (Triplet triplet : andTriplets.getTriplets()) {
+            if (triplet.getPredicate() instanceof TypeRelation) {
+                handleTypeRelationTriplet(triplet);
+            } else {
+                handleTripletWithoutTypeRelation(triplet);
             }
         }
     }
