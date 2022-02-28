@@ -12,12 +12,13 @@ public class MarkerAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
     private String path;
 
     public MarkerAnnotationExpressionVisitor(String path) {
-    	this.path = path;
+        this.path = path;
     }
 
     @Override
     public void visit(MarkerAnnotationExpr n, Void arg) {
-        annotationInstance = new AnnotationInstance(n.getName().asString(), new ArrayList<>(), path);
+        annotationInstance =
+                new AnnotationInstance(n.getName().asString(), new ArrayList<>(), path);
     }
 
     /** @return the parsed annotation instance */

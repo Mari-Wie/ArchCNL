@@ -8,7 +8,7 @@ import org.archcnl.owlify.famix.codemodel.Type;
 public class ObjectCreationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private Type typeOfCreatedObject;
-    
+
     public ObjectCreationExpressionVisitor() {}
 
     @Override

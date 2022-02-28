@@ -17,10 +17,10 @@ import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
-	private String path;
-	
+    private String path;
+
     public NormalAnnotationExpressionVisitor(String path) {
-    	this.path = path;
+        this.path = path;
     }
 
     @Override

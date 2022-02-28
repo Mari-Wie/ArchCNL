@@ -3,7 +3,6 @@ package org.archcnl.javaparser.visitors;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
@@ -147,11 +146,13 @@ public class ConstructorDeclarationVisitorTest
     protected Class<ConstructorDeclarationVisitor> getVisitorClass() {
         return ConstructorDeclarationVisitor.class;
     }
-    
+
     @Override
-    protected ConstructorDeclarationVisitor createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-    	Object[] paramValues = {"TODO"};
-    	Class<?>[] paramClasses = {String.class};
-    	return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
+    protected ConstructorDeclarationVisitor createInstance()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+                    InvocationTargetException, NoSuchMethodException, SecurityException {
+        Object[] paramValues = {"TODO"};
+        Class<?>[] paramClasses = {String.class};
+        return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

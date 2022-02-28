@@ -20,7 +20,7 @@ public class Parameter {
     private final Type type;
     private List<Modifier> modifiers;
     private List<AnnotationInstance> annotations;
-	private String location;
+    private String location;
 
     /**
      * Constructor.

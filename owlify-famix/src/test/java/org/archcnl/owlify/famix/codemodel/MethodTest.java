@@ -69,13 +69,15 @@ public class MethodTest {
                         "param",
                         new Type("namespace.A", "A", false),
                         new ArrayList<>(),
-                        new ArrayList<>(), "TODO");
+                        new ArrayList<>(),
+                        "TODO");
         declaredException = new Type("namespace.MyException", "MyException", false);
         annotation = new AnnotationInstance("Deprecated", new ArrayList<>(), "TODO");
         thrownException = new Type("namespace.MyError", "MyError", false);
         caughtException = new Type("java.lang.Exception", "Exception", false);
         localVariable =
-                new LocalVariable("TODO", 
+                new LocalVariable(
+                        "TODO",
                         new Type("namespace.C", "C", false),
                         "variable",
                         Arrays.asList(new Modifier("public")));
@@ -88,7 +90,7 @@ public class MethodTest {
 
         Method method =
                 new Method(
-                		"not-defined",
+                        "not-defined",
                         name,
                         signature,
                         Arrays.asList(new Modifier("private")),
@@ -161,7 +163,7 @@ public class MethodTest {
 
         Method method =
                 new Method(
-                		"not-defined",
+                        "not-defined",
                         name,
                         signature,
                         new ArrayList<>(),
@@ -218,7 +220,7 @@ public class MethodTest {
 
         Method method1 =
                 new Method(
-                		"not-defined",
+                        "not-defined",
                         name,
                         signature,
                         new ArrayList<>(),
@@ -232,7 +234,7 @@ public class MethodTest {
                         new ArrayList<>());
         Method method2 =
                 new Method(
-                		"not-defined",
+                        "not-defined",
                         name,
                         signature2,
                         new ArrayList<>(),

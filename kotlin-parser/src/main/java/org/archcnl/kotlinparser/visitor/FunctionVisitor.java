@@ -25,7 +25,7 @@ public class FunctionVisitor extends NamedBaseVisitor {
 
         var function =
                 new Method(
-                		"not-Defined",
+                        "not-Defined",
                         functionName,
                         functionSignature,
                         new ArrayList<>(),

@@ -11,7 +11,7 @@ import org.archcnl.owlify.famix.codemodel.Method;
 public class ConstructorDeclarationVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Method> visitedConstructors;
-	private String path;
+    private String path;
 
     public ConstructorDeclarationVisitor(String path) {
         this.visitedConstructors = new ArrayList<>();

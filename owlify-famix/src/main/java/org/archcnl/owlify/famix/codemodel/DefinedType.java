@@ -2,8 +2,8 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ public abstract class DefinedType {
      * @param modifiers List of annotation instances for the type.
      */
     protected DefinedType(
-    		String path,
+            String path,
             String fullyQualifiedName,
             String simpleName,
             List<AnnotationInstance> annotations,

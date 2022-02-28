@@ -3,7 +3,6 @@ package org.archcnl.javaparser.visitors;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.Field;
@@ -103,11 +102,13 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
     protected Class<JavaFieldVisitor> getVisitorClass() {
         return JavaFieldVisitor.class;
     }
-    
+
     @Override
-    protected JavaFieldVisitor createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-    	Object[] paramValues = {"TODO"};
-    	Class<?>[] paramClasses = {String.class};
-    	return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
+    protected JavaFieldVisitor createInstance()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+                    InvocationTargetException, NoSuchMethodException, SecurityException {
+        Object[] paramValues = {"TODO"};
+        Class<?>[] paramClasses = {String.class};
+        return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

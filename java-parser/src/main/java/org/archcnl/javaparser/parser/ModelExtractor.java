@@ -69,7 +69,7 @@ public class ModelExtractor {
     }
 
     private void visitFile(Path path, CompilationUnit unit) {
-    	String pathString = path.toString();
+        String pathString = path.toString();
         LOG.info("Parsing java file: " + path.toString());
         JavaTypeVisitor typeVisitor = new JavaTypeVisitor(pathString);
 

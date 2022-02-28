@@ -58,9 +58,11 @@ public abstract class GenericVisitorTest<E extends VoidVisitorAdapter<Void>> {
             e.printStackTrace();
         }
     }
-    
-    protected E createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-    	return getVisitorClass().getDeclaredConstructor().newInstance();
+
+    protected E createInstance()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+                    InvocationTargetException, NoSuchMethodException, SecurityException {
+        return getVisitorClass().getDeclaredConstructor().newInstance();
     }
 
     protected abstract Class<E> getVisitorClass();

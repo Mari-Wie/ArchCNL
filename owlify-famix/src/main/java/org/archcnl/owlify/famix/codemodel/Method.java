@@ -1,8 +1,8 @@
 package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
-import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasSignature;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasCaughtException;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredException;
@@ -21,7 +21,7 @@ import org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties;
  * <p>Represented by the "Method" ontology class.
  */
 public class Method {
-	private final String location;
+    private final String location;
     private final String name;
     private final String signature;
     private List<Modifier> modifiers;
@@ -53,7 +53,7 @@ public class Method {
      * @param localVariables List of local variables defined in this method's body.
      */
     public Method(
-    		String location,
+            String location,
             String name,
             String signature,
             List<Modifier> modifiers,
@@ -65,7 +65,7 @@ public class Method {
             List<Type> thrownExceptions,
             List<Type> caughtExceptions,
             List<LocalVariable> localVariables) {
-    	this.location = location;
+        this.location = location;
         this.name = name;
         this.signature = signature;
         this.modifiers = modifiers;
@@ -83,7 +83,7 @@ public class Method {
     public String getPosition() {
         return location;
     }
-    
+
     /** @return the simple name */
     public String getName() {
         return name;

@@ -42,7 +42,8 @@ public class AnnotationTest {
         List<AnnotationAttribute> attributes = Arrays.asList(DummyObjects.annotationAttribute());
 
         DefinedType type =
-                new Annotation("TODO", fullName, name, new ArrayList<>(), new ArrayList<>(), attributes);
+                new Annotation(
+                        "TODO", fullName, name, new ArrayList<>(), new ArrayList<>(), attributes);
 
         type.firstPass(ontology);
 
@@ -90,7 +91,12 @@ public class AnnotationTest {
     public void testGetNestedTypeNames() {
         DefinedType type =
                 new Annotation(
-                		"TODO", fullName, name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                        "TODO",
+                        fullName,
+                        name,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        new ArrayList<>());
         assertEquals(1, type.getNestedTypeNames().size());
         assertEquals(fullName, type.getNestedTypeNames().get(0));
     }

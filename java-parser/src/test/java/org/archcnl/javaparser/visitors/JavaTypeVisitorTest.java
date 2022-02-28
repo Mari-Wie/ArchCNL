@@ -222,11 +222,13 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
     protected Class<JavaTypeVisitor> getVisitorClass() {
         return JavaTypeVisitor.class;
     }
-    
+
     @Override
-    protected JavaTypeVisitor createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-    	Object[] paramValues = {"TODO"};
-    	Class<?>[] paramClasses = {String.class};
-    	return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
+    protected JavaTypeVisitor createInstance()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+                    InvocationTargetException, NoSuchMethodException, SecurityException {
+        Object[] paramValues = {"TODO"};
+        Class<?>[] paramClasses = {String.class};
+        return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

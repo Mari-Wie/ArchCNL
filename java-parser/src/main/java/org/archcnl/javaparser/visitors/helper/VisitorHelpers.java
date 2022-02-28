@@ -25,10 +25,10 @@ public class VisitorHelpers {
         List<AnnotationInstance> annotations = new ArrayList<>();
 
         for (AnnotationExpr annotationExpr : annotationList) {
-        	String location = path;
-        	if(annotationExpr.getBegin().isPresent()) {
-        		location += ", Line: " + String.valueOf(annotationExpr.getBegin().get().line);
-        	}
+            String location = path;
+            if (annotationExpr.getBegin().isPresent()) {
+                location += ", Line: " + String.valueOf(annotationExpr.getBegin().get().line);
+            }
             MarkerAnnotationExpressionVisitor v1 = new MarkerAnnotationExpressionVisitor(location);
             SingleMemberAnnotationExpressionVisitor v2 =
                     new SingleMemberAnnotationExpressionVisitor(location);

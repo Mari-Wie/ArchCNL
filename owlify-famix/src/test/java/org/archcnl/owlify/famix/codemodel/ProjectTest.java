@@ -55,7 +55,8 @@ public class ProjectTest {
 
         // an annotation "@collision"
         DefinedType type =
-                new Annotation("TODO", 
+                new Annotation(
+                        "TODO",
                         collidingName,
                         collidingName,
                         new ArrayList<>(),

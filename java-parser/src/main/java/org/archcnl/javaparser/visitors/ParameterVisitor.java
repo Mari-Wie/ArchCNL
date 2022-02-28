@@ -10,10 +10,10 @@ import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 public class ParameterVisitor extends VoidVisitorAdapter<Void> {
 
     private org.archcnl.owlify.famix.codemodel.Parameter parameter;
-	private String path;
+    private String path;
 
     public ParameterVisitor(String path) {
-    	this.path = path;
+        this.path = path;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
         List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers =
                 VisitorHelpers.processModifiers(n.getModifiers());
         String location = path;
-        if(n.getBegin().isPresent()) {
-        	location += ", Line: " + String.valueOf(n.getBegin().get().line);
+        if (n.getBegin().isPresent()) {
+            location += ", Line: " + String.valueOf(n.getBegin().get().line);
         }
         parameter =
                 new org.archcnl.owlify.famix.codemodel.Parameter(

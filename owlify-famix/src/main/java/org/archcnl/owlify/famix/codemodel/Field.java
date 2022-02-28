@@ -31,7 +31,7 @@ public class Field {
      * @param modifiers List of modifiers for this field.
      */
     public Field(
-    		String location,
+            String location,
             String name,
             Type type,
             List<AnnotationInstance> annotations,

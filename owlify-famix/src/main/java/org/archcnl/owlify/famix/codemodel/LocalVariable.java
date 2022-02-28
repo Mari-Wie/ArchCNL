@@ -19,7 +19,7 @@ public class LocalVariable {
     private final Type type;
     private final String name;
     private List<Modifier> modifiers;
-	private String location;
+    private String location;
 
     /**
      * Constructor.

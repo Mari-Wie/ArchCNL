@@ -26,7 +26,7 @@ public abstract class ClassInterfaceEnum extends DefinedType {
      * @param annotations List of annotation instances for this type's declaration.
      */
     protected ClassInterfaceEnum(
-    		String path,
+            String path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,

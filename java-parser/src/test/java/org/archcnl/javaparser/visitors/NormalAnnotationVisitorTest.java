@@ -190,11 +190,13 @@ public class NormalAnnotationVisitorTest
     protected Class<NormalAnnotationExpressionVisitor> getVisitorClass() {
         return NormalAnnotationExpressionVisitor.class;
     }
-    
+
     @Override
-    protected NormalAnnotationExpressionVisitor createInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-    	Object[] paramValues = {"TODO"};
-    	Class<?>[] paramClasses = {String.class};
-    	return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
+    protected NormalAnnotationExpressionVisitor createInstance()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+                    InvocationTargetException, NoSuchMethodException, SecurityException {
+        Object[] paramValues = {"TODO"};
+        Class<?>[] paramClasses = {String.class};
+        return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

@@ -43,12 +43,12 @@ public class MethodParser {
 
     /** Parses the given method declaration. */
     public MethodParser(MethodDeclaration n, String path) {
-    	this.path = path;
-    	location = path;
-    	if(n.getBegin().isPresent()) {
-    		location +=  ", Line " + String.valueOf(n.getBegin().get().line);
-    	}
-    	location = path + " Line " + location;
+        this.path = path;
+        location = path;
+        if (n.getBegin().isPresent()) {
+            location += ", Line " + String.valueOf(n.getBegin().get().line);
+        }
+        location = path + " Line " + location;
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
@@ -71,11 +71,11 @@ public class MethodParser {
 
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, String path) {
-    	this.path = path;
-    	location = path;
-    	if(n.getBegin().isPresent()) {
-    		location +=  ", Line " + String.valueOf(n.getBegin().get().line);
-    	}
+        this.path = path;
+        location = path;
+        if (n.getBegin().isPresent()) {
+            location += ", Line " + String.valueOf(n.getBegin().get().line);
+        }
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
@@ -100,7 +100,7 @@ public class MethodParser {
 
     private Method createMethodModel(boolean isConstructor) {
         return new Method(
-        		location,
+                location,
                 name,
                 signature,
                 modifiers,

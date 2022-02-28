@@ -41,7 +41,8 @@ public class EnumerationTest {
     @Test
     public void testFirstPass() {
         DefinedType type =
-                new Enumeration("TODO", 
+                new Enumeration(
+                        "TODO",
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -70,7 +71,8 @@ public class EnumerationTest {
     @Test
     public void testFirstPassNestedTypesAreVisited() {
         DefinedType type =
-                new Enumeration("TODO", 
+                new Enumeration(
+                        "TODO",
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -106,7 +108,8 @@ public class EnumerationTest {
     @Test
     public void testSecondPass() {
         DefinedType type =
-                new Enumeration("TODO", 
+                new Enumeration(
+                        "TODO",
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -133,7 +136,8 @@ public class EnumerationTest {
     @Test
     public void testGetNestedTypeNames() {
         DefinedType type =
-                new Enumeration("TODO", 
+                new Enumeration(
+                        "TODO",
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),

@@ -29,7 +29,7 @@ public class KotlinTypeVisitor extends NamedBaseVisitor {
 
             var definedType =
                     new ClassOrInterface(
-                    		"TODO",
+                            "TODO",
                             fullyQualifiedName,
                             className,
                             new ArrayList<>(),

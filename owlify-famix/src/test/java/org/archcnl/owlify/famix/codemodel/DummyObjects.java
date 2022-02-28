@@ -36,7 +36,8 @@ public class DummyObjects {
     }
 
     public static DefinedType definedType() {
-        return new ClassOrInterface("TODO", 
+        return new ClassOrInterface(
+                "TODO",
                 "dummies.DummyClass",
                 "DummyClass",
                 new ArrayList<>(),
@@ -50,7 +51,7 @@ public class DummyObjects {
 
     public static Method method() {
         return new Method(
-        		"not-defined",
+                "not-defined",
                 "dummies.DummyClass.DummyClass",
                 "dummies.DUmmyClass.DummyClass(int)",
                 new ArrayList<>(),
@@ -75,7 +76,8 @@ public class DummyObjects {
     }
 
     public static Field field() {
-        return new Field("TODO", "dummyField", primitiveType(), new ArrayList<>(), new ArrayList<>());
+        return new Field(
+                "TODO", "dummyField", primitiveType(), new ArrayList<>(), new ArrayList<>());
     }
 
     public static Namespace namespace() {

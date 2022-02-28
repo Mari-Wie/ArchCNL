@@ -11,7 +11,6 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
         definedTypes.add(
                 new ClassOrInterface(
-                		path,
+                        path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         processNestedTypes(n.getMembers()),
@@ -64,7 +63,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
         definedTypes.add(
                 new Enumeration(
-                		path,
+                        path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         processNestedTypes(n.getMembers()),
@@ -78,7 +77,7 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
     public void visit(AnnotationDeclaration n, Void arg) {
         definedTypes.add(
                 new Annotation(
-                		path,
+                        path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         VisitorHelpers.processAnnotations(n.getAnnotations(), path),

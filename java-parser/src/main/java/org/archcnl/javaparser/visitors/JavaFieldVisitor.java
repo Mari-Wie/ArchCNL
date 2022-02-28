@@ -12,7 +12,7 @@ import org.archcnl.owlify.famix.codemodel.Field;
 public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Field> fields;
-	private String path;
+    private String path;
 
     public JavaFieldVisitor(String path) {
         this.fields = new ArrayList<>();
@@ -26,12 +26,12 @@ public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
         for (VariableDeclarator variableDeclarator : n.getVariables()) {
             variableDeclarator.accept(visitor, null);
             String location = path;
-            if(variableDeclarator.getBegin().isPresent()) {
-            	location += ", Line: " + String.valueOf(variableDeclarator.getBegin().get().line);
+            if (variableDeclarator.getBegin().isPresent()) {
+                location += ", Line: " + String.valueOf(variableDeclarator.getBegin().get().line);
             }
             fields.add(
                     new Field(
-                    		location,
+                            location,
                             variableDeclarator.getNameAsString(),
                             visitor.getType(),
                             VisitorHelpers.processAnnotations(n.getAnnotations(), path),

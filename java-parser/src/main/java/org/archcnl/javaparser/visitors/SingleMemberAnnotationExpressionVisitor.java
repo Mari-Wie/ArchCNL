@@ -9,10 +9,10 @@ import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 public class SingleMemberAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
-	private String path;
+    private String path;
 
     public SingleMemberAnnotationExpressionVisitor(String path) {
-    	this.path = path;
+        this.path = path;
     }
 
     @Override

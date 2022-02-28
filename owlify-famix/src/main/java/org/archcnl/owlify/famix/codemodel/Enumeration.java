@@ -25,7 +25,7 @@ public class Enumeration extends ClassInterfaceEnum {
      * @param annotations List of annotation instances for this enumeration.
      */
     public Enumeration(
-    		String path,
+            String path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,
