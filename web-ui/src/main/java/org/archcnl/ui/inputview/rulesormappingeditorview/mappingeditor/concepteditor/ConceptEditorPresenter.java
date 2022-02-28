@@ -81,6 +81,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     protected void updateMapping() {
         if (concept.isPresent()) {
             try {
+                concept.get().setDescription(view.getDescription());
                 final ConceptMapping mapping =
                         new ConceptMapping(
                                 view.getThenTripletSubject(), getAndTripletsList(), concept.get());

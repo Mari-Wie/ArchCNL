@@ -96,6 +96,7 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     protected void updateMapping() {
         if (relation.isPresent()) {
             try {
+                relation.get().setDescription(view.getDescription());
                 final Triplet thenTriplet =
                         new Triplet(
                                 view.getThenTripletSubject(),
