@@ -152,7 +152,7 @@ public abstract class MappingEditorPresenter extends Component {
 
     private void doneButtonClicked() {
         if (doIncompleteTripletsExist()) {
-            showIncompleteTripletsWarning(() -> updateMapping());
+            showIncompleteTripletsWarning(this::updateMapping);
         } else {
             updateMapping();
         }
