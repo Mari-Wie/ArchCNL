@@ -4,11 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
@@ -62,15 +59,10 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void updateMappingName(final String newName) {
         if (relation.isEmpty()) {
-            final Set<ActualObjectType> relatableObjectTypes = new LinkedHashSet<>();
-            final ObjectType selectedObjectType = view.getSelectedObjectTypeInThenTriplet();
-            if (selectedObjectType instanceof ActualObjectType) {
-                relatableObjectTypes.add((ActualObjectType) selectedObjectType);
-            }
             relation =
                     Optional.of(
                             new CustomRelation(
-                                    newName, "", new LinkedHashSet<>(), relatableObjectTypes));
+                                    newName, "", new LinkedHashSet<>(), new LinkedHashSet<>()));
         } else {
             fireEvent(new ChangeRelationNameRequestedEvent(this, true, relation.get(), newName));
         }
