@@ -2,8 +2,10 @@ package org.archcnl.domain.common;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
@@ -53,12 +55,14 @@ public class VariableManager {
      */
     public boolean hasConflictingDynamicTypes(AndTriplets andTriplets) {
         parseVariableTypes(andTriplets);
-        for (Variable v : variables) {
-            if (v.hasConflictingDynamicTypes()) {
-                return true;
-            }
-        }
-        return false;
+        return variables.stream().anyMatch(Variable::hasConflictingDynamicTypes);
+    }
+
+    public List<Variable> getConflictingVariables(AndTriplets andTriplets) {
+        parseVariableTypes(andTriplets);
+        return variables.stream()
+                .filter(Variable::hasConflictingDynamicTypes)
+                .collect(Collectors.toList());
     }
 
     public void parseVariableTypes(AndTriplets andTriplets) {
