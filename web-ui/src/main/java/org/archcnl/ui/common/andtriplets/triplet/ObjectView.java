@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
+import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
@@ -11,11 +12,13 @@ import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 
@@ -41,6 +44,7 @@ public class ObjectView extends HorizontalLayout {
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableStringBoolSelectionView.addListener(
                 VariableListUpdateRequestedEvent.class, this::fireEvent);
+        variableStringBoolSelectionView.addListener(VariableSelectedEvent.class, this::fireEvent);
     }
 
     private void switchToConceptView() {
@@ -104,6 +108,12 @@ public class ObjectView extends HorizontalLayout {
             showErrorMessage("Concept does not exist");
         } catch (ObjectNotDefinedException | SubjectOrObjectNotDefinedException e) {
             showErrorMessage("Object not set");
+        }
+    }
+
+    public void highlightConflictingVariables(List<Variable> conflictingVariables) {
+        if (currentSelectionComponentString.equals(variableStringBoolSelectionView)) {
+            variableStringBoolSelectionView.hightlightConflictingVariables(conflictingVariables);
         }
     }
 

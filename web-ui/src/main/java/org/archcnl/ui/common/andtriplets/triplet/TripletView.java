@@ -15,6 +15,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 
 public class TripletView extends HorizontalLayout {
 
@@ -59,6 +60,7 @@ public class TripletView extends HorizontalLayout {
     private void addListeners() {
         subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+        subjectComponent.addListener(VariableSelectedEvent.class, this::fireEvent);
 
         predicateComponent.addListener(PredicateSelectedEvent.class, this::fireEvent);
         predicateComponent.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
@@ -67,6 +69,7 @@ public class TripletView extends HorizontalLayout {
         objectView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
         objectView.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         objectView.addListener(ConceptSelectedEvent.class, this::fireEvent);
+        objectView.addListener(VariableSelectedEvent.class, this::fireEvent);
     }
 
     private void addCreateRemoveButtons() {
