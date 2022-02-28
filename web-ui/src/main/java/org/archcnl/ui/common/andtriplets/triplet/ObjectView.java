@@ -112,7 +112,7 @@ public class ObjectView extends HorizontalLayout {
     }
 
     public void highlightConflictingVariables(List<Variable> conflictingVariables) {
-        if (currentSelectionComponentString.equals(variableStringBoolSelectionView)) {
+        if (currentSelectionComponentString.equals(ObjectView.VAR_STRING_BOOL)) {
             variableStringBoolSelectionView.hightlightConflictingVariables(conflictingVariables);
         }
     }

@@ -98,7 +98,6 @@ public class AndTripletsEditorPresenter extends Component {
         VariableManager variableManager = new VariableManager();
         List<Variable> conflictingVariables =
                 variableManager.getConflictingVariables(getAndTriplets());
-        System.out.println(conflictingVariables.size());
         tripletPresenters.forEach(p -> p.highlightConflictingVariables(conflictingVariables));
     }
 
