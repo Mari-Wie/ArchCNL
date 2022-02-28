@@ -101,6 +101,8 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
 
     @Override
     public void descriptionHasChanged(final MappingDescriptionFieldChangedEvent event) {
-        concept.get().setDescription(event.getNewDescription());
+        if (concept.isPresent()) {
+            concept.get().setDescription(event.getNewDescription());
+        }
     }
 }

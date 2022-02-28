@@ -121,6 +121,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
     @Override
     public void descriptionHasChanged(final MappingDescriptionFieldChangedEvent event) {
-        relation.get().setDescription(event.getNewDescription());
+        if (relation.isPresent()) {
+            relation.get().setDescription(event.getNewDescription());
+        }
     }
 }
