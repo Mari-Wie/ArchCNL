@@ -74,12 +74,12 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
         return getEventBus().addListener(eventType, listener);
     }
 
-    void getData() {
+    private void getData() {
         // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
         // fooTreeGrid.getDataProvider()).getTreeData().getRootItems();
     }
 
-    void setUpDragAndDrop() {
+    private void setUpDragAndDrop() {
         // Modifying the data view requires a mutable collection
 
         treeGrid.addDragStartListener(e -> draggedItem = e.getDraggedItems().get(0));
