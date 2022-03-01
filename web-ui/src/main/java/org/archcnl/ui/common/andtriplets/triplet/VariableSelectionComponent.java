@@ -10,16 +10,14 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequeste
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
+import org.archcnl.ui.common.andtriplets.triplet.SelectionComponent;
 
-public class VariableSelectionComponent extends ComboBox<String>
-        implements DropTarget<VariableSelectionComponent> {
+public class VariableSelectionComponent extends SelectionComponent {
 
     private static final long serialVersionUID = 8887336725233930402L;
 
     public VariableSelectionComponent() {
-        setActive(true);
-        setPlaceholder("Variable");
-        setClearButtonVisible(true);
+        super("Variable");
         setPattern("\\w+");
         setPreventInvalidInput(true);
 
@@ -37,7 +35,6 @@ public class VariableSelectionComponent extends ComboBox<String>
                     setInvalid(false);
                     fireEvent(new VariableSelectedEvent(this, true));
                 });
-        addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
         addFocusListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
     }
 
@@ -53,26 +50,6 @@ public class VariableSelectionComponent extends ComboBox<String>
         String variableName =
                 getOptionalValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
         return new Variable(variableName);
-    }
-
-    public void highlightWhenEmpty() {
-        if (getOptionalValue().isEmpty()) {
-            showErrorMessage("Variable not set");
-        }
-    }
-
-    private void handleDropEvent(Object data) {
-        if (data instanceof Variable) {
-            Variable variable = (Variable) data;
-            setValue(variable.getName());
-        } else {
-            showErrorMessage("Not a Variable");
-        }
-    }
-
-    public void showErrorMessage(String message) {
-        setErrorMessage(message);
-        setInvalid(true);
     }
 
     @Override

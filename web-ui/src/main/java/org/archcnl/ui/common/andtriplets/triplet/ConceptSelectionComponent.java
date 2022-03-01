@@ -9,25 +9,21 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.SelectionComponent;
 
-public class ConceptSelectionComponent extends ComboBox<String>
-        implements DropTarget<ConceptSelectionComponent> {
+public class ConceptSelectionComponent extends SelectionComponent {
 
     private static final long serialVersionUID = 5874026321476515429L;
     private Optional<Concept> selectedConcept = Optional.empty();
 
     public ConceptSelectionComponent() {
-        setActive(true);
-        setPlaceholder("Concept");
-        setClearButtonVisible(true);
-
+        super("Concept");
         addAttachListener(e -> fireEvent(new ConceptListUpdateRequestedEvent(this, true)));
         addValueChangeListener(
                 event -> {
                     setInvalid(false);
                     fireEvent(new ConceptSelectedEvent(this, true));
                 });
-        addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
     public Optional<String> getSelectedItem() {
@@ -51,20 +47,6 @@ public class ConceptSelectionComponent extends ComboBox<String>
 
     public Optional<Concept> getConcept() {
         return selectedConcept;
-    }
-
-    private void handleDropEvent(Object data) {
-        if (data instanceof Concept) {
-            Concept concept = (Concept) data;
-            setValue(concept.getName());
-        } else {
-            showErrorMessage("Not a Concept");
-        }
-    }
-
-    public void showErrorMessage(String message) {
-        setErrorMessage(message);
-        setInvalid(true);
     }
 
     @Override
