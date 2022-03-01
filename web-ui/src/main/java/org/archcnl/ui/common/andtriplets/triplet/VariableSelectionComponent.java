@@ -1,26 +1,23 @@
 package org.archcnl.ui.common.andtriplets.triplet;
 
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dnd.DropTarget;
-import com.vaadin.flow.shared.Registration;
 import java.util.List;
+
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 
-public class VariableSelectionComponent extends ComboBox<String>
-        implements DropTarget<VariableSelectionComponent> {
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.shared.Registration;
+
+public class VariableSelectionComponent extends SelectionComponent {
 
     private static final long serialVersionUID = 8887336725233930402L;
 
     public VariableSelectionComponent() {
-        setActive(true);
-        setPlaceholder("Variable");
-        setClearButtonVisible(true);
+        super("Variable");
         setPattern("\\w+");
         setPreventInvalidInput(true);
 
@@ -38,8 +35,18 @@ public class VariableSelectionComponent extends ComboBox<String>
                     setInvalid(false);
                     fireEvent(new VariableSelectedEvent(this, true));
                 });
-        addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
         addFocusListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
+    }
+
+    @Override
+    protected void handleDropEvent(Object data) {
+        // TODO: find a way to only handle events where the type is Hierarchynode to get rid of the
+        // instanceof
+        String droppedName = "";
+        if (data instanceof Variable) {
+            droppedName = ((Variable) data).getName();
+        }
+        checkedSetValue(droppedName);
     }
 
     public void setVariable(Variable variable) {
@@ -56,12 +63,6 @@ public class VariableSelectionComponent extends ComboBox<String>
         return new Variable(variableName);
     }
 
-    public void highlightWhenEmpty() {
-        if (isEmpty()) {
-            showErrorMessage("Variable not set");
-        }
-    }
-
     public void hightlightConflictingVariables(List<Variable> conflictingVariables) {
         if (!isEmpty()) {
             String value = getValue();
@@ -73,20 +74,6 @@ public class VariableSelectionComponent extends ComboBox<String>
                 setInvalid(false);
             }
         }
-    }
-
-    private void handleDropEvent(Object data) {
-        if (data instanceof Variable) {
-            Variable variable = (Variable) data;
-            setValue(variable.getName());
-        } else {
-            showErrorMessage("Not a Variable");
-        }
-    }
-
-    public void showErrorMessage(String message) {
-        setErrorMessage(message);
-        setInvalid(true);
     }
 
     @Override
