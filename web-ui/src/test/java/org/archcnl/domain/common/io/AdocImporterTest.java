@@ -12,18 +12,14 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.io.importhelper.MappingDescriptionExtractor;
-import org.archcnl.domain.common.io.importhelper.MappingExtractor;
-import org.archcnl.domain.common.io.importhelper.RuleExtractor;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.io.importhelper.DescriptionParser;
+import org.archcnl.domain.common.io.importhelper.MappingParser;
+import org.archcnl.domain.common.io.importhelper.RuleParser;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
@@ -51,10 +47,9 @@ class AdocImporterTest {
 
     @Test
     void givenRuleFile_whenImportingIntoModel_thenModelIsLikeExpected()
-            throws IOException, UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
-                    ConceptDoesNotExistException, InvalidVariableNameException,
-                    ConceptAlreadyExistsException, VariableAlreadyExistsException,
-                    RelationAlreadyExistsException, UnrelatedMappingException {
+            throws IOException, UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, RelationAlreadyExistsException,
+                    UnrelatedMappingException {
 
         // given
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
@@ -70,32 +65,28 @@ class AdocImporterTest {
                 customQueryQueue);
 
         // then
-        RulesConceptsAndRelations expectedModel = TestUtils.prepareModel();
+        ArchitectureRuleManager expectedRuleManager = TestUtils.prepareRuleManager();
+        ConceptManager expectedConceptManager = TestUtils.prepareConceptManager();
+        RelationManager expectedRelationManager = TestUtils.prepareRelationManager();
         List<Query> expectedCustomQueries = TestUtils.prepareCustomQueries();
         List<FreeTextQuery> expectedFreeTextQueries = TestUtils.prepareFreeTextQueries();
 
         // Check if architecture rules were correctly imported
         Assertions.assertEquals(
-                expectedModel.getArchitectureRuleManager().getArchitectureRules().size(),
+                expectedRuleManager.getArchitectureRules().size(),
                 ruleManager.getArchitectureRules().size());
         for (ArchitectureRule rule : ruleManager.getArchitectureRules()) {
-            Assertions.assertTrue(
-                    expectedModel
-                            .getArchitectureRuleManager()
-                            .getArchitectureRules()
-                            .contains(rule));
+            Assertions.assertTrue(expectedRuleManager.getArchitectureRules().contains(rule));
         }
 
         // Check if concepts were correctly imported
         Assertions.assertEquals(
-                expectedModel.getConceptManager().getInputConcepts().size(),
+                expectedConceptManager.getInputConcepts().size(),
                 conceptManager.getInputConcepts().size());
         for (Concept concept : conceptManager.getInputConcepts()) {
-            Assertions.assertTrue(
-                    expectedModel.getConceptManager().getInputConcepts().contains(concept));
+            Assertions.assertTrue(expectedConceptManager.getInputConcepts().contains(concept));
             Assertions.assertEquals(
-                    expectedModel
-                            .getConceptManager()
+                    expectedConceptManager
                             .getConceptByName(concept.getName())
                             .get()
                             .getDescription(),
@@ -104,14 +95,12 @@ class AdocImporterTest {
 
         // Check if relations were correctly imported
         Assertions.assertEquals(
-                expectedModel.getRelationManager().getInputRelations().size(),
+                expectedRelationManager.getInputRelations().size(),
                 relationManager.getInputRelations().size());
         for (Relation relation : relationManager.getInputRelations()) {
-            Assertions.assertTrue(
-                    expectedModel.getRelationManager().getInputRelations().contains(relation));
+            Assertions.assertTrue(expectedRelationManager.getInputRelations().contains(relation));
             Assertions.assertEquals(
-                    expectedModel
-                            .getRelationManager()
+                    expectedRelationManager
                             .getRelationByName(relation.getName())
                             .get()
                             .getDescription(),
@@ -132,7 +121,6 @@ class AdocImporterTest {
         Assertions.assertEquals(expectedCustomQueries.size(), customQueryQueue.size());
         while (!customQueryQueue.isEmpty()) {
             Query query = customQueryQueue.poll();
-            System.out.println(query.getName());
             Assertions.assertTrue(
                     expectedCustomQueries.stream()
                             .anyMatch(q -> q.getName().equals(query.getName())));
@@ -150,25 +138,22 @@ class AdocImporterTest {
         String rulesFileString = FileUtils.readFileToString(ruleFile, StandardCharsets.UTF_8);
         // then
         Assertions.assertEquals(
-                2,
-                TestUtils.numberOfMatches(RuleExtractor.getRuleContentPattern(), rulesFileString));
+                2, TestUtils.numberOfMatches(RuleParser.getRuleContentPattern(), rulesFileString));
         Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getConceptDescriptionPattern(),
-                        rulesFileString));
+                        DescriptionParser.getConceptDescriptionPattern(), rulesFileString));
         Assertions.assertEquals(
                 1,
                 TestUtils.numberOfMatches(
-                        MappingDescriptionExtractor.getRelationDescriptionPattern(),
-                        rulesFileString));
+                        DescriptionParser.getRelationDescriptionPattern(), rulesFileString));
         Assertions.assertEquals(
                 5,
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getRelationMappingPattern(), rulesFileString));
+                        MappingParser.getRelationMappingPattern(), rulesFileString));
         Assertions.assertEquals(
                 3,
                 TestUtils.numberOfMatches(
-                        MappingExtractor.getConceptMappingPattern(), rulesFileString));
+                        MappingParser.getConceptMappingPattern(), rulesFileString));
     }
 }

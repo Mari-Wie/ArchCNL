@@ -5,7 +5,8 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
-import org.archcnl.ui.events.EditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 
 public class EditableHierarchyEntryLayout<T extends HierarchyObject>
         extends HierarchyEntryLayout<T> {
@@ -22,7 +23,8 @@ public class EditableHierarchyEntryLayout<T extends HierarchyObject>
     }
 
     protected void deleteButtonPressed() {
-        // TODO: Implement delete functionality
+        HierarchyObject hierarchyObject = get();
+        fireEvent(new DeleteHierarchyObjectRequestedEvent(this, true, hierarchyObject));
     }
 
     protected void editButtonPressed() {

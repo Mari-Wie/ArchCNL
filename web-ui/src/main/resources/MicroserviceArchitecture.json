@@ -1,0 +1,100 @@
+{
+	"style": "MICROSERVICE_ARCHITECTURE",
+	"architectureInformation": [
+		{
+			"id": 1,
+			"name": "Microservice Name",
+			"groupId": 1
+		},
+		{
+			"id": 2,
+			"name": "Microservice Main Class Ending",
+			"groupId": 1
+		},
+		{
+			"id": 3,
+			"name": "DB-Access Mechanism",
+			"groupId": 2
+		},
+		{
+			"id": 4,
+			"name": "DB-Access Mechanism Ending",
+			"groupId": 2
+		},
+		{
+			"id": 5,
+			"name": "API-Mechanism Name",
+			"groupId": 3
+		},
+		{
+			"id": 6,
+			"name": "API-Mechanism Name Ending",
+			"groupId": 3
+		},
+		{
+			"id": 7,
+			"name": "API Gateway Package",
+			"groupId": -1
+		},
+		{
+			"id": 8,
+			"name": "MS-App Package Structure",
+			"groupId": -1
+		},
+		{
+			"id": 9,
+			"name": "Service Registry Class Name",
+			"groupId": -1
+		},
+		{
+			"id": 10,
+			"name": "Service Registry Import Class Name",
+			"groupId": -1
+		},
+		{
+			"id": 11,
+			"name": "Circuit Breaker Import Class Name",
+			"groupId": -1
+		}
+	],
+	"architectureRules": [
+		{
+			"rule": "Every Microservice must registerin ServiceRegistry.",
+			"requiredArchitectureInformationIds": [
+				9,
+				10
+			]
+		},
+		{
+			"rule": "Every Microservice must haveown DatabaseAccessAbstraction.",
+			"requiredArchitectureInformationIds": [
+				3,
+				4
+			]
+		},
+		{
+			"rule": "Every Microservice must use CircuitBreaker.",
+			"requiredArchitectureInformationIds": [
+				11
+			]
+		},
+		{
+			"rule": "Every Microservice must haveown API.",
+			"requiredArchitectureInformationIds": [
+				5,
+				6
+			]
+		},
+		{
+			"rule": "Every ApiGateway must resideinpackage MicroserviceApp.",
+			"requiredArchitectureInformationIds": [
+				7
+			]
+		},
+		{
+			"rule": "Every Microservice must useown RuntimeEnvironment.",
+			"requiredArchitectureInformationIds": [
+			]
+		}
+	]
+}

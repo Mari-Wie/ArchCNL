@@ -14,7 +14,6 @@ import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 
 public class TripletView extends HorizontalLayout {
@@ -22,7 +21,7 @@ public class TripletView extends HorizontalLayout {
     private static final long serialVersionUID = -547117976123681486L;
 
     private VariableSelectionComponent subjectComponent;
-    private PredicateComponent predicateComponent;
+    private PredicateSelectionComponent predicateComponent;
     private ObjectView objectView;
 
     public TripletView() {
@@ -30,7 +29,7 @@ public class TripletView extends HorizontalLayout {
         setWidthFull();
 
         subjectComponent = new VariableSelectionComponent();
-        predicateComponent = new PredicateComponent();
+        predicateComponent = new PredicateSelectionComponent();
         objectView = new ObjectView();
 
         HorizontalLayout tripletLayout = new HorizontalLayout();
@@ -49,7 +48,7 @@ public class TripletView extends HorizontalLayout {
         return subjectComponent;
     }
 
-    public PredicateComponent getPredicateComponent() {
+    public PredicateSelectionComponent getPredicateComponent() {
         return predicateComponent;
     }
 
@@ -58,14 +57,12 @@ public class TripletView extends HorizontalLayout {
     }
 
     private void addListeners() {
-        subjectComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
 
         predicateComponent.addListener(PredicateSelectedEvent.class, this::fireEvent);
         predicateComponent.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
 
-        objectView.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         objectView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         objectView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
         objectView.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);

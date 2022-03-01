@@ -1,40 +1,42 @@
 package org.archcnl.domain.output.model.query;
 
 import java.util.Arrays;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class WhereClauseTest {
 
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+
+    @Before
+    public void setup() throws ConceptDoesNotExistException {
+        conceptManager = new ConceptManager();
+        relationManager = new RelationManager(conceptManager);
+    }
+
     @Test
-    public void givenSimpleWhereClause_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException, RelationDoesNotExistException {
+    public void givenSimpleWhereClause_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
         final Triplet triplet1 =
                 new Triplet(
                         new Variable("aggregate"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("is-of-type")
-                                .get(),
+                        relationManager.getRelationByName("is-of-type").get(),
                         new CustomConcept("Aggregate", ""));
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("aggregate"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("hasName")
-                                .get(),
+                        relationManager.getRelationByName("hasName").get(),
                         new Variable("name"));
         final AndTriplets triplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
         final WhereClause whereClause = new WhereClause(triplets);
@@ -61,59 +63,37 @@ public class WhereClauseTest {
 
     @Test
     public void givenWhereClause_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException, RelationDoesNotExistException,
-                    ConceptDoesNotExistException {
+            throws ConceptDoesNotExistException {
         // given
         final Triplet triplet1 =
                 new Triplet(
                         new Variable("rule"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("is-of-type")
-                                .get(),
-                        RulesConceptsAndRelations.getInstance()
-                                .getConceptManager()
-                                .getConceptByName("ArchitectureRule")
-                                .get());
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("ArchitectureRule").get());
         final Triplet triplet2 =
                 new Triplet(
                         new Variable("rule"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("hasRuleRepresentation")
-                                .get(),
+                        relationManager.getRelationByName("hasRuleRepresentation").get(),
                         new StringValue("string"));
         final Triplet triplet3 =
                 new Triplet(
                         new Variable("rule"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("hasRuleRepresentation")
-                                .get(),
+                        relationManager.getRelationByName("hasRuleRepresentation").get(),
                         new Variable("cnl"));
         final Triplet triplet4 =
                 new Triplet(
                         new Variable("violation"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("violates")
-                                .get(),
+                        relationManager.getRelationByName("violates").get(),
                         new Variable("rule"));
         final Triplet triplet5 =
                 new Triplet(
                         new Variable("proof"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("proofs")
-                                .get(),
+                        relationManager.getRelationByName("proofs").get(),
                         new Variable("violation"));
         final Triplet triplet6 =
                 new Triplet(
                         new Variable("proof"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("hasNotInferredStatement")
-                                .get(),
+                        relationManager.getRelationByName("hasNotInferredStatement").get(),
                         new BooleanValue(true));
         final AndTriplets triplets =
                 new AndTriplets(

@@ -2,6 +2,7 @@ package org.archcnl.domain.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 
 public class HierarchyNode<T extends HierarchyObject> {
@@ -78,7 +79,7 @@ public class HierarchyNode<T extends HierarchyObject> {
     // TODO: handle case where element is not found
     public void remove(HierarchyNode<T> hn) {
         for (HierarchyNode<T> c : children) {
-            if (hn == c) {
+            if (hn.equals(c)) {
                 removeChild(c);
                 return;
             } else {
@@ -89,5 +90,23 @@ public class HierarchyNode<T extends HierarchyObject> {
 
     public void removeChild(HierarchyNode<T> hn) {
         children.remove(hn);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof HierarchyNode) {
+            final HierarchyNode<?> that = (HierarchyNode<?>) obj;
+            if (this.getName() != null && that.getName() != null) {
+                return Objects.equals(this.getName(), that.getName());
+            } else if (this.getEntry() != null && that.getEntry() != null) {
+                return Objects.equals(this.getEntry().getName(), that.getEntry().getName());
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getName() != null ? Objects.hash(getName()) : Objects.hash(getEntry().getName());
     }
 }

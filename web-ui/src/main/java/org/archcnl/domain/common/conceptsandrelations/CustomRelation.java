@@ -8,26 +8,27 @@ import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
 public class CustomRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "architecture";
 
-    private RelationMapping mapping;
+    private Optional<RelationMapping> mapping;
 
     public CustomRelation(
             String name, String description, List<ActualObjectType> relatableObjectTypes) {
         super(name, description, relatableObjectTypes);
+        this.mapping = Optional.empty();
     }
 
     public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getPredicate())) {
-            this.mapping = mapping;
+            this.mapping = Optional.of(mapping);
             ObjectType thenTripletObject = mapping.getThenTriplet().getObject();
             if (thenTripletObject instanceof ActualObjectType) {
-                setRelatableObjectType((ActualObjectType) thenTripletObject);
+                setRelatableObjectType(thenTripletObject);
             }
         } else {
             throw new UnrelatedMappingException(
@@ -36,7 +37,7 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
     }
 
     public Optional<RelationMapping> getMapping() {
-        return Optional.ofNullable(mapping);
+        return mapping;
     }
 
     public void setRelatableObjectType(ObjectType objectType) {

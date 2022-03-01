@@ -15,24 +15,24 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.ui.common.ButtonClickResponder;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.dialogs.ButtonClickResponder;
 import org.archcnl.ui.common.dialogs.OkCancelDialog;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCancelButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingCloseButtonClicked;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDoneButtonClickedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingNameFieldChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.MappingAlreadyExistsException;
 
 @Tag("Editor")
 public abstract class MappingEditorPresenter extends Component {
@@ -49,39 +49,32 @@ public abstract class MappingEditorPresenter extends Component {
 
     protected void initializeView(final MappingEditorView view) {
         this.view = view;
-        initInfoFieldAndThenTriplet();
         addListeners();
-    }
-
-    protected void initializeView(
-            final MappingEditorView view, final List<AndTriplets> andTripletsList) {
-        initializeView(view);
-        showAndTriplets(andTripletsList);
     }
 
     private void addListeners() {
         view.addListener(
                 MappingCloseButtonClicked.class,
-                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
+                event -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
         view.addListener(MappingNameFieldChangedEvent.class, this::nameHasChanged);
         view.addListener(MappingDescriptionFieldChangedEvent.class, this::descriptionHasChanged);
         view.addListener(MappingDoneButtonClickedEvent.class, event -> doneButtonClicked());
         view.addListener(
                 MappingCancelButtonClickedEvent.class,
-                event -> fireEvent(new RuleEditorRequestedEvent(this, true)));
+                event -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
     }
 
     private void nameHasChanged(final MappingNameFieldChangedEvent event) {
         view.updateNameField(event.getNewName());
         view.updateNameFieldInThenTriplet(event.getNewName());
-        try {
-            updateMappingName(event.getNewName());
-        } catch (final MappingAlreadyExistsException e) {
-            view.showNameFieldErrorMessage("The name is already taken");
-        }
+        updateMappingName(event.getNewName());
     }
 
-    private void showAndTriplets(final List<AndTriplets> andTripletsList) {
+    public void showNameAlreadyTakenErrorMessage() {
+        view.showNameFieldErrorMessage("The name is already taken");
+    }
+
+    protected void showAndTriplets(final List<AndTriplets> andTripletsList) {
         view.clearContent();
         andTripletsPresenters.clear();
         andTripletsList.forEach(
@@ -110,12 +103,15 @@ public abstract class MappingEditorPresenter extends Component {
         andTripletsPresenter.addListener(
                 DeleteAndTripletsViewRequestedEvent.class,
                 event -> deleteAndTripletsView(event.getSource()));
-        andTripletsPresenter.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         andTripletsPresenter.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         andTripletsPresenter.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
+
+        andTripletsPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        andTripletsPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
     }
 
     private void addNewAndTripletsViewAfter(final AndTripletsEditorView oldAndTripletsView) {
@@ -179,20 +175,12 @@ public abstract class MappingEditorPresenter extends Component {
     }
 
     protected void addVariable(final VariableCreationRequestedEvent event) {
-        try {
-            final Variable newVariable = new Variable(event.getVariableName());
-            try {
-                variableManager.addVariable(newVariable);
-            } catch (final VariableAlreadyExistsException e) {
-                // do nothing
-            }
-            event.getSource()
-                    .setItems(variableManager.getVariables().stream().map(Variable::getName));
-            event.getSource().setValue(newVariable.getName());
-            view.getVariableListView().showVariableList(variableManager.getVariables());
-        } catch (final InvalidVariableNameException e1) {
-            event.getSource().showErrorMessage("Invalid variable name");
-        }
+        final Variable newVariable = new Variable(event.getVariableName());
+        variableManager.addVariable(newVariable);
+
+        event.getSource().setItems(variableManager.getVariables().stream().map(Variable::getName));
+        event.getSource().setValue(newVariable.getName());
+        view.getVariableListView().showVariableList(variableManager.getVariables());
     }
 
     protected void hightlightIncompleteTriplets() {
@@ -210,9 +198,9 @@ public abstract class MappingEditorPresenter extends Component {
         return view;
     }
 
-    protected abstract void updateMappingName(String newName) throws MappingAlreadyExistsException;
+    protected abstract void updateMappingName(String newName);
 
-    protected abstract void initInfoFieldAndThenTriplet();
+    protected abstract void updateInfoFieldsAndThenTriplet();
 
     protected abstract void updateMapping();
 

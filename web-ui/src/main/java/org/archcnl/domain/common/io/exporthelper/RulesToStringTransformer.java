@@ -9,11 +9,10 @@ public class RulesToStringTransformer {
 
     public static String constructArchRuleString(List<ArchitectureRule> rules) {
         StringBuilder builder = new StringBuilder();
-        // TODO: Add description once rules have them
         for (ArchitectureRule rule : rules) {
             builder.append("[role=\"rule\"]");
             builder.append("\n");
-            builder.append(rule.toStringRepresentation());
+            builder.append(rule.transformToAdoc());
             builder.append("\n\n");
         }
         return builder.toString();

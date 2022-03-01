@@ -6,9 +6,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
@@ -17,8 +15,6 @@ public class VariableSelectionComponent extends ComboBox<String>
         implements DropTarget<VariableSelectionComponent> {
 
     private static final long serialVersionUID = 8887336725233930402L;
-    private static final String CREATE_ITEM = "Create new variable ";
-    private static final String CREATE_ITEM_PATTERN = CREATE_ITEM + "\"\\w+\"";
 
     public VariableSelectionComponent() {
         setActive(true);
@@ -31,11 +27,6 @@ public class VariableSelectionComponent extends ComboBox<String>
     }
 
     private void addListeners() {
-        addFilterChangeListener(
-                event ->
-                        fireEvent(
-                                new VariableFilterChangedEvent(
-                                        this, true, event.getFilter(), CREATE_ITEM)));
         addCustomValueSetListener(
                 event -> {
                     setInvalid(false);
@@ -44,10 +35,6 @@ public class VariableSelectionComponent extends ComboBox<String>
         addValueChangeListener(
                 event -> {
                     setInvalid(false);
-                    if (event.getValue() != null && event.getValue().matches(CREATE_ITEM_PATTERN)) {
-                        fireEvent(
-                                new VariableCreationRequestedEvent(this, true, getFilterString()));
-                    }
                     fireEvent(new VariableSelectedEvent(this, true));
                 });
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
@@ -62,8 +49,7 @@ public class VariableSelectionComponent extends ComboBox<String>
         }
     }
 
-    public Variable getVariable()
-            throws SubjectOrObjectNotDefinedException, InvalidVariableNameException {
+    public Variable getVariable() throws SubjectOrObjectNotDefinedException {
         String variableName =
                 getOptionalValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
         return new Variable(variableName);

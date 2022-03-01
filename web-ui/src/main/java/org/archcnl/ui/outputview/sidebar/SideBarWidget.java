@@ -3,7 +3,6 @@ package org.archcnl.ui.outputview.sidebar;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -12,8 +11,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.ui.outputview.queryviews.CustomQueryView;
-import org.archcnl.ui.outputview.queryviews.FreeTextQueryUiComponent;
-import org.archcnl.ui.outputview.queryviews.QueryResultsUiComponent;
+import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
+import org.archcnl.ui.outputview.queryviews.QueryResultsComponent;
+import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
 import org.archcnl.ui.outputview.sidebar.events.ShowComponentRequestedEvent;
 
@@ -21,17 +22,20 @@ public class SideBarWidget extends VerticalLayout {
 
     private static final long serialVersionUID = 3732746285572139979L;
     private Tabs tabs;
+    private SideBarTab generalInformationTab;
     private SideBarTab customQueryTab;
     private SideBarTab freeTextQueryTab;
 
     public SideBarWidget(
-            final QueryResultsUiComponent defaultQueryView,
+            final QueryResultsComponent defaultQueryView,
             final CustomQueryView customQueryView,
-            final FreeTextQueryUiComponent freeTextQueryView) {
+            final FreeTextQueryComponent freeTextQueryView) {
         setHeightFull();
         getStyle().set("overflow", "hidden");
 
-        add(new Text("Query Options"));
+        Span header = new Span("Query Options");
+        header.setClassName("side-bar-text");
+        add(header);
         addTabs(defaultQueryView, customQueryView, freeTextQueryView);
         addReturnButton();
     }
@@ -47,20 +51,15 @@ public class SideBarWidget extends VerticalLayout {
     }
 
     public void addTabs(
-            final QueryResultsUiComponent defaultQueryView,
+            final QueryResultsComponent defaultQueryView,
             final CustomQueryView customQueryView,
-            final FreeTextQueryUiComponent freeTextQueryView) {
+            final FreeTextQueryComponent freeTextQueryView) {
 
-        final Span genInfo = new Span("General Information");
-        genInfo.setClassName("side-bar-text");
-        final SideBarTab generalInformationTab =
-                new SideBarTab(genInfo, VaadinIcon.INFO_CIRCLE, defaultQueryView);
-        final Span customQuery = new Span("Custom Queries");
-        customQuery.setClassName("side-bar-text");
-        customQueryTab = new SideBarTab(customQuery, VaadinIcon.AUTOMATION, customQueryView);
-        final Span freeText = new Span("Free Text Queries");
-        freeText.setClassName("side-bar-text");
-        freeTextQueryTab = new SideBarTab(freeText, VaadinIcon.TEXT_INPUT, freeTextQueryView);
+        generalInformationTab =
+                new SideBarTab("General Information", VaadinIcon.INFO_CIRCLE, defaultQueryView);
+        customQueryTab = new SideBarTab("Custom Queries", VaadinIcon.AUTOMATION, customQueryView);
+        freeTextQueryTab =
+                new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
         tabs = new Tabs(generalInformationTab, customQueryTab, freeTextQueryTab);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setHeightFull();
@@ -79,9 +78,7 @@ public class SideBarWidget extends VerticalLayout {
     }
 
     public void addPinnedQueryTab(Component linkedComponent, String name) {
-        final Span nameSpan = new Span(name);
-        nameSpan.setClassName("side-bar-text");
-        final SideBarTab newTab = new SideBarTab(nameSpan, VaadinIcon.PIN, linkedComponent);
+        final SideBarTab newTab = new SideBarTab(name, VaadinIcon.PIN, linkedComponent);
         tabs.add(newTab);
         tabs.setSelectedTab(newTab);
     }
@@ -90,8 +87,31 @@ public class SideBarWidget extends VerticalLayout {
         customQueryTab.setLinkedComponent(customQueryView);
     }
 
-    public void updateFreeTextQueryTab(final FreeTextQueryUiComponent freeTextQueryView) {
+    public void updateFreeTextQueryTab(final FreeTextQueryComponent freeTextQueryView) {
         freeTextQueryTab.setLinkedComponent(freeTextQueryView);
+    }
+
+    public void updatePinnedQueryName(QueryNameUpdateRequestedEvent event) {
+        tabs.getChildren()
+                .filter(SideBarTab.class::isInstance)
+                .map(SideBarTab.class::cast)
+                .filter(tab -> !tab.equals(customQueryTab))
+                .filter(tab -> !tab.equals(freeTextQueryTab))
+                .filter(tab -> tab.getLinkedComponent().equals(event.getSource()))
+                .findFirst()
+                .ifPresent(tab -> tab.updateLabel(event.getName()));
+    }
+
+    public void deletePinnedQuery(DeleteButtonPressedEvent event) {
+        generalInformationTab.setSelected(true);
+        tabs.getChildren()
+                .filter(SideBarTab.class::isInstance)
+                .map(SideBarTab.class::cast)
+                .filter(tab -> !tab.equals(customQueryTab))
+                .filter(tab -> !tab.equals(freeTextQueryTab))
+                .filter(tab -> tab.getLinkedComponent().equals(event.getSource()))
+                .findFirst()
+                .ifPresent(tab -> tabs.remove(tab));
     }
 
     @Override

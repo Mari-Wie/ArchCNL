@@ -1,7 +1,5 @@
 package org.archcnl.domain.common;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -11,18 +9,17 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.ConformanceConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class ConceptManager extends HierarchyManager<Concept> {
 
     private TreeMap<String, Concept> concepts;
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public ConceptManager() {
         super();
-        concepts = new TreeMap<String, Concept>();
+        concepts = new TreeMap<>();
         // TODO: move this to somewhere where to ConceptManager is created and files are loaded,
         // also
         // this has to be in something like: create empty project
@@ -35,7 +32,6 @@ public class ConceptManager extends HierarchyManager<Concept> {
     public void addConcept(Concept concept) throws ConceptAlreadyExistsException {
         if (!doesConceptExist(concept)) {
             concepts.put(concept.getName(), concept);
-            propertyChangeSupport.firePropertyChange("newConcept", null, concept);
         } else {
             throw new ConceptAlreadyExistsException(concept.getName());
         }
@@ -58,10 +54,6 @@ public class ConceptManager extends HierarchyManager<Concept> {
             // TODO: error handling
         }
         parent.get().add(concept);
-    }
-
-    public void conceptHasBeenUpdated(Concept concept) {
-        propertyChangeSupport.firePropertyChange("conceptUpdated", null, concept);
     }
 
     public void append(CustomConcept concept) throws UnrelatedMappingException {
@@ -100,6 +92,11 @@ public class ConceptManager extends HierarchyManager<Concept> {
 
     public boolean doesConceptExist(Concept concept) {
         return concepts.containsValue(concept);
+    }
+
+    public void removeConcept(Concept concept) {
+        concepts.remove(concept.getName());
+        removeFromHierarchy(new HierarchyNode<>(concept));
     }
 
     // TODO: kick the inits out of here and load/init them from outside the manager
@@ -196,9 +193,5 @@ public class ConceptManager extends HierarchyManager<Concept> {
                 .filter(CustomConcept.class::isInstance)
                 .map(CustomConcept.class::cast)
                 .collect(Collectors.toList());
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 }

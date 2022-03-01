@@ -14,6 +14,7 @@ public class ConceptSelectionComponent extends ComboBox<String>
         implements DropTarget<ConceptSelectionComponent> {
 
     private static final long serialVersionUID = 5874026321476515429L;
+    private Optional<Concept> selectedConcept = Optional.empty();
 
     public ConceptSelectionComponent() {
         setActive(true);
@@ -39,7 +40,17 @@ public class ConceptSelectionComponent extends ComboBox<String>
         } catch (IllegalStateException e) {
             fireEvent(new ConceptListUpdateRequestedEvent(this, false));
             setValue(concept.getName());
+        } finally {
+            selectedConcept = Optional.of(concept);
         }
+    }
+
+    public void setInternalConcept(Concept concept) {
+        selectedConcept = Optional.of(concept);
+    }
+
+    public Optional<Concept> getConcept() {
+        return selectedConcept;
     }
 
     private void handleDropEvent(Object data) {

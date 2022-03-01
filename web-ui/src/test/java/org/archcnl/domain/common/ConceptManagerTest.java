@@ -11,14 +11,10 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,12 +23,14 @@ import org.junit.jupiter.api.Test;
 class ConceptManagerTest {
 
     private ConceptManager conceptManager;
+    private RelationManager relationManager;
     private int inputConceptsCount;
     private int outputConceptsCount;
 
     @BeforeEach
-    private void setup() {
+    private void setup() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
+        relationManager = new RelationManager(conceptManager);
         inputConceptsCount = 12;
         outputConceptsCount = 18;
     }
@@ -110,9 +108,7 @@ class ConceptManagerTest {
 
     @Test
     void givenConceptManager_whenCustomConceptsAdded_thenGetCustomConceptsAsExpected()
-            throws ConceptAlreadyExistsException, VariableAlreadyExistsException,
-                    UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
-                    InvalidVariableNameException {
+            throws ConceptAlreadyExistsException, UnsupportedObjectTypeException {
         Assertions.assertEquals(0, conceptManager.getCustomConcepts().size());
         conceptManager.addConcept(new CustomConcept("Test", ""));
         conceptManager.addConcept(new FamixConcept("ABC", ""));
@@ -121,9 +117,7 @@ class ConceptManagerTest {
 
     @Test
     void givenConceptManager_whenConceptsAreAdded_thenExpectedResults()
-            throws ConceptAlreadyExistsException, VariableAlreadyExistsException,
-                    UnsupportedObjectTypeInTriplet, RelationDoesNotExistException,
-                    InvalidVariableNameException {
+            throws ConceptAlreadyExistsException, UnsupportedObjectTypeException {
         Assertions.assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
         Assertions.assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
         conceptManager.addConcept(new CustomConcept("Test", ""));
@@ -140,9 +134,8 @@ class ConceptManagerTest {
 
     @Test
     void givenConceptManager_whenAddOrAppendIsCalled_thenExpectedResults()
-            throws VariableAlreadyExistsException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, InvalidVariableNameException,
-                    ConceptDoesNotExistException, UnrelatedMappingException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    UnrelatedMappingException {
         Assertions.assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
         Assertions.assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
         conceptManager.addOrAppend(new CustomConcept("Test", ""));
@@ -159,14 +152,8 @@ class ConceptManagerTest {
         and1.add(
                 TripletFactory.createTriplet(
                         new Variable("class"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("is-of-type")
-                                .get(),
-                        RulesConceptsAndRelations.getInstance()
-                                .getConceptManager()
-                                .getConceptByName("FamixClass")
-                                .get()));
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("FamixClass").get()));
         when1.add(new AndTriplets(and1));
         final ConceptMapping mapping1 = new ConceptMapping(new Variable("class"), when1, concept1);
         concept1.setMapping(mapping1);
@@ -184,14 +171,8 @@ class ConceptManagerTest {
         and2.add(
                 TripletFactory.createTriplet(
                         new Variable("class"),
-                        RulesConceptsAndRelations.getInstance()
-                                .getRelationManager()
-                                .getRelationByName("is-of-type")
-                                .get(),
-                        RulesConceptsAndRelations.getInstance()
-                                .getConceptManager()
-                                .getConceptByName("Enum")
-                                .get()));
+                        relationManager.getRelationByName("is-of-type").get(),
+                        conceptManager.getConceptByName("Enum").get()));
         when2.add(new AndTriplets(and2));
         final ConceptMapping mapping2 = new ConceptMapping(new Variable("class"), when2, concept2);
         concept2.setMapping(mapping2);

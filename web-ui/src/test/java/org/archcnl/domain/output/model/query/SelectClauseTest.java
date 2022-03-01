@@ -4,15 +4,13 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class SelectClauseTest {
 
     @Test
-    public void givenSelectClause_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException {
+    public void givenSelectClause_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
         final Variable variable1 = new Variable("name");
         final Variable variable2 = new Variable("cnl");
@@ -32,8 +30,7 @@ public class SelectClauseTest {
     }
 
     @Test
-    public void givenSimpleSelectClause_whenCallAsFormattedString_thenReturnFormattedString()
-            throws InvalidVariableNameException {
+    public void givenSimpleSelectClause_whenCallAsFormattedString_thenReturnFormattedString() {
         // given
         final Variable variable1 = new Variable("name");
         final Set<Variable> objects = new LinkedHashSet<>(Arrays.asList(variable1));

@@ -1,8 +1,10 @@
 package org.archcnl.domain.input.model.architecturerules;
 
 import java.util.Objects;
+import org.archcnl.domain.common.FormattedAdocDomainObject;
+import org.archcnl.domain.common.FormattedViewDomainObject;
 
-public class ArchitectureRule {
+public class ArchitectureRule implements FormattedAdocDomainObject, FormattedViewDomainObject {
 
     private String ruleString;
 
@@ -10,7 +12,17 @@ public class ArchitectureRule {
         this.ruleString = rule;
     }
 
-    public String toStringRepresentation() {
+    public void setRuleString(String ruleString) {
+        this.ruleString = ruleString;
+    }
+
+    @Override
+    public String transformToGui() {
+        return ruleString;
+    }
+
+    @Override
+    public String transformToAdoc() {
         return ruleString;
     }
 
@@ -21,11 +33,11 @@ public class ArchitectureRule {
             return false;
         }
         ArchitectureRule otherRule = (ArchitectureRule) o;
-        return toStringRepresentation().equals(otherRule.toStringRepresentation());
+        return transformToAdoc().equals(otherRule.transformToAdoc());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(toStringRepresentation());
+        return Objects.hash(transformToAdoc());
     }
 }

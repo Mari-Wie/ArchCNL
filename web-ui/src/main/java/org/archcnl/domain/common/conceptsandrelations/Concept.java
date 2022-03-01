@@ -1,9 +1,9 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.Objects;
+import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 
 public abstract class Concept extends ActualObjectType implements HierarchyObject {
 
@@ -34,12 +34,10 @@ public abstract class Concept extends ActualObjectType implements HierarchyObjec
         return Objects.hash(name);
     }
 
-    public void changeName(String newName) throws ConceptAlreadyExistsException {
-        if (!RulesConceptsAndRelations.getInstance()
-                .getConceptManager()
-                .doesConceptExist(new CustomConcept(newName, ""))) {
+    public void changeName(String newName, ConceptManager conceptManager)
+            throws ConceptAlreadyExistsException {
+        if (!conceptManager.doesConceptExist(new CustomConcept(newName, ""))) {
             this.name = newName;
-            RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);
         } else {
             throw new ConceptAlreadyExistsException(newName);
         }
@@ -55,9 +53,9 @@ public abstract class Concept extends ActualObjectType implements HierarchyObjec
         return false;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
-        RulesConceptsAndRelations.getInstance().getConceptManager().conceptHasBeenUpdated(this);
     }
 
     @Override

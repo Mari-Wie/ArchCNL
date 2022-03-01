@@ -5,59 +5,47 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.model.RulesConceptsAndRelations;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.ChangeConceptNameRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.exceptions.MappingAlreadyExistsException;
 
 public class ConceptEditorPresenter extends MappingEditorPresenter {
 
     private static final long serialVersionUID = 1636256374259524105L;
     private ConceptEditorView view;
-    private Optional<CustomConcept> concept;
+    private Optional<CustomConcept> concept = Optional.empty();
 
     public ConceptEditorPresenter() {
         super();
-        this.concept = Optional.empty();
         view =
                 new ConceptEditorView(
                         prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
-        addThenTripletListeners();
         initializeView(view);
+        addConceptViewListeners();
     }
 
-    public ConceptEditorPresenter(final CustomConcept concept) {
-        super();
+    public void showConcept(final CustomConcept concept) {
         this.concept = Optional.of(concept);
-        view =
-                new ConceptEditorView(
-                        prepareAndTripletsEditorView(new AndTripletsEditorPresenter(true)));
-        addThenTripletListeners();
-        initializeView(view, ConceptEditorPresenter.extractAndTriplets(concept));
+        showAndTriplets(extractAndTriplets(concept));
+        updateInfoFieldsAndThenTriplet();
     }
 
-    private void addThenTripletListeners() {
-        view.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
+    private void addConceptViewListeners() {
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
     }
 
-    private static List<AndTriplets> extractAndTriplets(final CustomConcept concept) {
+    private List<AndTriplets> extractAndTriplets(final CustomConcept concept) {
         if (concept == null || concept.getMapping().isEmpty()) {
             return new LinkedList<>();
         } else {
@@ -66,7 +54,7 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void initInfoFieldAndThenTriplet() {
+    protected void updateInfoFieldsAndThenTriplet() {
         if (concept.isPresent()) {
             view.updateDescription(concept.get().getDescription());
             view.updateNameField(concept.get().getName());
@@ -81,17 +69,11 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
     }
 
     @Override
-    protected void updateMappingName(final String newName) throws MappingAlreadyExistsException {
+    protected void updateMappingName(final String newName) {
         if (concept.isEmpty()) {
             concept = Optional.of(new CustomConcept(newName, ""));
         } else {
-            try {
-                concept.get().changeName(newName);
-            } catch (final ConceptAlreadyExistsException e) {
-                if (!newName.equals(concept.get().getName())) {
-                    throw new MappingAlreadyExistsException(e.getMessage());
-                }
-            }
+            fireEvent(new ChangeConceptNameRequestedEvent(this, true, concept.get(), newName));
         }
     }
 
@@ -103,33 +85,18 @@ public class ConceptEditorPresenter extends MappingEditorPresenter {
                         new ConceptMapping(
                                 view.getThenTripletSubject(), getAndTripletsList(), concept.get());
                 concept.get().setMapping(mapping);
+                fireEvent(new AddCustomConceptRequestedEvent(this, true, concept.get()));
 
-                if (!doesConceptExist(concept.get())) {
-                    RulesConceptsAndRelations.getInstance()
-                            .getConceptManager()
-                            .addToParent(concept.get(), "Custom Concepts");
-                }
-
-                fireEvent(new RuleEditorRequestedEvent(this, true));
-            } catch (UnrelatedMappingException
-                    | UnsupportedObjectTypeInTriplet
-                    | RelationDoesNotExistException
-                    | ConceptAlreadyExistsException
-                    | InvalidVariableNameException e) {
+                fireEvent(new RulesWidgetRequestedEvent(this, true));
+            } catch (UnrelatedMappingException e) {
                 // not possible/fatal
-                throw new RuntimeException();
+                throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectErrorMessage("Setting a subject is required");
             }
         } else {
             view.showNameFieldErrorMessage("A name is required");
         }
-    }
-
-    private boolean doesConceptExist(final CustomConcept concept) {
-        return RulesConceptsAndRelations.getInstance()
-                .getConceptManager()
-                .doesConceptExist(concept);
     }
 
     @Override

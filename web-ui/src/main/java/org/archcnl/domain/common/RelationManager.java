@@ -1,7 +1,5 @@
 package org.archcnl.domain.common;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -19,15 +17,14 @@ import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 
 public class RelationManager extends HierarchyManager<Relation> {
 
     private List<Relation> relations;
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public RelationManager(final ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
@@ -48,17 +45,12 @@ public class RelationManager extends HierarchyManager<Relation> {
             throw new RelationAlreadyExistsException(relation.getName());
         }
         relations.add(relation);
-        propertyChangeSupport.firePropertyChange("newRelation", null, relation);
     }
 
     public void add(Relation relation, HierarchyNode<Relation> parent)
             throws RelationAlreadyExistsException {
         addRelation(relation);
         parent.add(relation);
-    }
-
-    public void relationHasBeenUpdated(final Relation relation) {
-        propertyChangeSupport.firePropertyChange("relationUpdated", null, relation);
     }
 
     public void addToParent(Relation relation, HierarchyNode<Relation> parent)
@@ -147,6 +139,11 @@ public class RelationManager extends HierarchyManager<Relation> {
                         existingRelation -> relation.getName().equals(existingRelation.getName()));
     }
 
+    public void removeRelation(Relation relation) {
+        relations.remove(relation);
+        removeFromHierarchy(new HierarchyNode<>(relation));
+    }
+
     private void initializeSpecialRelations() {
         final List<ActualObjectType> stringConcept = new LinkedList<>();
         stringConcept.add(new StringValue(""));
@@ -159,11 +156,10 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeTypeRelation() {
-        addToDefault(
-                new TypeRelation(
-                        "is-of-type",
-                        "type",
-                        "This relation is used to state that the subject is an instance of the class stated in the object."));
+        TypeRelation typeRelation = TypeRelation.getTyperelation();
+        typeRelation.setDescription(
+                "This relation is used to state that the subject is an instance of the class stated in the object.");
+        addToDefault(typeRelation);
     }
 
     private void initializeStringRelations() {
@@ -490,9 +486,5 @@ public class RelationManager extends HierarchyManager<Relation> {
                 .filter(CustomRelation.class::isInstance)
                 .map(CustomRelation.class::cast)
                 .collect(Collectors.toList());
-    }
-
-    public void addPropertyChangeListener(final PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 }

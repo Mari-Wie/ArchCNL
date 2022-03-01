@@ -1,19 +1,12 @@
 package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
 import java.util.Objects;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 
 public class Variable extends ObjectType {
 
     private String name;
 
-    public Variable(String name) throws InvalidVariableNameException {
-        if (name.startsWith("?")) {
-            name = name.substring(1);
-        }
-        if (!name.matches("\\w+")) {
-            throw new InvalidVariableNameException(name);
-        }
+    public Variable(String name) {
         this.name = name;
     }
 
