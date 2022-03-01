@@ -23,18 +23,24 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
 
-    private void handleDropEvent(Object data) {
+    protected void handleDropEvent(Object data) {
         // TODO: find a way to only handle events where the type is Hierarchynode to get rid of the
         // instanceof
+        String droppedName = "";
         if (data instanceof List) {
             List<HierarchyNode> nodes = (List<HierarchyNode>) data;
-            String droppedName = nodes.get(0).getName();
-            ListDataProvider dataProvider = (ListDataProvider) getDataProvider();
-            if (dataProvider.getItems().contains(droppedName)) {
-                setValue(droppedName);
-            } else {
-                showErrorMessage("Not a " + name.toLowerCase());
-            }
+            droppedName = nodes.get(0).getName();
+        }
+        checkedSetValue(droppedName);
+    }
+
+    protected void checkedSetValue(String val){
+        ListDataProvider<String> dataProvider = (ListDataProvider) getDataProvider();
+        if (dataProvider.getItems().contains(val)) {
+            setValue(val);
+        }
+        else{
+            showErrorMessage("Not a " + name.toLowerCase());
         }
     }
 
@@ -57,6 +63,6 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
     protected <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
+            }
 }
 ;

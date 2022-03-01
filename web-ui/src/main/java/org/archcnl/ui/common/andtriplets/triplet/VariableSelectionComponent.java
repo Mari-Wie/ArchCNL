@@ -8,6 +8,8 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequeste
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
 public class VariableSelectionComponent extends SelectionComponent {
 
@@ -35,6 +37,18 @@ public class VariableSelectionComponent extends SelectionComponent {
         addFocusListener(e -> fireEvent(new VariableListUpdateRequestedEvent(this, true)));
     }
 
+    @Override
+    protected void handleDropEvent(Object data) {
+        // TODO: find a way to only handle events where the type is Hierarchynode to get rid of the
+        // instanceof
+        String droppedName = "";
+        if(data instanceof Variable){
+            droppedName = ((Variable)data).getName();
+        }
+        checkedSetValue(droppedName);
+    }
+
+
     public void setVariable(Variable variable) {
         try {
             setValue(variable.getName());
@@ -45,7 +59,7 @@ public class VariableSelectionComponent extends SelectionComponent {
 
     public Variable getVariable() throws SubjectOrObjectNotDefinedException {
         String variableName =
-                getOptionalValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
+            getOptionalValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
         return new Variable(variableName);
     }
 
@@ -53,5 +67,5 @@ public class VariableSelectionComponent extends SelectionComponent {
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
+            }
 }
