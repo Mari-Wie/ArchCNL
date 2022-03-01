@@ -31,7 +31,7 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "HierarchyNode for" + entry.toString();
     }
 

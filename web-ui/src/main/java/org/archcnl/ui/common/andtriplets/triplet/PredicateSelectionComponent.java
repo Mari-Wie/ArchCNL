@@ -2,14 +2,11 @@ package org.archcnl.ui.common.andtriplets.triplet;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.SelectionComponent;
 
 public class PredicateSelectionComponent extends SelectionComponent {
 
