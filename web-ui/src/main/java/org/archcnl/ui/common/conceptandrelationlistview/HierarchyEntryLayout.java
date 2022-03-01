@@ -30,6 +30,11 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
         return entry.getEntry();
     }
 
+    @Override
+    public String toString(){
+        return "HierarchyNode for" + entry.toString();
+    }
+
     public void updateDescription() {
         getElement().setAttribute("title", entry.getDescription());
     }
