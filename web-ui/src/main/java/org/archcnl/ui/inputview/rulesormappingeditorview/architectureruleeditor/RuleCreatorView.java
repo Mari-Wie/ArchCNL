@@ -36,10 +36,10 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
         getStyle().set("border", "1px solid black");
         setClassName("architecture-rules");
 
-        initializeLayout();
+        initializeLayout(ruleString);
     }
 
-    private void initializeLayout() {
+    private void initializeLayout(Optional<String> ruleString) {
         subject = new SubjectComponent();
         subject.addListener(
                 DetermineVerbComponentEvent.class,
@@ -61,6 +61,13 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
         archRuleTextArea.setWidthFull();
 
         add(subject, verb, buttonsLayout);
+
+        ruleString.ifPresent(
+                rule -> {
+                    archRuleTextArea.setValue(rule);
+                    expertmodeCheckbox.setValue(true);
+                    activateExpertMode(true);
+                });
     }
 
     private void activateExpertMode(Boolean show) {
