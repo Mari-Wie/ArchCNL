@@ -15,9 +15,9 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 public class VerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
-    private ArrayList<RuleComponentInterface> verbComponentList;
+    private ArrayList<RuleComponentInterface> verbComponentList = new ArrayList<>();
     private boolean showAndOrComponent = true;
-    private String currentSubjectSelection;
+    private String currentSubjectSelection = "If";
 
     /**
      * There are three possible verb component, depending on what descriptor is chosen in the
@@ -26,20 +26,16 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
     public VerbComponent() {
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
-        verbComponentList = new ArrayList<>();
-        currentSubjectSelection = "";
+
+        determineVerbComponent("");
     }
 
     /**
      * Called by DetermineVerbComponentEvent. Event is fired when a different descriptor is selected
      * in the subject component.
-     *
-     * @param selectedDescriptor the value of the first ComboBox of the subject component.
      */
     public void determineVerbComponent(String selectedDescriptor) {
-        // TODO Quality-of-Life: also return when the new descriptor doesn't change the verb
-        // component
-        if (currentSubjectSelection.equals(selectedDescriptor)) {
+        if (determineState(selectedDescriptor) == determineState(currentSubjectSelection)) {
             return;
         }
 
@@ -47,26 +43,48 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
         verbComponentList.clear();
         add(new Label("Rule Statement"));
 
-        if (selectedDescriptor.equals("If")
-                || selectedDescriptor.equals("If a")
-                || selectedDescriptor.equals("If an")) {
-            IfVerbComponent verbComponent = new IfVerbComponent();
-            verbComponentList.add(verbComponent);
-            add(verbComponent);
-        } else if (selectedDescriptor.equals("Fact:")) {
-            FactVerbComponent verbComponent = new FactVerbComponent();
-            verbComponentList.add(verbComponent);
-            add(verbComponent);
-        } else {
-            EveryOnlyNoVerbComponent verbComponent = new EveryOnlyNoVerbComponent(false);
-            verbComponent.addListener(
-                    ShowAndOrBlockEvent.class,
-                    event -> showAndOrComponent(event.getShowAndOrBlock()));
-            verbComponentList.add(verbComponent);
-            add(verbComponent);
-            addAndOrVerbComponent();
+        switch (selectedDescriptor) {
+            case "If":
+            case "If a":
+            case "If an":
+                IfVerbComponent ifVerbComponent = new IfVerbComponent();
+                verbComponentList.add(ifVerbComponent);
+                add(ifVerbComponent);
+                break;
+            case "Fact:":
+                FactVerbComponent factVerbComponent = new FactVerbComponent();
+                verbComponentList.add(factVerbComponent);
+                add(factVerbComponent);
+                break;
+            default:
+                EveryOnlyNoVerbComponent defaultVerbComponent = new EveryOnlyNoVerbComponent(false);
+                defaultVerbComponent.addListener(
+                        ShowAndOrBlockEvent.class,
+                        event -> showAndOrComponent(event.getShowAndOrBlock()));
+                verbComponentList.add(defaultVerbComponent);
+                add(defaultVerbComponent);
+                addAndOrVerbComponent();
+                break;
         }
         currentSubjectSelection = selectedDescriptor;
+    }
+
+    private int determineState(String subjectDescriptor) {
+        int currentState = 0;
+        switch (subjectDescriptor) {
+            case "If":
+            case "If a":
+            case "If an":
+                currentState = 1;
+                break;
+            case "Fact:":
+                currentState = 2;
+                break;
+            default:
+                currentState = 3;
+                break;
+        }
+        return currentState;
     }
 
     private void showAndOrComponent(boolean showComponent) {
@@ -106,10 +124,10 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
     }
 
     @Override
-    public String getString() {
+    public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         for (RuleComponentInterface ruleComponent : verbComponentList) {
-            sBuilder.append(ruleComponent.getString());
+            sBuilder.append(ruleComponent.getRuleString());
         }
         return sBuilder.toString();
     }

@@ -69,7 +69,7 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
     }
 
     @Override
-    public String getString() {
+    public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(one_firstModifier.getValue() + " ");
         if (isInStateOne) {

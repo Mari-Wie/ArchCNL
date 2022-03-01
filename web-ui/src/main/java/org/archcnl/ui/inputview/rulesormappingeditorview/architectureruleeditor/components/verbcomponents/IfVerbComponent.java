@@ -86,20 +86,20 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
     }
 
     @Override
-    public String getString() {
+    public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(one_firstVariable.getValue() + " ");
         sBuilder.append(oneb_OptionalModifier.getValue() + " ");
         sBuilder.append(two_secondVariable.getValue());
         if (three_firstAddConditionCheckbox.getValue()) {
-            sBuilder.append(" " + firstCondition.getString());
+            sBuilder.append(" " + firstCondition.getRuleString());
         }
         sBuilder.append(four_firstModifier.getValue() + " ");
         sBuilder.append(five_thirdVariable.getValue() + " ");
         sBuilder.append(six_secondModifier.getValue() + " ");
         sBuilder.append(seven_fourthVariable.getValue());
         if (eight_secondAddConditionCheckbox.getValue()) {
-            sBuilder.append(" " + secondCondition.getString());
+            sBuilder.append(" " + secondCondition.getRuleString());
         }
         return sBuilder.toString();
     }

@@ -267,7 +267,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
     }
 
     @Override
-    public String getString() {
+    public String getRuleString() {
         // This is an empty AndOr Block and is ignored
         if (one_firstCombobox.getValue().equals("-")) {
             return "";
@@ -289,7 +289,7 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         }
         if (boolArray[5]) {
             if (six_addConditionCheckbox.getValue()) {
-                sBuilder.append(" " + newCondition.getString());
+                sBuilder.append(" " + newCondition.getRuleString());
             }
         }
         return sBuilder.toString();

@@ -83,7 +83,7 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
     }
 
     @Override
-    public String getString() {
+    public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(startLabelTextfield.getText() + "");
         sBuilder.append(firstVariable.getValue() + " ");
@@ -91,7 +91,7 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
         sBuilder.append(secondVariable.getValue());
         sBuilder.append(endLabelTextfield.getText() + " ");
         if (andCheckbox.getValue()) {
-            sBuilder.append("and " + newCondition.getString());
+            sBuilder.append("and " + newCondition.getRuleString());
         }
 
         return sBuilder.toString();

@@ -23,7 +23,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
     private ComboBox<String> one_DescriptorCombobox;
     private ConceptTextfieldWidget two_FirstConcept;
     private Checkbox three_ConditionCheckbox;
-    private boolean showFirstConcept = true;
+    private boolean showFirstConcept = true, showCondition = false;
 
     /**
      * The subject component is usually made out of a descriptor (Every, Only, If, No,...), a
@@ -39,9 +39,9 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
 
     private void initializeLayout() {
         newCondition = new ConditionComponent();
-
         subjectLayout = new HorizontalLayout();
-        List<String> firstStatements =
+
+        List<String> descriptorList =
                 Arrays.asList(
                         "Every",
                         "Every a",
@@ -57,65 +57,75 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
                         "No a",
                         "No an",
                         "Fact:");
-
-        one_DescriptorCombobox = new ComboBox<String>("Modifier", firstStatements);
+        one_DescriptorCombobox = new ComboBox<String>("Modifier", descriptorList);
         one_DescriptorCombobox.setValue("Every");
         one_DescriptorCombobox.addValueChangeListener(
                 e -> {
-                    updateUI(one_DescriptorCombobox.getValue());
+                    updateUI();
                 });
+
         two_FirstConcept = new ConceptTextfieldWidget();
         two_FirstConcept.setLabel("Concept");
+
         three_ConditionCheckbox = new Checkbox("that... (add condition)");
-        three_ConditionCheckbox.addClickListener(
-                e -> addCondition(three_ConditionCheckbox.getValue()));
+        three_ConditionCheckbox.addClickListener(e -> updateUI());
+
         subjectLayout.setVerticalComponentAlignment(Alignment.END, three_ConditionCheckbox);
         subjectLayout.add(one_DescriptorCombobox, two_FirstConcept, three_ConditionCheckbox);
-
         add(subjectLayout);
     }
 
-    private void updateUI(String value) {
-        if (value.equals("Nothing")) {
-            subjectLayout.remove(two_FirstConcept, three_ConditionCheckbox);
-            showFirstConcept = false;
-        } else if (value.equals("Fact:")) {
-            subjectLayout.remove(three_ConditionCheckbox);
-        } else {
-            subjectLayout.add(two_FirstConcept, three_ConditionCheckbox);
-            showFirstConcept = true;
+    public String getFirstModifierValue() {
+        return one_DescriptorCombobox.getValue();
+    }
+
+    private void updateUI() {
+        String descriptorValue = one_DescriptorCombobox.getValue();
+        showFirstConcept = true;
+        subjectLayout.add(two_FirstConcept);
+
+        switch (descriptorValue) {
+            case "Nothing":
+                subjectLayout.remove(two_FirstConcept);
+                showFirstConcept = false;
+            case "Fact:":
+                subjectLayout.remove(three_ConditionCheckbox);
+                showCondition(false);
+                break;
+            default:
+                subjectLayout.add(three_ConditionCheckbox);
+                showCondition(three_ConditionCheckbox.getValue());
+                break;
         }
         fireEvent(new DetermineVerbComponentEvent(this, true));
     }
 
-    private void addCondition(Boolean showCondition) {
-        if (showCondition) {
+    private void showCondition(Boolean show) {
+        if (show) {
             add(newCondition);
-        } else {
-            remove(newCondition);
+            showCondition = true;
+            return;
         }
+        remove(newCondition);
+        showCondition = false;
     }
 
-    public String getFirstModifier() {
-        return one_DescriptorCombobox.getValue();
+    @Override
+    public String getRuleString() {
+        StringBuilder sBuilder = new StringBuilder();
+        sBuilder.append(one_DescriptorCombobox.getValue() + " ");
+        if (showFirstConcept) {
+            sBuilder.append(two_FirstConcept.getValue() + " ");
+        }
+        if (showCondition) {
+            sBuilder.append(newCondition.getRuleString());
+        }
+        return sBuilder.toString();
     }
 
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
-
-    @Override
-    public String getString() {
-        StringBuilder sBuilder = new StringBuilder();
-        sBuilder.append(one_DescriptorCombobox.getValue() + " ");
-        if (showFirstConcept) {
-            sBuilder.append(two_FirstConcept.getValue() + " ");
-            if (three_ConditionCheckbox.getValue()) {
-                sBuilder.append(newCondition.getString());
-            }
-        }
-        return sBuilder.toString();
     }
 }

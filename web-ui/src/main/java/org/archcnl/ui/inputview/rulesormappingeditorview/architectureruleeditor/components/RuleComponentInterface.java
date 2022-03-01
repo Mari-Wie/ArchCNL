@@ -2,5 +2,5 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor
 
 public interface RuleComponentInterface {
 
-    public abstract String getString();
+    public abstract String getRuleString();
 }

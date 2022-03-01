@@ -24,11 +24,12 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
     private SubjectComponent subject;
     private VerbComponent verb;
     private HorizontalLayout buttonsLayout;
+    private Checkbox expertmodeCheckbox;
 
     /**
      * Architecture rules are made up out of a subject component (Every/no/... concept) describing
      * the topic of the rule and a verb component (Can/must/...) describing the rule the subject
-     * must follow. Refer to the architecture rule tree in the wiki for a visualization.
+     * must follow. Refer to the architecture rule tree in the documentation for a visualisation.
      */
     public RuleCreatorView(Optional<String> ruleString) {
         getStyle().set("overflow", "auto");
@@ -36,28 +37,28 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
         setClassName("architecture-rules");
 
         initializeLayout();
-        verb.determineVerbComponent(subject.getFirstModifier());
     }
 
     private void initializeLayout() {
         subject = new SubjectComponent();
-        verb = new VerbComponent();
-        buttonsLayout = new HorizontalLayout();
-
         subject.addListener(
                 DetermineVerbComponentEvent.class,
-                event -> verb.determineVerbComponent(event.getSource().getFirstModifier()));
+                event -> verb.determineVerbComponent(event.getSource().getFirstModifierValue()));
 
+        verb = new VerbComponent();
+
+        buttonsLayout = new HorizontalLayout();
         saveButton = new Button("Save Rule", e -> saveRule());
         cancelButton =
                 new Button("Cancel", click -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
-        Checkbox activateExpertmode = new Checkbox("Activate Expertmode");
-        activateExpertmode.addClickListener(e -> activateExpertMode(activateExpertmode.getValue()));
-        buttonsLayout.setVerticalComponentAlignment(Alignment.CENTER, activateExpertmode);
+        expertmodeCheckbox = new Checkbox("Activate Expertmode");
+        expertmodeCheckbox.addClickListener(e -> activateExpertMode(expertmodeCheckbox.getValue()));
+        buttonsLayout.setVerticalComponentAlignment(Alignment.CENTER, expertmodeCheckbox);
+        buttonsLayout.setPadding(true);
+        buttonsLayout.add(saveButton, cancelButton, expertmodeCheckbox);
+
         archRuleTextArea = new TextArea("Create new architecture rule");
         archRuleTextArea.setWidthFull();
-        buttonsLayout.setPadding(true);
-        buttonsLayout.add(saveButton, cancelButton, activateExpertmode);
 
         add(subject, verb, buttonsLayout);
     }
@@ -76,7 +77,7 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
         } else {
             fireEvent(
                     new SaveRuleButtonPressedEvent(
-                            this, true, subject.getString() + verb.getString()));
+                            this, true, subject.getRuleString() + verb.getRuleString()));
         }
         fireEvent(new RulesWidgetRequestedEvent(this, true));
     }
