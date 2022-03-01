@@ -21,7 +21,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     private HierarchyNode<T> draggedItem;
 
     public HierarchyView() {
-        getStyle().set("border", "1px solid black");
+        setClassName("hierarchy");
         roots = new ArrayList<HierarchyNode<T>>();
         treeGrid = new TreeGrid<HierarchyNode<T>>();
         treeGrid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
@@ -74,12 +74,12 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
         return getEventBus().addListener(eventType, listener);
     }
 
-    void getData() {
+    private void getData() {
         // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
         // fooTreeGrid.getDataProvider()).getTreeData().getRootItems();
     }
 
-    void setUpDragAndDrop() {
+    private void setUpDragAndDrop() {
         // Modifying the data view requires a mutable collection
 
         treeGrid.addDragStartListener(e -> draggedItem = e.getDraggedItems().get(0));
@@ -93,7 +93,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
 
                     if (targetNode == null || personWasDroppedOntoItself) return;
 
-                    if (dropLocation == GridDropLocation.BELOW) {
+                    if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
                                 new HierarchySwapRequestedEvent(
                                         this, false, draggedItem, targetNode, dropLocation));
