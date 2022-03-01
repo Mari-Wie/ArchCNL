@@ -4,7 +4,12 @@ import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import java.util.Optional;
+
+import java.util.List;
 import com.vaadin.flow.component.dnd.DropTarget;
+import org.archcnl.domain.common.HierarchyNode;
+import com.vaadin.flow.data.provider.ListDataProvider;
+
 public class SelectionComponent extends ComboBox<String> implements DropTarget<SelectionComponent>
 {
     private String name;
@@ -20,10 +25,18 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
         addDropListener(event -> event.getDragData().ifPresent(this::handleDropEvent));
     }
     private void handleDropEvent(Object data){
-        System.out.println(data.toString());
-        String n = data.toString();
-        setValue(n.substring(1, n.length() - 1));
-        //fireEvent(fireEvent(new SelectionComponentUpdateRequested(this, true));
+        //TODO: find a way to only handle events where the type is Hierarchynode to get rid of the instanceof
+        if(data instanceof List ){
+            List<HierarchyNode> nodes = (List<HierarchyNode>) data;
+            String droppedName = nodes.get(0).getName();
+            ListDataProvider dataProvider = (ListDataProvider) getDataProvider();
+            if( dataProvider.getItems().contains(droppedName)){
+                setValue(droppedName);
+            }
+            else{
+                showErrorMessage("Not a " + name.toLowerCase());
+            }
+        }
     }
 
     public void showErrorMessage(String message) {
