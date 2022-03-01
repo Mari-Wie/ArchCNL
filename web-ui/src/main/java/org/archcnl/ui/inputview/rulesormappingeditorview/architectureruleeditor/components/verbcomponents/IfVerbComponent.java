@@ -15,14 +15,15 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
     private static final long serialVersionUID = 1L;
     private HorizontalLayout firstRowComponentRuleLayout, secondRowComponentRuleLayout;
     private ConditionComponent firstCondition, secondCondition;
-    private RelationTextfieldWidget one_firstVariable, five_thirdVariable;
-    private ConceptTextfieldWidget two_secondVariable, seven_fourthVariable;
-    private Checkbox three_firstAddConditionCheckbox, eight_secondAddConditionCheckbox;
-    private ComboBox<String> oneb_OptionalModifier, four_firstModifier, six_secondModifier;
+    private RelationTextfieldWidget one_firstVariable, six_thirdVariable;
+    private ComboBox<String> two_firstModifier, five_secondModifier, seven_thirdModifier;
+    private ConceptTextfieldWidget three_secondVariable, eight_fourthVariable;
+    private Checkbox four_firstAddConditionCheckbox, nine_secondAddConditionCheckbox;
 
     public IfVerbComponent() {
         this.setMargin(false);
         this.setPadding(false);
+
         initializeLayout();
     }
 
@@ -32,39 +33,39 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
 
         firstRowComponentRuleLayout = new HorizontalLayout();
         one_firstVariable = new RelationTextfieldWidget();
-        oneb_OptionalModifier = new ComboBox<String>("Modifier", Arrays.asList(" ", "a", "an"));
-        oneb_OptionalModifier.setValue("a");
-        two_secondVariable = new ConceptTextfieldWidget();
-        three_firstAddConditionCheckbox = new Checkbox("that... (add condition)");
-        three_firstAddConditionCheckbox.addClickListener(
-                e -> addConditionBlock(true, three_firstAddConditionCheckbox.getValue()));
+        two_firstModifier = new ComboBox<String>("Modifier", Arrays.asList(" ", "a", "an"));
+        two_firstModifier.setValue("a");
+        three_secondVariable = new ConceptTextfieldWidget();
+        four_firstAddConditionCheckbox = new Checkbox("that... (add condition)");
+        four_firstAddConditionCheckbox.addClickListener(
+                e -> addConditionBlock(true, four_firstAddConditionCheckbox.getValue()));
         firstRowComponentRuleLayout.setVerticalComponentAlignment(
-                Alignment.END, three_firstAddConditionCheckbox);
+                Alignment.END, four_firstAddConditionCheckbox);
         firstRowComponentRuleLayout.add(
                 one_firstVariable,
-                oneb_OptionalModifier,
-                two_secondVariable,
-                three_firstAddConditionCheckbox);
+                two_firstModifier,
+                three_secondVariable,
+                four_firstAddConditionCheckbox);
 
         secondRowComponentRuleLayout = new HorizontalLayout();
-        four_firstModifier = new ComboBox<>("Modifier", ", then it must");
-        four_firstModifier.setValue(", then it must");
-        five_thirdVariable = new RelationTextfieldWidget();
-        six_secondModifier =
+        five_secondModifier = new ComboBox<>("Modifier", ", then it must");
+        five_secondModifier.setValue(", then it must");
+        six_thirdVariable = new RelationTextfieldWidget();
+        seven_thirdModifier =
                 new ComboBox<String>("Modifier", Arrays.asList("this", "this a", "this an"));
-        six_secondModifier.setValue("this");
-        seven_fourthVariable = new ConceptTextfieldWidget();
-        eight_secondAddConditionCheckbox = new Checkbox("that... (add condition)");
-        eight_secondAddConditionCheckbox.addClickListener(
-                e -> addConditionBlock(false, eight_secondAddConditionCheckbox.getValue()));
+        seven_thirdModifier.setValue("this");
+        eight_fourthVariable = new ConceptTextfieldWidget();
+        nine_secondAddConditionCheckbox = new Checkbox("that... (add condition)");
+        nine_secondAddConditionCheckbox.addClickListener(
+                e -> addConditionBlock(false, nine_secondAddConditionCheckbox.getValue()));
         secondRowComponentRuleLayout.setVerticalComponentAlignment(
-                Alignment.END, eight_secondAddConditionCheckbox);
+                Alignment.END, nine_secondAddConditionCheckbox);
         secondRowComponentRuleLayout.add(
-                four_firstModifier,
-                five_thirdVariable,
-                six_secondModifier,
-                seven_fourthVariable,
-                eight_secondAddConditionCheckbox);
+                five_secondModifier,
+                six_thirdVariable,
+                seven_thirdModifier,
+                eight_fourthVariable,
+                nine_secondAddConditionCheckbox);
 
         add(firstRowComponentRuleLayout, secondRowComponentRuleLayout);
     }
@@ -73,32 +74,33 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         if (conditionOne) {
             if (showCondition) {
                 addComponentAtIndex(1, firstCondition);
-            } else {
-                remove(firstCondition);
+                return;
             }
-        } else {
-            if (showCondition) {
-                addComponentAtIndex(3, secondCondition);
-            } else {
-                remove(secondCondition);
-            }
+            remove(firstCondition);
+            return;
         }
+
+        if (showCondition) {
+            addComponentAtIndex(3, secondCondition);
+            return;
+        }
+        remove(secondCondition);
     }
 
     @Override
     public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(one_firstVariable.getValue() + " ");
-        sBuilder.append(oneb_OptionalModifier.getValue() + " ");
-        sBuilder.append(two_secondVariable.getValue());
-        if (three_firstAddConditionCheckbox.getValue()) {
+        sBuilder.append(two_firstModifier.getValue() + " ");
+        sBuilder.append(three_secondVariable.getValue());
+        if (four_firstAddConditionCheckbox.getValue()) {
             sBuilder.append(" " + firstCondition.getRuleString());
         }
-        sBuilder.append(four_firstModifier.getValue() + " ");
-        sBuilder.append(five_thirdVariable.getValue() + " ");
-        sBuilder.append(six_secondModifier.getValue() + " ");
-        sBuilder.append(seven_fourthVariable.getValue());
-        if (eight_secondAddConditionCheckbox.getValue()) {
+        sBuilder.append(five_secondModifier.getValue() + " ");
+        sBuilder.append(six_thirdVariable.getValue() + " ");
+        sBuilder.append(seven_thirdModifier.getValue() + " ");
+        sBuilder.append(eight_fourthVariable.getValue());
+        if (nine_secondAddConditionCheckbox.getValue()) {
             sBuilder.append(" " + secondCondition.getRuleString());
         }
         return sBuilder.toString();

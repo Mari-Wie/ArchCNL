@@ -23,7 +23,7 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewReques
 public class InputView extends HorizontalLayout {
 
     private static final long serialVersionUID = 1L;
-    private static final float GOLDEN_RATIO = 61.8f;
+    private static final float CONTENT_RATIO = 70.0f;
 
     private ConceptAndRelationView conceptAndRelationView;
     private RulesOrMappingEditorView currentlyShownView;
@@ -49,14 +49,14 @@ public class InputView extends HorizontalLayout {
 
         rightHandSideLayout.getStyle().remove("border");
         rightHandSideLayout.setPadding(false);
-        rightHandSideLayout.setWidth(100.0f - GOLDEN_RATIO, Unit.PERCENTAGE);
+        rightHandSideLayout.setWidth(100.0f - CONTENT_RATIO, Unit.PERCENTAGE);
         rightHandSideLayout.setHeight(100, Unit.PERCENTAGE);
 
         rightHandSideLayout.add(hierarchies, but);
     }
 
     public void changeCurrentlyShownView(final RulesOrMappingEditorView newView) {
-        newView.setWidth(InputView.GOLDEN_RATIO, Unit.PERCENTAGE);
+        newView.setWidth(InputView.CONTENT_RATIO, Unit.PERCENTAGE);
         replace(currentlyShownView, newView);
         conceptAndRelationView.update();
         currentlyShownView = newView;

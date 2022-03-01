@@ -32,7 +32,8 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
 
     /**
      * Called by DetermineVerbComponentEvent. Event is fired when a different descriptor is selected
-     * in the subject component.
+     * in the subject component. Depending on the selection one of three verb components will be
+     * shown.
      */
     public void determineVerbComponent(String selectedDescriptor) {
         if (determineState(selectedDescriptor) == determineState(currentSubjectSelection)) {
@@ -57,7 +58,7 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
                 add(factVerbComponent);
                 break;
             default:
-                EveryOnlyNoVerbComponent defaultVerbComponent = new EveryOnlyNoVerbComponent(false);
+                DefaultVerbComponent defaultVerbComponent = new DefaultVerbComponent(false);
                 defaultVerbComponent.addListener(
                         ShowAndOrBlockEvent.class,
                         event -> showAndOrComponent(event.getShowAndOrBlock()));
@@ -87,8 +88,33 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
         return currentState;
     }
 
-    private void showAndOrComponent(boolean showComponent) {
-        if (!showComponent) {
+    private void addAndOrVerbComponent() {
+        DefaultVerbComponent andOrVerbComponent = new DefaultVerbComponent(true);
+        andOrVerbComponent.addListener(
+                AddAndOrVerbComponentEvent.class, event -> addAndOrVerbComponent());
+        andOrVerbComponent.addListener(
+                RemoveAndOrVerbComponentEvent.class,
+                event -> removeAndOrVerbComponent(event.getSource()));
+
+        verbComponentList.add(andOrVerbComponent);
+        add(andOrVerbComponent);
+    }
+
+    private void removeAndOrVerbComponent(DefaultVerbComponent source) {
+        verbComponentList.remove(source);
+        remove((Component) source);
+        if (verbComponentList.size() == 1 && showAndOrComponent) {
+            addAndOrVerbComponent();
+        }
+    }
+
+    /**
+     * Some paths of the defaultVerbcomponent don't allow and/or additions. The AndOrBlock must thus
+     * be removed. Otherwise an AndOrBlock should always be shown, even if all previous AndOrBlocks
+     * get deleted.
+     */
+    private void showAndOrComponent(boolean showAndOrBlock) {
+        if (!showAndOrBlock) {
             ArrayList<RuleComponentInterface> verbComponentsToRemoveList = new ArrayList<>();
             verbComponentList.stream()
                     .skip(1)
@@ -101,26 +127,7 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
         } else if (verbComponentList.size() < 2) {
             addAndOrVerbComponent();
         }
-        showAndOrComponent = showComponent;
-    }
-
-    private void addAndOrVerbComponent() {
-        EveryOnlyNoVerbComponent andOrVerbComponent = new EveryOnlyNoVerbComponent(true);
-        andOrVerbComponent.addListener(
-                AddAndOrVerbComponentEvent.class, event -> addAndOrVerbComponent());
-        andOrVerbComponent.addListener(
-                RemoveAndOrVerbComponentEvent.class,
-                event -> removeAndOrVerbComponent(event.getSource()));
-        add(andOrVerbComponent);
-        verbComponentList.add(andOrVerbComponent);
-    }
-
-    private void removeAndOrVerbComponent(EveryOnlyNoVerbComponent source) {
-        verbComponentList.remove(source);
-        remove((Component) source);
-        if (verbComponentList.size() == 1 && showAndOrComponent) {
-            addAndOrVerbComponent();
-        }
+        showAndOrComponent = showAndOrBlock;
     }
 
     @Override
@@ -135,7 +142,6 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
-        System.out.println("Listener Added");
         return getEventBus().addListener(eventType, listener);
     }
 }

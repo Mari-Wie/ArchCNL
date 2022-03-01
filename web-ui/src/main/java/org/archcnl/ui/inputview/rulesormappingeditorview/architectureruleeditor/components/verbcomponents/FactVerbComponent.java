@@ -13,13 +13,14 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
     private static final long serialVersionUID = 1L;
     private HorizontalLayout componentRuleLayout;
     private ComboBox<String> one_firstModifier, three_secondModifier;
-    private ConceptTextfieldWidget twoA_firstVariable, four_thirdVariable;
-    private RelationTextfieldWidget twoB_firstVariable;
-    private boolean isInStateOne = false;
+    private ConceptTextfieldWidget twoA_firstVariable_Concept, four_thirdVariable;
+    private RelationTextfieldWidget twoB_firstVariable_Relation;
+    private boolean isInUpperBranch = false;
 
     public FactVerbComponent() {
         this.setMargin(false);
         this.setPadding(false);
+
         initializeLayout();
     }
 
@@ -31,51 +32,61 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
                 e -> {
                     updateUI();
                 });
-        twoA_firstVariable = new ConceptTextfieldWidget();
-        twoB_firstVariable = new RelationTextfieldWidget();
+
+        twoA_firstVariable_Concept = new ConceptTextfieldWidget();
+        twoB_firstVariable_Relation = new RelationTextfieldWidget();
+
         three_secondModifier = new ComboBox<>("Modifier", Arrays.asList("equal-to", " "));
         three_secondModifier.setValue("equal-to");
         three_secondModifier.addValueChangeListener(
                 e -> {
                     updateUI();
                 });
+
         four_thirdVariable = new ConceptTextfieldWidget();
         componentRuleLayout.add(
-                one_firstModifier, twoB_firstVariable, three_secondModifier, four_thirdVariable);
+                one_firstModifier,
+                twoB_firstVariable_Relation,
+                three_secondModifier,
+                four_thirdVariable);
         add(componentRuleLayout);
         updateUI();
     }
 
     private void updateUI() {
         componentRuleLayout.removeAll();
-        if (one_firstModifier.getValue().equals(" ")) {
-            isInStateOne = false;
-            componentRuleLayout.add(
-                    one_firstModifier,
-                    twoB_firstVariable,
-                    three_secondModifier,
-                    four_thirdVariable);
-            if (three_secondModifier.getValue().equals("equal-to")) {
-                four_thirdVariable.setPlaceholder("+/- [0-9] / String");
-                four_thirdVariable.setLabel("Number or String");
-                return;
-            }
-            four_thirdVariable.setPlaceholder("Concept");
-            four_thirdVariable.setLabel("Concept");
-        } else {
-            isInStateOne = true;
-            componentRuleLayout.add(one_firstModifier, twoA_firstVariable);
+
+        if (!one_firstModifier.getValue().equals(" ")) {
+            isInUpperBranch = true;
+            componentRuleLayout.add(one_firstModifier, twoA_firstVariable_Concept);
+            return;
         }
+
+        isInUpperBranch = false;
+        componentRuleLayout.add(
+                one_firstModifier,
+                twoB_firstVariable_Relation,
+                three_secondModifier,
+                four_thirdVariable);
+
+        if (three_secondModifier.getValue().equals("equal-to")) {
+            four_thirdVariable.setPlaceholder("+/- [0-9] / String");
+            four_thirdVariable.setLabel("Integer or String");
+            return;
+        }
+
+        four_thirdVariable.setPlaceholder("Concept");
+        four_thirdVariable.setLabel("Concept");
     }
 
     @Override
     public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(one_firstModifier.getValue() + " ");
-        if (isInStateOne) {
-            sBuilder.append(twoA_firstVariable.getValue() + " ");
+        if (isInUpperBranch) {
+            sBuilder.append(twoA_firstVariable_Concept.getValue() + " ");
         } else {
-            sBuilder.append(twoB_firstVariable.getValue() + " ");
+            sBuilder.append(twoB_firstVariable_Relation.getValue() + " ");
             sBuilder.append(three_secondModifier.getValue() + " ");
             sBuilder.append(four_thirdVariable.getValue());
         }
