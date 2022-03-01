@@ -34,12 +34,11 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
         checkedSetValue(droppedName);
     }
 
-    protected void checkedSetValue(String val){
+    protected void checkedSetValue(String val) {
         ListDataProvider<String> dataProvider = (ListDataProvider) getDataProvider();
         if (dataProvider.getItems().contains(val)) {
             setValue(val);
-        }
-        else{
+        } else {
             showErrorMessage("Not a " + name.toLowerCase());
         }
     }
@@ -63,6 +62,6 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
     protected <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-            }
+    }
 }
 ;
