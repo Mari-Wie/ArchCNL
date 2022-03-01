@@ -34,11 +34,12 @@ public class InputView extends HorizontalLayout {
         setWidth(100, Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
         initConceptAndRelationView();
-        initRightHandSideLayout(
-                conceptAndRelationView,
+        Button checkViolationButton =
                 new Button(
                         "Check for violations",
-                        click -> fireEvent(new OutputViewRequestedEvent(this, true))));
+                        click -> fireEvent(new OutputViewRequestedEvent(this, true)));
+        checkViolationButton.setClassName("check-violation-btn");
+        initRightHandSideLayout(conceptAndRelationView, checkViolationButton);
 
         changeCurrentlyShownView(ruleEditorView);
         addAndExpand(currentlyShownView, rightHandSideLayout);

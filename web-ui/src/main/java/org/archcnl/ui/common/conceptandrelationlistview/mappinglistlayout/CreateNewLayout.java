@@ -22,9 +22,6 @@ public class CreateNewLayout extends VerticalLayout {
         buttonRow.setClassName("card-title-box");
         archRulesLabel.setClassName("card-title-box--title");
         createNewRuleButton.setClassName("card-title-box--btn");
-        if (inputSide) {
-            buttonRow.add(createNewRuleButton);
-        }
         add(buttonRow);
     }
 }

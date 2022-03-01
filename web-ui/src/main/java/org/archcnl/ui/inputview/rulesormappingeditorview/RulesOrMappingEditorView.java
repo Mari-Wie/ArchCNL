@@ -21,7 +21,6 @@ public abstract class RulesOrMappingEditorView extends VerticalLayout {
         final Button createNewRuleButton = new Button(buttonLabel, clickListener);
         createNewLayout.add(archRulesLabel);
         createNewLayout.add(createNewRuleButton);
-        createNewLayout.getStyle().remove("border");
         add(createNewLayout);
         return createNewLayout;
     }
