@@ -5,18 +5,18 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.Arrays;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConceptTextfieldComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConditionComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RelationTextfieldComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
 
 public class IfVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout firstRowComponentRuleLayout, secondRowComponentRuleLayout;
     private ConditionComponent firstCondition, secondCondition;
-    private RelationTextfieldComponent one_firstVariable, five_thirdVariable;
-    private ConceptTextfieldComponent two_secondVariable, seven_fourthVariable;
+    private RelationTextfieldWidget one_firstVariable, five_thirdVariable;
+    private ConceptTextfieldWidget two_secondVariable, seven_fourthVariable;
     private Checkbox three_firstAddConditionCheckbox, eight_secondAddConditionCheckbox;
     private ComboBox<String> oneb_OptionalModifier, four_firstModifier, six_secondModifier;
 
@@ -31,10 +31,10 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         secondCondition = new ConditionComponent();
 
         firstRowComponentRuleLayout = new HorizontalLayout();
-        one_firstVariable = new RelationTextfieldComponent();
+        one_firstVariable = new RelationTextfieldWidget();
         oneb_OptionalModifier = new ComboBox<String>("Modifier", Arrays.asList(" ", "a", "an"));
         oneb_OptionalModifier.setValue("a");
-        two_secondVariable = new ConceptTextfieldComponent();
+        two_secondVariable = new ConceptTextfieldWidget();
         three_firstAddConditionCheckbox = new Checkbox("that... (add condition)");
         three_firstAddConditionCheckbox.addClickListener(
                 e -> addConditionBlock(true, three_firstAddConditionCheckbox.getValue()));
@@ -49,11 +49,11 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         secondRowComponentRuleLayout = new HorizontalLayout();
         four_firstModifier = new ComboBox<>("Modifier", ", then it must");
         four_firstModifier.setValue(", then it must");
-        five_thirdVariable = new RelationTextfieldComponent();
+        five_thirdVariable = new RelationTextfieldWidget();
         six_secondModifier =
                 new ComboBox<String>("Modifier", Arrays.asList("this", "this a", "this an"));
         six_secondModifier.setValue("this");
-        seven_fourthVariable = new ConceptTextfieldComponent();
+        seven_fourthVariable = new ConceptTextfieldWidget();
         eight_secondAddConditionCheckbox = new Checkbox("that... (add condition)");
         eight_secondAddConditionCheckbox.addClickListener(
                 e -> addConditionBlock(false, eight_secondAddConditionCheckbox.getValue()));

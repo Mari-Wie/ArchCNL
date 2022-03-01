@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -8,12 +8,12 @@ import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 
-public class RelationTextfieldComponent extends TextField
-        implements DropTarget<ConceptTextfieldComponent> {
+public class RelationTextfieldWidget extends TextField
+        implements DropTarget<RelationTextfieldWidget> {
 
     private static final long serialVersionUID = 1L;
 
-    public RelationTextfieldComponent() {
+    public RelationTextfieldWidget() {
         setActive(true);
         setPlaceholder("Relation");
         setLabel("Relation");

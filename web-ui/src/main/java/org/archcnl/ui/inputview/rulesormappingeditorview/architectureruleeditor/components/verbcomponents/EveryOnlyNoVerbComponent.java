@@ -13,10 +13,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConceptTextfieldComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConditionComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RelationTextfieldComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
@@ -27,8 +27,8 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
     private HorizontalLayout horizontalRowLayout, componentRuleLayout;
     private ConditionComponent newCondition;
     private ComboBox<String> one_firstCombobox, three_secondCombobox;
-    private RelationTextfieldComponent two_firstVariable;
-    private ConceptTextfieldComponent four_secondVariable, five_thirdVariable;
+    private RelationTextfieldWidget two_firstVariable;
+    private ConceptTextfieldWidget four_secondVariable, five_thirdVariable;
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
     private SelectionState currentState;
@@ -106,15 +106,15 @@ public class EveryOnlyNoVerbComponent extends VerticalLayout implements RuleComp
         horizontalRowLayout = new HorizontalLayout();
         componentRuleLayout = new HorizontalLayout();
         initializeFirstCombobox();
-        two_firstVariable = new RelationTextfieldComponent();
+        two_firstVariable = new RelationTextfieldWidget();
         three_secondCombobox = new ComboBox<String>("Modifier", secondModifierList);
         three_secondCombobox.setValue("a");
         three_secondCombobox.addValueChangeListener(
                 e -> {
                     determineState();
                 });
-        four_secondVariable = new ConceptTextfieldComponent();
-        five_thirdVariable = new ConceptTextfieldComponent();
+        four_secondVariable = new ConceptTextfieldWidget();
+        five_thirdVariable = new ConceptTextfieldWidget();
         six_addConditionCheckbox = new Checkbox("that... (add condition)");
         six_addConditionCheckbox.addClickListener(
                 e -> showConditionBlock(six_addConditionCheckbox.getValue()));

@@ -9,7 +9,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.SubjectComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.subjectcomponents.SubjectComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.VerbComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
@@ -17,68 +17,73 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetReque
 
 public class RuleCreatorView extends RulesOrMappingEditorView {
 
-	private static final long serialVersionUID = -2966045554441002128L;
-	private Button saveButton;
-	private TextArea archRuleTextArea;
-	private SubjectComponent subject;
-	private VerbComponent verb;
-	private HorizontalLayout buttonsLayout;
+    private static final long serialVersionUID = -2966045554441002128L;
+    private Button saveButton;
+    private Button cancelButton;
+    private TextArea archRuleTextArea;
+    private SubjectComponent subject;
+    private VerbComponent verb;
+    private HorizontalLayout buttonsLayout;
 
-	/**
-	 * Architecture rules are made up out of a subject component (Every/no/...
-	 * concept) describing the topic of the rule and a verb component (Can/must/...)
-	 * describing the rule the subject must follow. Refer to the architecture rule
-	 * tree in the wiki for a visualization.
-	 */
-	public RuleCreatorView(Optional<String> ruleString) {
-		getStyle().set("overflow", "auto");
-		getStyle().set("border", "1px solid black");
-		setClassName("architecture-rules");
+    /**
+     * Architecture rules are made up out of a subject component (Every/no/... concept) describing
+     * the topic of the rule and a verb component (Can/must/...) describing the rule the subject
+     * must follow. Refer to the architecture rule tree in the wiki for a visualization.
+     */
+    public RuleCreatorView(Optional<String> ruleString) {
+        getStyle().set("overflow", "auto");
+        getStyle().set("border", "1px solid black");
+        setClassName("architecture-rules");
 
-		initializeLayout();
-		verb.determineVerbComponent(subject.getFirstModifier());
-	}
+        initializeLayout();
+        verb.determineVerbComponent(subject.getFirstModifier());
+    }
 
-	private void initializeLayout() {
-		subject = new SubjectComponent();
-		verb = new VerbComponent();
-		buttonsLayout = new HorizontalLayout();
+    private void initializeLayout() {
+        subject = new SubjectComponent();
+        verb = new VerbComponent();
+        buttonsLayout = new HorizontalLayout();
 
-		subject.addListener(DetermineVerbComponentEvent.class,
-				event -> verb.determineVerbComponent(event.getSource().getFirstModifier()));
+        subject.addListener(
+                DetermineVerbComponentEvent.class,
+                event -> verb.determineVerbComponent(event.getSource().getFirstModifier()));
 
-		saveButton = new Button("Save Rule", e -> saveRule());
-		Checkbox activateExpertmode = new Checkbox("Activate Expertmode");
-		activateExpertmode.addClickListener(e -> activateExpertMode(activateExpertmode.getValue()));
-		buttonsLayout.setVerticalComponentAlignment(Alignment.CENTER, activateExpertmode);
-		archRuleTextArea = new TextArea("Freetext mode", "Every Aggregate must residein a DomainRing");
-		archRuleTextArea.setWidthFull();
-		buttonsLayout.setPadding(true);
-		buttonsLayout.add(saveButton, activateExpertmode);
+        saveButton = new Button("Save Rule", e -> saveRule());
+        cancelButton =
+                new Button("Cancel", click -> fireEvent(new RulesWidgetRequestedEvent(this, true)));
+        Checkbox activateExpertmode = new Checkbox("Activate Expertmode");
+        activateExpertmode.addClickListener(e -> activateExpertMode(activateExpertmode.getValue()));
+        buttonsLayout.setVerticalComponentAlignment(Alignment.CENTER, activateExpertmode);
+        archRuleTextArea = new TextArea("Create new architecture rule");
+        archRuleTextArea.setWidthFull();
+        buttonsLayout.setPadding(true);
+        buttonsLayout.add(saveButton, cancelButton, activateExpertmode);
 
-		add(subject, verb, buttonsLayout);
-	}
+        add(subject, verb, buttonsLayout);
+    }
 
-	private void activateExpertMode(Boolean show) {
-		if (show) {
-			add(archRuleTextArea);
-		} else {
-			remove(archRuleTextArea);
-		}
-	}
+    private void activateExpertMode(Boolean show) {
+        if (show) {
+            add(archRuleTextArea);
+        } else {
+            remove(archRuleTextArea);
+        }
+    }
 
-	private void saveRule() {
-		if (!archRuleTextArea.isEmpty()) {
-			fireEvent(new SaveRuleButtonPressedEvent(this, true, archRuleTextArea.getValue()));
-		} else {
-			fireEvent(new SaveRuleButtonPressedEvent(this, true, subject.getString() + verb.getString()));
-			fireEvent(new RulesWidgetRequestedEvent(this, true));
-		}
-	}
+    private void saveRule() {
+        if (!archRuleTextArea.isEmpty()) {
+            fireEvent(new SaveRuleButtonPressedEvent(this, true, archRuleTextArea.getValue()));
+        } else {
+            fireEvent(
+                    new SaveRuleButtonPressedEvent(
+                            this, true, subject.getString() + verb.getString()));
+        }
+        fireEvent(new RulesWidgetRequestedEvent(this, true));
+    }
 
-	@Override
-	public <T extends ComponentEvent<?>> Registration addListener(final Class<T> eventType,
-			final ComponentEventListener<T> listener) {
-		return getEventBus().addListener(eventType, listener);
-	}
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
+    }
 }

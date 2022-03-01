@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents;
 
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -7,13 +7,16 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.Arrays;
 import java.util.List;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
 
 public class ConditionComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private Label startLabelTextfield, endLabelTextfield;
-    private RelationTextfieldComponent firstVariable;
-    private ConceptTextfieldComponent secondVariable;
+    private RelationTextfieldWidget firstVariable;
+    private ConceptTextfieldWidget secondVariable;
     private ComboBox<String> firstCombobox;
     private Checkbox andCheckbox;
     private ConditionComponent newCondition;
@@ -26,7 +29,7 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
 
         startLabelTextfield = new Label("that(");
         conditionBox.setVerticalComponentAlignment(Alignment.END, startLabelTextfield);
-        firstVariable = new RelationTextfieldComponent();
+        firstVariable = new RelationTextfieldWidget();
         firstVariable.setLabel("Relation");
 
         List<String> firstStatements =
@@ -38,7 +41,7 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
                     firstComboboxListener(firstCombobox.getValue());
                 });
 
-        secondVariable = new ConceptTextfieldComponent();
+        secondVariable = new ConceptTextfieldWidget();
         secondVariable.setLabel("Concept");
         secondVariable.setPlaceholder("Concept");
 

@@ -4,17 +4,17 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.Arrays;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.ConceptTextfieldComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RelationTextfieldComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
 
 public class FactVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout componentRuleLayout;
     private ComboBox<String> one_firstModifier, three_secondModifier;
-    private ConceptTextfieldComponent twoA_firstVariable, four_thirdVariable;
-    private RelationTextfieldComponent twoB_firstVariable;
+    private ConceptTextfieldWidget twoA_firstVariable, four_thirdVariable;
+    private RelationTextfieldWidget twoB_firstVariable;
     private boolean isInStateOne = false;
 
     public FactVerbComponent() {
@@ -31,15 +31,15 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
                 e -> {
                     updateUI();
                 });
-        twoA_firstVariable = new ConceptTextfieldComponent();
-        twoB_firstVariable = new RelationTextfieldComponent();
+        twoA_firstVariable = new ConceptTextfieldWidget();
+        twoB_firstVariable = new RelationTextfieldWidget();
         three_secondModifier = new ComboBox<>("Modifier", Arrays.asList("equal-to", " "));
         three_secondModifier.setValue("equal-to");
         three_secondModifier.addValueChangeListener(
                 e -> {
                     updateUI();
                 });
-        four_thirdVariable = new ConceptTextfieldComponent();
+        four_thirdVariable = new ConceptTextfieldWidget();
         componentRuleLayout.add(
                 one_firstModifier, twoB_firstVariable, three_secondModifier, four_thirdVariable);
         add(componentRuleLayout);

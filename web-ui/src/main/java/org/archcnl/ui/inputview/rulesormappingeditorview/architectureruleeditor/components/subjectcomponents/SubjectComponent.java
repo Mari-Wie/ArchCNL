@@ -1,4 +1,4 @@
-package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components;
+package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.subjectcomponents;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -10,6 +10,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.List;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
 
 public class SubjectComponent extends VerticalLayout implements RuleComponentInterface {
@@ -18,7 +21,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
     private HorizontalLayout subjectLayout;
     private ConditionComponent newCondition;
     private ComboBox<String> one_DescriptorCombobox;
-    private ConceptTextfieldComponent two_FirstConcept;
+    private ConceptTextfieldWidget two_FirstConcept;
     private Checkbox three_ConditionCheckbox;
     private boolean showFirstConcept = true;
 
@@ -61,7 +64,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
                 e -> {
                     updateUI(one_DescriptorCombobox.getValue());
                 });
-        two_FirstConcept = new ConceptTextfieldComponent();
+        two_FirstConcept = new ConceptTextfieldWidget();
         two_FirstConcept.setLabel("Concept");
         three_ConditionCheckbox = new Checkbox("that... (add condition)");
         three_ConditionCheckbox.addClickListener(
