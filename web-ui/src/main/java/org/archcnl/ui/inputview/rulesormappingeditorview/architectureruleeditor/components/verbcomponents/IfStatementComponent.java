@@ -13,13 +13,13 @@ import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatementComponent;
 
 public class IfStatementComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout firstRowComponentRuleLayout, secondRowComponentRuleLayout;
-    private ConditionStatement firstCondition, secondCondition;
+    private ConditionStatementComponent firstCondition, secondCondition;
     private PredicateSelectionComponent one_firstVariable, six_thirdVariable;
     private ComboBox<String> two_firstModifier, five_secondModifier, seven_thirdModifier;
     private ConceptSelectionComponent three_secondVariable, eight_fourthVariable;
@@ -89,7 +89,6 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
     private ConceptSelectionComponent createConceptComboBox() {
         ConceptSelectionComponent newConceptComboBox = new ConceptSelectionComponent();
         newConceptComboBox.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
-        newConceptComboBox.setPlaceholder("Concept");
         newConceptComboBox.setLabel("Concept");
         return newConceptComboBox;
     }
@@ -97,13 +96,12 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
     private PredicateSelectionComponent createRelationComboBox() {
         PredicateSelectionComponent newRelationComboBox = new PredicateSelectionComponent();
         newRelationComboBox.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
-        newRelationComboBox.setPlaceholder("Relation");
         newRelationComboBox.setLabel("Relation");
         return newRelationComboBox;
     }
 
-    private ConditionStatement createConditionComponent() {
-        ConditionStatement condition = new ConditionStatement();
+    private ConditionStatementComponent createConditionComponent() {
+        ConditionStatementComponent condition = new ConditionStatementComponent();
         condition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         condition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         return condition;

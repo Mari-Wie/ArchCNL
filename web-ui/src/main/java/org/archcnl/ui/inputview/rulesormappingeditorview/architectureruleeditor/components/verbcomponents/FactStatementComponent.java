@@ -12,7 +12,7 @@ import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.VariableTextfieldWidget;
 
 public class FactStatementComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -21,7 +21,7 @@ public class FactStatementComponent extends VerticalLayout implements RuleCompon
     private ComboBox<String> one_firstModifier, three_secondModifier;
     private ConceptSelectionComponent twoA_firstVariable_Concept;
     private ConceptSelectionComponent fourA_thirdVariable;
-    private ConceptTextfieldWidget fourB_thirdVariable;
+    private VariableTextfieldWidget fourB_thirdVariable;
     private PredicateSelectionComponent twoB_firstVariable_Relation;
     private boolean isInUpperBranch = false, conceptRequired = true;
 
@@ -80,8 +80,9 @@ public class FactStatementComponent extends VerticalLayout implements RuleCompon
         return conceptVariable;
     }
 
-    private ConceptTextfieldWidget createTextfieldWidget() {
-        ConceptTextfieldWidget freeTextVariable = new ConceptTextfieldWidget();
+    private VariableTextfieldWidget createTextfieldWidget() {
+        VariableTextfieldWidget freeTextVariable =
+                new VariableTextfieldWidget("(([+-]?[0-9]+)|[a-z]+])");
         freeTextVariable.setPlaceholder("+/- [0-9] / String");
         freeTextVariable.setLabel("Integer or String");
         return freeTextVariable;

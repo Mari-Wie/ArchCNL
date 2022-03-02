@@ -10,28 +10,29 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatementComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.VariableTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrStatementComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrStatmentComponentEvent;
 
 public class DefaultStatementComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout horizontalRowLayout, componentRuleLayout;
-    private ConditionStatement newCondition;
+    private ConditionStatementComponent newCondition;
     private ComboBox<String> one_firstCombobox, three_secondCombobox;
     private PredicateSelectionComponent two_firstVariable;
-    private TextField four_secondVariable;
+    private VariableTextfieldWidget four_secondVariable;
     private ConceptSelectionComponent five_thirdVariable;
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
@@ -120,7 +121,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     determineState();
                 });
 
-        four_secondVariable = new TextField();
+        four_secondVariable = new VariableTextfieldWidget("/[+-]?[0-9]+");
         four_secondVariable.setPlaceholder("+/- [0-9] / String");
         four_secondVariable.setLabel("Integer or String");
 
@@ -146,7 +147,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
     }
 
     private void createCondtionComponent() {
-        newCondition = new ConditionStatement();
+        newCondition = new ConditionStatementComponent();
         newCondition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         newCondition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
     }
@@ -168,24 +169,22 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
             one_firstCombobox =
                     new ComboBox<String>("And / Or (Optional)", Arrays.asList("-", "and", "or"));
             one_firstCombobox.setValue("-");
-        } else {
-            one_firstCombobox =
-                    new ComboBox<String>(
-                            "Modifier",
-                            Arrays.asList(
-                                    "must",
-                                    "can-only",
-                                    "can",
-                                    "must be",
-                                    "must be a",
-                                    "must be an"));
-            one_firstCombobox.setValue("must");
-            secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
+            one_firstCombobox.addValueChangeListener(
+                    e -> {
+                        determineState();
+                    });
+            return;
         }
+        List<String> modifierList =
+                Arrays.asList("must", "can-only", "can", "must be", "must be a", "must be an");
+        one_firstCombobox = new ComboBox<String>("Modifier", modifierList);
+        one_firstCombobox.setValue("must");
         one_firstCombobox.addValueChangeListener(
                 e -> {
                     determineState();
                 });
+
+        secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
     }
 
     private void initializeAndOrButtons() {
@@ -194,7 +193,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
             Button addButton =
                     new Button(
                             new Icon(VaadinIcon.PLUS),
-                            click -> fireEvent(new AddAndOrVerbComponentEvent(this, true)));
+                            click -> fireEvent(new AddAndOrStatementComponentEvent(this, true)));
             Button deleteButton =
                     new Button(
                             new Icon(VaadinIcon.TRASH),
@@ -282,10 +281,10 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
             case MUSTBEBRANCH:
             case MUSTBEBRANCHWITHCONDITION:
             case ANYTHINGBRANCH:
-                fireEvent(new ShowAndOrBlockEvent(this, true, false));
+                fireEvent(new ShowAndOrStatmentComponentEvent(this, true, false));
                 break;
             default:
-                fireEvent(new ShowAndOrBlockEvent(this, true, true));
+                fireEvent(new ShowAndOrStatmentComponentEvent(this, true, true));
                 break;
         }
     }

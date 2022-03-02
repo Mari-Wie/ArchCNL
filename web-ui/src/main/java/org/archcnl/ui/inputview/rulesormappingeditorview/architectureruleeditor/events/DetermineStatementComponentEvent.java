@@ -5,11 +5,11 @@ import com.vaadin.flow.component.DomEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.subjectcomponents.SubjectComponent;
 
 @DomEvent("change")
-public class DetermineVerbComponentEvent extends ComponentEvent<SubjectComponent> {
+public class DetermineStatementComponentEvent extends ComponentEvent<SubjectComponent> {
 
     private static final long serialVersionUID = 1L;
 
-    public DetermineVerbComponentEvent(SubjectComponent source, boolean fromClient) {
+    public DetermineStatementComponentEvent(SubjectComponent source, boolean fromClient) {
         super(source, fromClient);
     }
 }

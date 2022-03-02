@@ -13,7 +13,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.subjectcomponents.SubjectComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.StatementComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineStatementComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 
@@ -30,8 +30,9 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
 
     /**
      * Architecture rules are made up out of a subject component (Every/no/... concept) describing
-     * the topic of the rule and a verb component (Can/must/...) describing the rule the subject
-     * must follow. Refer to the architecture rule tree in the documentation for a visualisation.
+     * the topic of the rule and a statement component (Can/must/...) describing the rule the
+     * subject must follow. Refer to the architecture rule tree in the documentation for a
+     * visualisation.
      */
     public RuleCreatorView(Optional<String> ruleString) {
         getStyle().set("overflow", "auto");
@@ -46,7 +47,7 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
         subject.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         subject.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subject.addListener(
-                DetermineVerbComponentEvent.class,
+                DetermineStatementComponentEvent.class,
                 event -> verb.determineVerbComponent(event.getSource().getFirstModifierValue()));
 
         verb = new StatementComponent();
@@ -79,19 +80,20 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
     private void activateExpertMode(Boolean show) {
         if (show) {
             add(archRuleTextArea);
-        } else {
-            remove(archRuleTextArea);
+            return;
         }
+        remove(archRuleTextArea);
     }
 
     private void saveRule() {
         if (!archRuleTextArea.isEmpty()) {
             fireEvent(new SaveRuleButtonPressedEvent(this, true, archRuleTextArea.getValue()));
-        } else {
-            fireEvent(
-                    new SaveRuleButtonPressedEvent(
-                            this, true, subject.getRuleString() + verb.getRuleString()));
+            fireEvent(new RulesWidgetRequestedEvent(this, true));
+            return;
         }
+        fireEvent(
+                new SaveRuleButtonPressedEvent(
+                        this, true, subject.getRuleString() + verb.getRuleString()));
         fireEvent(new RulesWidgetRequestedEvent(this, true));
     }
 

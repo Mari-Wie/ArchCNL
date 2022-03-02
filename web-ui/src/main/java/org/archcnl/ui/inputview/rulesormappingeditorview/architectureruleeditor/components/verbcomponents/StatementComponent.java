@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrStatementComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrStatmentComponentEvent;
 
 public class StatementComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -74,7 +74,7 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
                 defaultVerbComponent.addListener(
                         ConceptListUpdateRequestedEvent.class, this::fireEvent);
                 defaultVerbComponent.addListener(
-                        ShowAndOrBlockEvent.class,
+                        ShowAndOrStatmentComponentEvent.class,
                         event -> showAndOrComponent(event.getShowAndOrBlock()));
                 verbComponentList.add(defaultVerbComponent);
                 add(defaultVerbComponent);
@@ -105,7 +105,7 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
     private void addAndOrVerbComponent() {
         DefaultStatementComponent andOrVerbComponent = new DefaultStatementComponent(true);
         andOrVerbComponent.addListener(
-                AddAndOrVerbComponentEvent.class, event -> addAndOrVerbComponent());
+                AddAndOrStatementComponentEvent.class, event -> addAndOrVerbComponent());
         andOrVerbComponent.addListener(
                 RemoveAndOrVerbComponentEvent.class,
                 event -> removeAndOrVerbComponent(event.getSource()));

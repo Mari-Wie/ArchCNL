@@ -14,16 +14,16 @@ import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatementComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineStatementComponentEvent;
 
 public class SubjectComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout subjectLayout;
-    private ConditionStatement newCondition;
+    private ConditionStatementComponent newCondition;
     private ComboBox<String> one_DescriptorCombobox;
-    private ConceptSelectionComponent two_FirstConcept;
+    private ConceptSelectionComponent two_ConceptCombobox;
     private Checkbox three_ConditionCheckbox;
     private boolean showFirstConcept = true, showCondition = false;
 
@@ -40,7 +40,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
     }
 
     private void initializeLayout() {
-        newCondition = new ConditionStatement();
+        newCondition = new ConditionStatementComponent();
         newCondition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         newCondition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subjectLayout = new HorizontalLayout();
@@ -68,34 +68,31 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
                     updateUI();
                 });
 
-        createTwoFirstConcept();
+        two_ConceptCombobox = createConceptCombobox();
 
         three_ConditionCheckbox = new Checkbox("that... (add condition)");
         three_ConditionCheckbox.addClickListener(e -> updateUI());
 
         subjectLayout.setVerticalComponentAlignment(Alignment.END, three_ConditionCheckbox);
-        subjectLayout.add(one_DescriptorCombobox, two_FirstConcept, three_ConditionCheckbox);
+        subjectLayout.add(one_DescriptorCombobox, two_ConceptCombobox, three_ConditionCheckbox);
         add(subjectLayout);
     }
 
-    private void createTwoFirstConcept() {
-        two_FirstConcept = new ConceptSelectionComponent();
-        two_FirstConcept.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
-        two_FirstConcept.setLabel("Concept");
-    }
-
-    public String getFirstModifierValue() {
-        return one_DescriptorCombobox.getValue();
+    private ConceptSelectionComponent createConceptCombobox() {
+        ConceptSelectionComponent conceptCombobox = new ConceptSelectionComponent();
+        conceptCombobox.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        conceptCombobox.setLabel("Concept");
+        return conceptCombobox;
     }
 
     private void updateUI() {
-        String descriptorValue = one_DescriptorCombobox.getValue();
+        subjectLayout.add(two_ConceptCombobox);
         showFirstConcept = true;
-        subjectLayout.add(two_FirstConcept);
 
+        String descriptorValue = one_DescriptorCombobox.getValue();
         switch (descriptorValue) {
             case "Nothing":
-                subjectLayout.remove(two_FirstConcept);
+                subjectLayout.remove(two_ConceptCombobox);
                 showFirstConcept = false;
             case "Fact:":
                 subjectLayout.remove(three_ConditionCheckbox);
@@ -106,7 +103,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
                 showCondition(three_ConditionCheckbox.getValue());
                 break;
         }
-        fireEvent(new DetermineVerbComponentEvent(this, true));
+        fireEvent(new DetermineStatementComponentEvent(this, true));
     }
 
     private void showCondition(Boolean show) {
@@ -119,12 +116,16 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
         showCondition = false;
     }
 
+    public String getFirstModifierValue() {
+        return one_DescriptorCombobox.getValue();
+    }
+
     @Override
     public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(one_DescriptorCombobox.getValue() + " ");
         if (showFirstConcept) {
-            sBuilder.append(two_FirstConcept.getValue() + " ");
+            sBuilder.append(two_ConceptCombobox.getValue() + " ");
         }
         if (showCondition) {
             sBuilder.append(newCondition.getRuleString());

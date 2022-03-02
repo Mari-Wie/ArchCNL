@@ -3,11 +3,11 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.DefaultStatementComponent;
 
-public class AddAndOrVerbComponentEvent extends ComponentEvent<DefaultStatementComponent> {
+public class AddAndOrStatementComponentEvent extends ComponentEvent<DefaultStatementComponent> {
 
     private static final long serialVersionUID = 1L;
 
-    public AddAndOrVerbComponentEvent(DefaultStatementComponent source, boolean fromClient) {
+    public AddAndOrStatementComponentEvent(DefaultStatementComponent source, boolean fromClient) {
         super(source, fromClient);
     }
 }
