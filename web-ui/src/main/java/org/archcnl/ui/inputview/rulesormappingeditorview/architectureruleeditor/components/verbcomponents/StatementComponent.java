@@ -59,13 +59,16 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
                 break;
             case "Fact:":
                 FactStatementComponent factVerbComponent = new FactStatementComponent();
-                factVerbComponent.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
-                factVerbComponent.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+                factVerbComponent.addListener(
+                        ConceptListUpdateRequestedEvent.class, this::fireEvent);
+                factVerbComponent.addListener(
+                        RelationListUpdateRequestedEvent.class, this::fireEvent);
                 verbComponentList.add(factVerbComponent);
                 add(factVerbComponent);
                 break;
             default:
-                DefaultStatementComponent defaultVerbComponent = new DefaultStatementComponent(false);
+                DefaultStatementComponent defaultVerbComponent =
+                        new DefaultStatementComponent(false);
                 defaultVerbComponent.addListener(
                         RelationListUpdateRequestedEvent.class, this::fireEvent);
                 defaultVerbComponent.addListener(
@@ -106,6 +109,8 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
         andOrVerbComponent.addListener(
                 RemoveAndOrVerbComponentEvent.class,
                 event -> removeAndOrVerbComponent(event.getSource()));
+        andOrVerbComponent.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        andOrVerbComponent.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
 
         verbComponentList.add(andOrVerbComponent);
         add(andOrVerbComponent);

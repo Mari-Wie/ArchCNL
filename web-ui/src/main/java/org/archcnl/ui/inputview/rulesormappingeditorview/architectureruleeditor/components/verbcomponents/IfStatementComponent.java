@@ -85,15 +85,15 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
 
         add(firstRowComponentRuleLayout, secondRowComponentRuleLayout);
     }
-    
+
     private ConceptSelectionComponent createConceptComboBox() {
-    	ConceptSelectionComponent newConceptComboBox = new ConceptSelectionComponent();
+        ConceptSelectionComponent newConceptComboBox = new ConceptSelectionComponent();
         newConceptComboBox.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         newConceptComboBox.setPlaceholder("Concept");
         newConceptComboBox.setLabel("Concept");
         return newConceptComboBox;
     }
-    
+
     private PredicateSelectionComponent createRelationComboBox() {
         PredicateSelectionComponent newRelationComboBox = new PredicateSelectionComponent();
         newRelationComboBox.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);

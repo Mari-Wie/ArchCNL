@@ -10,7 +10,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.List;
-
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -75,33 +74,33 @@ public class ConditionStatement extends VerticalLayout implements RuleComponentI
         relationVariable.setLabel("Relation");
         relationVariable.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
     }
-    
+
     private void createFreeTextVariable() {
         freeTextVariable = new ConceptTextfieldWidget();
         freeTextVariable.setLabel("Concept, Interger or String");
         freeTextVariable.setPlaceholder("Concept, Interger or String");
     }
-    
+
     private void createConceptVariable() {
-    	conceptVariable = new ConceptSelectionComponent();
-    	conceptVariable.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
-    	conceptVariable.setLabel("Concept");
+        conceptVariable = new ConceptSelectionComponent();
+        conceptVariable.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        conceptVariable.setLabel("Concept");
     }
 
     private void firstComboboxListener(String value) {
-    	switch (value) {
-		case "a":
-		case "an":
-		case "equal-to a":
-		case "equal-to an":
-			conditionBox.replace(freeTextVariable, conceptVariable);
-			conceptRequired = true;
-			break;
-		default:
-			conditionBox.replace(conceptVariable, freeTextVariable);
-			conceptRequired = false;
-			break;
-		}
+        switch (value) {
+            case "a":
+            case "an":
+            case "equal-to a":
+            case "equal-to an":
+                conditionBox.replace(freeTextVariable, conceptVariable);
+                conceptRequired = true;
+                break;
+            default:
+                conditionBox.replace(conceptVariable, freeTextVariable);
+                conceptRequired = false;
+                break;
+        }
     }
 
     private void addCondition(Boolean showCondition) {
@@ -121,13 +120,10 @@ public class ConditionStatement extends VerticalLayout implements RuleComponentI
         sBuilder.append(startLabelTextfield.getText() + "");
         sBuilder.append(relationVariable.getValue() + " ");
         sBuilder.append(modifierCombobox.getValue() + " ");
-        if(conceptRequired)
-        {
-        	sBuilder.append(conceptVariable.getValue());
-        }
-        else
-        {
-        	sBuilder.append(freeTextVariable.getValue());
+        if (conceptRequired) {
+            sBuilder.append(conceptVariable.getValue());
+        } else {
+            sBuilder.append(freeTextVariable.getValue());
         }
         sBuilder.append(endLabelTextfield.getText() + " ");
         if (andCheckbox.getValue()) {
