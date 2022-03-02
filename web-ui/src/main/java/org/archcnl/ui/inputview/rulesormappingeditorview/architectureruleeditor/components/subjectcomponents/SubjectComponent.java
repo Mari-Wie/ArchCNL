@@ -82,7 +82,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
 
     private void createTwoFirstConcept(){
         two_FirstConcept = new ConceptSelectionComponent();
-        two_FirstConcept.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        two_FirstConcept.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
         two_FirstConcept.setLabel("Concept");
     }
 
