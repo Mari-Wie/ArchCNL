@@ -29,6 +29,7 @@ public class ConditionStatement extends VerticalLayout implements RuleComponentI
     private Checkbox andCheckbox;
     private ConditionStatement newCondition;
     private HorizontalLayout conditionBox;
+    private boolean conceptRequired = true;
 
     public ConditionStatement() {
         setMargin(false);
@@ -94,9 +95,11 @@ public class ConditionStatement extends VerticalLayout implements RuleComponentI
 		case "equal-to a":
 		case "equal-to an":
 			conditionBox.replace(freeTextVariable, conceptVariable);
+			conceptRequired = true;
 			break;
 		default:
 			conditionBox.replace(conceptVariable, freeTextVariable);
+			conceptRequired = false;
 			break;
 		}
     }
@@ -118,7 +121,14 @@ public class ConditionStatement extends VerticalLayout implements RuleComponentI
         sBuilder.append(startLabelTextfield.getText() + "");
         sBuilder.append(relationVariable.getValue() + " ");
         sBuilder.append(modifierCombobox.getValue() + " ");
-        sBuilder.append(freeTextVariable.getValue());
+        if(conceptRequired)
+        {
+        	sBuilder.append(conceptVariable.getValue());
+        }
+        else
+        {
+        	sBuilder.append(freeTextVariable.getValue());
+        }
         sBuilder.append(endLabelTextfield.getText() + " ");
         if (andCheckbox.getValue()) {
             sBuilder.append("and " + newCondition.getRuleString());

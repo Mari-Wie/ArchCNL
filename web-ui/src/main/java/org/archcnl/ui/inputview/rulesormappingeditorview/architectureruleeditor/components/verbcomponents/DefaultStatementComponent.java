@@ -66,8 +66,8 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
         DEFAULTNUMBERBRANCH(true, true, true, true, true, true),
         DEFAULTNUMBERBRANCHWITHCONDITION(true, true, true, true, true, true),
         EQUALTOVARIABLEBRANCH(true, true, true, true, false, false),
-        DEFAULTBRANCH(true, true, true, true, false, true),
-        DEFAULTBRANCHWITHCONDITION(true, true, true, true, false, true);
+        DEFAULTBRANCH(true, true, true, false, true, true),
+        DEFAULTBRANCHWITHCONDITION(true, true, true, false, true, true);
 
         private boolean[] showComponentsBooleanArray;
 
@@ -159,6 +159,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
 
     private void createConceptComboBox() {
         five_thirdVariable = new ConceptSelectionComponent();
+        five_thirdVariable.setLabel("Concept");
         five_thirdVariable.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
     }
 

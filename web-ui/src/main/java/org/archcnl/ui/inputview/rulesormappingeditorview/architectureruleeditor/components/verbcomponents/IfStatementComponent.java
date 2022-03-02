@@ -10,6 +10,7 @@ import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
@@ -31,18 +32,6 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
         initializeLayout();
     }
 
-    private PredicateSelectionComponent createRelationComboBox() {
-        PredicateSelectionComponent newRelationComboBox = new PredicateSelectionComponent();
-        newRelationComboBox.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
-        return newRelationComboBox;
-    }
-
-    private ConditionStatement createConditionComponent() {
-        ConditionStatement condition = new ConditionStatement();
-        condition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
-        return condition;
-    }
-
     private void initializeLayout() {
 
         firstCondition = createConditionComponent();
@@ -54,7 +43,7 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
         two_firstModifier = new ComboBox<String>("Modifier", Arrays.asList(" ", "a", "an"));
         two_firstModifier.setValue("a");
 
-        three_secondVariable = new ConceptSelectionComponent();
+        three_secondVariable = createConceptComboBox();
 
         four_firstAddConditionCheckbox = new Checkbox("that... (add condition)");
         four_firstAddConditionCheckbox.addClickListener(
@@ -79,7 +68,7 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
                 new ComboBox<String>("Modifier", Arrays.asList("this", "this a", "this an"));
         seven_thirdModifier.setValue("this");
 
-        eight_fourthVariable = new ConceptSelectionComponent();
+        eight_fourthVariable = createConceptComboBox();
 
         nine_secondAddConditionCheckbox = new Checkbox("that... (add condition)");
         nine_secondAddConditionCheckbox.addClickListener(
@@ -95,6 +84,29 @@ public class IfStatementComponent extends VerticalLayout implements RuleComponen
                 nine_secondAddConditionCheckbox);
 
         add(firstRowComponentRuleLayout, secondRowComponentRuleLayout);
+    }
+    
+    private ConceptSelectionComponent createConceptComboBox() {
+    	ConceptSelectionComponent newConceptComboBox = new ConceptSelectionComponent();
+        newConceptComboBox.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        newConceptComboBox.setPlaceholder("Concept");
+        newConceptComboBox.setLabel("Concept");
+        return newConceptComboBox;
+    }
+    
+    private PredicateSelectionComponent createRelationComboBox() {
+        PredicateSelectionComponent newRelationComboBox = new PredicateSelectionComponent();
+        newRelationComboBox.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        newRelationComboBox.setPlaceholder("Relation");
+        newRelationComboBox.setLabel("Relation");
+        return newRelationComboBox;
+    }
+
+    private ConditionStatement createConditionComponent() {
+        ConditionStatement condition = new ConditionStatement();
+        condition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+        condition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        return condition;
     }
 
     private void addConditionBlock(Boolean conditionOne, Boolean showCondition) {
