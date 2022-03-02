@@ -38,6 +38,9 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relatione
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.AddCustomRelationRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.ChangeRelationNameRequestedEvent;
 
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+
 @Tag("InputPresenter")
 public class InputPresenter extends Component {
 
@@ -67,6 +70,7 @@ public class InputPresenter extends Component {
         architectureRulesLayout.addListener(RuleCreatorRequestedEvent.class, this::handleEvent);
         architectureRulesLayout.addListener(EditRuleButtonPressedEvent.class, this::handleEvent);
         architectureRulesLayout.addListener(DeleteRuleButtonPressedEvent.class, this::fireEvent);
+
     }
 
     public InputView getView() {
@@ -103,10 +107,14 @@ public class InputPresenter extends Component {
     }
 
     private void handleEvent(final RuleCreatorRequestedEvent event) {
+        //TODO move this to the InputPresenter
         final RuleCreatorPresenter presenter = new RuleCreatorPresenter();
         presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::fireEvent);
+        presenter.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        presenter.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
         view.changeCurrentlyShownView(presenter.getView());
+
     }
 
     private void handleEvent(final EditRuleButtonPressedEvent event) {

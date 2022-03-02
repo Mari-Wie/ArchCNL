@@ -5,16 +5,18 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.Arrays;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
 
 public class FactVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout componentRuleLayout;
     private ComboBox<String> one_firstModifier, three_secondModifier;
-    private ConceptTextfieldWidget twoA_firstVariable_Concept, four_thirdVariable;
-    private RelationTextfieldWidget twoB_firstVariable_Relation;
+    private ConceptSelectionComponent twoA_firstVariable_Concept;
+    private ConceptTextfieldWidget four_thirdVariable;
+    private PredicateSelectionComponent twoB_firstVariable_Relation;
     private boolean isInUpperBranch = false;
 
     public FactVerbComponent() {
@@ -33,8 +35,8 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
                     updateUI();
                 });
 
-        twoA_firstVariable_Concept = new ConceptTextfieldWidget();
-        twoB_firstVariable_Relation = new RelationTextfieldWidget();
+        twoA_firstVariable_Concept = new ConceptSelectionComponent();
+        twoB_firstVariable_Relation = new PredicateSelectionComponent();
 
         three_secondModifier = new ComboBox<>("Modifier", Arrays.asList("equal-to", " "));
         three_secondModifier.setValue("equal-to");

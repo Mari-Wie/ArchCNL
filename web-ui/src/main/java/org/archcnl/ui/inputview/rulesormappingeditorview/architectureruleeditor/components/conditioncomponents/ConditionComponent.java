@@ -8,14 +8,20 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.Arrays;
 import java.util.List;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
+
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import com.vaadin.flow.shared.Registration;
 
 public class ConditionComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private Label startLabelTextfield, endLabelTextfield;
-    private RelationTextfieldWidget firstVariable;
+    private PredicateSelectionComponent firstVariable;
     private ConceptTextfieldWidget secondVariable;
     private ComboBox<String> firstCombobox;
     private Checkbox andCheckbox;
@@ -29,11 +35,9 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
 
         startLabelTextfield = new Label("that(");
         conditionBox.setVerticalComponentAlignment(Alignment.END, startLabelTextfield);
-        firstVariable = new RelationTextfieldWidget();
-        firstVariable.setLabel("Relation");
 
         List<String> firstStatements =
-                Arrays.asList(" ", "a", "an", "equal-to", "equal-to a", "equal-to an");
+            Arrays.asList(" ", "a", "an", "equal-to", "equal-to a", "equal-to an");
         firstCombobox = new ComboBox<String>("Modifier", firstStatements);
         firstCombobox.setValue("a");
         firstCombobox.addValueChangeListener(
@@ -41,9 +45,8 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
                     firstComboboxListener(firstCombobox.getValue());
                 });
 
-        secondVariable = new ConceptTextfieldWidget();
-        secondVariable.setLabel("Concept");
-        secondVariable.setPlaceholder("Concept");
+        createFirstVariable();
+        createSecondVariable();
 
         endLabelTextfield = new Label(")");
         conditionBox.setVerticalComponentAlignment(Alignment.END, endLabelTextfield);
@@ -60,6 +63,18 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
                 endLabelTextfield,
                 andCheckbox);
         add(conditionBox);
+    }
+
+    private void createSecondVariable(){
+        secondVariable = new ConceptTextfieldWidget();
+        secondVariable.setLabel("Concept");
+        secondVariable.setPlaceholder("Concept");
+    }
+
+    private void createFirstVariable(){
+        firstVariable = new PredicateSelectionComponent();
+        firstVariable.setLabel("Relation");
+        firstVariable.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
     }
 
     private void firstComboboxListener(String value) {
@@ -95,5 +110,10 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
         }
 
         return sBuilder.toString();
+    }
+  @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

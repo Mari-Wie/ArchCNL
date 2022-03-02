@@ -11,6 +11,9 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+
 @Tag("NewArchitectureRulePresenter")
 public class RuleCreatorPresenter extends Component {
 
@@ -21,6 +24,8 @@ public class RuleCreatorPresenter extends Component {
     public RuleCreatorPresenter() {
         oldRule = Optional.empty();
         view = new RuleCreatorView(Optional.empty());
+        view.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        view.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
         addListeners();
     }
 

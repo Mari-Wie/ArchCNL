@@ -12,8 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 
 public class SubjectComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -21,7 +23,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
     private HorizontalLayout subjectLayout;
     private ConditionComponent newCondition;
     private ComboBox<String> one_DescriptorCombobox;
-    private ConceptTextfieldWidget two_FirstConcept;
+    private ConceptSelectionComponent two_FirstConcept;
     private Checkbox three_ConditionCheckbox;
     private boolean showFirstConcept = true, showCondition = false;
 
@@ -39,6 +41,9 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
 
     private void initializeLayout() {
         newCondition = new ConditionComponent();
+        newCondition.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        //TODO, either just remove this (DELTE) or remove next line and this (2.3.2022)
+        newCondition.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
         subjectLayout = new HorizontalLayout();
 
         List<String> descriptorList =
@@ -64,8 +69,7 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
                     updateUI();
                 });
 
-        two_FirstConcept = new ConceptTextfieldWidget();
-        two_FirstConcept.setLabel("Concept");
+        createTwoFirstConcept();
 
         three_ConditionCheckbox = new Checkbox("that... (add condition)");
         three_ConditionCheckbox.addClickListener(e -> updateUI());
@@ -73,6 +77,13 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
         subjectLayout.setVerticalComponentAlignment(Alignment.END, three_ConditionCheckbox);
         subjectLayout.add(one_DescriptorCombobox, two_FirstConcept, three_ConditionCheckbox);
         add(subjectLayout);
+    }
+
+
+    private void createTwoFirstConcept(){
+        two_FirstConcept = new ConceptSelectionComponent();
+        two_FirstConcept.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        two_FirstConcept.setLabel("Concept");
     }
 
     public String getFirstModifierValue() {

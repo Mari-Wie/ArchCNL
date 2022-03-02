@@ -15,6 +15,9 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+
 public class RuleCreatorView extends RulesOrMappingEditorView {
 
     private static final long serialVersionUID = -2966045554441002128L;
@@ -41,6 +44,9 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
 
     private void initializeLayout(Optional<String> ruleString) {
         subject = new SubjectComponent();
+
+        subject.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        subject.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
         subject.addListener(
                 DetermineVerbComponentEvent.class,
                 event -> verb.determineVerbComponent(event.getSource().getFirstModifierValue()));

@@ -15,11 +15,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.RelationTextfieldWidget;
+import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 
 public class DefaultVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -27,8 +31,9 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
     private HorizontalLayout horizontalRowLayout, componentRuleLayout;
     private ConditionComponent newCondition;
     private ComboBox<String> one_firstCombobox, three_secondCombobox;
-    private RelationTextfieldWidget two_firstVariable;
-    private ConceptTextfieldWidget four_secondVariable, five_thirdVariable;
+    private PredicateSelectionComponent two_firstVariable;
+    private ConceptTextfieldWidget four_secondVariable;
+    private ConceptSelectionComponent five_thirdVariable;
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
     private SelectionState currentState;
@@ -56,8 +61,8 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
      */
     private enum SelectionState {
         EMPTYANDORBLOCK(true, false, false, false, false, false),
-        MUSTBEBRANCH(true, true, false, false, false, true),
-        MUSTBEBRANCHWITHCONDITION(true, true, false, false, false, true),
+        MUSTBEBRANCH(true, false, false, false, true, true),
+        MUSTBEBRANCHWITHCONDITION(true, false, false, false, true, true),
         ANYTHINGBRANCH(true, true, true, false, false, false),
         DEFAULTNUMBERBRANCH(true, true, true, true, true, true),
         DEFAULTNUMBERBRANCHWITHCONDITION(true, true, true, true, true, true),
@@ -101,12 +106,14 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
     }
 
     private void initializeLayout() {
-        newCondition = new ConditionComponent();
+        createCondtionComponent();
 
         horizontalRowLayout = new HorizontalLayout();
         componentRuleLayout = new HorizontalLayout();
+
         initializeFirstCombobox();
-        two_firstVariable = new RelationTextfieldWidget();
+        createRelationComboBox();
+
         three_secondCombobox = new ComboBox<String>("Modifier", secondModifierList);
         three_secondCombobox.setValue("a");
         three_secondCombobox.addValueChangeListener(
@@ -114,11 +121,15 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
                     determineState();
                 });
 
+
         four_secondVariable = new ConceptTextfieldWidget();
-        five_thirdVariable = new ConceptTextfieldWidget();
+
+        createConceptComboBox();
+
         six_addConditionCheckbox = new Checkbox("that... (add condition)");
         six_addConditionCheckbox.addClickListener(
                 e -> showConditionBlock(six_addConditionCheckbox.getValue()));
+
         componentRuleLayout.setVerticalComponentAlignment(Alignment.END, six_addConditionCheckbox);
 
         buildingBlock = new Component[6];
@@ -132,6 +143,22 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
         horizontalRowLayout.add(componentRuleLayout);
         initializeAndOrButtons();
         add(horizontalRowLayout);
+    }
+
+    private void createCondtionComponent(){
+        newCondition = new ConditionComponent();
+        newCondition.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+    }
+
+  private void createRelationComboBox()
+    {
+        two_firstVariable = new PredicateSelectionComponent();
+        two_firstVariable.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+    }
+  private void createConceptComboBox()
+    {
+        five_thirdVariable = new ConceptSelectionComponent();
+        five_thirdVariable.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
     }
 
     private void initializeFirstCombobox() {

@@ -47,7 +47,7 @@ public class ConceptSelectionComponent extends SelectionComponent {
     }
 
     @Override
-    protected <T extends ComponentEvent<?>> Registration addListener(
+    public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }

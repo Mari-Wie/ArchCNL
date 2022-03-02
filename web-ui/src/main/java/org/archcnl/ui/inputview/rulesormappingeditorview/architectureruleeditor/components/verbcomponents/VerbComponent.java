@@ -12,6 +12,9 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
 
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+
 public class VerbComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +52,8 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
             case "If a":
             case "If an":
                 IfVerbComponent ifVerbComponent = new IfVerbComponent();
+                ifVerbComponent.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+                ifVerbComponent.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
                 verbComponentList.add(ifVerbComponent);
                 add(ifVerbComponent);
                 break;
@@ -59,6 +64,8 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
                 break;
             default:
                 DefaultVerbComponent defaultVerbComponent = new DefaultVerbComponent(false);
+                defaultVerbComponent.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+                defaultVerbComponent.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
                 defaultVerbComponent.addListener(
                         ShowAndOrBlockEvent.class,
                         event -> showAndOrComponent(event.getShowAndOrBlock()));
