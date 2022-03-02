@@ -10,18 +10,14 @@ public class HierarchyNode<T extends HierarchyObject> {
     private String text;
     private List<HierarchyNode<T>> children;
 
-    /**
-     * Constructor for creating seperation nodes
-     **/
+    /** Constructor for creating seperation nodes */
     public HierarchyNode(String text) {
         entry = null;
         this.text = text;
         children = new ArrayList<HierarchyNode<T>>();
     }
 
-    /**
-     * Constructor for creating node containing HierarchyObject
-     **/
+    /** Constructor for creating node containing HierarchyObject */
     public HierarchyNode(T p_entry) {
         this.entry = p_entry;
         text = null;
@@ -30,38 +26,41 @@ public class HierarchyNode<T extends HierarchyObject> {
 
     /**
      * Checks if the node has a HierarchyObject
+     *
      * @return false if no object was set, true otherwise
-     **/
+     */
     public boolean hasEntry() {
         return entry != null;
     }
 
     /**
      * Getter for child nodes
+     *
      * @return List<HierarchyObject> List of children
-     **/
+     */
     public List<HierarchyNode<T>> getChildren() {
         return children;
     }
 
     /**
      * Getter for HierarchyObject
+     *
      * @return returns a HierarchyObject if it was set, otherwise null
-     **/
+     */
     public T getEntry() {
-        if(hasEntry()){
+        if (hasEntry()) {
             return entry;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     /**
-     * Getter for the name of the node. The name is either the name of the HierarchyObjecty or the name of text of the node
+     * Getter for the name of the node. The name is either the name of the HierarchyObjecty or the
+     * name of text of the node
+     *
      * @return Either the name of the contained HierarchyObject or the tesxt of the node.
-     **/
+     */
     public String getName() {
         if (hasEntry()) {
             return entry.getName();
@@ -71,8 +70,9 @@ public class HierarchyNode<T extends HierarchyObject> {
 
     /**
      * Getter for the desctiption of the contained HierarchyObject
+     *
      * @return returns the description if a HierarchyObject is found, otherwise a empty string.
-     **/
+     */
     public String getDescription() {
         if (hasEntry()) {
             return entry.getDescription();
@@ -81,34 +81,36 @@ public class HierarchyNode<T extends HierarchyObject> {
     }
 
     /**
-     * Adds given node as a child to the node.
-     * If node and this node are the same no child is added
+     * Adds given node as a child to the node. If node and this node are the same no child is added
+     *
      * @param newChild the node that is to be added
      * @return true if node was added, false otherwise
-     **/
+     */
     public boolean addChild(HierarchyNode<T> hierrarchyNode) {
         children.add(hierrarchyNode);
         return true;
     }
 
     /**
-     * Adds given HierarchyObject as a newly created child to the node.
-     * If node and this node are the same no child is added
+     * Adds given HierarchyObject as a newly created child to the node. If node and this node are
+     * the same no child is added
+     *
      * @param newChild the node that is to be added
      * @return true if node was added, false otherwise
-     **/
+     */
     public boolean add(T newChild) {
-        //TODO consider using a set instead of a listfor children
+        // TODO consider using a set instead of a listfor children
         return addChild(new HierarchyNode<T>(newChild));
     }
     /**
-     * Adds given HierarchyNode to a child node with given destination
-     * If node and this node are the same no child is added
-     * If no child is found that matches with the destination no node is added
+     * Adds given HierarchyNode to a child node with given destination If node and this node are the
+     * same no child is added If no child is found that matches with the destination no node is
+     * added
+     *
      * @param newChild the node that is to be added
      * @param destination name of the node where the child is to be added
      * @return true if node was added, false otherwise
-     **/
+     */
     public boolean add(HierarchyNode<T> newChild, String destination) {
         if (getName() == destination) {
             return addChild(newChild);
@@ -121,42 +123,42 @@ public class HierarchyNode<T extends HierarchyObject> {
     }
 
     /**
-     * Removes given HierarchyNode
-     * Recursivelty searches in all children for given node
-     * If no node is found nothing changes in the hierarchy
+     * Removes given HierarchyNode Recursivelty searches in all children for given node If no node
+     * is found nothing changes in the hierarchy
+     *
      * @param hierarchyNode The node that is to be removed
      * @return true if node was removed, false otherwise
-     **/
+     */
     public boolean remove(HierarchyNode<T> hierarchyNode) {
         for (HierarchyNode<T> childNode : children) {
 
             if (hierarchyNode.equals(childNode)) {
                 return removeChild(childNode);
             } else {
-                if(childNode.remove(hierarchyNode)) return true;
+                if (childNode.remove(hierarchyNode)) return true;
             }
         }
         return false;
     }
 
-    public boolean hasChildRecursive(HierarchyNode<T> hierarchyNode){
+    public boolean hasChildRecursive(HierarchyNode<T> hierarchyNode) {
         for (HierarchyNode<T> childNode : children) {
             if (hierarchyNode.equals(childNode)) {
                 return true;
-            }
-            else{
-                if(childNode.hasChildRecursive(hierarchyNode)) return true;
+            } else {
+                if (childNode.hasChildRecursive(hierarchyNode)) return true;
             }
         }
         return false;
     }
 
     /**
-     * Removes given HierarchyNode from this node
-     * If no node is found nothing changes in the hierarchy
+     * Removes given HierarchyNode from this node If no node is found nothing changes in the
+     * hierarchy
+     *
      * @param hierarchyNode The node that is to be removed
      * @return true if node was removed, false otherwise
-     **/
+     */
     public boolean removeChild(HierarchyNode<T> hierarchyNode) {
         children.remove(hierarchyNode);
         return true;
