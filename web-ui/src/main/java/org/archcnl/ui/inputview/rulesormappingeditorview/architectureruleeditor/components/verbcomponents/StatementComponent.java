@@ -14,7 +14,7 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
 
-public class VerbComponent extends VerticalLayout implements RuleComponentInterface {
+public class StatementComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private ArrayList<RuleComponentInterface> verbComponentList = new ArrayList<>();
@@ -25,7 +25,7 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
      * There are three possible verb component, depending on what descriptor is chosen in the
      * subject component. a) If ... b) Fact: ... c) Every/Only/No/Nothing ...
      */
-    public VerbComponent() {
+    public StatementComponent() {
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
 
@@ -50,7 +50,7 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
             case "If":
             case "If a":
             case "If an":
-                IfVerbComponent ifVerbComponent = new IfVerbComponent();
+                IfStatementComponent ifVerbComponent = new IfStatementComponent();
                 ifVerbComponent.addListener(
                         RelationListUpdateRequestedEvent.class, this::fireEvent);
                 ifVerbComponent.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
@@ -58,12 +58,14 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
                 add(ifVerbComponent);
                 break;
             case "Fact:":
-                FactVerbComponent factVerbComponent = new FactVerbComponent();
+                FactStatementComponent factVerbComponent = new FactStatementComponent();
+                factVerbComponent.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+                factVerbComponent.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
                 verbComponentList.add(factVerbComponent);
                 add(factVerbComponent);
                 break;
             default:
-                DefaultVerbComponent defaultVerbComponent = new DefaultVerbComponent(false);
+                DefaultStatementComponent defaultVerbComponent = new DefaultStatementComponent(false);
                 defaultVerbComponent.addListener(
                         RelationListUpdateRequestedEvent.class, this::fireEvent);
                 defaultVerbComponent.addListener(
@@ -98,7 +100,7 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
     }
 
     private void addAndOrVerbComponent() {
-        DefaultVerbComponent andOrVerbComponent = new DefaultVerbComponent(true);
+        DefaultStatementComponent andOrVerbComponent = new DefaultStatementComponent(true);
         andOrVerbComponent.addListener(
                 AddAndOrVerbComponentEvent.class, event -> addAndOrVerbComponent());
         andOrVerbComponent.addListener(
@@ -109,7 +111,7 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
         add(andOrVerbComponent);
     }
 
-    private void removeAndOrVerbComponent(DefaultVerbComponent source) {
+    private void removeAndOrVerbComponent(DefaultStatementComponent source) {
         verbComponentList.remove(source);
         remove((Component) source);
         if (verbComponentList.size() == 1 && showAndOrComponent) {

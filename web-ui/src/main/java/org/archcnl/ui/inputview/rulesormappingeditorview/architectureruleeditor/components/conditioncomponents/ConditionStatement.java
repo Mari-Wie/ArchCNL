@@ -10,25 +10,30 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.List;
+
+import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
 
-public class ConditionComponent extends VerticalLayout implements RuleComponentInterface {
+public class ConditionStatement extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private Label startLabelTextfield, endLabelTextfield;
-    private PredicateSelectionComponent firstVariable;
-    private ConceptTextfieldWidget secondVariable;
-    private ComboBox<String> firstCombobox;
+    private PredicateSelectionComponent relationVariable;
+    private ConceptTextfieldWidget freeTextVariable;
+    private ConceptSelectionComponent conceptVariable;
+    private ComboBox<String> modifierCombobox;
     private Checkbox andCheckbox;
-    private ConditionComponent newCondition;
+    private ConditionStatement newCondition;
+    private HorizontalLayout conditionBox;
 
-    public ConditionComponent() {
+    public ConditionStatement() {
         setMargin(false);
         setPadding(false);
-        HorizontalLayout conditionBox = new HorizontalLayout();
+        conditionBox = new HorizontalLayout();
         conditionBox.setMargin(false);
 
         startLabelTextfield = new Label("that(");
@@ -36,15 +41,16 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
 
         List<String> firstStatements =
                 Arrays.asList(" ", "a", "an", "equal-to", "equal-to a", "equal-to an");
-        firstCombobox = new ComboBox<String>("Modifier", firstStatements);
-        firstCombobox.setValue("a");
-        firstCombobox.addValueChangeListener(
+        modifierCombobox = new ComboBox<String>("Modifier", firstStatements);
+        modifierCombobox.setValue("a");
+        modifierCombobox.addValueChangeListener(
                 e -> {
-                    firstComboboxListener(firstCombobox.getValue());
+                    firstComboboxListener(modifierCombobox.getValue());
                 });
 
-        createFirstVariable();
-        createSecondVariable();
+        createRelationVariable();
+        createConceptVariable();
+        createFreeTextVariable();
 
         endLabelTextfield = new Label(")");
         conditionBox.setVerticalComponentAlignment(Alignment.END, endLabelTextfield);
@@ -55,38 +61,49 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
 
         conditionBox.add(
                 startLabelTextfield,
-                firstVariable,
-                firstCombobox,
-                secondVariable,
+                relationVariable,
+                modifierCombobox,
+                conceptVariable,
                 endLabelTextfield,
                 andCheckbox);
         add(conditionBox);
     }
 
-    private void createSecondVariable() {
-        secondVariable = new ConceptTextfieldWidget();
-        secondVariable.setLabel("Concept");
-        secondVariable.setPlaceholder("Concept");
+    private void createRelationVariable() {
+        relationVariable = new PredicateSelectionComponent();
+        relationVariable.setLabel("Relation");
+        relationVariable.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
     }
-
-    private void createFirstVariable() {
-        firstVariable = new PredicateSelectionComponent();
-        firstVariable.setLabel("Relation");
-        firstVariable.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+    
+    private void createFreeTextVariable() {
+        freeTextVariable = new ConceptTextfieldWidget();
+        freeTextVariable.setLabel("Concept, Interger or String");
+        freeTextVariable.setPlaceholder("Concept, Interger or String");
+    }
+    
+    private void createConceptVariable() {
+    	conceptVariable = new ConceptSelectionComponent();
+    	conceptVariable.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
+    	conceptVariable.setLabel("Concept");
     }
 
     private void firstComboboxListener(String value) {
-        secondVariable.setLabel("Concept / Number / String");
-        secondVariable.setPlaceholder("+/- [0-9] / String");
-        if (value.equals("a") || value.equals("an")) {
-            secondVariable.setLabel("Concept");
-            secondVariable.setPlaceholder("Concept");
-        }
+    	switch (value) {
+		case "a":
+		case "an":
+		case "equal-to a":
+		case "equal-to an":
+			conditionBox.replace(freeTextVariable, conceptVariable);
+			break;
+		default:
+			conditionBox.replace(conceptVariable, freeTextVariable);
+			break;
+		}
     }
 
     private void addCondition(Boolean showCondition) {
         if (newCondition == null) {
-            newCondition = new ConditionComponent();
+            newCondition = new ConditionStatement();
         }
         if (showCondition) {
             add(newCondition);
@@ -99,9 +116,9 @@ public class ConditionComponent extends VerticalLayout implements RuleComponentI
     public String getRuleString() {
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append(startLabelTextfield.getText() + "");
-        sBuilder.append(firstVariable.getValue() + " ");
-        sBuilder.append(firstCombobox.getValue() + " ");
-        sBuilder.append(secondVariable.getValue());
+        sBuilder.append(relationVariable.getValue() + " ");
+        sBuilder.append(modifierCombobox.getValue() + " ");
+        sBuilder.append(freeTextVariable.getValue());
         sBuilder.append(endLabelTextfield.getText() + " ");
         if (andCheckbox.getValue()) {
             sBuilder.append("and " + newCondition.getRuleString());

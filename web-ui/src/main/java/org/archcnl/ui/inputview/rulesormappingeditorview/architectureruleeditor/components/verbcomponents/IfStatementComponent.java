@@ -12,19 +12,19 @@ import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
 
-public class IfVerbComponent extends VerticalLayout implements RuleComponentInterface {
+public class IfStatementComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout firstRowComponentRuleLayout, secondRowComponentRuleLayout;
-    private ConditionComponent firstCondition, secondCondition;
+    private ConditionStatement firstCondition, secondCondition;
     private PredicateSelectionComponent one_firstVariable, six_thirdVariable;
     private ComboBox<String> two_firstModifier, five_secondModifier, seven_thirdModifier;
     private ConceptSelectionComponent three_secondVariable, eight_fourthVariable;
     private Checkbox four_firstAddConditionCheckbox, nine_secondAddConditionCheckbox;
 
-    public IfVerbComponent() {
+    public IfStatementComponent() {
         this.setMargin(false);
         this.setPadding(false);
 
@@ -37,8 +37,8 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         return newRelationComboBox;
     }
 
-    private ConditionComponent createConditionComponent() {
-        ConditionComponent condition = new ConditionComponent();
+    private ConditionStatement createConditionComponent() {
+        ConditionStatement condition = new ConditionStatement();
         condition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         return condition;
     }

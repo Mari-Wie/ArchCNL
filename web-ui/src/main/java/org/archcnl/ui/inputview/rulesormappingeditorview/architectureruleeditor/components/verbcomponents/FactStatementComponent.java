@@ -1,15 +1,19 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.shared.Registration;
+
 import java.util.Arrays;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
 
-public class FactVerbComponent extends VerticalLayout implements RuleComponentInterface {
+public class FactStatementComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout componentRuleLayout;
@@ -19,7 +23,7 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
     private PredicateSelectionComponent twoB_firstVariable_Relation;
     private boolean isInUpperBranch = false;
 
-    public FactVerbComponent() {
+    public FactStatementComponent() {
         this.setMargin(false);
         this.setPadding(false);
 
@@ -93,5 +97,11 @@ public class FactVerbComponent extends VerticalLayout implements RuleComponentIn
             sBuilder.append(four_thirdVariable.getValue());
         }
         return sBuilder.toString();
+    }
+    
+    @Override
+    public <T extends ComponentEvent<?>> Registration addListener(
+            final Class<T> eventType, final ComponentEventListener<T> listener) {
+        return getEventBus().addListener(eventType, listener);
     }
 }

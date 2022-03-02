@@ -12,7 +12,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.subjectcomponents.SubjectComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.VerbComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.StatementComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
@@ -24,7 +24,7 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
     private Button cancelButton;
     private TextArea archRuleTextArea;
     private SubjectComponent subject;
-    private VerbComponent verb;
+    private StatementComponent verb;
     private HorizontalLayout buttonsLayout;
     private Checkbox expertmodeCheckbox;
 
@@ -43,14 +43,13 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
 
     private void initializeLayout(Optional<String> ruleString) {
         subject = new SubjectComponent();
-
         subject.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         subject.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subject.addListener(
                 DetermineVerbComponentEvent.class,
                 event -> verb.determineVerbComponent(event.getSource().getFirstModifierValue()));
 
-        verb = new VerbComponent();
+        verb = new StatementComponent();
         verb.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         verb.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
 

@@ -14,14 +14,14 @@ import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
 
 public class SubjectComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout subjectLayout;
-    private ConditionComponent newCondition;
+    private ConditionStatement newCondition;
     private ComboBox<String> one_DescriptorCombobox;
     private ConceptSelectionComponent two_FirstConcept;
     private Checkbox three_ConditionCheckbox;
@@ -40,9 +40,8 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
     }
 
     private void initializeLayout() {
-        newCondition = new ConditionComponent();
+        newCondition = new ConditionStatement();
         newCondition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
-        // TODO, either just remove this (DELTE) or remove next line and this (2.3.2022)
         newCondition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subjectLayout = new HorizontalLayout();
 

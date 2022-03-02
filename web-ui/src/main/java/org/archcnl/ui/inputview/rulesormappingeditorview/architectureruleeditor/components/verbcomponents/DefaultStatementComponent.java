@@ -10,6 +10,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,20 +19,19 @@ import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionStatement;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
 
-public class DefaultVerbComponent extends VerticalLayout implements RuleComponentInterface {
+public class DefaultStatementComponent extends VerticalLayout implements RuleComponentInterface {
 
     private static final long serialVersionUID = 1L;
     private HorizontalLayout horizontalRowLayout, componentRuleLayout;
-    private ConditionComponent newCondition;
+    private ConditionStatement newCondition;
     private ComboBox<String> one_firstCombobox, three_secondCombobox;
     private PredicateSelectionComponent two_firstVariable;
-    private ConceptTextfieldWidget four_secondVariable;
+    private TextField four_secondVariable;
     private ConceptSelectionComponent five_thirdVariable;
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
@@ -95,7 +95,7 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
         }
     }
 
-    public DefaultVerbComponent(Boolean andOrBlock) {
+    public DefaultStatementComponent(Boolean andOrBlock) {
         this.setMargin(false);
         this.setPadding(false);
         isAndOrBlock = andOrBlock;
@@ -120,7 +120,9 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
                     determineState();
                 });
 
-        four_secondVariable = new ConceptTextfieldWidget();
+        four_secondVariable = new TextField();
+        four_secondVariable.setPlaceholder("+/- [0-9] / String");
+        four_secondVariable.setLabel("Integer or String");
 
         createConceptComboBox();
 
@@ -144,12 +146,14 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
     }
 
     private void createCondtionComponent() {
-        newCondition = new ConditionComponent();
+        newCondition = new ConditionStatement();
         newCondition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        newCondition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
     }
 
     private void createRelationComboBox() {
         two_firstVariable = new PredicateSelectionComponent();
+        two_firstVariable.setLabel("Relation");
         two_firstVariable.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
     }
 
@@ -247,8 +251,6 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
 
     private void updateUI() {
         componentRuleLayout.removeAll();
-        four_secondVariable.setPlaceholder("Concept");
-        four_secondVariable.setLabel("Concept");
 
         // Show all UI elements according to current state
         boolean[] boolArray = currentState.getShowComponentBooleanArray();
