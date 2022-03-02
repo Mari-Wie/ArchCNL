@@ -20,22 +20,39 @@ public class HierarchyManager<T extends HierarchyObject> {
         hierarchy_roots.add(newRoot);
     }
 
-    public void moveNode(HierarchyNode<T> node, HierarchyNode<T> target) {
-        if (hierarchy_roots.contains(node)) {
-            hierarchy_roots.remove(node);
-        } else {
-            removeFromHierarchy(node);
+    private boolean containedInRoots(HierarchyNode<T> node){
+        for (HierarchyNode<T> n : hierarchy_roots){
+            if (node.equals(n)) {return true;}
         }
-        target.addChild(node);
+        return false;
+    }
+
+    public void moveNode(HierarchyNode<T> node, HierarchyNode<T> target) {
+        if (containedInRoots(node)) {
+            //TODO handle this case, currently the moved node
+            //would vanish into thin air without this if statement
+            return;
+        }
+
+        if(node.hasChildRecursive(target)){
+            return;
+        }
+
+        if(removeFromHierarchy(node)){
+            target.addChild(node);
+        }
     }
 
     public List<HierarchyNode<T>> getRoots() {
         return hierarchy_roots;
     }
 
-    public void removeFromHierarchy(HierarchyNode<T> node) {
+    public boolean removeFromHierarchy(HierarchyNode<T> node) {
         for (HierarchyNode<T> hn : hierarchy_roots) {
-            hn.remove(node);
+            if(hn.remove(node)){
+                return true;
+            }
         }
+        return false;
     }
-}
+  }
