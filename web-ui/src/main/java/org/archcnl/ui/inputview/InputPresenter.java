@@ -103,9 +103,12 @@ public class InputPresenter extends Component {
     }
 
     private void handleEvent(final RuleCreatorRequestedEvent event) {
+        // TODO move this to the InputPresenter
         final RuleCreatorPresenter presenter = new RuleCreatorPresenter();
         presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::fireEvent);
+        presenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        presenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         view.changeCurrentlyShownView(presenter.getView());
     }
 
