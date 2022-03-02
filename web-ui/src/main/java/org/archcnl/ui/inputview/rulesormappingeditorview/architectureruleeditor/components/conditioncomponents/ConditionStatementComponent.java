@@ -9,7 +9,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -87,9 +90,13 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     }
 
     private void createVariableTextfield() {
-        variableTextfield = new VariableTextfieldWidget("[+-]?[0-9]+");
-        variableTextfield.setLabel("Concept, Interger or String");
-        variableTextfield.setPlaceholder("Concept, Interger or String");
+    	Set<String> regexSet = new HashSet<>();
+    	regexSet.add("[+-]?[0-9]+");
+    	regexSet.add("[A-Za-z]+");
+    	
+        variableTextfield = new VariableTextfieldWidget(regexSet);
+        variableTextfield.setLabel("Interger, String (or Concept)");
+        variableTextfield.setPlaceholder("Interger, String (or Concept)");
     }
 
     private void firstComboboxListener(String value) {

@@ -13,7 +13,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -38,6 +41,8 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
     private Component[] buildingBlock;
     private SelectionState currentState;
     private boolean isAndOrBlock = false;
+    private final String CHAR_REGEX = "[A-Za-z]+";
+    private final String INTEGER_REGEX = "[+-]?[0-9]+";
     private ArrayList<String> secondModifierList =
             new ArrayList<>(
                     Arrays.asList(
@@ -121,7 +126,10 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     determineState();
                 });
 
-        four_secondVariable = new VariableTextfieldWidget("/[+-]?[0-9]+");
+        Set<String> regexSet = new HashSet<>();
+    	regexSet.add(INTEGER_REGEX);
+    	regexSet.add(CHAR_REGEX);
+        four_secondVariable = new VariableTextfieldWidget(regexSet);
         four_secondVariable.setPlaceholder("+/- [0-9] / String");
         four_secondVariable.setLabel("Integer or String");
 
@@ -266,11 +274,13 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     || currentState == SelectionState.DEFAULTNUMBERBRANCHWITHCONDITION) {
                 four_secondVariable.setPlaceholder("+/- [0-9]");
                 four_secondVariable.setLabel("Integer");
+                four_secondVariable.removeRegex(CHAR_REGEX);
             }
 
             if (currentState == SelectionState.EQUALTOVARIABLEBRANCH) {
                 four_secondVariable.setPlaceholder("+/- [0-9] / String");
                 four_secondVariable.setLabel("Integer or String");
+                four_secondVariable.addRegex(INTEGER_REGEX);
             }
         }
         // Hide / Show condition
