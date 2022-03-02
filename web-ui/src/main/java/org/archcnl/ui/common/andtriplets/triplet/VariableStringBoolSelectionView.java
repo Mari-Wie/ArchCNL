@@ -14,6 +14,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 
 public class VariableStringBoolSelectionView extends HorizontalLayout {
@@ -134,6 +135,12 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
         }
     }
 
+    public void hightlightConflictingVariables(List<Variable> conflictingVariables) {
+        if (variableSelectionComponent != null) {
+            variableSelectionComponent.hightlightConflictingVariables(conflictingVariables);
+        }
+    }
+
     private void removeAllSecondaryViews() {
         if (booleanSelectionComponent != null) {
             remove(booleanSelectionComponent);
@@ -177,6 +184,7 @@ public class VariableStringBoolSelectionView extends HorizontalLayout {
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableListUpdateRequestedEvent.class, this::fireEvent);
+        variableSelectionComponent.addListener(VariableSelectedEvent.class, this::fireEvent);
         add(variableSelectionComponent);
     }
 

@@ -6,7 +6,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import java.util.List;
+import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
 public class VariableListView extends VerticalLayout {
@@ -21,7 +21,7 @@ public class VariableListView extends VerticalLayout {
         content.getStyle().set("overflow-x", "auto");
     }
 
-    public void showVariableList(final List<Variable> variables) {
+    public void showVariableList(final Set<Variable> variables) {
         content.removeAll();
         if (getComponentCount() == 0) {
             addBasicView();

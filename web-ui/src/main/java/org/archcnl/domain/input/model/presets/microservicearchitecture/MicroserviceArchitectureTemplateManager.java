@@ -1,6 +1,7 @@
 package org.archcnl.domain.input.model.presets.microservicearchitecture;
 
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -215,7 +216,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
         String regexInput = registryImportName;
 
         CustomRelation registerinRelation =
-                new CustomRelation("registerin", "", new LinkedList<>());
+                new CustomRelation("registerin", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<AndTriplets> whenTriplets = createRegisterinWhenTriplets(regexInput);
 
@@ -386,7 +387,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
      */
     public CustomRelation createHaveownRelationAndMapping() {
 
-        CustomRelation haveown = new CustomRelation("haveown", "", new LinkedList<>());
+        CustomRelation haveown =
+                new CustomRelation("haveown", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -787,7 +789,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createUseownRelationAndMapping() {
 
-        CustomRelation useown = new CustomRelation("useown", "", new LinkedList<>());
+        CustomRelation useown =
+                new CustomRelation("useown", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -838,7 +841,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     public CustomRelation createResideInPackageRelationAndMapping() {
 
         CustomRelation resideInPackage =
-                new CustomRelation("resideinpackage", "", new LinkedList<>());
+                new CustomRelation(
+                        "resideinpackage", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -889,7 +893,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createUseRelationAndMapping() {
 
-        CustomRelation use = new CustomRelation("use", "", new LinkedList<>());
+        CustomRelation use =
+                new CustomRelation("use", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 

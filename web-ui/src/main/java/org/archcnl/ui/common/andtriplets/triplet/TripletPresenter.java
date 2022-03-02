@@ -5,6 +5,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.shared.Registration;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
@@ -22,6 +23,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.ObjectNotDefinedException;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.TripletNotDefinedException;
@@ -46,6 +48,7 @@ public class TripletPresenter extends Component {
     private void addListeners() {
         tripletView.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         tripletView.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+        tripletView.addListener(VariableSelectedEvent.class, this::fireEvent);
 
         tripletView.addListener(
                 PredicateSelectedEvent.class,
@@ -107,6 +110,11 @@ public class TripletPresenter extends Component {
         tripletView.getSubjectComponent().highlightWhenEmpty();
         tripletView.getPredicateComponent().highlightWhenEmpty();
         tripletView.getObjectView().highlightWhenEmpty();
+    }
+
+    public void highlightConflictingVariables(List<Variable> conflictingVariables) {
+        tripletView.getSubjectComponent().hightlightConflictingVariables(conflictingVariables);
+        tripletView.getObjectView().highlightConflictingVariables(conflictingVariables);
     }
 
     public TripletView getTripletView() {

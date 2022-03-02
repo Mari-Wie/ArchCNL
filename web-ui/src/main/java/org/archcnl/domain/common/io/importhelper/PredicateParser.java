@@ -1,6 +1,6 @@
 package org.archcnl.domain.common.io.importhelper;
 
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
@@ -27,7 +27,10 @@ public class PredicateParser {
                                         .getRelationByRealName(predicateName)
                                         .orElse(
                                                 new CustomRelation(
-                                                        predicateName, "", new LinkedList<>())));
+                                                        predicateName,
+                                                        "",
+                                                        new LinkedHashSet<>(),
+                                                        new LinkedHashSet<>())));
             } else {
                 // has to be a SpecialRelation
                 return relationManager

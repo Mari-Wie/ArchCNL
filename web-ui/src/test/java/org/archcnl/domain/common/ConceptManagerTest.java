@@ -31,8 +31,8 @@ class ConceptManagerTest {
     private void setup() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
-        inputConceptsCount = 12;
-        outputConceptsCount = 18;
+        inputConceptsCount = 13;
+        outputConceptsCount = 19;
     }
 
     @Test
@@ -80,6 +80,7 @@ class ConceptManagerTest {
         Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Parameter", "")));
         Assertions.assertTrue(
                 conceptManager.doesConceptExist(new FamixConcept("LocalVariable", "")));
+        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Exception", "")));
 
         // Conformance
         Assertions.assertTrue(

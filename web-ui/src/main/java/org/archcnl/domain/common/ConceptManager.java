@@ -155,6 +155,7 @@ public class ConceptManager extends HierarchyManager<Concept> {
         initFamixConcept(
                 "LocalVariable",
                 "Models a local variable defined in a method, or a constructor from the object-oriented programming style.");
+        initFamixConcept("Exception", "Exceptions are often used for error handling.");
 
         // Conformance
         initConformanceConcept(

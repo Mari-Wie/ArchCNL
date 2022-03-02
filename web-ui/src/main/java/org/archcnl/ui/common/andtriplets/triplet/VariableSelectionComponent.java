@@ -3,6 +3,7 @@ package org.archcnl.ui.common.andtriplets.triplet;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.shared.Registration;
+import java.util.List;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
@@ -58,6 +59,19 @@ public class VariableSelectionComponent extends SelectionComponent {
         String variableName =
                 getOptionalValue().orElseThrow(SubjectOrObjectNotDefinedException::new);
         return new Variable(variableName);
+    }
+
+    public void hightlightConflictingVariables(List<Variable> conflictingVariables) {
+        if (!isEmpty()) {
+            String value = getValue();
+            if (conflictingVariables.stream().anyMatch(v -> v.getName().equals(value))) {
+                // TODO only show a warning as there are cases where false conflicts are detected
+                // see the limitation described in VariableManagerTest
+                showErrorMessage("Possible type conflict");
+            } else {
+                setInvalid(false);
+            }
+        }
     }
 
     @Override
