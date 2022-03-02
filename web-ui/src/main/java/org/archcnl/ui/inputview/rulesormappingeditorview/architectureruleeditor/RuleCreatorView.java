@@ -52,6 +52,8 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
                 event -> verb.determineVerbComponent(event.getSource().getFirstModifierValue()));
 
         verb = new VerbComponent();
+        verb.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        verb.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
 
         buttonsLayout = new HorizontalLayout();
         saveButton = new Button("Save Rule", e -> saveRule());
