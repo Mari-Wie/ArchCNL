@@ -21,10 +21,9 @@ public class HierarchyManager<T extends HierarchyObject> {
     }
 
     public void moveNode(HierarchyNode<T> node, HierarchyNode<T> target) {
-        if(hierarchy_roots.contains(node)){
+        if (hierarchy_roots.contains(node)) {
             hierarchy_roots.remove(node);
-        }
-        else{
+        } else {
             removeFromHierarchy(node);
         }
         target.addChild(node);
