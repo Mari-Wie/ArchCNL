@@ -1,19 +1,18 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.shared.Registration;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
 
 public class IfVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -32,16 +31,15 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         initializeLayout();
     }
 
-    private PredicateSelectionComponent createRelationComboBox()
-    {
+    private PredicateSelectionComponent createRelationComboBox() {
         PredicateSelectionComponent newRelationComboBox = new PredicateSelectionComponent();
-        newRelationComboBox.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        newRelationComboBox.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         return newRelationComboBox;
     }
 
-    private ConditionComponent createConditionComponent(){
+    private ConditionComponent createConditionComponent() {
         ConditionComponent condition = new ConditionComponent();
-        condition.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        condition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         return condition;
     }
 
@@ -78,7 +76,7 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         six_thirdVariable = createRelationComboBox();
 
         seven_thirdModifier =
-            new ComboBox<String>("Modifier", Arrays.asList("this", "this a", "this an"));
+                new ComboBox<String>("Modifier", Arrays.asList("this", "this a", "this an"));
         seven_thirdModifier.setValue("this");
 
         eight_fourthVariable = new ConceptSelectionComponent();
@@ -134,10 +132,10 @@ public class IfVerbComponent extends VerticalLayout implements RuleComponentInte
         }
         return sBuilder.toString();
     }
+
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-            }
-
+    }
 }

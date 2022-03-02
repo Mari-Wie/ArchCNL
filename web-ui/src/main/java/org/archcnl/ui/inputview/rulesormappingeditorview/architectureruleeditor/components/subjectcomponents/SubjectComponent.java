@@ -10,12 +10,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.List;
+import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
-import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 
 public class SubjectComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -41,9 +41,9 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
 
     private void initializeLayout() {
         newCondition = new ConditionComponent();
-        newCondition.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
-        //TODO, either just remove this (DELTE) or remove next line and this (2.3.2022)
-        newCondition.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+        newCondition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        // TODO, either just remove this (DELTE) or remove next line and this (2.3.2022)
+        newCondition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subjectLayout = new HorizontalLayout();
 
         List<String> descriptorList =
@@ -79,10 +79,9 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
         add(subjectLayout);
     }
 
-
-    private void createTwoFirstConcept(){
+    private void createTwoFirstConcept() {
         two_FirstConcept = new ConceptSelectionComponent();
-        two_FirstConcept.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+        two_FirstConcept.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         two_FirstConcept.setLabel("Concept");
     }
 

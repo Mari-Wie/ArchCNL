@@ -7,13 +7,12 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
-
-import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 
 public class VerbComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -52,8 +51,9 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
             case "If a":
             case "If an":
                 IfVerbComponent ifVerbComponent = new IfVerbComponent();
-                ifVerbComponent.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
-                ifVerbComponent.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+                ifVerbComponent.addListener(
+                        RelationListUpdateRequestedEvent.class, this::fireEvent);
+                ifVerbComponent.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
                 verbComponentList.add(ifVerbComponent);
                 add(ifVerbComponent);
                 break;
@@ -64,8 +64,10 @@ public class VerbComponent extends VerticalLayout implements RuleComponentInterf
                 break;
             default:
                 DefaultVerbComponent defaultVerbComponent = new DefaultVerbComponent(false);
-                defaultVerbComponent.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
-                defaultVerbComponent.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+                defaultVerbComponent.addListener(
+                        RelationListUpdateRequestedEvent.class, this::fireEvent);
+                defaultVerbComponent.addListener(
+                        ConceptListUpdateRequestedEvent.class, this::fireEvent);
                 defaultVerbComponent.addListener(
                         ShowAndOrBlockEvent.class,
                         event -> showAndOrComponent(event.getShowAndOrBlock()));

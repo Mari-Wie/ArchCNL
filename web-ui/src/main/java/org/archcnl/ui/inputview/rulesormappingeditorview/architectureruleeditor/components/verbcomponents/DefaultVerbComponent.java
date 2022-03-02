@@ -13,17 +13,16 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.RuleComponentInterface;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.conditioncomponents.ConditionComponent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.AddAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RemoveAndOrVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.ShowAndOrBlockEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets.ConceptTextfieldWidget;
-
-import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 
 public class DefaultVerbComponent extends VerticalLayout implements RuleComponentInterface {
 
@@ -121,7 +120,6 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
                     determineState();
                 });
 
-
         four_secondVariable = new ConceptTextfieldWidget();
 
         createConceptComboBox();
@@ -145,20 +143,19 @@ public class DefaultVerbComponent extends VerticalLayout implements RuleComponen
         add(horizontalRowLayout);
     }
 
-    private void createCondtionComponent(){
+    private void createCondtionComponent() {
         newCondition = new ConditionComponent();
-        newCondition.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        newCondition.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
     }
 
-  private void createRelationComboBox()
-    {
+    private void createRelationComboBox() {
         two_firstVariable = new PredicateSelectionComponent();
-        two_firstVariable.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
+        two_firstVariable.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
     }
-  private void createConceptComboBox()
-    {
+
+    private void createConceptComboBox() {
         five_thirdVariable = new ConceptSelectionComponent();
-        five_thirdVariable.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+        five_thirdVariable.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
     }
 
     private void initializeFirstCombobox() {

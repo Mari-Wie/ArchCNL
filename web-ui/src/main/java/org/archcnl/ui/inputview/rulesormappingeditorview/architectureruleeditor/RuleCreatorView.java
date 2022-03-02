@@ -8,15 +8,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.shared.Registration;
 import java.util.Optional;
+import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.subjectcomponents.SubjectComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.verbcomponents.VerbComponent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DetermineVerbComponentEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
-
-import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 
 public class RuleCreatorView extends RulesOrMappingEditorView {
 
@@ -45,15 +44,15 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
     private void initializeLayout(Optional<String> ruleString) {
         subject = new SubjectComponent();
 
-        subject.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
-        subject.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+        subject.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        subject.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subject.addListener(
                 DetermineVerbComponentEvent.class,
                 event -> verb.determineVerbComponent(event.getSource().getFirstModifierValue()));
 
         verb = new VerbComponent();
-        verb.addListener(RelationListUpdateRequestedEvent.class,this::fireEvent);
-        verb.addListener(ConceptListUpdateRequestedEvent.class,this::fireEvent);
+        verb.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        verb.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
 
         buttonsLayout = new HorizontalLayout();
         saveButton = new Button("Save Rule", e -> saveRule());
