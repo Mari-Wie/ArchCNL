@@ -2,6 +2,8 @@ package org.archcnl.javaparser.visitors;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.javaparser.visitors.helper.MethodParser;
@@ -11,9 +13,9 @@ import org.archcnl.owlify.famix.codemodel.Method;
 public class ConstructorDeclarationVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Method> visitedConstructors;
-    private String path;
+    private Path path;
 
-    public ConstructorDeclarationVisitor(String path) {
+    public ConstructorDeclarationVisitor(Path path) {
         this.visitedConstructors = new ArrayList<>();
         this.path = path;
     }

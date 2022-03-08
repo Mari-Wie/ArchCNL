@@ -98,7 +98,6 @@ public class CNLToolchain {
             boolean logVerbose,
             boolean removePreviousDatabases,
             List<String> enabledParsers) {
-        System.out.println("PRIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIINT");
 
         if (logVerbose) {
             LOG.info("verbose logging is enabled");

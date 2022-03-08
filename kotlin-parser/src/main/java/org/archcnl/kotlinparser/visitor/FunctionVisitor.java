@@ -1,5 +1,6 @@
 package org.archcnl.kotlinparser.visitor;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
@@ -25,7 +26,6 @@ public class FunctionVisitor extends NamedBaseVisitor {
 
         var function =
                 new Method(
-                        "not-Defined",
                         functionName,
                         functionSignature,
                         new ArrayList<>(),
@@ -36,7 +36,9 @@ public class FunctionVisitor extends NamedBaseVisitor {
                         false,
                         new ArrayList<>(),
                         new ArrayList<>(),
-                        new ArrayList<>());
+                        new ArrayList<>(),
+                        Path.of("TODO"),
+                        null); // TODO null zu Optional
         functions.add(function);
 
         return super.visitFunctionDeclaration(ctx);

@@ -9,15 +9,15 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.throwsException;
 
+import com.github.javaparser.Position;
+
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties;
-
-import com.github.javaparser.Position;
 
 /**
  * Models a method (or interface operation or constructor).
@@ -25,8 +25,6 @@ import com.github.javaparser.Position;
  * <p>Represented by the "Method" ontology class.
  */
 public class Method {
-    private final String path;
-    private final Optional<Position> beginning;
     private final String name;
     private final String signature;
     private List<Modifier> modifiers;
@@ -38,6 +36,8 @@ public class Method {
     private List<AnnotationInstance> annotations;
     private Type returnType;
     private final boolean isConstructor;
+    private final Path path;
+    private final Optional<Position> beginning;
 
     /**
      * Constructor.
@@ -69,7 +69,7 @@ public class Method {
             List<Type> thrownExceptions,
             List<Type> caughtExceptions,
             List<LocalVariable> localVariables,
-            String path,
+            Path path,
             Optional<Position> beginning) {
         this.name = name;
         this.signature = signature;
@@ -140,20 +140,18 @@ public class Method {
     public List<LocalVariable> getLocalVariables() {
         return localVariables;
     }
-    
+
     /** @return the path */
-    public String getPath() {
-    	return path;
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Position> getBeginning() {
+        return beginning;
     }
 
     /**
-	 * @return the beginning
-	 */
-	public Optional<Position> getBeginning() {
-		return beginning;
-	}
-
-	/**
      * Models this method in the given ontology.
      *
      * @param ontology The ontology in which this method will be modeled.
@@ -165,11 +163,11 @@ public class Method {
 
         Individual m = ontology.createIndividual(FamixClasses.Method, uri);
 
-        String location = path;
-        if(beginning.isPresent()) {
+        String location = path.toString();
+        if (beginning.isPresent()) {
             location += ", Line: " + String.valueOf(beginning.get().line);
         }
-        
+
         m.addLiteral(ontology.get(isLocatedAt), location);
         m.addLiteral(ontology.get(hasName), name);
         m.addLiteral(ontology.get(hasSignature), signature);

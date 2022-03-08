@@ -3,6 +3,8 @@ package org.archcnl.javaparser.visitors.helper;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,14 +23,16 @@ public class VisitorHelpers {
      * AnnotationInstances.
      */
     public static List<AnnotationInstance> processAnnotations(
-            NodeList<AnnotationExpr> annotationList, String path) {
+            NodeList<AnnotationExpr> annotationList, Path path) {
         List<AnnotationInstance> annotations = new ArrayList<>();
 
         for (AnnotationExpr annotationExpr : annotationList) {
-            MarkerAnnotationExpressionVisitor v1 = new MarkerAnnotationExpressionVisitor(path, annotationExpr.getBegin());
+            MarkerAnnotationExpressionVisitor v1 =
+                    new MarkerAnnotationExpressionVisitor(path);
             SingleMemberAnnotationExpressionVisitor v2 =
-                    new SingleMemberAnnotationExpressionVisitor(path, annotationExpr.getBegin());
-            NormalAnnotationExpressionVisitor v3 = new NormalAnnotationExpressionVisitor(path, annotationExpr.getBegin());
+                    new SingleMemberAnnotationExpressionVisitor(path);
+            NormalAnnotationExpressionVisitor v3 =
+                    new NormalAnnotationExpressionVisitor(path);
 
             annotationExpr.accept(v1, null);
             annotationExpr.accept(v2, null);

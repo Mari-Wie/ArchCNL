@@ -11,6 +11,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +30,9 @@ import org.archcnl.owlify.famix.codemodel.Type;
 public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private List<DefinedType> definedTypes;
-    private String path;
+    private Path path;
 
-    public JavaTypeVisitor(String path) {
+    public JavaTypeVisitor(Path path) {
         definedTypes = new ArrayList<>();
         this.path = path;
     }

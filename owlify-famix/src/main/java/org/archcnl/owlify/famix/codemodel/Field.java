@@ -6,13 +6,13 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
+import com.github.javaparser.Position;
+
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
-
-import com.github.javaparser.Position;
 
 /**
  * Models a field/attribute for a given type.
@@ -24,8 +24,8 @@ public class Field {
     private final Type type;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
-    private String path;
-	private Optional<Position> beginning;
+    private Path path;
+    private Optional<Position> beginning;
 
     /**
      * Constructor.
@@ -40,8 +40,8 @@ public class Field {
             Type type,
             List<AnnotationInstance> annotations,
             List<Modifier> modifiers,
-    	String path,
-    	Optional<Position> beginning) {
+            Path path,
+            Optional<Position> beginning) {
         super();
         this.name = name;
         this.type = type;
@@ -51,21 +51,17 @@ public class Field {
         this.beginning = beginning;
     }
 
-    /**
-	 * @return the path
-	 */
-	public String getPath() {
-		return path;
-	}
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
 
-	/**
-	 * @return the beginning
-	 */
-	public Optional<Position> getBeginning() {
-		return beginning;
-	}
+    /** @return the beginning */
+    public Optional<Position> getBeginning() {
+        return beginning;
+    }
 
-	/** @return the simple name */
+    /** @return the simple name */
     public String getName() {
         return name;
     }
@@ -98,8 +94,8 @@ public class Field {
         parent.addProperty(ontology.get(definesAttribute), attribute);
         attribute.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         attribute.addLiteral(ontology.get(hasName), name);
-        
-        String location = path;
+
+        String location = path.toString();
         if (beginning.isPresent()) {
             location += ", Line: " + String.valueOf(beginning.get().line);
         }

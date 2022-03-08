@@ -5,6 +5,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
@@ -19,7 +20,7 @@ import org.archcnl.owlify.famix.ontology.FamixOntology;
 public abstract class DefinedType {
     private final String fullyQualifiedName;
     private final String simpleName;
-    private final String path;
+    private final Path path;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
 
@@ -32,7 +33,7 @@ public abstract class DefinedType {
      * @param modifiers List of annotation instances for the type.
      */
     protected DefinedType(
-            String path,
+    		Path path,
             String fullyQualifiedName,
             String simpleName,
             List<AnnotationInstance> annotations,

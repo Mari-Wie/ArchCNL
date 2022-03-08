@@ -5,14 +5,14 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesVariable;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
+import com.github.javaparser.Position;
+
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
-
-import com.github.javaparser.Position;
 
 /**
  * Models a local variable.
@@ -23,8 +23,8 @@ public class LocalVariable {
     private final Type type;
     private final String name;
     private List<Modifier> modifiers;
-    private String path;
-	private Optional<Position> beginning;
+    private Path path;
+    private Optional<Position> beginning;
 
     /**
      * Constructor.
@@ -35,7 +35,12 @@ public class LocalVariable {
      * @param path The path of the class this variable is in
      * @param beginning The position of the beginning of the variable
      */
-    public LocalVariable(Type type, String name, List<Modifier> modifiers, String path, Optional<Position> beginning) {
+    public LocalVariable(
+            Type type,
+            String name,
+            List<Modifier> modifiers,
+            Path path,
+            Optional<Position> beginning) {
         super();
         this.type = type;
         this.name = name;
@@ -59,21 +64,17 @@ public class LocalVariable {
         return modifiers;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Position> getBeginning() {
+        return beginning;
+    }
+
     /**
-	 * @return the path
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * @return the beginning
-	 */
-	public Optional<Position> getBeginning() {
-		return beginning;
-	}
-
-	/**
      * Models this variable in the given ontology.
      *
      * @param ontology The famix ontology in which this variable will be modeled.
@@ -85,8 +86,8 @@ public class LocalVariable {
         Individual individual = ontology.createIndividual(FamixClasses.LocalVariable, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
-        
-        String location = path;
+
+        String location = path.toString();
         if (beginning.isPresent()) {
             location += ", Line: " + String.valueOf(beginning.get().line);
         }

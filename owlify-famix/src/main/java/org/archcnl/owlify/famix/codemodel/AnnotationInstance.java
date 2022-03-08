@@ -8,13 +8,13 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
+import com.github.javaparser.Position;
+
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
-
-import com.github.javaparser.Position;
 
 /**
  * Models an annotation instance, i.e. the "use" of an annotation. For instance, when some class is
@@ -26,8 +26,8 @@ import com.github.javaparser.Position;
 public class AnnotationInstance {
     private final String name;
     private List<AnnotationMemberValuePair> values;
-    private String path;
-	private Optional<Position> beginning;
+    private Path path;
+    private Optional<Position> beginning;
 
     /**
      * Constructor.
@@ -35,7 +35,11 @@ public class AnnotationInstance {
      * @param name Fully qualified name of the instantiated annotation type.
      * @param values List of member value pairs present in the instance.
      */
-    public AnnotationInstance(String name, List<AnnotationMemberValuePair> values, String path, Optional<Position> beginning) {
+    public AnnotationInstance(
+            String name,
+            List<AnnotationMemberValuePair> values,
+            Path path,
+            Optional<Position> beginning) {
         super();
         this.name = name;
         this.values = values;
@@ -53,21 +57,17 @@ public class AnnotationInstance {
         return values;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Position> getBeginning() {
+        return beginning;
+    }
+
     /**
-	 * @return the path
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * @return the beginning
-	 */
-	public Optional<Position> getBeginning() {
-		return beginning;
-	}
-
-	/**
      * Models this annotation instance in the given famix ontology.
      *
      * @param ontology The famix ontology in which this will be modeled.
@@ -98,8 +98,8 @@ public class AnnotationInstance {
         Individual annotationType = ontology.createIndividual(AnnotationType, name);
         annotationType.addLiteral(ontology.get(isExternal), true);
         annotationType.addLiteral(ontology.get(hasFullQualifiedName), name);
-        
-        String location = path;
+
+        String location = path.toString();
         if (beginning.isPresent()) {
             location += ", Line: " + String.valueOf(beginning.get().line);
         }

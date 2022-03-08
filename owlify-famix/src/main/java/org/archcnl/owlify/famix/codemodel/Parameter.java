@@ -5,14 +5,14 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesParameter;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
+import com.github.javaparser.Position;
+
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
-
-import com.github.javaparser.Position;
 
 /**
  * Models a parameter of a method.
@@ -24,7 +24,7 @@ public class Parameter {
     private final Type type;
     private List<Modifier> modifiers;
     private List<AnnotationInstance> annotations;
-    private String path;
+    private Path path;
     private Optional<Position> beginning;
 
     /**
@@ -40,7 +40,7 @@ public class Parameter {
             Type type,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations,
-            String path,
+            Path path,
             Optional<Position> beginning) {
         super();
         this.name = name;
@@ -71,21 +71,17 @@ public class Parameter {
         return annotations;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Position> getBeginning() {
+        return beginning;
+    }
+
     /**
-	 * @return the path
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * @return the beginning
-	 */
-	public Optional<Position> getBeginning() {
-		return beginning;
-	}
-
-	/**
      * Models this parameter in the given ontology.
      *
      * @param ontology The famix ontology in which this parameter will be modeled.
@@ -97,13 +93,13 @@ public class Parameter {
         Individual individual = ontology.createIndividual(FamixClasses.Parameter, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
-        
-        String location = path;
+
+        String location = path.toString();
         if (beginning.isPresent()) {
             location += ", Line: " + String.valueOf(beginning.get().line);
-        }        
+        }
         individual.addLiteral(ontology.get(isLocatedAt), location);
-        
+
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
         annotations.forEach(anno -> anno.modelIn(ontology, uri, individual));
 

@@ -80,6 +80,8 @@ public class ModelExtractorTest {
         Assert.assertFalse(method.isConstructor());
         Assert.assertEquals(1, method.getDeclaredExceptions().size());
         Assert.assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
+        Assert.assertTrue(method.getPath().equals(interfaceUnderTest.getPath()));
+        Assert.assertEquals(4, method.getBeginning().get().line);
     }
 
     @Test
@@ -143,8 +145,16 @@ public class ModelExtractorTest {
         Assert.assertEquals(1, method1.getParameters().size());
         Assert.assertEquals("b", method1.getParameters().get(0).getName());
         Assert.assertEquals("int", method1.getParameters().get(0).getType().getName());
+        Assert.assertTrue(
+                method1.getParameters()
+                        .get(0)
+                        .getPath()
+                        .equals(classUnderTest.getPath()));
+        Assert.assertEquals(7, method1.getParameters().get(0).getBeginning().get().line);
         Assert.assertEquals(1, method1.getModifiers().size());
         Assert.assertEquals("public", method1.getModifiers().get(0).getName());
+        Assert.assertTrue(method1.getPath().equals(classUnderTest.getPath()));
+        Assert.assertEquals(7, method1.getBeginning().get().line);
 
         final Method method2 = type.getMethods().get(1);
         Assert.assertEquals("ClassB", method2.getName());
@@ -160,8 +170,16 @@ public class ModelExtractorTest {
         Assert.assertEquals(1, method2.getParameters().size());
         Assert.assertEquals("b", method2.getParameters().get(0).getName());
         Assert.assertEquals("Integer", method2.getParameters().get(0).getType().getSimpleName());
+        Assert.assertTrue(
+                method2.getParameters()
+                        .get(0)
+                        .getPath()
+                        .equals(classUnderTest.getPath()));
+        Assert.assertEquals(12, method2.getParameters().get(0).getBeginning().get().line);
         Assert.assertEquals(1, method2.getModifiers().size());
         Assert.assertEquals("public", method2.getModifiers().get(0).getName());
+        Assert.assertTrue(method2.getPath().equals(classUnderTest.getPath()));
+        Assert.assertEquals(11, method2.getBeginning().get().line);
     }
 
     @Test
@@ -207,9 +225,17 @@ public class ModelExtractorTest {
                 "java.lang.NullPointerException", method.getCaughtExceptions().get(0).getName());
         Assert.assertEquals(1, method.getParameters().size());
         Assert.assertEquals("items", method.getParameters().get(0).getName());
+        Assert.assertTrue(
+                method.getParameters()
+                        .get(0)
+                        .getPath()
+                        .equals(classUnderTest.getPath()));
+        Assert.assertEquals(7, method.getParameters().get(0).getBeginning().get().line);
         Assert.assertEquals(2, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals("static", method.getModifiers().get(1).getName());
+        Assert.assertTrue(method.getPath().equals(classUnderTest.getPath()));
+        Assert.assertEquals(7, method.getBeginning().get().line);
     }
 
     @Test
@@ -280,5 +306,7 @@ public class ModelExtractorTest {
         Assert.assertEquals(1, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals("boolean", method.getReturnType().getName());
+        Assert.assertTrue(method.getPath().equals(enumUnderTest.getPath()));
+        Assert.assertEquals(9, method.getBeginning().get().line);
     }
 }

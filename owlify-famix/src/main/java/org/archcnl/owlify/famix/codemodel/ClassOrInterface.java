@@ -5,6 +5,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Inher
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasSubClass;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasSuperClass;
 
+import java.nio.file.Path;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
@@ -33,7 +34,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
      * @param supertypes List of supertypes for this type.
      */
     public ClassOrInterface(
-            String path,
+    		Path path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,

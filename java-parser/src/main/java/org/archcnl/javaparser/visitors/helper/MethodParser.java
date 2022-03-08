@@ -8,6 +8,8 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ReferenceType;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +33,7 @@ public class MethodParser {
 
     private String name;
     private String signature;
-    private String path;
+    private Path path;
     private Optional<Position> beginning;
     private List<Type> caughtExceptions;
     private List<Type> thrownExceptions;
@@ -42,9 +44,8 @@ public class MethodParser {
     private Type returnType;
     private List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers;
 
-
     /** Parses the given method declaration. */
-    public MethodParser(MethodDeclaration n, String path) {
+    public MethodParser(MethodDeclaration n, Path path) {
         this.path = path;
         beginning = n.getBegin();
         name = n.getName().asString();
@@ -68,7 +69,7 @@ public class MethodParser {
     }
 
     /** Parses the given constructor declaration. */
-    public MethodParser(ConstructorDeclaration n, String path) {
+    public MethodParser(ConstructorDeclaration n, Path path) {
         this.path = path;
         beginning = n.getBegin();
         name = n.getName().asString();
@@ -116,7 +117,7 @@ public class MethodParser {
         return visitor.getType();
     }
 
-    private void processBody(List<Statement> bodyStatements, String path) {
+    private void processBody(List<Statement> bodyStatements, Path path) {
         for (Statement statement : bodyStatements) {
             TryCatchVisitor v1 = new TryCatchVisitor();
             ThrowStatementVisitor v2 = new ThrowStatementVisitor();

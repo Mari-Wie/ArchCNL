@@ -3,6 +3,8 @@ package org.archcnl.javaparser.visitors;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.javaparser.visitors.helper.VisitorHelpers;
@@ -12,9 +14,9 @@ import org.archcnl.owlify.famix.codemodel.Field;
 public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Field> fields;
-    private String path;
+    private Path path;
 
-    public JavaFieldVisitor(String path) {
+    public JavaFieldVisitor(Path path) {
         this.fields = new ArrayList<>();
         this.path = path;
     }
@@ -31,8 +33,8 @@ public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
                             visitor.getType(),
                             VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                             VisitorHelpers.processModifiers(n.getModifiers()),
-            path,
-                    variableDeclarator.getBegin()));
+                            path,
+                            variableDeclarator.getBegin()));
         }
     }
 

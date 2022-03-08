@@ -1,5 +1,6 @@
 package org.archcnl.kotlinparser.visitor;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
@@ -36,7 +37,9 @@ public class AnnotationVisitor extends NamedBaseVisitor {
                         annotationValues.add(annotationValue);
                     });
 
-            var annotationInstance = new AnnotationInstance(userType, annotationValues, "TODO");
+            var annotationInstance =
+                    new AnnotationInstance(
+                            userType, annotationValues, Path.of("TODO"), null); // TODO null zu Optional
             annotationInstances.add(annotationInstance);
         }
 
