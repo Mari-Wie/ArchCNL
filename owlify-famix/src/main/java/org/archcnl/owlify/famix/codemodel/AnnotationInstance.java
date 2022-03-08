@@ -9,8 +9,12 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
+
+import com.github.javaparser.Position;
 
 /**
  * Models an annotation instance, i.e. the "use" of an annotation. For instance, when some class is
@@ -23,6 +27,7 @@ public class AnnotationInstance {
     private final String name;
     private List<AnnotationMemberValuePair> values;
     private String path;
+	private Optional<Position> beginning;
 
     /**
      * Constructor.
@@ -30,11 +35,12 @@ public class AnnotationInstance {
      * @param name Fully qualified name of the instantiated annotation type.
      * @param values List of member value pairs present in the instance.
      */
-    public AnnotationInstance(String name, List<AnnotationMemberValuePair> values, String path) {
+    public AnnotationInstance(String name, List<AnnotationMemberValuePair> values, String path, Optional<Position> beginning) {
         super();
         this.name = name;
         this.values = values;
         this.path = path;
+        this.beginning = beginning;
     }
 
     /** @return the name */
@@ -48,6 +54,20 @@ public class AnnotationInstance {
     }
 
     /**
+	 * @return the path
+	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * @return the beginning
+	 */
+	public Optional<Position> getBeginning() {
+		return beginning;
+	}
+
+	/**
      * Models this annotation instance in the given famix ontology.
      *
      * @param ontology The famix ontology in which this will be modeled.
@@ -78,7 +98,12 @@ public class AnnotationInstance {
         Individual annotationType = ontology.createIndividual(AnnotationType, name);
         annotationType.addLiteral(ontology.get(isExternal), true);
         annotationType.addLiteral(ontology.get(hasFullQualifiedName), name);
-        annotationType.addLiteral(ontology.get(isLocatedAt), path);
+        
+        String location = path;
+        if (beginning.isPresent()) {
+            location += ", Line: " + String.valueOf(beginning.get().line);
+        }
+        annotationType.addLiteral(ontology.get(isLocatedAt), location);
         ontology.typeCache().addDefinedType(name, annotationType);
     }
 }

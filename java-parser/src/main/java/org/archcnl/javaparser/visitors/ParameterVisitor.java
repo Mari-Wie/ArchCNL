@@ -26,13 +26,9 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
                 VisitorHelpers.processAnnotations(n.getAnnotations(), path);
         List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers =
                 VisitorHelpers.processModifiers(n.getModifiers());
-        String location = path;
-        if (n.getBegin().isPresent()) {
-            location += ", Line: " + String.valueOf(n.getBegin().get().line);
-        }
         parameter =
                 new org.archcnl.owlify.famix.codemodel.Parameter(
-                        n.getNameAsString(), visitor.getType(), modifiers, annotations, location);
+                        n.getNameAsString(), visitor.getType(), modifiers, annotations, path, n.getBegin());
     }
 
     /** @return the parsed parameter */

@@ -25,17 +25,14 @@ public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
 
         for (VariableDeclarator variableDeclarator : n.getVariables()) {
             variableDeclarator.accept(visitor, null);
-            String location = path;
-            if (variableDeclarator.getBegin().isPresent()) {
-                location += ", Line: " + String.valueOf(variableDeclarator.getBegin().get().line);
-            }
             fields.add(
                     new Field(
-                            location,
                             variableDeclarator.getNameAsString(),
                             visitor.getType(),
                             VisitorHelpers.processAnnotations(n.getAnnotations(), path),
-                            VisitorHelpers.processModifiers(n.getModifiers())));
+                            VisitorHelpers.processModifiers(n.getModifiers()),
+            path,
+                    variableDeclarator.getBegin()));
         }
     }
 

@@ -7,8 +7,12 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
+
+import com.github.javaparser.Position;
 
 /**
  * Models a field/attribute for a given type.
@@ -20,7 +24,8 @@ public class Field {
     private final Type type;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
-    private String location;
+    private String path;
+	private Optional<Position> beginning;
 
     /**
      * Constructor.
@@ -31,20 +36,36 @@ public class Field {
      * @param modifiers List of modifiers for this field.
      */
     public Field(
-            String location,
             String name,
             Type type,
             List<AnnotationInstance> annotations,
-            List<Modifier> modifiers) {
+            List<Modifier> modifiers,
+    	String path,
+    	Optional<Position> beginning) {
         super();
         this.name = name;
         this.type = type;
         this.annotations = annotations;
         this.modifiers = modifiers;
-        this.location = location;
+        this.path = path;
+        this.beginning = beginning;
     }
 
-    /** @return the simple name */
+    /**
+	 * @return the path
+	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * @return the beginning
+	 */
+	public Optional<Position> getBeginning() {
+		return beginning;
+	}
+
+	/** @return the simple name */
     public String getName() {
         return name;
     }
@@ -77,6 +98,11 @@ public class Field {
         parent.addProperty(ontology.get(definesAttribute), attribute);
         attribute.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         attribute.addLiteral(ontology.get(hasName), name);
+        
+        String location = path;
+        if (beginning.isPresent()) {
+            location += ", Line: " + String.valueOf(beginning.get().line);
+        }
         attribute.addLiteral(ontology.get(isLocatedAt), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, attribute));

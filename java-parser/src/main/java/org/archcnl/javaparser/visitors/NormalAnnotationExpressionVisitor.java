@@ -1,5 +1,6 @@
 package org.archcnl.javaparser.visitors;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -8,6 +9,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
@@ -18,9 +20,11 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
 
     private AnnotationInstance annotationInstance;
     private String path;
+	private Optional<Position> beginning;
 
-    public NormalAnnotationExpressionVisitor(String path) {
+    public NormalAnnotationExpressionVisitor(String path, Optional<Position> beginning) {
         this.path = path;
+        this.beginning = beginning;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
                         .map(pair -> createAnnotationPairFromPair(pair, n))
                         .collect(Collectors.toList());
 
-        annotationInstance = new AnnotationInstance(n.getName().asString(), values, path);
+        annotationInstance = new AnnotationInstance(n.getName().asString(), values, path, beginning);
     }
 
     /** @return the parsed annotation instance */

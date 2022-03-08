@@ -26,18 +26,15 @@ public class LocalVariableVisitor extends VoidVisitorAdapter<Void> {
         for (VariableDeclarator variableDeclarator : n.getVariables()) {
             DeclaredJavaTypeVisitor visitor = new DeclaredJavaTypeVisitor();
             variableDeclarator.accept(visitor, null);
-            String location = path;
-            if (variableDeclarator.getBegin().isPresent()) {
-                location += ", Line: " + String.valueOf(variableDeclarator.getBegin().get().line);
-            }
 
             List<Modifier> modifiers = VisitorHelpers.processModifiers(n.getModifiers());
             localVariables.add(
                     new LocalVariable(
-                            location,
                             visitor.getType(),
                             variableDeclarator.getNameAsString(),
-                            modifiers));
+                            modifiers,
+                            path,
+                            variableDeclarator.getBegin()));
         }
     }
 

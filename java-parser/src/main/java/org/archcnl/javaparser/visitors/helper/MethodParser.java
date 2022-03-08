@@ -1,5 +1,6 @@
 package org.archcnl.javaparser.visitors.helper;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -30,8 +31,8 @@ public class MethodParser {
 
     private String name;
     private String signature;
-    private String location;
     private String path;
+    private Optional<Position> beginning;
     private List<Type> caughtExceptions;
     private List<Type> thrownExceptions;
     private List<LocalVariable> localVariables;
@@ -41,14 +42,11 @@ public class MethodParser {
     private Type returnType;
     private List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers;
 
+
     /** Parses the given method declaration. */
     public MethodParser(MethodDeclaration n, String path) {
         this.path = path;
-        location = path;
-        if (n.getBegin().isPresent()) {
-            location += ", Line " + String.valueOf(n.getBegin().get().line);
-        }
-        location = path + " Line " + location;
+        beginning = n.getBegin();
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
@@ -72,10 +70,7 @@ public class MethodParser {
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, String path) {
         this.path = path;
-        location = path;
-        if (n.getBegin().isPresent()) {
-            location += ", Line " + String.valueOf(n.getBegin().get().line);
-        }
+        beginning = n.getBegin();
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
@@ -100,7 +95,6 @@ public class MethodParser {
 
     private Method createMethodModel(boolean isConstructor) {
         return new Method(
-                location,
                 name,
                 signature,
                 modifiers,
@@ -111,7 +105,9 @@ public class MethodParser {
                 isConstructor,
                 caughtExceptions,
                 thrownExceptions,
-                localVariables);
+                localVariables,
+                path,
+                beginning);
     }
 
     private Type processReturnType(MethodDeclaration n) {
