@@ -64,6 +64,7 @@ public class ToolchainIT {
         Assert.assertTrue(askQueryResult(result, FIRST_RULE_CORRECTLY_MAPPED_QUERY));
         Assert.assertTrue(askQueryResult(result, SECOND_RULE_CORRECTLY_MAPPED_QUERY));
         Assert.assertFalse(askQueryResult(result, THIRD_RULE_VIOLATED_QUERY));
+        Assert.assertEquals(9, result.numPrefixes());
     }
 
     private OntModel loadResult() throws IOException {

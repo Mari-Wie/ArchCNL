@@ -22,7 +22,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -131,6 +133,13 @@ public class StardogDatabase implements StardogDatabaseAPI {
     }
 
     @Override
+    public void addNamespaces(Map<String, String> nsMap) {
+        for (String prefix : nsMap.keySet()) {
+            connection.namespaces().add(prefix, nsMap.get(prefix));
+        }
+    }
+
+    @Override
     public String getServer() {
         return _server;
     }
@@ -185,12 +194,32 @@ public class StardogDatabase implements StardogDatabaseAPI {
                 ArrayList<String> singleResult = new ArrayList<String>();
                 for (String variableName : variables) {
                     // Extracting a String from the stardog result BindingSet
-                    singleResult.add(Value.lex(stardogResult.get(variableName)));
+                    Value value = stardogResult.get(variableName);
+                    if (value != null) {
+                        // Result is not shortened according to prefixes (like it would be on
+                        // stardog studio) and needs to
+                        // be shortened manually
+                        String iri = stripPrefixes(Value.lex(value));
+                        singleResult.add(iri);
+                    } else {
+                        singleResult.add("");
+                    }
                 }
                 queryResult.add(singleResult);
             }
             return queryResult;
         }
+    }
+
+    private String stripPrefixes(String string) {
+        Map<String, String> prefixMap = new HashMap<String, String>();
+        connection
+                .namespaces()
+                .forEach(namespace -> prefixMap.put(namespace.prefix(), namespace.iri()));
+        for (String prefix : prefixMap.keySet()) {
+            string = string.replace(prefixMap.get(prefix), prefix + ":");
+        }
+        return string;
     }
 
     private void printToConsole(SelectQueryResult results) {

@@ -3,6 +3,7 @@ package org.archcnl.stardogwrapper.api;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.archcnl.stardogwrapper.api.exceptions.NoConnectionToStardogServerException;
 
@@ -60,6 +61,14 @@ public interface StardogDatabaseAPI {
      * @param path The path to the file to which the retrieved model will be written.
      */
     void writeModelFromContextToFile(String context, String path);
+
+    /**
+     * Adds namespaces to the database, so that results of queries on the database have shortened
+     * names according to the defined namespaces.
+     *
+     * @param nsMap A map of prefixes with their iris
+     */
+    void addNamespaces(Map<String, String> nsMap);
 
     /** @return the server's name */
     String getServer();
