@@ -185,7 +185,12 @@ public class StardogDatabase implements StardogDatabaseAPI {
                 ArrayList<String> singleResult = new ArrayList<String>();
                 for (String variableName : variables) {
                     // Extracting a String from the stardog result BindingSet
-                    singleResult.add(Value.lex(stardogResult.get(variableName)));
+                    Value value = stardogResult.get(variableName);
+                    if (value != null) {
+                        singleResult.add(Value.lex(value));
+                    } else {
+                        singleResult.add("");
+                    }
                 }
                 queryResult.add(singleResult);
             }
