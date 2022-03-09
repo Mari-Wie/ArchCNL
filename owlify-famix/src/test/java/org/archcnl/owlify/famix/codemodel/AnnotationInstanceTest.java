@@ -78,8 +78,7 @@ public class AnnotationInstanceTest {
         final String name = "namespace.SomeAnnotation";
         final List<AnnotationMemberValuePair> values =
                 Arrays.asList(new AnnotationMemberValuePair("attribute", "value"));
-        AnnotationInstance instance =
-                new AnnotationInstance(name, values, path, position); // TODO null zu Optional
+        AnnotationInstance instance = new AnnotationInstance(name, values, path, position);
         String parentName = "namespace.Class.method";
         Individual parent = ontology.createIndividual(Method, parentName);
 
