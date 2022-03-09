@@ -11,7 +11,7 @@ PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
 ASK
 WHERE {
     ?rule rdf:type conformance:ArchitectureRule.
-    ?rule conformance:hasRuleRepresentation "Every Aggregate must residein a DomainRing."^^xsd:string.
+    ?rule conformance:hasRuleRepresentation "Every Aggregate must resideIn a DomainRing."^^xsd:string.
     ?violation conformance:violates ?rule.
     ?proof conformance:proofs ?violation.
     ?proof conformance:hasAssertedStatement ?statement1.
@@ -24,7 +24,7 @@ WHERE {
     ?s1 famix:hasFullQualifiedName "api.ValidationAggregate"^^xsd:string.
     
     ?statement2 conformance:hasSubject ?s2.
-    ?statement2 conformance:hasPredicate architecture:residein.
+    ?statement2 conformance:hasPredicate architecture:resideIn.
     ?statement2 conformance:hasObject ?object.
     ?s2 famix:hasFullQualifiedName "api.ValidationAggregate"^^xsd:string.
     
