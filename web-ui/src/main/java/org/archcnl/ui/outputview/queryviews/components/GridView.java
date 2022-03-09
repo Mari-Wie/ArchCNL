@@ -1,6 +1,7 @@
 package org.archcnl.ui.outputview.queryviews.components;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -16,6 +17,10 @@ public class GridView extends VerticalLayout {
 
     public GridView() {
         grid.setHeightByRows(true);
+        grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
+        grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
+        grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+
         add(grid);
     }
 
@@ -40,6 +45,7 @@ public class GridView extends VerticalLayout {
             // TODO Decide what to do with errors or wrong queries
         }
 
+        grid.getColumns().forEach(column -> column.setResizable(true));
         grid.setItems(violationList);
     }
 
