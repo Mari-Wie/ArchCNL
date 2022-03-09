@@ -1,22 +1,19 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.events.MappingDescriptionFieldChangedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.events.AddCustomRelationRequestedEvent;
@@ -44,8 +41,6 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     }
 
     private void addRelationViewListeners() {
-        view.addListener(
-                VariableFilterChangedEvent.class, event -> event.handleEvent(variableManager));
         view.addListener(VariableCreationRequestedEvent.class, this::addVariable);
         view.addListener(
                 VariableListUpdateRequestedEvent.class,
@@ -64,12 +59,10 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     @Override
     protected void updateMappingName(final String newName) {
         if (relation.isEmpty()) {
-            final List<ActualObjectType> relatableObjectTypes = new LinkedList<>();
-            final ObjectType selectedObjectType = view.getSelectedObjectTypeInThenTriplet();
-            if (selectedObjectType instanceof ActualObjectType) {
-                relatableObjectTypes.add((ActualObjectType) selectedObjectType);
-            }
-            relation = Optional.of(new CustomRelation(newName, "", relatableObjectTypes));
+            relation =
+                    Optional.of(
+                            new CustomRelation(
+                                    newName, "", new LinkedHashSet<>(), new LinkedHashSet<>()));
         } else {
             fireEvent(new ChangeRelationNameRequestedEvent(this, true, relation.get(), newName));
         }
@@ -95,11 +88,12 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
     protected void updateMapping() {
         if (relation.isPresent()) {
             try {
-                final CustomRelation thenRelation = relation.get();
-                final ObjectType thenObject = view.getThenTripletObject();
-                thenRelation.setRelatableObjectType(thenObject);
+                relation.get().setDescription(view.getDescription());
                 final Triplet thenTriplet =
-                        new Triplet(view.getThenTripletSubject(), thenRelation, thenObject);
+                        new Triplet(
+                                view.getThenTripletSubject(),
+                                relation.get(),
+                                view.getThenTripletObject());
 
                 final RelationMapping mapping =
                         new RelationMapping(thenTriplet, getAndTripletsList());
@@ -107,9 +101,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
                 relation.get().setMapping(mapping);
                 fireEvent(new AddCustomRelationRequestedEvent(this, true, relation.get()));
 
-                fireEvent(new RuleEditorRequestedEvent(this, true));
-            } catch (UnrelatedMappingException | InvalidVariableNameException e) {
-                // not possible/fatal
+                fireEvent(new RulesWidgetRequestedEvent(this, true));
+            } catch (UnrelatedMappingException e) {
                 throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectOrObjectErrorMessage("Setting this is required");
@@ -121,6 +114,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
     @Override
     public void descriptionHasChanged(final MappingDescriptionFieldChangedEvent event) {
-        relation.get().setDescription(event.getNewDescription());
+        if (relation.isPresent()) {
+            relation.get().setDescription(event.getNewDescription());
+        }
     }
 }

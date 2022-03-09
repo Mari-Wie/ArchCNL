@@ -1,6 +1,5 @@
 package org.archcnl.ui.common.andtriplets;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Unit;
@@ -57,12 +56,12 @@ public class AndTripletsEditorView extends VerticalLayout {
 
     public void addNewTripletViewAfter(
             final TripletView oldTripletView, final TripletView newTripletView) {
-        final int previousIndex = boxContent.indexOf((Component) oldTripletView);
+        final int previousIndex = boxContent.indexOf(oldTripletView);
         boxContent.addComponentAtIndex(previousIndex + 1, newTripletView);
     }
 
     public void deleteTripletView(final TripletView tripletView) {
-        boxContent.remove((Component) tripletView);
+        boxContent.remove(tripletView);
     }
 
     public void addTripletView(final TripletView tripletView) {
@@ -80,13 +79,17 @@ public class AndTripletsEditorView extends VerticalLayout {
     }
 
     public void updateLabels() {
-        if (getFirstTripletView().isPresent()) {
-            final TripletView firstTriplet = (TripletView) getFirstTripletView().get();
-            firstTriplet.setLabels();
+        Optional<TripletView> firstTriplet = getFirstTripletView();
+        if (firstTriplet.isPresent()) {
+            firstTriplet.get().setLabels();
         }
     }
 
-    private Optional<Component> getFirstTripletView() {
-        return boxContent.getChildren().filter(TripletView.class::isInstance).findFirst();
+    private Optional<TripletView> getFirstTripletView() {
+        return boxContent
+                .getChildren()
+                .filter(TripletView.class::isInstance)
+                .map(TripletView.class::cast)
+                .findFirst();
     }
 }

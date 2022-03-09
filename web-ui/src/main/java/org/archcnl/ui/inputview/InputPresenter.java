@@ -14,22 +14,22 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
-import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
-import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.ArchitectureRulesLayout;
-import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.NewArchitectureRulePresenter;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.RuleCreatorPresenter;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.RulesWidget;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.SaveArchitectureRuleRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleEditorRequestedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.ConceptEditorPresenter;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepteditor.events.AddCustomConceptRequestedEvent;
@@ -43,10 +43,10 @@ public class InputPresenter extends Component {
 
     private static final long serialVersionUID = -3190548402023632606L;
     private InputView view;
-    private ArchitectureRulesLayout architectureRulesLayout;
+    private RulesWidget architectureRulesLayout;
 
     public InputPresenter() {
-        architectureRulesLayout = new ArchitectureRulesLayout();
+        architectureRulesLayout = new RulesWidget();
         architectureRulesLayout.setClassName("architecture-rules");
         view = new InputView(architectureRulesLayout);
         addListeners();
@@ -98,21 +98,23 @@ public class InputPresenter extends Component {
         view.changeCurrentlyShownView(relationEditorPresenter.getMappingEditorView());
     }
 
-    private void handleEvent(final RuleEditorRequestedEvent event) {
+    private void handleEvent(final RulesWidgetRequestedEvent event) {
         view.changeCurrentlyShownView(architectureRulesLayout);
     }
 
     private void handleEvent(final RuleCreatorRequestedEvent event) {
-        final NewArchitectureRulePresenter presenter = new NewArchitectureRulePresenter();
-        presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        // TODO move this to the InputPresenter
+        final RuleCreatorPresenter presenter = new RuleCreatorPresenter();
+        presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::fireEvent);
+        presenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
+        presenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         view.changeCurrentlyShownView(presenter.getView());
     }
 
     private void handleEvent(final EditRuleButtonPressedEvent event) {
-        final NewArchitectureRulePresenter presenter =
-                new NewArchitectureRulePresenter(event.getRule());
-        presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        final RuleCreatorPresenter presenter = new RuleCreatorPresenter(event.getRule());
+        presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(SaveArchitectureRuleRequestedEvent.class, this::fireEvent);
         view.changeCurrentlyShownView(presenter.getView());
     }
@@ -122,7 +124,7 @@ public class InputPresenter extends Component {
     }
 
     private void addListenersToMappingEditor(MappingEditorPresenter presenter) {
-        presenter.addListener(RuleEditorRequestedEvent.class, this::handleEvent);
+        presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
         presenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         presenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);

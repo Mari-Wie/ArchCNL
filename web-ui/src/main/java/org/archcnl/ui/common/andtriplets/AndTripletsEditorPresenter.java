@@ -12,9 +12,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
 import org.archcnl.ui.common.andtriplets.events.AddAndTripletsViewButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.TripletPresenter;
@@ -26,8 +28,8 @@ import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.TripletViewDeleteButtonPressedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.TripletNotDefinedException;
 
 @Tag("AndTripletsEditorPresenter")
@@ -70,7 +72,7 @@ public class AndTripletsEditorPresenter extends Component {
                                     try {
                                         return presenter.getTriplet();
                                     } catch (TripletNotDefinedException
-                                            | UnsupportedObjectTypeInTriplet e) {
+                                            | UnsupportedObjectTypeException e) {
                                         // ignore this incomplete/faulty Triplet
                                         return null;
                                     }
@@ -92,6 +94,13 @@ public class AndTripletsEditorPresenter extends Component {
         return view;
     }
 
+    private void showConflictingDynamicTypes() {
+        VariableManager variableManager = new VariableManager();
+        List<Variable> conflictingVariables =
+                variableManager.getConflictingVariables(getAndTriplets());
+        tripletPresenters.forEach(p -> p.highlightConflictingVariables(conflictingVariables));
+    }
+
     private TripletView prepareTripletView(TripletPresenter tripletPresenter) {
         addListenersToTripletPresenter(tripletPresenter);
         tripletPresenters.add(tripletPresenter);
@@ -99,9 +108,10 @@ public class AndTripletsEditorPresenter extends Component {
     }
 
     private void addListenersToTripletPresenter(TripletPresenter tripletPresenter) {
-        tripletPresenter.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         tripletPresenter.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         tripletPresenter.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(
+                VariableSelectedEvent.class, e -> showConflictingDynamicTypes());
         tripletPresenter.addListener(
                 TripletViewDeleteButtonPressedEvent.class,
                 event -> deleteTripletView(event.getSource()));
@@ -109,7 +119,12 @@ public class AndTripletsEditorPresenter extends Component {
                 AddTripletViewAfterButtonPressedEvent.class,
                 event -> addNewTripletViewAfter(event.getSource()));
 
-        tripletPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        tripletPresenter.addListener(
+                PredicateSelectedEvent.class,
+                e -> {
+                    showConflictingDynamicTypes();
+                    fireEvent(e);
+                });
         tripletPresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         tripletPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         tripletPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);

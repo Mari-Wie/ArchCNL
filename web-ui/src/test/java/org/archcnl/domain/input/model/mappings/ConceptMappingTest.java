@@ -7,24 +7,20 @@ import java.util.LinkedList;
 import java.util.List;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.junit.jupiter.api.Test;
 
 class ConceptMappingTest {
 
     @Test
     void givenConcepts_whenToStringRepresentation_thenGetExpectedResult()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         // given
         List<CustomConcept> customConcepts = TestUtils.prepareCustomConcepts();
 

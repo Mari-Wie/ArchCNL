@@ -34,8 +34,7 @@ label {
     font-size: var(--p-font-size-small);
 }
 
-.architecture-rules, .new-concept, .new-relation, 
-.query-text-box, .general-info-box {
+.architecture-rules, .query-text-box, .general-info-box, .hierarchy {
     background-color: var(--primary-light);
     border-radius: 1%;
     border: none !important;
@@ -101,4 +100,12 @@ vaadin-vertical-layout {
 
 .side-bar-text {
     color: var(--primary-light-font) !important;
+}
+
+.side-bar-tab[selected] {
+    color: White;
+}
+
+.side-bar-tab[selected]::before, .side-bar-tab[selected]::after  {
+    background-color: White;
 }

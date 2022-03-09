@@ -2,6 +2,7 @@ package org.archcnl.domain;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,14 +17,11 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.ConceptAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
-import org.archcnl.domain.input.exceptions.VariableAlreadyExistsException;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
@@ -69,9 +67,8 @@ public class TestUtils {
     }
 
     public static ConceptManager prepareConceptManager()
-            throws UnrelatedMappingException, UnsupportedObjectTypeInTriplet,
-                    ConceptDoesNotExistException, InvalidVariableNameException,
-                    ConceptAlreadyExistsException {
+            throws UnrelatedMappingException, UnsupportedObjectTypeException,
+                    ConceptDoesNotExistException, ConceptAlreadyExistsException {
 
         final ConceptManager conceptManager = new ConceptManager();
         final RelationManager relationManager = new RelationManager(conceptManager);
@@ -184,10 +181,9 @@ public class TestUtils {
     }
 
     public static RelationManager prepareRelationManager()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
 
         final ConceptManager conceptManager = new ConceptManager();
         final RelationManager relationManager = new RelationManager(conceptManager);
@@ -267,7 +263,8 @@ public class TestUtils {
         useWhenTriplets.add(new AndTriplets(triplets));
         useWhenTriplets.add(new AndTriplets(triplets2));
 
-        final CustomRelation resideIn = new CustomRelation("resideIn", "", new LinkedList<>());
+        final CustomRelation resideIn =
+                new CustomRelation("resideIn", "", new LinkedHashSet<>(), new LinkedHashSet<>());
         final RelationMapping resideInMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
@@ -278,7 +275,8 @@ public class TestUtils {
                 new CustomRelation(
                         "use",
                         "A class uses another class if it has a field of it or if it imports it.",
-                        new LinkedList<>());
+                        new LinkedHashSet<>(),
+                        new LinkedHashSet<>());
         final RelationMapping useMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, use, class2Variable),
@@ -289,7 +287,8 @@ public class TestUtils {
                 new CustomRelation(
                         "emptyWhenRelationString",
                         "",
-                        new LinkedList<>(Arrays.asList(new StringValue(""))));
+                        new LinkedHashSet<>(),
+                        new LinkedHashSet<>(Arrays.asList(new StringValue(""))));
         final RelationMapping emptyWhenRelationStringMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -303,7 +302,8 @@ public class TestUtils {
                 new CustomRelation(
                         "emptyWhenRelationBoolean",
                         "",
-                        new LinkedList<>(Arrays.asList(new BooleanValue(false))));
+                        new LinkedHashSet<>(),
+                        new LinkedHashSet<>(Arrays.asList(new BooleanValue(false))));
         final RelationMapping emptyWhenRelationBooleanMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -312,7 +312,11 @@ public class TestUtils {
         emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
 
         final CustomRelation emptyWhenRelationVariable =
-                new CustomRelation("emptyWhenRelationVariable", "", new LinkedList<>());
+                new CustomRelation(
+                        "emptyWhenRelationVariable",
+                        "",
+                        new LinkedHashSet<>(),
+                        new LinkedHashSet<>());
         final RelationMapping emptyWhenRelationVariableMapping =
                 new RelationMapping(
                         TripletFactory.createTriplet(
@@ -329,24 +333,21 @@ public class TestUtils {
     }
 
     public static List<CustomConcept> prepareCustomConcepts()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         return TestUtils.prepareConceptManager().getCustomConcepts();
     }
 
     public static List<CustomRelation> prepareCustomRelations()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    RelationDoesNotExistException, ConceptDoesNotExistException,
-                    VariableAlreadyExistsException, ConceptAlreadyExistsException,
-                    UnrelatedMappingException, RelationAlreadyExistsException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException,
+                    RelationAlreadyExistsException {
         return TestUtils.prepareRelationManager().getCustomRelations();
     }
 
     public static List<Query> prepareCustomQueries()
-            throws InvalidVariableNameException, UnsupportedObjectTypeInTriplet,
-                    ConceptDoesNotExistException {
+            throws UnsupportedObjectTypeException, ConceptDoesNotExistException {
         ConceptManager conceptManager = new ConceptManager();
         RelationManager relationManager = new RelationManager(conceptManager);
         Query query1 =

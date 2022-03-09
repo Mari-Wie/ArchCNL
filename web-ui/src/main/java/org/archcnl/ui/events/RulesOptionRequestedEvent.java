@@ -1,8 +1,6 @@
 package org.archcnl.ui.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.ui.MainView;
 
 public class RulesOptionRequestedEvent extends ComponentEvent<MainView> {
@@ -12,7 +10,6 @@ public class RulesOptionRequestedEvent extends ComponentEvent<MainView> {
         IMPORT_RULE_PRESETS
     }
 
-    private static final Logger LOG = LogManager.getLogger(RulesOptionRequestedEvent.class);
     private static final long serialVersionUID = 7994033413072875198L;
     private RulesOption option;
 

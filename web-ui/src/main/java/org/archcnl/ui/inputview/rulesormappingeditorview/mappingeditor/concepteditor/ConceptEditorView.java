@@ -3,11 +3,9 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.concepte
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.MappingEditorView;
@@ -20,6 +18,8 @@ public class ConceptEditorView extends MappingEditorView {
 
     public ConceptEditorView(AndTripletsEditorView emptyAndTripletsView) {
         super("Concept", emptyAndTripletsView);
+        mappingNameField.setPlaceholder("e.g. FamixClass");
+        mappingNameField.setPattern("[A-Z][a-zA-Z]*");
     }
 
     @Override
@@ -47,8 +47,7 @@ public class ConceptEditorView extends MappingEditorView {
         subjectComponent.setInvalid(true);
     }
 
-    public Variable getThenTripletSubject()
-            throws InvalidVariableNameException, SubjectOrObjectNotDefinedException {
+    public Variable getThenTripletSubject() throws SubjectOrObjectNotDefinedException {
         return subjectComponent.getVariable();
     }
 
@@ -57,7 +56,6 @@ public class ConceptEditorView extends MappingEditorView {
     }
 
     private void addListenersToSubjectComponent() {
-        subjectComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableCreationRequestedEvent.class, this::fireEvent);
         subjectComponent.addListener(VariableListUpdateRequestedEvent.class, this::fireEvent);
     }

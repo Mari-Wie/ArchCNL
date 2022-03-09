@@ -5,8 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.exceptions.ConceptDoesNotExistException;
-import org.archcnl.domain.input.exceptions.RelationDoesNotExistException;
+import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.presets.microservicearchitecture.ArchitecturalStyle;
 import org.junit.jupiter.api.AfterAll;
@@ -48,8 +47,7 @@ public class MicroserviceArchitectureTest {
     @Test
     void
             givenMicroserviceArchitecture_whenRulesAndMappingsCreated_thenArchitectureContainsServiceRegistryRuleConceptsAndRelations()
-                    throws IOException, ConceptDoesNotExistException,
-                            RelationDoesNotExistException {
+                    throws IOException, ConceptDoesNotExistException {
 
         // given + when is given from beforeAll-Method
 
@@ -69,8 +67,7 @@ public class MicroserviceArchitectureTest {
     @Test
     void
             givenMicroserviceArchitecture_whenRulesAndMappingsCreated_thenArchitectureContainsDecentralizedPersistenceConceptsAndRelations()
-                    throws IOException, ConceptDoesNotExistException,
-                            RelationDoesNotExistException {
+                    throws IOException, ConceptDoesNotExistException {
 
         // given + when is given from beforeAll-Method
 
@@ -90,8 +87,7 @@ public class MicroserviceArchitectureTest {
     @Test
     void
             givenMicroserviceArchitecture_whenRulesAndMappingsCreated_thenArchitectureContainsAPIGatewayConceptsAndRelations()
-                    throws IOException, ConceptDoesNotExistException,
-                            RelationDoesNotExistException {
+                    throws IOException, ConceptDoesNotExistException {
 
         // given + when is given from beforeAll-Method
 
@@ -111,8 +107,7 @@ public class MicroserviceArchitectureTest {
     @Test
     void
             givenMicroserviceArchitecture_whenRulesAndMappingsCreated_thenArchitectureContainsCircuitBreakerConceptsAndRelations()
-                    throws IOException, ConceptDoesNotExistException,
-                            RelationDoesNotExistException {
+                    throws IOException, ConceptDoesNotExistException {
 
         // given + when is given from beforeAll-Method
 
@@ -132,8 +127,7 @@ public class MicroserviceArchitectureTest {
     @Test
     void
             givenMicroserviceArchitecture_whenRulesAndMappingsCreated_thenArchitectureContainsApiMechanismConceptsAndRelations()
-                    throws IOException, ConceptDoesNotExistException,
-                            RelationDoesNotExistException {
+                    throws IOException, ConceptDoesNotExistException {
 
         // given + when is given from beforeAll-Method
 
@@ -152,8 +146,7 @@ public class MicroserviceArchitectureTest {
     @Test
     void
             givenMicroserviceArchitecture_whenRulesAndMappingsCreated_thenArchitectureContainsRuntimeEnvironmentConceptsAndRelations()
-                    throws IOException, ConceptDoesNotExistException,
-                            RelationDoesNotExistException {
+                    throws IOException, ConceptDoesNotExistException {
 
         // given + when is given from beforeAll-Method
 

@@ -36,6 +36,7 @@ public class MainView extends VerticalLayout {
     private HorizontalLayout footer;
     private HorizontalLayout content;
     private MenuItem saveProjectMenuItem;
+    private MenuItem openProjectMenuItem;
 
     public MainView(final HorizontalLayout content) {
         setSizeFull();
@@ -75,9 +76,13 @@ public class MainView extends VerticalLayout {
         projectSubMenu.addItem(
                 "New Project",
                 e -> fireEvent(new ProjectOptionRequestedEvent(this, true, ProjectOption.NEW)));
-        projectSubMenu.addItem(
-                "Open Project",
-                e -> fireEvent(new ProjectOptionRequestedEvent(this, true, ProjectOption.OPEN)));
+        openProjectMenuItem =
+                projectSubMenu.addItem(
+                        "Open Project",
+                        e ->
+                                fireEvent(
+                                        new ProjectOptionRequestedEvent(
+                                                this, true, ProjectOption.OPEN)));
         saveProjectMenuItem =
                 projectSubMenu.addItem(
                         "Save",
@@ -140,7 +145,7 @@ public class MainView extends VerticalLayout {
                                                 this, true, FooterOption.WIKI)));
         final Button siteButton =
                 new Button(
-                        "Project Site",
+                        "Repository",
                         e ->
                                 fireEvent(
                                         new FooterOptionRequestedEvent(
@@ -183,6 +188,10 @@ public class MainView extends VerticalLayout {
 
     public void setSaveProjectMenuItemEnabled(final boolean enabled) {
         saveProjectMenuItem.setEnabled(enabled);
+    }
+
+    public void setOpenProjectMenuItemEnabled(final boolean enabled) {
+        openProjectMenuItem.setEnabled(enabled);
     }
 
     @Override

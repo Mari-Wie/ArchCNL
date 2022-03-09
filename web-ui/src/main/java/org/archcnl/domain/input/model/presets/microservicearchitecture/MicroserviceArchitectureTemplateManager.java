@@ -1,6 +1,7 @@
 package org.archcnl.domain.input.model.presets.microservicearchitecture;
 
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -14,9 +15,8 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.String
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.TripletFactory;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.exceptions.InvalidVariableNameException;
-import org.archcnl.domain.input.exceptions.UnrelatedMappingException;
-import org.archcnl.domain.input.exceptions.UnsupportedObjectTypeInTriplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
@@ -53,19 +53,15 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     @Override
     public void initializeVariables() {
-        try {
-            classVariable = new Variable("class");
-            class2Variable = new Variable("class2");
-            classPackage = new Variable("classPackage");
-            class2Package = new Variable("class2Package");
-            nameVariable = new Variable("name");
-            registryVariable = new Variable("registry");
-            registryImportVariable = new Variable("registryImport");
-            registryImportNameVariable = new Variable("registryImportName");
-            methodVariable = new Variable("method");
-        } catch (InvalidVariableNameException e) {
-            e.printStackTrace();
-        }
+        classVariable = new Variable("class");
+        class2Variable = new Variable("class2");
+        classPackage = new Variable("classPackage");
+        class2Package = new Variable("class2Package");
+        nameVariable = new Variable("name");
+        registryVariable = new Variable("registry");
+        registryImportVariable = new Variable("registryImport");
+        registryImportNameVariable = new Variable("registryImportName");
+        methodVariable = new Variable("method");
     }
 
     /**
@@ -140,7 +136,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             microserviceWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return microserviceWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -203,7 +199,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             serviceRegistryWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return serviceRegistryWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -220,7 +216,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
         String regexInput = registryImportName;
 
         CustomRelation registerinRelation =
-                new CustomRelation("registerin", "", new LinkedList<>());
+                new CustomRelation("registerin", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<AndTriplets> whenTriplets = createRegisterinWhenTriplets(regexInput);
 
@@ -232,7 +228,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             whenTriplets);
             registerinRelation.setMapping(mapping);
             return registerinRelation;
-        } catch (UnsupportedObjectTypeInTriplet | UnrelatedMappingException e) {
+        } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -285,7 +281,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             registryImportNameVariable,
                             relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -370,7 +366,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             relationManager.getRelationByName("matches").get(),
                             new StringValue(regexInput)));
 
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -391,7 +387,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
      */
     public CustomRelation createHaveownRelationAndMapping() {
 
-        CustomRelation haveown = new CustomRelation("haveown", "", new LinkedList<>());
+        CustomRelation haveown =
+                new CustomRelation("haveown", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -445,7 +442,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             relationManager.getRelationByName("namespaceContains").get(),
                             class2Package));
 
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -460,7 +457,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             haveownWhenTriplets);
             haveown.setMapping(mapping);
             return haveown;
-        } catch (UnsupportedObjectTypeInTriplet | UnrelatedMappingException e) {
+        } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -524,7 +521,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             apiGatewayWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return apiGatewayWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -593,7 +590,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             microserviceAppWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return microserviceAppWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -659,7 +656,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             circuitBreakerWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return circuitBreakerWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -724,7 +721,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             apiMechanismWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return apiMechanismWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -783,7 +780,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
             runtimeEnvironmentWhenTriplets.add(new AndTriplets(createdTriplets));
 
             return runtimeEnvironmentWhenTriplets;
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -792,7 +789,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createUseownRelationAndMapping() {
 
-        CustomRelation useown = new CustomRelation("useown", "", new LinkedList<>());
+        CustomRelation useown =
+                new CustomRelation("useown", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -818,7 +816,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             relationManager.getRelationByName("definesMethod").get(),
                             class2Variable));
 
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -833,7 +831,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             useownWhenTriplets);
             useown.setMapping(mapping);
             return useown;
-        } catch (UnsupportedObjectTypeInTriplet | UnrelatedMappingException e) {
+        } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -843,7 +841,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
     public CustomRelation createResideInPackageRelationAndMapping() {
 
         CustomRelation resideInPackage =
-                new CustomRelation("resideinpackage", "", new LinkedList<>());
+                new CustomRelation(
+                        "resideinpackage", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -869,7 +868,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             relationManager.getRelationByName("namespaceContains").get(),
                             class2Package));
 
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -885,7 +884,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             resideInWhenTriplets);
             resideInPackage.setMapping(mapping);
             return resideInPackage;
-        } catch (UnsupportedObjectTypeInTriplet | UnrelatedMappingException e) {
+        } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -894,7 +893,8 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
 
     public CustomRelation createUseRelationAndMapping() {
 
-        CustomRelation use = new CustomRelation("use", "", new LinkedList<>());
+        CustomRelation use =
+                new CustomRelation("use", "", new LinkedHashSet<>(), new LinkedHashSet<>());
 
         List<Triplet> createdTriplets = new LinkedList<>();
 
@@ -920,7 +920,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             relationManager.getRelationByName("imports").get(),
                             class2Variable));
 
-        } catch (UnsupportedObjectTypeInTriplet e) {
+        } catch (UnsupportedObjectTypeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -935,7 +935,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             useWhenTriplets);
             use.setMapping(mapping);
             return use;
-        } catch (UnsupportedObjectTypeInTriplet | UnrelatedMappingException e) {
+        } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

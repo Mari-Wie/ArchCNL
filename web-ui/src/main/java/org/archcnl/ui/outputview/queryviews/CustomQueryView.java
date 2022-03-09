@@ -17,15 +17,14 @@ import java.util.stream.Collectors;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorView;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
-import org.archcnl.ui.common.andtriplets.triplet.events.VariableFilterChangedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.variablelistview.VariableListView;
-import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
-import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.components.GridView;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinQueryButtonPressedEvent;
@@ -143,7 +142,7 @@ public class CustomQueryView extends HorizontalLayout {
     public void showVariableSelectionComponents(List<VariableSelectionComponent> components) {
         select.removeAll();
         components.forEach(component -> select.add(component));
-        components.forEach(component -> addVariableSelectionComponentsListeners(component));
+        components.forEach(this::addVariableSelectionComponentsListeners);
         VariableSelectionComponent variableSelectionComponent = new VariableSelectionComponent();
         addVariableSelectionComponentsListeners(variableSelectionComponent);
         select.add(variableSelectionComponent);
@@ -151,7 +150,6 @@ public class CustomQueryView extends HorizontalLayout {
 
     private void addVariableSelectionComponentsListeners(
             VariableSelectionComponent variableSelectionComponent) {
-        variableSelectionComponent.addListener(VariableFilterChangedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
                 VariableCreationRequestedEvent.class, this::fireEvent);
         variableSelectionComponent.addListener(
@@ -176,18 +174,24 @@ public class CustomQueryView extends HorizontalLayout {
                 .anyMatch(VariableSelectionComponent::isEmpty);
     }
 
-    public boolean areAtleastTwoVariableSelectionComponentsEmpty() {
-        final List<VariableSelectionComponent> components =
-                select.getChildren()
-                        .filter(VariableSelectionComponent.class::isInstance)
-                        .map(VariableSelectionComponent.class::cast)
-                        .collect(Collectors.toList());
-        final long componentsCount = components.stream().count();
-        final long nonEmptyComponentsCount =
-                components.stream()
-                        .filter(component -> component.getOptionalValue().isPresent())
-                        .count();
-        return componentsCount - nonEmptyComponentsCount >= 2;
+    public void removeNeighboringComponentsIfEmpty(
+            VariableSelectionComponent variableSelectionComponent) {
+        int index = select.indexOf(variableSelectionComponent);
+        if (index > 0 && select.getComponentAt(index - 1) instanceof VariableSelectionComponent) {
+            VariableSelectionComponent previousComponent =
+                    (VariableSelectionComponent) select.getComponentAt(index - 1);
+            if (previousComponent.isEmpty()) {
+                removeVariableSelectionComponent(previousComponent);
+            }
+        }
+        if (index < select.getComponentCount() - 1
+                && select.getComponentAt(index + 1) instanceof VariableSelectionComponent) {
+            VariableSelectionComponent nextComponent =
+                    (VariableSelectionComponent) select.getComponentAt(index + 1);
+            if (nextComponent.isEmpty()) {
+                removeVariableSelectionComponent(nextComponent);
+            }
+        }
     }
 
     public void replacePinButtonWithDeleteButton() {

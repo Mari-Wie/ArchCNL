@@ -3,7 +3,7 @@ package org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relation
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
-import org.archcnl.domain.input.exceptions.RelationAlreadyExistsException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 import org.archcnl.ui.inputview.rulesormappingeditorview.mappingeditor.relationeditor.RelationEditorPresenter;
 
 public class ChangeRelationNameRequestedEvent extends ComponentEvent<RelationEditorPresenter> {

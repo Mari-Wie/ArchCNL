@@ -9,18 +9,18 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
-import org.archcnl.ui.events.ConceptGridUpdateRequestedEvent;
-import org.archcnl.ui.events.ConceptHierarchySwapRequestedEvent;
-import org.archcnl.ui.events.EditorRequestedEvent;
-import org.archcnl.ui.events.GridUpdateRequestedEvent;
-import org.archcnl.ui.events.HierarchySwapRequestedEvent;
-import org.archcnl.ui.events.RelationGridUpdateRequestedEvent;
-import org.archcnl.ui.events.RelationHierarchySwapRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.ConceptEditorRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.events.RelationEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.GridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 
 public class ConceptAndRelationView extends VerticalLayout {
 
@@ -53,20 +53,16 @@ public class ConceptAndRelationView extends VerticalLayout {
                     requestConceptGridUpdate();
                 });
         conceptHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class,
-                e -> {
-                    requestConceptSwap(e);
-                });
+                HierarchySwapRequestedEvent.class, this::requestConceptSwap);
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of concepts but are mapped to each other externally
         conceptHierarchyView.addListener(
                 EditorRequestedEvent.class,
-                e -> {
-                    fireEvent(
-                            new ConceptEditorRequestedEvent(
-                                    this, true, (CustomConcept) e.getSource().get()));
-                });
+                e ->
+                        fireEvent(
+                                new ConceptEditorRequestedEvent(
+                                        this, true, (CustomConcept) e.getSource().get())));
         conceptHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
@@ -78,32 +74,25 @@ public class ConceptAndRelationView extends VerticalLayout {
     }
 
     protected void initHierarchies() {
-        conceptHierarchyView = new HierarchyView<Concept>();
-        relationHierarchyView = new HierarchyView<Relation>();
+        conceptHierarchyView = new HierarchyView<>();
+        relationHierarchyView = new HierarchyView<>();
     }
 
     protected void createRelationHierarchy() {
         relationHierarchyView.setHeight(50, Unit.PERCENTAGE);
         relationHierarchyView.addListener(
-                GridUpdateRequestedEvent.class,
-                e -> {
-                    requestRelationGridUpdate();
-                });
+                GridUpdateRequestedEvent.class, e -> requestRelationGridUpdate());
         relationHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class,
-                e -> {
-                    requestRelationSwap(e);
-                });
+                HierarchySwapRequestedEvent.class, this::requestRelationSwap);
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of relations but are mapped to each other externally
         relationHierarchyView.addListener(
                 EditorRequestedEvent.class,
-                e -> {
-                    fireEvent(
-                            new RelationEditorRequestedEvent(
-                                    this, true, (CustomRelation) e.getSource().get()));
-                });
+                e ->
+                        fireEvent(
+                                new RelationEditorRequestedEvent(
+                                        this, true, (CustomRelation) e.getSource().get())));
         relationHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
