@@ -22,6 +22,14 @@ public class QueryResultsComponent extends AbstractQueryComponent {
         gridView.update(result);
     }
 
+    public void updateGeneralInfoLayout(
+            String nrOfViolations,
+            String nrOfPackages,
+            String nrOfRelationships,
+            String nrOfTypes) {
+        generalInfoLayout.update(nrOfViolations, nrOfPackages, nrOfRelationships, nrOfTypes);
+    }
+
     protected void addComponents() {
         add(generalInfoLayout, gridView, queryTextArea);
     }

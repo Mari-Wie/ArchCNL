@@ -12,6 +12,7 @@ import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
+import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
@@ -188,7 +189,37 @@ public class OutputPresenter extends Component {
     }
 
     public void displayResult(final Optional<Result> result) {
-        view.displayResult(result);
+        String nrOfViolations = "-1";
+        String nrOfPackages = "-1";
+        String nrOfRelationships = "-1";
+        String nrOfTypes = "-1";
+        Optional<StardogDatabaseAPI.Result> nrOfViolationsResult =
+                resultRepository.executeNativeSelectQuery(
+                        QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_VIOLATIONS));
+        Optional<StardogDatabaseAPI.Result> nrOfPackagesResult =
+                resultRepository.executeNativeSelectQuery(
+                        QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_PACKAGES));
+        Optional<StardogDatabaseAPI.Result> nrOfRelationshipsResult =
+                resultRepository.executeNativeSelectQuery(
+                        QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_RELATIONSHIPS));
+        Optional<StardogDatabaseAPI.Result> nrOfTypesResult =
+                resultRepository.executeNativeSelectQuery(
+                        QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_TYPES));
+
+        if (nrOfViolationsResult.isPresent()) {
+            nrOfViolations = nrOfViolationsResult.get().getViolations().get(0).get(0);
+        }
+        if (nrOfPackagesResult.isPresent()) {
+            nrOfPackages = nrOfPackagesResult.get().getViolations().get(0).get(0);
+        }
+        if (nrOfRelationshipsResult.isPresent()) {
+            nrOfRelationships = nrOfRelationshipsResult.get().getViolations().get(0).get(0);
+        }
+        if (nrOfTypesResult.isPresent()) {
+            nrOfTypes = nrOfTypesResult.get().getViolations().get(0).get(0);
+        }
+
+        view.displayResult(result, nrOfViolations, nrOfPackages, nrOfRelationships, nrOfTypes);
     }
 
     public void setResultRepository(final ResultRepository repository) {
