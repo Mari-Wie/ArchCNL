@@ -25,7 +25,7 @@ public class Annotation extends DefinedType {
      * @param attributes List of annotation attributes defined in the declaration.
      */
     public Annotation(
-    		Path path,
+            Path path,
             String name,
             String simpleName,
             List<AnnotationInstance> annotations,

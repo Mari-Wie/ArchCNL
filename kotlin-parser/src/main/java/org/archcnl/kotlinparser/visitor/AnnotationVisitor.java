@@ -39,7 +39,10 @@ public class AnnotationVisitor extends NamedBaseVisitor {
 
             var annotationInstance =
                     new AnnotationInstance(
-                            userType, annotationValues, Path.of("TODO"), null); // TODO null zu Optional
+                            userType,
+                            annotationValues,
+                            Path.of("TODO"),
+                            null); // TODO null zu Optional
             annotationInstances.add(annotationInstance);
         }
 

@@ -20,9 +20,9 @@ import org.archcnl.owlify.famix.ontology.FamixOntology;
 public abstract class DefinedType {
     private final String fullyQualifiedName;
     private final String simpleName;
-    private final Path path;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
+    private final Path path;
 
     /**
      * Constructor.
@@ -33,7 +33,7 @@ public abstract class DefinedType {
      * @param modifiers List of annotation instances for the type.
      */
     protected DefinedType(
-    		Path path,
+            Path path,
             String fullyQualifiedName,
             String simpleName,
             List<AnnotationInstance> annotations,
@@ -65,6 +65,11 @@ public abstract class DefinedType {
         return modifiers;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
     /**
      * First pass of the modeling. "Memorizes" this type and its nested types.
      *
@@ -77,7 +82,7 @@ public abstract class DefinedType {
         individual.addLiteral(ontology.get(hasName), simpleName);
         individual.addLiteral(ontology.get(hasFullQualifiedName), fullyQualifiedName);
         individual.addLiteral(ontology.get(isExternal), false);
-        individual.addLiteral(ontology.get(isLocatedAt), path);
+        individual.addLiteral(ontology.get(isLocatedAt), path.toString());
 
         ontology.typeCache().addDefinedType(fullyQualifiedName, individual);
 

@@ -4,7 +4,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.Field;

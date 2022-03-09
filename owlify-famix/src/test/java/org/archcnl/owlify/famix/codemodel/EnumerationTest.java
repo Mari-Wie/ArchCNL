@@ -6,6 +6,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasModifier;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesNestedType;
@@ -17,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
@@ -29,6 +31,7 @@ public class EnumerationTest {
 
     private static final String name = "MyEnumeration";
     private static final String fullName = "namespace." + name;
+    private static final Path path = Path.of("someRootDirectory/someEnumeration");
 
     @Before
     public void setUp() throws FileNotFoundException {
@@ -42,7 +45,7 @@ public class EnumerationTest {
     public void testFirstPass() {
         DefinedType type =
                 new Enumeration(
-                        "TODO",
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -61,6 +64,9 @@ public class EnumerationTest {
                 ontology.codeModel()
                         .containsLiteral(individual, ontology.get(hasFullQualifiedName), fullName));
         assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(isLocatedAt), path.toString()));
+        assertTrue(
                 ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
         assertEquals(Enum.uri(), individual.getOntClass().getURI());
 
@@ -72,7 +78,7 @@ public class EnumerationTest {
     public void testFirstPassNestedTypesAreVisited() {
         DefinedType type =
                 new Enumeration(
-                        "TODO",
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -85,6 +91,7 @@ public class EnumerationTest {
 
         String nestedName = DummyObjects.definedType().getName();
         String nestedSimpleName = DummyObjects.definedType().getSimpleName();
+        Path nestedPath = DummyObjects.definedType().getPath();
 
         Individual individual =
                 ontology.codeModel().getIndividual(FamixClass.individualUri(nestedName));
@@ -98,6 +105,10 @@ public class EnumerationTest {
                         .containsLiteral(
                                 individual, ontology.get(hasFullQualifiedName), nestedName));
         assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(
+                                individual, ontology.get(isLocatedAt), nestedPath.toString()));
+        assertTrue(
                 ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
         assertEquals(FamixClass.uri(), individual.getOntClass().getURI());
 
@@ -109,7 +120,7 @@ public class EnumerationTest {
     public void testSecondPass() {
         DefinedType type =
                 new Enumeration(
-                        "TODO",
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -137,7 +148,7 @@ public class EnumerationTest {
     public void testGetNestedTypeNames() {
         DefinedType type =
                 new Enumeration(
-                        "TODO",
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),

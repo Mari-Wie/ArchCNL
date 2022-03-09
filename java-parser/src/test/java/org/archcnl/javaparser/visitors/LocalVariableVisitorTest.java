@@ -4,8 +4,6 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
-
-import java.nio.file.Path;
 import java.util.List;
 import org.archcnl.owlify.famix.codemodel.LocalVariable;
 import org.junit.Assert;

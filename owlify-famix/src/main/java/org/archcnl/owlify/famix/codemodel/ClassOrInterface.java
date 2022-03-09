@@ -34,7 +34,7 @@ public class ClassOrInterface extends ClassInterfaceEnum {
      * @param supertypes List of supertypes for this type.
      */
     public ClassOrInterface(
-    		Path path,
+            Path path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,

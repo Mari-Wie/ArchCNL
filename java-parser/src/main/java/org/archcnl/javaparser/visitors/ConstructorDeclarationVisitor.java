@@ -2,7 +2,6 @@ package org.archcnl.javaparser.visitors;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;

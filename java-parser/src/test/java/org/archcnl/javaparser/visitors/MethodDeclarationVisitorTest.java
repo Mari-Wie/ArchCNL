@@ -4,7 +4,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.Method;
@@ -60,7 +59,10 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals("static", method.getModifiers().get(1).getName());
         Assert.assertEquals(8, method.getBeginning().get().line);
-        Assert.assertTrue(method.getPath().startsWith(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES)));
+        Assert.assertTrue(
+                method.getPath()
+                        .startsWith(
+                                Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES)));
     }
 
     @Test
@@ -89,7 +91,10 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals(1, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals(10, method.getBeginning().get().line);
-        Assert.assertTrue(method.getPath().startsWith(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES)));
+        Assert.assertTrue(
+                method.getPath()
+                        .startsWith(
+                                Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES)));
     }
 
     @Test

@@ -10,7 +10,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.throwsException;
 
 import com.github.javaparser.Position;
-
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;

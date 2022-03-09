@@ -19,8 +19,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
-
 public class ModelExtractorTest {
 
     private static final String PATH_TO_PACKAGE_WITH_EXAMPLE_JAVA_PROJECT =
@@ -154,9 +152,7 @@ public class ModelExtractorTest {
         final Parameter parameter1 = method1.getParameters().get(0);
         Assert.assertEquals("b", parameter1.getName());
         Assert.assertEquals("int", parameter1.getType().getName());
-        Assert.assertEquals(
-        		parameter1
-                        .getPath(), classUnderTest.getPath());
+        Assert.assertEquals(parameter1.getPath(), classUnderTest.getPath());
         Assert.assertEquals(7, parameter1.getBeginning().get().line);
         Assert.assertEquals(1, method1.getModifiers().size());
         Assert.assertEquals("public", method1.getModifiers().get(0).getName());
@@ -165,7 +161,7 @@ public class ModelExtractorTest {
 
         final Method method2 = type.getMethods().get(1);
         Assert.assertEquals("ClassB", method2.getName());
-        Assert.assertEquals(1, method2.getAnnotations().size());       
+        Assert.assertEquals(1, method2.getAnnotations().size());
         final AnnotationInstance annotation = method2.getAnnotations().get(0);
         Assert.assertEquals("Deprecated", annotation.getName());
         Assert.assertEquals(0, annotation.getValues().size());
@@ -184,9 +180,7 @@ public class ModelExtractorTest {
         final Parameter parameter2 = method2.getParameters().get(0);
         Assert.assertEquals("b", parameter2.getName());
         Assert.assertEquals("Integer", parameter2.getType().getSimpleName());
-        Assert.assertEquals(
-        		parameter2
-                        .getPath(), classUnderTest.getPath());
+        Assert.assertEquals(parameter2.getPath(), classUnderTest.getPath());
         Assert.assertEquals(12, parameter2.getBeginning().get().line);
         Assert.assertEquals(1, method2.getModifiers().size());
         Assert.assertEquals("public", method2.getModifiers().get(0).getName());
@@ -239,10 +233,7 @@ public class ModelExtractorTest {
                 "java.lang.NullPointerException", method.getCaughtExceptions().get(0).getName());
         Assert.assertEquals(1, method.getParameters().size());
         Assert.assertEquals("items", method.getParameters().get(0).getName());
-        Assert.assertEquals(
-                method.getParameters()
-                        .get(0)
-                        .getPath(), classUnderTest.getPath());
+        Assert.assertEquals(method.getParameters().get(0).getPath(), classUnderTest.getPath());
         Assert.assertEquals(7, method.getParameters().get(0).getBeginning().get().line);
         Assert.assertEquals(2, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());

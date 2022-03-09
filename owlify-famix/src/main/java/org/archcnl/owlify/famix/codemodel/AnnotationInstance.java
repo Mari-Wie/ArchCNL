@@ -9,7 +9,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
 import com.github.javaparser.Position;
-
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +86,12 @@ public class AnnotationInstance {
         individual.addProperty(
                 ontology.get(hasAnnotationType), ontology.typeCache().getIndividual(name));
 
+        String location = path.toString();
+        if (beginning.isPresent()) {
+            location += ", Line: " + String.valueOf(beginning.get().line);
+        }
+        individual.addLiteral(ontology.get(isLocatedAt), location);
+
         for (AnnotationMemberValuePair memberValuePair : values) {
             memberValuePair.modelIn(ontology, name, uri, individual);
         }
@@ -99,11 +104,6 @@ public class AnnotationInstance {
         annotationType.addLiteral(ontology.get(isExternal), true);
         annotationType.addLiteral(ontology.get(hasFullQualifiedName), name);
 
-        String location = path.toString();
-        if (beginning.isPresent()) {
-            location += ", Line: " + String.valueOf(beginning.get().line);
-        }
-        annotationType.addLiteral(ontology.get(isLocatedAt), location);
         ontology.typeCache().addDefinedType(name, annotationType);
     }
 }

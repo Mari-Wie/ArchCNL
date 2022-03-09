@@ -6,6 +6,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasSignature;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isConstructor;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesParameter;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesVariable;
@@ -19,10 +20,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.github.javaparser.Position;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
@@ -47,6 +51,10 @@ public class MethodTest {
 
     private Individual parent;
 
+    private static final Optional<Position> position1 = Optional.of(new Position(5, 4));
+    private static final Optional<Position> position2 = Optional.of(new Position(2, 3));
+    private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
+
     @Before
     public void setUp() throws FileNotFoundException {
         ontology =
@@ -70,17 +78,19 @@ public class MethodTest {
                         new Type("namespace.A", "A", false),
                         new ArrayList<>(),
                         new ArrayList<>(),
-                        "TODO");
+                        path,
+                        position1);
         declaredException = new Type("namespace.MyException", "MyException", false);
-        annotation = new AnnotationInstance("Deprecated", new ArrayList<>(), "TODO");
+        annotation = new AnnotationInstance("Deprecated", new ArrayList<>(), path, position1);
         thrownException = new Type("namespace.MyError", "MyError", false);
         caughtException = new Type("java.lang.Exception", "Exception", false);
         localVariable =
                 new LocalVariable(
-                        "TODO",
                         new Type("namespace.C", "C", false),
                         "variable",
-                        Arrays.asList(new Modifier("public")));
+                        Arrays.asList(new Modifier("public")),
+                        path,
+                        position1);
         returnType = new Type("namespace.B", "B", false);
     }
 
@@ -90,7 +100,6 @@ public class MethodTest {
 
         Method method =
                 new Method(
-                        "not-defined",
                         name,
                         signature,
                         Arrays.asList(new Modifier("private")),
@@ -101,7 +110,9 @@ public class MethodTest {
                         constructor,
                         Arrays.asList(thrownException),
                         Arrays.asList(caughtException),
-                        Arrays.asList(localVariable));
+                        Arrays.asList(localVariable),
+                        path,
+                        position1);
 
         method.modelIn(ontology, parentName, parent);
 
@@ -147,6 +158,12 @@ public class MethodTest {
         assertTrue(
                 ontology.codeModel()
                         .containsLiteral(parent, ontology.get(definesMethod), individual));
+        assertTrue(
+                ontology.codeModel()
+                        .contains(
+                                individual,
+                                ontology.get(isLocatedAt),
+                                path.toString() + ", Line: 5"));
 
         // ensure that the components have been modeled (the exact modeling is tested by their unit
         // tests)
@@ -163,7 +180,6 @@ public class MethodTest {
 
         Method method =
                 new Method(
-                        "not-defined",
                         name,
                         signature,
                         new ArrayList<>(),
@@ -174,7 +190,9 @@ public class MethodTest {
                         constructor,
                         new ArrayList<>(),
                         new ArrayList<>(),
-                        new ArrayList<>());
+                        new ArrayList<>(),
+                        path,
+                        position1);
 
         method.modelIn(ontology, parentName, parent);
 
@@ -192,6 +210,12 @@ public class MethodTest {
         assertTrue(
                 ontology.codeModel()
                         .containsLiteral(individual, ontology.get(isConstructor), constructor));
+        assertTrue(
+                ontology.codeModel()
+                        .contains(
+                                individual,
+                                ontology.get(isLocatedAt),
+                                path.toString() + ", Line: 5"));
 
         // constructors have no return type
         assertNull(ontology.codeModel().getProperty(individual, ontology.get(hasDeclaredType)));
@@ -220,7 +244,6 @@ public class MethodTest {
 
         Method method1 =
                 new Method(
-                        "not-defined",
                         name,
                         signature,
                         new ArrayList<>(),
@@ -231,10 +254,11 @@ public class MethodTest {
                         constructor,
                         Arrays.asList(thrownException),
                         new ArrayList<>(),
-                        new ArrayList<>());
+                        new ArrayList<>(),
+                        path,
+                        position1);
         Method method2 =
                 new Method(
-                        "not-defined",
                         name,
                         signature2,
                         new ArrayList<>(),
@@ -245,7 +269,9 @@ public class MethodTest {
                         constructor,
                         new ArrayList<>(),
                         Arrays.asList(caughtException),
-                        new ArrayList<>());
+                        new ArrayList<>(),
+                        path,
+                        position2);
 
         method1.modelIn(ontology, parentName, parent);
         method2.modelIn(ontology, parentName, parent);
@@ -280,6 +306,18 @@ public class MethodTest {
         assertTrue(
                 ontology.codeModel()
                         .containsLiteral(parent, ontology.get(definesMethod), individual2));
+        assertTrue(
+                ontology.codeModel()
+                        .contains(
+                                individual1,
+                                ontology.get(isLocatedAt),
+                                path.toString() + ", Line: 5"));
+        assertTrue(
+                ontology.codeModel()
+                        .contains(
+                                individual2,
+                                ontology.get(isLocatedAt),
+                                path.toString() + ", Line: 2"));
 
         // only individual1 should have a thrown exception
         assertNotNull(ontology.codeModel().getProperty(individual1, ontology.get(throwsException)));

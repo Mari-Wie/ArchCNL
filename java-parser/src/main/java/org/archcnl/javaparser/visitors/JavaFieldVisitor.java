@@ -3,7 +3,6 @@ package org.archcnl.javaparser.visitors;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;

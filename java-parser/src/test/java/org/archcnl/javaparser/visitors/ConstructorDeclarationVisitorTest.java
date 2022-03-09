@@ -4,7 +4,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
@@ -39,7 +38,11 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertTrue(constructor.getDeclaredExceptions().isEmpty());
         Assert.assertTrue(constructor.getLocalVariables().isEmpty());
         Assert.assertEquals(1, constructor.getParameters().size());
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES, GenericVisitorTest.SIMPLE_CLASS).startsWith(constructor.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
+                                GenericVisitorTest.SIMPLE_CLASS)
+                        .startsWith(constructor.getPath()));
         Assert.assertEquals(6, constructor.getBeginning().get().line);
 
         final Parameter param = constructor.getParameters().get(0);
@@ -48,7 +51,11 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertEquals("parameter", param.getName());
         Assert.assertEquals("int", param.getType().getName());
         Assert.assertTrue(param.getType().isPrimitive());
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES, GenericVisitorTest.SIMPLE_CLASS).startsWith(param.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
+                                GenericVisitorTest.SIMPLE_CLASS)
+                        .startsWith(param.getPath()));
         Assert.assertEquals(6, param.getBeginning().get().line);
     }
 
@@ -95,7 +102,11 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertTrue(constructor1.getThrownExceptions().isEmpty());
         Assert.assertEquals(1, constructor1.getParameters().size());
         Assert.assertEquals(18, constructor1.getParameters().get(0).getBeginning().get().line);
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES, GenericVisitorTest.SIMPLE_CLASS).startsWith(constructor1.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
+                                GenericVisitorTest.SIMPLE_CLASS)
+                        .startsWith(constructor1.getPath()));
 
         final AnnotationInstance annotation = constructor1.getAnnotations().get(0);
         Assert.assertEquals("Deprecated", annotation.getName());
@@ -153,8 +164,12 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertEquals("since", param2annotation.getValues().get(0).getName());
         Assert.assertEquals("\"yesterday\"", param2annotation.getValues().get(0).getValue());
         Assert.assertEquals(24, param2annotation.getBeginning().get().line);
-        
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES, GenericVisitorTest.SIMPLE_CLASS).startsWith(constructor2.getPath()));
+
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
+                                GenericVisitorTest.SIMPLE_CLASS)
+                        .startsWith(constructor2.getPath()));
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.archcnl.javaparser.visitors;
 
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;

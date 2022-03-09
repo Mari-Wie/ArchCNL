@@ -40,8 +40,11 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
         Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
         Assert.assertEquals("final", definedClass.getModifiers().get(1).getName());
         Assert.assertFalse(definedClass.isInterface());
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                                + GenericVisitorTest.SIMPLE_CLASS).startsWith(definedClass.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.SIMPLE_CLASS)
+                        .startsWith(definedClass.getPath()));
     }
 
     @Test
@@ -66,8 +69,11 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
         Assert.assertEquals(1, definedClass.getModifiers().size());
         Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
         Assert.assertTrue(definedClass.isInterface());
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.INTERFACE).startsWith(definedClass.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.INTERFACE)
+                        .startsWith(definedClass.getPath()));
     }
 
     @Test
@@ -102,9 +108,12 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
         Assert.assertEquals("floatingPoint", attributes.get(2).getName());
         Assert.assertEquals("float", attributes.get(2).getType().getName());
         Assert.assertTrue(attributes.get(2).getType().isPrimitive());
-        
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.ANNOTATION).startsWith(definedAnnotation.getPath()));
+
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.ANNOTATION)
+                        .startsWith(definedAnnotation.getPath()));
     }
 
     @Test
@@ -124,8 +133,11 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
         Assert.assertEquals("examples.Enumeration", definedType.getName());
         Assert.assertEquals("Enumeration", definedType.getSimpleName());
         Assert.assertTrue(definedType instanceof Enumeration);
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.ENUM).startsWith(definedType.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.ENUM)
+                        .startsWith(definedType.getPath()));
     }
 
     @Test
@@ -166,9 +178,12 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
         Assert.assertEquals(0, definedClass.getAnnotations().size());
         Assert.assertEquals(1, definedClass.getModifiers().size());
         Assert.assertEquals("public", definedClass.getModifiers().get(0).getName());
-        
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.INNER_CLASS).startsWith(definedClass.getPath()));
+
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.INNER_CLASS)
+                        .startsWith(definedClass.getPath()));
     }
 
     @Test
@@ -200,9 +215,12 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
         Assert.assertFalse(innerClass.isInterface());
         Assert.assertEquals(1, innerClass.getFields().size());
         Assert.assertEquals("innerField", innerClass.getFields().get(0).getName());
-        
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.INNER_CLASS).startsWith(outerType.getPath()));
+
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.INNER_CLASS)
+                        .startsWith(outerType.getPath()));
     }
 
     @Test
@@ -232,11 +250,17 @@ public class JavaTypeVisitorTest extends GenericVisitorTest<JavaTypeVisitor> {
 
         final ClassOrInterface class2 = (ClassOrInterface) type2;
         Assert.assertEquals(0, class2.getModifiers().size());
-        
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.TWO_CLASSES).startsWith(class1.getPath()));
-        Assert.assertTrue(Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
-                + GenericVisitorTest.TWO_CLASSES).startsWith(class2.getPath()));
+
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.TWO_CLASSES)
+                        .startsWith(class1.getPath()));
+        Assert.assertTrue(
+                Path.of(
+                                GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES
+                                        + GenericVisitorTest.TWO_CLASSES)
+                        .startsWith(class2.getPath()));
     }
 
     @Override
