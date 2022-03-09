@@ -186,6 +186,11 @@ public class StardogDatabase implements StardogDatabaseAPI {
             List<String> variables = queryResults.variables();
             Result queryResult = new Result(variables);
 
+            Map<String, String> prefixMap = new HashMap<String, String>();
+            connection
+                    .namespaces()
+                    .forEach(namespace -> prefixMap.put(namespace.prefix(), namespace.iri()));
+
             while (queryResults.hasNext()) {
 
                 // Here we get the result from the query
@@ -197,9 +202,8 @@ public class StardogDatabase implements StardogDatabaseAPI {
                     Value value = stardogResult.get(variableName);
                     if (value != null) {
                         // Result is not shortened according to prefixes (like it would be on
-                        // stardog studio) and needs to
-                        // be shortened manually
-                        String iri = stripPrefixes(Value.lex(value));
+                        // stardog studio) and needs to be shortened manually
+                        String iri = stripPrefixes(Value.lex(value), prefixMap);
                         singleResult.add(iri);
                     } else {
                         singleResult.add("");
@@ -211,13 +215,9 @@ public class StardogDatabase implements StardogDatabaseAPI {
         }
     }
 
-    private String stripPrefixes(String string) {
-        Map<String, String> prefixMap = new HashMap<String, String>();
-        connection
-                .namespaces()
-                .forEach(namespace -> prefixMap.put(namespace.prefix(), namespace.iri()));
-        for (String prefix : prefixMap.keySet()) {
-            string = string.replace(prefixMap.get(prefix), prefix + ":");
+    private String stripPrefixes(String string, Map<String, String> namespaces) {
+        for (String prefix : namespaces.keySet()) {
+            string = string.replace(namespaces.get(prefix), prefix + ":");
         }
         return string;
     }
