@@ -190,9 +190,9 @@ public class OutputPresenter extends Component {
 
     public void displayResult(final Optional<Result> result) {
         String nrOfViolations = "-1";
-        String nrOfPackagesValue = "-1";
-        String nrOfRelationshipsValue = "-1";
-        String nrOfTypesValue = "-1";
+        String nrOfPackages = "-1";
+        String nrOfRelationships = "-1";
+        String nrOfTypes = "-1";
         Optional<StardogDatabaseAPI.Result> nrOfViolationsResult =
                 resultRepository.executeNativeSelectQuery(
                         QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_VIOLATIONS));
@@ -210,17 +210,16 @@ public class OutputPresenter extends Component {
             nrOfViolations = nrOfViolationsResult.get().getViolations().get(0).get(0);
         }
         if (nrOfPackagesResult.isPresent()) {
-            nrOfPackagesValue = nrOfPackagesResult.get().getViolations().get(0).get(0);
+            nrOfPackages = nrOfPackagesResult.get().getViolations().get(0).get(0);
         }
         if (nrOfRelationshipsResult.isPresent()) {
-            nrOfRelationshipsValue = nrOfRelationshipsResult.get().getViolations().get(0).get(0);
+            nrOfRelationships = nrOfRelationshipsResult.get().getViolations().get(0).get(0);
         }
         if (nrOfTypesResult.isPresent()) {
-            nrOfTypesValue = nrOfTypesResult.get().getViolations().get(0).get(0);
+            nrOfTypes = nrOfTypesResult.get().getViolations().get(0).get(0);
         }
 
-        view.displayResult(
-                result, nrOfViolations, nrOfPackagesValue, nrOfRelationshipsValue, nrOfTypesValue);
+        view.displayResult(result, nrOfViolations, nrOfPackages, nrOfRelationships, nrOfTypes);
     }
 
     public void setResultRepository(final ResultRepository repository) {
