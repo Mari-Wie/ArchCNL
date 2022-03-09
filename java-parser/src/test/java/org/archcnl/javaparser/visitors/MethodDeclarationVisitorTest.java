@@ -58,7 +58,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals(2, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals("static", method.getModifiers().get(1).getName());
-        Assert.assertEquals(8, method.getBeginning().get().line);
+        Assert.assertEquals((Integer) 8, method.getBeginning().get());
         Assert.assertTrue(
                 method.getPath()
                         .startsWith(
@@ -90,7 +90,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals(0, method.getParameters().size());
         Assert.assertEquals(1, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
-        Assert.assertEquals(10, method.getBeginning().get().line);
+        Assert.assertEquals((Integer) 10, method.getBeginning().get());
         Assert.assertTrue(
                 method.getPath()
                         .startsWith(
@@ -112,7 +112,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
 
         final Method method1 = visitor.getMethods().get(0);
         Assert.assertEquals("calculateArea()", method1.getSignature());
-        Assert.assertEquals(30, method1.getBeginning().get().line);
+        Assert.assertEquals((Integer) 30, method1.getBeginning().get());
 
         final Method method2 = visitor.getMethods().get(1);
         Assert.assertEquals("stringMethod()", method2.getSignature());
@@ -122,7 +122,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         Assert.assertEquals("SuppressWarnings", method2.getAnnotations().get(1).getName());
         Assert.assertEquals(0, method2.getAnnotations().get(1).getValues().size());
         Assert.assertEquals(0, method2.getLocalVariables().size());
-        Assert.assertEquals(34, method2.getBeginning().get().line);
+        Assert.assertEquals((Integer) 34, method2.getBeginning().get());
 
         final Method method3 = visitor.getMethods().get(2);
         Assert.assertEquals("referenceMethod(ClassInSubpackage)", method3.getSignature());
@@ -138,7 +138,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         final var sinceNeverValuePairMethod3 = deprecationAnnotationMethod3.getValues().get(0);
         Assert.assertEquals("since", sinceNeverValuePairMethod3.getName());
         Assert.assertEquals("\"neverEver\"", sinceNeverValuePairMethod3.getValue());
-        Assert.assertEquals(40, method3.getBeginning().get().line);
+        Assert.assertEquals((Integer) 40, method3.getBeginning().get());
 
         final Method method4 = visitor.getMethods().get(3);
         Assert.assertEquals("returnNull()", method4.getSignature());
@@ -148,7 +148,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         final var valuePairMethod4 = multipleValueAnnotationMethod4.getValues().get(0);
         Assert.assertEquals("key", valuePairMethod4.getName());
         Assert.assertEquals("NULL_CONSTANT", valuePairMethod4.getValue());
-        Assert.assertEquals(47, method4.getBeginning().get().line);
+        Assert.assertEquals((Integer) 47, method4.getBeginning().get());
 
         final Method method5 = visitor.getMethods().get(4);
         Assert.assertEquals("primitiveMethod(boolean)", method5.getSignature());
@@ -166,7 +166,7 @@ public class MethodDeclarationVisitorTest extends GenericVisitorTest<MethodDecla
         final var doubleValuePairMethod5 = multipleValueAnnotationMethod5.getValues().get(1);
         Assert.assertEquals("doubleValue", doubleValuePairMethod5.getName());
         Assert.assertEquals("3.14", doubleValuePairMethod5.getValue());
-        Assert.assertEquals(52, method5.getBeginning().get().line);
+        Assert.assertEquals((Integer) 52, method5.getBeginning().get());
     }
 
     @Override

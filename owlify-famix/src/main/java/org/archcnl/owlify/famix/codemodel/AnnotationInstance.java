@@ -8,7 +8,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
-import com.github.javaparser.Position;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class AnnotationInstance {
     private final String name;
     private List<AnnotationMemberValuePair> values;
     private Path path;
-    private Optional<Position> beginning;
+    private Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -38,7 +37,7 @@ public class AnnotationInstance {
             String name,
             List<AnnotationMemberValuePair> values,
             Path path,
-            Optional<Position> beginning) {
+            Optional<Integer> beginning) {
         super();
         this.name = name;
         this.values = values;
@@ -62,7 +61,7 @@ public class AnnotationInstance {
     }
 
     /** @return the beginning */
-    public Optional<Position> getBeginning() {
+    public Optional<Integer> getBeginning() {
         return beginning;
     }
 
@@ -88,7 +87,7 @@ public class AnnotationInstance {
 
         String location = path.toString();
         if (beginning.isPresent()) {
-            location += ", Line: " + String.valueOf(beginning.get().line);
+            location += ", Line: " + String.valueOf(beginning.get());
         }
         individual.addLiteral(ontology.get(isLocatedAt), location);
 

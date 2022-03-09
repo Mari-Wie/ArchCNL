@@ -28,7 +28,7 @@ import org.junit.Test;
 public class AnnotationInstanceTest {
 
     private FamixOntology ontology;
-    private static final Optional<Position> position = Optional.of(new Position(5, 4));
+    private static final Optional<Integer> position = Optional.of(5);
     private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
 
     @Before

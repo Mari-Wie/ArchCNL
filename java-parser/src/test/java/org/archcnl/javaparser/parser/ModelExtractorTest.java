@@ -85,7 +85,7 @@ public class ModelExtractorTest {
         Assert.assertEquals(1, method.getDeclaredExceptions().size());
         Assert.assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
         Assert.assertEquals(interfaceUnderTest.getPath(), method.getPath());
-        Assert.assertEquals(4, method.getBeginning().get().line);
+        Assert.assertEquals((Integer) 4, method.getBeginning().get());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class ModelExtractorTest {
         final ClassOrInterface type = (ClassOrInterface) classUnderTest.getDefinedTypes().get(0);
         Assert.assertEquals(1, type.getFields().size());
         Assert.assertEquals(classUnderTest.getPath(), type.getFields().get(0).getPath());
-        Assert.assertEquals(5, type.getFields().get(0).getBeginning().get().line);
+        Assert.assertEquals((Integer) 5, type.getFields().get(0).getBeginning().get());
         Assert.assertEquals(0, type.getSupertypes().size());
         Assert.assertEquals(2, type.getMethods().size());
 
@@ -153,11 +153,11 @@ public class ModelExtractorTest {
         Assert.assertEquals("b", parameter1.getName());
         Assert.assertEquals("int", parameter1.getType().getName());
         Assert.assertEquals(parameter1.getPath(), classUnderTest.getPath());
-        Assert.assertEquals(7, parameter1.getBeginning().get().line);
+        Assert.assertEquals((Integer) 7, parameter1.getBeginning().get());
         Assert.assertEquals(1, method1.getModifiers().size());
         Assert.assertEquals("public", method1.getModifiers().get(0).getName());
         Assert.assertEquals(classUnderTest.getPath(), method1.getPath());
-        Assert.assertEquals(7, method1.getBeginning().get().line);
+        Assert.assertEquals((Integer) 7, method1.getBeginning().get());
 
         final Method method2 = type.getMethods().get(1);
         Assert.assertEquals("ClassB", method2.getName());
@@ -166,13 +166,13 @@ public class ModelExtractorTest {
         Assert.assertEquals("Deprecated", annotation.getName());
         Assert.assertEquals(0, annotation.getValues().size());
         Assert.assertEquals(classUnderTest.getPath(), annotation.getPath());
-        Assert.assertEquals(11, annotation.getBeginning().get().line);
+        Assert.assertEquals((Integer) 11, annotation.getBeginning().get());
         Assert.assertEquals(1, method2.getLocalVariables().size());
         final LocalVariable variable = method2.getLocalVariables().get(0);
         Assert.assertEquals("int", variable.getType().getName());
         Assert.assertEquals("local", variable.getName());
         Assert.assertEquals(classUnderTest.getPath(), variable.getPath());
-        Assert.assertEquals(13, variable.getBeginning().get().line);
+        Assert.assertEquals((Integer) 13, variable.getBeginning().get());
         Assert.assertTrue(method2.isConstructor());
         Assert.assertEquals(0, method2.getDeclaredExceptions().size());
         Assert.assertEquals(0, method2.getThrownExceptions().size());
@@ -181,11 +181,11 @@ public class ModelExtractorTest {
         Assert.assertEquals("b", parameter2.getName());
         Assert.assertEquals("Integer", parameter2.getType().getSimpleName());
         Assert.assertEquals(parameter2.getPath(), classUnderTest.getPath());
-        Assert.assertEquals(12, parameter2.getBeginning().get().line);
+        Assert.assertEquals((Integer) 12, parameter2.getBeginning().get());
         Assert.assertEquals(1, method2.getModifiers().size());
         Assert.assertEquals("public", method2.getModifiers().get(0).getName());
         Assert.assertTrue(method2.getPath().equals(classUnderTest.getPath()));
-        Assert.assertEquals(11, method2.getBeginning().get().line);
+        Assert.assertEquals((Integer) 11, method2.getBeginning().get());
     }
 
     @Test
@@ -224,7 +224,7 @@ public class ModelExtractorTest {
         Assert.assertEquals(1, method.getLocalVariables().size());
         Assert.assertEquals("localVariable", method.getLocalVariables().get(0).getName());
         Assert.assertEquals(classUnderTest.getPath(), method.getLocalVariables().get(0).getPath());
-        Assert.assertEquals(8, method.getLocalVariables().get(0).getBeginning().get().line);
+        Assert.assertEquals((Integer) 8, method.getLocalVariables().get(0).getBeginning().get());
         Assert.assertFalse(method.isConstructor());
         Assert.assertEquals(1, method.getDeclaredExceptions().size());
         Assert.assertEquals("java.lang.Exception", method.getDeclaredExceptions().get(0).getName());
@@ -234,12 +234,12 @@ public class ModelExtractorTest {
         Assert.assertEquals(1, method.getParameters().size());
         Assert.assertEquals("items", method.getParameters().get(0).getName());
         Assert.assertEquals(method.getParameters().get(0).getPath(), classUnderTest.getPath());
-        Assert.assertEquals(7, method.getParameters().get(0).getBeginning().get().line);
+        Assert.assertEquals((Integer) 7, method.getParameters().get(0).getBeginning().get());
         Assert.assertEquals(2, method.getModifiers().size());
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals("static", method.getModifiers().get(1).getName());
         Assert.assertEquals(classUnderTest.getPath(), method.getPath());
-        Assert.assertEquals(7, method.getBeginning().get().line);
+        Assert.assertEquals((Integer) 7, method.getBeginning().get());
     }
 
     @Test
@@ -301,7 +301,7 @@ public class ModelExtractorTest {
         Assert.assertEquals("String", field.getType().getSimpleName());
         Assert.assertEquals("field", field.getName());
         Assert.assertEquals(enumUnderTest.getPath(), field.getPath());
-        Assert.assertEquals(7, field.getBeginning().get().line);
+        Assert.assertEquals((Integer) 7, field.getBeginning().get());
 
         final Method method = type.getMethods().get(0);
         Assert.assertEquals("isOtherValue", method.getName());
@@ -315,6 +315,6 @@ public class ModelExtractorTest {
         Assert.assertEquals("public", method.getModifiers().get(0).getName());
         Assert.assertEquals("boolean", method.getReturnType().getName());
         Assert.assertEquals(enumUnderTest.getPath(), method.getPath());
-        Assert.assertEquals(9, method.getBeginning().get().line);
+        Assert.assertEquals((Integer) 9, method.getBeginning().get());
     }
 }

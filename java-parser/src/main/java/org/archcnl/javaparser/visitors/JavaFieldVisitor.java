@@ -33,7 +33,7 @@ public class JavaFieldVisitor extends VoidVisitorAdapter<Void> {
                             VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                             VisitorHelpers.processModifiers(n.getModifiers()),
                             path,
-                            variableDeclarator.getBegin()));
+                            VisitorHelpers.convertOptionalFromPositionToInteger(variableDeclarator.getBegin())));
         }
     }
 

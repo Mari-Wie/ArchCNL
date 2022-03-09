@@ -35,7 +35,7 @@ public class LocalVariableVisitor extends VoidVisitorAdapter<Void> {
                             variableDeclarator.getNameAsString(),
                             modifiers,
                             path,
-                            variableDeclarator.getBegin()));
+                            VisitorHelpers.convertOptionalFromPositionToInteger(variableDeclarator.getBegin())));
         }
     }
 

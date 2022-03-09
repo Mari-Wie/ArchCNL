@@ -61,7 +61,7 @@ public class NormalAnnotationVisitorTest
         Assert.assertEquals(1, anno.getValues().size());
         Assert.assertEquals("since", anno.getValues().get(0).getName());
         Assert.assertEquals("\"neverEver\"", anno.getValues().get(0).getValue());
-        Assert.assertEquals(41, anno.getBeginning().get().line);
+        Assert.assertEquals((Integer) 41, anno.getBeginning().get());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class NormalAnnotationVisitorTest
         Assert.assertEquals("0", anno.getValues().get(0).getValue());
         Assert.assertEquals("doubleValue", anno.getValues().get(1).getName());
         Assert.assertEquals("3.14", anno.getValues().get(1).getValue());
-        Assert.assertEquals(53, anno.getBeginning().get().line);
+        Assert.assertEquals((Integer) 53, anno.getBeginning().get());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class NormalAnnotationVisitorTest
         final AnnotationInstance anno = annos.get(0);
         Assert.assertEquals("Deprecated", anno.getName());
         Assert.assertEquals(0, anno.getValues().size());
-        Assert.assertEquals(17, anno.getBeginning().get().line);
+        Assert.assertEquals((Integer) 17, anno.getBeginning().get());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class NormalAnnotationVisitorTest
         Assert.assertEquals(1, anno.getValues().size());
         Assert.assertEquals("since", anno.getValues().get(0).getName());
         Assert.assertEquals("\"today\"", anno.getValues().get(0).getValue());
-        Assert.assertEquals(7, anno.getBeginning().get().line);
+        Assert.assertEquals((Integer) 7, anno.getBeginning().get());
     }
 
     @Test
@@ -150,7 +150,7 @@ public class NormalAnnotationVisitorTest
         Assert.assertEquals(1, anno.getValues().size());
         Assert.assertEquals("key", anno.getValues().get(0).getName());
         Assert.assertEquals("A", anno.getValues().get(0).getValue());
-        Assert.assertEquals(8, anno.getBeginning().get().line);
+        Assert.assertEquals((Integer) 8, anno.getBeginning().get());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class NormalAnnotationVisitorTest
         Assert.assertEquals(1, anno.getValues().size());
         Assert.assertEquals("key", anno.getValues().get(0).getName());
         Assert.assertEquals("NULL_CONSTANT", anno.getValues().get(0).getValue());
-        Assert.assertEquals(47, anno.getBeginning().get().line);
+        Assert.assertEquals((Integer) 47, anno.getBeginning().get());
     }
 
     private List<AnnotationInstance> visit(final List<AnnotationExpr> annotationExpressions) {

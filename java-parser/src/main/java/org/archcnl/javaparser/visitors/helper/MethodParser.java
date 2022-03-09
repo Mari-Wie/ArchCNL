@@ -33,7 +33,7 @@ public class MethodParser {
     private String name;
     private String signature;
     private Path path;
-    private Optional<Position> beginning;
+    private Optional<Integer> beginning;
     private List<Type> caughtExceptions;
     private List<Type> thrownExceptions;
     private List<LocalVariable> localVariables;
@@ -46,7 +46,7 @@ public class MethodParser {
     /** Parses the given method declaration. */
     public MethodParser(MethodDeclaration n, Path path) {
         this.path = path;
-        beginning = n.getBegin();
+        beginning = VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin());
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
@@ -70,7 +70,11 @@ public class MethodParser {
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, Path path) {
         this.path = path;
-        beginning = n.getBegin();
+        if(n.getBegin().isPresent()) {
+        	beginning = Optional.of(n.getBegin().get().line);        	
+        } else {
+        	beginning = Optional.empty();
+        }
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;

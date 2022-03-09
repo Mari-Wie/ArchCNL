@@ -9,7 +9,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectPropert
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.throwsException;
 
-import com.github.javaparser.Position;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,7 @@ public class Method {
     private Type returnType;
     private final boolean isConstructor;
     private final Path path;
-    private final Optional<Position> beginning;
+    private final Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -69,7 +68,7 @@ public class Method {
             List<Type> caughtExceptions,
             List<LocalVariable> localVariables,
             Path path,
-            Optional<Position> beginning) {
+            Optional<Integer> beginning) {
         this.name = name;
         this.signature = signature;
         this.modifiers = modifiers;
@@ -146,7 +145,7 @@ public class Method {
     }
 
     /** @return the beginning */
-    public Optional<Position> getBeginning() {
+    public Optional<Integer> getBeginning() {
         return beginning;
     }
 
@@ -164,7 +163,7 @@ public class Method {
 
         String location = path.toString();
         if (beginning.isPresent()) {
-            location += ", Line: " + String.valueOf(beginning.get().line);
+            location += ", Line: " + String.valueOf(beginning.get());
         }
 
         m.addLiteral(ontology.get(isLocatedAt), location);

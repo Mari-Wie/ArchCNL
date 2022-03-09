@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.github.javaparser.Position;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -51,8 +50,8 @@ public class MethodTest {
 
     private Individual parent;
 
-    private static final Optional<Position> position1 = Optional.of(new Position(5, 4));
-    private static final Optional<Position> position2 = Optional.of(new Position(2, 3));
+    private static final Optional<Integer> position1 = Optional.of(5);
+    private static final Optional<Integer> position2 = Optional.of(2);
     private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
 
     @Before

@@ -32,7 +32,7 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
         Assert.assertEquals(1, field.getModifiers().size());
         Assert.assertEquals("private", field.getModifiers().get(0).getName());
         Assert.assertTrue(field.getAnnotations().isEmpty());
-        Assert.assertEquals(4, field.getBeginning().get().line);
+        Assert.assertEquals((Integer) 4, field.getBeginning().get());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
         Assert.assertEquals(1, field.getModifiers().size());
         Assert.assertEquals("private", field.getModifiers().get(0).getName());
         Assert.assertTrue(field.getAnnotations().isEmpty());
-        Assert.assertEquals(8, field.getBeginning().get().line);
+        Assert.assertEquals((Integer) 8, field.getBeginning().get());
     }
 
     @Test
@@ -91,17 +91,17 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
         Assert.assertEquals("examples.ClassWithInnerClass.InnerClass", field1.getType().getName());
         Assert.assertEquals("InnerClass", field1.getType().getSimpleName());
         Assert.assertFalse(field1.getType().isPrimitive());
-        Assert.assertEquals(4, field1.getBeginning().get().line);
+        Assert.assertEquals((Integer) 4, field1.getBeginning().get());
 
         final Field field2 = visitor.getFields().get(1);
         Assert.assertEquals("field2", field2.getName());
         Assert.assertEquals("float", field2.getType().getName());
         Assert.assertTrue(field2.getType().isPrimitive());
-        Assert.assertEquals(5, field2.getBeginning().get().line);
+        Assert.assertEquals((Integer) 5, field2.getBeginning().get());
 
         final Field field3 = visitor.getFields().get(2);
         Assert.assertEquals("innerField", field3.getName());
-        Assert.assertEquals(17, field3.getBeginning().get().line);
+        Assert.assertEquals((Integer) 17, field3.getBeginning().get());
     }
 
     @Override

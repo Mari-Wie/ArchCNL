@@ -12,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.github.javaparser.Position;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -28,7 +27,7 @@ import org.junit.Test;
 public class FieldTest {
 
     private FamixOntology ontology;
-    private static final Optional<Position> position = Optional.of(new Position(5, 4));
+    private static final Optional<Integer> position = Optional.of(5);
     private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
 
     @Before

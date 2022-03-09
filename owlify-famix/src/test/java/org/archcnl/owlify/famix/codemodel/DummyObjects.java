@@ -14,7 +14,7 @@ import java.util.Optional;
 public class DummyObjects {
 
     private static final Path path = Path.of("someRootDirectory/dummyObject");
-    private static final Optional<Position> position = Optional.of(new Position(3, 5));
+    private static final Optional<Integer> position = Optional.of(3);
 
     private DummyObjects() {}
 
@@ -104,10 +104,6 @@ public class DummyObjects {
 
     public static Namespace namespace() {
         return new Namespace("dummies", Namespace.TOP);
-    }
-
-    public static int getLine() {
-        return position.get().line;
     }
 
     public static SourceFile sourceFile() {

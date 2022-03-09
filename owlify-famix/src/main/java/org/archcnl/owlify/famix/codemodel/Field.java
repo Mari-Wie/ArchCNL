@@ -24,7 +24,7 @@ public class Field {
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
     private Path path;
-    private Optional<Position> beginning;
+    private Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -40,7 +40,7 @@ public class Field {
             List<AnnotationInstance> annotations,
             List<Modifier> modifiers,
             Path path,
-            Optional<Position> beginning) {
+            Optional<Integer> beginning) {
         super();
         this.name = name;
         this.type = type;
@@ -56,7 +56,7 @@ public class Field {
     }
 
     /** @return the beginning */
-    public Optional<Position> getBeginning() {
+    public Optional<Integer> getBeginning() {
         return beginning;
     }
 
@@ -96,7 +96,7 @@ public class Field {
 
         String location = path.toString();
         if (beginning.isPresent()) {
-            location += ", Line: " + String.valueOf(beginning.get().line);
+            location += ", Line: " + String.valueOf(beginning.get());
         }
         attribute.addLiteral(ontology.get(isLocatedAt), location);
 

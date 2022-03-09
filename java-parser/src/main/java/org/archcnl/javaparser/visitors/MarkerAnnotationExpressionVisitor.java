@@ -4,6 +4,8 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.nio.file.Path;
 import java.util.ArrayList;
+
+import org.archcnl.javaparser.visitors.helper.VisitorHelpers;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 
 /** Visits a marker annotation expression. */
@@ -20,7 +22,7 @@ public class MarkerAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
     public void visit(MarkerAnnotationExpr n, Void arg) {
         annotationInstance =
                 new AnnotationInstance(
-                        n.getName().asString(), new ArrayList<>(), path, n.getBegin());
+                        n.getName().asString(), new ArrayList<>(), path, VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
     }
 
     /** @return the parsed annotation instance */

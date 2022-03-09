@@ -43,7 +43,7 @@ public class ConstructorDeclarationVisitorTest
                                 GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
                                 GenericVisitorTest.SIMPLE_CLASS)
                         .startsWith(constructor.getPath()));
-        Assert.assertEquals(6, constructor.getBeginning().get().line);
+        Assert.assertEquals((Integer) 6, constructor.getBeginning().get());
 
         final Parameter param = constructor.getParameters().get(0);
         Assert.assertTrue(param.getAnnotations().isEmpty());
@@ -56,7 +56,7 @@ public class ConstructorDeclarationVisitorTest
                                 GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
                                 GenericVisitorTest.SIMPLE_CLASS)
                         .startsWith(param.getPath()));
-        Assert.assertEquals(6, param.getBeginning().get().line);
+        Assert.assertEquals((Integer) 6, param.getBeginning().get());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertTrue(constructor1.getLocalVariables().isEmpty());
         Assert.assertTrue(constructor1.getThrownExceptions().isEmpty());
         Assert.assertEquals(1, constructor1.getParameters().size());
-        Assert.assertEquals(18, constructor1.getParameters().get(0).getBeginning().get().line);
+        Assert.assertEquals((Integer) 18, constructor1.getParameters().get(0).getBeginning().get());
         Assert.assertTrue(
                 Path.of(
                                 GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES,
@@ -111,7 +111,7 @@ public class ConstructorDeclarationVisitorTest
         final AnnotationInstance annotation = constructor1.getAnnotations().get(0);
         Assert.assertEquals("Deprecated", annotation.getName());
         Assert.assertEquals(0, annotation.getValues().size());
-        Assert.assertEquals(17, annotation.getBeginning().get().line);
+        Assert.assertEquals((Integer) 17, annotation.getBeginning().get());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertEquals("java.lang.Double", variable.getType().getName());
         Assert.assertEquals("Double", variable.getType().getSimpleName());
         Assert.assertFalse(variable.getType().isPrimitive());
-        Assert.assertEquals(25, variable.getBeginning().get().line);
+        Assert.assertEquals((Integer) 25, variable.getBeginning().get());
         Assert.assertEquals(2, constructor2.getParameters().size());
 
         final Parameter param1 = constructor2.getParameters().get(0);
@@ -150,20 +150,20 @@ public class ConstructorDeclarationVisitorTest
         Assert.assertTrue(param1.getAnnotations().isEmpty());
         Assert.assertEquals(1, param1.getModifiers().size());
         Assert.assertEquals("final", param1.getModifiers().get(0).getName());
-        Assert.assertEquals(24, param1.getBeginning().get().line);
+        Assert.assertEquals((Integer) 24, param1.getBeginning().get());
 
         final Parameter param2 = constructor2.getParameters().get(1);
         Assert.assertEquals("otherHalfOfRadius", param2.getName());
         Assert.assertEquals(1, param2.getAnnotations().size());
         Assert.assertTrue(param2.getModifiers().isEmpty());
-        Assert.assertEquals(24, param2.getBeginning().get().line);
+        Assert.assertEquals((Integer) 24, param2.getBeginning().get());
 
         final AnnotationInstance param2annotation = param2.getAnnotations().get(0);
         Assert.assertEquals("Deprecated", param2annotation.getName());
         Assert.assertEquals(1, param2annotation.getValues().size());
         Assert.assertEquals("since", param2annotation.getValues().get(0).getName());
         Assert.assertEquals("\"yesterday\"", param2annotation.getValues().get(0).getValue());
-        Assert.assertEquals(24, param2annotation.getBeginning().get().line);
+        Assert.assertEquals((Integer) 24, param2annotation.getBeginning().get());
 
         Assert.assertTrue(
                 Path.of(

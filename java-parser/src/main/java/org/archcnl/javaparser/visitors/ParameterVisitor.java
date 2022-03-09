@@ -34,7 +34,7 @@ public class ParameterVisitor extends VoidVisitorAdapter<Void> {
                         modifiers,
                         annotations,
                         path,
-                        n.getBegin());
+                        VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
     }
 
     /** @return the parsed parameter */

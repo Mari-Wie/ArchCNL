@@ -5,7 +5,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesParameter;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
-import com.github.javaparser.Position;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class Parameter {
     private List<Modifier> modifiers;
     private List<AnnotationInstance> annotations;
     private Path path;
-    private Optional<Position> beginning;
+    private Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -40,7 +39,7 @@ public class Parameter {
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations,
             Path path,
-            Optional<Position> beginning) {
+            Optional<Integer> beginning) {
         super();
         this.name = name;
         this.type = type;
@@ -76,7 +75,7 @@ public class Parameter {
     }
 
     /** @return the beginning */
-    public Optional<Position> getBeginning() {
+    public Optional<Integer> getBeginning() {
         return beginning;
     }
 
@@ -95,7 +94,7 @@ public class Parameter {
 
         String location = path.toString();
         if (beginning.isPresent()) {
-            location += ", Line: " + String.valueOf(beginning.get().line);
+            location += ", Line: " + String.valueOf(beginning.get());
         }
         individual.addLiteral(ontology.get(isLocatedAt), location);
 
