@@ -30,7 +30,9 @@ public class KotlinTypeVisitor extends NamedBaseVisitor {
 
             var definedType =
                     new ClassOrInterface(
-                            Path.of("TODO"),
+                            Path.of("noPathInformationAvailableForKotlinFiles"), // TODO Implement
+                            // kotlin path
+                            // information
                             fullyQualifiedName,
                             className,
                             new ArrayList<>(),

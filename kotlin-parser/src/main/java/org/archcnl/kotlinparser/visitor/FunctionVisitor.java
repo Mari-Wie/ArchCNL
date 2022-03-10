@@ -3,6 +3,7 @@ package org.archcnl.kotlinparser.visitor;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
 import org.archcnl.owlify.famix.codemodel.Method;
 import org.archcnl.owlify.famix.codemodel.Type;
@@ -37,8 +38,10 @@ public class FunctionVisitor extends NamedBaseVisitor {
                         new ArrayList<>(),
                         new ArrayList<>(),
                         new ArrayList<>(),
-                        Path.of("TODO"),
-                        null); // TODO null zu Optional
+                        Path.of("noPathInformationAvailableForKotlinFiles"), // TODO implement path
+                        // information for
+                        // Kotlin
+                        Optional.empty()); // TODO implement line information for Kotlin
         functions.add(function);
 
         return super.visitFunctionDeclaration(ctx);
