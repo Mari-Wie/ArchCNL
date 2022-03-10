@@ -25,6 +25,7 @@ import org.archcnl.common.datatypes.ConstraintViolation;
 import org.archcnl.conformancechecking.api.CheckedRule;
 import org.archcnl.conformancechecking.api.IConformanceCheck;
 import org.archcnl.conformancechecking.impl.ConformanceCheckImpl;
+import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndProperties;
 import org.archcnl.javaparser.parser.JavaOntologyTransformer;
 import org.archcnl.kotlinparser.parser.KotlinOntologyTransformer;
 import org.archcnl.owlify.core.OwlifyComponent;
@@ -227,7 +228,19 @@ public class CNLToolchain {
 
         db.addDataByRDFFileAsNamedGraph(resultPath, context);
 
+        addNamespacesToOntology();
+
+        ConformanceCheckOntologyClassesAndProperties.resetCounters();
+
         LOG.info("CNLToolchain completed successfully!");
+    }
+
+    private void addNamespacesToOntology() {
+        Map<String, String> namespaces = new HashMap<>();
+        namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
+        namespaces.put("conformance", "http://arch-ont.org/ontologies/architectureconformance#");
+        namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl");
+        db.addNamespaces(namespaces);
     }
 
     private void storeModelAndConstraintsInDB(
