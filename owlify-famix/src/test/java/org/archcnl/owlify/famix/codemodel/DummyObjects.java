@@ -1,6 +1,5 @@
 package org.archcnl.owlify.famix.codemodel;
 
-import com.github.javaparser.Position;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;

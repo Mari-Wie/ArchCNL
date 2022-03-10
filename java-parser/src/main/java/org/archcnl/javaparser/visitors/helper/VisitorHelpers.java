@@ -61,12 +61,13 @@ public class VisitorHelpers {
                                         mod.replace(" ", ""))) // remove trailing whitespace
                 .collect(Collectors.toList());
     }
-    
-    public static Optional<Integer> convertOptionalFromPositionToInteger(Optional<Position> positionOptional) {
-    	if(positionOptional.isPresent()) {
-    		return Optional.of(positionOptional.get().line);
-    	} else {
-    		return Optional.empty();
-    	}
+
+    public static Optional<Integer> convertOptionalFromPositionToInteger(
+            Optional<Position> positionOptional) {
+        if (positionOptional.isPresent()) {
+            return Optional.of(positionOptional.get().line);
+        } else {
+            return Optional.empty();
+        }
     }
 }

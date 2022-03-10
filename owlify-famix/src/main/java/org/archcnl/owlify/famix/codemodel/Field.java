@@ -6,7 +6,6 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
-import com.github.javaparser.Position;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;

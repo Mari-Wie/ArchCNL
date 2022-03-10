@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-
 import org.archcnl.javaparser.visitors.helper.VisitorHelpers;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
@@ -34,7 +33,11 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
                         .collect(Collectors.toList());
 
         annotationInstance =
-                new AnnotationInstance(n.getName().asString(), values, path, VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
+                new AnnotationInstance(
+                        n.getName().asString(),
+                        values,
+                        path,
+                        VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
     }
 
     /** @return the parsed annotation instance */

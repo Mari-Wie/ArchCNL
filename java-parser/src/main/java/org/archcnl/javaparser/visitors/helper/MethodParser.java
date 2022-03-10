@@ -1,6 +1,5 @@
 package org.archcnl.javaparser.visitors.helper;
 
-import com.github.javaparser.Position;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -70,10 +69,10 @@ public class MethodParser {
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, Path path) {
         this.path = path;
-        if(n.getBegin().isPresent()) {
-        	beginning = Optional.of(n.getBegin().get().line);        	
+        if (n.getBegin().isPresent()) {
+            beginning = Optional.of(n.getBegin().get().line);
         } else {
-        	beginning = Optional.empty();
+            beginning = Optional.empty();
         }
         name = n.getName().asString();
         signature = n.getSignature().asString();

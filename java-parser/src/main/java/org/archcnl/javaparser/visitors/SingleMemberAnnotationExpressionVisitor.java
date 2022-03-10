@@ -4,7 +4,6 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.nio.file.Path;
 import java.util.ArrayList;
-
 import org.archcnl.javaparser.visitors.helper.VisitorHelpers;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 
@@ -21,7 +20,11 @@ public class SingleMemberAnnotationExpressionVisitor extends VoidVisitorAdapter<
     @Override
     public void visit(SingleMemberAnnotationExpr n, Void arg) {
         annotationInstance =
-                new AnnotationInstance(n.getNameAsString(), new ArrayList<>(), path, VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
+                new AnnotationInstance(
+                        n.getNameAsString(),
+                        new ArrayList<>(),
+                        path,
+                        VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
 
         // TODO Annotation Attributes
     }
