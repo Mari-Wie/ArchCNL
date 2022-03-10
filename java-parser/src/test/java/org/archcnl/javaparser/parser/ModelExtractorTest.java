@@ -108,6 +108,7 @@ public class ModelExtractorTest {
         final ClassOrInterface type = (ClassOrInterface) classUnderTest.getDefinedTypes().get(0);
         Assert.assertEquals(2, type.getFields().size());
         Assert.assertEquals(1, type.getSupertypes().size());
+        Assert.assertEquals(classUnderTest.getPath(), type.getPath());
     }
 
     @Test
@@ -140,6 +141,7 @@ public class ModelExtractorTest {
         Assert.assertEquals((Integer) 5, type.getFields().get(0).getBeginning().get());
         Assert.assertEquals(0, type.getSupertypes().size());
         Assert.assertEquals(2, type.getMethods().size());
+        Assert.assertEquals(classUnderTest.getPath(), type.getPath());
 
         final Method method1 = type.getMethods().get(0);
         Assert.assertEquals("ClassB", method1.getName());
@@ -217,6 +219,7 @@ public class ModelExtractorTest {
         Assert.assertEquals(0, type.getFields().size());
         Assert.assertEquals(0, type.getSupertypes().size());
         Assert.assertEquals(1, type.getMethods().size());
+        Assert.assertEquals(classUnderTest.getPath(), type.getPath());
 
         final Method method = type.getMethods().get(0);
         Assert.assertEquals("staticMethod", method.getName());
@@ -302,6 +305,7 @@ public class ModelExtractorTest {
         Assert.assertEquals("field", field.getName());
         Assert.assertEquals(enumUnderTest.getPath(), field.getPath());
         Assert.assertEquals((Integer) 7, field.getBeginning().get());
+        Assert.assertEquals(enumUnderTest.getPath(), type.getPath());
 
         final Method method = type.getMethods().get(0);
         Assert.assertEquals("isOtherValue", method.getName());
