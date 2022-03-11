@@ -20,6 +20,7 @@ public class GridView extends VerticalLayout {
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
         grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
         grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+        grid.setClassName("result-grid");
 
         add(grid);
     }
