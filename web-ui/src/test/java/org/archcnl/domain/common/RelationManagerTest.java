@@ -34,8 +34,8 @@ class RelationManagerTest {
     private void setup() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
-        inputRelationsCount = 28;
-        outputRelationsCount = 39;
+        inputRelationsCount = 29;
+        outputRelationsCount = 40;
     }
 
     @Test
@@ -87,6 +87,10 @@ class RelationManagerTest {
                 relationManager.doesRelationExist(
                         new FamixRelation(
                                 "hasName", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
+        Assertions.assertTrue(
+                relationManager.doesRelationExist(
+                        new FamixRelation(
+                                "isLocatedAt", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
         Assertions.assertTrue(
                 relationManager.doesRelationExist(
                         new FamixRelation(

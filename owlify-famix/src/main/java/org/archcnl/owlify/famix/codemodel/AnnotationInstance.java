@@ -4,10 +4,13 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Annot
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationType;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 
@@ -21,6 +24,8 @@ import org.archcnl.owlify.famix.ontology.FamixOntology;
 public class AnnotationInstance {
     private final String name;
     private List<AnnotationMemberValuePair> values;
+    private Path path;
+    private Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -28,10 +33,16 @@ public class AnnotationInstance {
      * @param name Fully qualified name of the instantiated annotation type.
      * @param values List of member value pairs present in the instance.
      */
-    public AnnotationInstance(String name, List<AnnotationMemberValuePair> values) {
+    public AnnotationInstance(
+            String name,
+            List<AnnotationMemberValuePair> values,
+            Path path,
+            Optional<Integer> beginning) {
         super();
         this.name = name;
         this.values = values;
+        this.path = path;
+        this.beginning = beginning;
     }
 
     /** @return the name */
@@ -42,6 +53,16 @@ public class AnnotationInstance {
     /** @return the values */
     public List<AnnotationMemberValuePair> getValues() {
         return values;
+    }
+
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Integer> getBeginning() {
+        return beginning;
     }
 
     /**
@@ -64,6 +85,12 @@ public class AnnotationInstance {
         individual.addProperty(
                 ontology.get(hasAnnotationType), ontology.typeCache().getIndividual(name));
 
+        String location = path.toString();
+        if (beginning.isPresent()) {
+            location += ", Line: " + String.valueOf(beginning.get());
+        }
+        individual.addLiteral(ontology.get(isLocatedAt), location);
+
         for (AnnotationMemberValuePair memberValuePair : values) {
             memberValuePair.modelIn(ontology, name, uri, individual);
         }
@@ -75,6 +102,7 @@ public class AnnotationInstance {
         Individual annotationType = ontology.createIndividual(AnnotationType, name);
         annotationType.addLiteral(ontology.get(isExternal), true);
         annotationType.addLiteral(ontology.get(hasFullQualifiedName), name);
+
         ontology.typeCache().addDefinedType(name, annotationType);
     }
 }

@@ -16,6 +16,7 @@ public class QueryUtils {
     private static final Path rootDir = Path.of("./src/main/resources/queries/");
     private static final Path VIOLATIONS_SUBJECT_PREDICATE_OBJECT =
             Path.of("violationsSubjectPredicateObject.sparql");
+    private static final Path VIOLATIONS_WITH_LOCATIONS = Path.of("violationsWithLocations.sparql");
     public static final Path NUMBER_OF_VIOLATIONS = Path.of("nrOfViolations.sparql");
     public static final Path NUMBER_OF_PACKAGES = Path.of("nrOfPackages.sparql");
     public static final Path NUMBER_OF_RELATIONSHIPS = Path.of("nrOfRelationships.sparql");
@@ -25,7 +26,7 @@ public class QueryUtils {
             "# An error occured while trying to load the query.\r\n" + "SELECT * WHERE {}";
 
     public static String getDefaultQuery() {
-        return getQueryFromQueryDirectory(VIOLATIONS_SUBJECT_PREDICATE_OBJECT);
+        return getQueryFromQueryDirectory(VIOLATIONS_WITH_LOCATIONS);
     }
 
     public static String getQueryFromQueryDirectory(Path path) {

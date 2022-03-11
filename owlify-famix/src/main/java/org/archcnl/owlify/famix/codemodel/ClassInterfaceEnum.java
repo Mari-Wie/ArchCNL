@@ -2,6 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesNestedType;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
@@ -26,6 +27,7 @@ public abstract class ClassInterfaceEnum extends DefinedType {
      * @param annotations List of annotation instances for this type's declaration.
      */
     protected ClassInterfaceEnum(
+            Path path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,
@@ -33,7 +35,7 @@ public abstract class ClassInterfaceEnum extends DefinedType {
             List<Field> fields,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations) {
-        super(name, simpleName, annotations, modifiers);
+        super(path, name, simpleName, annotations, modifiers);
         this.nestedTypes = nestedTypes;
         this.methods = methods;
         this.fields = fields;

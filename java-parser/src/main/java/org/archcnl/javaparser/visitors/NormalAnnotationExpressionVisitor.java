@@ -7,9 +7,11 @@ import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.archcnl.javaparser.visitors.helper.VisitorHelpers;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 
@@ -17,6 +19,11 @@ import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
 public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
+    private Path path;
+
+    public NormalAnnotationExpressionVisitor(Path path) {
+        this.path = path;
+    }
 
     @Override
     public void visit(final NormalAnnotationExpr n, final Void arg) {
@@ -25,7 +32,12 @@ public class NormalAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> 
                         .map(pair -> createAnnotationPairFromPair(pair, n))
                         .collect(Collectors.toList());
 
-        annotationInstance = new AnnotationInstance(n.getName().asString(), values);
+        annotationInstance =
+                new AnnotationInstance(
+                        n.getName().asString(),
+                        values,
+                        path,
+                        VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
     }
 
     /** @return the parsed annotation instance */

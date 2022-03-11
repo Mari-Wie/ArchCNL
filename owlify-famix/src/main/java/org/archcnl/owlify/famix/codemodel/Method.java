@@ -2,13 +2,16 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasSignature;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasCaughtException;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredException;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.throwsException;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
@@ -31,6 +34,8 @@ public class Method {
     private List<AnnotationInstance> annotations;
     private Type returnType;
     private final boolean isConstructor;
+    private final Path path;
+    private final Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -61,7 +66,9 @@ public class Method {
             boolean isConstructor,
             List<Type> thrownExceptions,
             List<Type> caughtExceptions,
-            List<LocalVariable> localVariables) {
+            List<LocalVariable> localVariables,
+            Path path,
+            Optional<Integer> beginning) {
         this.name = name;
         this.signature = signature;
         this.modifiers = modifiers;
@@ -73,6 +80,8 @@ public class Method {
         this.isConstructor = isConstructor;
         this.caughtExceptions = caughtExceptions;
         this.localVariables = localVariables;
+        this.path = path;
+        this.beginning = beginning;
     }
 
     /** @return the simple name */
@@ -130,6 +139,16 @@ public class Method {
         return localVariables;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Integer> getBeginning() {
+        return beginning;
+    }
+
     /**
      * Models this method in the given ontology.
      *
@@ -142,6 +161,12 @@ public class Method {
 
         Individual m = ontology.createIndividual(FamixClasses.Method, uri);
 
+        String location = path.toString();
+        if (beginning.isPresent()) {
+            location += ", Line: " + String.valueOf(beginning.get());
+        }
+
+        m.addLiteral(ontology.get(isLocatedAt), location);
         m.addLiteral(ontology.get(hasName), name);
         m.addLiteral(ontology.get(hasSignature), signature);
         parent.addProperty(ontology.get(definesMethod), m);

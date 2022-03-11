@@ -128,6 +128,7 @@ public class FamixOntology {
         isExternal,
         hasName,
         hasFullQualifiedName,
+        isLocatedAt,
         hasValue,
         hasModifier,
         hasSignature,

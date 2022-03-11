@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,7 @@ import org.junit.Test;
 public class ProjectTest {
 
     private FamixOntology ontology;
+    private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
 
     @Before
     public void setUp() throws FileNotFoundException {
@@ -56,6 +58,7 @@ public class ProjectTest {
         // an annotation "@collision"
         DefinedType type =
                 new Annotation(
+                        path,
                         collidingName,
                         collidingName,
                         new ArrayList<>(),

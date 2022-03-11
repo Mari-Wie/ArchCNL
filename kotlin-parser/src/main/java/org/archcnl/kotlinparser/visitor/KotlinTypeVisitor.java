@@ -1,5 +1,6 @@
 package org.archcnl.kotlinparser.visitor;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
@@ -29,6 +30,9 @@ public class KotlinTypeVisitor extends NamedBaseVisitor {
 
             var definedType =
                     new ClassOrInterface(
+                            Path.of("noPathInformationAvailableForKotlinFiles"), // TODO Implement
+                            // kotlin path
+                            // information
                             fullyQualifiedName,
                             className,
                             new ArrayList<>(),

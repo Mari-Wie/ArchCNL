@@ -1,7 +1,9 @@
 package org.archcnl.kotlinparser.visitor;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.archcnl.kotlinparser.grammar.KotlinParser;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 import org.archcnl.owlify.famix.codemodel.AnnotationMemberValuePair;
@@ -36,7 +38,14 @@ public class AnnotationVisitor extends NamedBaseVisitor {
                         annotationValues.add(annotationValue);
                     });
 
-            var annotationInstance = new AnnotationInstance(userType, annotationValues);
+            var annotationInstance =
+                    new AnnotationInstance(
+                            userType,
+                            annotationValues,
+                            Path.of("noPathInformationAvailableForKotlinFiles"), // TODO implement
+                            // path information
+                            // for Kotlin
+                            Optional.empty()); // TODO implement line information for Kotlin
             annotationInstances.add(annotationInstance);
         }
 

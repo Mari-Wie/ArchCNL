@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ReferenceType;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,8 @@ public class MethodParser {
 
     private String name;
     private String signature;
+    private Path path;
+    private Optional<Integer> beginning;
     private List<Type> caughtExceptions;
     private List<Type> thrownExceptions;
     private List<LocalVariable> localVariables;
@@ -40,11 +43,13 @@ public class MethodParser {
     private List<org.archcnl.owlify.famix.codemodel.Modifier> modifiers;
 
     /** Parses the given method declaration. */
-    public MethodParser(MethodDeclaration n) {
+    public MethodParser(MethodDeclaration n, Path path) {
+        this.path = path;
+        beginning = VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin());
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = processReturnType(n);
-        annotations = VisitorHelpers.processAnnotations(n.getAnnotations());
+        annotations = VisitorHelpers.processAnnotations(n.getAnnotations(), path);
         parameters = processParameters(n.getParameters());
         declaredExceptions = processDeclaredExceptions(n.getThrownExceptions());
         modifiers = VisitorHelpers.processModifiers(n.getModifiers());
@@ -55,18 +60,20 @@ public class MethodParser {
         Optional<BlockStmt> body = n.getBody();
 
         if (body.isPresent()) {
-            processBody(body.get().getStatements());
+            processBody(body.get().getStatements(), path);
         }
 
         method = createMethodModel(false);
     }
 
     /** Parses the given constructor declaration. */
-    public MethodParser(ConstructorDeclaration n) {
+    public MethodParser(ConstructorDeclaration n, Path path) {
+        this.path = path;
+        beginning = VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin());
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
-        annotations = VisitorHelpers.processAnnotations(n.getAnnotations());
+        annotations = VisitorHelpers.processAnnotations(n.getAnnotations(), path);
         parameters = processParameters(n.getParameters());
         declaredExceptions = processDeclaredExceptions(n.getThrownExceptions());
         modifiers = VisitorHelpers.processModifiers(n.getModifiers());
@@ -75,12 +82,12 @@ public class MethodParser {
         localVariables = new ArrayList<>();
 
         // constructors body is mandatory in Java
-        processBody(n.getBody().getStatements());
+        processBody(n.getBody().getStatements(), path);
 
         method = createMethodModel(true);
     }
 
-    /** Returns a Method object which models the gvien constructor/method declaration. */
+    /** Returns a Method object which models the given constructor/method declaration. */
     public Method getMethod() {
         return method;
     }
@@ -97,7 +104,9 @@ public class MethodParser {
                 isConstructor,
                 caughtExceptions,
                 thrownExceptions,
-                localVariables);
+                localVariables,
+                path,
+                beginning);
     }
 
     private Type processReturnType(MethodDeclaration n) {
@@ -106,11 +115,11 @@ public class MethodParser {
         return visitor.getType();
     }
 
-    private void processBody(List<Statement> bodyStatements) {
+    private void processBody(List<Statement> bodyStatements, Path path) {
         for (Statement statement : bodyStatements) {
             TryCatchVisitor v1 = new TryCatchVisitor();
             ThrowStatementVisitor v2 = new ThrowStatementVisitor();
-            LocalVariableVisitor v3 = new LocalVariableVisitor();
+            LocalVariableVisitor v3 = new LocalVariableVisitor(path);
 
             statement.accept(v1, null);
             statement.accept(v2, null);
@@ -127,7 +136,7 @@ public class MethodParser {
         List<org.archcnl.owlify.famix.codemodel.Parameter> parameters = new ArrayList<>();
 
         for (Parameter parameter : p) {
-            ParameterVisitor v = new ParameterVisitor();
+            ParameterVisitor v = new ParameterVisitor(path);
             parameter.accept(v, null);
             parameters.add(v.getParameter());
         }

@@ -187,6 +187,12 @@ public class RelationManager extends HierarchyManager<Relation> {
                         stringConcept));
         addToDefault(
                 new FamixRelation(
+                        "isLocatedAt",
+                        "This relation is used to state that the subject is located at the locations stated in the object.",
+                        namedEntity,
+                        stringConcept));
+        addToDefault(
+                new FamixRelation(
                         "hasSignature",
                         "This relation is used to state that a method has the signature which is stated in the object.",
                         namedEntity,

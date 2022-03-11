@@ -2,6 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.AnnotationType;
 
+import java.nio.file.Path;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
@@ -24,12 +25,13 @@ public class Annotation extends DefinedType {
      * @param attributes List of annotation attributes defined in the declaration.
      */
     public Annotation(
+            Path path,
             String name,
             String simpleName,
             List<AnnotationInstance> annotations,
             List<Modifier> modifiers,
             List<AnnotationAttribute> attributes) {
-        super(name, simpleName, annotations, modifiers);
+        super(path, name, simpleName, annotations, modifiers);
         this.attributes = attributes;
     }
 

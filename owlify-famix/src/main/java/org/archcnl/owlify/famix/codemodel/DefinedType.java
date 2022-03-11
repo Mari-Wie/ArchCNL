@@ -3,7 +3,9 @@ package org.archcnl.owlify.famix.codemodel;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasFullQualifiedName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
@@ -20,6 +22,7 @@ public abstract class DefinedType {
     private final String simpleName;
     private List<AnnotationInstance> annotations;
     private List<Modifier> modifiers;
+    private final Path path;
 
     /**
      * Constructor.
@@ -30,12 +33,14 @@ public abstract class DefinedType {
      * @param modifiers List of annotation instances for the type.
      */
     protected DefinedType(
+            Path path,
             String fullyQualifiedName,
             String simpleName,
             List<AnnotationInstance> annotations,
             List<Modifier> modifiers) {
         this.fullyQualifiedName = fullyQualifiedName;
         this.simpleName = simpleName;
+        this.path = path;
         this.annotations = annotations;
         this.modifiers = modifiers;
     }
@@ -60,6 +65,11 @@ public abstract class DefinedType {
         return modifiers;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
     /**
      * First pass of the modeling. "Memorizes" this type and its nested types.
      *
@@ -72,6 +82,7 @@ public abstract class DefinedType {
         individual.addLiteral(ontology.get(hasName), simpleName);
         individual.addLiteral(ontology.get(hasFullQualifiedName), fullyQualifiedName);
         individual.addLiteral(ontology.get(isExternal), false);
+        individual.addLiteral(ontology.get(isLocatedAt), path.toString());
 
         ontology.typeCache().addDefinedType(fullyQualifiedName, individual);
 

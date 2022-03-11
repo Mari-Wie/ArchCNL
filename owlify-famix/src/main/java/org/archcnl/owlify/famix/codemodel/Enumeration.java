@@ -2,6 +2,7 @@ package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses.Enum;
 
+import java.nio.file.Path;
 import java.util.List;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
@@ -25,6 +26,7 @@ public class Enumeration extends ClassInterfaceEnum {
      * @param annotations List of annotation instances for this enumeration.
      */
     public Enumeration(
+            Path path,
             String name,
             String simpleName,
             List<DefinedType> nestedTypes,
@@ -32,7 +34,7 @@ public class Enumeration extends ClassInterfaceEnum {
             List<Field> fields,
             List<Modifier> modifiers,
             List<AnnotationInstance> annotations) {
-        super(name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
+        super(path, name, simpleName, nestedTypes, methods, fields, modifiers, annotations);
     }
 
     @Override

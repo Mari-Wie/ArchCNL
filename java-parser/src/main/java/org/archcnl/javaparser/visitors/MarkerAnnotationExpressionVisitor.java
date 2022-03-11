@@ -2,19 +2,29 @@ package org.archcnl.javaparser.visitors;
 
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import org.archcnl.javaparser.visitors.helper.VisitorHelpers;
 import org.archcnl.owlify.famix.codemodel.AnnotationInstance;
 
 /** Visits a marker annotation expression. */
 public class MarkerAnnotationExpressionVisitor extends VoidVisitorAdapter<Void> {
 
     private AnnotationInstance annotationInstance;
+    private Path path;
 
-    public MarkerAnnotationExpressionVisitor() {}
+    public MarkerAnnotationExpressionVisitor(Path path) {
+        this.path = path;
+    }
 
     @Override
     public void visit(MarkerAnnotationExpr n, Void arg) {
-        annotationInstance = new AnnotationInstance(n.getName().asString(), new ArrayList<>());
+        annotationInstance =
+                new AnnotationInstance(
+                        n.getName().asString(),
+                        new ArrayList<>(),
+                        path,
+                        VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin()));
     }
 
     /** @return the parsed annotation instance */

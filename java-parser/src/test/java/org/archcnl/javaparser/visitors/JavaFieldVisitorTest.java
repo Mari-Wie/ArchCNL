@@ -2,6 +2,8 @@ package org.archcnl.javaparser.visitors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import org.archcnl.javaparser.exceptions.FileIsNotAJavaClassException;
 import org.archcnl.javaparser.parser.CompilationUnitFactory;
 import org.archcnl.owlify.famix.codemodel.Field;
@@ -30,6 +32,7 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
         Assert.assertEquals(1, field.getModifiers().size());
         Assert.assertEquals("private", field.getModifiers().get(0).getName());
         Assert.assertTrue(field.getAnnotations().isEmpty());
+        Assert.assertEquals((Integer) 4, field.getBeginning().get());
     }
 
     @Test
@@ -53,6 +56,7 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
         Assert.assertEquals(1, field.getModifiers().size());
         Assert.assertEquals("private", field.getModifiers().get(0).getName());
         Assert.assertTrue(field.getAnnotations().isEmpty());
+        Assert.assertEquals((Integer) 8, field.getBeginning().get());
     }
 
     @Test
@@ -87,18 +91,30 @@ public class JavaFieldVisitorTest extends GenericVisitorTest<JavaFieldVisitor> {
         Assert.assertEquals("examples.ClassWithInnerClass.InnerClass", field1.getType().getName());
         Assert.assertEquals("InnerClass", field1.getType().getSimpleName());
         Assert.assertFalse(field1.getType().isPrimitive());
+        Assert.assertEquals((Integer) 4, field1.getBeginning().get());
 
         final Field field2 = visitor.getFields().get(1);
         Assert.assertEquals("field2", field2.getName());
         Assert.assertEquals("float", field2.getType().getName());
         Assert.assertTrue(field2.getType().isPrimitive());
+        Assert.assertEquals((Integer) 5, field2.getBeginning().get());
 
         final Field field3 = visitor.getFields().get(2);
         Assert.assertEquals("innerField", field3.getName());
+        Assert.assertEquals((Integer) 17, field3.getBeginning().get());
     }
 
     @Override
     protected Class<JavaFieldVisitor> getVisitorClass() {
         return JavaFieldVisitor.class;
+    }
+
+    @Override
+    protected JavaFieldVisitor createInstance()
+            throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+                    InvocationTargetException, NoSuchMethodException, SecurityException {
+        Object[] paramValues = {Path.of(GenericVisitorTest.PATH_TO_PACKAGE_WITH_TEST_EXAMPLES)};
+        Class<?>[] paramClasses = {Path.class};
+        return getVisitorClass().getDeclaredConstructor(paramClasses).newInstance(paramValues);
     }
 }

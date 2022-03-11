@@ -7,6 +7,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isInterface;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesAttribute;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesMethod;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesNestedType;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
@@ -32,6 +34,7 @@ public class ClassOrInterfaceTest {
 
     private static final String name = "MyClassOrInterface";
     private static final String fullName = "namespace." + name;
+    private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
 
     @Before
     public void setUp() throws FileNotFoundException {
@@ -46,6 +49,7 @@ public class ClassOrInterfaceTest {
         final boolean isInterface = false;
         DefinedType type =
                 new ClassOrInterface(
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -67,6 +71,9 @@ public class ClassOrInterfaceTest {
                 ontology.codeModel()
                         .containsLiteral(individual, ontology.get(hasFullQualifiedName), fullName));
         assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(isLocatedAt), path.toString()));
+        assertTrue(
                 ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
         assertEquals(FamixClass.uri(), individual.getOntClass().getURI());
 
@@ -79,6 +86,7 @@ public class ClassOrInterfaceTest {
         final boolean isInterface = false;
         DefinedType type =
                 new ClassOrInterface(
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -93,6 +101,7 @@ public class ClassOrInterfaceTest {
 
         String nestedName = DummyObjects.definedType().getName();
         String nestedSimpleName = DummyObjects.definedType().getSimpleName();
+        Path nestedPath = DummyObjects.definedType().getPath();
 
         Individual individual =
                 ontology.codeModel().getIndividual(FamixClass.individualUri(nestedName));
@@ -106,6 +115,10 @@ public class ClassOrInterfaceTest {
                         .containsLiteral(
                                 individual, ontology.get(hasFullQualifiedName), nestedName));
         assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(
+                                individual, ontology.get(isLocatedAt), nestedPath.toString()));
+        assertTrue(
                 ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
         assertEquals(FamixClass.uri(), individual.getOntClass().getURI());
 
@@ -118,6 +131,7 @@ public class ClassOrInterfaceTest {
         final boolean isInterfaceFlag = false;
         DefinedType type =
                 new ClassOrInterface(
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),
@@ -163,6 +177,7 @@ public class ClassOrInterfaceTest {
         final boolean isInterface = false;
         DefinedType type =
                 new ClassOrInterface(
+                        path,
                         fullName,
                         name,
                         Arrays.asList(DummyObjects.definedType()),

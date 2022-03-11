@@ -11,6 +11,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +29,11 @@ import org.archcnl.owlify.famix.codemodel.Type;
 public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private List<DefinedType> definedTypes;
+    private Path path;
 
-    public JavaTypeVisitor() {
+    public JavaTypeVisitor(Path path) {
         definedTypes = new ArrayList<>();
+        this.path = path;
     }
 
     @Override
@@ -41,13 +44,14 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
         definedTypes.add(
                 new ClassOrInterface(
+                        path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         processNestedTypes(n.getMembers()),
                         processAllMethods(n.getMethods(), n.getConstructors()),
                         processFields(n.getFields()),
                         VisitorHelpers.processModifiers(n.getModifiers()),
-                        VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                         n.isInterface(),
                         supertypes));
     }
@@ -60,22 +64,24 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
         definedTypes.add(
                 new Enumeration(
+                        path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
                         processNestedTypes(n.getMembers()),
                         processAllMethods(n.getMethods(), n.getConstructors()),
                         processFields(n.getFields()),
                         VisitorHelpers.processModifiers(n.getModifiers()),
-                        VisitorHelpers.processAnnotations(n.getAnnotations())));
+                        VisitorHelpers.processAnnotations(n.getAnnotations(), path)));
     }
 
     @Override
     public void visit(AnnotationDeclaration n, Void arg) {
         definedTypes.add(
                 new Annotation(
+                        path,
                         n.resolve().getQualifiedName(),
                         n.getNameAsString(),
-                        VisitorHelpers.processAnnotations(n.getAnnotations()),
+                        VisitorHelpers.processAnnotations(n.getAnnotations(), path),
                         VisitorHelpers.processModifiers(n.getModifiers()),
                         processAnnotationAttributes(n.getMembers())));
     }
@@ -108,8 +114,8 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private List<Method> processAllMethods(
             List<MethodDeclaration> methods, List<ConstructorDeclaration> constructors) {
-        MethodDeclarationVisitor methodVisitor = new MethodDeclarationVisitor();
-        ConstructorDeclarationVisitor constructorVisitor = new ConstructorDeclarationVisitor();
+        MethodDeclarationVisitor methodVisitor = new MethodDeclarationVisitor(path);
+        ConstructorDeclarationVisitor constructorVisitor = new ConstructorDeclarationVisitor(path);
 
         methods.forEach(declaration -> declaration.accept(methodVisitor, null));
         constructors.forEach(declaration -> declaration.accept(constructorVisitor, null));
@@ -121,13 +127,13 @@ public class JavaTypeVisitor extends VoidVisitorAdapter<Void> {
     }
 
     private List<Field> processFields(List<FieldDeclaration> fields) {
-        JavaFieldVisitor fieldVisitor = new JavaFieldVisitor();
+        JavaFieldVisitor fieldVisitor = new JavaFieldVisitor(path);
         fields.forEach(declaration -> declaration.accept(fieldVisitor, null));
         return fieldVisitor.getFields();
     }
 
     private List<DefinedType> processNestedTypes(NodeList<BodyDeclaration<?>> declarations) {
-        JavaTypeVisitor typeVisitor = new JavaTypeVisitor();
+        JavaTypeVisitor typeVisitor = new JavaTypeVisitor(path);
         declarations.accept(typeVisitor, null);
         return typeVisitor.getDefinedTypes();
     }

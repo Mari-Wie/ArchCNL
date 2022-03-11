@@ -5,6 +5,7 @@ import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypePrope
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasModifier;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isExternal;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationInstance;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasAnnotationTypeAttribute;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,7 @@ public class AnnotationTest {
 
     private static final String name = "MyAnnotation";
     private static final String fullName = "namespace." + name;
+    private static final Path path = Path.of("someRootDirectory/someClassOrInterface");
 
     @Before
     public void setUp() throws FileNotFoundException {
@@ -42,7 +45,8 @@ public class AnnotationTest {
         List<AnnotationAttribute> attributes = Arrays.asList(DummyObjects.annotationAttribute());
 
         DefinedType type =
-                new Annotation(fullName, name, new ArrayList<>(), new ArrayList<>(), attributes);
+                new Annotation(
+                        path, fullName, name, new ArrayList<>(), new ArrayList<>(), attributes);
 
         type.firstPass(ontology);
 
@@ -55,6 +59,9 @@ public class AnnotationTest {
         assertTrue(
                 ontology.codeModel()
                         .containsLiteral(individual, ontology.get(hasFullQualifiedName), fullName));
+        assertTrue(
+                ontology.codeModel()
+                        .containsLiteral(individual, ontology.get(isLocatedAt), path.toString()));
         assertTrue(
                 ontology.codeModel().containsLiteral(individual, ontology.get(isExternal), false));
         assertEquals(AnnotationType.uri(), individual.getOntClass().getURI());
@@ -72,7 +79,7 @@ public class AnnotationTest {
         List<Modifier> modifiers = Arrays.asList(DummyObjects.modifier());
 
         DefinedType type =
-                new Annotation(fullName, name, annotations, modifiers, new ArrayList<>());
+                new Annotation(path, fullName, name, annotations, modifiers, new ArrayList<>());
 
         type.firstPass(ontology);
         type.secondPass(ontology);
@@ -90,7 +97,12 @@ public class AnnotationTest {
     public void testGetNestedTypeNames() {
         DefinedType type =
                 new Annotation(
-                        fullName, name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                        path,
+                        fullName,
+                        name,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        new ArrayList<>());
         assertEquals(1, type.getNestedTypeNames().size());
         assertEquals(fullName, type.getNestedTypeNames().get(0));
     }

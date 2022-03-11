@@ -1,10 +1,13 @@
 package org.archcnl.owlify.famix.codemodel;
 
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.hasName;
+import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixDatatypeProperties.isLocatedAt;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.definesParameter;
 import static org.archcnl.owlify.famix.ontology.FamixOntology.FamixObjectProperties.hasDeclaredType;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import org.apache.jena.ontology.Individual;
 import org.archcnl.owlify.famix.ontology.FamixOntology;
 import org.archcnl.owlify.famix.ontology.FamixOntology.FamixClasses;
@@ -19,6 +22,8 @@ public class Parameter {
     private final Type type;
     private List<Modifier> modifiers;
     private List<AnnotationInstance> annotations;
+    private Path path;
+    private Optional<Integer> beginning;
 
     /**
      * Constructor.
@@ -32,12 +37,16 @@ public class Parameter {
             String name,
             Type type,
             List<Modifier> modifiers,
-            List<AnnotationInstance> annotations) {
+            List<AnnotationInstance> annotations,
+            Path path,
+            Optional<Integer> beginning) {
         super();
         this.name = name;
         this.type = type;
         this.modifiers = modifiers;
         this.annotations = annotations;
+        this.path = path;
+        this.beginning = beginning;
     }
 
     /** @return the simple name */
@@ -60,6 +69,16 @@ public class Parameter {
         return annotations;
     }
 
+    /** @return the path */
+    public Path getPath() {
+        return path;
+    }
+
+    /** @return the beginning */
+    public Optional<Integer> getBeginning() {
+        return beginning;
+    }
+
     /**
      * Models this parameter in the given ontology.
      *
@@ -72,6 +91,12 @@ public class Parameter {
         Individual individual = ontology.createIndividual(FamixClasses.Parameter, uri);
         individual.addProperty(ontology.get(hasDeclaredType), type.getIndividual(ontology));
         individual.addLiteral(ontology.get(hasName), name);
+
+        String location = path.toString();
+        if (beginning.isPresent()) {
+            location += ", Line: " + String.valueOf(beginning.get());
+        }
+        individual.addLiteral(ontology.get(isLocatedAt), location);
 
         modifiers.forEach(mod -> mod.modelIn(ontology, individual));
         annotations.forEach(anno -> anno.modelIn(ontology, uri, individual));
