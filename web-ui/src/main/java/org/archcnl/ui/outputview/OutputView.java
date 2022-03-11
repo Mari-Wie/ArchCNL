@@ -56,8 +56,15 @@ public class OutputView extends HorizontalLayout {
         currentComponent = component;
     }
 
-    public void displayResult(final Optional<Result> result) {
+    public void displayResult(
+            final Optional<Result> result,
+            String nrOfViolations,
+            String nrOfPackages,
+            String nrOfRelationships,
+            String nrOfTypes) {
         defaultQueryView.updateGridView(result);
+        defaultQueryView.updateGeneralInfoLayout(
+                nrOfViolations, nrOfPackages, nrOfRelationships, nrOfTypes);
     }
 
     @Override

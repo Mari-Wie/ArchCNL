@@ -34,6 +34,13 @@ public class ConformanceCheckOntologyClassesAndProperties {
         return clazz.createIndividual(model, id);
     }
 
+    public static void resetCounters() {
+        violationId = 0;
+        proofId = 0;
+        assertedId = 0;
+        notInferredId = 0;
+    }
+
     public enum ConformanceCheckDatatypeProperties {
         hasCheckingDate,
         hasRuleRepresentation,
