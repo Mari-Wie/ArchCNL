@@ -15,6 +15,7 @@ public class QueryUtils {
 
     private static final Path VIOLATIONS_SUBJECT_PREDICATE_OBJECT =
             Path.of("violationsSubjectPredicateObject.sparql");
+    private static final Path VIOLATIONS_WITH_LOCATIONS = Path.of("violationsWithLocations.sparql");
     private static final Path rootDir = Path.of("./src/main/resources/queries/");
 
     private static final String EXCEPTION_TEXT =

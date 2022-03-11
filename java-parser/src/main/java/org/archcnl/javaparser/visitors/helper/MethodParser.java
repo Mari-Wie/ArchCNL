@@ -69,11 +69,7 @@ public class MethodParser {
     /** Parses the given constructor declaration. */
     public MethodParser(ConstructorDeclaration n, Path path) {
         this.path = path;
-        if (n.getBegin().isPresent()) {
-            beginning = Optional.of(n.getBegin().get().line);
-        } else {
-            beginning = Optional.empty();
-        }
+        beginning = VisitorHelpers.convertOptionalFromPositionToInteger(n.getBegin());
         name = n.getName().asString();
         signature = n.getSignature().asString();
         returnType = Type.UNUSED_VALUE;
