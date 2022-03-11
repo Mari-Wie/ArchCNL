@@ -45,6 +45,10 @@ label {
     margin-top: var(--p-layout-medium);
 }
 
+.result-grid {
+    word-break: break-word;
+}
+
 .variable-card {
     border: none !important;
     background-color: var(--inactive);

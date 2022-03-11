@@ -239,7 +239,8 @@ public class CNLToolchain {
         Map<String, String> namespaces = new HashMap<>();
         namespaces.put("architecture", "http://www.arch-ont.org/ontologies/architecture.owl#");
         namespaces.put("conformance", "http://arch-ont.org/ontologies/architectureconformance#");
-        namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl");
+        namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
+        namespaces.put("main", "http://arch-ont.org/ontologies/main.owl#");
         db.addNamespaces(namespaces);
     }
 
