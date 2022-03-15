@@ -31,7 +31,7 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     private Checkbox andCheckbox;
     private ConditionStatementComponent newCondition;
     private HorizontalLayout conditionBox;
-    private boolean conceptRequired = true;
+    private boolean usesConcept = true;
 
     public ConditionStatementComponent() {
         setMargin(false);
@@ -105,12 +105,26 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
             case "an":
             case "equal-to a":
             case "equal-to an":
-                conditionBox.replace(variableTextfield, conceptCombobox);
-                conceptRequired = true;
+            	conditionBox.removeAll();
+            	conditionBox.add(
+                        startLabelTextfield,
+                        relationCombobox,
+                        modifierCombobox,
+                        conceptCombobox,
+                        endLabelTextfield,
+                        andCheckbox);
+                usesConcept = true;
                 break;
             default:
-                conditionBox.replace(conceptCombobox, variableTextfield);
-                conceptRequired = false;
+            	conditionBox.removeAll();
+            	conditionBox.add(
+                        startLabelTextfield,
+                        relationCombobox,
+                        modifierCombobox,
+                        variableTextfield,
+                        endLabelTextfield,
+                        andCheckbox);
+                usesConcept = false;
                 break;
         }
     }
@@ -135,7 +149,7 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
         sBuilder.append(relationCombobox.getValue() + " ");
         sBuilder.append(modifierCombobox.getValue() + " ");
 
-        if (conceptRequired) {
+        if (usesConcept) {
             sBuilder.append(conceptCombobox.getValue());
         } else {
             sBuilder.append(variableTextfield.getValue());
