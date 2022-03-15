@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -32,6 +31,8 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     private ConditionStatementComponent newCondition;
     private HorizontalLayout conditionBox;
     private boolean usesConcept = true;
+    private final String CHAR_REGEX = "[A-Za-z]+";
+    private final String INTEGER_REGEX = "[+-]?[0-9]+";
 
     public ConditionStatementComponent() {
         setMargin(false);
@@ -90,10 +91,10 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     }
 
     private void createVariableTextfield() {
-    	Set<String> regexSet = new HashSet<>();
-    	regexSet.add("[+-]?[0-9]+");
-    	regexSet.add("[A-Za-z]+");
-    	
+        Set<String> regexSet = new HashSet<>();
+        regexSet.add(CHAR_REGEX);
+        regexSet.add(INTEGER_REGEX);
+
         variableTextfield = new VariableTextfieldWidget(regexSet);
         variableTextfield.setLabel("Interger, String (or Concept)");
         variableTextfield.setPlaceholder("Interger, String (or Concept)");
@@ -105,8 +106,8 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
             case "an":
             case "equal-to a":
             case "equal-to an":
-            	conditionBox.removeAll();
-            	conditionBox.add(
+                conditionBox.removeAll();
+                conditionBox.add(
                         startLabelTextfield,
                         relationCombobox,
                         modifierCombobox,
@@ -116,8 +117,8 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
                 usesConcept = true;
                 break;
             default:
-            	conditionBox.removeAll();
-            	conditionBox.add(
+                conditionBox.removeAll();
+                conditionBox.add(
                         startLabelTextfield,
                         relationCombobox,
                         modifierCombobox,

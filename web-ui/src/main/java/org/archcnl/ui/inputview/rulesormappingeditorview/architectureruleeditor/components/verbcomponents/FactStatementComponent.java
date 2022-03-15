@@ -9,7 +9,6 @@ import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -27,6 +26,8 @@ public class FactStatementComponent extends VerticalLayout implements RuleCompon
     private VariableTextfieldWidget fourB_thirdVariable;
     private PredicateSelectionComponent twoB_firstVariable_Relation;
     private boolean isInUpperBranch = false, conceptRequired = true;
+    private final String CHAR_REGEX = "[A-Za-z]+";
+    private final String INTEGER_REGEX = "[+-]?[0-9]+";
 
     public FactStatementComponent() {
         this.setMargin(false);
@@ -85,10 +86,10 @@ public class FactStatementComponent extends VerticalLayout implements RuleCompon
 
     private VariableTextfieldWidget createTextfieldWidget() {
         Set<String> regexSet = new HashSet<>();
-    	regexSet.add("[+-]?[0-9]+");
-    	regexSet.add("[A-Za-z]+");    	
-    	VariableTextfieldWidget freeTextVariable =
-                new VariableTextfieldWidget(regexSet);
+        regexSet.add(CHAR_REGEX);
+        regexSet.add(INTEGER_REGEX);
+        VariableTextfieldWidget freeTextVariable = new VariableTextfieldWidget(regexSet);
+
         freeTextVariable.setPlaceholder("+/- [0-9] / String");
         freeTextVariable.setLabel("Integer or String");
         return freeTextVariable;

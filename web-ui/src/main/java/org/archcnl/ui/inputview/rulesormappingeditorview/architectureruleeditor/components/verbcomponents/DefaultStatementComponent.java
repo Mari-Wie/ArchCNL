@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -106,7 +105,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
         this.setPadding(false);
         isAndOrBlock = andOrBlock;
         addModifiers = everySubjectDescriptor;
-        
+
         initializeLayout();
         determineState();
     }
@@ -128,9 +127,10 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                 });
 
         Set<String> regexSet = new HashSet<>();
-    	regexSet.add(INTEGER_REGEX);
-    	regexSet.add(CHAR_REGEX);
+        regexSet.add(CHAR_REGEX);
+        regexSet.add(INTEGER_REGEX);
         four_secondVariable = new VariableTextfieldWidget(regexSet);
+
         four_secondVariable.setPlaceholder("+/- [0-9] / String");
         four_secondVariable.setLabel("Integer or String");
 
@@ -184,21 +184,21 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     });
             return;
         }
-        //AndOrBlocks can't choose anything/equal-to anything
+        // AndOrBlocks can't choose anything/equal-to anything
         secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
-        
+
         List<String> modifierList = new ArrayList<>();
         modifierList.add("can");
-        if(addModifiers)
-        {
-        	modifierList.addAll(Arrays.asList("can-only", "must", "must be", "must be a", "must be an"));
-        }     
+        if (addModifiers) {
+            modifierList.addAll(
+                    Arrays.asList("can-only", "must", "must be", "must be a", "must be an"));
+        }
         one_firstCombobox = new ComboBox<String>("Modifier", modifierList);
         one_firstCombobox.setValue("can");
         one_firstCombobox.addValueChangeListener(
                 e -> {
                     determineState();
-                });   
+                });
     }
 
     private void initializeAndOrButtons() {
@@ -286,7 +286,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
             if (currentState == SelectionState.EQUALTOVARIABLEBRANCH) {
                 four_secondVariable.setPlaceholder("+/- [0-9] / String");
                 four_secondVariable.setLabel("Integer or String");
-                four_secondVariable.addRegex(INTEGER_REGEX);
+                four_secondVariable.addRegex(CHAR_REGEX);
             }
         }
         // Hide / Show condition

@@ -1,8 +1,7 @@
 package org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.components.textfieldwidgets;
 
-import java.util.Set;
-
 import com.vaadin.flow.component.textfield.TextField;
+import java.util.Set;
 
 public class VariableTextfieldWidget extends TextField {
 
@@ -17,32 +16,28 @@ public class VariableTextfieldWidget extends TextField {
                 });
     }
 
-    public void addRegex(String Regex)
-    {
-    	regexPatternList.add(Regex);
+    public void addRegex(String Regex) {
+        regexPatternList.add(Regex);
     }
-    
-    public void removeRegex(String Regex)
-    {
-    	regexPatternList.remove(Regex);
+
+    public void removeRegex(String Regex) {
+        regexPatternList.remove(Regex);
     }
 
     private void checkRegex() {
         boolean validInput = false;
-    	for (String regexString : regexPatternList) 
-        {
-			if(getValue().matches(regexString)) {
-				validInput = true;
-			}
-		}
-    	showErrorMessage(validInput);
+        for (String regexString : regexPatternList) {
+            if (getValue().matches(regexString)) {
+                validInput = true;
+            }
+        }
+        showErrorMessage(validInput);
     }
 
-    private void showErrorMessage(boolean showError) {
-        if(showError)
-        {
-        	setErrorMessage("Invalid Input");
+    private void showErrorMessage(boolean validInput) {
+        if (!validInput) {
+            setErrorMessage("Invalid Input");
             setInvalid(true);
-        }    	
+        }
     }
 }

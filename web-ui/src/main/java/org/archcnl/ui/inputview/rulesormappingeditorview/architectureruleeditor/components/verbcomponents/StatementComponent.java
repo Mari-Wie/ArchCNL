@@ -39,7 +39,7 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
      */
     public void determineVerbComponent(String selectedDescriptor) {
         int selectedState = determineState(selectedDescriptor);
-    	if (selectedState == determineState(currentSubjectSelection)) {
+        if (selectedState == determineState(currentSubjectSelection)) {
             return;
         }
 
@@ -99,8 +99,8 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
             case "Every":
             case "Every a":
             case "Every an":
-            	currentState = 3;
-            	break;
+                currentState = 3;
+                break;
             default:
                 currentState = 4;
                 break;
