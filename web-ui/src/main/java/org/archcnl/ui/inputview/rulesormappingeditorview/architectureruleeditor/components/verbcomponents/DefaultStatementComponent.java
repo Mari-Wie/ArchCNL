@@ -40,7 +40,7 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
     private SelectionState currentState;
-    private boolean isAndOrBlock = false;
+    private boolean isAndOrBlock = false, addModifiers = true;
     private final String CHAR_REGEX = "[A-Za-z]+";
     private final String INTEGER_REGEX = "[+-]?[0-9]+";
     private ArrayList<String> secondModifierList =
@@ -101,11 +101,12 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
         }
     }
 
-    public DefaultStatementComponent(Boolean andOrBlock) {
+    public DefaultStatementComponent(Boolean andOrBlock, Boolean everySubjectDescriptor) {
         this.setMargin(false);
         this.setPadding(false);
         isAndOrBlock = andOrBlock;
-
+        addModifiers = everySubjectDescriptor;
+        
         initializeLayout();
         determineState();
     }
@@ -183,16 +184,21 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     });
             return;
         }
-        List<String> modifierList =
-                Arrays.asList("must", "can-only", "can", "must be", "must be a", "must be an");
+        //AndOrBlocks can't choose anything/equal-to anything
+        secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
+        
+        List<String> modifierList = new ArrayList<>();
+        modifierList.add("can");
+        if(addModifiers)
+        {
+        	modifierList.addAll(Arrays.asList("can-only", "must", "must be", "must be a", "must be an"));
+        }     
         one_firstCombobox = new ComboBox<String>("Modifier", modifierList);
-        one_firstCombobox.setValue("must");
+        one_firstCombobox.setValue("can");
         one_firstCombobox.addValueChangeListener(
                 e -> {
                     determineState();
-                });
-
-        secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
+                });   
     }
 
     private void initializeAndOrButtons() {

@@ -29,7 +29,7 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
         this.getStyle().set("border", "1px solid black");
         this.setMargin(false);
 
-        determineVerbComponent("");
+        determineVerbComponent("Every");
     }
 
     /**
@@ -38,7 +38,8 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
      * shown.
      */
     public void determineVerbComponent(String selectedDescriptor) {
-        if (determineState(selectedDescriptor) == determineState(currentSubjectSelection)) {
+        int selectedState = determineState(selectedDescriptor);
+    	if (selectedState == determineState(currentSubjectSelection)) {
             return;
         }
 
@@ -68,7 +69,7 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
                 break;
             default:
                 DefaultStatementComponent defaultVerbComponent =
-                        new DefaultStatementComponent(false);
+                        new DefaultStatementComponent(false, selectedState == 3);
                 defaultVerbComponent.addListener(
                         RelationListUpdateRequestedEvent.class, this::fireEvent);
                 defaultVerbComponent.addListener(
@@ -95,15 +96,20 @@ public class StatementComponent extends VerticalLayout implements RuleComponentI
             case "Fact:":
                 currentState = 2;
                 break;
+            case "Every":
+            case "Every a":
+            case "Every an":
+            	currentState = 3;
+            	break;
             default:
-                currentState = 3;
+                currentState = 4;
                 break;
         }
         return currentState;
     }
 
     private void addAndOrVerbComponent() {
-        DefaultStatementComponent andOrVerbComponent = new DefaultStatementComponent(true);
+        DefaultStatementComponent andOrVerbComponent = new DefaultStatementComponent(true, false);
         andOrVerbComponent.addListener(
                 AddAndOrStatementComponentEvent.class, event -> addAndOrVerbComponent());
         andOrVerbComponent.addListener(
