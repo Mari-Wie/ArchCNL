@@ -101,30 +101,17 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     }
 
     private void firstComboboxListener(String value) {
+        conditionBox.remove(conceptCombobox, variableTextfield, endLabelTextfield, andCheckbox);
         switch (value) {
             case "a":
             case "an":
             case "equal-to a":
             case "equal-to an":
-                conditionBox.removeAll();
-                conditionBox.add(
-                        startLabelTextfield,
-                        relationCombobox,
-                        modifierCombobox,
-                        conceptCombobox,
-                        endLabelTextfield,
-                        andCheckbox);
+                conditionBox.add(conceptCombobox, endLabelTextfield, andCheckbox);
                 usesConcept = true;
                 break;
             default:
-                conditionBox.removeAll();
-                conditionBox.add(
-                        startLabelTextfield,
-                        relationCombobox,
-                        modifierCombobox,
-                        variableTextfield,
-                        endLabelTextfield,
-                        andCheckbox);
+                conditionBox.add(variableTextfield, endLabelTextfield, andCheckbox);
                 usesConcept = false;
                 break;
         }
