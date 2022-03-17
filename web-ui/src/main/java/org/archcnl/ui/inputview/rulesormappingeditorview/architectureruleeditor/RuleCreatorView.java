@@ -87,13 +87,13 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
 
     private void saveRule() {
         if (!archRuleTextArea.isEmpty()) {
-            fireEvent(new SaveRuleButtonPressedEvent(this, true, archRuleTextArea.getValue()));
+            fireEvent(new SaveRuleButtonPressedEvent(this, true, archRuleTextArea.getValue().stripTrailing() + "."));
             fireEvent(new RulesWidgetRequestedEvent(this, true));
             return;
         }
         fireEvent(
                 new SaveRuleButtonPressedEvent(
-                        this, true, subject.getRuleString() + verb.getRuleString()));
+                        this, true, (subject.getRuleString() + verb.getRuleString().stripTrailing() + ".")));
         fireEvent(new RulesWidgetRequestedEvent(this, true));
     }
 
