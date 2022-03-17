@@ -26,6 +26,22 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
     private ConceptSelectionComponent two_ConceptCombobox;
     private Checkbox three_ConditionCheckbox;
     private boolean showFirstConcept = true, showCondition = false;
+    private List<String> descriptorList =
+            Arrays.asList(
+                    "Every",
+                    "Every a",
+                    "Every an",
+                    "Only",
+                    "Only a",
+                    "Only an",
+                    "If",
+                    "If a",
+                    "If an",
+                    "Nothing",
+                    "No",
+                    "No a",
+                    "No an",
+                    "Fact:");
 
     /**
      * The subject component is usually made out of a descriptor (Every, Only, If, No,...), a
@@ -45,22 +61,6 @@ public class SubjectComponent extends VerticalLayout implements RuleComponentInt
         newCondition.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         subjectLayout = new HorizontalLayout();
 
-        List<String> descriptorList =
-                Arrays.asList(
-                        "Every",
-                        "Every a",
-                        "Every an",
-                        "Only",
-                        "Only a",
-                        "Only an",
-                        "If",
-                        "If a",
-                        "If an",
-                        "Nothing",
-                        "No",
-                        "No a",
-                        "No an",
-                        "Fact:");
         one_DescriptorCombobox = new ComboBox<String>("Modifier", descriptorList);
         one_DescriptorCombobox.setValue("Every");
         one_DescriptorCombobox.addValueChangeListener(

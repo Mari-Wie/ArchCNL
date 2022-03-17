@@ -13,7 +13,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -37,7 +39,9 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
     private Checkbox six_addConditionCheckbox;
     private Component[] buildingBlock;
     private SelectionState currentState;
-    private boolean isAndOrBlock = false;
+    private boolean isAndOrBlock = false, addModifiers = true;
+    private final String CHAR_REGEX = "[A-Za-z]+";
+    private final String INTEGER_REGEX = "[+-]?[0-9]+";
     private ArrayList<String> secondModifierList =
             new ArrayList<>(
                     Arrays.asList(
@@ -96,10 +100,11 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
         }
     }
 
-    public DefaultStatementComponent(Boolean andOrBlock) {
+    public DefaultStatementComponent(Boolean andOrBlock, Boolean everySubjectDescriptor) {
         this.setMargin(false);
         this.setPadding(false);
         isAndOrBlock = andOrBlock;
+        addModifiers = everySubjectDescriptor;
 
         initializeLayout();
         determineState();
@@ -121,7 +126,11 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     determineState();
                 });
 
-        four_secondVariable = new VariableTextfieldWidget("/[+-]?[0-9]+");
+        Set<String> regexSet = new HashSet<>();
+        regexSet.add(CHAR_REGEX);
+        regexSet.add(INTEGER_REGEX);
+        four_secondVariable = new VariableTextfieldWidget(regexSet);
+
         four_secondVariable.setPlaceholder("+/- [0-9] / String");
         four_secondVariable.setLabel("Integer or String");
 
@@ -175,16 +184,21 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     });
             return;
         }
-        List<String> modifierList =
-                Arrays.asList("must", "can-only", "can", "must be", "must be a", "must be an");
+        // AndOrBlocks can't choose anything/equal-to anything
+        secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
+
+        List<String> modifierList = new ArrayList<>();
+        modifierList.add("can");
+        if (addModifiers) {
+            modifierList.addAll(
+                    Arrays.asList("can-only", "must", "must be", "must be a", "must be an"));
+        }
         one_firstCombobox = new ComboBox<String>("Modifier", modifierList);
-        one_firstCombobox.setValue("must");
+        one_firstCombobox.setValue("can");
         one_firstCombobox.addValueChangeListener(
                 e -> {
                     determineState();
                 });
-
-        secondModifierList.addAll(Arrays.asList("anything", "equal-to anything"));
     }
 
     private void initializeAndOrButtons() {
@@ -266,11 +280,13 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
                     || currentState == SelectionState.DEFAULTNUMBERBRANCHWITHCONDITION) {
                 four_secondVariable.setPlaceholder("+/- [0-9]");
                 four_secondVariable.setLabel("Integer");
+                four_secondVariable.removeRegex(CHAR_REGEX);
             }
 
             if (currentState == SelectionState.EQUALTOVARIABLEBRANCH) {
                 four_secondVariable.setPlaceholder("+/- [0-9] / String");
                 four_secondVariable.setLabel("Integer or String");
+                four_secondVariable.addRegex(CHAR_REGEX);
             }
         }
         // Hide / Show condition
@@ -316,11 +332,11 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
             sBuilder.append(four_secondVariable.getValue() + " ");
         }
         if (boolArray[4]) {
-            sBuilder.append(five_thirdVariable.getValue());
+            sBuilder.append(five_thirdVariable.getValue() + " ");
         }
         if (boolArray[5]) {
             if (six_addConditionCheckbox.getValue()) {
-                sBuilder.append(" " + newCondition.getRuleString());
+                sBuilder.append(newCondition.getRuleString());
             }
         }
         return sBuilder.toString();

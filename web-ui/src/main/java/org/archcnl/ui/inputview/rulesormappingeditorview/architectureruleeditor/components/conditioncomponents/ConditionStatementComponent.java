@@ -9,7 +9,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.archcnl.ui.common.andtriplets.triplet.ConceptSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.PredicateSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
@@ -28,7 +30,9 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     private Checkbox andCheckbox;
     private ConditionStatementComponent newCondition;
     private HorizontalLayout conditionBox;
-    private boolean conceptRequired = true;
+    private boolean usesConcept = true;
+    private final String CHAR_REGEX = "[A-Za-z]+";
+    private final String INTEGER_REGEX = "[+-]?[0-9]+";
 
     public ConditionStatementComponent() {
         setMargin(false);
@@ -87,23 +91,28 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
     }
 
     private void createVariableTextfield() {
-        variableTextfield = new VariableTextfieldWidget("[+-]?[0-9]+");
-        variableTextfield.setLabel("Concept, Interger or String");
-        variableTextfield.setPlaceholder("Concept, Interger or String");
+        Set<String> regexSet = new HashSet<>();
+        regexSet.add(CHAR_REGEX);
+        regexSet.add(INTEGER_REGEX);
+
+        variableTextfield = new VariableTextfieldWidget(regexSet);
+        variableTextfield.setLabel("Interger, String (or Concept)");
+        variableTextfield.setPlaceholder("Interger, String (or Concept)");
     }
 
     private void firstComboboxListener(String value) {
+        conditionBox.remove(conceptCombobox, variableTextfield, endLabelTextfield, andCheckbox);
         switch (value) {
             case "a":
             case "an":
             case "equal-to a":
             case "equal-to an":
-                conditionBox.replace(variableTextfield, conceptCombobox);
-                conceptRequired = true;
+                conditionBox.add(conceptCombobox, endLabelTextfield, andCheckbox);
+                usesConcept = true;
                 break;
             default:
-                conditionBox.replace(conceptCombobox, variableTextfield);
-                conceptRequired = false;
+                conditionBox.add(variableTextfield, endLabelTextfield, andCheckbox);
+                usesConcept = false;
                 break;
         }
     }
@@ -128,7 +137,7 @@ public class ConditionStatementComponent extends VerticalLayout implements RuleC
         sBuilder.append(relationCombobox.getValue() + " ");
         sBuilder.append(modifierCombobox.getValue() + " ");
 
-        if (conceptRequired) {
+        if (usesConcept) {
             sBuilder.append(conceptCombobox.getValue());
         } else {
             sBuilder.append(variableTextfield.getValue());
