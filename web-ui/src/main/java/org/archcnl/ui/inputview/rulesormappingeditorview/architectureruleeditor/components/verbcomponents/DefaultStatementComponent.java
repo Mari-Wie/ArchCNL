@@ -332,11 +332,11 @@ public class DefaultStatementComponent extends VerticalLayout implements RuleCom
             sBuilder.append(four_secondVariable.getValue() + " ");
         }
         if (boolArray[4]) {
-            sBuilder.append(five_thirdVariable.getValue());
+            sBuilder.append(five_thirdVariable.getValue() + " ");
         }
         if (boolArray[5]) {
             if (six_addConditionCheckbox.getValue()) {
-                sBuilder.append(" " + newCondition.getRuleString());
+                sBuilder.append(newCondition.getRuleString());
             }
         }
         return sBuilder.toString();
