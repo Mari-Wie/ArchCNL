@@ -86,7 +86,7 @@ public class RelationManager extends HierarchyManager<Relation> {
     public void addOrAppend(final CustomRelation relation) throws UnrelatedMappingException {
         try {
             if (!doesRelationExist(relation)) {
-                addRelation(relation);
+                addToParent(relation, "Custom Relations");
             } else {
                 final Optional<Relation> existingRelationOpt =
                         getRelationByName(relation.getName());
