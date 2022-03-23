@@ -65,7 +65,7 @@ public class SideBarWidget extends VerticalLayout {
         freeTextQueryTab =
                 new SideBarTab("Free Text Queries", VaadinIcon.TEXT_INPUT, freeTextQueryView);
         tabs = new Tabs(generalInformationTab);
-        prespecifiedQueries.forEach(query -> addPrespecifiedQueryTab(query, "test"));
+        prespecifiedQueries.forEach(query -> addPrespecifiedQueryTab(query, query.getName()));
         tabs.add(customQueryTab);
         tabs.add(freeTextQueryTab);
 

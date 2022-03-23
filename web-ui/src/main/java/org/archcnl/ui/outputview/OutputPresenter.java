@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.PrespecifiedQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
@@ -51,14 +52,8 @@ public class OutputPresenter extends Component {
         final String defaultQuery = QueryUtils.getDefaultQuery();
         customQueryPresenter = createCustomQueryPresenter();
         freeTextQueryView = createFreeTextQueryView(defaultQuery);
-        List<String> prespecifiedQueries = QueryUtils.getPrespecifiedQueries();
         List<PrespecifiedQueryComponent> prespecifiedQueryComponents =
-                new LinkedList<PrespecifiedQueryComponent>();
-        for (String query : prespecifiedQueries) {
-            PrespecifiedQueryComponent queryComponent = new PrespecifiedQueryComponent(query);
-            prespecifiedQueryComponents.add(queryComponent);
-            queryComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
-        }
+                createPrespecifiedQueryComponents();
         view =
                 new OutputView(
                         customQueryPresenter.getView(),
@@ -168,6 +163,17 @@ public class OutputPresenter extends Component {
                     view.getSideBarWidget().deletePinnedQuery(event);
                 });
         return newComponent;
+    }
+
+    private List<PrespecifiedQueryComponent> createPrespecifiedQueryComponents() {
+        List<PrespecifiedQueryComponent> prespecifiedQueryComponents =
+                new LinkedList<PrespecifiedQueryComponent>();
+        for (PrespecifiedQuery query : QueryUtils.getPrespecifiedQueries()) {
+            PrespecifiedQueryComponent queryComponent = new PrespecifiedQueryComponent(query);
+            prespecifiedQueryComponents.add(queryComponent);
+            queryComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        }
+        return prespecifiedQueryComponents;
     }
 
     private void handleEvent(PinCustomQueryRequestedEvent event) {
