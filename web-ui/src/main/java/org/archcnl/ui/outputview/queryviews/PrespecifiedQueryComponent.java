@@ -3,7 +3,7 @@ package org.archcnl.ui.outputview.queryviews;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import org.archcnl.domain.output.model.query.PrespecifiedQuery;
-import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
+import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 
 public class PrespecifiedQueryComponent extends AbstractQueryComponent {
 
@@ -15,7 +15,7 @@ public class PrespecifiedQueryComponent extends AbstractQueryComponent {
     private Button runButton =
             new Button(
                     "Run",
-                    e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
+                    e -> fireEvent(new RunQueryRequestedEvent(this, true, getQuery(), gridView)));
 
     public PrespecifiedQueryComponent(PrespecifiedQuery query) {
         super(query.getQueryString());
