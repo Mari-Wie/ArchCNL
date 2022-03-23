@@ -19,9 +19,23 @@ GRAPH ?g
       {?proof conformance:hasNotInferredStatement ?nStatement.}
        FILTER(?statement in (?aStatement, ?nStatement))
        BIND(IF(BOUND(?aStatement), "Asserted", "NotInferred") AS ?StatementType)
-      ?statement conformance:hasSubject ?Subject .
-      ?statement conformance:hasPredicate ?Predicate .
-      ?statement conformance:hasObject ?Object.
+      ?statement conformance:hasSubject ?S.    
+            OPTIONAL {
+               ?S famix:hasFullQualifiedName ?SName.
+            }
+      BIND(IF(BOUND(?SName), ?SName, ?S) AS ?Subject)
+
+      ?statement conformance:hasPredicate ?P.
+            OPTIONAL {
+               ?P famix:hasFullQualifiedName ?SName.
+            }
+      BIND(IF(BOUND(?PName), ?PName, ?P) AS ?Predicate)
+          
+      ?statement conformance:hasObject ?O.
+            OPTIONAL {
+               ?O famix:hasFullQualifiedName ?OName.
+            }
+      BIND(IF(BOUND(?OName), ?OName, ?O) AS ?Object)
     }
   }
 }
