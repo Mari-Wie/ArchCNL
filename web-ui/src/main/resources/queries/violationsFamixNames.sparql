@@ -17,26 +17,25 @@ GRAPH ?g
       {?proof conformance:hasAssertedStatement ?aStatement.}
       UNION
       {?proof conformance:hasNotInferredStatement ?nStatement.}
-      FILTER(?statement in (?aStatement, ?nStatement))
-      BIND(IF(BOUND(?aStatement), "Asserted", "NotInferred") AS ?StatementType)
-      
-      ?statement conformance:hasSubject ?S.
-             OPTIONAL {
-               ?S famix:isLocatedAt ?SubjectLocation.
-             }
-      BIND(IF(BOUND(?SubjectLocation), ?SubjectLocation, ?S) AS ?Subject)
+       FILTER(?statement in (?aStatement, ?nStatement))
+       BIND(IF(BOUND(?aStatement), "Asserted", "NotInferred") AS ?StatementType)
+      ?statement conformance:hasSubject ?S.    
+            OPTIONAL {
+               ?S famix:hasFullQualifiedName ?SName.
+            }
+      BIND(IF(BOUND(?SName), ?SName, ?S) AS ?Subject)
 
       ?statement conformance:hasPredicate ?P.
-               OPTIONAL {
-               ?P famix:isLocatedAt ?PredicateLocation.
-             }
-      BIND(IF(BOUND(?PredicateLocation), ?PredicateLocation, ?P) AS ?Predicate)
-
+            OPTIONAL {
+               ?P famix:hasFullQualifiedName ?SName.
+            }
+      BIND(IF(BOUND(?PName), ?PName, ?P) AS ?Predicate)
+          
       ?statement conformance:hasObject ?O.
-               OPTIONAL {
-               ?O famix:isLocatedAt ?ObjectLocation.
-             }
-      BIND(IF(BOUND(?ObjectLocation), ?ObjectLocation, ?O) AS ?Object)
+            OPTIONAL {
+               ?O famix:hasFullQualifiedName ?OName.
+            }
+      BIND(IF(BOUND(?OName), ?OName, ?O) AS ?Object)
     }
   }
 }

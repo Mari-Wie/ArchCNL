@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
+import org.archcnl.domain.output.model.query.PredefinedQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
@@ -24,9 +25,9 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdat
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
+import org.archcnl.ui.outputview.queryviews.PredefinedQueryComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
-import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
@@ -50,13 +51,20 @@ public class OutputPresenter extends Component {
         final String defaultQuery = QueryUtils.getDefaultQuery();
         customQueryPresenter = createCustomQueryPresenter();
         freeTextQueryView = createFreeTextQueryView(defaultQuery);
-        view = new OutputView(customQueryPresenter.getView(), freeTextQueryView, defaultQuery);
+        List<PredefinedQueryComponent> predefinedQueryComponents =
+                createPredefinedQueryComponents();
+        view =
+                new OutputView(
+                        customQueryPresenter.getView(),
+                        predefinedQueryComponents,
+                        freeTextQueryView,
+                        defaultQuery);
         addListeners();
     }
 
     private void addListeners() {
         view.addListener(CustomQueryInsertionRequestedEvent.class, this::handleEvent);
-        view.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        view.addListener(RunQueryRequestedEvent.class, this::handleEvent);
         view.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
         view.addListener(InputViewRequestedEvent.class, this::fireEvent);
         view.addListener(
@@ -144,7 +152,7 @@ public class OutputPresenter extends Component {
     private FreeTextQueryComponent createFreeTextQueryView(String query) {
         FreeTextQueryComponent newComponent = new FreeTextQueryComponent(query);
         newComponent.addListener(CustomQueryInsertionRequestedEvent.class, this::handleEvent);
-        newComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        newComponent.addListener(RunQueryRequestedEvent.class, this::handleEvent);
         newComponent.addListener(PinFreeTextQueryRequestedEvent.class, this::handleEvent);
         newComponent.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
         newComponent.addListener(
@@ -154,6 +162,17 @@ public class OutputPresenter extends Component {
                     view.getSideBarWidget().deletePinnedQuery(event);
                 });
         return newComponent;
+    }
+
+    private List<PredefinedQueryComponent> createPredefinedQueryComponents() {
+        List<PredefinedQueryComponent> predefinedQueryComponents =
+                new LinkedList<PredefinedQueryComponent>();
+        for (PredefinedQuery query : QueryUtils.getPredefinedQueries()) {
+            PredefinedQueryComponent queryComponent = new PredefinedQueryComponent(query);
+            predefinedQueryComponents.add(queryComponent);
+            queryComponent.addListener(RunQueryRequestedEvent.class, this::handleEvent);
+        }
+        return predefinedQueryComponents;
     }
 
     private void handleEvent(PinCustomQueryRequestedEvent event) {
@@ -177,11 +196,6 @@ public class OutputPresenter extends Component {
 
     private void handleEvent(final CustomQueryInsertionRequestedEvent event) {
         event.getSource().setQueryText(customQueryPresenter.getQuery());
-    }
-
-    private void handleEvent(final FreeTextRunButtonPressedEvent event) {
-        final Optional<Result> result = resultRepository.executeNativeSelectQuery(event.getQuery());
-        event.getSource().update(result);
     }
 
     private void handleEvent(final QueryNameUpdateRequestedEvent event) {

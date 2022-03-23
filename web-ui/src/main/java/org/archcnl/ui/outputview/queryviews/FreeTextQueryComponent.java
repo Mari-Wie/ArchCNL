@@ -10,9 +10,9 @@ import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
-import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinFreeTextQueryRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.QueryNameUpdateRequestedEvent;
+import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
 
 public class FreeTextQueryComponent extends AbstractQueryComponent {
 
@@ -32,7 +32,7 @@ public class FreeTextQueryComponent extends AbstractQueryComponent {
     private Button runButton =
             new Button(
                     "Run",
-                    e -> fireEvent(new FreeTextRunButtonPressedEvent(gridView, true, getQuery())));
+                    e -> fireEvent(new RunQueryRequestedEvent(this, true, getQuery(), gridView)));
     private HorizontalLayout topRow;
 
     public FreeTextQueryComponent(String defaultQueryText) {

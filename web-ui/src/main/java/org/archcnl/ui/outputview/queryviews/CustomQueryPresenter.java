@@ -72,7 +72,10 @@ public class CustomQueryPresenter extends Component {
                 e ->
                         fireEvent(
                                 new RunQueryRequestedEvent(
-                                        this, true, makeQuery(), view.getGridView())));
+                                        this,
+                                        true,
+                                        makeQuery().transformToSparqlQuery(),
+                                        view.getGridView())));
         view.addListener(UpdateQueryTextButtonPressedEvent.class, this::handleEvent);
         view.addListener(
                 PinQueryButtonPressedEvent.class,
