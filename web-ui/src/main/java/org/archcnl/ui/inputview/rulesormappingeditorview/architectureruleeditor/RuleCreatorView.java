@@ -89,7 +89,7 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
         if (!archRuleTextArea.isEmpty()) {
             fireEvent(
                     new SaveRuleButtonPressedEvent(
-                            this, true, archRuleTextArea.getValue().stripTrailing() + "."));
+                            this, true, createTextareaRule(archRuleTextArea.getValue())));
             fireEvent(new RulesWidgetRequestedEvent(this, true));
             return;
         }
@@ -99,6 +99,15 @@ public class RuleCreatorView extends RulesOrMappingEditorView {
                         true,
                         (subject.getRuleString() + verb.getRuleString().stripTrailing() + ".")));
         fireEvent(new RulesWidgetRequestedEvent(this, true));
+    }
+
+    private String createTextareaRule(String rule) {
+        rule = rule.stripTrailing();
+        char lastChar = rule.charAt(rule.length() - 1);
+        if (lastChar == '.') {
+            return rule;
+        }
+        return rule + ".";
     }
 
     @Override
