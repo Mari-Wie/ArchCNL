@@ -109,6 +109,12 @@ public class MainPresenter extends Component {
             view.setOpenProjectMenuItemEnabled(false);
         } catch (PropertyNotFoundException e2) {
             view.showErrorMessage("Failed to connect to stardog database.");
+        } catch (StardogException e) {
+            view.showErrorMessage(
+                    "An error occured while running the architecture check. Could not connect to the database.");
+        } catch (Exception e) {
+            view.showErrorMessage(
+                    "An unexpected error occured while running the architecture check.");
         }
     }
 
@@ -124,6 +130,9 @@ public class MainPresenter extends Component {
         } catch (PropertyNotFoundException e) {
             view.showErrorMessage(
                     "An error occured while running the architecture check. Properties of database could not be read.");
+        } catch (Exception e) {
+            view.showErrorMessage(
+                    "An unexpected error occured while running the architecture check.");
         }
     }
 
