@@ -41,19 +41,19 @@ public class QueryUtils {
         }
     }
 
-    public static List<PrespecifiedQuery> getPrespecifiedQueries() {
-        List<PrespecifiedQuery> prespecifiedQueries = new LinkedList<PrespecifiedQuery>();
-        prespecifiedQueries.add(
-                new PrespecifiedQuery(
+    public static List<PredefinedQuery> getPredefinedQueries() {
+        List<PredefinedQuery> predefinedQueries = new LinkedList<PredefinedQuery>();
+        predefinedQueries.add(
+                new PredefinedQuery(
                         "Locations of Violations",
                         "This query returns the architecture violations with their corresponding locations.",
                         getQueryFromQueryDirectory(VIOLATIONS_WITH_LOCATIONS)));
-        prespecifiedQueries.add(
-                new PrespecifiedQuery(
+        predefinedQueries.add(
+                new PredefinedQuery(
                         "Minimalistic Violations",
                         "This query returns violated rules and the objects that are involved in those violations.",
                         getQueryFromQueryDirectory(MINIMALISTIC_VIOLATIONINSTANCES)));
-        return prespecifiedQueries;
+        return predefinedQueries;
     }
 
     public static Set<QueryNamespace> getNamespaces() {

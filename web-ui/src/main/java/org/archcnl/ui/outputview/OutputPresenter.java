@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
-import org.archcnl.domain.output.model.query.PrespecifiedQuery;
+import org.archcnl.domain.output.model.query.PredefinedQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
@@ -25,7 +25,7 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdat
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
-import org.archcnl.ui.outputview.queryviews.PrespecifiedQueryComponent;
+import org.archcnl.ui.outputview.queryviews.PredefinedQueryComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.PinCustomQueryRequestedEvent;
@@ -51,12 +51,12 @@ public class OutputPresenter extends Component {
         final String defaultQuery = QueryUtils.getDefaultQuery();
         customQueryPresenter = createCustomQueryPresenter();
         freeTextQueryView = createFreeTextQueryView(defaultQuery);
-        List<PrespecifiedQueryComponent> prespecifiedQueryComponents =
-                createPrespecifiedQueryComponents();
+        List<PredefinedQueryComponent> predefinedQueryComponents =
+                createPredefinedQueryComponents();
         view =
                 new OutputView(
                         customQueryPresenter.getView(),
-                        prespecifiedQueryComponents,
+                        predefinedQueryComponents,
                         freeTextQueryView,
                         defaultQuery);
         addListeners();
@@ -164,15 +164,15 @@ public class OutputPresenter extends Component {
         return newComponent;
     }
 
-    private List<PrespecifiedQueryComponent> createPrespecifiedQueryComponents() {
-        List<PrespecifiedQueryComponent> prespecifiedQueryComponents =
-                new LinkedList<PrespecifiedQueryComponent>();
-        for (PrespecifiedQuery query : QueryUtils.getPrespecifiedQueries()) {
-            PrespecifiedQueryComponent queryComponent = new PrespecifiedQueryComponent(query);
-            prespecifiedQueryComponents.add(queryComponent);
+    private List<PredefinedQueryComponent> createPredefinedQueryComponents() {
+        List<PredefinedQueryComponent> predefinedQueryComponents =
+                new LinkedList<PredefinedQueryComponent>();
+        for (PredefinedQuery query : QueryUtils.getPredefinedQueries()) {
+            PredefinedQueryComponent queryComponent = new PredefinedQueryComponent(query);
+            predefinedQueryComponents.add(queryComponent);
             queryComponent.addListener(RunQueryRequestedEvent.class, this::handleEvent);
         }
-        return prespecifiedQueryComponents;
+        return predefinedQueryComponents;
     }
 
     private void handleEvent(PinCustomQueryRequestedEvent event) {

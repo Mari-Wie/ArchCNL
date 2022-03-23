@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.outputview.queryviews.CustomQueryView;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
-import org.archcnl.ui.outputview.queryviews.PrespecifiedQueryComponent;
+import org.archcnl.ui.outputview.queryviews.PredefinedQueryComponent;
 import org.archcnl.ui.outputview.queryviews.QueryResultsComponent;
 import org.archcnl.ui.outputview.sidebar.SideBarWidget;
 import org.archcnl.ui.outputview.sidebar.events.InputViewRequestedEvent;
@@ -22,7 +22,7 @@ public class OutputView extends HorizontalLayout {
     private static final long serialVersionUID = 1L;
 
     private QueryResultsComponent defaultQueryView;
-    private List<PrespecifiedQueryComponent> prespecifiedQueries;
+    private List<PredefinedQueryComponent> predefinedQueries;
     private FreeTextQueryComponent freeTextQueryView;
     private CustomQueryView customQueryView;
     private SideBarWidget sideBarWidget;
@@ -30,11 +30,11 @@ public class OutputView extends HorizontalLayout {
 
     public OutputView(
             CustomQueryView customQueryView,
-            List<PrespecifiedQueryComponent> prespecifiedQueries,
+            List<PredefinedQueryComponent> predefinedQueries,
             FreeTextQueryComponent freeTextQueryView,
             String defaultQuery) {
         defaultQueryView = new QueryResultsComponent(defaultQuery);
-        this.prespecifiedQueries = prespecifiedQueries;
+        this.predefinedQueries = predefinedQueries;
         this.customQueryView = customQueryView;
         this.freeTextQueryView = freeTextQueryView;
         initSideBarWidget();
@@ -47,7 +47,7 @@ public class OutputView extends HorizontalLayout {
     private void initSideBarWidget() {
         sideBarWidget =
                 new SideBarWidget(
-                        defaultQueryView, prespecifiedQueries, customQueryView, freeTextQueryView);
+                        defaultQueryView, predefinedQueries, customQueryView, freeTextQueryView);
         sideBarWidget.addListener(InputViewRequestedEvent.class, this::fireEvent);
         sideBarWidget.addListener(ShowComponentRequestedEvent.class, this::fireEvent);
         sideBarWidget.setWidth(15, Unit.PERCENTAGE);
