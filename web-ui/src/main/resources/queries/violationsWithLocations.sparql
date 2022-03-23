@@ -5,7 +5,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
-SELECT DISTINCT ?Rule ?Violation ?StatementType ?Subject ?SubjectLocation ?Predicate ?PredicateLocation ?Object ?ObjectLocation
+SELECT DISTINCT ?Rule ?Violation ?StatementType ?Subject ?Predicate ?Object
 WHERE {
 GRAPH ?g
   {
@@ -17,20 +17,26 @@ GRAPH ?g
       {?proof conformance:hasAssertedStatement ?aStatement.}
       UNION
       {?proof conformance:hasNotInferredStatement ?nStatement.}
-       FILTER(?statement in (?aStatement, ?nStatement))
-       BIND(IF(BOUND(?aStatement), "Asserted", "NotInferred") AS ?StatementType)
-      ?statement conformance:hasSubject ?Subject.
+      FILTER(?statement in (?aStatement, ?nStatement))
+      BIND(IF(BOUND(?aStatement), "Asserted", "NotInferred") AS ?StatementType)
+      
+      ?statement conformance:hasSubject ?S.
              OPTIONAL {
-               ?Subject famix:isLocatedAt ?SubjectLocation.
+               ?S famix:isLocatedAt ?SubjectLocation.
              }
-      ?statement conformance:hasPredicate ?Predicate.
-                   OPTIONAL {
-               ?Predicate famix:isLocatedAt ?PredicateLocation.
+      BIND(IF(BOUND(?SubjectLocation), ?SubjectLocation, ?S) AS ?Subject)
+
+      ?statement conformance:hasPredicate ?P.
+               OPTIONAL {
+               ?P famix:isLocatedAt ?PredicateLocation.
              }
-      ?statement conformance:hasObject ?Object.
-                   OPTIONAL {
-               ?Object famix:isLocatedAt ?ObjectLocation.
+      BIND(IF(BOUND(?PredicateLocation), ?PredicateLocation, ?P) AS ?Predicate)
+
+      ?statement conformance:hasObject ?O.
+               OPTIONAL {
+               ?O famix:isLocatedAt ?ObjectLocation.
              }
+      BIND(IF(BOUND(?ObjectLocation), ?ObjectLocation, ?O) AS ?Object)
     }
   }
 }
