@@ -24,6 +24,7 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdat
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
+import org.archcnl.ui.outputview.queryviews.PrespecifiedQueryComponent;
 import org.archcnl.ui.outputview.queryviews.events.CustomQueryInsertionRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
 import org.archcnl.ui.outputview.queryviews.events.FreeTextRunButtonPressedEvent;
@@ -50,7 +51,20 @@ public class OutputPresenter extends Component {
         final String defaultQuery = QueryUtils.getDefaultQuery();
         customQueryPresenter = createCustomQueryPresenter();
         freeTextQueryView = createFreeTextQueryView(defaultQuery);
-        view = new OutputView(customQueryPresenter.getView(), freeTextQueryView, defaultQuery);
+        List<String> prespecifiedQueries = QueryUtils.getPrespecifiedQueries();
+        List<PrespecifiedQueryComponent> prespecifiedQueryComponents =
+                new LinkedList<PrespecifiedQueryComponent>();
+        for (String query : prespecifiedQueries) {
+            PrespecifiedQueryComponent queryComponent = new PrespecifiedQueryComponent(query);
+            prespecifiedQueryComponents.add(queryComponent);
+            queryComponent.addListener(FreeTextRunButtonPressedEvent.class, this::handleEvent);
+        }
+        view =
+                new OutputView(
+                        customQueryPresenter.getView(),
+                        prespecifiedQueryComponents,
+                        freeTextQueryView,
+                        defaultQuery);
         addListeners();
     }
 

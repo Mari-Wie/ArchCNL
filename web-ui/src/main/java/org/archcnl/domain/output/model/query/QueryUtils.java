@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import org.archcnl.domain.output.model.query.attribute.QueryNamespace;
 
@@ -14,9 +16,10 @@ public class QueryUtils {
     private QueryUtils() {}
 
     private static final Path rootDir = Path.of("./src/main/resources/queries/");
-    private static final Path VIOLATIONS_SUBJECT_PREDICATE_OBJECT =
-            Path.of("violationsSubjectPredicateObject.sparql");
+    private static final Path VIOLATIONS_WITH_FAMIX_NAMES = Path.of("violationsFamixNames.sparql");
     private static final Path VIOLATIONS_WITH_LOCATIONS = Path.of("violationsWithLocations.sparql");
+    private static final Path MINIMALISTIC_VIOLATIONINSTANCES =
+            Path.of("minimalisticViolatingInstances.sparql");
     public static final Path NUMBER_OF_VIOLATIONS = Path.of("nrOfViolations.sparql");
     public static final Path NUMBER_OF_PACKAGES = Path.of("nrOfPackages.sparql");
     public static final Path NUMBER_OF_RELATIONSHIPS = Path.of("nrOfRelationships.sparql");
@@ -36,6 +39,13 @@ public class QueryUtils {
         } catch (IOException e) {
             return EXCEPTION_TEXT;
         }
+    }
+
+    public static List<String> getPrespecifiedQueries() {
+        List<String> prespecifiedQueries = new LinkedList<String>();
+        prespecifiedQueries.add(getQueryFromQueryDirectory(VIOLATIONS_WITH_FAMIX_NAMES));
+        prespecifiedQueries.add(getQueryFromQueryDirectory(MINIMALISTIC_VIOLATIONINSTANCES));
+        return prespecifiedQueries;
     }
 
     public static Set<QueryNamespace> getNamespaces() {
