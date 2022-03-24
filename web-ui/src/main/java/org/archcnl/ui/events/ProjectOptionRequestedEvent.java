@@ -107,7 +107,7 @@ public class ProjectOptionRequestedEvent extends ComponentEvent<MainView> {
                 e -> {
                     inputPresenter.updateArchitectureRulesLayout(rules);
                     inputPresenter.updateConceptAndRelations();
-                    outputPresenter.updateQustomQueryView();
+                    outputPresenter.updateCustomQueryView();
                 });
         openProjectDialog.open();
     }

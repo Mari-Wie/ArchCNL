@@ -226,8 +226,8 @@ public class OutputPresenter extends Component {
         resultRepository = repository;
     }
 
-    public void updateQustomQueryView() {
-        view.updateQustomQueryView();
+    public void updateCustomQueryView() {
+        view.updateCustomQueryView();
     }
 
     @Override

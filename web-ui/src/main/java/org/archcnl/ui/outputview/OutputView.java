@@ -51,7 +51,7 @@ public class OutputView extends HorizontalLayout {
         return sideBarWidget;
     }
 
-    public void updateQustomQueryView() {
+    public void updateCustomQueryView() {
         customQueryView.updateHierarchies();
     }
 
