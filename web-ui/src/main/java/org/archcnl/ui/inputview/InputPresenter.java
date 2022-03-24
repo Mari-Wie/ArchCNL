@@ -123,6 +123,10 @@ public class InputPresenter extends Component {
         architectureRulesLayout.updateRules(rules);
     }
 
+    public void updateConceptAndRelations() {
+        view.updateConceptAndRelations();
+    }
+
     private void addListenersToMappingEditor(MappingEditorPresenter presenter) {
         presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(PredicateSelectedEvent.class, this::fireEvent);

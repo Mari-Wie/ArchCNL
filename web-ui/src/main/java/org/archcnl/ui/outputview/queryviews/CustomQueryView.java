@@ -198,6 +198,10 @@ public class CustomQueryView extends HorizontalLayout {
         topRow.replace(pinButton, deleteButton);
     }
 
+    public void updateHierarchies() {
+        conceptAndRelationView.update();
+    }
+
     private void fireNameUpdateEventIfNameNotEmpty() {
         if (queryName.getOptionalValue().isPresent()) {
             fireEvent(new QueryNameUpdateRequestedEvent(this, true, queryName.getValue()));
