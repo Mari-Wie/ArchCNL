@@ -57,6 +57,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
 
     public void update() {
         treeGrid.setItems(roots, HierarchyNode::getChildren);
+        treeGrid.expand(roots);
     }
 
     @Override
