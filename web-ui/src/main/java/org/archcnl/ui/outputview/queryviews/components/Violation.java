@@ -1,5 +1,7 @@
 package org.archcnl.ui.outputview.queryviews.components;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -9,7 +11,8 @@ public class Violation {
 
     public Violation(final List<String> vars, final List<String> values) {
         for (int i = 0; i < vars.size(); i++) {
-            violation.put(vars.get(i), values.get(i));
+            String value = URLDecoder.decode(values.get(i), StandardCharsets.UTF_8);
+            violation.put(vars.get(i), value);
         }
     }
 
