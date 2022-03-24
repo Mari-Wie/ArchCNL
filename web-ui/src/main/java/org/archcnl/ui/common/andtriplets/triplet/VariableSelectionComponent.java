@@ -38,13 +38,11 @@ public class VariableSelectionComponent extends SelectionComponent {
 
     @Override
     protected void handleDropEvent(Object data) {
-        // TODO: find a way to only handle events where the type is Hierarchynode to get rid of the
-        // instanceof
-        String droppedName = "";
         if (data instanceof Variable) {
-            droppedName = ((Variable) data).getName();
+            setValue(((Variable) data).getName());
+        } else {
+            showErrorMessage("Not a variable");
         }
-        checkedSetValue(droppedName);
     }
 
     public void setVariable(Variable variable) {
