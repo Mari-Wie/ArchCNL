@@ -240,6 +240,10 @@ public class OutputPresenter extends Component {
         resultRepository = repository;
     }
 
+    public void updateCustomQueryView() {
+        view.updateCustomQueryView();
+    }
+
     @Override
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {

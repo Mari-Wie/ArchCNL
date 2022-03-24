@@ -58,6 +58,10 @@ public class OutputView extends HorizontalLayout {
         return sideBarWidget;
     }
 
+    public void updateCustomQueryView() {
+        customQueryView.updateHierarchies();
+    }
+
     public void switchToComponent(final Component component) {
         replace(currentComponent, component);
         currentComponent = component;

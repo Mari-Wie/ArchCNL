@@ -103,7 +103,12 @@ public class ProjectOptionRequestedEvent extends ComponentEvent<MainView> {
                 e -> outputPresenter.showCustomQuery(e.getQuery(), e.isDefaultQueryTab()));
         List<ArchitectureRule> rules = ruleManager.getArchitectureRules();
         openProjectDialog.addListener(
-                ProjectOpenedEvent.class, e -> inputPresenter.updateArchitectureRulesLayout(rules));
+                ProjectOpenedEvent.class,
+                e -> {
+                    inputPresenter.updateArchitectureRulesLayout(rules);
+                    inputPresenter.updateConceptAndRelations();
+                    outputPresenter.updateCustomQueryView();
+                });
         openProjectDialog.open();
     }
 
