@@ -68,12 +68,18 @@ public class OutputView extends HorizontalLayout {
     }
 
     public void displayResult(
-            final Optional<Result> result,
+            final Optional<Result> defaultQueryResult,
+            List<Optional<Result>> predefinedQueryResults,
             String nrOfViolations,
             String nrOfPackages,
             String nrOfRelationships,
             String nrOfTypes) {
-        defaultQueryView.updateGridView(result);
+        defaultQueryView.updateGridView(defaultQueryResult);
+        for (int i = 0;
+                i < Math.min(predefinedQueryResults.size(), predefinedQueries.size());
+                i++) {
+            predefinedQueries.get(i).updateGridView(predefinedQueryResults.get(i));
+        }
         defaultQueryView.updateGeneralInfoLayout(
                 nrOfViolations, nrOfPackages, nrOfRelationships, nrOfTypes);
     }
