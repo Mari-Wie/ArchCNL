@@ -15,6 +15,7 @@ import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.SelectClause;
 import org.archcnl.domain.output.model.query.WhereClause;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
+import org.archcnl.ui.common.andtriplets.events.DeleteAndTripletsViewRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.VariableSelectionComponent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
@@ -95,6 +96,11 @@ public class CustomQueryPresenter extends Component {
         wherePresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         wherePresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         wherePresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
+        wherePresenter.addListener(
+                DeleteAndTripletsViewRequestedEvent.class,
+                e -> {
+                    wherePresenter.clear();
+                });
     }
 
     private void addVariable(VariableCreationRequestedEvent event) {
