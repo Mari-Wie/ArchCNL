@@ -2,11 +2,14 @@ package org.archcnl.domain.common;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
@@ -14,6 +17,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Actual
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class VariableManager {
 
@@ -53,33 +57,61 @@ public class VariableManager {
      * @param andTriplets The triplets whose syntax will be checked
      * @return true if there are conflicting dynamic types
      */
-    public boolean hasConflictingDynamicTypes(AndTriplets andTriplets) {
-        parseVariableTypes(andTriplets);
+    public boolean hasConflictingDynamicTypes(
+            AndTriplets andTriplets, ConceptManager conceptManager) {
+        parseVariableTypes(andTriplets, conceptManager);
         return variables.stream().anyMatch(Variable::hasConflictingDynamicTypes);
     }
 
-    public List<Variable> getConflictingVariables(AndTriplets andTriplets) {
-        parseVariableTypes(andTriplets);
+    public List<Variable> getConflictingVariables(
+            AndTriplets andTriplets, ConceptManager conceptManager) {
+        parseVariableTypes(andTriplets, conceptManager);
         return variables.stream()
                 .filter(Variable::hasConflictingDynamicTypes)
                 .collect(Collectors.toList());
     }
 
-    public void parseVariableTypes(AndTriplets andTriplets) {
+    public void parseVariableTypes(AndTriplets andTriplets, ConceptManager conceptManager) {
         clearAllDynamicTypes();
         for (Triplet triplet : andTriplets.getTriplets()) {
             if (triplet.getPredicate() instanceof TypeRelation) {
-                handleTypeRelationTriplet(triplet);
+                handleTypeRelationTriplet(triplet, conceptManager);
             } else {
                 handleTripletWithoutTypeRelation(triplet);
             }
         }
     }
 
-    private void handleTypeRelationTriplet(Triplet triplet) {
+    private void handleTypeRelationTriplet(Triplet triplet, ConceptManager conceptManager) {
         // The TypeRelation can only relate to Concepts
         Concept object = (Concept) triplet.getObject();
         Set<ActualObjectType> dynamicTypes = new LinkedHashSet<>(Arrays.asList(object));
+
+        // Recursively add super types found in mappings
+        Queue<CustomConcept> queue = new LinkedList<>();
+        if (object instanceof CustomConcept) {
+            queue.add((CustomConcept) object);
+        }
+        while (!queue.isEmpty()) {
+            Optional<ConceptMapping> mapping = queue.poll().getMapping();
+            if (mapping.isPresent()) {
+                String subjectName = mapping.get().getThenTriplet().getSubject().getName();
+                VariableManager varManager = new VariableManager();
+                for (AndTriplets andTriplets : mapping.get().getWhenTriplets()) {
+                    varManager.parseVariableTypes(andTriplets, conceptManager);
+                    Optional<Variable> subjectVariable = varManager.getVariableByName(subjectName);
+                    if (subjectVariable.isPresent()) {
+                        Set<ActualObjectType> types = subjectVariable.get().getDynamicTypes();
+                        types.stream()
+                                .filter(CustomConcept.class::isInstance)
+                                .map(CustomConcept.class::cast)
+                                .forEach(queue::add);
+                        dynamicTypes.addAll(types);
+                    }
+                }
+            }
+        }
+
         refineAndAddVariable(triplet.getSubject(), dynamicTypes);
     }
 
