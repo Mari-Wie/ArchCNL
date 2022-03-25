@@ -8,12 +8,12 @@ import com.vaadin.flow.shared.Registration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.archcnl.domain.output.model.query.FreeTextQuery;
 import org.archcnl.domain.output.model.query.PredefinedQuery;
 import org.archcnl.domain.output.model.query.Query;
 import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.domain.output.repository.ResultRepository;
-import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
@@ -165,12 +165,10 @@ public class OutputPresenter extends Component {
     }
 
     private List<PredefinedQueryComponent> createPredefinedQueryComponents() {
-        List<PredefinedQueryComponent> predefinedQueryComponents =
-                new LinkedList<PredefinedQueryComponent>();
+        List<PredefinedQueryComponent> predefinedQueryComponents = new LinkedList<>();
         for (PredefinedQuery query : QueryUtils.getPredefinedQueries()) {
             PredefinedQueryComponent queryComponent = new PredefinedQueryComponent(query);
             predefinedQueryComponents.add(queryComponent);
-            queryComponent.addListener(RunQueryRequestedEvent.class, this::handleEvent);
         }
         return predefinedQueryComponents;
     }
@@ -202,21 +200,21 @@ public class OutputPresenter extends Component {
         view.getSideBarWidget().updatePinnedQueryName(event);
     }
 
-    public void displayResult(final Optional<Result> result) {
+    public void displayResult() {
         String nrOfViolations = "-1";
         String nrOfPackages = "-1";
         String nrOfRelationships = "-1";
         String nrOfTypes = "-1";
-        Optional<StardogDatabaseAPI.Result> nrOfViolationsResult =
+        Optional<Result> nrOfViolationsResult =
                 resultRepository.executeNativeSelectQuery(
                         QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_VIOLATIONS));
-        Optional<StardogDatabaseAPI.Result> nrOfPackagesResult =
+        Optional<Result> nrOfPackagesResult =
                 resultRepository.executeNativeSelectQuery(
                         QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_PACKAGES));
-        Optional<StardogDatabaseAPI.Result> nrOfRelationshipsResult =
+        Optional<Result> nrOfRelationshipsResult =
                 resultRepository.executeNativeSelectQuery(
                         QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_RELATIONSHIPS));
-        Optional<StardogDatabaseAPI.Result> nrOfTypesResult =
+        Optional<Result> nrOfTypesResult =
                 resultRepository.executeNativeSelectQuery(
                         QueryUtils.getQueryFromQueryDirectory(QueryUtils.NUMBER_OF_TYPES));
 
@@ -233,7 +231,23 @@ public class OutputPresenter extends Component {
             nrOfTypes = nrOfTypesResult.get().getViolations().get(0).get(0);
         }
 
-        view.displayResult(result, nrOfViolations, nrOfPackages, nrOfRelationships, nrOfTypes);
+        Optional<Result> defaultQueryResult =
+                resultRepository.executeNativeSelectQuery(QueryUtils.getDefaultQuery());
+        List<Optional<Result>> predefinedQueryResults =
+                QueryUtils.getPredefinedQueries().stream()
+                        .map(
+                                query ->
+                                        resultRepository.executeNativeSelectQuery(
+                                                query.getQueryString()))
+                        .collect(Collectors.toList());
+
+        view.displayResult(
+                defaultQueryResult,
+                predefinedQueryResults,
+                nrOfViolations,
+                nrOfPackages,
+                nrOfRelationships,
+                nrOfTypes);
     }
 
     public void setResultRepository(final ResultRepository repository) {

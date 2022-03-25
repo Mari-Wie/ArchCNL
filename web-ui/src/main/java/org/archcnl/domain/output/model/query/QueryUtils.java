@@ -29,7 +29,7 @@ public class QueryUtils {
             "# An error occured while trying to load the query.\r\n" + "SELECT * WHERE {}";
 
     public static String getDefaultQuery() {
-        return getQueryFromQueryDirectory(VIOLATIONS_WITH_FAMIX_NAMES);
+        return getQueryFromQueryDirectory(MINIMALISTIC_VIOLATIONINSTANCES);
     }
 
     public static String getQueryFromQueryDirectory(Path path) {
@@ -42,17 +42,17 @@ public class QueryUtils {
     }
 
     public static List<PredefinedQuery> getPredefinedQueries() {
-        List<PredefinedQuery> predefinedQueries = new LinkedList<PredefinedQuery>();
+        List<PredefinedQuery> predefinedQueries = new LinkedList<>();
         predefinedQueries.add(
                 new PredefinedQuery(
-                        "Locations of Violations",
+                        "More Details",
+                        "This query returns violated rules and the objects that are involved in those violations.",
+                        getQueryFromQueryDirectory(VIOLATIONS_WITH_FAMIX_NAMES)));
+        predefinedQueries.add(
+                new PredefinedQuery(
+                        "Violation Locations",
                         "This query returns the architecture violations with their corresponding locations.",
                         getQueryFromQueryDirectory(VIOLATIONS_WITH_LOCATIONS)));
-        predefinedQueries.add(
-                new PredefinedQuery(
-                        "Minimalistic Violations",
-                        "This query returns violated rules and the objects that are involved in those violations.",
-                        getQueryFromQueryDirectory(MINIMALISTIC_VIOLATIONINSTANCES)));
         return predefinedQueries;
     }
 

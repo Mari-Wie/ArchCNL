@@ -5,7 +5,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX conformance: <http://arch-ont.org/ontologies/architectureconformance#>
 PREFIX famix: <http://arch-ont.org/ontologies/famix.owl#>
 PREFIX architecture: <http://www.arch-ont.org/ontologies/architecture.owl#>
-SELECT DISTINCT ?Rule ?Violation ?ViolatingObject
+SELECT DISTINCT ?Rule ?Violation ?ViolatingObject ?Location
 WHERE {
 GRAPH ?g
   {
@@ -16,6 +16,7 @@ GRAPH ?g
     ?proof conformance:hasAssertedStatement ?statement.
     ?statement conformance:hasSubject ?subject.
     ?subject famix:hasFullQualifiedName ?ViolatingObject.
+    OPTIONAL {?subject famix:isLocatedAt ?Location.}
   }
 }
 ORDER BY ?Violation

@@ -16,7 +16,6 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
-import org.archcnl.domain.output.model.query.QueryUtils;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
@@ -101,10 +100,7 @@ public class MainPresenter extends Component {
             if (path.isPresent()) {
                 runArchCnlToolchain(architectureCheck, path.get());
             }
-            outputPresenter.displayResult(
-                    architectureCheck
-                            .getRepository()
-                            .executeNativeSelectQuery(QueryUtils.getDefaultQuery()));
+            outputPresenter.displayResult();
             view.showContent(outputPresenter.getView());
             view.setOpenProjectMenuItemEnabled(false);
         } catch (PropertyNotFoundException e2) {

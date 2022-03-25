@@ -1,9 +1,9 @@
 package org.archcnl.ui.outputview.queryviews;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
+import java.util.Optional;
 import org.archcnl.domain.output.model.query.PredefinedQuery;
-import org.archcnl.ui.outputview.queryviews.events.RunQueryRequestedEvent;
+import org.archcnl.stardogwrapper.api.StardogDatabaseAPI.Result;
 
 public class PredefinedQueryComponent extends AbstractQueryComponent {
 
@@ -11,11 +11,6 @@ public class PredefinedQueryComponent extends AbstractQueryComponent {
 
     private final String name;
     private final Label description;
-
-    private Button runButton =
-            new Button(
-                    "Run",
-                    e -> fireEvent(new RunQueryRequestedEvent(this, true, getQuery(), gridView)));
 
     public PredefinedQueryComponent(PredefinedQuery query) {
         super(query.getQueryString());
@@ -25,11 +20,15 @@ public class PredefinedQueryComponent extends AbstractQueryComponent {
         addComponents();
     }
 
+    public void updateGridView(final Optional<Result> result) {
+        gridView.update(result);
+    }
+
     public String getName() {
         return name;
     }
 
     protected void addComponents() {
-        add(description, queryTextArea, runButton, gridView);
+        add(description, gridView, queryTextArea);
     }
 }
