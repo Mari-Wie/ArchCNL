@@ -94,6 +94,12 @@ public class AndTripletsEditorPresenter extends Component {
         return view;
     }
 
+    public void clear() {
+        tripletPresenters.clear();
+        view.clearContent();
+        view.addTripletView(prepareTripletView(new TripletPresenter()));
+    }
+
     private void showConflictingDynamicTypes() {
         VariableManager variableManager = new VariableManager();
         List<Variable> conflictingVariables =
