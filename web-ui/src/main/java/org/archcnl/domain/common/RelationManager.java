@@ -152,7 +152,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                 new JenaBuiltinRelation(
                         "matches",
                         "regex",
-                        "This relation is used to state that a literal given as the subject matches against the regular expression pattern stated in the object. The syntax of the regular expression pattern is according to java.util.regex.",
+                        "Checks whether a string matches a regular expression represented by another string. The syntax of the regular expression pattern is according to java.util.regex.",
                         stringConcept,
                         stringConcept));
     }
