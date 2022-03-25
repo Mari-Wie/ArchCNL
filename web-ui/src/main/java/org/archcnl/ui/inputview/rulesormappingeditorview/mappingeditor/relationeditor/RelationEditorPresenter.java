@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.ui.common.andtriplets.AndTripletsEditorPresenter;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
@@ -97,13 +96,8 @@ public class RelationEditorPresenter extends MappingEditorPresenter {
 
                 final RelationMapping mapping =
                         new RelationMapping(thenTriplet, getAndTripletsList());
-
-                relation.get().setMapping(mapping);
-                fireEvent(new AddCustomRelationRequestedEvent(this, true, relation.get()));
-
+                fireEvent(new AddCustomRelationRequestedEvent(this, true, relation.get(), mapping));
                 fireEvent(new RulesWidgetRequestedEvent(this, true));
-            } catch (UnrelatedMappingException e) {
-                throw new RuntimeException(e.getMessage());
             } catch (final SubjectOrObjectNotDefinedException e) {
                 view.showThenSubjectOrObjectErrorMessage("Setting this is required");
             }

@@ -19,6 +19,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
@@ -135,6 +136,7 @@ public class OutputPresenter extends Component {
         newCustomQueryPresenter.addListener(
                 RelationHierarchySwapRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(VariableSelectedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
                 RelationListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);

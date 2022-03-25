@@ -122,7 +122,8 @@ public class MappingParser {
                                         parseMapping(
                                                 potentialRelationMapping,
                                                 relationManager,
-                                                conceptManager));
+                                                conceptManager),
+                                        conceptManager);
                                 relations.add(relation);
                             } catch (UnrelatedMappingException
                                     | NoMappingException

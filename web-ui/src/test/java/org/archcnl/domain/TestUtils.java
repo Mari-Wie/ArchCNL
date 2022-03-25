@@ -269,7 +269,7 @@ public class TestUtils {
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, resideIn, packageVariable),
                         resideInWhenTriplets);
-        resideIn.setMapping(resideInMapping);
+        resideIn.setMapping(resideInMapping, conceptManager);
 
         final CustomRelation use =
                 new CustomRelation(
@@ -281,7 +281,7 @@ public class TestUtils {
                 new RelationMapping(
                         TripletFactory.createTriplet(classVariable, use, class2Variable),
                         useWhenTriplets);
-        use.setMapping(useMapping);
+        use.setMapping(useMapping, conceptManager);
 
         final CustomRelation emptyWhenRelationString =
                 new CustomRelation(
@@ -296,7 +296,7 @@ public class TestUtils {
                                 emptyWhenRelationString,
                                 new StringValue("test string")),
                         new LinkedList<>());
-        emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping);
+        emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping, conceptManager);
 
         final CustomRelation emptyWhenRelationBoolean =
                 new CustomRelation(
@@ -309,7 +309,7 @@ public class TestUtils {
                         TripletFactory.createTriplet(
                                 varVariable, emptyWhenRelationBoolean, new BooleanValue(false)),
                         new LinkedList<>());
-        emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping);
+        emptyWhenRelationBoolean.setMapping(emptyWhenRelationBooleanMapping, conceptManager);
 
         final CustomRelation emptyWhenRelationVariable =
                 new CustomRelation(
@@ -322,7 +322,7 @@ public class TestUtils {
                         TripletFactory.createTriplet(
                                 varVariable, emptyWhenRelationVariable, new Variable("test")),
                         new LinkedList<>());
-        emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping);
+        emptyWhenRelationVariable.setMapping(emptyWhenRelationVariableMapping, conceptManager);
 
         relationManager.addRelation(resideIn);
         relationManager.addRelation(use);

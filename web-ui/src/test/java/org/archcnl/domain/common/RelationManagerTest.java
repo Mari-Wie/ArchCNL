@@ -409,7 +409,7 @@ class RelationManagerTest {
                         TripletFactory.createTriplet(
                                 new Variable("class"), withRelation, new Variable("x")),
                         when1);
-        withRelation.setMapping(mapping1);
+        withRelation.setMapping(mapping1, conceptManager);
         relationManager.addOrAppend(withRelation);
         Assertions.assertEquals(
                 inputRelationsCount + 3, relationManager.getInputRelations().size());
@@ -436,7 +436,7 @@ class RelationManagerTest {
                         TripletFactory.createTriplet(
                                 new Variable("class"), otherWithRelation, new Variable("x")),
                         when2);
-        otherWithRelation.setMapping(mapping2);
+        otherWithRelation.setMapping(mapping2, conceptManager);
         relationManager.addOrAppend(otherWithRelation);
         Assertions.assertEquals(
                 inputRelationsCount + 3, relationManager.getInputRelations().size());

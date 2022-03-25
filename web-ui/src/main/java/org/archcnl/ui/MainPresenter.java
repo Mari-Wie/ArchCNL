@@ -20,6 +20,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
@@ -244,9 +245,11 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(
                 ChangeRelationNameRequestedEvent.class, e -> e.handleEvent(relationManager));
         inputPresenter.addListener(
-                AddCustomRelationRequestedEvent.class, e -> e.handleEvent(relationManager));
+                AddCustomRelationRequestedEvent.class,
+                e -> e.handleEvent(relationManager, conceptManager));
         inputPresenter.addListener(
-                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
+                PredicateSelectedEvent.class, e -> e.handleEvent(relationManager, conceptManager));
+        inputPresenter.addListener(VariableSelectedEvent.class, e -> e.handleEvent(conceptManager));
         inputPresenter.addListener(
                 RelationListUpdateRequestedEvent.class,
                 event -> event.handleEvent(relationManager.getInputRelations()));
@@ -269,7 +272,9 @@ public class MainPresenter extends Component {
                     view.setOpenProjectMenuItemEnabled(true);
                 });
         outputPresenter.addListener(
-                PredicateSelectedEvent.class, event -> event.handleEvent(relationManager));
+                PredicateSelectedEvent.class, e -> e.handleEvent(relationManager, conceptManager));
+        outputPresenter.addListener(
+                VariableSelectedEvent.class, e -> e.handleEvent(conceptManager));
         outputPresenter.addListener(
                 RelationListUpdateRequestedEvent.class,
                 event -> event.handleEvent(relationManager.getOutputRelations()));

@@ -3,6 +3,7 @@ package org.archcnl.domain.common.conceptsandrelations;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
@@ -26,7 +27,8 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
         this.mapping = Optional.empty();
     }
 
-    public void setMapping(RelationMapping mapping) throws UnrelatedMappingException {
+    public void setMapping(RelationMapping mapping, ConceptManager conceptManager)
+            throws UnrelatedMappingException {
         if (this.equals(mapping.getThenTriplet().getPredicate())) {
             this.mapping = Optional.of(mapping);
             Set<ActualObjectType> subjectRelatableTypes = new LinkedHashSet<>();
@@ -43,7 +45,7 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
             mapping.getWhenTriplets()
                     .forEach(
                             andTriplets -> {
-                                variableManager.parseVariableTypes(andTriplets);
+                                variableManager.parseVariableTypes(andTriplets, conceptManager);
                                 subjectRelatableTypes.addAll(subject.getDynamicTypes());
                                 if (object instanceof Variable) {
                                     objectRelatableTypes.addAll(

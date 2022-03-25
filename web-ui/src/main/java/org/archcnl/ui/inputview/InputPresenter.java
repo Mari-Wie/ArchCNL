@@ -14,6 +14,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.ConceptListUpdateRequest
 import org.archcnl.ui.common.andtriplets.triplet.events.ConceptSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
@@ -130,6 +131,7 @@ public class InputPresenter extends Component {
     private void addListenersToMappingEditor(MappingEditorPresenter presenter) {
         presenter.addListener(RulesWidgetRequestedEvent.class, this::handleEvent);
         presenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        presenter.addListener(VariableSelectedEvent.class, this::fireEvent);
         presenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         presenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         presenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
