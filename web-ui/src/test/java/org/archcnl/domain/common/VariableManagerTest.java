@@ -24,10 +24,12 @@ import org.junit.jupiter.api.Test;
 class VariableManagerTest {
 
     private VariableManager variableManager;
+    private ConceptManager conceptManager;
 
     @BeforeEach
     void setup() {
         variableManager = new VariableManager();
+        conceptManager = new ConceptManager();
     }
 
     @Test
@@ -43,7 +45,9 @@ class VariableManagerTest {
             Optional<ConceptMapping> mapping = concept.getMapping();
             if (mapping.isPresent()) {
                 for (AndTriplets andTriplets : mapping.get().getWhenTriplets()) {
-                    Assertions.assertFalse(variableManager.hasConflictingDynamicTypes(andTriplets));
+                    Assertions.assertFalse(
+                            variableManager.hasConflictingDynamicTypes(
+                                    andTriplets, conceptManager));
                 }
             }
         }
@@ -63,7 +67,9 @@ class VariableManagerTest {
             Optional<RelationMapping> mapping = relation.getMapping();
             if (mapping.isPresent()) {
                 for (AndTriplets andTriplets : mapping.get().getWhenTriplets()) {
-                    Assertions.assertFalse(variableManager.hasConflictingDynamicTypes(andTriplets));
+                    Assertions.assertFalse(
+                            variableManager.hasConflictingDynamicTypes(
+                                    andTriplets, conceptManager));
                 }
             }
         }
@@ -92,7 +98,8 @@ class VariableManagerTest {
         // when and then
         // this is a conflict as ?class is of type FamixClass after the first triplet
         // while the matches relation is only defined for string variables as subjects
-        Assertions.assertTrue(variableManager.hasConflictingDynamicTypes(andTriplets));
+        Assertions.assertTrue(
+                variableManager.hasConflictingDynamicTypes(andTriplets, conceptManager));
         Assertions.assertTrue(
                 variableManager
                         .getVariableByName(classVariable.getName())
@@ -125,7 +132,8 @@ class VariableManagerTest {
         // when and then
         // The matches relation is only defined for strings and string variables as object.
         // But in triplet3 the object variable has type FamixClass
-        Assertions.assertTrue(variableManager.hasConflictingDynamicTypes(andTriplets));
+        Assertions.assertTrue(
+                variableManager.hasConflictingDynamicTypes(andTriplets, conceptManager));
         Assertions.assertFalse(
                 variableManager
                         .getVariableByName(name.getName())
@@ -139,11 +147,7 @@ class VariableManagerTest {
     }
 
     @Test
-    /**
-     * This test shows the limitations of the current dynamicTypeChecker. It reports a type conflict
-     * for a valid AndTriplets.
-     */
-    void givenValidAndTriplets_whenCheckingDynamicTypes_thenIncorrectConflictDetected()
+    void givenValidAndTriplets_whenCheckingDynamicTypes_thenNoConflictDetected()
             throws ConceptDoesNotExistException, UnrelatedMappingException,
                     UnsupportedObjectTypeException, ConceptAlreadyExistsException {
         // given
@@ -162,19 +166,8 @@ class VariableManagerTest {
         AndTriplets andTriplets = new AndTriplets(Arrays.asList(triplet1, triplet2));
 
         // when and then
-        // Aggregate is a sub-class of FamixClass and thus hasName is defined on it.
-        // However, the current dynamicTypeChecker does not look recursively over CustomConcepts
-        // until it finds a DefaultConcept.
-        Assertions.assertTrue(variableManager.hasConflictingDynamicTypes(andTriplets));
-        Assertions.assertTrue(
-                variableManager
-                        .getVariableByName(aggregate.getName())
-                        .get()
-                        .hasConflictingDynamicTypes());
+        // Aggregate is a sub-class of FamixClass and thus hasName is also defined on it.
         Assertions.assertFalse(
-                variableManager
-                        .getVariableByName(name.getName())
-                        .get()
-                        .hasConflictingDynamicTypes());
+                variableManager.hasConflictingDynamicTypes(andTriplets, conceptManager));
     }
 }
