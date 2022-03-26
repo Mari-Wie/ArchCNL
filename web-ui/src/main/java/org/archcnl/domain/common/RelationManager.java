@@ -175,6 +175,10 @@ public class RelationManager extends HierarchyManager<Relation> {
         namedEntity.add(extractConcept(conceptManager, "AnnotationType"));
         namedEntity.add(extractConcept(conceptManager, "Enum"));
         namedEntity.add(extractConcept(conceptManager, "FamixClass"));
+        namedEntity.add(extractConcept(conceptManager, "Method"));
+        namedEntity.add(extractConcept(conceptManager, "Parameter"));
+        namedEntity.add(extractConcept(conceptManager, "LocalVariable"));
+        namedEntity.add(extractConcept(conceptManager, "Attribute"));
         addToDefault(
                 new FamixRelation(
                         "hasModifier",
