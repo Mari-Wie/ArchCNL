@@ -26,10 +26,12 @@ import org.archcnl.domain.input.model.mappings.RelationMapping;
 public class RelationManager extends HierarchyManager<Relation> {
 
     private List<Relation> relations;
+    private ConceptManager conceptManager;
 
     public RelationManager(final ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
-        relations = new LinkedList<>();
+        this.relations = new LinkedList<>();
+        this.conceptManager = conceptManager;
 
         addHierarchyRoot("Default Relations");
         addHierarchyRoot("Custom Relations");
@@ -100,7 +102,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                     if (existingMapping.isPresent() && newMapping.isPresent()) {
                         existingMapping.get().addAllAndTriplets(newMapping.get().getWhenTriplets());
                     } else if (existingMapping.isEmpty() && newMapping.isPresent()) {
-                        existingCustomRelation.setMapping(newMapping.get());
+                        existingCustomRelation.setMapping(newMapping.get(), conceptManager);
                     }
                 }
             }

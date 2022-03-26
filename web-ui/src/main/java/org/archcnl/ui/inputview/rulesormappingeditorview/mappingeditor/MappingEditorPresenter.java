@@ -25,6 +25,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.PredicateSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableCreationRequestedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableListUpdateRequestedEvent;
+import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.dialogs.ButtonClickResponder;
 import org.archcnl.ui.common.dialogs.OkCancelDialog;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RulesWidgetRequestedEvent;
@@ -108,6 +109,7 @@ public abstract class MappingEditorPresenter extends Component {
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
 
+        andTripletsPresenter.addListener(VariableSelectedEvent.class, this::fireEvent);
         andTripletsPresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
         andTripletsPresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         andTripletsPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);

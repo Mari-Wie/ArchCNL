@@ -93,6 +93,7 @@ public class CustomQueryPresenter extends Component {
                 VariableListUpdateRequestedEvent.class,
                 event -> event.handleEvent(variableManager));
         wherePresenter.addListener(PredicateSelectedEvent.class, this::fireEvent);
+        wherePresenter.addListener(VariableSelectedEvent.class, this::fireEvent);
         wherePresenter.addListener(RelationListUpdateRequestedEvent.class, this::fireEvent);
         wherePresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         wherePresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);

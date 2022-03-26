@@ -226,7 +226,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             TripletFactory.createTriplet(
                                     classVariable, registerinRelation, registryVariable),
                             whenTriplets);
-            registerinRelation.setMapping(mapping);
+            registerinRelation.setMapping(mapping, conceptManager);
             return registerinRelation;
         } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
@@ -455,7 +455,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                     new RelationMapping(
                             TripletFactory.createTriplet(classVariable, haveown, class2Variable),
                             haveownWhenTriplets);
-            haveown.setMapping(mapping);
+            haveown.setMapping(mapping, conceptManager);
             return haveown;
         } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
@@ -829,7 +829,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                     new RelationMapping(
                             TripletFactory.createTriplet(classVariable, useown, class2Variable),
                             useownWhenTriplets);
-            useown.setMapping(mapping);
+            useown.setMapping(mapping, conceptManager);
             return useown;
         } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
@@ -882,7 +882,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                             TripletFactory.createTriplet(
                                     class2Package, resideInPackage, classPackage),
                             resideInWhenTriplets);
-            resideInPackage.setMapping(mapping);
+            resideInPackage.setMapping(mapping, conceptManager);
             return resideInPackage;
         } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
@@ -933,7 +933,7 @@ public class MicroserviceArchitectureTemplateManager implements ArchitecturalSty
                     new RelationMapping(
                             TripletFactory.createTriplet(classVariable, use, class2Variable),
                             useWhenTriplets);
-            use.setMapping(mapping);
+            use.setMapping(mapping, conceptManager);
             return use;
         } catch (UnsupportedObjectTypeException | UnrelatedMappingException e) {
             // TODO Auto-generated catch block
