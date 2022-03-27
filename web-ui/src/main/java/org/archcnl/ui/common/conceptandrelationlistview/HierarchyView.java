@@ -58,8 +58,9 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                             .setFilter(
                                     HierarchyNode::getName,
                                     t -> {
-                                    String cleanedEv = ev.getSource().getValue().replaceAll("\\s+","");
-                                    for(String val : cleanedEv.split("\\|")){
+                                        String cleanedEv =
+                                                ev.getSource().getValue().replaceAll("\\s+", "");
+                                        for (String val : cleanedEv.split("\\|")) {
                                             if (t.contains(val)) {
                                                 return true;
                                             }
