@@ -26,6 +26,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.andtriplets.triplet.exceptions.SubjectOrObjectNotDefinedException;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
@@ -56,6 +57,7 @@ public class CustomQueryPresenter extends Component {
     }
 
     private void addListeners() {
+        view.addListener(NodeAddRequestedEvent.class, this::fireEvent);
         view.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         view.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
 
