@@ -18,8 +18,7 @@ public class EditableHierarchyView<T extends HierarchyObject> extends HierarchyV
             newLayout = factory.createEditable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
             newLayout.addListener(EditorRequestedEvent.class, this::fireEvent);
-        }
-        else if(node.isRemoveable()){
+        } else if (node.isRemoveable()) {
             newLayout = factory.createRemovable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
         } else {

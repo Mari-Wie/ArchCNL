@@ -16,15 +16,18 @@ public class HierarchyEntryLayoutFactory<T extends HierarchyObject> {
 
     public HierarchyEntryLayout<T> createRemovable(HierarchyNode<T> node) {
         HierarchyEntryLayout<T> newLayout = new HierarchyEntryLayout<T>(node);
-        if(node.getChildren().size() > 0){
-            Button newButton = new Button(
-                    new Icon(VaadinIcon.TRASH),
-                    click -> {
-                        newLayout.handleDelteEvent();
-                    });
-            //TODO button should not ne only invisible when children are there but should be greyed out
-            //newButton.setEnabled(false);
-            //newButton.getElement().setProperty("title", "Nodes with more than 0 children cannot be removed");
+        if (node.getChildren().size() > 0) {
+            Button newButton =
+                    new Button(
+                            new Icon(VaadinIcon.TRASH),
+                            click -> {
+                                newLayout.handleDelteEvent();
+                            });
+            // TODO button should not ne only invisible when children are there but should be greyed
+            // out
+            // newButton.setEnabled(false);
+            // newButton.getElement().setProperty("title", "Nodes with more than 0 children cannot
+            // be removed");
             newLayout.add(newButton);
         }
         return newLayout;
@@ -34,16 +37,16 @@ public class HierarchyEntryLayoutFactory<T extends HierarchyObject> {
         HierarchyEntryLayout<T> newLayout = new HierarchyEntryLayout<T>(node);
         newLayout.add(
                 new Button(
-                    new Icon(VaadinIcon.EDIT),
-                    click -> {
-                        newLayout.handleEditorRequestEvent();
-                    }));
+                        new Icon(VaadinIcon.EDIT),
+                        click -> {
+                            newLayout.handleEditorRequestEvent();
+                        }));
         newLayout.add(
                 new Button(
-                    new Icon(VaadinIcon.TRASH),
-                    click -> {
-                        newLayout.handleDelteEvent();
-                    }));
+                        new Icon(VaadinIcon.TRASH),
+                        click -> {
+                            newLayout.handleDelteEvent();
+                        }));
         return newLayout;
     }
 }

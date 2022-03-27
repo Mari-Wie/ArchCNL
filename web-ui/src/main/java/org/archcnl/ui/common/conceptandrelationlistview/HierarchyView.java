@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
-import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 
 public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEditorView {
     private TreeGrid<HierarchyNode<T>> treeGrid;
@@ -104,7 +104,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-            }
+    }
 
     private void getData() {
         // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
@@ -128,7 +128,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                     if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
                                 new HierarchySwapRequestedEvent(
-                                    this, false, draggedItem, targetNode, dropLocation));
+                                        this, false, draggedItem, targetNode, dropLocation));
                     } else {
                     }
                     requestGridUpdate();
