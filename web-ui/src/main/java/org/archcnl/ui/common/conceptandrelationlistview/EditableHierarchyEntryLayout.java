@@ -24,7 +24,7 @@ public class EditableHierarchyEntryLayout<T extends HierarchyObject>
 
     protected void deleteButtonPressed() {
         HierarchyObject hierarchyObject = get();
-        fireEvent(new DeleteHierarchyObjectRequestedEvent(this, true, hierarchyObject));
+        fireEvent(new DeleteHierarchyObjectRequestedEvent(this, true, entry));
     }
 
     protected void editButtonPressed() {

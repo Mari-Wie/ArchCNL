@@ -26,6 +26,7 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdate
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.events.EditOptionRequestedEvent;
@@ -154,18 +155,30 @@ public class MainPresenter extends Component {
         updateHierarchies(relationManager, event.getSource());
     }
 
+    private void handleEvent(final NodeAddRequestedEvent e) {
+        boolean removable = true;
+        if (e.nodeType() == NodeAddRequestedEvent.NodeType.CONCEPT) {
+            conceptManager.addHierarchyRoot(e.getName(), removable);
+            updateHierarchies(conceptManager, e.getSource());
+        }
+        if (e.nodeType() == NodeAddRequestedEvent.NodeType.RELATION) {
+            relationManager.addHierarchyRoot(e.getName(), removable);
+            updateHierarchies(relationManager, e.getSource());
+        }
+    }
+
     private void handleEvent(final DeleteRuleButtonPressedEvent event) {
         ruleManager.deleteArchitectureRule(event.getRule());
         inputPresenter.updateArchitectureRulesLayout(ruleManager.getArchitectureRules());
     }
 
     private void handleEvent(final DeleteConceptRequestedEvent event) {
-        conceptManager.removeConcept(event.getConcept());
+        conceptManager.removeNode(event.getConcept());
         updateHierarchies(conceptManager, event.getSource());
     }
 
     private void handleEvent(final DeleteRelationRequestedEvent event) {
-        relationManager.removeRelation(event.getRelation());
+        relationManager.removeNode(event.getRelation());
         updateHierarchies(relationManager, event.getSource());
     }
 
@@ -232,6 +245,8 @@ public class MainPresenter extends Component {
     }
 
     private void addInputListeners() {
+
+        inputPresenter.addListener(NodeAddRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(OutputViewRequestedEvent.class, e -> selectPathForChecking());
         inputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
@@ -262,6 +277,8 @@ public class MainPresenter extends Component {
     }
 
     private void addOutputListeners() {
+
+        outputPresenter.addListener(NodeAddRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);

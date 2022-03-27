@@ -21,9 +21,7 @@ public class RulesWidget extends RulesOrMappingEditorView {
         setWidthFull();
         // TODO: Separate ArchitectureRulesLayout from CreateNewLayout
         createCreateNewLayout(
-                "Architecture Rules",
-                "Create new Arch Rule",
-                e -> fireEvent(new RuleCreatorRequestedEvent(this, true)));
+                "Create new Arch Rule", e -> fireEvent(new RuleCreatorRequestedEvent(this, true)));
         add(rulesLayout);
     }
 

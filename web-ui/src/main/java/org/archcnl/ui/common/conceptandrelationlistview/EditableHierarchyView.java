@@ -13,12 +13,17 @@ public class EditableHierarchyView<T extends HierarchyObject> extends HierarchyV
     @Override
     public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
         HierarchyEntryLayout<T> newLayout;
+        HierarchyEntryLayoutFactory factory = new HierarchyEntryLayoutFactory<T>();
         if (node.hasEntry() && node.getEntry().isEditable()) {
-            newLayout = new EditableHierarchyEntryLayout<T>(node);
+            newLayout = factory.createEditable(node);
+            newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
             newLayout.addListener(EditorRequestedEvent.class, this::fireEvent);
+        }
+        else if(node.isRemoveable()){
+            newLayout = factory.createRemovable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
         } else {
-            newLayout = new HierarchyEntryLayout<T>(node);
+            newLayout = factory.createStatic(node);
         }
         return newLayout;
     }

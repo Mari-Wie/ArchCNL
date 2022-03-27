@@ -18,6 +18,7 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationReq
 import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
@@ -36,6 +37,20 @@ public class ConceptAndRelationView extends VerticalLayout {
         createConceptHierarchy();
         createRelationHierarchy();
         addElements();
+        addNodeButton();
+    }
+
+    private void addNodeButton() {
+        conceptHierarchyView.createCreateNewLayout(
+                "Add Node",
+                e -> {
+                    conceptHierarchyView.addTextField();
+                });
+        relationHierarchyView.createCreateNewLayout(
+                "Add Node",
+                e -> {
+                    relationHierarchyView.addTextField();
+                });
     }
 
     // Overriden in the editable version of this
@@ -54,6 +69,12 @@ public class ConceptAndRelationView extends VerticalLayout {
                 });
         conceptHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class, this::requestConceptSwap);
+        conceptHierarchyView.addListener(
+                NodeAddRequestedEvent.class,
+                e -> {
+                    e.setNodeType(NodeAddRequestedEvent.NodeType.CONCEPT);
+                    fireEvent(e);
+                });
 
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of concepts but are mapped to each other externally
@@ -68,9 +89,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                 event ->
                         fireEvent(
                                 new DeleteConceptRequestedEvent(
-                                        conceptHierarchyView,
-                                        true,
-                                        (Concept) event.getHierarchyObject())));
+                                        conceptHierarchyView, true, event.getHierarchyObject())));
     }
 
     protected void initHierarchies() {
@@ -85,6 +104,12 @@ public class ConceptAndRelationView extends VerticalLayout {
         relationHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class, this::requestRelationSwap);
 
+        relationHierarchyView.addListener(
+                NodeAddRequestedEvent.class,
+                e -> {
+                    e.setNodeType(NodeAddRequestedEvent.NodeType.RELATION);
+                    fireEvent(e);
+                });
         // TODO: Caution dirty hack: cast could be replaced by heavy rework, where mappings are not
         // part of relations but are mapped to each other externally
         relationHierarchyView.addListener(
@@ -98,9 +123,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                 event ->
                         fireEvent(
                                 new DeleteRelationRequestedEvent(
-                                        relationHierarchyView,
-                                        true,
-                                        (Relation) event.getHierarchyObject())));
+                                        relationHierarchyView, true, event.getHierarchyObject())));
     }
 
     public void update() {

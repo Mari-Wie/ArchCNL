@@ -19,6 +19,7 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdate
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
@@ -53,6 +54,8 @@ public class InputPresenter extends Component {
     }
 
     private void addListeners() {
+
+        view.addListener(NodeAddRequestedEvent.class, this::fireEvent);
         view.addListener(ConceptEditorRequestedEvent.class, this::handleEvent);
         view.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         view.addListener(ConceptHierarchySwapRequestedEvent.class, this::fireEvent);

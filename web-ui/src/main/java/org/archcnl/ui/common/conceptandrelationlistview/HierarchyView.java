@@ -3,8 +3,10 @@ package org.archcnl.ui.common.conceptandrelationlistview;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
@@ -13,7 +15,9 @@ import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.common.conceptandrelationlistview.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 
 public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEditorView {
     private TreeGrid<HierarchyNode<T>> treeGrid;
@@ -32,11 +36,38 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                 });
         setUpDragAndDrop();
         add(treeGrid);
+        add(footer);
     }
 
     public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
-        HierarchyEntryLayout<T> newLayout = new HierarchyEntryLayout<T>(node);
+        HierarchyEntryLayout<T> newLayout;
+        HierarchyEntryLayoutFactory factory = new HierarchyEntryLayoutFactory<T>();
+        if (node.isRemoveable()) {
+            newLayout = factory.createRemovable(node);
+            newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
+        } else {
+            newLayout = factory.createStatic(node);
+        }
         return newLayout;
+    }
+
+    public void addTextField() {
+        TextField newTextField = new TextField();
+        newTextField.focus();
+        newTextField.addKeyPressListener(
+                Key.ENTER,
+                event -> {
+                    if (!newTextField.getValue().isEmpty()) {
+                        footer.replace(newTextField, addNode);
+                        fireEvent(new NodeAddRequestedEvent(this, newTextField.getValue(), true));
+                    }
+                });
+        newTextField.addBlurListener(
+                e -> {
+                    footer.replace(newTextField, addNode);
+                });
+
+        footer.replace(addNodeElement, newTextField);
     }
 
     public void addSection(String sectionName) {
@@ -73,7 +104,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
+            }
 
     private void getData() {
         // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
@@ -97,7 +128,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                     if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
                                 new HierarchySwapRequestedEvent(
-                                        this, false, draggedItem, targetNode, dropLocation));
+                                    this, false, draggedItem, targetNode, dropLocation));
                     } else {
                     }
                     requestGridUpdate();
