@@ -49,6 +49,8 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
         nameField.setPlaceholder("Search");
         nameField.setValueChangeMode(ValueChangeMode.EAGER);
         nameField.setClearButtonVisible(true);
+        nameField.setWidth("25%");
+
         nameField.addValueChangeListener(
                 ev -> {
                     if (ev.getValue().isEmpty()) {
