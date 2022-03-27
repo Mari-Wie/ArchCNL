@@ -8,6 +8,8 @@ import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
+import com.vaadin.flow.data.provider.hierarchy.TreeDataProvider;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     List<HierarchyNode<T>> roots;
     List<HierarchyNode<T>> expandedNodes;
     private HierarchyNode<T> draggedItem;
+    // filter by name
+    TextField nameField = new TextField();
 
     public HierarchyView() {
         setClassName("hierarchy");
@@ -41,6 +45,28 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
         setUpDragAndDrop();
         add(treeGrid);
         add(footer);
+
+        nameField.setPlaceholder("Search");
+        nameField.setValueChangeMode(ValueChangeMode.EAGER);
+        nameField.setClearButtonVisible(true);
+        nameField.addValueChangeListener(
+                ev -> {
+                    if (ev.getValue().isEmpty()) {
+                        treeGrid.expand(expandedNodes);
+                    }
+                    ((TreeDataProvider<HierarchyNode<T>>) treeGrid.getDataProvider())
+                            .setFilter(
+                                    HierarchyNode::getName,
+                                    t -> {
+                                    String cleanedEv = ev.getSource().getValue().replaceAll("\\s+","");
+                                    for(String val : cleanedEv.split("\\|")){
+                                            if (t.contains(val)) {
+                                                return true;
+                                            }
+                                        }
+                                        return false;
+                                    });
+                });
     }
 
     public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
@@ -98,6 +124,8 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     @Override
     public void onAttach(AttachEvent attachEvent) {
         requestGridUpdate();
+        treeGrid.expand(roots);
+        footer.add(nameField);
     }
 
     public void requestGridUpdate() {
@@ -108,7 +136,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-            }
+    }
 
     private void getData() {
         // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
@@ -132,7 +160,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                     if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
                                 new HierarchySwapRequestedEvent(
-                                    this, false, draggedItem, targetNode, dropLocation));
+                                        this, false, draggedItem, targetNode, dropLocation));
                     } else {
                     }
                     requestGridUpdate();
