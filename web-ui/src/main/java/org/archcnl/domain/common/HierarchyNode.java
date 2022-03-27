@@ -29,7 +29,7 @@ public class HierarchyNode<T extends HierarchyObject> {
     }
 
     public boolean isRemoveable() {
-        return removeable && children.size() == 0;
+        return removeable;
     }
 
     public void setRemoveable(boolean canBeRemoved) {
