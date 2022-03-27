@@ -22,14 +22,18 @@ import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorVie
 public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEditorView {
     private TreeGrid<HierarchyNode<T>> treeGrid;
     List<HierarchyNode<T>> roots;
+    List<HierarchyNode<T>> expandedNodes;
     private HierarchyNode<T> draggedItem;
 
     public HierarchyView() {
         setClassName("hierarchy");
         roots = new ArrayList<HierarchyNode<T>>();
+        expandedNodes = new ArrayList<HierarchyNode<T>>(roots);
         treeGrid = new TreeGrid<HierarchyNode<T>>();
         treeGrid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
         treeGrid.setRowsDraggable(true);
+        treeGrid.addExpandListener(e -> expandedNodes.addAll(e.getItems()));
+        treeGrid.addCollapseListener(e -> expandedNodes.removeAll(e.getItems()));
         treeGrid.addComponentHierarchyColumn(
                 node -> {
                     return createNewHierarchyEntry(node);
@@ -88,7 +92,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
 
     public void update() {
         treeGrid.setItems(roots, HierarchyNode::getChildren);
-        treeGrid.expand(roots);
+        treeGrid.expand(expandedNodes);
     }
 
     @Override
@@ -104,7 +108,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     public <T extends ComponentEvent<?>> Registration addListener(
             final Class<T> eventType, final ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
+            }
 
     private void getData() {
         // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
@@ -128,7 +132,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                     if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
                                 new HierarchySwapRequestedEvent(
-                                        this, false, draggedItem, targetNode, dropLocation));
+                                    this, false, draggedItem, targetNode, dropLocation));
                     } else {
                     }
                     requestGridUpdate();
