@@ -95,8 +95,17 @@ public class ConceptManager extends HierarchyManager<Concept> {
     }
 
     public void removeConcept(Concept concept) {
-        concepts.remove(concept.getName());
+        if (concept != null) {
+            concepts.remove(concept.getName());
+        }
         removeFromHierarchy(new HierarchyNode<>(concept));
+    }
+
+    public void removeNode(HierarchyNode node) {
+        if (node.hasEntry()) {
+            concepts.remove(node.getName());
+        }
+        removeFromHierarchy(node);
     }
 
     // TODO: kick the inits out of here and load/init them from outside the manager
