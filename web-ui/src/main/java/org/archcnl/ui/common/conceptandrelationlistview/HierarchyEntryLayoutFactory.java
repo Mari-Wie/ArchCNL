@@ -16,7 +16,7 @@ public class HierarchyEntryLayoutFactory<T extends HierarchyObject> {
 
     public HierarchyEntryLayout<T> createRemovable(HierarchyNode<T> node) {
         HierarchyEntryLayout<T> newLayout = new HierarchyEntryLayout<T>(node);
-        if (node.getChildren().size() > 0) {
+        if (node.getChildren().size() == 0) {
             Button newButton =
                     new Button(
                             new Icon(VaadinIcon.TRASH),
