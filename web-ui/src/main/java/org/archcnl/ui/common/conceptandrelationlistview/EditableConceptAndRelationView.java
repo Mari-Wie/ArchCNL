@@ -12,11 +12,11 @@ public class EditableConceptAndRelationView extends ConceptAndRelationView {
 
     @Override
     protected void addElements() {
-        conceptHierarchyView.createCreateNewLayout(
+        conceptHierarchyView.createEditorButton(
                 "New Concept", e -> fireEvent(new ConceptEditorRequestedEvent(this, true)));
         add(conceptHierarchyView);
 
-        relationHierarchyView.createCreateNewLayout(
+        relationHierarchyView.createEditorButton(
                 "New Relation", e -> fireEvent(new RelationEditorRequestedEvent(this, true)));
 
         add(relationHierarchyView);

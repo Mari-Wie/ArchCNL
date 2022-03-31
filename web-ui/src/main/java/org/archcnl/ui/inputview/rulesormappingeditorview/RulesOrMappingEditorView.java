@@ -18,7 +18,7 @@ public abstract class RulesOrMappingEditorView extends VerticalLayout {
         footer = new HorizontalLayout();
     }
 
-    public HorizontalLayout createCreateNewLayout(
+    public HorizontalLayout createEditorButton(
             String buttonLabel, ComponentEventListener<ClickEvent<Button>> clickListener) {
 
         addNode = new Button(buttonLabel, clickListener);

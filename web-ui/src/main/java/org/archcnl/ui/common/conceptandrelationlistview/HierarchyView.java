@@ -4,8 +4,12 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.provider.hierarchy.TreeDataProvider;
@@ -27,7 +31,10 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     List<HierarchyNode<T>> expandedNodes;
     private HierarchyNode<T> draggedItem;
     // filter by name
-    TextField nameField = new TextField();
+    TextField searchField = new TextField();
+    HorizontalLayout searchBar = new HorizontalLayout();
+    Button searchButton;
+    Button cancelButton;
 
     public HierarchyView() {
         setClassName("hierarchy");
@@ -46,12 +53,12 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
         add(treeGrid);
         add(footer);
 
-        nameField.setPlaceholder("Search");
-        nameField.setValueChangeMode(ValueChangeMode.EAGER);
-        nameField.setClearButtonVisible(true);
-        nameField.setWidth("25%");
+        searchField.setPlaceholder("Search");
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.setClearButtonVisible(true);
+        searchField.setWidth("80%");
 
-        nameField.addValueChangeListener(
+        searchField.addValueChangeListener(
                 ev -> {
                     if (ev.getValue().isEmpty()) {
                         treeGrid.expand(expandedNodes);
@@ -70,6 +77,15 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                                         return false;
                                     });
                 });
+        searchButton = new Button(new Icon(VaadinIcon.SEARCH), click -> replace(footer, searchBar));
+        cancelButton =
+                new Button(
+                        new Icon(VaadinIcon.CLOSE),
+                        click -> {
+                            searchField.setValue("");
+                            replace(searchBar, footer);
+                        });
+        searchBar.add(searchField, cancelButton);
     }
 
     public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
@@ -128,7 +144,7 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
     public void onAttach(AttachEvent attachEvent) {
         requestGridUpdate();
         treeGrid.expand(roots);
-        footer.add(nameField);
+        footer.add(searchButton);
     }
 
     public void requestGridUpdate() {

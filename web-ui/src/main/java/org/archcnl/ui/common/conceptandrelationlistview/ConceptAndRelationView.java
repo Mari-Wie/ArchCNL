@@ -41,12 +41,12 @@ public class ConceptAndRelationView extends VerticalLayout {
     }
 
     private void addNodeButton() {
-        conceptHierarchyView.createCreateNewLayout(
+        conceptHierarchyView.createEditorButton(
                 "Add Node",
                 e -> {
                     conceptHierarchyView.addTextField();
                 });
-        relationHierarchyView.createCreateNewLayout(
+        relationHierarchyView.createEditorButton(
                 "Add Node",
                 e -> {
                     relationHierarchyView.addTextField();
