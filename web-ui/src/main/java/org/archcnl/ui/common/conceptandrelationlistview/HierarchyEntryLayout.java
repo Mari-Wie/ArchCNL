@@ -24,10 +24,6 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
         updateDescription();
     }
 
-    public HierarchyNode<T> getListEntry() {
-        return entry;
-    }
-
     public T get() {
         return entry.getEntry();
     }
