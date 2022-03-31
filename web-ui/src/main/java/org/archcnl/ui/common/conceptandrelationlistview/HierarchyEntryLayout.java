@@ -8,11 +8,13 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.shared.Registration;
 import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
+import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 
 public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalLayout {
 
     private static final long serialVersionUID = 2L;
-    private HierarchyNode<T> entry;
+    protected HierarchyNode<T> entry;
 
     public HierarchyEntryLayout(final HierarchyNode<T> entry) {
         this.entry = entry;
@@ -20,10 +22,6 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
         text.setWidth(100, Unit.PERCENTAGE);
         addAndExpand(text);
         updateDescription();
-    }
-
-    public HierarchyNode<T> getListEntry() {
-        return entry;
     }
 
     public T get() {
@@ -37,6 +35,14 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
 
     public void updateDescription() {
         getElement().setAttribute("title", entry.getDescription());
+    }
+
+    public void handleDelteEvent() {
+        fireEvent(new DeleteHierarchyObjectRequestedEvent(this, true, entry));
+    }
+
+    public void handleEditorRequestEvent() {
+        fireEvent(new EditorRequestedEvent(this, true));
     }
 
     @Override

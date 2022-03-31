@@ -22,6 +22,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
@@ -126,6 +127,8 @@ public class OutputPresenter extends Component {
 
     private CustomQueryPresenter createCustomQueryPresenter() {
         CustomQueryPresenter newCustomQueryPresenter = new CustomQueryPresenter();
+
+        newCustomQueryPresenter.addListener(NodeAddRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(PinCustomQueryRequestedEvent.class, this::handleEvent);
         newCustomQueryPresenter.addListener(RunQueryRequestedEvent.class, this::handleEvent);
         newCustomQueryPresenter.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);

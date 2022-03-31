@@ -16,6 +16,12 @@ public class HierarchyManager<T extends HierarchyObject> {
         hierarchy_roots.add(new HierarchyNode<T>(name));
     }
 
+    public void addHierarchyRoot(String name, boolean removable) {
+        HierarchyNode newNode = new HierarchyNode<T>(name);
+        newNode.setRemoveable(removable);
+        hierarchy_roots.add(newNode);
+    }
+
     public void addHierarchyRoot(HierarchyNode<T> newRoot) {
         hierarchy_roots.add(newRoot);
     }
@@ -51,6 +57,14 @@ public class HierarchyManager<T extends HierarchyObject> {
 
     public boolean removeFromHierarchy(HierarchyNode<T> node) {
         for (HierarchyNode<T> hn : hierarchy_roots) {
+            if (hn.equals(node)) {
+                if (hn.isRemoveable()) {
+                    hierarchy_roots.remove(node);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             if (hn.remove(node)) {
                 return true;
             }

@@ -22,6 +22,7 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
 import org.archcnl.ui.common.variablelistview.VariableListView;
@@ -123,6 +124,7 @@ public class CustomQueryView extends HorizontalLayout {
     private void initConceptAndRelationView() {
         conceptAndRelationView = new ConceptAndRelationView();
         conceptAndRelationView.setWidth(100.0f - CustomQueryView.CONTENT_RATIO, Unit.PERCENTAGE);
+        conceptAndRelationView.addListener(NodeAddRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(ConceptGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(RelationGridUpdateRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(

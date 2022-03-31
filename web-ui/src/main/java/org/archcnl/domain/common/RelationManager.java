@@ -143,8 +143,17 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     public void removeRelation(Relation relation) {
-        relations.remove(relation);
+        if (relation != null) {
+            relations.remove(relation);
+        }
         removeFromHierarchy(new HierarchyNode<>(relation));
+    }
+
+    public void removeNode(HierarchyNode node) {
+        if (node.hasEntry()) {
+            relations.remove(node.getName());
+        }
+        removeFromHierarchy(node);
     }
 
     private void initializeSpecialRelations() {

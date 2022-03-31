@@ -9,9 +9,12 @@ public class HierarchyNode<T extends HierarchyObject> {
     private T entry;
     private String text;
     private List<HierarchyNode<T>> children;
+    // only used for sepeartor nodes that are not default nodes!
+    private boolean removeable;
 
     /** Constructor for creating seperation nodes */
     public HierarchyNode(String text) {
+        removeable = false;
         entry = null;
         this.text = text;
         children = new ArrayList<HierarchyNode<T>>();
@@ -19,9 +22,18 @@ public class HierarchyNode<T extends HierarchyObject> {
 
     /** Constructor for creating node containing HierarchyObject */
     public HierarchyNode(T p_entry) {
+        removeable = false;
         this.entry = p_entry;
         text = null;
         children = new ArrayList<HierarchyNode<T>>();
+    }
+
+    public boolean isRemoveable() {
+        return removeable;
+    }
+
+    public void setRemoveable(boolean canBeRemoved) {
+        removeable = canBeRemoved;
     }
 
     /**
