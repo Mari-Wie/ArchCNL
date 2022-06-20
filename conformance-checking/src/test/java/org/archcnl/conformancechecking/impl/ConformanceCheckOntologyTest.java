@@ -27,8 +27,12 @@ public class ConformanceCheckOntologyTest {
     @Before
     public void setUp() {
         Model emptyModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-        rule1 = new ArchitectureRule(0, cnlSentence1, RuleType.DOMAIN_RANGE, emptyModel);
-        rule2 = new ArchitectureRule(0, cnlSentence2, RuleType.DOMAIN_RANGE, emptyModel);
+        rule1 =
+                new ArchitectureRule(
+                        0, cnlSentence1, RuleType.DOMAIN_RANGE, emptyModel, null, null);
+        rule2 =
+                new ArchitectureRule(
+                        0, cnlSentence2, RuleType.DOMAIN_RANGE, emptyModel, null, null);
     }
 
     @Test

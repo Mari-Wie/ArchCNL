@@ -38,7 +38,7 @@ public class ToolchainIT {
     private final String ruleFile = rootDir + "OnionArchitectureDemo/rules.adoc";
     private final boolean verboseLogging = false;
     private final boolean removeDBs = true;
-    private final List<String> enabledParsers = Arrays.asList("java");
+    private final List<String> enabledParsers = Arrays.asList("java", "git");
     
     @Test
     public void givenArchitecture_whenRunningToolchain_thenRuleResultsAreCorrect() throws IOException {
@@ -64,7 +64,7 @@ public class ToolchainIT {
         Assert.assertTrue(askQueryResult(result, FIRST_RULE_CORRECTLY_MAPPED_QUERY));
         Assert.assertTrue(askQueryResult(result, SECOND_RULE_CORRECTLY_MAPPED_QUERY));
         Assert.assertFalse(askQueryResult(result, THIRD_RULE_VIOLATED_QUERY));
-        Assert.assertEquals(10, result.numPrefixes());
+        Assert.assertEquals(12, result.numPrefixes());
     }
 
     private OntModel loadResult() throws IOException {

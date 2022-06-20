@@ -115,6 +115,14 @@
     <owl:DatatypeProperty rdf:about="#hasRuleID">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
     </owl:DatatypeProperty>
+    
+    <owl:DatatypeProperty rdf:about="#hasRuleValidFromDate">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>
+    
+    <owl:DatatypeProperty rdf:about="#hasRuleValidUntilDate">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>        
 
     <owl:DatatypeProperty rdf:about="#hasRuleRepresentation">
         <rdfs:domain rdf:resource="#ArchitectureRule"/>

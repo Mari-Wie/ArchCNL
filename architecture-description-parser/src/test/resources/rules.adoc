@@ -1,7 +1,7 @@
 [role="rule"]
 Only LayerOne can use LayerTwo.
 
-[role="rule"]
+[role="rule", validFrom="1940-01-01", validUntil="2100-01-01"]
 No LayerTwo can use LayerOne.
 
 [role="mapping"]

@@ -18,8 +18,12 @@ public class CNLTranslatorTest {
     public void givenCNLSentences_whenTranslatedbyTranslator_thenRulesAreCorrectlyTranslated() {
         // given
         CNLTranslator translator = new CNLTranslator();
-        List<String> cnlSentences =
-                Arrays.asList("Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne.");
+        List<ArchitectureRule> cnlSentences =
+                Arrays.asList(
+                        ArchitectureRule.createArchRuleForParsing(
+                                "Only LayerOne can use LayerTwo.", null, null),
+                        ArchitectureRule.createArchRuleForParsing(
+                                "No LayerTwo can use LayerOne.", null, null));
 
         // when
         List<ArchitectureRule> rules = translator.translate(cnlSentences, "./src/test/resources");
@@ -28,16 +32,20 @@ public class CNLTranslatorTest {
         assertThat(
                 rules,
                 CoreMatchers.hasItems(
-                        new ArchitectureRule(
+                        ArchitectureRule.createArchRuleForTests(
                                 0,
                                 "Only LayerOne can use LayerTwo.",
                                 RuleType.DOMAIN_RANGE,
-                                "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(
+                                "./src/test/resources/architecture0.owl",
+                                null,
+                                null),
+                        ArchitectureRule.createArchRuleForTests(
                                 1,
                                 "No LayerTwo can use LayerOne.",
                                 RuleType.NEGATION,
-                                "./src/test/resources/architecture1.owl")));
+                                "./src/test/resources/architecture1.owl",
+                                null,
+                                null)));
 
         // assert that 1st constraint files is correct:
         // given, when

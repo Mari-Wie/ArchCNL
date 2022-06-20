@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.ontology.DatatypeProperty;
@@ -31,14 +32,21 @@ public class ConformanceCheckImplTest {
         check.createNewConformanceCheck();
 
         ArchitectureRule rule0 =
-                new ArchitectureRule(
+                ArchitectureRule.createArchRuleForTests(
                         0,
                         "Only LayerOne can use LayerTwo.",
                         RuleType.DOMAIN_RANGE,
-                        "architecture0.owl");
+                        "architecture0.owl",
+                        null,
+                        LocalDate.of(2200, 1, 1));
         ArchitectureRule rule1 =
-                new ArchitectureRule(
-                        1, "No LayerTwo can use LayerOne.", RuleType.NEGATION, "architecture1.owl");
+                ArchitectureRule.createArchRuleForTests(
+                        1,
+                        "No LayerTwo can use LayerOne.",
+                        RuleType.NEGATION,
+                        "architecture1.owl",
+                        LocalDate.of(1990, 1, 1),
+                        null);
 
         List<ConstraintViolation> violations1 = new ArrayList<>();
         ConstraintViolationBuilder violation = new ConstraintViolationBuilder();

@@ -24,9 +24,12 @@ public class ArchitectureRuleTest {
         model1.createProperty("prop");
         model2.createProperty("prop");
 
-        ArchitectureRule r1 = new ArchitectureRule(0, "test", RuleType.AT_LEAST, model1);
-        ArchitectureRule r2 = new ArchitectureRule(0, "test", RuleType.AT_LEAST, model2);
-        ArchitectureRule r3 = new ArchitectureRule(1, "not test", RuleType.AT_MOST, model3);
+        ArchitectureRule r1 =
+                new ArchitectureRule(0, "test", RuleType.AT_LEAST, model1, null, null);
+        ArchitectureRule r2 =
+                new ArchitectureRule(0, "test", RuleType.AT_LEAST, model2, null, null);
+        ArchitectureRule r3 =
+                new ArchitectureRule(1, "not test", RuleType.AT_MOST, model3, null, null);
 
         // then
         assertEquals(r1, r1);

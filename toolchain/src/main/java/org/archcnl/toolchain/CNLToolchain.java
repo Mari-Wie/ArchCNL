@@ -29,6 +29,7 @@ import org.archcnl.conformancechecking.impl.ConformanceCheckOntologyClassesAndPr
 import org.archcnl.javaparser.parser.JavaOntologyTransformer;
 import org.archcnl.kotlinparser.parser.KotlinOntologyTransformer;
 import org.archcnl.owlify.core.OwlifyComponent;
+import org.archcnl.owlify.git.ontology.GitOntologyTransformer;
 import org.archcnl.stardogwrapper.api.ConstraintViolationsResultSet;
 import org.archcnl.stardogwrapper.api.StardogAPIFactory;
 import org.archcnl.stardogwrapper.api.StardogDatabaseAPI;
@@ -54,7 +55,8 @@ public class CNLToolchain {
     private final Map<String, Supplier<OwlifyComponent>> transformerFactories =
             Map.ofEntries(
                     Map.entry("java", () -> new JavaOntologyTransformer()),
-                    Map.entry("kotlin", () -> new KotlinOntologyTransformer()));
+                    Map.entry("kotlin", () -> new KotlinOntologyTransformer()),
+                    Map.entry("git", () -> new GitOntologyTransformer()));
 
     // private, use runToolchain to create and execute the toolchain
     private CNLToolchain(
@@ -241,6 +243,8 @@ public class CNLToolchain {
         namespaces.put("conformance", "http://arch-ont.org/ontologies/architectureconformance#");
         namespaces.put("famix", "http://arch-ont.org/ontologies/famix.owl#");
         namespaces.put("main", "http://arch-ont.org/ontologies/main.owl#");
+        namespaces.put("git", "http://arch-ont.org/ontologies/git.owl#");
+        namespaces.put("history", "http://arch-ont.org/ontologies/history.owl#");
         db.addNamespaces(namespaces);
     }
 

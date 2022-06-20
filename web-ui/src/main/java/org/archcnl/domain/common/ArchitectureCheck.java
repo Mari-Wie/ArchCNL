@@ -21,7 +21,7 @@ public class ArchitectureCheck {
     private final String ruleFile = ConfigAppService.getDbRuleFile();
     private static final boolean VERBOSE_LOGGING = false;
     private static final boolean REMOVE_DBS = true;
-    private final List<String> enabledParsers = Arrays.asList("java");
+    private final List<String> enabledParsers = Arrays.asList("java", "git");
 
     public ArchitectureCheck() throws PropertyNotFoundException {
         this.repository =

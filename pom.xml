@@ -213,6 +213,7 @@
 		<module>java-parser</module>
 		<module>kotlin-parser</module>
 		<module>web-ui</module>
+		<module>owlify-git</module>
 	</modules>
 
 	<dependencies>

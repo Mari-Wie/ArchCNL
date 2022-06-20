@@ -26,16 +26,20 @@ public class ExecuteMappingAPIImplTest {
         // given
         List<ArchitectureRule> architectureModel =
                 Arrays.asList(
-                        new ArchitectureRule(
+                        ArchitectureRule.createArchRuleForTests(
                                 0,
                                 "Only LayerOne can use LayerTwo.",
                                 RuleType.DOMAIN_RANGE,
-                                "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(
+                                "./src/test/resources/architecture0.owl",
+                                null,
+                                null),
+                        ArchitectureRule.createArchRuleForTests(
                                 1,
                                 "No LayerTwo can use LayerOne.",
                                 RuleType.NEGATION,
-                                "./src/test/resources/architecture1.owl"));
+                                "./src/test/resources/architecture1.owl",
+                                null,
+                                null));
 
         ExecuteMappingAPI e = new ExecuteMappingAPIImpl();
 

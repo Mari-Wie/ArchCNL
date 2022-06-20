@@ -47,7 +47,12 @@ public class ArchitectureToCodeMapperTest {
         architectureModel =
                 Arrays.asList(
                         new ArchitectureRule(
-                                0, "No ClassA can use ClassB.", RuleType.NEGATION, ruleModel));
+                                0,
+                                "No ClassA can use ClassB.",
+                                RuleType.NEGATION,
+                                ruleModel,
+                                null,
+                                null));
 
         // Mapping: When some class imports another one, the former uses the latter.
         nonTransitiveMapping =
