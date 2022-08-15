@@ -1,6 +1,8 @@
 package org.archcnl.ui.common.conceptandrelationlistview;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -10,6 +12,7 @@ import com.vaadin.flow.component.grid.dnd.GridDropMode;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.provider.hierarchy.TreeDataProvider;
@@ -23,21 +26,24 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyOb
 import org.archcnl.ui.common.conceptandrelationlistview.events.GridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
-import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 
-public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEditorView {
+public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
     private TreeGrid<HierarchyNode<T>> treeGrid;
-    List<HierarchyNode<T>> roots;
-    List<HierarchyNode<T>> expandedNodes;
+    private List<HierarchyNode<T>> roots;
+    private List<HierarchyNode<T>> expandedNodes;
     private HierarchyNode<T> draggedItem;
     // filter by name
-    TextField searchField = new TextField();
-    HorizontalLayout searchBar = new HorizontalLayout();
-    Button searchButton;
-    Button cancelButton;
+    private TextField searchField = new TextField();
+    private HorizontalLayout searchBar = new HorizontalLayout();
+    private Button searchButton;
+    private Button cancelButton;
+    protected HorizontalLayout footer = new HorizontalLayout();
+    protected Component addNodeElement;
+    protected Button addNode = new Button("No LABEL");
 
     public HierarchyView() {
         setClassName("hierarchy");
+        footer = new HorizontalLayout();
         roots = new ArrayList<HierarchyNode<T>>();
         expandedNodes = new ArrayList<HierarchyNode<T>>(roots);
         treeGrid = new TreeGrid<HierarchyNode<T>>();
@@ -86,6 +92,15 @@ public class HierarchyView<T extends HierarchyObject> extends RulesOrMappingEdit
                             replace(searchBar, footer);
                         });
         searchBar.add(searchField, cancelButton);
+    }
+
+    public HorizontalLayout createEditorButton(
+            String buttonLabel, ComponentEventListener<ClickEvent<Button>> clickListener) {
+
+        addNode = new Button(buttonLabel, clickListener);
+        addNodeElement = addNode;
+        footer.add(addNodeElement);
+        return footer;
     }
 
     public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
