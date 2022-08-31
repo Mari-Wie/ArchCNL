@@ -6,28 +6,28 @@ import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 
 public class HierarchyManager<T extends HierarchyObject> {
 
-    List<HierarchyNode<T>> hierarchy_roots;
+    List<HierarchyNode<T>> hierarchyRoots;
 
     public HierarchyManager() {
-        hierarchy_roots = new ArrayList<HierarchyNode<T>>();
+        hierarchyRoots = new ArrayList<>();
     }
 
     public void addHierarchyRoot(String name) {
-        hierarchy_roots.add(new HierarchyNode<T>(name));
+        hierarchyRoots.add(new HierarchyNode<>(name));
     }
 
     public void addHierarchyRoot(String name, boolean removable) {
-        HierarchyNode newNode = new HierarchyNode<T>(name);
+        HierarchyNode<T> newNode = new HierarchyNode<>(name);
         newNode.setRemoveable(removable);
-        hierarchy_roots.add(newNode);
+        hierarchyRoots.add(newNode);
     }
 
     public void addHierarchyRoot(HierarchyNode<T> newRoot) {
-        hierarchy_roots.add(newRoot);
+        hierarchyRoots.add(newRoot);
     }
 
     private boolean containedInRoots(HierarchyNode<T> node) {
-        for (HierarchyNode<T> n : hierarchy_roots) {
+        for (HierarchyNode<T> n : hierarchyRoots) {
             if (node.equals(n)) {
                 return true;
             }
@@ -52,14 +52,14 @@ public class HierarchyManager<T extends HierarchyObject> {
     }
 
     public List<HierarchyNode<T>> getRoots() {
-        return hierarchy_roots;
+        return hierarchyRoots;
     }
 
     public boolean removeFromHierarchy(HierarchyNode<T> node) {
-        for (HierarchyNode<T> hn : hierarchy_roots) {
+        for (HierarchyNode<T> hn : hierarchyRoots) {
             if (hn.equals(node)) {
                 if (hn.isRemoveable()) {
-                    hierarchy_roots.remove(node);
+                    hierarchyRoots.remove(node);
                     return true;
                 } else {
                     return false;

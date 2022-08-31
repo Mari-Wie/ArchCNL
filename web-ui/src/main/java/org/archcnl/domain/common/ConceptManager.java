@@ -47,9 +47,7 @@ public class ConceptManager extends HierarchyManager<Concept> {
             throws ConceptAlreadyExistsException {
         addConcept(concept);
         Optional<HierarchyNode<Concept>> parent =
-                hierarchy_roots.stream()
-                        .filter(node -> parentName.equals(node.getName()))
-                        .findAny();
+                hierarchyRoots.stream().filter(node -> parentName.equals(node.getName())).findAny();
         if (!parent.isPresent()) {
             // TODO: error handling
         }

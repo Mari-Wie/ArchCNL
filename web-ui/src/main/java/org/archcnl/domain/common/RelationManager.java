@@ -66,9 +66,7 @@ public class RelationManager extends HierarchyManager<Relation> {
             throws RelationAlreadyExistsException {
         addRelation(relation);
         Optional<HierarchyNode<Relation>> parent =
-                hierarchy_roots.stream()
-                        .filter(node -> parentName.equals(node.getName()))
-                        .findAny();
+                hierarchyRoots.stream().filter(node -> parentName.equals(node.getName())).findAny();
         if (!parent.isPresent()) {
             // TODO: error handling
         }
