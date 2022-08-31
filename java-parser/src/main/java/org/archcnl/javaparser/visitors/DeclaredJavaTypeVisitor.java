@@ -19,8 +19,6 @@ public class DeclaredJavaTypeVisitor extends VoidVisitorAdapter<Void> {
 
     private Type type;
 
-    public DeclaredJavaTypeVisitor() {}
-
     @Override
     public void visit(ClassOrInterfaceType n, Void arg) {
 
