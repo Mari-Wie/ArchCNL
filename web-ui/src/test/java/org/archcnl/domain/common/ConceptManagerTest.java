@@ -59,43 +59,30 @@ class ConceptManagerTest {
             throws ConceptDoesNotExistException {
         Assertions.assertEquals(inputConceptsCount, conceptManager.getInputConcepts().size());
         Assertions.assertEquals(outputConceptsCount, conceptManager.getOutputConcepts().size());
-        Assertions.assertFalse(conceptManager.doesConceptExist(new FamixConcept("ABC", "")));
+        Assertions.assertFalse(conceptManager.doesConceptExist("ABC"));
 
         // Famix
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("FamixClass", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Namespace", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Enum", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new FamixConcept("AnnotationType", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Method", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Attribute", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Inheritance", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new FamixConcept("AnnotationInstance", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new FamixConcept("AnnotationTypeAttribute", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(
-                        new FamixConcept("AnnotationInstanceAttribute", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Parameter", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new FamixConcept("LocalVariable", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new FamixConcept("Exception", "")));
+        Assertions.assertTrue(conceptManager.doesConceptExist("FamixClass"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Namespace"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Enum"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("AnnotationType"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Method"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Attribute"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Inheritance"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("AnnotationInstance"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("AnnotationTypeAttribute"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("AnnotationInstanceAttribute"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Parameter"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("LocalVariable"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Exception"));
 
         // Conformance
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new ConformanceConcept("ConformanceCheck", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new ConformanceConcept("ArchitectureRule", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(
-                        new ConformanceConcept("ArchitectureViolation", "")));
-        Assertions.assertTrue(conceptManager.doesConceptExist(new ConformanceConcept("Proof", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(new ConformanceConcept("AssertedStatement", "")));
-        Assertions.assertTrue(
-                conceptManager.doesConceptExist(
-                        new ConformanceConcept("NotInferredStatement", "")));
+        Assertions.assertTrue(conceptManager.doesConceptExist("ConformanceCheck"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("ArchitectureRule"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("ArchitectureViolation"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("Proof"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("AssertedStatement"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("NotInferredStatement"));
     }
 
     @Test

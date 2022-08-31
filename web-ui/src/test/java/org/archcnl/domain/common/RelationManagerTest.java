@@ -62,244 +62,54 @@ class RelationManagerTest {
     void givenRelationManager_whenCreated_thenExpectedRelations() {
         Assertions.assertEquals(inputRelationsCount, relationManager.getInputRelations().size());
         Assertions.assertEquals(outputRelationsCount, relationManager.getOutputRelations().size());
-        Assertions.assertFalse(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "abc", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
+        Assertions.assertFalse(relationManager.doesRelationExist("abc"));
 
         // Jena builtin
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new JenaBuiltinRelation(
-                                "matches",
-                                "regex",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
+        Assertions.assertTrue(relationManager.doesRelationExist("matches"));
 
         // Famix
-        Assertions.assertTrue(relationManager.doesRelationExist(TypeRelation.getTyperelation()));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasModifier", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasName", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "isLocatedAt", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasSignature", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasValue", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasFullQualifiedName",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "isConstructor",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "isExternal", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "isInterface", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasDefiningClass",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasDeclaredException",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasCaughtException",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "throwsException",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasSubClass", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasSuperClass",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "definesNestedType",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "definesParameter",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "definesVariable",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasAnnotationInstance",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasAnnotationType",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasAnnotationTypeAttribute",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasAnnotationInstanceAttribute",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "definesAttribute",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "definesMethod",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "imports", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "namespaceContains",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new FamixRelation(
-                                "hasDeclaredType",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
+        Assertions.assertTrue(relationManager.doesRelationExist("is-of-type"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasModifier"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasName"));
+        Assertions.assertTrue(relationManager.doesRelationExist("isLocatedAt"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasSignature"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasValue"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasFullQualifiedName"));
+        Assertions.assertTrue(relationManager.doesRelationExist("isConstructor"));
+        Assertions.assertTrue(relationManager.doesRelationExist("isExternal"));
+        Assertions.assertTrue(relationManager.doesRelationExist("isInterface"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasDefiningClass"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasDeclaredException"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasCaughtException"));
+        Assertions.assertTrue(relationManager.doesRelationExist("throwsException"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasSubClass"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasSuperClass"));
+        Assertions.assertTrue(relationManager.doesRelationExist("definesNestedType"));
+        Assertions.assertTrue(relationManager.doesRelationExist("definesParameter"));
+        Assertions.assertTrue(relationManager.doesRelationExist("definesVariable"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasAnnotationInstance"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasAnnotationType"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasAnnotationTypeAttribute"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasAnnotationInstanceAttribute"));
+        Assertions.assertTrue(relationManager.doesRelationExist("definesAttribute"));
+        Assertions.assertTrue(relationManager.doesRelationExist("definesMethod"));
+        Assertions.assertTrue(relationManager.doesRelationExist("imports"));
+        Assertions.assertTrue(relationManager.doesRelationExist("namespaceContains"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasDeclaredType"));
 
         // Conformance
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasRuleRepresentation",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasRuleType", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasNotInferredStatement",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasAssertedStatement",
-                                "",
-                                new LinkedHashSet<>(),
-                                new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasSubject", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasPredicate", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasObject", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "proofs", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasDetected", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "hasViolation", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "violates", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
-        Assertions.assertTrue(
-                relationManager.doesRelationExist(
-                        new ConformanceRelation(
-                                "validates", "", new LinkedHashSet<>(), new LinkedHashSet<>())));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasRuleRepresentation"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasRuleType"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasNotInferredStatement"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasAssertedStatement"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasSubject"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasPredicate"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasObject"));
+        Assertions.assertTrue(relationManager.doesRelationExist("proofs"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasDetected"));
+        Assertions.assertTrue(relationManager.doesRelationExist("hasViolation"));
+        Assertions.assertTrue(relationManager.doesRelationExist("violates"));
+        Assertions.assertTrue(relationManager.doesRelationExist("validates"));
     }
 
     @Test
