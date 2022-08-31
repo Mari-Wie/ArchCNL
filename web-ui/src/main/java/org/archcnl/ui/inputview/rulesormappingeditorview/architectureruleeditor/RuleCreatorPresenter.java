@@ -30,7 +30,7 @@ public class RuleCreatorPresenter extends Component {
 
     public RuleCreatorPresenter(ArchitectureRule rule) {
         oldRule = Optional.of(rule);
-        view = new RuleCreatorView(Optional.of(rule.transformToGui()));
+        view = new RuleCreatorView(Optional.of(rule));
         addListeners();
     }
 
@@ -42,7 +42,10 @@ public class RuleCreatorPresenter extends Component {
                                 new SaveArchitectureRuleRequestedEvent(
                                         this,
                                         true,
-                                        new ArchitectureRule(event.getRuleString()),
+                                        new ArchitectureRule(
+                                                event.getRuleString(),
+                                                event.getValidFrom(),
+                                                event.getValidUntil()),
                                         oldRule)));
         view.addListener(RulesWidgetRequestedEvent.class, this::fireEvent);
     }

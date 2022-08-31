@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,16 +47,20 @@ public class AsciiDocArc42ParserTest {
         assertThat(
                 rules,
                 CoreMatchers.hasItems(
-                        new ArchitectureRule(
+                        ArchitectureRule.createArchRuleForTests(
                                 0,
                                 "Only LayerOne can use LayerTwo.",
                                 RuleType.DOMAIN_RANGE,
-                                "./src/test/resources/architecture0.owl"),
-                        new ArchitectureRule(
+                                "./src/test/resources/architecture0.owl",
+                                null,
+                                null),
+                        ArchitectureRule.createArchRuleForTests(
                                 1,
                                 "No LayerTwo can use LayerOne.",
                                 RuleType.NEGATION,
-                                "./src/test/resources/architecture1.owl")));
+                                "./src/test/resources/architecture1.owl",
+                                LocalDate.of(1940, 01, 01),
+                                LocalDate.of(2100, 01, 01))));
 
         // assert that the 1st rule's constraint file is correct
         // given, when

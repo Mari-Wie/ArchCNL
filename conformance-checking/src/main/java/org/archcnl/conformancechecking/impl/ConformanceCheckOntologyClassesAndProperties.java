@@ -45,6 +45,8 @@ public class ConformanceCheckOntologyClassesAndProperties {
         hasCheckingDate,
         hasRuleRepresentation,
         hasRuleID,
+        hasRuleValidFromDate,
+        hasRuleValidUntilDate,
         hasProofText, // unused right now
         hasRuleType,
         hasViolationText; // unused right now

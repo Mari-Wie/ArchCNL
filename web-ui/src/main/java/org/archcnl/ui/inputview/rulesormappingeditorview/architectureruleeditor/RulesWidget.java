@@ -28,6 +28,7 @@ public class RulesWidget extends RulesOrMappingEditorView {
 
     public void updateRules(final List<ArchitectureRule> rules) {
         rulesLayout.removeAll();
+
         for (int i = 0; i < rules.size(); i++) {
             RuleComponent ruleView = new RuleComponent(rules.get(i), i + 1);
             ruleView.addListener(EditRuleButtonPressedEvent.class, this::fireEvent);

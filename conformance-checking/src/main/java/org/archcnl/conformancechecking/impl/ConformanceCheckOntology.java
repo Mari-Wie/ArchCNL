@@ -77,6 +77,21 @@ public class ConformanceCheckOntology {
                         ConformanceCheckDatatypeProperties.hasRuleID, model);
         architectureRuleIndividual.addLiteral(hasRuleIDProperty, rule.getId());
         architectureRuleIndividualCache.put(rule.getId(), architectureRuleIndividual);
+
+        if (rule.getValidFrom() != null) {
+            DatatypeProperty validFrom =
+                    ConformanceCheckOntologyClassesAndProperties.get(
+                            ConformanceCheckDatatypeProperties.hasRuleValidFromDate, model);
+            architectureRuleIndividual.addLiteral(validFrom, rule.getValidFrom().toString());
+        }
+        if (rule.getValidUntil() != null) {
+            DatatypeProperty validUntil =
+                    ConformanceCheckOntologyClassesAndProperties.get(
+                            ConformanceCheckDatatypeProperties.hasRuleValidUntilDate, model);
+            architectureRuleIndividual.addLiteral(validUntil, rule.getValidUntil().toString());
+        }
+
+        architectureRuleIndividualCache.put(rule.getId(), architectureRuleIndividual);
     }
 
     public void storeConformanceCheckingResultForRule(

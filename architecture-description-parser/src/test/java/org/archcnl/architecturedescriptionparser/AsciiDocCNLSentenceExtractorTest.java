@@ -3,6 +3,8 @@ package org.archcnl.architecturedescriptionparser;
 import static org.junit.Assert.*;
 
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
@@ -17,9 +19,29 @@ public class AsciiDocCNLSentenceExtractorTest {
         extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/rules.adoc"));
         // then
         assertThat(
-                extractor.extractArchitectureRules(),
+                extractor.extractArchitectureRules().stream()
+                        .map(rule -> rule.getCnlSentence())
+                        .collect(Collectors.toList()),
                 CoreMatchers.hasItems(
                         "Only LayerOne can use LayerTwo.", "No LayerTwo can use LayerOne."));
+    }
+
+    @Test
+    public void
+            givenArchitectureRules_whenGivenToSentenceExtractorWithValidity_thenRulesWithValidityAreExtractedCorrectly() {
+        // given, when
+        extractor = new AsciiDocCNLSentenceExtractor(Paths.get("./src/test/resources/rules.adoc"));
+        // then
+        assertThat(
+                extractor.extractArchitectureRules().stream()
+                        .map(rule -> rule.getValidFrom())
+                        .collect(Collectors.toList()),
+                CoreMatchers.hasItems(LocalDate.of(1940, 01, 01)));
+        assertThat(
+                extractor.extractArchitectureRules().stream()
+                        .map(rule -> rule.getValidUntil())
+                        .collect(Collectors.toList()),
+                CoreMatchers.hasItems(LocalDate.of(2100, 01, 01)));
     }
 
     @Test

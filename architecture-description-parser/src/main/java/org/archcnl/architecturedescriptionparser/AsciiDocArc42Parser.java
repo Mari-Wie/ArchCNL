@@ -42,10 +42,12 @@ public class AsciiDocArc42Parser {
         LOG.trace("Starting parseRulesFromDocumentation ...");
         LOG.debug("Parsing architecture rules from file: " + path);
 
-        List<String> lines = new AsciiDocCNLSentenceExtractor(path).extractArchitectureRules();
-        List<ArchitectureRule> rules = new CNLTranslator().translate(lines, outputDirectory);
+        List<ArchitectureRule> extractedRules =
+                new AsciiDocCNLSentenceExtractor(path).extractArchitectureRules();
+        List<ArchitectureRule> translatedRules =
+                new CNLTranslator().translate(extractedRules, outputDirectory);
 
-        return rules;
+        return translatedRules;
     }
 
     /**

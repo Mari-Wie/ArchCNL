@@ -58,7 +58,7 @@ public class CNLToolchainCLI implements Runnable {
     @Option(
             names = {"--parsers"},
             description = "Specify the enabled parsers (comma-separated list)")
-    private String parsers = "java,kotlin";
+    private String parsers = "java,kotlin,git";
 
     @Override
     public void run() {

@@ -31,6 +31,11 @@ public class ArchitectureRuleManager {
         architectureRules.stream()
                 .filter(rule -> rule.equals(oldRule))
                 .findFirst()
-                .ifPresent(rule -> rule.setRuleString(newRule.transformToAdoc()));
+                .ifPresent(
+                        rule -> {
+                            rule.setRuleString(newRule.transformToAdoc());
+                            rule.setValidFrom(newRule.getValidFrom());
+                            rule.setValidUntil(newRule.getValidUntil());
+                        });
     }
 }
