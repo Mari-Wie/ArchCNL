@@ -1,8 +1,9 @@
 package org.archcnl.domain.common;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
@@ -15,11 +16,10 @@ import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class ConceptManager extends HierarchyManager<Concept> {
 
-    private TreeMap<String, Concept> concepts;
+    private Map<String, Concept> concepts;
 
     public ConceptManager() {
-        super();
-        concepts = new TreeMap<>();
+        concepts = new HashMap<>();
         // TODO: move this to somewhere where to ConceptManager is created and files are loaded,
         // also
         // this has to be in something like: create empty project
@@ -30,17 +30,11 @@ public class ConceptManager extends HierarchyManager<Concept> {
     }
 
     public void addConcept(Concept concept) throws ConceptAlreadyExistsException {
-        if (!doesConceptExist(concept)) {
+        if (!doesConceptExist(concept.getName())) {
             concepts.put(concept.getName(), concept);
         } else {
             throw new ConceptAlreadyExistsException(concept.getName());
         }
-    }
-
-    public void addToParent(Concept concept, HierarchyNode<Concept> parent)
-            throws ConceptAlreadyExistsException {
-        addConcept(concept);
-        parent.add(concept);
     }
 
     public void addToParent(Concept concept, String parentName)
@@ -70,7 +64,7 @@ public class ConceptManager extends HierarchyManager<Concept> {
 
     public void addOrAppend(CustomConcept concept) throws UnrelatedMappingException {
         try {
-            if (!doesConceptExist(concept)) {
+            if (!doesConceptExist(concept.getName())) {
                 addToParent(concept, "Custom Concepts");
             } else {
                 append(concept);
@@ -88,8 +82,20 @@ public class ConceptManager extends HierarchyManager<Concept> {
         return Optional.ofNullable(concepts.get(name));
     }
 
-    public boolean doesConceptExist(Concept concept) {
-        return concepts.containsValue(concept);
+    public boolean doesConceptExist(String name) {
+        return concepts.containsKey(name);
+    }
+
+    public void updateName(String oldName, String newName) throws ConceptAlreadyExistsException {
+        if (!concepts.containsKey(oldName)) {
+            return;
+        }
+        if (doesConceptExist(newName) && !oldName.equals(newName)) {
+            throw new ConceptAlreadyExistsException(newName);
+        }
+        Concept concept = concepts.remove(oldName);
+        concept.changeName(newName);
+        concepts.put(newName, concept);
     }
 
     public void removeConcept(Concept concept) {

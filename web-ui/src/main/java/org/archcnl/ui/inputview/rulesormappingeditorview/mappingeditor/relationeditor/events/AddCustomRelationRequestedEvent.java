@@ -31,7 +31,7 @@ public class AddCustomRelationRequestedEvent extends ComponentEvent<RelationEdit
         } catch (UnrelatedMappingException e) {
             throw new RuntimeException(e.getMessage());
         }
-        if (!relationManager.doesRelationExist(relation)) {
+        if (!relationManager.doesRelationExist(relation.getName())) {
             try {
                 relationManager.addToParent(relation, "Custom Relations");
             } catch (RelationAlreadyExistsException e) {

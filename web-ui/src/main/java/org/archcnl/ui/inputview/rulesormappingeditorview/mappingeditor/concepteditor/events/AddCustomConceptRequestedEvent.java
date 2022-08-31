@@ -18,7 +18,7 @@ public class AddCustomConceptRequestedEvent extends ComponentEvent<ConceptEditor
     }
 
     public void handleEvent(ConceptManager conceptManager) {
-        if (!conceptManager.doesConceptExist(concept)) {
+        if (!conceptManager.doesConceptExist(concept.getName())) {
             try {
                 conceptManager.addToParent(concept, "Custom Concepts");
             } catch (ConceptAlreadyExistsException e) {

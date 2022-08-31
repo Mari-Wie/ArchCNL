@@ -1,9 +1,10 @@
 package org.archcnl.domain.common;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -25,12 +26,12 @@ import org.archcnl.domain.input.model.mappings.RelationMapping;
 
 public class RelationManager extends HierarchyManager<Relation> {
 
-    private List<Relation> relations;
+    private Map<String, Relation> relations;
     private ConceptManager conceptManager;
 
     public RelationManager(final ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
-        this.relations = new LinkedList<>();
+        this.relations = new HashMap<>();
         this.conceptManager = conceptManager;
 
         addHierarchyRoot("Default Relations");
@@ -44,22 +45,10 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     public void addRelation(final Relation relation) throws RelationAlreadyExistsException {
-        if (doesRelationExist(relation)) {
+        if (doesRelationExist(relation.getName())) {
             throw new RelationAlreadyExistsException(relation.getName());
         }
-        relations.add(relation);
-    }
-
-    public void add(Relation relation, HierarchyNode<Relation> parent)
-            throws RelationAlreadyExistsException {
-        addRelation(relation);
-        parent.add(relation);
-    }
-
-    public void addToParent(Relation relation, HierarchyNode<Relation> parent)
-            throws RelationAlreadyExistsException {
-        addRelation(relation);
-        parent.add(relation);
+        relations.put(relation.getName(), relation);
     }
 
     public void addToParent(Relation relation, String parentName)
@@ -85,7 +74,7 @@ public class RelationManager extends HierarchyManager<Relation> {
 
     public void addOrAppend(final CustomRelation relation) throws UnrelatedMappingException {
         try {
-            if (!doesRelationExist(relation)) {
+            if (!doesRelationExist(relation.getName())) {
                 addToParent(relation, "Custom Relations");
             } else {
                 final Optional<Relation> existingRelationOpt =
@@ -114,11 +103,11 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     public Optional<Relation> getRelationByName(final String name) {
-        return relations.stream().filter(relation -> name.equals(relation.getName())).findAny();
+        return Optional.ofNullable(relations.get(name));
     }
 
     public Optional<Relation> getRelationByRealName(final String realName) {
-        for (final Relation relation : relations) {
+        for (final Relation relation : relations.values()) {
             if (relation instanceof JenaBuiltinRelation) {
                 final JenaBuiltinRelation specialRelation = (JenaBuiltinRelation) relation;
                 if (realName.equals(specialRelation.getRealName())) {
@@ -134,15 +123,25 @@ public class RelationManager extends HierarchyManager<Relation> {
         return Optional.empty();
     }
 
-    public boolean doesRelationExist(final Relation relation) {
-        return relations.stream()
-                .anyMatch(
-                        existingRelation -> relation.getName().equals(existingRelation.getName()));
+    public boolean doesRelationExist(final String name) {
+        return relations.containsKey(name);
+    }
+
+    public void updateName(String oldName, String newName) throws RelationAlreadyExistsException {
+        if (!relations.containsKey(oldName)) {
+            return;
+        }
+        if (doesRelationExist(newName) && !oldName.equals(newName)) {
+            throw new RelationAlreadyExistsException(newName);
+        }
+        Relation relation = relations.remove(oldName);
+        relation.changeName(newName);
+        relations.put(newName, relation);
     }
 
     public void removeRelation(Relation relation) {
         if (relation != null) {
-            relations.remove(relation);
+            relations.remove(relation.getName());
         }
         removeFromHierarchy(new HierarchyNode<>(relation));
     }
@@ -568,19 +567,19 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     public List<Relation> getInputRelations() {
-        return relations.stream()
+        return relations.values().stream()
                 .filter(Predicate.not(ConformanceRelation.class::isInstance))
                 .collect(Collectors.toList());
     }
 
     public List<Relation> getOutputRelations() {
-        return relations.stream()
+        return relations.values().stream()
                 .filter(Predicate.not(JenaBuiltinRelation.class::isInstance))
                 .collect(Collectors.toList());
     }
 
     public List<CustomRelation> getCustomRelations() {
-        return relations.stream()
+        return relations.values().stream()
                 .filter(CustomRelation.class::isInstance)
                 .map(CustomRelation.class::cast)
                 .collect(Collectors.toList());
