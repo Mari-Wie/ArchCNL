@@ -222,22 +222,6 @@ public class StardogDatabase implements StardogDatabaseAPI {
         return string;
     }
 
-    private void printToConsole(SelectQueryResult results) {
-        try {
-            QueryResultWriters.write(results, System.out, TextTableQueryResultWriter.FORMAT);
-        } catch (IOException e) {
-            LOG.error("Failed to write results from query to Console");
-        }
-    }
-
-    private void selectQuery(String query) {
-        SelectQuery stardogSelectQuery = connection.select(query);
-        try (SelectQueryResult queryResults = stardogSelectQuery.execute()) {
-            System.out.println("The first ten results...");
-            printToConsole(queryResults);
-        }
-    }
-
     @Override
     public Optional<Result> executeSelectQuery(String query) {
         if (query.length() == 0) {
