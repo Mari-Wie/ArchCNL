@@ -15,8 +15,6 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.shared.Registration;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.ui.inputview.presets.PresetsDialogPresenter.TabOptions;
 import org.archcnl.ui.inputview.presets.events.ArchitectureRulesSelectedEvent;
 import org.archcnl.ui.inputview.presets.events.RuleSelectionTabRequestedEvent;
@@ -25,8 +23,6 @@ import org.archcnl.ui.inputview.presets.events.ValidateArchitecturalStyleFormEve
 public class PresetsDialogView extends Dialog implements HasComponents, FlexComponent<Component> {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LogManager.getLogger(PresetsDialogView.class);
 
     private Tabs tabs = new Tabs();
     private Map<Tab, Component> tabsToComponent;
@@ -60,23 +56,17 @@ public class PresetsDialogView extends Dialog implements HasComponents, FlexComp
         switch (tab) {
             case STYLE_SELECTION:
                 confirm.addClickListener(
-                        e -> {
-                            fireEvent(new RuleSelectionTabRequestedEvent(this, false));
-                        });
+                        e -> fireEvent(new RuleSelectionTabRequestedEvent(this, false)));
                 break;
             case RULE_SELECTION:
                 confirm.addClickListener(
-                        e -> {
-                            fireEvent(new ArchitectureRulesSelectedEvent(this, false));
-                        });
+                        e -> fireEvent(new ArchitectureRulesSelectedEvent(this, false)));
                 break;
             case ARCHITECTURE_INFORMATION:
                 confirm = new Button("Create Rules & Mappings");
 
                 confirm.addClickListener(
-                        e -> {
-                            fireEvent(new ValidateArchitecturalStyleFormEvent(this, false));
-                        });
+                        e -> fireEvent(new ValidateArchitecturalStyleFormEvent(this, false)));
                 break;
             default:
                 break;
