@@ -55,7 +55,7 @@ public class CNLToolchain {
     private final Map<String, Supplier<OwlifyComponent>> transformerFactories =
             Map.ofEntries(
                     Map.entry("java", JavaOntologyTransformer::new),
-                    Map.entry("kotlin", KotlinOntologyTransformer::new));
+                    Map.entry("kotlin", KotlinOntologyTransformer::new),
                     Map.entry("git", GitOntologyTransformer::new));
 
     // private, use runToolchain to create and execute the toolchain
