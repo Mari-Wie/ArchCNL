@@ -41,9 +41,9 @@ public class ConceptAndRelationView extends VerticalLayout {
 
     private void addNodeButton() {
         conceptHierarchyView.createEditorButton(
-                "Add Node", e -> conceptHierarchyView.addTextField());
+                "New Folder", e -> conceptHierarchyView.addTextField());
         relationHierarchyView.createEditorButton(
-                "Add Node", e -> relationHierarchyView.addTextField());
+                "New Folder", e -> relationHierarchyView.addTextField());
     }
 
     // Overriden in the editable version of this
