@@ -87,7 +87,7 @@ public class LocalVariable {
 
         String location = path.toString();
         if (beginning.isPresent()) {
-            location += ", Line: " + String.valueOf(beginning.get());
+            location += ", Line: " + beginning.get();
         }
         individual.addLiteral(ontology.get(isLocatedAt), location);
 
