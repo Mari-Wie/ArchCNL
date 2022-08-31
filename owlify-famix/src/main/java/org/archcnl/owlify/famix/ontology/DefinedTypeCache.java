@@ -13,15 +13,20 @@ public class DefinedTypeCache {
     }
 
     public void addDefinedType(String fullyQualifiedName, Individual typeIndividual) {
-
-        assert (!isDefined(fullyQualifiedName));
+        if (isDefined(fullyQualifiedName)) {
+            throw new IllegalArgumentException(
+                    "Type already present in DefinedTypeCache :" + fullyQualifiedName);
+        }
 
         types.put(fullyQualifiedName, typeIndividual);
     }
 
     public Individual getIndividual(String fullyQualifiedName) {
 
-        assert (isDefined(fullyQualifiedName));
+        if (!isDefined(fullyQualifiedName)) {
+            throw new IllegalArgumentException(
+                    "Type not present in DefinedTypeCache :" + fullyQualifiedName);
+        }
 
         return types.getOrDefault(fullyQualifiedName, null);
     }
