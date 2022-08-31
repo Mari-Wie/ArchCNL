@@ -15,7 +15,7 @@ public class DeleteHierarchyObjectRequestedEvent extends ComponentEvent<Componen
         this.hierarchyNode = hierarchyNode;
     }
 
-    public HierarchyNode getHierarchyObject() {
+    public HierarchyNode getHierarchyNode() {
         return hierarchyNode;
     }
 }

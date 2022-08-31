@@ -26,7 +26,6 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchy
 public class ConceptAndRelationView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
-    private static final int DEFAULT_EXPANSION_DEPTH = 10;
 
     protected HierarchyView<Concept> conceptHierarchyView;
     protected HierarchyView<Relation> relationHierarchyView;
@@ -37,20 +36,14 @@ public class ConceptAndRelationView extends VerticalLayout {
         createConceptHierarchy();
         createRelationHierarchy();
         addElements();
-        addNodeButton();
+        addFolderButton();
     }
 
-    private void addNodeButton() {
+    private void addFolderButton() {
         conceptHierarchyView.createEditorButton(
-                "Add Node",
-                e -> {
-                    conceptHierarchyView.addTextField();
-                });
+                "New Folder", e -> conceptHierarchyView.addTextField());
         relationHierarchyView.createEditorButton(
-                "Add Node",
-                e -> {
-                    relationHierarchyView.addTextField();
-                });
+                "New Folder", e -> relationHierarchyView.addTextField());
     }
 
     // Overriden in the editable version of this
@@ -63,10 +56,7 @@ public class ConceptAndRelationView extends VerticalLayout {
         conceptHierarchyView.setHeight(50, Unit.PERCENTAGE);
 
         conceptHierarchyView.addListener(
-                GridUpdateRequestedEvent.class,
-                e -> {
-                    requestConceptGridUpdate();
-                });
+                GridUpdateRequestedEvent.class, e -> requestConceptGridUpdate());
         conceptHierarchyView.addListener(
                 HierarchySwapRequestedEvent.class, this::requestConceptSwap);
         conceptHierarchyView.addListener(
@@ -89,7 +79,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                 event ->
                         fireEvent(
                                 new DeleteConceptRequestedEvent(
-                                        conceptHierarchyView, true, event.getHierarchyObject())));
+                                        conceptHierarchyView, true, event.getHierarchyNode())));
     }
 
     protected void initHierarchies() {
@@ -123,7 +113,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                 event ->
                         fireEvent(
                                 new DeleteRelationRequestedEvent(
-                                        relationHierarchyView, true, event.getHierarchyObject())));
+                                        relationHierarchyView, true, event.getHierarchyNode())));
     }
 
     public void update() {

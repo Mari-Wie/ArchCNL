@@ -753,6 +753,11 @@
         <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">long</hasName>
     </owl:NamedIndividual>
 
+    <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#short">
+        <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">short</hasName>
+    </owl:NamedIndividual>
+
     <owl:NamedIndividual rdf:about="http://arch-ont.org/ontologies/famix.owl#boolean">
         <rdf:type rdf:resource="http://arch-ont.org/ontologies/famix.owl#PrimitiveType"/>
         <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">boolean</hasName>

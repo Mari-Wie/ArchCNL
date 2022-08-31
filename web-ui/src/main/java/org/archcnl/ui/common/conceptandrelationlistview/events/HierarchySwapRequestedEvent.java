@@ -6,6 +6,8 @@ import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
 public class HierarchySwapRequestedEvent extends ComponentEvent<HierarchyView> {
+
+    private static final long serialVersionUID = 407454874319949811L;
     HierarchyNode dragged;
     HierarchyNode target;
     GridDropLocation location;

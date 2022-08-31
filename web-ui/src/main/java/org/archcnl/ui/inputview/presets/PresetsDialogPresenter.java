@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
@@ -46,12 +44,10 @@ public class PresetsDialogPresenter extends Dialog {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOG = LogManager.getLogger(PresetsDialogPresenter.class);
-
     private final PresetsDialogView view;
 
     private Tabs tabs = new Tabs();
-    private Map<Tab, Component> tabsToComponent = new LinkedHashMap<Tab, Component>();
+    private Map<Tab, Component> tabsToComponent = new LinkedHashMap<>();
     private Tab styleSelectionTab;
     private Tab ruleSelectionTab;
     private Tab architectureInformationTab;

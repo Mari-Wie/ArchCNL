@@ -155,7 +155,6 @@ public class FamixOntology {
         definesAttribute,
         hasDeclaredType,
         definesMethod,
-        hasDefiningClass,
         hasDeclaredException,
         definesParameter,
         hasCaughtException,

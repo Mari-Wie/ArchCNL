@@ -124,19 +124,21 @@ public class HierarchyNode<T extends HierarchyObject> {
      * @return true if node was added, false otherwise
      */
     public boolean add(HierarchyNode<T> newChild, String destination) {
-        if (getName() == destination) {
+        if (getName().equals(destination)) {
             return addChild(newChild);
         } else {
             for (HierarchyNode<T> node : children) {
-                return add(newChild, destination);
+                if (add(node, destination)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     /**
-     * Removes given HierarchyNode Recursivelty searches in all children for given node If no node
-     * is found nothing changes in the hierarchy
+     * Removes given HierarchyNode Recursively searches in all children for given node If no node is
+     * found nothing changes in the hierarchy
      *
      * @param hierarchyNode The node that is to be removed
      * @return true if node was removed, false otherwise

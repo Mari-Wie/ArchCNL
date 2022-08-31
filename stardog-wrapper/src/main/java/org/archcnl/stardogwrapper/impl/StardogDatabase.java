@@ -1,6 +1,5 @@
 package org.archcnl.stardogwrapper.impl;
 
-import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
@@ -15,12 +14,10 @@ import com.stardog.stark.Values;
 import com.stardog.stark.io.RDFFormats;
 import com.stardog.stark.query.BindingSet;
 import com.stardog.stark.query.SelectQueryResult;
-import com.stardog.stark.query.io.QueryResultWriters;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,20 +32,20 @@ public class StardogDatabase implements StardogDatabaseAPI {
 
     private static final Logger LOG = LogManager.getLogger(StardogDatabase.class);
 
-    private String _server;
-    private String _databaseName;
+    private String server;
+    private String databaseName;
 
-    private String _userName;
-    private String _password;
+    private String userName;
+    private String password;
 
     private ConnectionPool connectionPool;
     private Connection connection;
 
     public StardogDatabase(String server, String databaseName, String userName, String password) {
-        _server = server;
-        _databaseName = databaseName;
-        _userName = userName;
-        _password = password;
+        this.server = server;
+        this.databaseName = databaseName;
+        this.userName = userName;
+        this.password = password;
     }
 
     @Override
@@ -60,8 +57,8 @@ public class StardogDatabase implements StardogDatabaseAPI {
         }
 
         try (final AdminConnection aConn =
-                AdminConnectionConfiguration.toServer(_server)
-                        .credentials(_userName, _password)
+                AdminConnectionConfiguration.toServer(server)
+                        .credentials(userName, password)
                         .connect()) {
 
             if (deletePreviousDatabases) {
@@ -71,20 +68,20 @@ public class StardogDatabase implements StardogDatabaseAPI {
                 }
             }
 
-            if (!aConn.list().contains(_databaseName)) {
-                aConn.newDatabase(_databaseName).create();
-                LOG.info("New database created: " + _databaseName);
+            if (!aConn.list().contains(databaseName)) {
+                aConn.newDatabase(databaseName).create();
+                LOG.info("New database created: " + databaseName);
             } else {
-                LOG.warn("Database already exists: " + _databaseName);
+                LOG.warn("Database already exists: " + databaseName);
             }
         }
 
         LOG.debug("Start connection configuration ...");
         ConnectionConfiguration connectionConfig =
-                ConnectionConfiguration.to(_databaseName)
-                        .server(_server)
+                ConnectionConfiguration.to(databaseName)
+                        .server(server)
                         .reasoning(false)
-                        .credentials(_userName, _password);
+                        .credentials(userName, password);
         ConnectionPoolConfig poolConfig = ConnectionPoolConfig.using(connectionConfig);
         connectionPool = poolConfig.create();
         LOG.debug("ConnectionPool created.");
@@ -141,22 +138,22 @@ public class StardogDatabase implements StardogDatabaseAPI {
 
     @Override
     public String getServer() {
-        return _server;
+        return server;
     }
 
     @Override
     public String getDatabaseName() {
-        return _databaseName;
+        return databaseName;
     }
 
     @Override
     public String getUserName() {
-        return _userName;
+        return userName;
     }
 
     @Override
     public String getPassword() {
-        return _password;
+        return password;
     }
 
     @Override
@@ -186,7 +183,7 @@ public class StardogDatabase implements StardogDatabaseAPI {
             List<String> variables = queryResults.variables();
             Result queryResult = new Result(variables);
 
-            Map<String, String> prefixMap = new HashMap<String, String>();
+            Map<String, String> prefixMap = new HashMap<>();
             connection
                     .namespaces()
                     .forEach(namespace -> prefixMap.put(namespace.prefix(), namespace.iri()));
@@ -216,26 +213,10 @@ public class StardogDatabase implements StardogDatabaseAPI {
     }
 
     private String stripPrefixes(String string, Map<String, String> namespaces) {
-        for (String prefix : namespaces.keySet()) {
-            string = string.replace(namespaces.get(prefix), prefix + ":");
+        for (Map.Entry<String, String> entry : namespaces.entrySet()) {
+            string = string.replace(entry.getValue(), entry.getKey() + ":");
         }
         return string;
-    }
-
-    private void printToConsole(SelectQueryResult results) {
-        try {
-            QueryResultWriters.write(results, System.out, TextTableQueryResultWriter.FORMAT);
-        } catch (IOException e) {
-            LOG.error("Failed to write results from query to Console");
-        }
-    }
-
-    private void selectQuery(String query) {
-        SelectQuery stardogSelectQuery = connection.select(query);
-        try (SelectQueryResult queryResults = stardogSelectQuery.execute()) {
-            System.out.println("The first ten results...");
-            printToConsole(queryResults);
-        }
     }
 
     @Override

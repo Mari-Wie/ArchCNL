@@ -48,15 +48,15 @@ public class CNLToolchain {
     private final IConformanceCheck check;
     private final StardogDatabaseAPI db;
     private Map<ArchitectureRule, ConstraintViolationsResultSet> ruleToViolationMapping =
-            new HashMap<ArchitectureRule, ConstraintViolationsResultSet>();
+            new HashMap<>();
 
     // mapping of name to transformer factories
     // add new parsers here
     private final Map<String, Supplier<OwlifyComponent>> transformerFactories =
             Map.ofEntries(
-                    Map.entry("java", () -> new JavaOntologyTransformer()),
-                    Map.entry("kotlin", () -> new KotlinOntologyTransformer()),
-                    Map.entry("git", () -> new GitOntologyTransformer()));
+                    Map.entry("java", JavaOntologyTransformer::new),
+                    Map.entry("kotlin", KotlinOntologyTransformer::new),
+                    Map.entry("git", GitOntologyTransformer::new));
 
     // private, use runToolchain to create and execute the toolchain
     private CNLToolchain(
@@ -69,7 +69,7 @@ public class CNLToolchain {
         this.icvAPI = StardogAPIFactory.getICVAPI(db);
         this.transformers =
                 enabledTransformers.stream()
-                        .map(name -> createTransformer(name))
+                        .map(this::createTransformer)
                         .collect(Collectors.toList());
         this.check = new ConformanceCheckImpl();
     }
@@ -322,13 +322,9 @@ public class CNLToolchain {
     private Model buildCodeModel(List<Path> sourceCodePaths) {
         LOG.info("Creating the code model ...");
         LOG.info("Starting famix transformation ...");
-        var model =
-                transformers.stream()
-                        .map(transformer -> transformer.transform(sourceCodePaths))
-                        .reduce(
-                                null,
-                                (modelA, modelB) -> modelA == null ? modelB : modelA.union(modelB));
-        return model;
+        return transformers.stream()
+                .map(transformer -> transformer.transform(sourceCodePaths))
+                .reduce(null, (modelA, modelB) -> modelA == null ? modelB : modelA.union(modelB));
     }
 
     private List<ArchitectureRule> parseRuleFile(Path docPath) throws IOException {

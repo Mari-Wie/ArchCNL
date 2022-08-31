@@ -24,11 +24,9 @@ public class ChangeRelationNameRequestedEvent extends ComponentEvent<RelationEdi
 
     public void handleEvent(RelationManager relationManager) {
         try {
-            relation.changeName(newName, relationManager);
+            relationManager.updateName(relation.getName(), newName);
         } catch (final RelationAlreadyExistsException e) {
-            if (!newName.equals(relation.getName())) {
-                getSource().showNameAlreadyTakenErrorMessage();
-            }
+            getSource().showNameAlreadyTakenErrorMessage();
         }
     }
 }

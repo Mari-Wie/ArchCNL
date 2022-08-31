@@ -24,11 +24,9 @@ public class ChangeConceptNameRequestedEvent extends ComponentEvent<ConceptEdito
 
     public void handleEvent(ConceptManager conceptManager) {
         try {
-            concept.changeName(newName, conceptManager);
+            conceptManager.updateName(concept.getName(), newName);
         } catch (final ConceptAlreadyExistsException e) {
-            if (!newName.equals(concept.getName())) {
-                getSource().showNameAlreadyTakenErrorMessage();
-            }
+            getSource().showNameAlreadyTakenErrorMessage();
         }
     }
 }

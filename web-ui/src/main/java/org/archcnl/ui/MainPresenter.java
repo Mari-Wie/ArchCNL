@@ -10,9 +10,10 @@ import org.apache.logging.log4j.Logger;
 import org.archcnl.application.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.common.ArchitectureCheck;
 import org.archcnl.domain.common.ConceptManager;
-import org.archcnl.domain.common.HierarchyManager;
 import org.archcnl.domain.common.ProjectManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRuleManager;
@@ -79,8 +80,13 @@ public class MainPresenter extends Component {
         addOutputListeners();
     }
 
-    private void updateHierarchies(HierarchyManager hierarchyManager, HierarchyView hv) {
-        hv.setRoots(hierarchyManager.getRoots());
+    private void updateHierarchies(ConceptManager conceptManager, HierarchyView<Concept> hv) {
+        hv.setRoots(conceptManager.getRoots());
+        hv.update();
+    }
+
+    private void updateHierarchies(RelationManager relationManager, HierarchyView<Relation> hv) {
+        hv.setRoots(relationManager.getRoots());
         hv.update();
     }
 
@@ -156,11 +162,11 @@ public class MainPresenter extends Component {
         boolean removable = true;
         if (e.nodeType() == NodeAddRequestedEvent.NodeType.CONCEPT) {
             conceptManager.addHierarchyRoot(e.getName(), removable);
-            updateHierarchies(conceptManager, e.getSource());
+            updateHierarchies(conceptManager, (HierarchyView<Concept>) e.getSource());
         }
         if (e.nodeType() == NodeAddRequestedEvent.NodeType.RELATION) {
             relationManager.addHierarchyRoot(e.getName(), removable);
-            updateHierarchies(relationManager, e.getSource());
+            updateHierarchies(relationManager, (HierarchyView<Relation>) e.getSource());
         }
     }
 
@@ -170,12 +176,12 @@ public class MainPresenter extends Component {
     }
 
     private void handleEvent(final DeleteConceptRequestedEvent event) {
-        conceptManager.removeNode(event.getConcept());
+        conceptManager.removeNode(event.getHierarchyNode());
         updateHierarchies(conceptManager, event.getSource());
     }
 
     private void handleEvent(final DeleteRelationRequestedEvent event) {
-        relationManager.removeNode(event.getRelation());
+        relationManager.removeNode(event.getHierarchyNode());
         updateHierarchies(relationManager, event.getSource());
     }
 

@@ -1,9 +1,7 @@
 package org.archcnl.domain.common.conceptsandrelations;
 
 import java.util.Objects;
-import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
-import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 
 public abstract class Concept extends ActualObjectType implements HierarchyObject {
 
@@ -34,13 +32,8 @@ public abstract class Concept extends ActualObjectType implements HierarchyObjec
         return Objects.hash(name);
     }
 
-    public void changeName(String newName, ConceptManager conceptManager)
-            throws ConceptAlreadyExistsException {
-        if (!conceptManager.doesConceptExist(new CustomConcept(newName, ""))) {
-            this.name = newName;
-        } else {
-            throw new ConceptAlreadyExistsException(newName);
-        }
+    public void changeName(String newName) {
+        name = newName;
     }
 
     @Override

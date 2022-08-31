@@ -37,7 +37,7 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
         getElement().setAttribute("title", entry.getDescription());
     }
 
-    public void handleDelteEvent() {
+    public void handleDeleteEvent() {
         fireEvent(new DeleteHierarchyObjectRequestedEvent(this, true, entry));
     }
 
@@ -46,8 +46,8 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
     }
 
     @Override
-    public <T extends ComponentEvent<?>> Registration addListener(
-            final Class<T> eventType, final ComponentEventListener<T> listener) {
+    public <E extends ComponentEvent<?>> Registration addListener(
+            final Class<E> eventType, final ComponentEventListener<E> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 }
