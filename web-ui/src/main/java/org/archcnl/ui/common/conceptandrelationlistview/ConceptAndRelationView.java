@@ -36,10 +36,10 @@ public class ConceptAndRelationView extends VerticalLayout {
         createConceptHierarchy();
         createRelationHierarchy();
         addElements();
-        addNodeButton();
+        addFolderButton();
     }
 
-    private void addNodeButton() {
+    private void addFolderButton() {
         conceptHierarchyView.createEditorButton(
                 "New Folder", e -> conceptHierarchyView.addTextField());
         relationHierarchyView.createEditorButton(
@@ -58,7 +58,7 @@ public class ConceptAndRelationView extends VerticalLayout {
         conceptHierarchyView.addListener(
                 GridUpdateRequestedEvent.class, e -> requestConceptGridUpdate());
         conceptHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class, this::requestConceptSwap);
+                HierarchySwapRequestedEvent.class, e -> fireEvent(new ConceptHierarchySwapRequestedEvent(e)));
         conceptHierarchyView.addListener(
                 NodeAddRequestedEvent.class,
                 e -> {
@@ -92,7 +92,7 @@ public class ConceptAndRelationView extends VerticalLayout {
         relationHierarchyView.addListener(
                 GridUpdateRequestedEvent.class, e -> requestRelationGridUpdate());
         relationHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class, this::requestRelationSwap);
+                HierarchySwapRequestedEvent.class, e -> fireEvent(new RelationHierarchySwapRequestedEvent(e)));
 
         relationHierarchyView.addListener(
                 NodeAddRequestedEvent.class,
@@ -127,14 +127,6 @@ public class ConceptAndRelationView extends VerticalLayout {
 
     protected void requestRelationGridUpdate() {
         fireEvent(new RelationGridUpdateRequestedEvent(relationHierarchyView, true));
-    }
-
-    protected void requestConceptSwap(HierarchySwapRequestedEvent<Concept> e) {
-        fireEvent(new ConceptHierarchySwapRequestedEvent(e));
-    }
-
-    protected void requestRelationSwap(HierarchySwapRequestedEvent<Relation> e) {
-        fireEvent(new RelationHierarchySwapRequestedEvent(e));
     }
 
     @Override
