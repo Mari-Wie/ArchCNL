@@ -186,7 +186,7 @@ public class StardogDatabase implements StardogDatabaseAPI {
             List<String> variables = queryResults.variables();
             Result queryResult = new Result(variables);
 
-            Map<String, String> prefixMap = new HashMap<String, String>();
+            Map<String, String> prefixMap = new HashMap<>();
             connection
                     .namespaces()
                     .forEach(namespace -> prefixMap.put(namespace.prefix(), namespace.iri()));
@@ -216,8 +216,8 @@ public class StardogDatabase implements StardogDatabaseAPI {
     }
 
     private String stripPrefixes(String string, Map<String, String> namespaces) {
-        for (String prefix : namespaces.keySet()) {
-            string = string.replace(namespaces.get(prefix), prefix + ":");
+        for (Map.Entry<String, String> entry : namespaces.entrySet()) {
+            string = string.replace(entry.getValue(), entry.getKey() + ":");
         }
         return string;
     }
