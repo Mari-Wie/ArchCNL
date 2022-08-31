@@ -5,15 +5,14 @@ import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
 
-public class EditableHierarchyView<T extends HierarchyObject> extends HierarchyView {
-    public EditableHierarchyView() {
-        super();
-    }
+public class EditableHierarchyView<T extends HierarchyObject> extends HierarchyView<T> {
+
+    private static final long serialVersionUID = 4409737601179383368L;
 
     @Override
-    public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
+    public HierarchyEntryLayout<T> createNewHierarchyEntry(HierarchyNode<T> node) {
         HierarchyEntryLayout<T> newLayout;
-        HierarchyEntryLayoutFactory factory = new HierarchyEntryLayoutFactory<T>();
+        HierarchyEntryLayoutFactory<T> factory = new HierarchyEntryLayoutFactory<T>();
         if (node.hasEntry() && node.getEntry().isEditable()) {
             newLayout = factory.createEditable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);

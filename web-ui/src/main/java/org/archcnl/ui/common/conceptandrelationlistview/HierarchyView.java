@@ -28,6 +28,8 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.HierarchySwapRequ
 import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 
 public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
+
+    private static final long serialVersionUID = 4353502586813149848L;
     private TreeGrid<HierarchyNode<T>> treeGrid;
     private List<HierarchyNode<T>> roots;
     private List<HierarchyNode<T>> expandedNodes;
@@ -44,9 +46,9 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
     public HierarchyView() {
         setClassName("hierarchy");
         footer = new HorizontalLayout();
-        roots = new ArrayList<HierarchyNode<T>>();
-        expandedNodes = new ArrayList<HierarchyNode<T>>(roots);
-        treeGrid = new TreeGrid<HierarchyNode<T>>();
+        roots = new ArrayList<>();
+        expandedNodes = new ArrayList<>(roots);
+        treeGrid = new TreeGrid<>();
         treeGrid.setDropMode(GridDropMode.ON_TOP_OR_BETWEEN);
         treeGrid.setRowsDraggable(true);
         treeGrid.addExpandListener(e -> expandedNodes.addAll(e.getItems()));
@@ -103,9 +105,9 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
         return footer;
     }
 
-    public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
+    public HierarchyEntryLayout<T> createNewHierarchyEntry(HierarchyNode<T> node) {
         HierarchyEntryLayout<T> newLayout;
-        HierarchyEntryLayoutFactory factory = new HierarchyEntryLayoutFactory<T>();
+        HierarchyEntryLayoutFactory<T> factory = new HierarchyEntryLayoutFactory<>();
         if (node.isRemoveable()) {
             newLayout = factory.createRemovable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
@@ -126,16 +128,13 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
                         fireEvent(new NodeAddRequestedEvent(this, newTextField.getValue(), true));
                     }
                 });
-        newTextField.addBlurListener(
-                e -> {
-                    footer.replace(newTextField, addNode);
-                });
+        newTextField.addBlurListener(e -> footer.replace(newTextField, addNode));
 
         footer.replace(addNodeElement, newTextField);
     }
 
     public void addSection(String sectionName) {
-        roots.add(new HierarchyNode<T>(sectionName));
+        roots.add(new HierarchyNode<>(sectionName));
     }
 
     public void setRoots(List<HierarchyNode<T>> l) {
@@ -167,14 +166,9 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
     }
 
     @Override
-    public <T extends ComponentEvent<?>> Registration addListener(
-            final Class<T> eventType, final ComponentEventListener<T> listener) {
+    public <E extends ComponentEvent<?>> Registration addListener(
+            final Class<E> eventType, final ComponentEventListener<E> listener) {
         return getEventBus().addListener(eventType, listener);
-    }
-
-    private void getData() {
-        // Collection<Foo> sourceItems = ((TreeDataProvider<Foo>)
-        // fooTreeGrid.getDataProvider()).getTreeData().getRootItems();
     }
 
     private void setUpDragAndDrop() {
@@ -193,9 +187,10 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
 
                     if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
-                                new HierarchySwapRequestedEvent(
+                                new HierarchySwapRequestedEvent<T>(
                                         this, false, draggedItem, targetNode, dropLocation));
                     } else {
+                        // TODO: Notify the user
                     }
                     requestGridUpdate();
                 });

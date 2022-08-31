@@ -6,9 +6,8 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequ
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 
 public class EditableConceptAndRelationView extends ConceptAndRelationView {
-    public EditableConceptAndRelationView() {
-        super();
-    }
+
+    private static final long serialVersionUID = 2967841151192415193L;
 
     @Override
     protected void addElements() {

@@ -10,8 +10,9 @@ import java.util.List;
 import org.archcnl.domain.common.HierarchyNode;
 
 public class SelectionComponent extends ComboBox<String> implements DropTarget<SelectionComponent> {
+
+    private static final long serialVersionUID = 5467026470229011239L;
     private String name;
-    private String type;
 
     public SelectionComponent(String placeholder) {
         name = placeholder;
@@ -24,8 +25,6 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
     }
 
     protected void handleDropEvent(Object data) {
-        // TODO: find a way to only handle events where the type is Hierarchynode to get rid of the
-        // instanceof
         String droppedName = "";
         if (data instanceof List) {
             List<HierarchyNode> nodes = (List<HierarchyNode>) data;
@@ -49,7 +48,7 @@ public class SelectionComponent extends ComboBox<String> implements DropTarget<S
     }
 
     public String getName() {
-        return new String(name);
+        return name;
     }
 
     public void highlightWhenEmpty() {

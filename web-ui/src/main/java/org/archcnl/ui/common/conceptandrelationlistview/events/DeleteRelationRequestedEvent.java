@@ -8,15 +8,15 @@ import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 public class DeleteRelationRequestedEvent extends ComponentEvent<HierarchyView<Relation>> {
 
     private static final long serialVersionUID = 2597979523906513573L;
-    private HierarchyNode entry;
+    private HierarchyNode<Relation> entry;
 
     public DeleteRelationRequestedEvent(
-            HierarchyView<Relation> source, boolean fromClient, HierarchyNode relation) {
+            HierarchyView<Relation> source, boolean fromClient, HierarchyNode<Relation> relation) {
         super(source, fromClient);
         this.entry = relation;
     }
 
-    public HierarchyNode getRelation() {
+    public HierarchyNode<Relation> getHierarchyNode() {
         return entry;
     }
 

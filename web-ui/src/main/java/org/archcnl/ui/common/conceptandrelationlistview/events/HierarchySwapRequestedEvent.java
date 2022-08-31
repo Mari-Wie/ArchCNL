@@ -3,18 +3,22 @@ package org.archcnl.ui.common.conceptandrelationlistview.events;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import org.archcnl.domain.common.HierarchyNode;
+import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
 
-public class HierarchySwapRequestedEvent extends ComponentEvent<HierarchyView> {
-    HierarchyNode dragged;
-    HierarchyNode target;
+public class HierarchySwapRequestedEvent<T extends HierarchyObject>
+        extends ComponentEvent<HierarchyView<T>> {
+
+    private static final long serialVersionUID = 407454874319949811L;
+    HierarchyNode<T> dragged;
+    HierarchyNode<T> target;
     GridDropLocation location;
 
     public HierarchySwapRequestedEvent(
-            HierarchyView source,
+            HierarchyView<T> source,
             boolean fromClient,
-            HierarchyNode draggedNode,
-            HierarchyNode targetNode,
+            HierarchyNode<T> draggedNode,
+            HierarchyNode<T> targetNode,
             GridDropLocation gridDropLocation) {
         super(source, fromClient);
         dragged = draggedNode;
@@ -22,11 +26,11 @@ public class HierarchySwapRequestedEvent extends ComponentEvent<HierarchyView> {
         location = gridDropLocation;
     }
 
-    public HierarchyNode getDraggedNode() {
+    public HierarchyNode<T> getDraggedNode() {
         return dragged;
     }
 
-    public HierarchyNode getTargetNode() {
+    public HierarchyNode<T> getTargetNode() {
         return target;
     }
 

@@ -1,21 +1,12 @@
 package org.archcnl.ui.common.conceptandrelationlistview.events;
 
-import com.vaadin.flow.component.grid.dnd.GridDropLocation;
-import org.archcnl.domain.common.HierarchyNode;
-import org.archcnl.ui.common.conceptandrelationlistview.HierarchyView;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
 
-public class ConceptHierarchySwapRequestedEvent extends HierarchySwapRequestedEvent {
+public class ConceptHierarchySwapRequestedEvent extends HierarchySwapRequestedEvent<Concept> {
 
-    public ConceptHierarchySwapRequestedEvent(
-            HierarchyView source,
-            boolean fromClient,
-            HierarchyNode draggedNode,
-            HierarchyNode targetNode,
-            GridDropLocation gridDropLocation) {
-        super(source, fromClient, draggedNode, targetNode, gridDropLocation);
-    }
+    private static final long serialVersionUID = 1L;
 
-    public ConceptHierarchySwapRequestedEvent(HierarchySwapRequestedEvent e) {
+    public ConceptHierarchySwapRequestedEvent(HierarchySwapRequestedEvent<Concept> e) {
         super(e.getSource(), true, e.getDraggedNode(), e.getTargetNode(), e.getGridDropLocation());
     }
 }

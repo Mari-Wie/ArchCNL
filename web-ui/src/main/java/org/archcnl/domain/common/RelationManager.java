@@ -146,7 +146,7 @@ public class RelationManager extends HierarchyManager<Relation> {
         removeFromHierarchy(new HierarchyNode<>(relation));
     }
 
-    public void removeNode(HierarchyNode node) {
+    public void removeNode(HierarchyNode<Relation> node) {
         if (node.hasEntry()) {
             relations.remove(node.getName());
         }

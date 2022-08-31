@@ -105,7 +105,7 @@ public class ConceptManager extends HierarchyManager<Concept> {
         removeFromHierarchy(new HierarchyNode<>(concept));
     }
 
-    public void removeNode(HierarchyNode node) {
+    public void removeNode(HierarchyNode<Concept> node) {
         if (node.hasEntry()) {
             concepts.remove(node.getName());
         }
