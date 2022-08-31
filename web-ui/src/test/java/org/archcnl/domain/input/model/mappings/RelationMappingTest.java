@@ -1,9 +1,11 @@
 package org.archcnl.domain.input.model.mappings;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.archcnl.domain.TestUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.exceptions.UnsupportedObjectTypeException;
@@ -24,9 +26,12 @@ class RelationMappingTest {
         List<CustomRelation> customRelations = TestUtils.prepareCustomRelations();
 
         // when
-        List<RelationMapping> actual = new LinkedList<>();
-        customRelations.forEach(
-                relation -> relation.getMapping().ifPresent(mapping -> actual.add(mapping)));
+        Map<String, RelationMapping> actual = new HashMap<>();
+        for (CustomRelation relation : customRelations) {
+            if (relation.getMapping().isPresent()) {
+                actual.put(relation.getName(), relation.getMapping().get());
+            }
+        }
 
         String expectedResideIn =
                 "resideInMapping: (?class rdf:type famix:FamixClass)"
@@ -53,16 +58,22 @@ class RelationMappingTest {
 
         // then
         assertEquals(5, actual.size());
-        assertEquals(1, actual.get(0).transformToAdoc().size());
-        assertEquals(expectedResideIn, actual.get(0).transformToAdoc().get(0));
-        assertEquals(2, actual.get(1).transformToAdoc().size());
-        assertEquals(expectedUse1, actual.get(1).transformToAdoc().get(0));
-        assertEquals(expectedUse2, actual.get(1).transformToAdoc().get(1));
-        assertEquals(1, actual.get(2).transformToAdoc().size());
-        assertEquals(expectedEmptyVariableMapping, actual.get(2).transformToAdoc().get(0));
-        assertEquals(1, actual.get(3).transformToAdoc().size());
-        assertEquals(expectedEmptyStringMapping, actual.get(3).transformToAdoc().get(0));
-        assertEquals(1, actual.get(4).transformToAdoc().size());
-        assertEquals(expectedEmptyBooleanMapping, actual.get(4).transformToAdoc().get(0));
+        assertEquals(1, actual.get("resideIn").transformToAdoc().size());
+        assertEquals(expectedResideIn, actual.get("resideIn").transformToAdoc().get(0));
+        assertEquals(2, actual.get("use").transformToAdoc().size());
+        assertTrue(actual.get("use").transformToAdoc().contains(expectedUse1));
+        assertTrue(actual.get("use").transformToAdoc().contains(expectedUse2));
+        assertEquals(1, actual.get("emptyWhenRelationVariable").transformToAdoc().size());
+        assertEquals(
+                expectedEmptyVariableMapping,
+                actual.get("emptyWhenRelationVariable").transformToAdoc().get(0));
+        assertEquals(1, actual.get("emptyWhenRelationString").transformToAdoc().size());
+        assertEquals(
+                expectedEmptyStringMapping,
+                actual.get("emptyWhenRelationString").transformToAdoc().get(0));
+        assertEquals(1, actual.get("emptyWhenRelationBoolean").transformToAdoc().size());
+        assertEquals(
+                expectedEmptyBooleanMapping,
+                actual.get("emptyWhenRelationBoolean").transformToAdoc().get(0));
     }
 }
