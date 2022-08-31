@@ -4,11 +4,9 @@ import java.util.Objects;
 import java.util.Set;
 import org.archcnl.domain.common.FormattedAdocDomainObject;
 import org.archcnl.domain.common.FormattedViewDomainObject;
-import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 
 public abstract class Relation
         implements HierarchyObject, FormattedAdocDomainObject, FormattedViewDomainObject {
@@ -80,13 +78,8 @@ public abstract class Relation
         return Objects.hash(name);
     }
 
-    public void changeName(String newName, RelationManager relationManager)
-            throws RelationAlreadyExistsException {
-        if (relationManager.getRelationByName(newName).isEmpty()) {
-            this.name = newName;
-        } else {
-            throw new RelationAlreadyExistsException(newName);
-        }
+    public void changeName(String newName) {
+        name = newName;
     }
 
     @Override
