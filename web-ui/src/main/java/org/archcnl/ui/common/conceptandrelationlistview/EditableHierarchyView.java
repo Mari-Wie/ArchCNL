@@ -10,9 +10,9 @@ public class EditableHierarchyView<T extends HierarchyObject> extends HierarchyV
     private static final long serialVersionUID = 4409737601179383368L;
 
     @Override
-    public HierarchyEntryLayout<T> createNewHierarchyEntry(HierarchyNode<T> node) {
+    public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
         HierarchyEntryLayout<T> newLayout;
-        HierarchyEntryLayoutFactory<T> factory = new HierarchyEntryLayoutFactory<>();
+        HierarchyEntryLayoutFactory factory = new HierarchyEntryLayoutFactory<>();
         if (node.hasEntry() && node.getEntry().isEditable()) {
             newLayout = factory.createEditable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);

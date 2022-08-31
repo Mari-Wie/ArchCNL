@@ -53,10 +53,7 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
         treeGrid.setRowsDraggable(true);
         treeGrid.addExpandListener(e -> expandedNodes.addAll(e.getItems()));
         treeGrid.addCollapseListener(e -> expandedNodes.removeAll(e.getItems()));
-        treeGrid.addComponentHierarchyColumn(
-                node -> {
-                    return createNewHierarchyEntry(node);
-                });
+        treeGrid.addComponentHierarchyColumn(this::createNewHierarchyEntry);
         setUpDragAndDrop();
         add(treeGrid);
         add(footer);
@@ -105,9 +102,9 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
         return footer;
     }
 
-    public HierarchyEntryLayout<T> createNewHierarchyEntry(HierarchyNode<T> node) {
+    public HierarchyEntryLayout createNewHierarchyEntry(HierarchyNode node) {
         HierarchyEntryLayout<T> newLayout;
-        HierarchyEntryLayoutFactory<T> factory = new HierarchyEntryLayoutFactory<>();
+        HierarchyEntryLayoutFactory factory = new HierarchyEntryLayoutFactory<>();
         if (node.isRemoveable()) {
             newLayout = factory.createRemovable(node);
             newLayout.addListener(DeleteHierarchyObjectRequestedEvent.class, this::fireEvent);
@@ -131,10 +128,6 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
         newTextField.addBlurListener(e -> footer.replace(newTextField, addNode));
 
         footer.replace(addNodeElement, newTextField);
-    }
-
-    public void addSection(String sectionName) {
-        roots.add(new HierarchyNode<>(sectionName));
     }
 
     public void setRoots(List<HierarchyNode<T>> l) {
@@ -187,7 +180,7 @@ public class HierarchyView<T extends HierarchyObject> extends VerticalLayout {
 
                     if (dropLocation == GridDropLocation.ON_TOP) {
                         fireEvent(
-                                new HierarchySwapRequestedEvent<T>(
+                                new HierarchySwapRequestedEvent(
                                         this, false, draggedItem, targetNode, dropLocation));
                     } else {
                         // TODO: Notify the user

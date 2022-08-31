@@ -38,7 +38,7 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
     }
 
     public void handleDeleteEvent() {
-        fireEvent(new DeleteHierarchyObjectRequestedEvent<T>(this, true, entry));
+        fireEvent(new DeleteHierarchyObjectRequestedEvent(this, true, entry));
     }
 
     public void handleEditorRequestEvent() {

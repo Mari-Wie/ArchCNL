@@ -58,7 +58,7 @@ public class ConceptAndRelationView extends VerticalLayout {
         conceptHierarchyView.addListener(
                 GridUpdateRequestedEvent.class, e -> requestConceptGridUpdate());
         conceptHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class, e -> fireEvent(new ConceptHierarchySwapRequestedEvent(e)));
+                HierarchySwapRequestedEvent.class, this::requestConceptSwap);
         conceptHierarchyView.addListener(
                 NodeAddRequestedEvent.class,
                 e -> {
@@ -92,7 +92,7 @@ public class ConceptAndRelationView extends VerticalLayout {
         relationHierarchyView.addListener(
                 GridUpdateRequestedEvent.class, e -> requestRelationGridUpdate());
         relationHierarchyView.addListener(
-                HierarchySwapRequestedEvent.class, e -> fireEvent(new RelationHierarchySwapRequestedEvent(e)));
+                HierarchySwapRequestedEvent.class, this::requestRelationSwap);
 
         relationHierarchyView.addListener(
                 NodeAddRequestedEvent.class,
@@ -127,6 +127,14 @@ public class ConceptAndRelationView extends VerticalLayout {
 
     protected void requestRelationGridUpdate() {
         fireEvent(new RelationGridUpdateRequestedEvent(relationHierarchyView, true));
+    }
+
+    protected void requestConceptSwap(HierarchySwapRequestedEvent e) {
+        fireEvent(new ConceptHierarchySwapRequestedEvent(e));
+    }
+
+    protected void requestRelationSwap(HierarchySwapRequestedEvent e) {
+        fireEvent(new RelationHierarchySwapRequestedEvent(e));
     }
 
     @Override
