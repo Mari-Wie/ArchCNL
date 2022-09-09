@@ -22,7 +22,13 @@ public class PlantUmlTransformer {
     }
 
     private String transformToPlantUml(AndTriplets andTriplets, Triplet thenTriplet) {
-        return "";
+    	String title = "title";
+    	StringBuilder builder = new StringBuilder();
+    	builder.append("@startuml");
+    	builder.append("title " + title);
+    	
+    	builder.append("@enduml");
+        return builder.toString();
     }
 
     private File prepareTempFile() throws IOException {
