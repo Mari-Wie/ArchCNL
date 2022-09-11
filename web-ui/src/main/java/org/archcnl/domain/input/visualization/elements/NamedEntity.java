@@ -38,4 +38,8 @@ public abstract class NamedEntity {
     public void setHasFullQualifiedName(Optional<String> hasFullQualifiedName) {
         this.hasFullQualifiedName = hasFullQualifiedName;
     }
+
+    public String getVariableName() {
+        return variableName;
+    }
 }
