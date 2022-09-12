@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Class extends NamedEntity implements PlantUmlElement {
+public class Class extends NamespaceContent implements PlantUmlElement {
 
     private boolean isInterface = false;
     private List<Field> definesAttributes = new ArrayList<>();
@@ -15,44 +15,35 @@ public class Class extends NamedEntity implements PlantUmlElement {
     }
 
     @Override
-    public String buildPlantUmlCode() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(buildNameSection());
-        builder.append(buildClassBodySection());
-        return builder.toString();
+    protected List<String> buildBodySectionContentLines() {
+        List<String> bodyContentLines = new ArrayList<>();
+        bodyContentLines.addAll(buildAttributeLines());
+        bodyContentLines.addAll(buildMethodLines());
+        return bodyContentLines;
     }
 
-    private String buildNameSection() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getElementIdentifier() + " "); //
-        builder.append("\"" + getHighestRankingName() + "\"");
-        builder.append(" as ");
-        builder.append(getVariableName());
-        return builder.toString();
+    private List<String> buildAttributeLines() {
+        return definesAttributes.stream()
+                .map(Field::buildPlantUmlCode)
+                .collect(Collectors.toList());
     }
 
-    private String getElementIdentifier() {
+    private List<String> buildMethodLines() {
+        return definesMethods.stream().map(Method::buildPlantUmlCode).collect(Collectors.toList());
+    }
+
+    @Override
+    protected String getElementIdentifier() {
         return isInterface ? "interface" : "class";
     }
 
-    private String buildClassBodySection() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(" {\n");
-        builder.append(buildAttributeSection());
-        builder.append(buildMethodSection());
-        builder.append("}");
-        return builder.toString();
+    @Override
+    protected boolean isBodyEmpty() {
+        return definesAttributes.isEmpty() && definesMethods.isEmpty();
     }
 
-    private String buildAttributeSection() {
-        return definesAttributes.stream()
-                .map(field -> "\t" + field.buildPlantUmlCode() + "\n")
-                .collect(Collectors.joining());
-    }
-
-    private String buildMethodSection() {
-        return definesMethods.stream()
-                .map(method -> "\t" + method.buildPlantUmlCode() + "\n")
-                .collect(Collectors.joining());
+    @Override
+    protected void increaseIndentation() {
+        indentationDepth++;
     }
 }
