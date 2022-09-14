@@ -16,9 +16,7 @@ public abstract class NamespaceContent extends NamedEntity implements PlantUmlEl
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
         builder.append(buildNameSection());
-        if (!isBodyEmpty()) {
-            builder.append(buildBodySection());
-        }
+        builder.append(buildBodySection());
         return builder.toString();
     }
 
@@ -35,8 +33,6 @@ public abstract class NamespaceContent extends NamedEntity implements PlantUmlEl
     }
 
     protected abstract String getElementIdentifier();
-
-    protected abstract boolean isBodyEmpty();
 
     private String buildBodySection() {
         String identationPrefix = ONE_INDENTATION_LEVEL.repeat(indentationDepth);

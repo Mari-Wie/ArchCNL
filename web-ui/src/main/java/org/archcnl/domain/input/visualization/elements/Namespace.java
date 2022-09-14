@@ -30,11 +30,6 @@ public class Namespace extends NamespaceContent implements PlantUmlElement {
     }
 
     @Override
-    protected boolean isBodyEmpty() {
-        return namespaceContains.isEmpty();
-    }
-
-    @Override
     protected void increaseIndentation() {
         indentationDepth++;
         namespaceContains.forEach(NamespaceContent::increaseIndentation);

@@ -38,11 +38,6 @@ public class Class extends NamespaceContent implements PlantUmlElement {
     }
 
     @Override
-    protected boolean isBodyEmpty() {
-        return definesAttributes.isEmpty() && definesMethods.isEmpty();
-    }
-
-    @Override
     protected void increaseIndentation() {
         indentationDepth++;
     }
