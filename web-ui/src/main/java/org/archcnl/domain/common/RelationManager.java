@@ -154,21 +154,12 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeSpecialRelations() {
-        final Set<ActualObjectType> stringConcept = new LinkedHashSet<>();
-        stringConcept.add(new StringValue(""));
-        addToDefault(
-                new JenaBuiltinRelation(
-                        "matches",
-                        "regex",
-                        "Checks whether a string matches a regular expression represented by another string. The syntax of the regular expression pattern is according to java.util.regex.",
-                        stringConcept,
-                        stringConcept));
+        JenaBuiltinRelation regexRelation = JenaBuiltinRelation.getRegexRelation();
+        addToDefault(regexRelation);
     }
 
     private void initializeTypeRelation() {
         TypeRelation typeRelation = TypeRelation.getTyperelation();
-        typeRelation.setDescription(
-                "This relation is used to state that the subject is an instance of the class stated in the object.");
         addToDefault(typeRelation);
     }
 
