@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.JenaBuiltinRelation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
@@ -20,12 +18,11 @@ import org.archcnl.domain.input.visualization.helpers.InheritanceRelation;
 public class TripletReducer {
 
     private List<Triplet> triplets;
-    private Map<Variable, Set<ActualObjectType>> variableTypesMap;
+    private Set<Variable> variables;
 
-    public TripletReducer(
-            List<Triplet> triplets, Map<Variable, Set<ActualObjectType>> variableTypesMap) {
+    public TripletReducer(List<Triplet> triplets, Set<Variable> variables) {
         this.triplets = triplets;
-        this.variableTypesMap = variableTypesMap;
+        this.variables = variables;
     }
 
     public List<Triplet> reduce() throws MappingToUmlTranslationFailedException {
@@ -79,10 +76,10 @@ public class TripletReducer {
     private Map<Variable, InheritanceRelation> buildInheritanceMap() {
         Concept inheritance = new FamixConcept("Inheritance", "");
         Map<Variable, InheritanceRelation> inheritanceMap = new HashMap<>();
-        for (Entry<Variable, Set<ActualObjectType>> entry : variableTypesMap.entrySet()) {
-            if (entry.getValue().contains(inheritance)) {
+        for (Variable variable : variables) {
+            if (variable.getDynamicTypes().contains(inheritance)) {
                 InheritanceRelation inheritanceRelation = new InheritanceRelation();
-                inheritanceMap.put(entry.getKey(), inheritanceRelation);
+                inheritanceMap.put(variable, inheritanceRelation);
             }
         }
         return inheritanceMap;
