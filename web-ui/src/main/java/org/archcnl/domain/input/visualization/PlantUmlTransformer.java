@@ -22,12 +22,34 @@ public class PlantUmlTransformer {
     }
 
     private String transformToPlantUml(AndTriplets andTriplets, Triplet thenTriplet) {
+
+        return buildPlantUmlCode();
+    }
+
+    private boolean checkTypes() {
+        // is every type identified without alternatives
+        return false;
+    }
+
+    private String buildPlantUmlCode() {
         String title = "title";
         StringBuilder builder = new StringBuilder();
-        builder.append("@startuml");
-        builder.append("title " + title);
+        builder.append(buildHeader(title));
 
-        builder.append("@enduml");
+        builder.append(buildFooter());
+        return builder.toString();
+    }
+
+    private String buildHeader(String title) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("@startuml\n");
+        builder.append("title " + title + "\n");
+        return builder.toString();
+    }
+
+    private String buildFooter() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("@enduml\n");
         return builder.toString();
     }
 
