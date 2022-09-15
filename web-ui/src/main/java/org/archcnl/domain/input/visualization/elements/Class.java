@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 public class Class extends NamespaceContent implements PlantUmlElement {
 
     private boolean isInterface = false;
+    private boolean isAbstract = false;
+    private VisibilityModifier visibility;
     private List<Field> definesAttributes = new ArrayList<>();
     private List<Method> definesMethods = new ArrayList<>();
 
