@@ -1,12 +1,18 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.VariableManager;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
 public class MappingTranslator {
@@ -21,13 +27,20 @@ public class MappingTranslator {
 
     public void translateToPlantUmlModel(ConceptManager conceptManager)
             throws MappingToUmlTranslationFailedException {
-        Set<Variable> variables = inferVariableTypes(conceptManager);
-        prepareMappingForTranslation(variables);
-        createPlantUmlModelsInOrder(variables);
-        // separateRelationsInObjectRelatedOnesAndRelationsBetweenObjects
+        Set<Variable> variables = prepareMappingForTranslation(conceptManager);
+        TripletContainer container = new TripletContainer(whenTriplets);
+        createPlantUmlModels(variables);
         // set Object related properties
         // apply relations between objects
         // set thenTriplet note
+    }
+
+    private Set<Variable> prepareMappingForTranslation(ConceptManager conceptManager)
+            throws MappingToUmlTranslationFailedException {
+        Set<Variable> variables = inferVariableTypes(conceptManager);
+        TripletReducer reducer = new TripletReducer(whenTriplets, variables);
+        whenTriplets = reducer.reduce();
+        return inferVariableTypes(conceptManager);
     }
 
     private Set<Variable> inferVariableTypes(ConceptManager manager)
@@ -41,18 +54,23 @@ public class MappingTranslator {
         return variableManager.getVariables();
     }
 
-    private void prepareMappingForTranslation(Set<Variable> variables)
-            throws MappingToUmlTranslationFailedException {
-        TripletReducer reducer = new TripletReducer(whenTriplets, variables);
-        whenTriplets = reducer.reduce();
+    private Map<Variable, PlantUmlElement> createPlantUmlModels(Set<Variable> variables) {
+        Map<Variable, PlantUmlElement> elementMap = new HashMap<>();
+        for (Variable variable : variables) {
+            Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
+            PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable.getName());
+            elementMap.put(variable, element);
+        }
+        return elementMap;
     }
 
-    private void createPlantUmlModelsInOrder(Set<Variable> variables) {
-        List<Variable> sortedVariables = sortVariablesBasedOnConceptLevel(variables);
-    }
-
-    private List<Variable> sortVariablesBasedOnConceptLevel(Set<Variable> variables) {
-        // first remove inheritance variables
-        return null;
+    private Concept selectRepresentativeElementType(Set<ActualObjectType> options) {
+        if (options.size() == 1) {
+            return (Concept) options.iterator().next();
+        }
+        // Should only occur alongside the relations imports, namespaceContains, definesNestedType,
+        // and hasDeclaredType
+        // TODO implement better selection
+        return new FamixConcept("FamixClass", "");
     }
 }
