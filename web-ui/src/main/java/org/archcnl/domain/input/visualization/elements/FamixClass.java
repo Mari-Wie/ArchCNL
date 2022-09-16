@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Class extends NamespaceContent implements PlantUmlElement {
+public class FamixClass extends NamespaceContent implements PlantUmlElement {
 
     private boolean isInterface = false;
     private boolean isAbstract = false;
@@ -12,7 +12,7 @@ public class Class extends NamespaceContent implements PlantUmlElement {
     private List<Field> definesAttributes = new ArrayList<>();
     private List<Method> definesMethods = new ArrayList<>();
 
-    public Class(String variableName) {
+    public FamixClass(String variableName) {
         super(variableName);
     }
 

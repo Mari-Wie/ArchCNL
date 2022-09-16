@@ -20,6 +20,10 @@ public class Variable extends ObjectType {
         return dynamicTypes;
     }
 
+    public void setDynamicTypes(Set<ActualObjectType> dynamicTypes) {
+        this.dynamicTypes = dynamicTypes;
+    }
+
     public void clearDynamicTypes() {
         dynamicTypes.clear();
         conflictingDynamicTypes = false;

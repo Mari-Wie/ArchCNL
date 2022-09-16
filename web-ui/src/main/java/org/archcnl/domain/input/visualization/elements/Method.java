@@ -10,7 +10,7 @@ public class Method extends ClassContent implements PlantUmlElement {
 
     private List<Parameter> definesParameters = new ArrayList<>();
 
-    protected Method(String variableName) {
+    public Method(String variableName) {
         super(variableName);
     }
 

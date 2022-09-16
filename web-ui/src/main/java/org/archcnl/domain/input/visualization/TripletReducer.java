@@ -17,6 +17,7 @@ import org.archcnl.domain.input.visualization.helpers.InheritanceRelation;
 
 public class TripletReducer {
 
+    private static final Concept inheritance = new FamixConcept("Inheritance", "");
     private List<Triplet> triplets;
     private Set<Variable> variables;
 
@@ -74,7 +75,6 @@ public class TripletReducer {
     }
 
     private Map<Variable, InheritanceRelation> buildInheritanceMap() {
-        Concept inheritance = new FamixConcept("Inheritance", "");
         Map<Variable, InheritanceRelation> inheritanceMap = new HashMap<>();
         for (Variable variable : variables) {
             if (variable.getDynamicTypes().contains(inheritance)) {
@@ -98,7 +98,7 @@ public class TripletReducer {
                 inheritanceMap
                         .get(triplet.getSubject())
                         .setHasSuperClass((Variable) triplet.getObject());
-            } else {
+            } else if (!triplet.getObject().equals(inheritance)) {
                 newTriplets.add(triplet);
             }
         }
