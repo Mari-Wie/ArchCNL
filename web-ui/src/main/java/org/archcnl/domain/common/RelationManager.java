@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -373,33 +372,33 @@ public class RelationManager extends HierarchyManager<Relation> {
         // unused
         // TODO: "hasRuleID" and "hasCheckingDate" are also excluded as their ObjectType is unclear
         final Set<ActualObjectType> architectureRule =
-                new LinkedHashSet<>(Arrays.asList(getConcept("ArchitectureRule")));
+                new HashSet<>(Arrays.asList(getConcept("ArchitectureRule")));
         addToDefault(
                 new ConformanceRelation(
                         "hasRuleRepresentation",
                         "This relation is used to state that the subject (for example architecture rule) has a specified in the object representation (in most cases string representation).",
                         architectureRule,
-                        new LinkedHashSet<>(Arrays.asList(new StringValue("")))));
+                        new HashSet<>(Arrays.asList(new StringValue("")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasRuleType",
                         "This relation is used to state that the subject (for example architecture rule) has a specified in the object rule type.",
                         architectureRule,
-                        new LinkedHashSet<>(Arrays.asList(new StringValue("")))));
-        final Set<ActualObjectType> proof = new LinkedHashSet<>(Arrays.asList(getConcept("Proof")));
+                        new HashSet<>(Arrays.asList(new StringValue("")))));
+        final Set<ActualObjectType> proof = new HashSet<>(Arrays.asList(getConcept("Proof")));
         addToDefault(
                 new ConformanceRelation(
                         "hasNotInferredStatement",
                         "This relation is used to state that the subject hasn't / doesn't correspond to the specified in the object statements.",
                         proof,
-                        new LinkedHashSet<>(Arrays.asList(getConcept("NotInferredStatement")))));
+                        new HashSet<>(Arrays.asList(getConcept("NotInferredStatement")))));
         addToDefault(
                 new ConformanceRelation(
                         "hasAssertedStatement",
                         "This relation is used to state that the subject has / corresponds to the specified in the object statements.",
                         proof,
-                        new LinkedHashSet<>(Arrays.asList(getConcept("AssertedStatement")))));
-        final Set<ActualObjectType> statements = new LinkedHashSet<>();
+                        new HashSet<>(Arrays.asList(getConcept("AssertedStatement")))));
+        final Set<ActualObjectType> statements = new HashSet<>();
         statements.add(getConcept("NotInferredStatement"));
         statements.add(getConcept("AssertedStatement"));
         addToDefault(
@@ -407,21 +406,21 @@ public class RelationManager extends HierarchyManager<Relation> {
                         "hasSubject",
                         "This relation is used to state that the subject (for example statement) has a specified subject.",
                         statements,
-                        new LinkedHashSet<>()));
+                        new HashSet<>()));
         addToDefault(
                 new ConformanceRelation(
                         "hasPredicate",
                         "This relation is used to state that the subject (for example statement) has a specified predicate.",
                         statements,
-                        new LinkedHashSet<>()));
+                        new HashSet<>()));
         addToDefault(
                 new ConformanceRelation(
                         "hasObject",
                         "This relation is used to state that the subject (for example statement) has a specified object.",
                         statements,
-                        new LinkedHashSet<>()));
+                        new HashSet<>()));
         final Set<ActualObjectType> architecturViolation =
-                new LinkedHashSet<>(Arrays.asList(getConcept("ArchitectureViolation")));
+                new HashSet<>(Arrays.asList(getConcept("ArchitectureViolation")));
         addToDefault(
                 new ConformanceRelation(
                         "proofs",
@@ -429,7 +428,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         proof,
                         architecturViolation));
         final Set<ActualObjectType> conformanceCheck =
-                new LinkedHashSet<>(Arrays.asList(getConcept("ConformanceCheck")));
+                new HashSet<>(Arrays.asList(getConcept("ConformanceCheck")));
         addToDefault(
                 new ConformanceRelation(
                         "hasDetected",
