@@ -38,11 +38,11 @@ public class RelationManager extends HierarchyManager<Relation> {
         addHierarchyRoot("Default Relations");
         addHierarchyRoot("Custom Relations");
         initializeTypeRelation();
-        initializeBoolRelations(conceptManager);
-        initializeStringRelations(conceptManager);
+        initializeBoolRelations();
+        initializeStringRelations();
         initializeSpecialRelations();
-        initializeObjectRelations(conceptManager);
-        initializeConformanceRelations(conceptManager);
+        initializeObjectRelations();
+        initializeConformanceRelations();
     }
 
     public void addRelation(final Relation relation) throws RelationAlreadyExistsException {
@@ -162,8 +162,7 @@ public class RelationManager extends HierarchyManager<Relation> {
         addToDefault(TypeRelation.getTyperelation());
     }
 
-    private void initializeStringRelations(ConceptManager conceptManager)
-            throws ConceptDoesNotExistException {
+    private void initializeStringRelations() throws ConceptDoesNotExistException {
         final Set<ActualObjectType> stringValue = Collections.singleton(new StringValue(""));
 
         addToDefault(
@@ -204,8 +203,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         stringValue));
     }
 
-    private void initializeBoolRelations(ConceptManager conceptManager)
-            throws ConceptDoesNotExistException {
+    private void initializeBoolRelations() throws ConceptDoesNotExistException {
         final Set<ActualObjectType> boolObject = Collections.singleton(new BooleanValue(false));
         addToDefault(
                 new FamixRelation(
@@ -227,8 +225,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         boolObject));
     }
 
-    private void initializeObjectRelations(final ConceptManager conceptManager)
-            throws ConceptDoesNotExistException {
+    private void initializeObjectRelations() throws ConceptDoesNotExistException {
         // FamixClass relations
         Set<ActualObjectType> famixClass = Collections.singleton(getConcept("FamixClass"));
         Set<ActualObjectType> method = Collections.singleton(getConcept("Method"));
@@ -366,8 +363,7 @@ public class RelationManager extends HierarchyManager<Relation> {
                         getHasDeclaredTypeObjects()));
     }
 
-    private void initializeConformanceRelations(final ConceptManager conceptManager)
-            throws ConceptDoesNotExistException {
+    private void initializeConformanceRelations() throws ConceptDoesNotExistException {
         // Relations "hasProofText" and "hasViolationText" are excluded here as they are currently
         // unused
         // TODO: "hasRuleID" and "hasCheckingDate" are also excluded as their ObjectType is unclear
