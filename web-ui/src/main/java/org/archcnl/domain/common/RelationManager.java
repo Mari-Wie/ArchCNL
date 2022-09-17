@@ -1,7 +1,9 @@
 package org.archcnl.domain.common;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -154,303 +156,224 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
 
     private void initializeSpecialRelations() {
-        JenaBuiltinRelation regexRelation = JenaBuiltinRelation.getRegexRelation();
-        addToDefault(regexRelation);
+        addToDefault(JenaBuiltinRelation.getRegexRelation());
     }
 
     private void initializeTypeRelation() {
-        TypeRelation typeRelation = TypeRelation.getTyperelation();
-        addToDefault(typeRelation);
+        addToDefault(TypeRelation.getTyperelation());
     }
 
     private void initializeStringRelations(ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
-        final Set<ActualObjectType> stringConcept = new LinkedHashSet<>();
-        stringConcept.add(new StringValue(""));
-        final Set<ActualObjectType> namedEntity = new LinkedHashSet<>();
-        namedEntity.add(extractConcept(conceptManager, "Namespace"));
-        namedEntity.add(extractConcept(conceptManager, "AnnotationType"));
-        namedEntity.add(extractConcept(conceptManager, "Enum"));
-        namedEntity.add(extractConcept(conceptManager, "FamixClass"));
-        namedEntity.add(extractConcept(conceptManager, "Method"));
-        namedEntity.add(extractConcept(conceptManager, "Parameter"));
-        namedEntity.add(extractConcept(conceptManager, "LocalVariable"));
-        namedEntity.add(extractConcept(conceptManager, "Attribute"));
+        final Set<ActualObjectType> stringValue = Collections.singleton(new StringValue(""));
+
         addToDefault(
                 new FamixRelation(
                         "hasModifier",
                         "This relation is used to state that the subject has a modifier with the name stated in the object. Examples for modifiers are access modifiers (e.g. public) and mutability modifiers (e.g. final).",
-                        namedEntity,
-                        stringConcept));
+                        getHasModifierSubjects(),
+                        stringValue));
         addToDefault(
                 new FamixRelation(
                         "hasName",
                         "This relation is used to state that the subject has the name which is stated in the object.",
-                        namedEntity,
-                        stringConcept));
+                        getNamesEntities(),
+                        stringValue));
         addToDefault(
                 new FamixRelation(
                         "isLocatedAt",
                         "This relation is used to state that the subject is located at the locations stated in the object.",
-                        namedEntity,
-                        stringConcept));
+                        getIsLocatedAtSubjects(),
+                        stringValue));
         addToDefault(
                 new FamixRelation(
                         "hasSignature",
                         "This relation is used to state that a method has the signature which is stated in the object.",
-                        namedEntity,
-                        stringConcept));
+                        Collections.singleton(extractConcept(conceptManager, "Method")),
+                        stringValue));
         addToDefault(
                 new FamixRelation(
                         "hasFullQualifiedName",
                         "This relation is used to state that an entity has the name which is stated in the object.",
-                        namedEntity,
-                        stringConcept));
-        final Set<ActualObjectType> annotationInstanceAttribute =
-                new LinkedHashSet<>(
-                        Arrays.asList(
-                                extractConcept(conceptManager, "AnnotationInstanceAttribute")));
+                        getFamixTypes(),
+                        stringValue));
         addToDefault(
                 new FamixRelation(
                         "hasValue",
                         "This relation is used to state that an AnnotationInstanceAttribute (which is an attribute-value pair) has the value which is stated in the object.",
-                        annotationInstanceAttribute,
-                        stringConcept));
+                        Collections.singleton(
+                                extractConcept(conceptManager, "AnnotationInstanceAttribute")),
+                        stringValue));
     }
 
     private void initializeBoolRelations(ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
-        final Set<ActualObjectType> boolConcept = new LinkedHashSet<>();
-        boolConcept.add(new BooleanValue(false));
-        final Set<ActualObjectType> method =
-                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "Method")));
+        final Set<ActualObjectType> boolObject = Collections.singleton(new BooleanValue(false));
         addToDefault(
                 new FamixRelation(
                         "isConstructor",
                         "This relation is used to state that the subject is or isn't a constructor (based on a value in the object). A constructor is special method that is called when an object is instantiated.",
-                        method,
-                        boolConcept));
-        final Set<ActualObjectType> typeConcepts = new LinkedHashSet<>();
-        typeConcepts.add(extractConcept(conceptManager, "FamixClass"));
-        typeConcepts.add(extractConcept(conceptManager, "Enum"));
-        typeConcepts.add(extractConcept(conceptManager, "AnnotationType"));
+                        Collections.singleton(extractConcept(conceptManager, "Method")),
+                        boolObject));
         addToDefault(
                 new FamixRelation(
                         "isExternal",
                         "This relation is used to state that the subject is or isn't an external type (based on a value in the object).",
-                        typeConcepts,
-                        boolConcept));
-        final Set<ActualObjectType> famixClass =
-                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "FamixClass")));
+                        getFamixTypes(),
+                        boolObject));
         addToDefault(
                 new FamixRelation(
                         "isInterface",
                         "This relation is used to state that the subject is or isn't an interface (based on a value in the object). An interface is an abstract type that is used to specify a behavior that classes must implement.",
-                        famixClass,
-                        boolConcept));
+                        Collections.singleton(extractConcept(conceptManager, "FamixClass")),
+                        boolObject));
     }
 
     private void initializeObjectRelations(final ConceptManager conceptManager)
             throws ConceptDoesNotExistException {
         // FamixClass relations
-        final Set<ActualObjectType> famixClassConcept = new LinkedHashSet<>();
-        famixClassConcept.add(
-                conceptManager
-                        .getConceptByName("FamixClass")
-                        .orElseThrow(() -> new ConceptDoesNotExistException("FamixClass")));
-        final Set<ActualObjectType> exception =
-                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "Exception")));
-        addToDefault(
-                new FamixRelation(
-                        "hasDefiningClass",
-                        "This relation is used to state that the subject has or is a specified in the object class or type.",
-                        exception,
-                        famixClassConcept));
-        final Set<ActualObjectType> method =
-                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "Method")));
+        Set<ActualObjectType> famixClass =
+                Collections.singleton(extractConcept(conceptManager, "FamixClass"));
+        Set<ActualObjectType> method =
+                Collections.singleton(extractConcept(conceptManager, "Method"));
+        Set<ActualObjectType> inheritance =
+                Collections.singleton(extractConcept(conceptManager, "Inheritance"));
         addToDefault(
                 new FamixRelation(
                         "hasDeclaredException",
                         "This relation is used to state that the subject (for example a method) has a specified in the object exception type.",
                         method,
-                        famixClassConcept));
+                        famixClass));
         addToDefault(
                 new FamixRelation(
                         "hasCaughtException",
                         "This relation is used to state that the subject (for example a method) catches a specified in the object exception type.",
                         method,
-                        famixClassConcept));
+                        famixClass));
         addToDefault(
                 new FamixRelation(
                         "throwsException",
                         "This relation is used to state that the subject (for example a method) throws a specified in the object exception type.",
                         method,
-                        famixClassConcept));
-        final Set<ActualObjectType> inheritance =
-                new LinkedHashSet<>(Arrays.asList(extractConcept(conceptManager, "Inheritance")));
+                        famixClass));
         addToDefault(
                 new FamixRelation(
                         "hasSubClass",
                         "This relation is used to state that the subject has a sub class of the specified in the object type.",
                         inheritance,
-                        famixClassConcept));
+                        famixClass));
         addToDefault(
                 new FamixRelation(
                         "hasSuperClass",
                         "This relation is used to state that the subject extends a super class of the specified in the object type.",
                         inheritance,
-                        famixClassConcept));
+                        famixClass));
 
         // Parameter relations
-        final Set<ActualObjectType> parameterConcept = new LinkedHashSet<>();
-        parameterConcept.add(extractConcept(conceptManager, "Parameter"));
+        Set<ActualObjectType> parameter =
+                Collections.singleton(extractConcept(conceptManager, "Parameter"));
         addToDefault(
                 new FamixRelation(
                         "definesParameter",
                         "This relation is used to state that the subject (for example a method) has specified in the object parameters.",
                         method,
-                        parameterConcept));
+                        parameter));
 
         // LocalVariable relations
-        final Set<ActualObjectType> localVariableConcept = new LinkedHashSet<>();
-        localVariableConcept.add(extractConcept(conceptManager, "LocalVariable"));
+        Set<ActualObjectType> localVariable =
+                Collections.singleton(extractConcept(conceptManager, "LocalVariable"));
         addToDefault(
                 new FamixRelation(
                         "definesVariable",
                         "This relation is used to state that the subject (for example a method) defines a specified in the object variable.",
                         method,
-                        localVariableConcept));
+                        localVariable));
 
         // AnnotationInstance relations
-        final Set<ActualObjectType> annotationInstance = new LinkedHashSet<>();
-        annotationInstance.add(extractConcept(conceptManager, "AnnotationInstance"));
-        final Set<ActualObjectType> entity = new LinkedHashSet<>();
-        entity.add(extractConcept(conceptManager, "AnnotationInstance"));
-        entity.add(extractConcept(conceptManager, "AnnotationInstanceAttribute"));
-        entity.add(extractConcept(conceptManager, "Exception"));
-        entity.add(extractConcept(conceptManager, "Namespace"));
-        entity.add(extractConcept(conceptManager, "AnnotationType"));
-        entity.add(extractConcept(conceptManager, "Enum"));
-        entity.add(extractConcept(conceptManager, "FamixClass"));
+        Set<ActualObjectType> annotationInstance =
+                Collections.singleton(extractConcept(conceptManager, "AnnotationInstance"));
         addToDefault(
                 new FamixRelation(
                         "hasAnnotationInstance",
                         "This relation is used to state that the subject has a specified in the object annotation.",
-                        entity,
+                        getHasAnnotationInstanceSubjects(),
                         annotationInstance));
 
         // AnnotationType relations
-        final Set<ActualObjectType> annotationTypeConcept = new LinkedHashSet<>();
-        annotationTypeConcept.add(extractConcept(conceptManager, "AnnotationType"));
         addToDefault(
                 new FamixRelation(
                         "hasAnnotationType",
                         "This relation is used to state that the subject has a specified in the object annotations type.",
                         annotationInstance,
-                        annotationTypeConcept));
+                        Collections.singleton(extractConcept(conceptManager, "AnnotationType"))));
 
         // AnnotationTypeAttribute relations
-        final Set<ActualObjectType> annotationTypeAttributeConcept = new LinkedHashSet<>();
-        annotationTypeAttributeConcept.add(
-                extractConcept(conceptManager, "AnnotationTypeAttribute"));
-        final Set<ActualObjectType> hasAnnotationTypeAttributeSubjects = new LinkedHashSet<>();
-        hasAnnotationTypeAttributeSubjects.add(
-                extractConcept(conceptManager, "AnnotationInstanceAttribute"));
-        hasAnnotationTypeAttributeSubjects.add(extractConcept(conceptManager, "AnnotationType"));
         addToDefault(
                 new FamixRelation(
                         "hasAnnotationTypeAttribute",
                         "This relation is used to state that the subject has in the annotation specified in the object attributes of an annotation type.",
-                        hasAnnotationTypeAttributeSubjects,
-                        annotationTypeAttributeConcept));
+                        getHasAnnotationTypeAttributeSubjects(),
+                        Collections.singleton(
+                                extractConcept(conceptManager, "AnnotationTypeAttribute"))));
 
         // AnnotationInstanceAttribute relations
-        final Set<ActualObjectType> annotationInstanceAttributeConcept = new LinkedHashSet<>();
-        annotationInstanceAttributeConcept.add(
-                extractConcept(conceptManager, "AnnotationInstanceAttribute"));
         addToDefault(
                 new FamixRelation(
                         "hasAnnotationInstanceAttribute",
                         "This relation is used to state that the subject has in the annotation specified in the object an attribute-value pair.",
                         annotationInstance,
-                        annotationInstanceAttributeConcept));
+                        Collections.singleton(
+                                extractConcept(conceptManager, "AnnotationInstanceAttribute"))));
 
         // Attribute relations
-        final Set<ActualObjectType> attributeConcept = new LinkedHashSet<>();
-        attributeConcept.add(extractConcept(conceptManager, "Attribute"));
-        final Set<ActualObjectType> typeConcepts = new LinkedHashSet<>();
-        typeConcepts.add(extractConcept(conceptManager, "FamixClass"));
-        typeConcepts.add(extractConcept(conceptManager, "Enum"));
-        typeConcepts.add(extractConcept(conceptManager, "AnnotationType"));
+        Set<ActualObjectType> attribute =
+                Collections.singleton(extractConcept(conceptManager, "Attribute"));
         addToDefault(
                 new FamixRelation(
                         "definesAttribute",
                         "This relation is used to state that the subject (for example a class) defines specified in the object attribute.",
-                        typeConcepts,
-                        attributeConcept));
+                        getFamixClassAndEnum(),
+                        attribute));
 
         // Method relations
-        final Set<ActualObjectType> methodConcept = new LinkedHashSet<>();
-        methodConcept.add(extractConcept(conceptManager, "Method"));
         addToDefault(
                 new FamixRelation(
                         "definesMethod",
                         "This relation is used to state that the subject (for example a class) defines specified in the object method.",
-                        typeConcepts,
-                        methodConcept));
+                        getFamixClassAndEnum(),
+                        method));
 
         // Type relations
         addToDefault(
                 new FamixRelation(
                         "imports",
                         "This relation is used to state that the subject (for example a class) imports (has dependency to) specified in the object type, class etc.",
-                        typeConcepts,
-                        typeConcepts));
+                        getFamixTypes(),
+                        getFamixTypes()));
 
         // Class and Enum relations
-        final Set<ActualObjectType> classEnumConcepts = new LinkedHashSet<>();
-        classEnumConcepts.add(extractConcept(conceptManager, "FamixClass"));
-        classEnumConcepts.add(extractConcept(conceptManager, "Enum"));
         addToDefault(
                 new FamixRelation(
                         "definesNestedType",
                         "This relation is used to state that the subject (for example a class) defines a nested specified in the object type.",
-                        typeConcepts,
-                        classEnumConcepts));
+                        getFamixClassAndEnum(),
+                        getFamixTypes()));
 
         // Type + NameSpace relations
-        final Set<ActualObjectType> namespaceContainsConcepts = new LinkedHashSet<>();
-        namespaceContainsConcepts.add(extractConcept(conceptManager, "Namespace"));
-        namespaceContainsConcepts.add(extractConcept(conceptManager, "FamixClass"));
-        namespaceContainsConcepts.add(extractConcept(conceptManager, "Enum"));
-        namespaceContainsConcepts.add(extractConcept(conceptManager, "AnnotationType"));
-        final Set<ActualObjectType> namespace = new LinkedHashSet<>();
-        namespace.add(extractConcept(conceptManager, "Namespace"));
         addToDefault(
                 new FamixRelation(
                         "namespaceContains",
                         "This relation is used to state that the subject (namespace) contains a specified in the object type, class etc.",
-                        namespace,
-                        namespaceContainsConcepts));
+                        Collections.singleton(extractConcept(conceptManager, "Namespace")),
+                        getNamespaceContainsObjects()));
 
         // Type + Primitive relations
-        final Set<ActualObjectType> typesAndprimitives = new LinkedHashSet<>();
-        typesAndprimitives.add(extractConcept(conceptManager, "FamixClass"));
-        typesAndprimitives.add(extractConcept(conceptManager, "Enum"));
-        typesAndprimitives.add(extractConcept(conceptManager, "AnnotationType"));
-        typesAndprimitives.add(new StringValue(""));
-        typesAndprimitives.add(new BooleanValue(false));
-        final Set<ActualObjectType> behavioralAndStructuralEntities = new LinkedHashSet<>();
-        behavioralAndStructuralEntities.add(extractConcept(conceptManager, "Method"));
-        behavioralAndStructuralEntities.add(extractConcept(conceptManager, "Attribute"));
-        behavioralAndStructuralEntities.add(extractConcept(conceptManager, "LocalVariable"));
-        behavioralAndStructuralEntities.add(extractConcept(conceptManager, "Parameter"));
         addToDefault(
                 new FamixRelation(
                         "hasDeclaredType",
                         "This relation is used to state that the subject (for example attribute) has a specified in the object type.",
-                        behavioralAndStructuralEntities,
-                        typesAndprimitives));
+                        getHasDeclaredTypeSubjects(),
+                        getHasDeclaredTypeObjects()));
     }
 
     private void initializeConformanceRelations(final ConceptManager conceptManager)
@@ -555,6 +478,110 @@ public class RelationManager extends HierarchyManager<Relation> {
         return conceptManager
                 .getConceptByName(conceptName)
                 .orElseThrow(() -> new ConceptDoesNotExistException(conceptName));
+    }
+
+    private Set<ActualObjectType> getFamixTypes() throws ConceptDoesNotExistException {
+        return new HashSet<>(
+                Arrays.asList(
+                        extractConcept(conceptManager, "FamixClass"),
+                        extractConcept(conceptManager, "Enum"),
+                        extractConcept(conceptManager, "AnnotationType")));
+    }
+
+    private Set<ActualObjectType> getFamixClassAndEnum() throws ConceptDoesNotExistException {
+        return new HashSet<>(
+                Arrays.asList(
+                        extractConcept(conceptManager, "FamixClass"),
+                        extractConcept(conceptManager, "Enum")));
+    }
+
+    private Set<ActualObjectType> getNamespaceContainsObjects()
+            throws ConceptDoesNotExistException {
+        return new HashSet<>(
+                Arrays.asList(
+                        extractConcept(conceptManager, "FamixClass"),
+                        extractConcept(conceptManager, "Enum"),
+                        extractConcept(conceptManager, "AnnotationType"),
+                        extractConcept(conceptManager, "Namespace")));
+    }
+
+    private Set<ActualObjectType> getNamesEntities() throws ConceptDoesNotExistException {
+        Set<ActualObjectType> namedEntity = new HashSet<>();
+        namedEntity.add(extractConcept(conceptManager, "Namespace"));
+        namedEntity.add(extractConcept(conceptManager, "AnnotationType"));
+        namedEntity.add(extractConcept(conceptManager, "AnnotationTypeAttribute"));
+        namedEntity.add(extractConcept(conceptManager, "Enum"));
+        namedEntity.add(extractConcept(conceptManager, "FamixClass"));
+        namedEntity.add(extractConcept(conceptManager, "Method"));
+        namedEntity.add(extractConcept(conceptManager, "Parameter"));
+        namedEntity.add(extractConcept(conceptManager, "LocalVariable"));
+        namedEntity.add(extractConcept(conceptManager, "Attribute"));
+        namedEntity.add(extractConcept(conceptManager, "PrimitiveType"));
+        return namedEntity;
+    }
+
+    private Set<ActualObjectType> getHasModifierSubjects() throws ConceptDoesNotExistException {
+        Set<ActualObjectType> hasModifierSubjects = new HashSet<>();
+        hasModifierSubjects.add(extractConcept(conceptManager, "AnnotationType"));
+        hasModifierSubjects.add(extractConcept(conceptManager, "Enum"));
+        hasModifierSubjects.add(extractConcept(conceptManager, "FamixClass"));
+        hasModifierSubjects.add(extractConcept(conceptManager, "Method"));
+        hasModifierSubjects.add(extractConcept(conceptManager, "Parameter"));
+        hasModifierSubjects.add(extractConcept(conceptManager, "LocalVariable"));
+        hasModifierSubjects.add(extractConcept(conceptManager, "Attribute"));
+        return hasModifierSubjects;
+    }
+
+    private Set<ActualObjectType> getIsLocatedAtSubjects() throws ConceptDoesNotExistException {
+        Set<ActualObjectType> isLocatedAtSubjects = new HashSet<>();
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "AnnotationType"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "AnnotationInstance"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "Enum"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "FamixClass"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "Method"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "Parameter"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "LocalVariable"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "Attribute"));
+        isLocatedAtSubjects.add(extractConcept(conceptManager, "PrimitiveType"));
+        return isLocatedAtSubjects;
+    }
+
+    private Set<ActualObjectType> getHasAnnotationInstanceSubjects()
+            throws ConceptDoesNotExistException {
+        Set<ActualObjectType> hasAnnotationInstanceSubjects = new HashSet<>();
+        hasAnnotationInstanceSubjects.add(extractConcept(conceptManager, "AnnotationType"));
+        hasAnnotationInstanceSubjects.add(extractConcept(conceptManager, "Enum"));
+        hasAnnotationInstanceSubjects.add(extractConcept(conceptManager, "FamixClass"));
+        hasAnnotationInstanceSubjects.add(extractConcept(conceptManager, "Method"));
+        hasAnnotationInstanceSubjects.add(extractConcept(conceptManager, "Parameter"));
+        hasAnnotationInstanceSubjects.add(extractConcept(conceptManager, "Attribute"));
+        return hasAnnotationInstanceSubjects;
+    }
+
+    private Set<ActualObjectType> getHasAnnotationTypeAttributeSubjects()
+            throws ConceptDoesNotExistException {
+        return new HashSet<>(
+                Arrays.asList(
+                        extractConcept(conceptManager, "AnnotationInstanceAttribute"),
+                        extractConcept(conceptManager, "AnnotationType")));
+    }
+
+    private Set<ActualObjectType> getHasDeclaredTypeSubjects() throws ConceptDoesNotExistException {
+        return new HashSet<>(
+                Arrays.asList(
+                        extractConcept(conceptManager, "Attribute"),
+                        extractConcept(conceptManager, "Method"),
+                        extractConcept(conceptManager, "Parameter"),
+                        extractConcept(conceptManager, "LocalVariable"),
+                        extractConcept(conceptManager, "AnnotationTypeAttribute")));
+    }
+
+    private Set<ActualObjectType> getHasDeclaredTypeObjects() throws ConceptDoesNotExistException {
+        return new HashSet<>(
+                Arrays.asList(
+                        extractConcept(conceptManager, "FamixClass"),
+                        extractConcept(conceptManager, "Enum"),
+                        extractConcept(conceptManager, "PrimitiveType")));
     }
 
     public List<Relation> getInputRelations() {
