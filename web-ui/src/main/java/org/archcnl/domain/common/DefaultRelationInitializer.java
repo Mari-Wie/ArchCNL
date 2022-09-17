@@ -33,7 +33,11 @@ public class DefaultRelationInitializer {
         defaultRelations.addAll(getMainOntologyRelations());
         defaultRelations.addAll(getStringRelations());
         defaultRelations.addAll(getBoolRelations());
-        defaultRelations.addAll(getObjectRelations());
+        defaultRelations.add(getNamespaceRelation());
+        defaultRelations.addAll(getInheritanceRelations());
+        defaultRelations.addAll(getMethodRelations());
+        defaultRelations.addAll(getFamixTypeRelations());
+        defaultRelations.addAll(getAnnotationRelations());
         defaultRelations.addAll(getConformanceRelations());
         return defaultRelations;
     }
@@ -83,7 +87,7 @@ public class DefaultRelationInitializer {
                 new FamixRelation(
                         "hasName",
                         "This relation is used to state that the subject has the name which is stated in the object.",
-                        getNamesEntities(),
+                        getHasNameSubjects(),
                         stringValue));
         relations.add(
                 new FamixRelation(
@@ -136,12 +140,46 @@ public class DefaultRelationInitializer {
         return relations;
     }
 
-    private List<Relation> getObjectRelations() throws ConceptDoesNotExistException {
+    private Relation getNamespaceRelation() throws ConceptDoesNotExistException {
+        Set<ActualObjectType> namespaceContainsObjects =
+                new HashSet<>(
+                        Arrays.asList(
+                                getConcept("FamixClass"),
+                                getConcept("Enum"),
+                                getConcept("AnnotationType"),
+                                getConcept("Namespace")));
+        return new FamixRelation(
+                "namespaceContains",
+                "This relation is used to state that the subject (namespace) contains a specified in the object type, class etc.",
+                Collections.singleton(getConcept("Namespace")),
+                namespaceContainsObjects);
+    }
+
+    private List<Relation> getInheritanceRelations() throws ConceptDoesNotExistException {
         List<Relation> relations = new ArrayList<>();
-        // FamixClass relations
         Set<ActualObjectType> famixClass = Collections.singleton(getConcept("FamixClass"));
-        Set<ActualObjectType> method = Collections.singleton(getConcept("Method"));
         Set<ActualObjectType> inheritance = Collections.singleton(getConcept("Inheritance"));
+        relations.add(
+                new FamixRelation(
+                        "hasSubClass",
+                        "This relation is used to state that the subject has a sub class of the specified in the object type.",
+                        inheritance,
+                        famixClass));
+        relations.add(
+                new FamixRelation(
+                        "hasSuperClass",
+                        "This relation is used to state that the subject extends a super class of the specified in the object type.",
+                        inheritance,
+                        famixClass));
+        return relations;
+    }
+
+    private List<Relation> getMethodRelations() throws ConceptDoesNotExistException {
+        List<Relation> relations = new ArrayList<>();
+        Set<ActualObjectType> method = Collections.singleton(getConcept("Method"));
+        Set<ActualObjectType> famixClass = Collections.singleton(getConcept("FamixClass"));
+        Set<ActualObjectType> parameter = Collections.singleton(getConcept("Parameter"));
+        Set<ActualObjectType> localVariable = Collections.singleton(getConcept("LocalVariable"));
         relations.add(
                 new FamixRelation(
                         "hasDeclaredException",
@@ -162,117 +200,97 @@ public class DefaultRelationInitializer {
                         famixClass));
         relations.add(
                 new FamixRelation(
-                        "hasSubClass",
-                        "This relation is used to state that the subject has a sub class of the specified in the object type.",
-                        inheritance,
-                        famixClass));
-        relations.add(
-                new FamixRelation(
-                        "hasSuperClass",
-                        "This relation is used to state that the subject extends a super class of the specified in the object type.",
-                        inheritance,
-                        famixClass));
-
-        // Parameter relations
-        Set<ActualObjectType> parameter = Collections.singleton(getConcept("Parameter"));
-        relations.add(
-                new FamixRelation(
                         "definesParameter",
                         "This relation is used to state that the subject (for example a method) has specified in the object parameters.",
                         method,
                         parameter));
-
-        // LocalVariable relations
-        Set<ActualObjectType> localVariable = Collections.singleton(getConcept("LocalVariable"));
         relations.add(
                 new FamixRelation(
                         "definesVariable",
                         "This relation is used to state that the subject (for example a method) defines a specified in the object variable.",
                         method,
                         localVariable));
+        return relations;
+    }
 
-        // AnnotationInstance relations
-        Set<ActualObjectType> annotationInstance =
-                Collections.singleton(getConcept("AnnotationInstance"));
-        relations.add(
-                new FamixRelation(
-                        "hasAnnotationInstance",
-                        "This relation is used to state that the subject has a specified in the object annotation.",
-                        getHasAnnotationInstanceSubjects(),
-                        annotationInstance));
-
-        // AnnotationType relations
-        relations.add(
-                new FamixRelation(
-                        "hasAnnotationType",
-                        "This relation is used to state that the subject has a specified in the object annotations type.",
-                        annotationInstance,
-                        Collections.singleton(getConcept("AnnotationType"))));
-
-        // AnnotationTypeAttribute relations
-        relations.add(
-                new FamixRelation(
-                        "hasAnnotationTypeAttribute",
-                        "This relation is used to state that the subject has in the annotation specified in the object attributes of an annotation type.",
-                        getHasAnnotationTypeAttributeSubjects(),
-                        Collections.singleton(getConcept("AnnotationTypeAttribute"))));
-
-        // AnnotationInstanceAttribute relations
-        relations.add(
-                new FamixRelation(
-                        "hasAnnotationInstanceAttribute",
-                        "This relation is used to state that the subject has in the annotation specified in the object an attribute-value pair.",
-                        annotationInstance,
-                        Collections.singleton(getConcept("AnnotationInstanceAttribute"))));
-
-        // Attribute relations
+    private List<Relation> getFamixTypeRelations() throws ConceptDoesNotExistException {
+        List<Relation> relations = new ArrayList<>();
+        Set<ActualObjectType> method = Collections.singleton(getConcept("Method"));
         Set<ActualObjectType> attribute = Collections.singleton(getConcept("Attribute"));
+        Set<ActualObjectType> classAndEnum =
+                new HashSet<>(Arrays.asList(getConcept("FamixClass"), getConcept("Enum")));
+        Set<ActualObjectType> hasDeclaredTypeObjects =
+                new HashSet<>(
+                        Arrays.asList(
+                                getConcept("FamixClass"),
+                                getConcept("Enum"),
+                                getConcept("PrimitiveType")));
         relations.add(
                 new FamixRelation(
                         "definesAttribute",
                         "This relation is used to state that the subject (for example a class) defines specified in the object attribute.",
-                        getFamixClassAndEnum(),
+                        classAndEnum,
                         attribute));
-
-        // Method relations
         relations.add(
                 new FamixRelation(
                         "definesMethod",
                         "This relation is used to state that the subject (for example a class) defines specified in the object method.",
-                        getFamixClassAndEnum(),
+                        classAndEnum,
                         method));
-
-        // Type relations
+        relations.add(
+                new FamixRelation(
+                        "definesNestedType",
+                        "This relation is used to state that the subject (for example a class) defines a nested specified in the object type.",
+                        classAndEnum,
+                        getFamixTypes()));
         relations.add(
                 new FamixRelation(
                         "imports",
                         "This relation is used to state that the subject (for example a class) imports (has dependency to) specified in the object type, class etc.",
                         getFamixTypes(),
                         getFamixTypes()));
-
-        // Class and Enum relations
-        relations.add(
-                new FamixRelation(
-                        "definesNestedType",
-                        "This relation is used to state that the subject (for example a class) defines a nested specified in the object type.",
-                        getFamixClassAndEnum(),
-                        getFamixTypes()));
-
-        // Type + NameSpace relations
-        relations.add(
-                new FamixRelation(
-                        "namespaceContains",
-                        "This relation is used to state that the subject (namespace) contains a specified in the object type, class etc.",
-                        Collections.singleton(getConcept("Namespace")),
-                        getNamespaceContainsObjects()));
-
-        // Type + Primitive relations
         relations.add(
                 new FamixRelation(
                         "hasDeclaredType",
                         "This relation is used to state that the subject (for example attribute) has a specified in the object type.",
                         getHasDeclaredTypeSubjects(),
-                        getHasDeclaredTypeObjects()));
+                        hasDeclaredTypeObjects));
+        return relations;
+    }
+
+    private List<Relation> getAnnotationRelations() throws ConceptDoesNotExistException {
+        List<Relation> relations = new ArrayList<>();
+        Set<ActualObjectType> annotationInstance =
+                Collections.singleton(getConcept("AnnotationInstance"));
+        Set<ActualObjectType> hasAnnotationTypeAttributSubjects =
+                new HashSet<>(
+                        Arrays.asList(
+                                getConcept("AnnotationInstanceAttribute"),
+                                getConcept("AnnotationType")));
+        relations.add(
+                new FamixRelation(
+                        "hasAnnotationInstance",
+                        "This relation is used to state that the subject has a specified in the object annotation.",
+                        getHasAnnotationInstanceSubjects(),
+                        annotationInstance));
+        relations.add(
+                new FamixRelation(
+                        "hasAnnotationType",
+                        "This relation is used to state that the subject has a specified in the object annotations type.",
+                        annotationInstance,
+                        Collections.singleton(getConcept("AnnotationType"))));
+        relations.add(
+                new FamixRelation(
+                        "hasAnnotationTypeAttribute",
+                        "This relation is used to state that the subject has in the annotation specified in the object attributes of an annotation type.",
+                        hasAnnotationTypeAttributSubjects,
+                        Collections.singleton(getConcept("AnnotationTypeAttribute"))));
+        relations.add(
+                new FamixRelation(
+                        "hasAnnotationInstanceAttribute",
+                        "This relation is used to state that the subject has in the annotation specified in the object an attribute-value pair.",
+                        annotationInstance,
+                        Collections.singleton(getConcept("AnnotationInstanceAttribute"))));
         return relations;
     }
 
@@ -282,32 +300,32 @@ public class DefaultRelationInitializer {
         // unused
         // TODO: "hasRuleID" and "hasCheckingDate" are also excluded as their ObjectType is unclear
         final Set<ActualObjectType> architectureRule =
-                new HashSet<>(Arrays.asList(getConcept("ArchitectureRule")));
+                Collections.singleton(getConcept("ArchitectureRule"));
         relations.add(
                 new ConformanceRelation(
                         "hasRuleRepresentation",
                         "This relation is used to state that the subject (for example architecture rule) has a specified in the object representation (in most cases string representation).",
                         architectureRule,
-                        new HashSet<>(Arrays.asList(new StringValue("")))));
+                        Collections.singleton(new StringValue(""))));
         relations.add(
                 new ConformanceRelation(
                         "hasRuleType",
                         "This relation is used to state that the subject (for example architecture rule) has a specified in the object rule type.",
                         architectureRule,
-                        new HashSet<>(Arrays.asList(new StringValue("")))));
-        final Set<ActualObjectType> proof = new HashSet<>(Arrays.asList(getConcept("Proof")));
+                        Collections.singleton(new StringValue(""))));
+        final Set<ActualObjectType> proof = Collections.singleton(getConcept("Proof"));
         relations.add(
                 new ConformanceRelation(
                         "hasNotInferredStatement",
                         "This relation is used to state that the subject hasn't / doesn't correspond to the specified in the object statements.",
                         proof,
-                        new HashSet<>(Arrays.asList(getConcept("NotInferredStatement")))));
+                        Collections.singleton(getConcept("NotInferredStatement"))));
         relations.add(
                 new ConformanceRelation(
                         "hasAssertedStatement",
                         "This relation is used to state that the subject has / corresponds to the specified in the object statements.",
                         proof,
-                        new HashSet<>(Arrays.asList(getConcept("AssertedStatement")))));
+                        Collections.singleton(getConcept("AssertedStatement"))));
         final Set<ActualObjectType> statements = new HashSet<>();
         statements.add(getConcept("NotInferredStatement"));
         statements.add(getConcept("AssertedStatement"));
@@ -374,21 +392,7 @@ public class DefaultRelationInitializer {
                         getConcept("AnnotationType")));
     }
 
-    private Set<ActualObjectType> getFamixClassAndEnum() throws ConceptDoesNotExistException {
-        return new HashSet<>(Arrays.asList(getConcept("FamixClass"), getConcept("Enum")));
-    }
-
-    private Set<ActualObjectType> getNamespaceContainsObjects()
-            throws ConceptDoesNotExistException {
-        return new HashSet<>(
-                Arrays.asList(
-                        getConcept("FamixClass"),
-                        getConcept("Enum"),
-                        getConcept("AnnotationType"),
-                        getConcept("Namespace")));
-    }
-
-    private Set<ActualObjectType> getNamesEntities() throws ConceptDoesNotExistException {
+    private Set<ActualObjectType> getHasNameSubjects() throws ConceptDoesNotExistException {
         Set<ActualObjectType> namedEntity = new HashSet<>();
         namedEntity.add(getConcept("Namespace"));
         namedEntity.add(getConcept("AnnotationType"));
@@ -440,13 +444,6 @@ public class DefaultRelationInitializer {
         return hasAnnotationInstanceSubjects;
     }
 
-    private Set<ActualObjectType> getHasAnnotationTypeAttributeSubjects()
-            throws ConceptDoesNotExistException {
-        return new HashSet<>(
-                Arrays.asList(
-                        getConcept("AnnotationInstanceAttribute"), getConcept("AnnotationType")));
-    }
-
     private Set<ActualObjectType> getHasDeclaredTypeSubjects() throws ConceptDoesNotExistException {
         return new HashSet<>(
                 Arrays.asList(
@@ -455,12 +452,6 @@ public class DefaultRelationInitializer {
                         getConcept("Parameter"),
                         getConcept("LocalVariable"),
                         getConcept("AnnotationTypeAttribute")));
-    }
-
-    private Set<ActualObjectType> getHasDeclaredTypeObjects() throws ConceptDoesNotExistException {
-        return new HashSet<>(
-                Arrays.asList(
-                        getConcept("FamixClass"), getConcept("Enum"), getConcept("PrimitiveType")));
     }
 
     private Concept getConcept(final String conceptName) throws ConceptDoesNotExistException {
