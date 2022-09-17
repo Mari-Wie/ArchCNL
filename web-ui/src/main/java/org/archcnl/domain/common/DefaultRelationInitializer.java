@@ -10,6 +10,7 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.ConformanceRelation;
 import org.archcnl.domain.common.conceptsandrelations.FamixRelation;
 import org.archcnl.domain.common.conceptsandrelations.JenaBuiltinRelation;
+import org.archcnl.domain.common.conceptsandrelations.MainOntologyRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
@@ -29,6 +30,7 @@ public class DefaultRelationInitializer {
         List<Relation> defaultRelations = new ArrayList<>();
         defaultRelations.add(getTypeRelation());
         defaultRelations.addAll(getBuiltinRelations());
+        defaultRelations.addAll(getMainOntologyRelations());
         defaultRelations.addAll(getStringRelations());
         defaultRelations.addAll(getBoolRelations());
         defaultRelations.addAll(getObjectRelations());
@@ -44,9 +46,33 @@ public class DefaultRelationInitializer {
         return Arrays.asList(JenaBuiltinRelation.getRegexRelation());
     }
 
+    private List<Relation> getMainOntologyRelations() throws ConceptDoesNotExistException {
+        List<Relation> relations = new ArrayList<>();
+        Set<ActualObjectType> file = Collections.singleton(getConcept("SoftwareArtifactFile"));
+        relations.add(
+                new MainOntologyRelation(
+                        "hasPath",
+                        "The path of the file.",
+                        file,
+                        Collections.singleton(new StringValue(""))));
+        relations.add(
+                new MainOntologyRelation(
+                        "containsArtifact",
+                        "The top level source code entities contained in this file.",
+                        file,
+                        getFamixTypes()));
+        return relations;
+    }
+
     private List<Relation> getStringRelations() throws ConceptDoesNotExistException {
         List<Relation> relations = new ArrayList<>();
         final Set<ActualObjectType> stringValue = Collections.singleton(new StringValue(""));
+        relations.add(
+                new FamixRelation(
+                        "hasModifier",
+                        "This relation is used to state that the subject has a modifier with the name stated in the object. Examples for modifiers are access modifiers (e.g. public) and mutability modifiers (e.g. final).",
+                        getHasModifierSubjects(),
+                        stringValue));
         relations.add(
                 new FamixRelation(
                         "hasModifier",
