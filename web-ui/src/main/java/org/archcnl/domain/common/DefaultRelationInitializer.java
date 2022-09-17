@@ -79,12 +79,6 @@ public class DefaultRelationInitializer {
                         stringValue));
         relations.add(
                 new FamixRelation(
-                        "hasModifier",
-                        "This relation is used to state that the subject has a modifier with the name stated in the object. Examples for modifiers are access modifiers (e.g. public) and mutability modifiers (e.g. final).",
-                        getHasModifierSubjects(),
-                        stringValue));
-        relations.add(
-                new FamixRelation(
                         "hasName",
                         "This relation is used to state that the subject has the name which is stated in the object.",
                         getHasNameSubjects(),

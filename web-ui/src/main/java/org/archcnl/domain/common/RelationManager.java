@@ -50,12 +50,12 @@ public class RelationManager extends HierarchyManager<Relation> {
     }
     // TODO: fix this lazy coupout by removing it and refactoring the init functions. This function
     // is only here because I was to lazy to fix all the init functions.
-    public void addToDefault(Relation relation) {
+    private void addToDefault(Relation relation) {
         try {
             addToParent(relation, "Default Relations");
         } catch (RelationAlreadyExistsException e) {
             e.printStackTrace();
-            throw new RuntimeException("Relation already exists");
+            throw new RuntimeException("Relation " + relation.transformToGui() + " already exists");
         }
     }
 
