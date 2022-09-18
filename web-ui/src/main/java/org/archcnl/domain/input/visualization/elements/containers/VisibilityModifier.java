@@ -12,7 +12,7 @@ public enum VisibilityModifier {
         this.visibilityCharacter = visibilityCharacter;
     }
 
-    public char getVisibilityCharacter() {
-        return visibilityCharacter;
+    public String getVisibilityPrefix() {
+        return String.valueOf(visibilityCharacter);
     }
 }

@@ -30,4 +30,19 @@ public class ModifierContainer {
     private boolean isVisibilityModifier(String modifier) {
         return EnumUtils.isValidEnum(VisibilityModifier.class, modifier);
     }
+
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public String getVisibilityPrefix() {
+        if (visibilityModifer.isPresent()) {
+            return visibilityModifer.get().getVisibilityPrefix();
+        }
+        return "";
+    }
 }
