@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.elements;
+package org.archcnl.domain.input.visualization.elements.containers;
 
 public enum VisibilityModifier {
     PRIVATE('-'),
