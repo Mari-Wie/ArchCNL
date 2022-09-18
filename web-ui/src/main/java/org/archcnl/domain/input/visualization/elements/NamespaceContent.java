@@ -1,42 +1,48 @@
 package org.archcnl.domain.input.visualization.elements;
 
 import java.util.List;
+import java.util.Optional;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
-public abstract class NamespaceContent extends NamedEntity implements PlantUmlElement {
+public abstract class NamespaceContent implements PlantUmlElement {
 
     private static final String ONE_INDENTATION_LEVEL = "/t";
 
-    protected int indentationDepth = 0;
+    private int indentationDepth = 0;
+    protected Variable variable;
+    protected Optional<String> hasName = Optional.empty();
 
-    protected NamespaceContent(String variableName) {
-        super(variableName);
+    protected NamespaceContent(Variable variable) {
+        this.variable = variable;
     }
 
     @Override
     public String buildPlantUmlCode() {
+        String identationPrefix = ONE_INDENTATION_LEVEL.repeat(indentationDepth);
         StringBuilder builder = new StringBuilder();
-        builder.append(buildNameSection());
-        builder.append(buildBodySection());
+        builder.append(buildNameSection(identationPrefix));
+        builder.append(buildBodySection(identationPrefix));
         return builder.toString();
     }
 
-    private String buildNameSection() {
-        String identationPrefix = ONE_INDENTATION_LEVEL.repeat(indentationDepth);
-
+    private String buildNameSection(String identationPrefix) {
         StringBuilder builder = new StringBuilder();
         builder.append(identationPrefix);
         builder.append(getElementIdentifier() + " ");
         builder.append("\"" + getHighestRankingName() + "\"");
         builder.append(" as ");
-        builder.append(getVariableName());
+        builder.append(variable.getName());
+        builder.append(buildAnnotationSection());
         return builder.toString();
     }
 
+    protected abstract String buildAnnotationSection();
+
+    protected abstract String getHighestRankingName();
+
     protected abstract String getElementIdentifier();
 
-    private String buildBodySection() {
-        String identationPrefix = ONE_INDENTATION_LEVEL.repeat(indentationDepth);
-
+    private String buildBodySection(String identationPrefix) {
         StringBuilder builder = new StringBuilder();
         builder.append(" {\n");
         for (String contentLine : buildBodySectionContentLines()) {
@@ -51,5 +57,7 @@ public abstract class NamespaceContent extends NamedEntity implements PlantUmlEl
 
     protected abstract List<String> buildBodySectionContentLines();
 
-    protected abstract void increaseIndentation();
+    protected void increaseIndentation() {
+        indentationDepth++;
+    }
 }

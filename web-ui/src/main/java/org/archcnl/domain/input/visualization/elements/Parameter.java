@@ -1,13 +1,17 @@
 package org.archcnl.domain.input.visualization.elements;
 
 import java.util.Optional;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class Parameter extends NamedEntity implements PlantUmlElement {
+public class Parameter implements PlantUmlElement {
 
-    private Optional<String> hasDeclaredType = Optional.empty();
+    private Variable variable;
+    private Optional<String> hasName = Optional.empty();
+    private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
-    public Parameter(String variableName) {
-        super(variableName);
+    public Parameter(Variable variable) {
+        this.variable = variable;
     }
 
     @Override
@@ -19,15 +23,29 @@ public class Parameter extends NamedEntity implements PlantUmlElement {
     }
 
     private String buildNameSection() {
-        return getHighestRankingName();
+        return hasName.isPresent() ? hasName.get() : variable.transformToGui();
     }
 
     private String buildTypeSection() {
         StringBuilder builder = new StringBuilder();
         if (hasDeclaredType.isPresent()) {
             builder.append(":");
-            builder.append(hasDeclaredType.get());
+            builder.append(hasDeclaredType.get().getTypeRepresentation());
         }
         return builder.toString();
+    }
+
+    @Override
+    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+        switch (property) {
+            case "hasName":
+                this.hasName = Optional.of((String) object);
+                break;
+            case "hasDeclaredType":
+                this.hasDeclaredType = Optional.of((DeclaredType) object);
+                break;
+            default:
+                throw new PropertyNotFoundException(property + " couldn't be set");
+        }
     }
 }

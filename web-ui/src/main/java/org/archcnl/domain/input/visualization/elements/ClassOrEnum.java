@@ -8,15 +8,16 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class AnnotationType extends NamespaceContent implements PlantUmlElement, FamixType {
+public abstract class ClassOrEnum extends NamespaceContent
+        implements DeclaredType, FamixType, PlantUmlElement {
 
     private Optional<String> hasFullQualifiedName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
-    // PlantUml does not allow for multiple stereotypes
     private Optional<AnnotationInstance> hasAnnotationInstance = Optional.empty();
-    private List<AnnotationTypeAttribute> hasAnnotationTypeAttribute = new ArrayList<>();
+    private List<Field> definesAttribute = new ArrayList<>();
+    private List<Method> definesMethod = new ArrayList<>();
 
-    public AnnotationType(Variable variable) {
+    protected ClassOrEnum(Variable variable) {
         super(variable);
     }
 
@@ -35,12 +36,28 @@ public class AnnotationType extends NamespaceContent implements PlantUmlElement,
             case "hasAnnotationInstance":
                 this.hasAnnotationInstance = Optional.of((AnnotationInstance) object);
                 break;
-            case "hasAnnotationTypeAttribute":
-                this.hasAnnotationTypeAttribute.add((AnnotationTypeAttribute) object);
+            case "definesAttribute":
+                this.definesAttribute.add((Field) object);
+                break;
+            case "definesMethod":
+                this.definesMethod.add((Method) object);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
         }
+    }
+
+    @Override
+    public String getTypeRepresentation() {
+        return getHighestRankingName();
+    }
+
+    @Override
+    protected String buildAnnotationSection() {
+        if (hasAnnotationInstance.isEmpty()) {
+            return "";
+        }
+        return " " + hasAnnotationInstance.get().buildPlantUmlCode();
     }
 
     @Override
@@ -56,22 +73,18 @@ public class AnnotationType extends NamespaceContent implements PlantUmlElement,
     }
 
     @Override
-    protected String getElementIdentifier() {
-        return "annotation";
-    }
-
-    @Override
     protected List<String> buildBodySectionContentLines() {
-        return hasAnnotationTypeAttribute.stream()
-                .map(AnnotationTypeAttribute::buildPlantUmlCode)
-                .collect(Collectors.toList());
+        List<String> bodyContentLines = new ArrayList<>();
+        bodyContentLines.addAll(buildAttributeLines());
+        bodyContentLines.addAll(buildMethodLines());
+        return bodyContentLines;
     }
 
-    @Override
-    protected String buildAnnotationSection() {
-        if (hasAnnotationInstance.isEmpty()) {
-            return "";
-        }
-        return " " + hasAnnotationInstance.get().buildPlantUmlCode();
+    private List<String> buildAttributeLines() {
+        return definesAttribute.stream().map(Field::buildPlantUmlCode).collect(Collectors.toList());
+    }
+
+    private List<String> buildMethodLines() {
+        return definesMethod.stream().map(Method::buildPlantUmlCode).collect(Collectors.toList());
     }
 }

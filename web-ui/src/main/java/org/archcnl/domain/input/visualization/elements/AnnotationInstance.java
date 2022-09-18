@@ -31,7 +31,7 @@ public class AnnotationInstance implements PlantUmlElement {
 
     private String buildNameSection() {
         if (hasAnnotationType.isPresent()) {
-            return hasAnnotationType.get().buildNameSection();
+            return hasAnnotationType.get().getHighestRankingName();
         }
         return variable.transformToGui();
     }

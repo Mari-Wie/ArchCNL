@@ -28,9 +28,9 @@ public class MappingTranslator {
     public void translateToPlantUmlModel(ConceptManager conceptManager)
             throws MappingToUmlTranslationFailedException {
         Set<Variable> variables = prepareMappingForTranslation(conceptManager);
+        Map<Variable, PlantUmlElement> elementMap = createPlantUmlModels(variables);
         TripletContainer container = new TripletContainer(whenTriplets);
-        createPlantUmlModels(variables);
-        // set Object related properties
+        applyDataProperties(container, elementMap);
         // apply relations between objects
         // set thenTriplet note
     }
@@ -54,11 +54,12 @@ public class MappingTranslator {
         return variableManager.getVariables();
     }
 
-    private Map<Variable, PlantUmlElement> createPlantUmlModels(Set<Variable> variables) {
+    private Map<Variable, PlantUmlElement> createPlantUmlModels(Set<Variable> variables)
+            throws MappingToUmlTranslationFailedException {
         Map<Variable, PlantUmlElement> elementMap = new HashMap<>();
         for (Variable variable : variables) {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
-            PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable.getName());
+            PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable);
             elementMap.put(variable, element);
         }
         return elementMap;
@@ -72,5 +73,10 @@ public class MappingTranslator {
         // and hasDeclaredType
         // TODO implement better selection
         return new FamixConcept("FamixClass", "");
+    }
+
+    private void applyDataProperties(
+            TripletContainer container, Map<Variable, PlantUmlElement> elementMap) {
+        // TODO Auto-generated method stub
     }
 }
