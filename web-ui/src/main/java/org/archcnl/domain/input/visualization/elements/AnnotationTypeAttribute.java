@@ -25,7 +25,7 @@ public class AnnotationTypeAttribute implements PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
+    protected String buildNameSection() {
         return hasName.isPresent() ? hasName.get() : variable.transformToGui();
     }
 
