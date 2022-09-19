@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class Namespace extends NamespaceContent implements PlantUmlElement {
+public class Namespace extends NamespaceContent {
 
     private List<NamespaceContent> namespaceContains = new ArrayList<>();
 

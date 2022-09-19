@@ -3,7 +3,7 @@ package org.archcnl.domain.input.visualization.elements;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class FamixClass extends ClassOrEnum implements PlantUmlElement, FamixType, DeclaredType {
+public class FamixClass extends ClassOrEnum implements FamixType, DeclaredType {
 
     private boolean isInterface = false;
 

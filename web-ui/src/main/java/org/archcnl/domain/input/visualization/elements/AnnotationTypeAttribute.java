@@ -4,16 +4,15 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class AnnotationTypeAttribute implements PlantUmlElement {
+public class AnnotationTypeAttribute extends PlantUmlElement {
 
     private static final String FIELD_MODIFIER = "{field}";
 
-    private Variable variable;
     private Optional<String> hasName = Optional.empty();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
     public AnnotationTypeAttribute(Variable variable) {
-        this.variable = variable;
+        super(variable, true);
     }
 
     @Override

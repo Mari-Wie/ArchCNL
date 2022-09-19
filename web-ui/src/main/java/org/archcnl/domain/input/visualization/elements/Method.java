@@ -8,13 +8,12 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class Method implements PlantUmlElement {
+public class Method extends PlantUmlElement {
 
     private static final String METHOD_MODIFIER = "{method}";
     private static final String ABSTRACT_MODIFIER = "{abstract}";
     private static final String STATIC_MODIFIER = "{static}";
 
-    private Variable variable;
     private Optional<String> hasName = Optional.empty();
     private List<Parameter> definesParameters = new ArrayList<>();
     private ModifierContainer modifierContainer = new ModifierContainer();
@@ -22,7 +21,7 @@ public class Method implements PlantUmlElement {
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
     public Method(Variable variable) {
-        this.variable = variable;
+        super(variable, true);
     }
 
     @Override

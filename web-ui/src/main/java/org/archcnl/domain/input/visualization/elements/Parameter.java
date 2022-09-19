@@ -4,14 +4,13 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class Parameter implements PlantUmlElement {
+public class Parameter extends PlantUmlElement {
 
-    private Variable variable;
     private Optional<String> hasName = Optional.empty();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
     public Parameter(Variable variable) {
-        this.variable = variable;
+        super(variable, true);
     }
 
     @Override

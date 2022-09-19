@@ -4,13 +4,12 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class PrimitiveType implements PlantUmlElement, DeclaredType {
+public class PrimitiveType extends PlantUmlElement implements DeclaredType {
 
-    private Variable variable;
     private Optional<String> hasName = Optional.empty();
 
     public PrimitiveType(Variable variable) {
-        this.variable = variable;
+        super(variable, false);
     }
 
     @Override

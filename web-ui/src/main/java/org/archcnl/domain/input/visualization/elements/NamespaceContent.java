@@ -4,16 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
-public abstract class NamespaceContent implements PlantUmlElement {
+public abstract class NamespaceContent extends PlantUmlElement {
 
     private static final String ONE_INDENTATION_LEVEL = "/t";
 
     private int indentationDepth = 0;
-    protected Variable variable;
     protected Optional<String> hasName = Optional.empty();
 
     protected NamespaceContent(Variable variable) {
-        this.variable = variable;
+        super(variable, false);
     }
 
     @Override

@@ -4,13 +4,12 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class SoftwareArtifaceFile implements PlantUmlElement {
+public class SoftwareArtifaceFile extends PlantUmlElement {
 
-    private Variable variable;
     private Optional<String> hasPath = Optional.empty();
 
     public SoftwareArtifaceFile(Variable variable) {
-        this.variable = variable;
+        super(variable, false);
     }
 
     @Override

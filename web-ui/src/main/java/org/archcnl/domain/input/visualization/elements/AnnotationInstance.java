@@ -7,14 +7,13 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class AnnotationInstance implements PlantUmlElement {
+public class AnnotationInstance extends PlantUmlElement {
 
-    private Variable variable;
     private Optional<AnnotationType> hasAnnotationType = Optional.empty();
     private List<AnnotationInstanceAttribute> hasAnnotationInstanceAttribute = new ArrayList<>();
 
     public AnnotationInstance(Variable variable) {
-        this.variable = variable;
+        super(variable, true);
     }
 
     @Override

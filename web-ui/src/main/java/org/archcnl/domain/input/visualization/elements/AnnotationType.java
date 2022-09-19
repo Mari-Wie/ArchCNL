@@ -8,7 +8,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class AnnotationType extends NamespaceContent implements PlantUmlElement, FamixType {
+public class AnnotationType extends NamespaceContent implements FamixType {
 
     private Optional<String> hasFullQualifiedName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();

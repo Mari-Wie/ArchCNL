@@ -8,8 +8,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public abstract class ClassOrEnum extends NamespaceContent
-        implements DeclaredType, FamixType, PlantUmlElement {
+public abstract class ClassOrEnum extends NamespaceContent implements DeclaredType, FamixType {
 
     private Optional<String> hasFullQualifiedName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();

@@ -5,20 +5,19 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class Field implements PlantUmlElement {
+public class Field extends PlantUmlElement {
 
     private static final String FIELD_MODIFIER = "{field}";
     private static final String ABSTRACT_MODIFIER = "{abstract}";
     private static final String STATIC_MODIFIER = "{static}";
 
-    private Variable variable;
     private Optional<String> hasName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
     private Optional<AnnotationInstance> hasAnnotationInstance = Optional.empty();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
     public Field(Variable variable) {
-        this.variable = variable;
+        super(variable, true);
     }
 
     @Override
