@@ -32,18 +32,35 @@ public class AdocImporter {
     private static final Pattern CONCEPT_MAPPING_NAME = Pattern.compile("(?<=is)\\w+(?=:)");
     private static final Pattern RELATION_MAPPING_NAME = Pattern.compile(".+(?=Mapping:)");
 
-    public void readFromAdoc(
-            File file,
+    private ConceptManager conceptManager;
+    private RelationManager relationManager;
+    private Queue<FreeTextQuery> freeTextQueryQueue;
+    private Queue<Query> customQueryQueue;
+    private ArchitectureRuleManager ruleManager;
+
+    public AdocImporter(
             ArchitectureRuleManager ruleManager,
             ConceptManager conceptManager,
             RelationManager relationManager,
             Queue<FreeTextQuery> freeTextQueryQueue,
-            Queue<Query> customQueryQueue)
-            throws IOException {
+            Queue<Query> customQueryQueue) {
+        this.ruleManager = ruleManager;
+        this.conceptManager = conceptManager;
+        this.relationManager = relationManager;
+        this.freeTextQueryQueue = freeTextQueryQueue;
+        this.customQueryQueue = customQueryQueue;
+    }
 
+    public void readFromAdoc(File file) throws IOException {
         String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         fileContent = fileContent.replace("\r", "");
+        List<org.archcnl.common.datatypes.ArchitectureRule> lines =
+                new AsciiDocCNLSentenceExtractor(file.toPath()).extractArchitectureRules();
+        parseAdocString(fileContent, lines);
+    }
 
+    public void parseAdocString(
+            String fileContent, List<org.archcnl.common.datatypes.ArchitectureRule> lines) {
         /*
          * //TODO probably check if the methods from the common module can be used here
          * to extract the archRules from a adoc file. It is in place for archRules
@@ -56,9 +73,6 @@ public class AdocImporter {
         Map<String, String> relationDescriptions =
                 DescriptionParser.extractRelationDescriptions(
                         fileContent, AdocImporter.RELATION_MAPPING_NAME);
-
-        List<org.archcnl.common.datatypes.ArchitectureRule> lines =
-                new AsciiDocCNLSentenceExtractor(file.toPath()).extractArchitectureRules();
 
         ruleManager.addAllArchitectureRules(
                 lines.stream()
