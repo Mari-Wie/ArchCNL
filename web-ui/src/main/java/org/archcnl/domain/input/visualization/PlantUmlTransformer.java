@@ -4,38 +4,49 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import net.sourceforge.plantuml.SourceStringReader;
+import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
+import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
 public class PlantUmlTransformer {
 
     private static final String TEMP_FILE_PREFIX = "uml-";
     private static final String PNG_FILE_EXTENSION = ".png";
+    private final ConceptManager conceptManager;
+    private final AndTriplets andTriplets;
+    private final Triplet thenTriplet;
 
-    public File transformToDiagramPng(AndTriplets andTriplets, Triplet thenTriplet)
-            throws IOException {
-        String source = transformToPlantUml(andTriplets, thenTriplet);
+    public PlantUmlTransformer(
+            ConceptManager conceptManager, AndTriplets andTriplets, Triplet thenTriplet) {
+        this.conceptManager = conceptManager;
+        this.andTriplets = andTriplets;
+        this.thenTriplet = thenTriplet;
+    }
+
+    public File transformToDiagramPng() throws IOException, MappingToUmlTranslationFailedException {
+        String source = transformToPlantUml();
         File tempFile = prepareTempFile();
         writeAsTemporaryPng(tempFile, source);
         return tempFile;
     }
 
-    private String transformToPlantUml(AndTriplets andTriplets, Triplet thenTriplet) {
-
-        return buildPlantUmlCode();
+    public String transformToPlantUml() throws MappingToUmlTranslationFailedException {
+        MappingTranslator translator = new MappingTranslator(andTriplets, thenTriplet);
+        List<PlantUmlElement> umlElements = translator.translateToPlantUmlModel(conceptManager);
+        return buildPlantUmlCode(umlElements);
     }
 
-    private boolean checkTypes() {
-        // is every type identified without alternatives
-        return false;
-    }
-
-    private String buildPlantUmlCode() {
-        String title = "title";
+    private String buildPlantUmlCode(List<PlantUmlElement> umlElements) {
+        String title = thenTriplet.transformToGui();
         StringBuilder builder = new StringBuilder();
         builder.append(buildHeader(title));
-
+        for (PlantUmlElement element : umlElements) {
+            builder.append(element.buildPlantUmlCode());
+        }
         builder.append(buildFooter());
         return builder.toString();
     }

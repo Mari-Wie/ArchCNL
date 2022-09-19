@@ -22,6 +22,10 @@ public abstract class PlantUmlElement {
         this.hasParent = true;
     }
 
+    public boolean hasParentBeenFound() {
+        return hasParent;
+    }
+
     public abstract String buildPlantUmlCode();
 
     public abstract void setProperty(String property, Object object)
