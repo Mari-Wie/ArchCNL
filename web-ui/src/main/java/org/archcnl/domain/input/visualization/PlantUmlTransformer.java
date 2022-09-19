@@ -5,11 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
 public class PlantUmlTransformer {
@@ -36,17 +36,18 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml() throws MappingToUmlTranslationFailedException {
         MappingTranslator translator = new MappingTranslator(andTriplets, thenTriplet);
-        List<PlantUmlElement> umlElements = translator.translateToPlantUmlModel(conceptManager);
+        List<PlantUmlPart> umlElements = translator.translateToPlantUmlModel(conceptManager);
         return buildPlantUmlCode(umlElements);
     }
 
-    private String buildPlantUmlCode(List<PlantUmlElement> umlElements) {
+    private String buildPlantUmlCode(List<PlantUmlPart> umlElements) {
         String title = thenTriplet.transformToGui();
         StringBuilder builder = new StringBuilder();
         builder.append(buildHeader(title));
-        for (PlantUmlElement element : umlElements) {
-            builder.append(element.buildPlantUmlCode());
-        }
+        builder.append(
+                umlElements.stream()
+                        .map(PlantUmlPart::buildPlantUmlCode)
+                        .collect(Collectors.joining("\n")));
         builder.append(buildFooter());
         return builder.toString();
     }
@@ -54,13 +55,13 @@ public class PlantUmlTransformer {
     private String buildHeader(String title) {
         StringBuilder builder = new StringBuilder();
         builder.append("@startuml\n");
-        builder.append("title " + title + "\n");
+        // builder.append("title " + title + "\n");
         return builder.toString();
     }
 
     private String buildFooter() {
         StringBuilder builder = new StringBuilder();
-        builder.append("@enduml\n");
+        builder.append("\n@enduml");
         return builder.toString();
     }
 

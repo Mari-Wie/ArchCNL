@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.connections.CustomRelationConnection;
+import org.archcnl.domain.input.visualization.elements.CustomConceptPart;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
@@ -32,7 +35,7 @@ public class MappingTranslator {
         this.thenTriplet = thenTriplet;
     }
 
-    public List<PlantUmlElement> translateToPlantUmlModel(ConceptManager conceptManager)
+    public List<PlantUmlPart> translateToPlantUmlModel(ConceptManager conceptManager)
             throws MappingToUmlTranslationFailedException {
         Set<Variable> variables = prepareMappingForTranslation(conceptManager);
         Map<Variable, PlantUmlElement> elementMap = createPlantUmlModels(variables);
@@ -40,9 +43,11 @@ public class MappingTranslator {
         applyElementProperties(container, elementMap);
         List<PlantUmlElement> topLevelElements = getTopLevelElements(elementMap);
         topLevelElements = createRequiredParents(topLevelElements);
+        List<PlantUmlPart> parts = new ArrayList<>(topLevelElements);
         // apply relations between objects
         // set thenTriplet note
-        return topLevelElements;
+        parts.add(getThenTripletParts());
+        return parts;
     }
 
     private Set<Variable> prepareMappingForTranslation(ConceptManager conceptManager)
@@ -130,5 +135,19 @@ public class MappingTranslator {
             }
         }
         return topLevelElements;
+    }
+
+    private PlantUmlPart getThenTripletParts() {
+        if (thenTriplet.getObject() instanceof Concept) {
+            Variable subject = thenTriplet.getSubject();
+            Concept object = (Concept) thenTriplet.getObject();
+            return new CustomConceptPart(subject, object);
+        } else {
+            Variable subject = thenTriplet.getSubject();
+            Relation predicate = thenTriplet.getPredicate();
+            // TODO fix unsafe casting
+            Variable object = (Variable) thenTriplet.getObject();
+            return new CustomRelationConnection(subject, object, predicate);
+        }
     }
 }

@@ -41,7 +41,7 @@ public class TripletReducer {
             throws MappingToUmlTranslationFailedException {
         Map<ObjectType, String> regexSubjectToString = new HashMap<>();
         for (Triplet triplet : triplets) {
-            if (triplet.getPredicate().equals(JenaBuiltinRelation.getRegexRelation())) {
+            if (isRegexTriplet(triplet)) {
                 if (!(triplet.getObject() instanceof StringValue)) {
                     throw new MappingToUmlTranslationFailedException(
                             "Complex regex relations can't be translated: "
@@ -64,6 +64,8 @@ public class TripletReducer {
                 Triplet newTriplet =
                         new Triplet(triplet.getSubject(), triplet.getPredicate(), newObject);
                 tripletsWithoutRegex.add(newTriplet);
+            } else if (!isRegexTriplet(triplet)) {
+                tripletsWithoutRegex.add(triplet);
             }
         }
         return tripletsWithoutRegex;
@@ -106,5 +108,9 @@ public class TripletReducer {
             newTriplets.add(inheritanceRelation.buildInteritanceTriplet());
         }
         return newTriplets;
+    }
+
+    private boolean isRegexTriplet(Triplet triplet) {
+        return triplet.getPredicate().equals(JenaBuiltinRelation.getRegexRelation());
     }
 }

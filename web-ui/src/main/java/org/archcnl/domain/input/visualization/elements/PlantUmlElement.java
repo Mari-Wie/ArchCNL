@@ -1,9 +1,10 @@
 package org.archcnl.domain.input.visualization.elements;
 
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public abstract class PlantUmlElement {
+public abstract class PlantUmlElement implements PlantUmlPart {
 
     private boolean hasParent = false;
     private boolean requiresParent;
@@ -25,8 +26,6 @@ public abstract class PlantUmlElement {
     public boolean hasParentBeenFound() {
         return hasParent;
     }
-
-    public abstract String buildPlantUmlCode();
 
     public abstract void setProperty(String property, Object object)
             throws PropertyNotFoundException;
