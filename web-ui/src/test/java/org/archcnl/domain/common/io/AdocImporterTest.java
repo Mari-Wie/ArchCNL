@@ -55,14 +55,14 @@ class AdocImporterTest {
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
 
         // when
-        AdocImporter adocImporter = new AdocImporter();
-        adocImporter.readFromAdoc(
-                ruleFile,
-                ruleManager,
-                conceptManager,
-                relationManager,
-                freeTextQueryQueue,
-                customQueryQueue);
+        AdocImporter adocImporter =
+                new AdocImporter(
+                        ruleManager,
+                        conceptManager,
+                        relationManager,
+                        freeTextQueryQueue,
+                        customQueryQueue);
+        adocImporter.readFromAdoc(ruleFile);
 
         // then
         ArchitectureRuleManager expectedRuleManager = TestUtils.prepareRuleManager();

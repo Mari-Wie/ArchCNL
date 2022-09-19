@@ -92,4 +92,9 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
     private List<String> buildMethodLines() {
         return definesMethod.stream().map(Method::buildPlantUmlCode).collect(Collectors.toList());
     }
+
+    @Override
+    protected String buildVisibilityPrefixSection() {
+        return modifierContainer.getVisibilityPrefix();
+    }
 }

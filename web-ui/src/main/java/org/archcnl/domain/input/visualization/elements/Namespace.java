@@ -66,4 +66,9 @@ public class Namespace extends NamespaceContent {
     protected String buildAnnotationSection() {
         return "";
     }
+
+    @Override
+    protected String buildVisibilityPrefixSection() {
+        return "";
+    }
 }

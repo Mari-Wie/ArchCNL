@@ -78,4 +78,9 @@ public class AnnotationType extends NamespaceContent implements FamixType {
         }
         return " " + hasAnnotationInstance.get().buildPlantUmlCode();
     }
+
+    @Override
+    protected String buildVisibilityPrefixSection() {
+        return modifierContainer.getVisibilityPrefix();
+    }
 }

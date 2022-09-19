@@ -8,7 +8,6 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 public class Field extends PlantUmlElement {
 
     private static final String FIELD_MODIFIER = "{field}";
-    private static final String ABSTRACT_MODIFIER = "{abstract}";
     private static final String STATIC_MODIFIER = "{static}";
 
     private Optional<String> hasName = Optional.empty();
@@ -33,9 +32,6 @@ public class Field extends PlantUmlElement {
     private String buildModifierSection() {
         StringBuilder builder = new StringBuilder();
         builder.append(FIELD_MODIFIER + " ");
-        if (modifierContainer.isAbstract()) {
-            builder.append(ABSTRACT_MODIFIER + " ");
-        }
         if (modifierContainer.isStatic()) {
             builder.append(STATIC_MODIFIER + " ");
         }

@@ -14,11 +14,13 @@ public class ModifierContainer {
     private boolean isFinal = false;
 
     public void setModifier(String modifier) throws PropertyNotFoundException {
-        if ("abstract".equals(modifier)) {
+        // toUpperCase() is needed as "private" can't be used an enum member.
+        modifier = modifier.toUpperCase();
+        if ("ABSTRACT".equals(modifier)) {
             isAbstract = true;
-        } else if ("static".equals(modifier)) {
+        } else if ("STATIC".equals(modifier)) {
             isStatic = true;
-        } else if ("final".equals(modifier)) {
+        } else if ("FINAL".equals(modifier)) {
             isFinal = true;
         } else if (isVisibilityModifier(modifier)) {
             visibilityModifer = Optional.of(VisibilityModifier.valueOf(modifier));

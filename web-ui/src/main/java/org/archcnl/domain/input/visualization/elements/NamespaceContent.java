@@ -6,7 +6,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 
 public abstract class NamespaceContent extends PlantUmlElement {
 
-    private static final String ONE_INDENTATION_LEVEL = "/t";
+    private static final String ONE_INDENTATION_LEVEL = "\t";
 
     private int indentationDepth = 0;
     protected Optional<String> hasName = Optional.empty();
@@ -19,14 +19,14 @@ public abstract class NamespaceContent extends PlantUmlElement {
     public String buildPlantUmlCode() {
         String identationPrefix = ONE_INDENTATION_LEVEL.repeat(indentationDepth);
         StringBuilder builder = new StringBuilder();
-        builder.append(buildNameSection(identationPrefix));
+        builder.append(buildNameSection());
         builder.append(buildBodySection(identationPrefix));
         return builder.toString();
     }
 
-    private String buildNameSection(String identationPrefix) {
+    private String buildNameSection() {
         StringBuilder builder = new StringBuilder();
-        builder.append(identationPrefix);
+        builder.append(buildVisibilityPrefixSection());
         builder.append(getElementIdentifier() + " ");
         builder.append("\"" + getHighestRankingName() + "\"");
         builder.append(" as ");
@@ -34,6 +34,8 @@ public abstract class NamespaceContent extends PlantUmlElement {
         builder.append(buildAnnotationSection());
         return builder.toString();
     }
+
+    protected abstract String buildVisibilityPrefixSection();
 
     protected abstract String buildAnnotationSection();
 

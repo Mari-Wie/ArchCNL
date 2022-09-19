@@ -29,7 +29,9 @@ public class Method extends PlantUmlElement {
         StringBuilder builder = new StringBuilder();
         builder.append(buildModifierSection());
         builder.append(buildNameSection());
-        builder.append(buildParameterSection());
+        if (!definesParameters.isEmpty()) {
+            builder.append(buildParameterSection());
+        }
         builder.append(buildTypeSection());
         builder.append(buildAnnotationSection());
         return builder.toString();

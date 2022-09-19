@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.owlify.core.MainOntology.MainDatatypeProperties;
+import org.archcnl.domain.input.visualization.helpers.PlantUmlElementProperty;
 
 public class TripletContainer {
 
@@ -32,7 +32,7 @@ public class TripletContainer {
     }
 
     private boolean isElementProperty(Relation relation) {
-        return EnumUtils.isValidEnum(MainDatatypeProperties.class, relation.getName());
+        return EnumUtils.isValidEnum(PlantUmlElementProperty.class, relation.getName());
     }
 
     public List<Triplet> getElementPropertyTriplets() {
