@@ -86,7 +86,9 @@ public class Method extends PlantUmlElement {
                 this.hasName = Optional.of((String) object);
                 break;
             case "hasAnnotationInstance":
-                this.hasAnnotationInstance = Optional.of((AnnotationInstance) object);
+                AnnotationInstance instance = (AnnotationInstance) object;
+                instance.parentIsFound();
+                this.hasAnnotationInstance = Optional.of(instance);
                 break;
             case "hasDeclaredType":
                 this.hasDeclaredType = Optional.of((DeclaredType) object);
@@ -95,7 +97,9 @@ public class Method extends PlantUmlElement {
                 this.modifierContainer.setModifier((String) object);
                 break;
             case "definesParameters":
-                this.definesParameters.add((Parameter) object);
+                Parameter parameter = (Parameter) object;
+                parameter.parentIsFound();
+                this.definesParameters.add(parameter);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");

@@ -45,7 +45,9 @@ public class Namespace extends NamespaceContent {
                 this.hasName = Optional.of((String) object);
                 break;
             case "namespaceContains":
-                addContainedElement((NamespaceContent) object);
+                NamespaceContent content = (NamespaceContent) object;
+                content.parentIsFound();
+                addContainedElement(content);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");

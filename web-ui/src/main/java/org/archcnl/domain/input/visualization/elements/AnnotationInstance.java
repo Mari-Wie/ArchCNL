@@ -52,7 +52,9 @@ public class AnnotationInstance extends PlantUmlElement {
         if ("hasAnnotationType".equals(property)) {
             this.hasAnnotationType = Optional.of((AnnotationType) object);
         } else if ("hasAnnotationInstanceAttribute".equals(property)) {
-            this.hasAnnotationInstanceAttribute.add((AnnotationInstanceAttribute) object);
+            AnnotationInstanceAttribute attribute = (AnnotationInstanceAttribute) object;
+            attribute.parentIsFound();
+            this.hasAnnotationInstanceAttribute.add(attribute);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }

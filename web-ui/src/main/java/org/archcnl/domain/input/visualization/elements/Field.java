@@ -68,7 +68,9 @@ public class Field extends PlantUmlElement {
                 this.hasName = Optional.of((String) object);
                 break;
             case "hasAnnotationInstance":
-                this.hasAnnotationInstance = Optional.of((AnnotationInstance) object);
+                AnnotationInstance instance = (AnnotationInstance) object;
+                instance.parentIsFound();
+                this.hasAnnotationInstance = Optional.of(instance);
                 break;
             case "hasDeclaredType":
                 this.hasDeclaredType = Optional.of((DeclaredType) object);

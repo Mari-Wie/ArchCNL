@@ -33,10 +33,14 @@ public class AnnotationType extends NamespaceContent implements FamixType {
                 this.modifierContainer.setModifier((String) object);
                 break;
             case "hasAnnotationInstance":
-                this.hasAnnotationInstance = Optional.of((AnnotationInstance) object);
+                AnnotationInstance instance = (AnnotationInstance) object;
+                instance.parentIsFound();
+                this.hasAnnotationInstance = Optional.of(instance);
                 break;
             case "hasAnnotationTypeAttribute":
-                this.hasAnnotationTypeAttribute.add((AnnotationTypeAttribute) object);
+                AnnotationTypeAttribute attribute = (AnnotationTypeAttribute) object;
+                attribute.parentIsFound();
+                this.hasAnnotationTypeAttribute.add(attribute);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");

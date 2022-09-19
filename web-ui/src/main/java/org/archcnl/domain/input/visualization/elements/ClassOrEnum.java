@@ -33,13 +33,19 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
                 this.modifierContainer.setModifier((String) object);
                 break;
             case "hasAnnotationInstance":
-                this.hasAnnotationInstance = Optional.of((AnnotationInstance) object);
+                AnnotationInstance instance = (AnnotationInstance) object;
+                instance.parentIsFound();
+                this.hasAnnotationInstance = Optional.of(instance);
                 break;
             case "definesAttribute":
-                this.definesAttribute.add((Field) object);
+                Field field = (Field) object;
+                field.parentIsFound();
+                this.definesAttribute.add(field);
                 break;
             case "definesMethod":
-                this.definesMethod.add((Method) object);
+                Method method = (Method) object;
+                method.parentIsFound();
+                this.definesMethod.add(method);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
