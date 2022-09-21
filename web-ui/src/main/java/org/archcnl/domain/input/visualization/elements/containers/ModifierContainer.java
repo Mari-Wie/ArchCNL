@@ -41,6 +41,10 @@ public class ModifierContainer {
         return isStatic;
     }
 
+    public boolean isFinal() {
+        return isFinal;
+    }
+
     public String getVisibilityPrefix() {
         if (visibilityModifer.isPresent()) {
             return visibilityModifer.get().getVisibilityPrefix();

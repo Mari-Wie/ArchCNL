@@ -12,6 +12,7 @@ import org.archcnl.domain.input.visualization.elements.AnnotationTypeAttribute;
 import org.archcnl.domain.input.visualization.elements.FamixClass;
 import org.archcnl.domain.input.visualization.elements.FamixEnum;
 import org.archcnl.domain.input.visualization.elements.Field;
+import org.archcnl.domain.input.visualization.elements.LocalVariable;
 import org.archcnl.domain.input.visualization.elements.Method;
 import org.archcnl.domain.input.visualization.elements.Namespace;
 import org.archcnl.domain.input.visualization.elements.Parameter;
@@ -24,6 +25,7 @@ public class PlantUmlMapper {
 
     private static final Map<String, Function<Variable, PlantUmlElement>> conceptMap =
             Map.ofEntries(
+                    // SoftwareArtifactFile is hard to model in class diagram
                     entry("SoftwareArtifactFile", SoftwareArtifaceFile::new),
                     entry("Namespace", Namespace::new),
                     entry("FamixClass", FamixClass::new),
@@ -32,7 +34,7 @@ public class PlantUmlMapper {
                     entry("Method", Method::new),
                     entry("Parameter", Parameter::new),
                     // LocalVariable is hard to model in class diagram
-                    // entry("LocalVariable", LocalVariable::new),
+                    entry("LocalVariable", LocalVariable::new),
                     entry("PrimitiveType", PrimitiveType::new),
                     entry("AnnotationType", AnnotationType::new),
                     entry("AnnotationTypeAttribute", AnnotationTypeAttribute::new),
