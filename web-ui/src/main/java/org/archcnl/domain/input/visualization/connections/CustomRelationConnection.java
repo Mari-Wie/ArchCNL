@@ -7,6 +7,6 @@ public class CustomRelationConnection extends PlantUmlConnection {
 
     public CustomRelationConnection(Variable subject, Variable object, Relation relation) {
         super(subject, object, ArrowType.CUSTOM_RELATION);
-        setName("**" + relation.getName() + "**");
+        setNodeText(relation.getName());
     }
 }

@@ -150,7 +150,8 @@ class PlantUmlTransformerTest {
                         + "	+interface \"?interface\" as interface {\n"
                         + "	}\n"
                         + "}\n"
-                        + "class -[bold]-> interface: **weirdRelation**\n"
+                        + "class -[bold]-> interface\n"
+                        + "note on link: weirdRelation\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
