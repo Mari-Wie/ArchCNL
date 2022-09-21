@@ -21,6 +21,18 @@ public class AnnotationType extends NamespaceContent implements FamixType {
     }
 
     @Override
+    protected String buildNameSection() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(buildVisibilityPrefixSection());
+        builder.append(getElementIdentifier() + " ");
+        builder.append("\"" + getHighestRankingName() + "\"");
+        builder.append(" as ");
+        builder.append(variable.getName());
+        builder.append(buildAnnotationSection());
+        return builder.toString();
+    }
+
+    @Override
     public void setProperty(String property, Object object) throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
@@ -71,7 +83,6 @@ public class AnnotationType extends NamespaceContent implements FamixType {
                 .collect(Collectors.toList());
     }
 
-    @Override
     protected String buildAnnotationSection() {
         if (hasAnnotationInstance.isEmpty()) {
             return "";
@@ -79,7 +90,6 @@ public class AnnotationType extends NamespaceContent implements FamixType {
         return " " + hasAnnotationInstance.get().buildPlantUmlCode();
     }
 
-    @Override
     protected String buildVisibilityPrefixSection() {
         return modifierContainer.getVisibilityPrefix();
     }

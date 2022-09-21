@@ -53,11 +53,23 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
     }
 
     @Override
+    protected String buildNameSection() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(buildVisibilityPrefixSection());
+        builder.append(getElementIdentifier() + " ");
+        builder.append("\"" + getHighestRankingName() + "\"");
+        builder.append(" as ");
+        builder.append(variable.getName());
+        builder.append(buildAnnotationSection());
+        builder.append(buildParentSection());
+        return builder.toString();
+    }
+
+    @Override
     public String getTypeRepresentation() {
         return getHighestRankingName();
     }
 
-    @Override
     protected String buildAnnotationSection() {
         if (hasAnnotationInstance.isEmpty()) {
             return "";
@@ -93,8 +105,9 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
         return definesMethod.stream().map(Method::buildPlantUmlCode).collect(Collectors.toList());
     }
 
-    @Override
     protected String buildVisibilityPrefixSection() {
         return modifierContainer.getVisibilityPrefix();
     }
+
+    protected abstract String buildParentSection();
 }

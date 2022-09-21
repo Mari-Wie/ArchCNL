@@ -12,4 +12,9 @@ public class FamixEnum extends ClassOrEnum implements FamixType, DeclaredType {
     protected String getElementIdentifier() {
         return "enum";
     }
+
+    @Override
+    protected String buildParentSection() {
+        return "";
+    }
 }

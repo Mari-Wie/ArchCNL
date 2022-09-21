@@ -24,20 +24,7 @@ public abstract class NamespaceContent extends PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(buildVisibilityPrefixSection());
-        builder.append(getElementIdentifier() + " ");
-        builder.append("\"" + getHighestRankingName() + "\"");
-        builder.append(" as ");
-        builder.append(variable.getName());
-        builder.append(buildAnnotationSection());
-        return builder.toString();
-    }
-
-    protected abstract String buildVisibilityPrefixSection();
-
-    protected abstract String buildAnnotationSection();
+    protected abstract String buildNameSection();
 
     protected abstract String getHighestRankingName();
 

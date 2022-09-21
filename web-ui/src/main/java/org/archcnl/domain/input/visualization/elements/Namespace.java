@@ -16,6 +16,16 @@ public class Namespace extends NamespaceContent {
     }
 
     @Override
+    protected String buildNameSection() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getElementIdentifier() + " ");
+        builder.append("\"" + getHighestRankingName() + "\"");
+        builder.append(" as ");
+        builder.append(variable.getName());
+        return builder.toString();
+    }
+
+    @Override
     protected List<String> buildBodySectionContentLines() {
         return namespaceContains.stream()
                 .map(NamespaceContent::buildPlantUmlCode)
@@ -60,15 +70,5 @@ public class Namespace extends NamespaceContent {
             return hasName.get();
         }
         return variable.transformToGui();
-    }
-
-    @Override
-    protected String buildAnnotationSection() {
-        return "";
-    }
-
-    @Override
-    protected String buildVisibilityPrefixSection() {
-        return "";
     }
 }
