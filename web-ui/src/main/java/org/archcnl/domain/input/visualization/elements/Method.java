@@ -17,7 +17,7 @@ public class Method extends PlantUmlElement {
     private Optional<String> hasName = Optional.empty();
     private List<Parameter> definesParameters = new ArrayList<>();
     private ModifierContainer modifierContainer = new ModifierContainer();
-    private Optional<AnnotationInstance> hasAnnotationInstance = Optional.empty();
+    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
     public Method(Variable variable) {
@@ -74,11 +74,14 @@ public class Method extends PlantUmlElement {
         return "";
     }
 
-    private String buildAnnotationSection() {
-        if (hasAnnotationInstance.isPresent()) {
-            return " " + hasAnnotationInstance.get().buildPlantUmlCode();
+    protected String buildAnnotationSection() {
+        if (hasAnnotationInstance.isEmpty()) {
+            return "";
         }
-        return "";
+        return " "
+                + hasAnnotationInstance.stream()
+                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .collect(Collectors.joining());
     }
 
     @Override
@@ -90,7 +93,7 @@ public class Method extends PlantUmlElement {
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
                 instance.parentIsFound();
-                this.hasAnnotationInstance = Optional.of(instance);
+                this.hasAnnotationInstance.add(instance);
                 break;
             case "hasDeclaredType":
                 this.hasDeclaredType = Optional.of((DeclaredType) object);

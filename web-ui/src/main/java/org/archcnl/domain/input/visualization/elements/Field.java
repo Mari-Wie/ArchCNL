@@ -1,6 +1,9 @@
 package org.archcnl.domain.input.visualization.elements;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
@@ -12,7 +15,7 @@ public class Field extends PlantUmlElement {
 
     private Optional<String> hasName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
-    private Optional<AnnotationInstance> hasAnnotationInstance = Optional.empty();
+    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
 
     public Field(Variable variable) {
@@ -50,11 +53,14 @@ public class Field extends PlantUmlElement {
         return "";
     }
 
-    private String buildAnnotationSection() {
-        if (hasAnnotationInstance.isPresent()) {
-            return " " + hasAnnotationInstance.get().buildPlantUmlCode();
+    protected String buildAnnotationSection() {
+        if (hasAnnotationInstance.isEmpty()) {
+            return "";
         }
-        return "";
+        return " "
+                + hasAnnotationInstance.stream()
+                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .collect(Collectors.joining());
     }
 
     @Override
@@ -66,7 +72,7 @@ public class Field extends PlantUmlElement {
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
                 instance.parentIsFound();
-                this.hasAnnotationInstance = Optional.of(instance);
+                this.hasAnnotationInstance.add(instance);
                 break;
             case "hasDeclaredType":
                 this.hasDeclaredType = Optional.of((DeclaredType) object);

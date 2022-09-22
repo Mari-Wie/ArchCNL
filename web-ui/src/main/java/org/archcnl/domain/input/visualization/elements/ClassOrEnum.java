@@ -12,7 +12,7 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
 
     private Optional<String> hasFullQualifiedName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
-    private Optional<AnnotationInstance> hasAnnotationInstance = Optional.empty();
+    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private List<Field> definesAttribute = new ArrayList<>();
     private List<Method> definesMethod = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
                 instance.parentIsFound();
-                this.hasAnnotationInstance = Optional.of(instance);
+                this.hasAnnotationInstance.add(instance);
                 break;
             case "definesAttribute":
                 Field field = (Field) object;
@@ -74,7 +74,10 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
         if (hasAnnotationInstance.isEmpty()) {
             return "";
         }
-        return " " + hasAnnotationInstance.get().buildPlantUmlCode();
+        return " "
+                + hasAnnotationInstance.stream()
+                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .collect(Collectors.joining());
     }
 
     @Override

@@ -13,7 +13,7 @@ public class AnnotationType extends NamespaceContent implements FamixType {
     private Optional<String> hasFullQualifiedName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
     // PlantUml does not allow for multiple stereotypes
-    private Optional<AnnotationInstance> hasAnnotationInstance = Optional.empty();
+    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private List<AnnotationTypeAttribute> hasAnnotationTypeAttribute = new ArrayList<>();
 
     public AnnotationType(Variable variable) {
@@ -47,7 +47,7 @@ public class AnnotationType extends NamespaceContent implements FamixType {
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
                 instance.parentIsFound();
-                this.hasAnnotationInstance = Optional.of(instance);
+                this.hasAnnotationInstance.add(instance);
                 break;
             case "hasAnnotationTypeAttribute":
                 AnnotationTypeAttribute attribute = (AnnotationTypeAttribute) object;
@@ -87,7 +87,10 @@ public class AnnotationType extends NamespaceContent implements FamixType {
         if (hasAnnotationInstance.isEmpty()) {
             return "";
         }
-        return " " + hasAnnotationInstance.get().buildPlantUmlCode();
+        return " "
+                + hasAnnotationInstance.stream()
+                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .collect(Collectors.joining());
     }
 
     protected String buildVisibilityPrefixSection() {
