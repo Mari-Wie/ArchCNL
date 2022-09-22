@@ -19,6 +19,7 @@ public class Method extends PlantUmlElement {
     private ModifierContainer modifierContainer = new ModifierContainer();
     private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
+    private boolean isConstructor = false;
 
     public Method(Variable variable) {
         super(variable, true);
@@ -28,6 +29,9 @@ public class Method extends PlantUmlElement {
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
         builder.append(buildModifierSection());
+        if (isConstructor) {
+            builder.append("<<Create>> ");
+        }
         builder.append(buildNameSection());
         if (!definesParameters.isEmpty()) {
             builder.append(buildParameterSection());
@@ -105,6 +109,9 @@ public class Method extends PlantUmlElement {
                 Parameter parameter = (Parameter) object;
                 parameter.parentIsFound();
                 this.definesParameters.add(parameter);
+                break;
+            case "isConstructor":
+                this.isConstructor = (boolean) object;
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
