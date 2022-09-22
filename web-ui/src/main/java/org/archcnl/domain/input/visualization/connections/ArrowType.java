@@ -4,7 +4,10 @@ public enum ArrowType {
     BASIC(".."),
     CUSTOM_RELATION("-[bold]->"),
     SIMPLE_ARROW("-->"),
-    INHERITS("--|>");
+    INHERITS("--|>"),
+    DASHED("-[dashed]->"),
+    COMPOSITION("*--"),
+    CONTAINMENT("+--");
 
     private String plantUmlCode;
 

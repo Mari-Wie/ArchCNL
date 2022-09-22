@@ -7,7 +7,13 @@ import org.apache.commons.lang3.EnumUtils;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
+import org.archcnl.domain.input.visualization.connections.CatchesExceptionConnection;
+import org.archcnl.domain.input.visualization.connections.ContainmentConnection;
+import org.archcnl.domain.input.visualization.connections.DeclaresExceptionConnection;
+import org.archcnl.domain.input.visualization.connections.DefinesVariableConnection;
+import org.archcnl.domain.input.visualization.connections.ImportConnection;
+import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
+import org.archcnl.domain.input.visualization.connections.ThrowsExceptionConnection;
 
 public class TripletContainer {
 
@@ -21,6 +27,7 @@ public class TripletContainer {
         definesAttribute,
         definesMethod,
         isInterface,
+        isConstructor,
         hasDeclaredType,
         definesParameter,
         hasAnnotationTypeAttribute,
@@ -30,28 +37,27 @@ public class TripletContainer {
         inheritsFrom;
     }
 
-    private enum ElementRelation {
-        containsArtifact,
-        isExternal,
-        isLocatedAt,
-        imports,
-        definesNestedType,
-        hasSignature,
-        isConstructor,
-        definesVariable,
-        throwsException,
-        hasCaughtException,
-        hasDeclaredException;
+    private enum ElementConnection {
+        containsArtifact(ContainmentConnection::new),
+        // isExternal,
+        // isLocatedAt,
+        imports(ImportConnection::new),
+        definesNestedType(ContainmentConnection::new),
+        // hasSignature,
+        definesVariable(DefinesVariableConnection::new),
+        throwsException(ThrowsExceptionConnection::new),
+        hasCaughtException(CatchesExceptionConnection::new),
+        hasDeclaredException(DeclaresExceptionConnection::new);
 
-        private BiFunction<Variable, Variable, PlantUmlElement> creator;
+        private BiFunction<Variable, Variable, PlantUmlConnection> creator;
 
-        private ElementRelation(BiFunction<Variable, Variable, PlantUmlElement> creator) {
+        private ElementConnection(BiFunction<Variable, Variable, PlantUmlConnection> creator) {
             this.creator = creator;
         }
     }
 
     private List<Triplet> elementPropertyTriplets;
-    private List<Triplet> elementRelationTriplets;
+    private List<Triplet> elementConnectionTriplets;
 
     public TripletContainer(List<Triplet> triplets) {
         setElementPropertyTriplets(triplets);
@@ -66,9 +72,9 @@ public class TripletContainer {
     }
 
     private void setElementRelationTriplets(List<Triplet> triplets) {
-        elementRelationTriplets =
+        elementConnectionTriplets =
                 triplets.stream()
-                        .filter(t -> isElementRelation(t.getPredicate()))
+                        .filter(t -> isElementConnection(t.getPredicate()))
                         .collect(Collectors.toList());
     }
 
@@ -76,15 +82,15 @@ public class TripletContainer {
         return EnumUtils.isValidEnum(ElementProperty.class, relation.getName());
     }
 
-    private boolean isElementRelation(Relation relation) {
-        return EnumUtils.isValidEnum(ElementRelation.class, relation.getName());
+    private boolean isElementConnection(Relation relation) {
+        return EnumUtils.isValidEnum(ElementConnection.class, relation.getName());
     }
 
     public List<Triplet> getElementPropertyTriplets() {
         return elementPropertyTriplets;
     }
 
-    public List<Triplet> getElementRelationTriplets() {
-        return elementRelationTriplets;
+    public List<Triplet> getElementConnectionTriplets() {
+        return elementConnectionTriplets;
     }
 }
