@@ -1,29 +1,28 @@
 package org.archcnl.domain.input.visualization.connections;
 
 import java.util.Optional;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.PlantUmlPart;
 
 public abstract class PlantUmlConnection implements PlantUmlPart {
 
-    private Variable subject;
-    private Variable object;
+    private String subjectId;
+    private String objectId;
     private Optional<String> name = Optional.empty();
     private Optional<String> noteText = Optional.empty();
     private ArrowType arrowType;
 
-    protected PlantUmlConnection(Variable subject, Variable object, ArrowType arrowType) {
-        this.subject = subject;
-        this.object = object;
+    protected PlantUmlConnection(String subjectId, String objectId, ArrowType arrowType) {
+        this.subjectId = subjectId;
+        this.objectId = objectId;
         this.arrowType = arrowType;
     }
 
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
-        builder.append(subject.getName() + " ");
+        builder.append(subjectId + " ");
         builder.append(arrowType.getPlantUmlCode());
-        builder.append(" " + object.getName());
+        builder.append(" " + objectId);
         if (name.isPresent()) {
             builder.append(": ");
             builder.append(name.get());

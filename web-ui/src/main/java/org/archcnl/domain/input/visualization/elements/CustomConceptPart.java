@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.visualization.elements;
 
 import org.archcnl.domain.common.conceptsandrelations.Concept;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
@@ -11,9 +10,9 @@ public class CustomConceptPart implements PlantUmlPart {
     private Concept concept;
     private PlantUmlConnection connection;
 
-    public CustomConceptPart(Variable subject, Concept concept) {
+    public CustomConceptPart(String subjectId, Concept concept) {
         this.concept = concept;
-        this.connection = new BasicConnection(new Variable(concept.getName()), subject);
+        this.connection = new BasicConnection(concept.getName(), subjectId);
     }
 
     @Override

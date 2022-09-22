@@ -61,14 +61,14 @@ public class TripletContainer {
         hasCaughtException(CatchesExceptionConnection::new),
         hasDeclaredException(DeclaresExceptionConnection::new);
 
-        private BiFunction<Variable, Variable, PlantUmlConnection> creator;
+        private BiFunction<String, String, PlantUmlConnection> creator;
 
-        private ElementConnection(BiFunction<Variable, Variable, PlantUmlConnection> creator) {
+        private ElementConnection(BiFunction<String, String, PlantUmlConnection> creator) {
             this.creator = creator;
         }
 
-        public PlantUmlConnection createConnection(Variable subject, Variable object) {
-            return creator.apply(subject, object);
+        public PlantUmlConnection createConnection(String subjectId, String objectId) {
+            return creator.apply(subjectId, objectId);
         }
 
         public static boolean isElementConnection(Relation relation) {
@@ -113,15 +113,18 @@ public class TripletContainer {
         }
     }
 
-    public List<PlantUmlConnection> createConnections() {
+    public List<PlantUmlConnection> createConnections(Map<Variable, PlantUmlElement> elementMap)
+            throws MappingToUmlTranslationFailedException {
         List<PlantUmlConnection> connections = new ArrayList<>();
         for (Triplet triplet : elementConnectionTriplets) {
             String key = triplet.getPredicate().getName();
             ElementConnection enumEntry = ElementConnection.valueOf(key);
             Variable subject = triplet.getSubject();
+            String subjectId = elementMap.get(subject).getIdentifier();
             // TODO allow non-variables as objects
             Variable object = (Variable) triplet.getObject();
-            PlantUmlConnection connection = enumEntry.createConnection(subject, object);
+            String objectId = elementMap.get(object).getIdentifier();
+            PlantUmlConnection connection = enumEntry.createConnection(subjectId, objectId);
             connections.add(connection);
         }
         return connections;

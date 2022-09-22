@@ -41,8 +41,8 @@ public class MappingTranslator {
 
         List<PlantUmlPart> parts = new ArrayList<>();
         parts.addAll(createRequiredParents(topLevelElements));
-        parts.addAll(container.createConnections());
-        parts.add(getThenTripletParts());
+        parts.addAll(container.createConnections(elementMap));
+        parts.add(getThenTripletParts(elementMap));
         return parts;
     }
 
@@ -104,17 +104,19 @@ public class MappingTranslator {
         return topLevelElements;
     }
 
-    private PlantUmlPart getThenTripletParts() {
+    private PlantUmlPart getThenTripletParts(Map<Variable, PlantUmlElement> elementMap)
+            throws MappingToUmlTranslationFailedException {
+        Variable subject = thenTriplet.getSubject();
+        String subjectId = elementMap.get(subject).getIdentifier();
         if (thenTriplet.getObject() instanceof Concept) {
-            Variable subject = thenTriplet.getSubject();
             Concept object = (Concept) thenTriplet.getObject();
-            return new CustomConceptPart(subject, object);
+            return new CustomConceptPart(subjectId, object);
         } else {
-            Variable subject = thenTriplet.getSubject();
             Relation predicate = thenTriplet.getPredicate();
             // TODO fix unsafe casting
             Variable object = (Variable) thenTriplet.getObject();
-            return new CustomRelationConnection(subject, object, predicate);
+            String objectId = elementMap.get(object).getIdentifier();
+            return new CustomRelationConnection(subjectId, objectId, predicate);
         }
     }
 }
