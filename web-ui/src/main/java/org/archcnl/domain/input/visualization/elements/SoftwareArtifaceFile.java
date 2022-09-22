@@ -16,7 +16,7 @@ public class SoftwareArtifaceFile extends PlantUmlElement {
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
         builder.append("note as " + buildNameSection() + "\n");
-        builder.append("\t===File\n");
+        builder.append("===File\n");
         if (hasPath.isPresent()) {
             builder.append("\t" + hasPath.get() + "\n");
         }

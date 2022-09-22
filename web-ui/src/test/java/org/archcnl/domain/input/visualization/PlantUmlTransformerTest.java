@@ -197,7 +197,7 @@ class PlantUmlTransformerTest {
                         + "class \"?class\" as class {\n"
                         + "}\n"
                         + "note as file\n"
-                        + "	===File\n"
+                        + "===File\n"
                         + "end note\n"
                         + "class \"?class2\" as class2 {\n"
                         + "}\n"
@@ -208,6 +208,55 @@ class PlantUmlTransformerTest {
                         + "file +-- interface\n"
                         + "note \"ThenConcept\" as ThenConcept\n"
                         + "ThenConcept .. class\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenMappingWithConnectionWithinClass_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException {
+        // given
+        Variable clazz = new Variable("class");
+        Variable method = new Variable("method");
+        Variable parameter = new Variable("parameter");
+        Variable localVariable = new Variable("localVariable");
+
+        Relation typeRelation = TypeRelation.getTyperelation();
+        Concept famixClass = conceptManager.getConceptByName("FamixClass").get();
+        Relation definesMethod = relationManager.getRelationByName("definesMethod").get();
+        Relation definesParameter = relationManager.getRelationByName("definesParameter").get();
+        Relation definesVariable = relationManager.getRelationByName("definesVariable").get();
+
+        AndTriplets whenTriplets =
+                new AndTriplets(
+                        Arrays.asList(
+                                new Triplet(clazz, typeRelation, famixClass),
+                                new Triplet(clazz, definesMethod, method),
+                                new Triplet(method, definesParameter, parameter),
+                                new Triplet(method, definesVariable, localVariable)));
+
+        CustomRelation paramRelation =
+                new CustomRelation("paramRelation", "", new HashSet<>(), new HashSet<>());
+        Triplet thenTriplet = new Triplet(clazz, paramRelation, parameter);
+
+        // when
+        PlantUmlTransformer transformer =
+                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
+        String plantUmlCode = transformer.transformToPlantUml();
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "class \"?class\" as class {\n"
+                        + "	{method} ?method(?parameter)\n"
+                        + "}\n"
+                        + "note as localVariable\n"
+                        + "===LocalVariable\n"
+                        + "?localVariable\n"
+                        + "end note\n"
+                        + "class::method *-- localVariable: definesVariable\n"
+                        + "class -[bold]-> class::parameter\n"
+                        + "note on link: paramRelation\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }

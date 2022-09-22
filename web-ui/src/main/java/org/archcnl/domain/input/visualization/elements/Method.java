@@ -15,7 +15,7 @@ public class Method extends PlantUmlElement {
     private static final String STATIC_MODIFIER = "{static}";
 
     private Optional<String> hasName = Optional.empty();
-    private List<Parameter> definesParameters = new ArrayList<>();
+    private List<Parameter> definesParameter = new ArrayList<>();
     private ModifierContainer modifierContainer = new ModifierContainer();
     private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private Optional<DeclaredType> hasDeclaredType = Optional.empty();
@@ -62,7 +62,7 @@ public class Method extends PlantUmlElement {
         builder.append("(");
         // (a:String, b:String, c:String, d:int)
         String joinedParameters =
-                definesParameters.stream()
+                definesParameter.stream()
                         .map(Parameter::buildPlantUmlCode)
                         .collect(Collectors.joining(", "));
         builder.append(joinedParameters);
@@ -104,10 +104,10 @@ public class Method extends PlantUmlElement {
             case "hasModifier":
                 this.modifierContainer.setModifier((String) object);
                 break;
-            case "definesParameters":
+            case "definesParameter":
                 Parameter parameter = (Parameter) object;
                 parameter.setParent(this);
-                this.definesParameters.add(parameter);
+                this.definesParameter.add(parameter);
                 break;
             case "isConstructor":
                 this.isConstructor = (boolean) object;

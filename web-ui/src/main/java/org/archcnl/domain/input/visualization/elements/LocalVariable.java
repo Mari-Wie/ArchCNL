@@ -19,7 +19,7 @@ public class LocalVariable extends PlantUmlElement {
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
         builder.append("note as " + variable.getName() + "\n");
-        builder.append("\t===LocalVariable\n");
+        builder.append("===LocalVariable\n");
         builder.append(buildModifierSection());
         builder.append(buildNameSection());
         builder.append(buildTypeSection());
