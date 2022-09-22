@@ -21,10 +21,7 @@ public class PrimitiveType extends PlantUmlElement implements DeclaredType {
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
         builder.append("class ");
-        if (hasName.isPresent()) {
-            builder.append(" \"" + hasName.get() + "\"");
-            builder.append(" as ");
-        }
+        builder.append(buildNameSection());
         builder.append(variable.getName());
         return builder.toString();
     }
@@ -36,5 +33,13 @@ public class PrimitiveType extends PlantUmlElement implements DeclaredType {
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }
+    }
+
+    @Override
+    protected String buildNameSection() {
+        if (hasName.isEmpty()) {
+            return "";
+        }
+        return " \"" + hasName.get() + "\" as ";
     }
 }

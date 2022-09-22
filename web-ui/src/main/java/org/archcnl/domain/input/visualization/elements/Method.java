@@ -33,9 +33,7 @@ public class Method extends PlantUmlElement {
             builder.append("<<Create>> ");
         }
         builder.append(buildNameSection());
-        if (!definesParameters.isEmpty()) {
-            builder.append(buildParameterSection());
-        }
+        builder.append(buildParameterSection());
         builder.append(buildTypeSection());
         builder.append(buildAnnotationSection());
         return builder.toString();
@@ -54,7 +52,8 @@ public class Method extends PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
+    @Override
+    protected String buildNameSection() {
         return hasName.isPresent() ? hasName.get() : variable.transformToGui();
     }
 
@@ -96,7 +95,7 @@ public class Method extends PlantUmlElement {
                 break;
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
-                instance.parentIsFound();
+                instance.setParent(this);
                 this.hasAnnotationInstance.add(instance);
                 break;
             case "hasDeclaredType":
@@ -107,7 +106,7 @@ public class Method extends PlantUmlElement {
                 break;
             case "definesParameters":
                 Parameter parameter = (Parameter) object;
-                parameter.parentIsFound();
+                parameter.setParent(this);
                 this.definesParameters.add(parameter);
                 break;
             case "isConstructor":

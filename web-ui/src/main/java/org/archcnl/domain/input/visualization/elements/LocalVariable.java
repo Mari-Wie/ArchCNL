@@ -18,12 +18,12 @@ public class LocalVariable extends PlantUmlElement {
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
-        builder.append("note as " + variable.getName());
-        builder.append("\t===LocalVariable");
+        builder.append("note as " + variable.getName() + "\n");
+        builder.append("\t===LocalVariable\n");
         builder.append(buildModifierSection());
         builder.append(buildNameSection());
         builder.append(buildTypeSection());
-        builder.append("end note");
+        builder.append("\nend note");
         return builder.toString();
     }
 
@@ -31,7 +31,8 @@ public class LocalVariable extends PlantUmlElement {
         return modifierContainer.isFinal() ? "final " : "";
     }
 
-    private String buildNameSection() {
+    @Override
+    protected String buildNameSection() {
         return hasName.isPresent() ? hasName.get() : variable.transformToGui();
     }
 

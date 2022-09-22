@@ -21,7 +21,8 @@ public class Parameter extends PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
+    @Override
+    protected String buildNameSection() {
         return hasName.isPresent() ? hasName.get() : variable.transformToGui();
     }
 

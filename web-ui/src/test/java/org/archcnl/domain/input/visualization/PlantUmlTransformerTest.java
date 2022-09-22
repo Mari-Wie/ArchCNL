@@ -145,13 +145,69 @@ class PlantUmlTransformerTest {
                         + "folder \"?namespace\" as namespace {\n"
                         + "	class \"ClassName\" as class {\n"
                         + "		{field} {static} +?attribute\n"
-                        + "		{method} {abstract} -.*main\n"
+                        + "		{method} {abstract} -.*main()\n"
                         + "	}\n"
                         + "	+interface \"?interface\" as interface {\n"
                         + "	}\n"
                         + "}\n"
                         + "class -[bold]-> interface\n"
                         + "note on link: weirdRelation\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenSimpleMappingWithConnections_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException {
+        // given
+        Variable file = new Variable("file");
+        Variable clazz = new Variable("class");
+        Variable clazz2 = new Variable("class2");
+        Variable interfaceVar = new Variable("interface");
+        Variable inheritance = new Variable("inheritance");
+        Relation typeRelation = TypeRelation.getTyperelation();
+        Concept artifactFile = conceptManager.getConceptByName("SoftwareArtifactFile").get();
+        CustomConcept thenConcept = new CustomConcept("ThenConcept", "");
+        Relation isInterface = relationManager.getRelationByName("isInterface").get();
+        Relation imports = relationManager.getRelationByName("imports").get();
+        Relation containsArtifact = relationManager.getRelationByName("containsArtifact").get();
+        Relation hasSubClass = relationManager.getRelationByName("hasSubClass").get();
+        Relation hasSuperClass = relationManager.getRelationByName("hasSuperClass").get();
+
+        AndTriplets whenTriplets =
+                new AndTriplets(
+                        Arrays.asList(
+                                new Triplet(file, typeRelation, artifactFile),
+                                new Triplet(file, containsArtifact, clazz),
+                                new Triplet(clazz, imports, clazz2),
+                                new Triplet(file, containsArtifact, interfaceVar),
+                                new Triplet(inheritance, hasSubClass, clazz),
+                                new Triplet(inheritance, hasSuperClass, interfaceVar),
+                                new Triplet(interfaceVar, isInterface, new BooleanValue(true))));
+        Triplet thenTriplet = new Triplet(clazz, typeRelation, thenConcept);
+
+        // when
+        PlantUmlTransformer transformer =
+                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
+        String plantUmlCode = transformer.transformToPlantUml();
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "class \"?class\" as class {\n"
+                        + "}\n"
+                        + "note as file\n"
+                        + "	===File\n"
+                        + "end note\n"
+                        + "class \"?class2\" as class2 {\n"
+                        + "}\n"
+                        + "interface \"?interface\" as interface {\n"
+                        + "}\n"
+                        + "file +-- class\n"
+                        + "class -[dashed]-> class2: <<imports>>\n"
+                        + "file +-- interface\n"
+                        + "note \"ThenConcept\" as ThenConcept\n"
+                        + "ThenConcept .. class\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }

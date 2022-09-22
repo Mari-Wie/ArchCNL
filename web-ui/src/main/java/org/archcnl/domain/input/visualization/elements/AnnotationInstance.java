@@ -28,7 +28,8 @@ public class AnnotationInstance extends PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
+    @Override
+    protected String buildNameSection() {
         if (hasAnnotationType.isPresent()) {
             return hasAnnotationType.get().getHighestRankingName();
         }
@@ -53,7 +54,7 @@ public class AnnotationInstance extends PlantUmlElement {
             this.hasAnnotationType = Optional.of((AnnotationType) object);
         } else if ("hasAnnotationInstanceAttribute".equals(property)) {
             AnnotationInstanceAttribute attribute = (AnnotationInstanceAttribute) object;
-            attribute.parentIsFound();
+            attribute.setParent(this);
             this.hasAnnotationInstanceAttribute.add(attribute);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");

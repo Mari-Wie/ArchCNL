@@ -22,7 +22,8 @@ public class AnnotationInstanceAttribute extends PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
+    @Override
+    protected String buildNameSection() {
         if (hasAnnotationTypeAttribute.isPresent()) {
             return hasAnnotationTypeAttribute.get().buildNameSection();
         }

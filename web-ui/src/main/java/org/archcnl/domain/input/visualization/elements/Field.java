@@ -42,7 +42,8 @@ public class Field extends PlantUmlElement {
         return builder.toString();
     }
 
-    private String buildNameSection() {
+    @Override
+    protected String buildNameSection() {
         return hasName.isPresent() ? hasName.get() : variable.transformToGui();
     }
 
@@ -71,7 +72,7 @@ public class Field extends PlantUmlElement {
                 break;
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
-                instance.parentIsFound();
+                instance.setParent(this);
                 this.hasAnnotationInstance.add(instance);
                 break;
             case "hasDeclaredType":

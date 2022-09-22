@@ -15,10 +15,10 @@ public class SoftwareArtifaceFile extends PlantUmlElement {
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
-        builder.append("note as " + variable.getName());
-        builder.append("\t===File");
+        builder.append("note as " + buildNameSection() + "\n");
+        builder.append("\t===File\n");
         if (hasPath.isPresent()) {
-            builder.append("\t" + hasPath.get());
+            builder.append("\t" + hasPath.get() + "\n");
         }
         builder.append("end note");
         return builder.toString();
@@ -31,5 +31,10 @@ public class SoftwareArtifaceFile extends PlantUmlElement {
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }
+    }
+
+    @Override
+    protected String buildNameSection() {
+        return variable.getName();
     }
 }

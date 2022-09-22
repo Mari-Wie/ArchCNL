@@ -34,17 +34,17 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
                 break;
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
-                instance.parentIsFound();
+                instance.setParent(this);
                 this.hasAnnotationInstance.add(instance);
                 break;
             case "definesAttribute":
                 Field field = (Field) object;
-                field.parentIsFound();
+                field.setParent(this);
                 this.definesAttribute.add(field);
                 break;
             case "definesMethod":
                 Method method = (Method) object;
-                method.parentIsFound();
+                method.setParent(this);
                 this.definesMethod.add(method);
                 break;
             default:

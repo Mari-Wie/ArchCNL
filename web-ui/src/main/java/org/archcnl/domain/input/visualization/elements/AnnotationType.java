@@ -46,12 +46,12 @@ public class AnnotationType extends NamespaceContent implements FamixType {
                 break;
             case "hasAnnotationInstance":
                 AnnotationInstance instance = (AnnotationInstance) object;
-                instance.parentIsFound();
+                instance.setParent(this);
                 this.hasAnnotationInstance.add(instance);
                 break;
             case "hasAnnotationTypeAttribute":
                 AnnotationTypeAttribute attribute = (AnnotationTypeAttribute) object;
-                attribute.parentIsFound();
+                attribute.setParent(this);
                 this.hasAnnotationTypeAttribute.add(attribute);
                 break;
             default:

@@ -56,7 +56,7 @@ public class Namespace extends NamespaceContent {
                 break;
             case "namespaceContains":
                 NamespaceContent content = (NamespaceContent) object;
-                content.parentIsFound();
+                content.setParent(this);
                 addContainedElement(content);
                 break;
             default:
