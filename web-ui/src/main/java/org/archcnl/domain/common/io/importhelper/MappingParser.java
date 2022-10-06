@@ -135,7 +135,7 @@ public class MappingParser {
         return relations;
     }
 
-    private static ConceptMapping parseMapping(
+    public static ConceptMapping parseMapping(
             final String potentialMapping,
             final CustomConcept thisConcept,
             final RelationManager relationManager,
@@ -157,7 +157,7 @@ public class MappingParser {
         }
     }
 
-    private static RelationMapping parseMapping(
+    public static RelationMapping parseMapping(
             final String potentialMapping,
             final RelationManager relationManager,
             final ConceptManager conceptManager)
