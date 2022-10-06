@@ -1,6 +1,6 @@
 package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,7 +12,7 @@ public class Variable extends ObjectType {
 
     public Variable(String name) {
         this.name = name;
-        this.dynamicTypes = new LinkedHashSet<>();
+        this.dynamicTypes = new HashSet<>();
         this.conflictingDynamicTypes = false;
     }
 
@@ -21,7 +21,7 @@ public class Variable extends ObjectType {
     }
 
     public void setDynamicTypes(Set<ActualObjectType> dynamicTypes) {
-        this.dynamicTypes = dynamicTypes;
+        this.dynamicTypes = new HashSet<>(dynamicTypes);
     }
 
     public void clearDynamicTypes() {
@@ -31,7 +31,7 @@ public class Variable extends ObjectType {
 
     public void refineDynamicTypes(Set<ActualObjectType> dynamicTypes) {
         if (this.dynamicTypes.isEmpty()) {
-            this.dynamicTypes = dynamicTypes;
+            setDynamicTypes(dynamicTypes);
         } else {
             this.dynamicTypes.retainAll(dynamicTypes);
             if (this.dynamicTypes.isEmpty()) {
