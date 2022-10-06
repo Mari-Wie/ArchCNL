@@ -45,9 +45,9 @@ public class MappingParser {
 
     private static final Pattern NORMAL_TRIPLET_PATTERN =
             Pattern.compile(
-                    "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'.*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
+                    "\\(\\?\\w+ \\w+:\\w+ (\\?\\w+|\\w+:\\w+|'\\S*'|'(false|true)'\\^\\^xsd\\:boolean)\\)");
     private static final Pattern JENA_BUILTIN_TRIPLET_PATTERN =
-            Pattern.compile("\\w+\\(\\?\\w+, '.+'\\)");
+            Pattern.compile("\\w+\\(\\?\\w+, '\\S*'\\)");
     private static final Pattern TRIPLET_PATTERN =
             Pattern.compile(
                     MappingParser.NORMAL_TRIPLET_PATTERN

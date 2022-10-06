@@ -294,7 +294,7 @@ public class TestUtils {
                         TripletFactory.createTriplet(
                                 varVariable,
                                 emptyWhenRelationString,
-                                new StringValue("test string")),
+                                new StringValue("testString")),
                         new LinkedList<>());
         emptyWhenRelationString.setMapping(emptyWhenRelationStringMapping, conceptManager);
 

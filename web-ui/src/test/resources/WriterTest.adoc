@@ -30,7 +30,7 @@ useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClas
 useMapping: (?class rdf:type famix:FamixClass) (?class2 rdf:type famix:FamixClass) (?class famix:imports ?class2) -> (?class architecture:use ?class2)
 
 [role="mapping"]
-emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'test string')
+emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'testString')
 
 [role="mapping"]
 emptyWhenRelationVariableMapping: -> (?var architecture:emptyWhenRelationVariable ?test)
