@@ -8,9 +8,17 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Boolea
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class VariableTest {
+
+    private ConceptManager conceptManager;
+
+    @BeforeEach
+    void setup() {
+        conceptManager = new ConceptManager();
+    }
 
     @Test
     void givenVariable_whenRefineDynamicTypes_thenExpectedDynamicTypes() {
@@ -21,7 +29,7 @@ class VariableTest {
         Set<ActualObjectType> types = new LinkedHashSet<>();
         types.add(new FamixConcept("FamixClass", ""));
         types.add(new StringValue(""));
-        variable.refineDynamicTypes(types);
+        variable.refineDynamicTypes(types, conceptManager);
 
         // then
         Assertions.assertFalse(variable.hasConflictingDynamicTypes());
@@ -37,14 +45,14 @@ class VariableTest {
         Set<ActualObjectType> initialTypes = new LinkedHashSet<>();
         initialTypes.add(new FamixConcept("FamixClass", ""));
         initialTypes.add(new StringValue(""));
-        variable.refineDynamicTypes(initialTypes);
+        variable.refineDynamicTypes(initialTypes, conceptManager);
 
         // when
         Set<ActualObjectType> types = new LinkedHashSet<>();
         types.add(new FamixConcept("FamixClass", ""));
         types.add(new FamixConcept("Namespace", ""));
         types.add(new BooleanValue(false));
-        variable.refineDynamicTypes(types);
+        variable.refineDynamicTypes(types, conceptManager);
 
         // then
         Assertions.assertFalse(variable.hasConflictingDynamicTypes());
@@ -60,12 +68,12 @@ class VariableTest {
         Set<ActualObjectType> initialTypes = new LinkedHashSet<>();
         initialTypes.add(new FamixConcept("FamixClass", ""));
         initialTypes.add(new StringValue(""));
-        variable.refineDynamicTypes(initialTypes);
+        variable.refineDynamicTypes(initialTypes, conceptManager);
 
         // when
         Set<ActualObjectType> types = new LinkedHashSet<>();
         types.add(new FamixConcept("Namespace", ""));
-        variable.refineDynamicTypes(types);
+        variable.refineDynamicTypes(types, conceptManager);
 
         // then
         Assertions.assertTrue(variable.hasConflictingDynamicTypes());

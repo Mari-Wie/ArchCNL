@@ -3,6 +3,8 @@ package org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 
 public class Variable extends ObjectType {
 
@@ -29,13 +31,28 @@ public class Variable extends ObjectType {
         conflictingDynamicTypes = false;
     }
 
-    public void refineDynamicTypes(Set<ActualObjectType> dynamicTypes) {
-        if (this.dynamicTypes.isEmpty()) {
-            setDynamicTypes(dynamicTypes);
+    public void refineDynamicTypes(Set<ActualObjectType> types, ConceptManager conceptManager) {
+        if (dynamicTypes.isEmpty()) {
+            setDynamicTypes(types);
         } else {
-            this.dynamicTypes.retainAll(dynamicTypes);
-            if (this.dynamicTypes.isEmpty()) {
+            addStillValidCustomConceptsToTypes(types, conceptManager);
+            dynamicTypes.retainAll(types);
+            if (dynamicTypes.isEmpty()) {
                 conflictingDynamicTypes = true;
+            }
+        }
+    }
+
+    private void addStillValidCustomConceptsToTypes(
+            Set<ActualObjectType> types, ConceptManager conceptManager) {
+        for (ActualObjectType type : dynamicTypes) {
+            if (type instanceof CustomConcept) {
+                CustomConcept concept = (CustomConcept) type;
+                Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
+                baseTypes.retainAll(types);
+                if (!baseTypes.isEmpty()) {
+                    types.add(concept);
+                }
             }
         }
     }

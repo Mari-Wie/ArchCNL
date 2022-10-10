@@ -2,10 +2,8 @@ package org.archcnl.domain.common;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
@@ -17,7 +15,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Actual
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.model.mappings.ConceptMapping;
 
 public class VariableManager {
 
@@ -77,7 +74,7 @@ public class VariableManager {
             if (triplet.getPredicate() instanceof TypeRelation) {
                 handleTypeRelationTriplet(triplet, conceptManager);
             } else {
-                handleTripletWithoutTypeRelation(triplet);
+                handleTripletWithoutTypeRelation(triplet, conceptManager);
             }
         }
     }
@@ -87,54 +84,37 @@ public class VariableManager {
         Concept object = (Concept) triplet.getObject();
         Set<ActualObjectType> dynamicTypes = new LinkedHashSet<>(Arrays.asList(object));
 
-        // Recursively add super types found in mappings
-        Queue<CustomConcept> queue = new LinkedList<>();
         if (object instanceof CustomConcept) {
-            queue.add((CustomConcept) object);
-        }
-        while (!queue.isEmpty()) {
-            Optional<ConceptMapping> mapping = queue.poll().getMapping();
-            if (mapping.isPresent()) {
-                String subjectName = mapping.get().getThenTriplet().getSubject().getName();
-                VariableManager varManager = new VariableManager();
-                for (AndTriplets andTriplets : mapping.get().getWhenTriplets()) {
-                    varManager.parseVariableTypes(andTriplets, conceptManager);
-                    Optional<Variable> subjectVariable = varManager.getVariableByName(subjectName);
-                    if (subjectVariable.isPresent()) {
-                        Set<ActualObjectType> types = subjectVariable.get().getDynamicTypes();
-                        types.stream()
-                                .filter(CustomConcept.class::isInstance)
-                                .map(CustomConcept.class::cast)
-                                .forEach(queue::add);
-                        dynamicTypes.addAll(types);
-                    }
-                }
-            }
+            CustomConcept concept = (CustomConcept) object;
+            Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
+            dynamicTypes.addAll(baseTypes);
         }
 
-        refineAndAddVariable(triplet.getSubject(), dynamicTypes);
+        refineAndAddVariable(triplet.getSubject(), dynamicTypes, conceptManager);
     }
 
-    private void handleTripletWithoutTypeRelation(Triplet triplet) {
+    private void handleTripletWithoutTypeRelation(Triplet triplet, ConceptManager conceptManager) {
         // handle subject
         Variable subject = triplet.getSubject();
         Relation predicate = triplet.getPredicate();
         ObjectType object = triplet.getObject();
-        refineAndAddVariable(subject, predicate.getRelatableSubjectTypes());
+        refineAndAddVariable(subject, predicate.getRelatableSubjectTypes(), conceptManager);
 
         // handle object
         if (object instanceof Variable) {
-            refineAndAddVariable((Variable) object, predicate.getRelatableObjectTypes());
+            refineAndAddVariable(
+                    (Variable) object, predicate.getRelatableObjectTypes(), conceptManager);
         }
     }
 
-    private void refineAndAddVariable(Variable variable, Set<ActualObjectType> dynamicTypes) {
+    private void refineAndAddVariable(
+            Variable variable, Set<ActualObjectType> dynamicTypes, ConceptManager conceptManager) {
         Optional<Variable> variableFromManager = getVariableByName(variable.getName());
         if (variableFromManager.isEmpty()) {
             addVariable(variable);
-            variable.refineDynamicTypes(dynamicTypes);
+            variable.refineDynamicTypes(dynamicTypes, conceptManager);
         } else {
-            variableFromManager.get().refineDynamicTypes(dynamicTypes);
+            variableFromManager.get().refineDynamicTypes(dynamicTypes, conceptManager);
         }
     }
 }
