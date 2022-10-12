@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Optional;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import org.archcnl.domain.input.visualization.elements.CustomConceptVisualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
 public class PlantUmlTransformer {
@@ -17,37 +17,33 @@ public class PlantUmlTransformer {
     private static final String TEMP_FILE_PREFIX = "uml-";
     private static final String PNG_FILE_EXTENSION = ".png";
     private final ConceptManager conceptManager;
-    private final AndTriplets andTriplets;
-    private final Triplet thenTriplet;
 
-    public PlantUmlTransformer(
-            ConceptManager conceptManager, AndTriplets andTriplets, Triplet thenTriplet) {
+    public PlantUmlTransformer(ConceptManager conceptManager) {
         this.conceptManager = conceptManager;
-        this.andTriplets = andTriplets;
-        this.thenTriplet = thenTriplet;
     }
 
+    /*
     public File transformToDiagramPng() throws IOException, MappingToUmlTranslationFailedException {
         String source = transformToPlantUml();
         File tempFile = prepareTempFile();
         writeAsTemporaryPng(tempFile, source);
         return tempFile;
     }
+    */
 
-    public String transformToPlantUml() throws MappingToUmlTranslationFailedException {
-        MappingTranslator translator = new MappingTranslator(andTriplets, thenTriplet);
-        List<PlantUmlPart> umlElements = translator.translateToPlantUmlModel(conceptManager);
-        return buildPlantUmlCode(umlElements);
+    public String transformToPlantUml(ConceptMapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        CustomConceptVisualizer visualizer =
+                new CustomConceptVisualizer(
+                        mapping, conceptManager, Optional.empty(), new HashSet<>());
+        return buildPlantUmlCode(
+                visualizer.buildPlantUmlCode(), mapping.getMappingNameRepresentation());
     }
 
-    private String buildPlantUmlCode(List<PlantUmlPart> umlElements) {
-        String title = thenTriplet.transformToGui();
+    private String buildPlantUmlCode(String content, String mappingName) {
         StringBuilder builder = new StringBuilder();
-        builder.append(buildHeader(title));
-        builder.append(
-                umlElements.stream()
-                        .map(PlantUmlPart::buildPlantUmlCode)
-                        .collect(Collectors.joining("\n")));
+        builder.append(buildHeader(mappingName));
+        builder.append(content);
         builder.append(buildFooter());
         return builder.toString();
     }
@@ -55,7 +51,7 @@ public class PlantUmlTransformer {
     private String buildHeader(String title) {
         StringBuilder builder = new StringBuilder();
         builder.append("@startuml\n");
-        // builder.append("title " + title + "\n");
+        builder.append("title " + title + "\n");
         return builder.toString();
     }
 

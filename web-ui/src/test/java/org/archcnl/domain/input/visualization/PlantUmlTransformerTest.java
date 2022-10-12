@@ -4,10 +4,12 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
 import org.archcnl.domain.common.io.importhelper.exceptions.NoMappingException;
+import org.archcnl.domain.common.io.importhelper.exceptions.NoTripletException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
@@ -38,15 +40,13 @@ class PlantUmlTransformerTest {
                         mappingString, thenConcept, relationManager, conceptManager);
 
         // when
-        AndTriplets whenTriplets = mapping.getWhenTriplets().get(0);
-        Triplet thenTriplet = mapping.getThenTriplet();
-        PlantUmlTransformer transformer =
-                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
-        String plantUmlCode = transformer.transformToPlantUml();
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
         String expectedCode =
                 "@startuml\n"
+                        + "title isThenConcept\n"
                         + "class \"?class\" as class {\n"
                         + "}\n"
                         + "note \"ThenConcept\" as ThenConcept\n"
@@ -69,15 +69,13 @@ class PlantUmlTransformerTest {
                         mappingString, thenConcept, relationManager, conceptManager);
 
         // when
-        AndTriplets whenTriplets = mapping.getWhenTriplets().get(0);
-        Triplet thenTriplet = mapping.getThenTriplet();
-        PlantUmlTransformer transformer =
-                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
-        String plantUmlCode = transformer.transformToPlantUml();
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
         String expectedCode =
                 "@startuml\n"
+                        + "title isThenConcept\n"
                         + "interface \"?class\" as class {\n"
                         + "}\n"
                         + "note \"ThenConcept\" as ThenConcept\n"
@@ -110,11 +108,8 @@ class PlantUmlTransformerTest {
                 MappingParser.parseMapping(mappingString, relationManager, conceptManager);
 
         // when
-        AndTriplets whenTriplets = mapping.getWhenTriplets().get(0);
-        Triplet thenTriplet = mapping.getThenTriplet();
-        PlantUmlTransformer transformer =
-                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
-        String plantUmlCode = transformer.transformToPlantUml();
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
         String expectedCode =
@@ -152,15 +147,13 @@ class PlantUmlTransformerTest {
                         mappingString, thenConcept, relationManager, conceptManager);
 
         // when
-        AndTriplets whenTriplets = mapping.getWhenTriplets().get(0);
-        Triplet thenTriplet = mapping.getThenTriplet();
-        PlantUmlTransformer transformer =
-                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
-        String plantUmlCode = transformer.transformToPlantUml();
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
         String expectedCode =
                 "@startuml\n"
+                        + "title isThenConcept\n"
                         + "class \"?class\" as class {\n"
                         + "}\n"
                         + "note as file\n"
@@ -193,11 +186,8 @@ class PlantUmlTransformerTest {
                 MappingParser.parseMapping(mappingString, relationManager, conceptManager);
 
         // when
-        AndTriplets whenTriplets = mapping.getWhenTriplets().get(0);
-        Triplet thenTriplet = mapping.getThenTriplet();
-        PlantUmlTransformer transformer =
-                new PlantUmlTransformer(conceptManager, whenTriplets, thenTriplet);
-        String plantUmlCode = transformer.transformToPlantUml();
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
         String expectedCode =
@@ -212,6 +202,193 @@ class PlantUmlTransformerTest {
                         + "class::method *-- localVariable: definesVariable\n"
                         + "class -[bold]-> class::parameter\n"
                         + "note on link: paramRelation\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenRelationMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException {
+        // given
+        CustomConcept controller = new CustomConcept("Controller", "");
+        String controllerMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping controllerMapping =
+                MappingParser.parseMapping(
+                        controllerMappingString, controller, relationManager, conceptManager);
+        controller.setMapping(controllerMapping);
+        conceptManager.addConcept(controller);
+
+        String mappingString =
+                "usedByControllerMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?controller rdf:type architecture:Controller)"
+                        + " (?controller famix:imports ?class)"
+                        + " -> (?class architecture:usedByController ?controller)";
+        RelationMapping mapping =
+                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenConceptMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException {
+        // given
+        CustomConcept controller = new CustomConcept("Controller", "");
+        String controllerMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping controllerMapping =
+                MappingParser.parseMapping(
+                        controllerMappingString, controller, relationManager, conceptManager);
+        controller.setMapping(controllerMapping);
+        conceptManager.addConcept(controller);
+
+        CustomConcept importingController = new CustomConcept("ImportingController", "");
+        String mappingString =
+                "isImportingController: (?class rdf:type famix:FamixClass)"
+                        + " (?controller rdf:type architecture:Controller)"
+                        + " (?controller famix:imports ?class)"
+                        + " -> (?controller rdf:type architechture:ImportingController)";
+        ConceptMapping mapping =
+                MappingParser.parseMapping(
+                        mappingString, importingController, relationManager, conceptManager);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title isImportingController\n"
+                        + "class \"?class\" as class {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller1 {\n"
+                        + "}\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller1\n"
+                        + "controller1 -[dashed]-> class: <<imports>>\n"
+                        + "note \"ImportingController\" as ImportingController\n"
+                        + "ImportingController .. controller1\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenConceptMappingWithElementPropertyOfCustomConcept_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {
+        // given
+        CustomConcept controller = new CustomConcept("Controller", "");
+        String controllerMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping controllerMapping =
+                MappingParser.parseMapping(
+                        controllerMappingString, controller, relationManager, conceptManager);
+        controller.setMapping(controllerMapping);
+        conceptManager.addConcept(controller);
+
+        CustomConcept importingController = new CustomConcept("ImportingController", "");
+        String mappingString =
+                "isImportingController: (?class rdf:type famix:FamixClass)"
+                        + " (?controller rdf:type architecture:Controller)"
+                        + " (?class famix:definesAttribute ?attribute)"
+                        + " (?attribute famix:hasDeclaredType ?controller)"
+                        + " -> (?controller rdf:type architechture:ImportingController)";
+
+        ConceptMapping mapping =
+                MappingParser.parseMapping(
+                        mappingString, importingController, relationManager, conceptManager);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenDoubleConceptMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {
+        // given
+        CustomConcept controller = new CustomConcept("Controller", "");
+        String controllerMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping controllerMapping =
+                MappingParser.parseMapping(
+                        controllerMappingString, controller, relationManager, conceptManager);
+        controller.setMapping(controllerMapping);
+        conceptManager.addConcept(controller);
+
+        CustomConcept importingController = new CustomConcept("ImportingController", "");
+        String mappingString =
+                "isImportingController: (?class rdf:type famix:FamixClass)"
+                        + " (?controller rdf:type architecture:Controller)"
+                        + " (?controller famix:imports ?class)"
+                        + " -> (?controller rdf:type architechture:ImportingController)";
+        String secondWhenString =
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?controller rdf:type architecture:Controller)"
+                        + " (?class famix:definesNestedType ?controller)";
+        ConceptMapping mapping =
+                MappingParser.parseMapping(
+                        mappingString, importingController, relationManager, conceptManager);
+        AndTriplets secondWhen =
+                MappingParser.parseWhenPart(secondWhenString, relationManager, conceptManager);
+        mapping.addAndTriplets(secondWhen);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title isImportingController\n"
+                        + "package isImportingController1 <<Cloud>> {\n"
+                        + "class \"?class\" as class {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller1 {\n"
+                        + "}\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller1\n"
+                        + "controller1 -[dashed]-> class: <<imports>>\n"
+                        + "}\n"
+                        + "package isImportingController2 <<Cloud>> {\n"
+                        + "class \"?class1\" as class1 {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller21 {\n"
+                        + "}\n"
+                        + "note \"Controller\" as Controller1\n"
+                        + "Controller1 .. controller21\n"
+                        + "class1 +-- controller21\n"
+                        + "}\n"
+                        + "note \"ImportingController\" as ImportingController\n"
+                        + "ImportingController .. controller1\n"
+                        + "ImportingController .. controller21\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }

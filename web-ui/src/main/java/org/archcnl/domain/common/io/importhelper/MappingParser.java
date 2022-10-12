@@ -178,7 +178,7 @@ public class MappingParser {
         }
     }
 
-    protected static AndTriplets parseWhenPart(
+    public static AndTriplets parseWhenPart(
             final String whenPart,
             final RelationManager relationManager,
             final ConceptManager conceptManager)

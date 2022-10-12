@@ -19,7 +19,6 @@ import org.archcnl.domain.input.visualization.connections.DefinesVariableConnect
 import org.archcnl.domain.input.visualization.connections.ImportConnection;
 import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.connections.ThrowsExceptionConnection;
-import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
@@ -84,15 +83,15 @@ public class TripletContainer {
         setElementRelationTriplets(triplets);
     }
 
-    public void applyElementProperties(Map<Variable, PlantUmlElement> elementMap)
+    public void applyElementProperties(Map<Variable, PlantUmlBlock> elementMap)
             throws MappingToUmlTranslationFailedException {
         for (Triplet triplet : elementPropertyTriplets) {
             Variable subject = triplet.getSubject();
             Relation predicate = triplet.getPredicate();
             ObjectType object = triplet.getObject();
-            PlantUmlElement subjectElement = elementMap.get(subject);
+            PlantUmlBlock subjectElement = elementMap.get(subject);
             if (object instanceof Variable) {
-                PlantUmlElement objectElement = elementMap.get(object);
+                PlantUmlBlock objectElement = elementMap.get(object);
                 tryToSetProperty(subjectElement, predicate.getName(), objectElement);
             } else if (object instanceof StringValue) {
                 String objectString = ((StringValue) object).getValue();
@@ -104,7 +103,7 @@ public class TripletContainer {
         }
     }
 
-    private void tryToSetProperty(PlantUmlElement element, String property, Object object)
+    private void tryToSetProperty(PlantUmlBlock element, String property, Object object)
             throws MappingToUmlTranslationFailedException {
         try {
             element.setProperty(property, object);
@@ -113,19 +112,24 @@ public class TripletContainer {
         }
     }
 
-    public List<PlantUmlConnection> createConnections(Map<Variable, PlantUmlElement> elementMap)
+    public List<PlantUmlConnection> createConnections(Map<Variable, PlantUmlBlock> elementMap)
             throws MappingToUmlTranslationFailedException {
         List<PlantUmlConnection> connections = new ArrayList<>();
         for (Triplet triplet : elementConnectionTriplets) {
             String key = triplet.getPredicate().getName();
             ElementConnection enumEntry = ElementConnection.valueOf(key);
             Variable subject = triplet.getSubject();
-            String subjectId = elementMap.get(subject).getIdentifier();
+            List<String> subjectIds = elementMap.get(subject).getIdentifier();
             // TODO allow non-variables as objects
             Variable object = (Variable) triplet.getObject();
-            String objectId = elementMap.get(object).getIdentifier();
-            PlantUmlConnection connection = enumEntry.createConnection(subjectId, objectId);
-            connections.add(connection);
+            List<String> objectIds = elementMap.get(object).getIdentifier();
+
+            for (String subjectId : subjectIds) {
+                for (String objectId : objectIds) {
+                    PlantUmlConnection connection = enumEntry.createConnection(subjectId, objectId);
+                    connections.add(connection);
+                }
+            }
         }
         return connections;
     }

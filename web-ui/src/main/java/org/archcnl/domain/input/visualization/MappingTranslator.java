@@ -4,119 +4,135 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
-import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.visualization.connections.CustomRelationConnection;
-import org.archcnl.domain.input.visualization.elements.CustomConceptPart;
+import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import org.archcnl.domain.input.visualization.elements.CustomConceptVisualizer;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
 public class MappingTranslator {
 
     private List<Triplet> whenTriplets;
-    private Triplet thenTriplet;
+    private ConceptManager conceptManager;
 
-    public MappingTranslator(AndTriplets andTriplets, Triplet thenTriplet) {
-        this.whenTriplets = andTriplets.getTriplets();
-        this.thenTriplet = thenTriplet;
+    public MappingTranslator(List<Triplet> whenTriplets, ConceptManager conceptManager) {
+        this.whenTriplets = whenTriplets;
+        this.conceptManager = conceptManager;
     }
 
-    public List<PlantUmlPart> translateToPlantUmlModel(ConceptManager conceptManager)
+    public Map<Variable, PlantUmlBlock> createElementMap(Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        Set<Variable> variables = prepareMappingForTranslation(conceptManager);
-        Map<Variable, PlantUmlElement> elementMap = createPlantUmlModels(variables);
+        Set<Variable> variables = prepareMappingForTranslation();
+        return createPlantUmlModels(variables, usedVariables);
+    }
+
+    public List<PlantUmlPart> translateToPlantUmlModel(Map<Variable, PlantUmlBlock> elementMap)
+            throws MappingToUmlTranslationFailedException {
+
         TripletContainer container = new TripletContainer(whenTriplets);
         container.applyElementProperties(elementMap);
-        List<PlantUmlElement> topLevelElements = getTopLevelElements(elementMap);
+        List<PlantUmlBlock> topLevelElements = getTopLevelElements(elementMap);
 
         List<PlantUmlPart> parts = new ArrayList<>();
         parts.addAll(createRequiredParents(topLevelElements));
         parts.addAll(container.createConnections(elementMap));
-        parts.add(getThenTripletParts(elementMap));
         return parts;
     }
 
-    private Set<Variable> prepareMappingForTranslation(ConceptManager conceptManager)
+    private Set<Variable> prepareMappingForTranslation()
             throws MappingToUmlTranslationFailedException {
-        Set<Variable> variables = inferVariableTypes(conceptManager);
-        TripletReducer reducer = new TripletReducer(whenTriplets, variables);
-        whenTriplets = reducer.reduce();
-        return inferVariableTypes(conceptManager);
+        Set<Variable> variables = inferVariableTypes();
+        whenTriplets = new TripletReducer(whenTriplets, variables).reduce();
+        return inferVariableTypes();
     }
 
-    private Set<Variable> inferVariableTypes(ConceptManager manager)
-            throws MappingToUmlTranslationFailedException {
+    private Set<Variable> inferVariableTypes() throws MappingToUmlTranslationFailedException {
         VariableManager variableManager = new VariableManager();
         AndTriplets container = new AndTriplets(whenTriplets);
-        if (variableManager.hasConflictingDynamicTypes(container, manager)) {
+        if (variableManager.hasConflictingDynamicTypes(container, conceptManager)) {
             throw new MappingToUmlTranslationFailedException(
                     "Variable with conflicting type usage in mapping.");
         }
         return variableManager.getVariables();
     }
 
-    private Map<Variable, PlantUmlElement> createPlantUmlModels(Set<Variable> variables)
+    private Map<Variable, PlantUmlBlock> createPlantUmlModels(
+            Set<Variable> variables, Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        Map<Variable, PlantUmlElement> elementMap = new HashMap<>();
+        Map<Variable, PlantUmlBlock> elementMap = new HashMap<>();
         for (Variable variable : variables) {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
-            PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable);
-            elementMap.put(variable, element);
+            if (elementType instanceof CustomConcept) {
+                ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
+                CustomConceptVisualizer visualizer =
+                        new CustomConceptVisualizer(
+                                mapping, conceptManager, Optional.of(variable), usedVariables);
+                elementMap.put(variable, visualizer);
+            } else {
+                PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable);
+                elementMap.put(variable, element);
+            }
         }
         return elementMap;
     }
 
-    private Concept selectRepresentativeElementType(Set<ActualObjectType> options) {
+    private ConceptMapping tryToGetMapping(CustomConcept concept)
+            throws MappingToUmlTranslationFailedException {
+        Optional<ConceptMapping> mapping = concept.getMapping();
+        if (mapping.isPresent()) {
+            return mapping.get();
+        }
+        throw new MappingToUmlTranslationFailedException(concept.getName() + " has no mapping");
+    }
+
+    private Concept selectRepresentativeElementType(Set<ActualObjectType> options)
+            throws MappingToUmlTranslationFailedException {
         if (options.size() == 1) {
             return (Concept) options.iterator().next();
         }
-        // Should only occur alongside the relations imports, namespaceContains, definesNestedType,
-        // and hasDeclaredType
-        // TODO implement better selection
-        return new FamixConcept("FamixClass", "");
+        Concept famixClass = new FamixConcept("FamixClass", "");
+        Set<ActualObjectType> customOptions =
+                options.stream()
+                        .filter(CustomConcept.class::isInstance)
+                        .collect(Collectors.toSet());
+        if (customOptions.size() == 1) {
+            return (Concept) customOptions.iterator().next();
+        } else if (customOptions.isEmpty() && options.contains(famixClass)) {
+            // This should mostly occur with objects of the following relations:
+            // imports, namespaceContains, definesNestedType, hasDeclaredType
+            // FamixClass is a good default for all of them
+            return famixClass;
+        }
+        throw new MappingToUmlTranslationFailedException(
+                "No representative type could be picked from: " + options);
     }
 
-    private List<PlantUmlElement> getTopLevelElements(Map<Variable, PlantUmlElement> elementMap) {
+    private List<PlantUmlBlock> getTopLevelElements(Map<Variable, PlantUmlBlock> elementMap) {
         return elementMap.values().stream()
-                .filter(Predicate.not(PlantUmlElement::hasParentBeenFound))
+                .filter(Predicate.not(PlantUmlBlock::hasParentBeenFound))
                 .collect(Collectors.toList());
     }
 
-    private List<PlantUmlElement> createRequiredParents(List<PlantUmlElement> topLevelElements)
-            throws MappingToUmlTranslationFailedException {
+    private List<PlantUmlBlock> createRequiredParents(List<PlantUmlBlock> topLevelElements) {
         // TODO implement creation
-        for (PlantUmlElement element : topLevelElements) {
+        for (PlantUmlBlock element : topLevelElements) {
             if (!element.hasRequiredParent()) {
                 throw new RuntimeException(
                         element.buildPlantUmlCode() + " is missing a required parent");
             }
         }
         return topLevelElements;
-    }
-
-    private PlantUmlPart getThenTripletParts(Map<Variable, PlantUmlElement> elementMap)
-            throws MappingToUmlTranslationFailedException {
-        Variable subject = thenTriplet.getSubject();
-        String subjectId = elementMap.get(subject).getIdentifier();
-        if (thenTriplet.getObject() instanceof Concept) {
-            Concept object = (Concept) thenTriplet.getObject();
-            return new CustomConceptPart(subjectId, object);
-        } else {
-            Relation predicate = thenTriplet.getPredicate();
-            // TODO fix unsafe casting
-            Variable object = (Variable) thenTriplet.getObject();
-            String objectId = elementMap.get(object).getIdentifier();
-            return new CustomRelationConnection(subjectId, objectId, predicate);
-        }
     }
 }

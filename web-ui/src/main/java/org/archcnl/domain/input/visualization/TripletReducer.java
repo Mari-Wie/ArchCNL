@@ -18,29 +18,29 @@ import org.archcnl.domain.input.visualization.helpers.InheritanceRelation;
 public class TripletReducer {
 
     private static final Concept inheritance = new FamixConcept("Inheritance", "");
-    private List<Triplet> triplets;
+    private List<Triplet> whenTriplets;
     private Set<Variable> variables;
 
     public TripletReducer(List<Triplet> triplets, Set<Variable> variables) {
-        this.triplets = triplets;
+        this.whenTriplets = triplets;
         this.variables = variables;
     }
 
     public List<Triplet> reduce() throws MappingToUmlTranslationFailedException {
         reduceSimpleRegexTriplets();
         reduceInheritanceTriplets();
-        return triplets;
+        return whenTriplets;
     }
 
     private void reduceSimpleRegexTriplets() throws MappingToUmlTranslationFailedException {
         Map<ObjectType, String> regexSubjectToString = buildRegexSubjectToStringMap();
-        triplets = injectRegexStringsIntoCallingTriplets(regexSubjectToString);
+        whenTriplets = injectRegexStringsIntoCallingTriplets(regexSubjectToString);
     }
 
     private Map<ObjectType, String> buildRegexSubjectToStringMap()
             throws MappingToUmlTranslationFailedException {
         Map<ObjectType, String> regexSubjectToString = new HashMap<>();
-        for (Triplet triplet : triplets) {
+        for (Triplet triplet : whenTriplets) {
             if (isRegexTriplet(triplet)) {
                 if (!(triplet.getObject() instanceof StringValue)) {
                     throw new MappingToUmlTranslationFailedException(
@@ -57,7 +57,7 @@ public class TripletReducer {
     private List<Triplet> injectRegexStringsIntoCallingTriplets(
             Map<ObjectType, String> regexSubjectToString) {
         List<Triplet> tripletsWithoutRegex = new ArrayList<>();
-        for (Triplet triplet : triplets) {
+        for (Triplet triplet : whenTriplets) {
             ObjectType object = triplet.getObject();
             if (regexSubjectToString.containsKey(object)) {
                 StringValue newObject = new StringValue(regexSubjectToString.get(object));
@@ -73,7 +73,7 @@ public class TripletReducer {
 
     private void reduceInheritanceTriplets() throws MappingToUmlTranslationFailedException {
         Map<Variable, InheritanceRelation> inheritanceMap = buildInheritanceMap();
-        triplets = replaceInheritanceTriplets(inheritanceMap);
+        whenTriplets = replaceInheritanceTriplets(inheritanceMap);
     }
 
     private Map<Variable, InheritanceRelation> buildInheritanceMap() {
@@ -91,7 +91,7 @@ public class TripletReducer {
             Map<Variable, InheritanceRelation> inheritanceMap)
             throws MappingToUmlTranslationFailedException {
         List<Triplet> newTriplets = new ArrayList<>();
-        for (Triplet triplet : triplets) {
+        for (Triplet triplet : whenTriplets) {
             if (triplet.getPredicate().getName().equals("hasSubClass")) {
                 inheritanceMap
                         .get(triplet.getSubject())

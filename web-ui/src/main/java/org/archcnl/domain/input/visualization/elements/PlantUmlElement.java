@@ -1,12 +1,12 @@
 package org.archcnl.domain.input.visualization.elements;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.visualization.PlantUmlPart;
-import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.PlantUmlBlock;
 
-public abstract class PlantUmlElement implements PlantUmlPart {
+public abstract class PlantUmlElement implements PlantUmlBlock {
 
     private Optional<PlantUmlElement> parent = Optional.empty();
     private final boolean requiresParent;
@@ -21,22 +21,19 @@ public abstract class PlantUmlElement implements PlantUmlPart {
         return !requiresParent || parent.isPresent();
     }
 
-    public abstract void setProperty(String property, Object object)
-            throws PropertyNotFoundException;
-
-    public String getIdentifier() throws MappingToUmlTranslationFailedException {
+    public List<String> getIdentifier() {
         if (!this.requiresParent) {
-            return variable.getName();
+            return Arrays.asList(variable.getName());
         }
         PlantUmlElement current = this;
         while (current.requiresParent) {
             if (current.parent.isEmpty()) {
-                throw new MappingToUmlTranslationFailedException(
-                        variable.getName() + " is missing a required parent");
+                return null;
             }
             current = current.parent.get();
         }
-        return current.getIdentifier() + "::" + removeNonAlphaNumericSymbols(buildNameSection());
+        return Arrays.asList(
+                current.getIdentifier() + "::" + removeNonAlphaNumericSymbols(buildNameSection()));
     }
 
     private String removeNonAlphaNumericSymbols(String string) {
