@@ -9,6 +9,7 @@ import java.util.Optional;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.elements.CustomConceptVisualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
@@ -36,6 +37,19 @@ public class PlantUmlTransformer {
         CustomConceptVisualizer visualizer =
                 new CustomConceptVisualizer(
                         mapping, conceptManager, Optional.empty(), new HashSet<>());
+        return buildPlantUmlCode(
+                visualizer.buildPlantUmlCode(), mapping.getMappingNameRepresentation());
+    }
+
+    public String transformToPlantUml(RelationMapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        CustomRelationVisualizer visualizer =
+                new CustomRelationVisualizer(
+                        mapping,
+                        conceptManager,
+                        new HashSet<>(),
+                        Optional.empty(),
+                        Optional.empty());
         return buildPlantUmlCode(
                 visualizer.buildPlantUmlCode(), mapping.getMappingNameRepresentation());
     }

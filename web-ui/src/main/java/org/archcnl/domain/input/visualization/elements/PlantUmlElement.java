@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.elements;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,12 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
             }
             current = current.parent.get();
         }
-        return Arrays.asList(
-                current.getIdentifier() + "::" + removeNonAlphaNumericSymbols(buildNameSection()));
+        List<String> identifiers = new ArrayList<>();
+        for (String parentIdentifier : current.getIdentifier()) {
+            identifiers.add(
+                    parentIdentifier + "::" + removeNonAlphaNumericSymbols(buildNameSection()));
+        }
+        return identifiers;
     }
 
     private String removeNonAlphaNumericSymbols(String string) {

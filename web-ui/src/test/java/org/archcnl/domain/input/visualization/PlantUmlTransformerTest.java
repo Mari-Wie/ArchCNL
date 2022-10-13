@@ -114,6 +114,7 @@ class PlantUmlTransformerTest {
         // then
         String expectedCode =
                 "@startuml\n"
+                        + "title weirdRelationMapping\n"
                         + "folder \"?namespace\" as namespace {\n"
                         + "	class \"ClassName\" as class {\n"
                         + "		{field} {static} +?attribute\n"
@@ -192,6 +193,7 @@ class PlantUmlTransformerTest {
         // then
         String expectedCode =
                 "@startuml\n"
+                        + "title paramRelationMapping\n"
                         + "class \"?class\" as class {\n"
                         + "	{method} ?method(?parameter)\n"
                         + "}\n"
@@ -236,7 +238,19 @@ class PlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title usedByControllerMapping\n"
+                        + "class \"?class\" as class {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller {\n"
+                        + "}\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller\n"
+                        + "controller -[dashed]-> class: <<imports>>\n"
+                        + "class -[bold]-> controller\n"
+                        + "note on link: usedByController\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
