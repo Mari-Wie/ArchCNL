@@ -19,7 +19,9 @@ import org.archcnl.domain.input.visualization.connections.DefinesVariableConnect
 import org.archcnl.domain.input.visualization.connections.ImportConnection;
 import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.connections.ThrowsExceptionConnection;
+import org.archcnl.domain.input.visualization.elements.CustomConceptVisualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
 public class TripletContainer {
@@ -106,8 +108,11 @@ public class TripletContainer {
     private void tryToSetProperty(PlantUmlBlock element, String property, Object object)
             throws MappingToUmlTranslationFailedException {
         try {
+            if (object instanceof CustomConceptVisualizer) {
+                object = ((CustomConceptVisualizer) object).getBaseElement();
+            }
             element.setProperty(property, object);
-        } catch (PropertyNotFoundException e) {
+        } catch (PropertyNotFoundException | MultipleBaseElementsException e) {
             throw new MappingToUmlTranslationFailedException(e.getMessage());
         }
     }

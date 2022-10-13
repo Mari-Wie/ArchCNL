@@ -322,7 +322,19 @@ class PlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title isImportingController\n"
+                        + "class \"?class\" as class {\n"
+                        + "	{field} ?attribute : .*Controller\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller1 {\n"
+                        + "}\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller1\n"
+                        + "note \"ImportingController\" as ImportingController\n"
+                        + "ImportingController .. controller1\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 

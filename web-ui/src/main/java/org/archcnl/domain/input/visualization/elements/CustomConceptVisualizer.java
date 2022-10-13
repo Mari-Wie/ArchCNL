@@ -15,6 +15,7 @@ import org.archcnl.domain.input.visualization.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.UniqueNamePicker;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
 public class CustomConceptVisualizer implements PlantUmlBlock {
@@ -122,5 +123,12 @@ public class CustomConceptVisualizer implements PlantUmlBlock {
         return variants.stream()
                 .map(ConceptMappingVariant::getIdentifier)
                 .collect(Collectors.toList());
+    }
+
+    public PlantUmlElement getBaseElement() throws MultipleBaseElementsException {
+        if (variants.size() > 1) {
+            throw new MultipleBaseElementsException(mappingName + " has multiple base elements");
+        }
+        return variants.get(0).getBaseElement();
     }
 }

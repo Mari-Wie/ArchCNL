@@ -18,6 +18,7 @@ import org.archcnl.domain.input.visualization.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.UniqueNamePicker;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
 public class ConceptMappingVariant implements PlantUmlPart {
@@ -137,5 +138,13 @@ public class ConceptMappingVariant implements PlantUmlPart {
             tripletsWithParentSubject.add(new Triplet(newSubject, predicate, newObject));
         }
         return tripletsWithParentSubject;
+    }
+
+    public PlantUmlElement getBaseElement() throws MultipleBaseElementsException {
+        PlantUmlBlock thenElement = elementMap.get(thenSubject);
+        if (thenElement instanceof CustomConceptVisualizer) {
+            return ((CustomConceptVisualizer) thenElement).getBaseElement();
+        }
+        return (PlantUmlElement) thenElement;
     }
 }
