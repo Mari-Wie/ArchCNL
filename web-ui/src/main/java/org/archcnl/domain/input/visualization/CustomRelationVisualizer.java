@@ -1,9 +1,9 @@
 package org.archcnl.domain.input.visualization;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
@@ -18,11 +18,10 @@ public class CustomRelationVisualizer extends MappingVisualizer {
     public CustomRelationVisualizer(
             RelationMapping mapping,
             ConceptManager conceptManager,
-            Set<Variable> usedVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject)
             throws MappingToUmlTranslationFailedException {
-        super(mapping, conceptManager, usedVariables);
+        super(mapping, conceptManager, new HashSet<>());
         createVariants(parentSubject, parentObject);
     }
 

@@ -18,6 +18,7 @@ import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.helpers.NamePicker;
 
 public class CustomConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 

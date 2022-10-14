@@ -44,11 +44,7 @@ public class PlantUmlTransformer {
             throws MappingToUmlTranslationFailedException {
         CustomRelationVisualizer visualizer =
                 new CustomRelationVisualizer(
-                        mapping,
-                        conceptManager,
-                        new HashSet<>(),
-                        Optional.empty(),
-                        Optional.empty());
+                        mapping, conceptManager, Optional.empty(), Optional.empty());
         return buildPlantUmlCode(
                 visualizer.buildPlantUmlCode(), mapping.getMappingNameRepresentation());
     }
