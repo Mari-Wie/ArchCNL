@@ -64,13 +64,11 @@ public class CustomConceptVisualizer implements PlantUmlBlock {
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
         throwWhenNoVariants(whenTriplets);
-        boolean moreThanOne = whenTriplets.size() > 1;
         for (int i = 0; i < whenTriplets.size(); i++) {
             AndTriplets whenVariant = whenTriplets.get(i);
             String variantName = mappingName + (i + 1);
             variants.add(
                     new ConceptMappingVariant(
-                            moreThanOne,
                             whenVariant,
                             thenSubject,
                             variantName,
@@ -82,9 +80,10 @@ public class CustomConceptVisualizer implements PlantUmlBlock {
 
     @Override
     public String buildPlantUmlCode() {
+        boolean moreThanOne = variants.size() > 1;
         StringBuilder builder = new StringBuilder();
         for (ConceptMappingVariant variant : variants) {
-            builder.append(variant.buildPlantUmlCode());
+            builder.append(variant.buildPlantUmlCode(moreThanOne));
             builder.append("\n");
         }
         builder.append(conceptElement.buildPlantUmlCode());

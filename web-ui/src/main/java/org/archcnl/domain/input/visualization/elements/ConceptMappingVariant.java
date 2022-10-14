@@ -21,9 +21,8 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class ConceptMappingVariant implements PlantUmlPart {
+public class ConceptMappingVariant {
 
-    private final boolean withBorder;
     private List<Triplet> whenTriplets;
     private final String variantName;
     private Variable thenSubject;
@@ -34,7 +33,6 @@ public class ConceptMappingVariant implements PlantUmlPart {
     private List<PlantUmlPart> umlElements;
 
     public ConceptMappingVariant(
-            boolean withBorder,
             AndTriplets andTriplets,
             Variable thenSubject,
             String variantName,
@@ -42,7 +40,6 @@ public class ConceptMappingVariant implements PlantUmlPart {
             Optional<Variable> parentSubject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        this.withBorder = withBorder;
         this.variantName = variantName;
         this.conceptManager = conceptManager;
         this.usedVariables = usedVariables;
@@ -57,12 +54,11 @@ public class ConceptMappingVariant implements PlantUmlPart {
             this.thenSubject = parentSubjectCopy;
         }
 
-        this.whenTriplets = pickUniqueVariables(whenTriplets, usedVariables);
+        pickUniqueVariables(usedVariables);
         buildContentParts();
     }
 
-    @Override
-    public String buildPlantUmlCode() {
+    public String buildPlantUmlCode(boolean withBorder) {
         StringBuilder builder = new StringBuilder();
         if (withBorder) {
             builder.append("package ");
@@ -97,10 +93,10 @@ public class ConceptMappingVariant implements PlantUmlPart {
         elementMap.get(thenSubject).setProperty(property, object);
     }
 
-    private List<Triplet> pickUniqueVariables(List<Triplet> triplets, Set<Variable> usedVariables) {
+    private void pickUniqueVariables(Set<Variable> usedVariables) {
         Map<Variable, Variable> renamedVariables = new HashMap<>();
         List<Triplet> modifiedTriplets = new ArrayList<>();
-        for (Triplet triplet : triplets) {
+        for (Triplet triplet : whenTriplets) {
             Variable oldSubject = triplet.getSubject();
             Relation predicate = triplet.getPredicate();
             ObjectType oldObject = triplet.getObject();
@@ -118,11 +114,11 @@ public class ConceptMappingVariant implements PlantUmlPart {
             }
             modifiedTriplets.add(new Triplet(newSubject, predicate, newObject));
         }
+        whenTriplets = modifiedTriplets;
 
         if (renamedVariables.containsKey(thenSubject)) {
             thenSubject = renamedVariables.get(thenSubject);
         }
-        return modifiedTriplets;
     }
 
     private List<Triplet> useParentSubject(

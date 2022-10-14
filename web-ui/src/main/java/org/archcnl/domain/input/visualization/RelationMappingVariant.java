@@ -13,9 +13,8 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.connections.CustomRelationConnection;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class RelationMappingVariant implements PlantUmlPart {
+public class RelationMappingVariant {
 
-    private boolean withBorder;
     private String variantName;
     private ConceptManager conceptManager;
     private Set<Variable> usedVariables;
@@ -25,7 +24,6 @@ public class RelationMappingVariant implements PlantUmlPart {
     private Triplet thenTriplet;
 
     public RelationMappingVariant(
-            boolean withBorder,
             AndTriplets whenVariant,
             Triplet thenTriplet,
             String variantName,
@@ -34,7 +32,6 @@ public class RelationMappingVariant implements PlantUmlPart {
             Optional<Variable> parentObject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        this.withBorder = withBorder;
         this.variantName = variantName;
         this.conceptManager = conceptManager;
         this.usedVariables = usedVariables;
@@ -43,8 +40,7 @@ public class RelationMappingVariant implements PlantUmlPart {
         buildContentParts();
     }
 
-    @Override
-    public String buildPlantUmlCode() {
+    public String buildPlantUmlCode(boolean withBorder) {
         StringBuilder builder = new StringBuilder();
         if (withBorder) {
             builder.append("package ");

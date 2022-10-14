@@ -14,7 +14,7 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 public class CustomRelationVisualizer {
 
     private ConceptManager conceptManager;
-    private List<RelationMappingVariant> variants = new ArrayList();
+    private List<RelationMappingVariant> variants = new ArrayList<>();
     private String mappingName;
 
     public CustomRelationVisualizer(
@@ -37,13 +37,11 @@ public class CustomRelationVisualizer {
             throws MappingToUmlTranslationFailedException {
         List<AndTriplets> whenTriplets = mapping.getWhenTriplets();
         throwWhenNoVariants(whenTriplets);
-        boolean moreThanOne = whenTriplets.size() > 1;
         for (int i = 0; i < whenTriplets.size(); i++) {
             AndTriplets whenVariant = whenTriplets.get(i);
             String variantName = mappingName + (i + 1);
             variants.add(
                     new RelationMappingVariant(
-                            moreThanOne,
                             whenVariant,
                             mapping.getThenTriplet(),
                             variantName,
@@ -63,8 +61,9 @@ public class CustomRelationVisualizer {
     }
 
     public String buildPlantUmlCode() {
+        boolean moreThanOne = variants.size() > 1;
         return variants.stream()
-                .map(RelationMappingVariant::buildPlantUmlCode)
+                .map(v -> v.buildPlantUmlCode(moreThanOne))
                 .collect(Collectors.joining("\n"));
     }
 
