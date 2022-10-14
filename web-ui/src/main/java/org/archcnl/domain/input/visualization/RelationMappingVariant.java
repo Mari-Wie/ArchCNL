@@ -70,7 +70,7 @@ public class RelationMappingVariant implements PlantUmlPart {
         List<String> objectIds = elementMap.get(thenTriplet.getObject()).getIdentifier();
         for (String subjectId : subjectIds) {
             for (String objectId : objectIds) {
-                Relation relation = thenTriplet.getPredicate();
+                CustomRelation relation = (CustomRelation) thenTriplet.getPredicate();
                 CustomRelationConnection connection =
                         new CustomRelationConnection(subjectId, objectId, relation);
                 umlElements.add(connection);
