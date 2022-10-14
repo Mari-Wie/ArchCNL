@@ -16,6 +16,11 @@ public abstract class ObjectType implements FormattedDomainObject {
         return requiredHashCodeOverride();
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + ":" + getName();
+    }
+
     protected abstract boolean requiredEqualsOverride(Object obj);
 
     protected abstract int requiredHashCodeOverride();

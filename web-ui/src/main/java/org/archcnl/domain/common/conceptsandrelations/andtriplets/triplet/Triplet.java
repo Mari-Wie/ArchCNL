@@ -89,4 +89,9 @@ public class Triplet implements FormattedDomainObject {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return transformToAdoc();
+    }
 }
