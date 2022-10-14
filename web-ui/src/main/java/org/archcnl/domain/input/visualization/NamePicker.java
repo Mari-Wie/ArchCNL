@@ -4,9 +4,9 @@ import java.util.Map;
 import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 
-public class UniqueNamePicker {
+public class NamePicker {
 
-    private UniqueNamePicker() {}
+    private NamePicker() {}
 
     public static Variable pickUniqueVariable(
             Set<Variable> usedVariables,

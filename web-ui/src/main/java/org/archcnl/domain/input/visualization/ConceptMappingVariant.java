@@ -1,12 +1,9 @@
 package org.archcnl.domain.input.visualization;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
@@ -18,110 +15,49 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class ConceptMappingVariant {
-
-    private List<Triplet> whenTriplets;
-    private final String variantName;
-    private Variable thenSubject;
-    private ConceptManager conceptManager;
-    private Set<Variable> usedVariables;
-
-    private Map<Variable, PlantUmlBlock> elementMap;
-    private List<PlantUmlPart> umlElements;
+public class ConceptMappingVariant extends MappingVariant {
 
     public ConceptMappingVariant(
-            AndTriplets andTriplets,
-            Variable thenSubject,
+            AndTriplets whenVariant,
+            Triplet thenTriplet,
             String variantName,
             ConceptManager conceptManager,
             Optional<Variable> parentSubject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        this.variantName = variantName;
-        this.conceptManager = conceptManager;
-        this.usedVariables = usedVariables;
 
-        if (parentSubject.isEmpty()) {
-            this.whenTriplets = andTriplets.getTriplets();
-            this.thenSubject = thenSubject;
-        } else {
-            Variable parentSubjectCopy = new Variable(parentSubject.get().getName());
-            this.whenTriplets =
-                    useParentSubject(thenSubject, parentSubjectCopy, andTriplets.getTriplets());
-            this.thenSubject = parentSubjectCopy;
+        super(whenVariant, thenTriplet, conceptManager, usedVariables, variantName);
+        if (parentSubject.isPresent()) {
+            useParentSubject(parentSubject.get());
         }
-
-        pickUniqueVariables(usedVariables);
+        pickUniqueVariables();
         buildContentParts();
     }
 
-    public String buildPlantUmlCode(boolean withBorder) {
-        StringBuilder builder = new StringBuilder();
-        if (withBorder) {
-            builder.append("package ");
-            builder.append(variantName);
-            builder.append(" <<Cloud>> {\n");
-        }
-        builder.append(
-                umlElements.stream()
-                        .map(PlantUmlPart::buildPlantUmlCode)
-                        .collect(Collectors.joining("\n")));
-        if (withBorder) {
-            builder.append("\n}");
-        }
-        return builder.toString();
-    }
-
-    public void buildContentParts() throws MappingToUmlTranslationFailedException {
+    @Override
+    protected void buildContentParts() throws MappingToUmlTranslationFailedException {
         MappingTranslator translator = new MappingTranslator(whenTriplets, conceptManager);
         elementMap = translator.createElementMap(usedVariables);
         umlElements = translator.translateToPlantUmlModel(elementMap);
     }
 
     public String getIdentifier() {
-        var element = elementMap.get(thenSubject);
+        var element = getThenSubjectBlock();
         if (element instanceof CustomConceptVisualizer) {
             return ((CustomConceptVisualizer) element).getIdentifier().get(0);
         }
-        return thenSubject.getName();
+        return thenTriplet.getSubject().getName();
     }
 
     public void setProperty(String property, Object object) throws PropertyNotFoundException {
-        elementMap.get(thenSubject).setProperty(property, object);
+        getThenSubjectBlock().setProperty(property, object);
     }
 
-    private void pickUniqueVariables(Set<Variable> usedVariables) {
-        Map<Variable, Variable> renamedVariables = new HashMap<>();
-        List<Triplet> modifiedTriplets = new ArrayList<>();
-        for (Triplet triplet : whenTriplets) {
-            Variable oldSubject = triplet.getSubject();
-            Relation predicate = triplet.getPredicate();
-            ObjectType oldObject = triplet.getObject();
-
-            Variable newSubject =
-                    UniqueNamePicker.pickUniqueVariable(
-                            usedVariables, renamedVariables, oldSubject);
-            ObjectType newObject = null;
-            if (oldObject instanceof Variable) {
-                newObject =
-                        UniqueNamePicker.pickUniqueVariable(
-                                usedVariables, renamedVariables, (Variable) oldObject);
-            } else {
-                newObject = oldObject;
-            }
-            modifiedTriplets.add(new Triplet(newSubject, predicate, newObject));
-        }
-        whenTriplets = modifiedTriplets;
-
-        if (renamedVariables.containsKey(thenSubject)) {
-            thenSubject = renamedVariables.get(thenSubject);
-        }
-    }
-
-    private List<Triplet> useParentSubject(
-            Variable thenSubject, Variable parentSubject, List<Triplet> triplets) {
+    private void useParentSubject(Variable parentSubject) {
         List<Triplet> tripletsWithParentSubject = new ArrayList<>();
-        for (Triplet triplet : triplets) {
+        Variable thenSubject = thenTriplet.getSubject();
+
+        for (Triplet triplet : whenTriplets) {
             Variable oldSubject = triplet.getSubject();
             Relation predicate = triplet.getPredicate();
             ObjectType oldObject = triplet.getObject();
@@ -130,14 +66,23 @@ public class ConceptMappingVariant {
             ObjectType newObject = oldObject.equals(thenSubject) ? parentSubject : oldObject;
             tripletsWithParentSubject.add(new Triplet(newSubject, predicate, newObject));
         }
-        return tripletsWithParentSubject;
+        whenTriplets = tripletsWithParentSubject;
+
+        thenSubject = new Variable(parentSubject.getName());
+        Relation thenPredicate = thenTriplet.getPredicate();
+        ObjectType thenObject = thenTriplet.getObject();
+        thenTriplet = new Triplet(thenSubject, thenPredicate, thenObject);
     }
 
     public PlantUmlElement getBaseElement() throws MultipleBaseElementsException {
-        PlantUmlBlock thenElement = elementMap.get(thenSubject);
+        PlantUmlBlock thenElement = getThenSubjectBlock();
         if (thenElement instanceof CustomConceptVisualizer) {
             return ((CustomConceptVisualizer) thenElement).getBaseElement();
         }
         return (PlantUmlElement) thenElement;
+    }
+
+    private PlantUmlBlock getThenSubjectBlock() {
+        return elementMap.get(thenTriplet.getSubject());
     }
 }

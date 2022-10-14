@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
@@ -18,12 +19,10 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class CustomConceptVisualizer implements PlantUmlBlock {
+public class CustomConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 
-    private final String mappingName;
-    private final CustomConceptElement conceptElement;
+    private CustomConceptElement conceptElement;
     private List<ConceptMappingVariant> variants = new ArrayList<>();
-    private ConceptManager conceptManager;
 
     public CustomConceptVisualizer(
             ConceptMapping mapping,
@@ -31,46 +30,34 @@ public class CustomConceptVisualizer implements PlantUmlBlock {
             Optional<Variable> parentSubject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        this.conceptManager = conceptManager;
-        this.mappingName = mapping.getMappingNameRepresentation();
+        super(mapping, conceptManager, usedVariables);
+        createConceptElement();
+        createVariants(parentSubject);
+    }
 
-        // Cast is safe as a ConceptMapping will always have a CustomConcept in the object of it's
-        // thenTriplet
+    private void createConceptElement() {
         CustomConcept concept = (CustomConcept) mapping.getThenTriplet().getObject();
-        this.conceptElement =
-                new CustomConceptElement(
-                        concept,
-                        UniqueNamePicker.pickUniqueVariable(
-                                        usedVariables,
-                                        new HashMap<>(),
-                                        new Variable(concept.getName()))
-                                .getName());
-        Variable thenSubject = mapping.getThenTriplet().getSubject();
-        createVariants(mapping.getWhenTriplets(), thenSubject, parentSubject, usedVariables);
+
+        Variable uniqueVar =
+                NamePicker.pickUniqueVariable(
+                        usedVariables, new HashMap<>(), new Variable(concept.getName()));
+
+        this.conceptElement = new CustomConceptElement(concept, uniqueVar.getName());
     }
 
-    private void throwWhenNoVariants(List<AndTriplets> whenTriplets)
+    private void createVariants(Optional<Variable> parentSubject)
             throws MappingToUmlTranslationFailedException {
-        if (whenTriplets.isEmpty()) {
-            throw new MappingToUmlTranslationFailedException(
-                    "Mapping " + mappingName + " has no whenTriplets.");
-        }
-    }
-
-    private void createVariants(
-            List<AndTriplets> whenTriplets,
-            Variable thenSubject,
-            Optional<Variable> parentSubject,
-            Set<Variable> usedVariables)
-            throws MappingToUmlTranslationFailedException {
+        List<AndTriplets> whenTriplets = mapping.getWhenTriplets();
+        Triplet thenTriplet = mapping.getThenTriplet();
         throwWhenNoVariants(whenTriplets);
+
         for (int i = 0; i < whenTriplets.size(); i++) {
             AndTriplets whenVariant = whenTriplets.get(i);
             String variantName = mappingName + (i + 1);
             variants.add(
                     new ConceptMappingVariant(
                             whenVariant,
-                            thenSubject,
+                            thenTriplet,
                             variantName,
                             conceptManager,
                             parentSubject,
@@ -80,10 +67,10 @@ public class CustomConceptVisualizer implements PlantUmlBlock {
 
     @Override
     public String buildPlantUmlCode() {
-        boolean moreThanOne = variants.size() > 1;
+        boolean printBorder = moreThanOneVariant();
         StringBuilder builder = new StringBuilder();
         for (ConceptMappingVariant variant : variants) {
-            builder.append(variant.buildPlantUmlCode(moreThanOne));
+            builder.append(variant.buildPlantUmlCode(printBorder));
             builder.append("\n");
         }
         builder.append(conceptElement.buildPlantUmlCode());
@@ -125,9 +112,14 @@ public class CustomConceptVisualizer implements PlantUmlBlock {
     }
 
     public PlantUmlElement getBaseElement() throws MultipleBaseElementsException {
-        if (variants.size() > 1) {
+        if (moreThanOneVariant()) {
             throw new MultipleBaseElementsException(mappingName + " has multiple base elements");
         }
         return variants.get(0).getBaseElement();
+    }
+
+    @Override
+    protected boolean moreThanOneVariant() {
+        return variants.size() > 1;
     }
 }

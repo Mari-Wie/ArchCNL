@@ -11,11 +11,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class CustomRelationVisualizer {
+public class CustomRelationVisualizer extends MappingVisualizer {
 
-    private ConceptManager conceptManager;
     private List<RelationMappingVariant> variants = new ArrayList<>();
-    private String mappingName;
 
     public CustomRelationVisualizer(
             RelationMapping mapping,
@@ -24,16 +22,11 @@ public class CustomRelationVisualizer {
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject)
             throws MappingToUmlTranslationFailedException {
-        this.conceptManager = conceptManager;
-        this.mappingName = mapping.getMappingNameRepresentation();
-        createVariants(mapping, usedVariables, parentSubject, parentObject);
+        super(mapping, conceptManager, usedVariables);
+        createVariants(parentSubject, parentObject);
     }
 
-    private void createVariants(
-            RelationMapping mapping,
-            Set<Variable> usedVariables,
-            Optional<Variable> parentSubject,
-            Optional<Variable> parentObject)
+    private void createVariants(Optional<Variable> parentSubject, Optional<Variable> parentObject)
             throws MappingToUmlTranslationFailedException {
         List<AndTriplets> whenTriplets = mapping.getWhenTriplets();
         throwWhenNoVariants(whenTriplets);
@@ -52,22 +45,16 @@ public class CustomRelationVisualizer {
         }
     }
 
-    private void throwWhenNoVariants(List<AndTriplets> whenTriplets)
-            throws MappingToUmlTranslationFailedException {
-        if (whenTriplets.isEmpty()) {
-            throw new MappingToUmlTranslationFailedException(
-                    "Mapping " + mappingName + " has no whenTriplets.");
-        }
-    }
-
+    @Override
     public String buildPlantUmlCode() {
-        boolean moreThanOne = variants.size() > 1;
+        boolean printBorder = moreThanOneVariant();
         return variants.stream()
-                .map(v -> v.buildPlantUmlCode(moreThanOne))
+                .map(v -> v.buildPlantUmlCode(printBorder))
                 .collect(Collectors.joining("\n"));
     }
 
-    public List<AndTriplets> getTripletsOfVariants() {
-        return null;
+    @Override
+    protected boolean moreThanOneVariant() {
+        return variants.size() > 1;
     }
 }

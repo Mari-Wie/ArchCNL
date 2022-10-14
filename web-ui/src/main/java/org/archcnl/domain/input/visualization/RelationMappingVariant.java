@@ -1,31 +1,17 @@
 package org.archcnl.domain.input.visualization;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
-import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.connections.CustomRelationConnection;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class RelationMappingVariant {
-
-    private String variantName;
-    private ConceptManager conceptManager;
-    private Set<Variable> usedVariables;
-    private Map<Variable, PlantUmlBlock> elementMap;
-    private List<PlantUmlPart> umlElements;
-    private List<Triplet> whenTriplets;
-    private Triplet thenTriplet;
+public class RelationMappingVariant extends MappingVariant {
 
     public RelationMappingVariant(
             AndTriplets whenVariant,
@@ -36,34 +22,14 @@ public class RelationMappingVariant {
             Optional<Variable> parentObject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        this.variantName = variantName;
-        this.conceptManager = conceptManager;
-        this.usedVariables = usedVariables;
-        this.whenTriplets = whenVariant.getTriplets();
-        this.thenTriplet = thenTriplet;
 
-        pickUniqueVariables(usedVariables);
+        super(whenVariant, thenTriplet, conceptManager, usedVariables, variantName);
+        pickUniqueVariables();
         buildContentParts();
     }
 
-    public String buildPlantUmlCode(boolean withBorder) {
-        StringBuilder builder = new StringBuilder();
-        if (withBorder) {
-            builder.append("package ");
-            builder.append(variantName);
-            builder.append(" <<Cloud>> {\n");
-        }
-        builder.append(
-                umlElements.stream()
-                        .map(PlantUmlPart::buildPlantUmlCode)
-                        .collect(Collectors.joining("\n")));
-        if (withBorder) {
-            builder.append("\n}");
-        }
-        return builder.toString();
-    }
-
-    public void buildContentParts() throws MappingToUmlTranslationFailedException {
+    @Override
+    protected void buildContentParts() throws MappingToUmlTranslationFailedException {
         MappingTranslator translator = new MappingTranslator(whenTriplets, conceptManager);
         elementMap = translator.createElementMap(usedVariables);
         umlElements = translator.translateToPlantUmlModel(elementMap);
@@ -78,39 +44,5 @@ public class RelationMappingVariant {
                 umlElements.add(connection);
             }
         }
-    }
-
-    private void pickUniqueVariables(Set<Variable> usedVariables) {
-        Map<Variable, Variable> renamedVariables = new HashMap<>();
-        List<Triplet> modifiedTriplets = new ArrayList<>();
-        for (Triplet triplet : whenTriplets) {
-            Variable oldSubject = triplet.getSubject();
-            Relation predicate = triplet.getPredicate();
-            ObjectType oldObject = triplet.getObject();
-
-            Variable newSubject =
-                    UniqueNamePicker.pickUniqueVariable(
-                            usedVariables, renamedVariables, oldSubject);
-            ObjectType newObject = null;
-            if (oldObject instanceof Variable) {
-                newObject =
-                        UniqueNamePicker.pickUniqueVariable(
-                                usedVariables, renamedVariables, (Variable) oldObject);
-            } else {
-                newObject = oldObject;
-            }
-            modifiedTriplets.add(new Triplet(newSubject, predicate, newObject));
-        }
-        whenTriplets = modifiedTriplets;
-
-        Variable thenSubject = thenTriplet.getSubject();
-        ObjectType thenObject = thenTriplet.getObject();
-        if (renamedVariables.containsKey(thenSubject)) {
-            thenSubject = renamedVariables.get(thenSubject);
-        }
-        if (renamedVariables.containsKey(thenObject)) {
-            thenObject = renamedVariables.get(thenObject);
-        }
-        thenTriplet = new Triplet(thenSubject, thenTriplet.getPredicate(), thenObject);
     }
 }
