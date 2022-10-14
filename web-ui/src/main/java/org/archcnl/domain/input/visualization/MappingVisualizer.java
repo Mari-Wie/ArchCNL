@@ -31,6 +31,10 @@ public abstract class MappingVisualizer {
         }
     }
 
+    public String getMappingName() {
+        return mappingName;
+    }
+
     protected abstract boolean moreThanOneVariant();
 
     public abstract String buildPlantUmlCode();

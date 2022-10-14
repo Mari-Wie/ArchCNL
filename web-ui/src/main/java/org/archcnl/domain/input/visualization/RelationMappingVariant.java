@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.visualization;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
@@ -18,8 +17,6 @@ public class RelationMappingVariant extends MappingVariant {
             Triplet thenTriplet,
             String variantName,
             ConceptManager conceptManager,
-            Optional<Variable> parentSubject,
-            Optional<Variable> parentObject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
 

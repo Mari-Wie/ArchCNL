@@ -5,12 +5,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 
 public class PlantUmlTransformer {
 
@@ -33,26 +39,51 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
+        mapping = flattenCustomRelations(mapping);
         CustomConceptVisualizer visualizer =
                 new CustomConceptVisualizer(
                         mapping, conceptManager, Optional.empty(), new HashSet<>());
-        return buildPlantUmlCode(
-                visualizer.buildPlantUmlCode(), mapping.getMappingNameRepresentation());
+        return buildPlantUmlCode(visualizer);
     }
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        CustomRelationVisualizer visualizer =
-                new CustomRelationVisualizer(
-                        mapping, conceptManager, Optional.empty(), Optional.empty());
-        return buildPlantUmlCode(
-                visualizer.buildPlantUmlCode(), mapping.getMappingNameRepresentation());
+        mapping = flattenCustomRelations(mapping);
+        CustomRelationVisualizer visualizer = new CustomRelationVisualizer(mapping, conceptManager);
+        return buildPlantUmlCode(visualizer);
     }
 
-    private String buildPlantUmlCode(String content, String mappingName) {
+    private ConceptMapping flattenCustomRelations(ConceptMapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        MappingFlattener flattener =
+                new MappingFlattener(
+                        mapping.getWhenTriplets(),
+                        mapping.getThenTriplet().getSubject(),
+                        mapping.getThenTriplet().getObject());
+        List<AndTriplets> flattenedAndTriplets = flattener.flatten();
+        Variable thenSubject = mapping.getThenTriplet().getSubject();
+        CustomConcept thisConcept = (CustomConcept) mapping.getThenTriplet().getObject();
+        mapping = new ConceptMapping(thenSubject, flattenedAndTriplets, thisConcept);
+        return mapping;
+    }
+
+    private RelationMapping flattenCustomRelations(RelationMapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        MappingFlattener flattener =
+                new MappingFlattener(
+                        mapping.getWhenTriplets(),
+                        mapping.getThenTriplet().getSubject(),
+                        mapping.getThenTriplet().getObject());
+        List<AndTriplets> flattenedAndTriplets = flattener.flatten();
+        Triplet thenTriplet = mapping.getThenTriplet();
+        mapping = new RelationMapping(thenTriplet, flattenedAndTriplets);
+        return mapping;
+    }
+
+    private String buildPlantUmlCode(MappingVisualizer visualizer) {
         StringBuilder builder = new StringBuilder();
-        builder.append(buildHeader(mappingName));
-        builder.append(content);
+        builder.append(buildHeader(visualizer.getMappingName()));
+        builder.append(visualizer.buildPlantUmlCode());
         builder.append(buildFooter());
         return builder.toString();
     }

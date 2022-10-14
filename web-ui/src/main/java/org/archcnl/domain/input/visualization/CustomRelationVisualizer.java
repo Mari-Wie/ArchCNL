@@ -3,11 +3,9 @@ package org.archcnl.domain.input.visualization;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
@@ -15,18 +13,13 @@ public class CustomRelationVisualizer extends MappingVisualizer {
 
     private List<RelationMappingVariant> variants = new ArrayList<>();
 
-    public CustomRelationVisualizer(
-            RelationMapping mapping,
-            ConceptManager conceptManager,
-            Optional<Variable> parentSubject,
-            Optional<Variable> parentObject)
+    public CustomRelationVisualizer(RelationMapping mapping, ConceptManager conceptManager)
             throws MappingToUmlTranslationFailedException {
         super(mapping, conceptManager, new HashSet<>());
-        createVariants(parentSubject, parentObject);
+        createVariants();
     }
 
-    private void createVariants(Optional<Variable> parentSubject, Optional<Variable> parentObject)
-            throws MappingToUmlTranslationFailedException {
+    private void createVariants() throws MappingToUmlTranslationFailedException {
         List<AndTriplets> whenTriplets = mapping.getWhenTriplets();
         throwWhenNoVariants(whenTriplets);
         for (int i = 0; i < whenTriplets.size(); i++) {
@@ -38,8 +31,6 @@ public class CustomRelationVisualizer extends MappingVisualizer {
                             mapping.getThenTriplet(),
                             variantName,
                             conceptManager,
-                            parentSubject,
-                            parentObject,
                             usedVariables));
         }
     }
