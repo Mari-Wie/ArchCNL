@@ -1,11 +1,17 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.Collections;
+import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.ConceptDoesNotExistException;
+import org.archcnl.domain.common.exceptions.RelationAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.common.io.importhelper.MappingParser;
 import org.archcnl.domain.common.io.importhelper.exceptions.NoMappingException;
@@ -243,12 +249,12 @@ class PlantUmlTransformerTest {
                         + "title usedByControllerMapping\n"
                         + "class \"?class\" as class {\n"
                         + "}\n"
-                        + "class \".*Controller\" as controller {\n"
+                        + "class \".*Controller\" as controller1 {\n"
                         + "}\n"
                         + "note \"Controller\" as Controller\n"
-                        + "Controller .. controller\n"
-                        + "controller -[dashed]-> class: <<imports>>\n"
-                        + "class -[bold]-> controller\n"
+                        + "Controller .. controller1\n"
+                        + "controller1 -[dashed]-> class: <<imports>>\n"
+                        + "class -[bold]-> controller1\n"
                         + "note on link: usedByController\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
@@ -416,6 +422,100 @@ class PlantUmlTransformerTest {
                         + "ImportingController .. controller1\n"
                         + "ImportingController .. controller21\n"
                         + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenUseMapping_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {
+        // given
+        String mappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        String secondWhenString =
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:definesAttribute ?attribute)"
+                        + " (?attribute famix:hasDeclaredType ?class2)";
+        RelationMapping mapping =
+                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+        AndTriplets secondWhen =
+                MappingParser.parseWhenPart(secondWhenString, relationManager, conceptManager);
+        mapping.addAndTriplets(secondWhen);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title useMapping\n"
+                        + "package useMapping1 <<Cloud>> {\n"
+                        + "class \"?class\" as class {\n"
+                        + "}\n"
+                        + "class \"?class2\" as class2 {\n"
+                        + "}\n"
+                        + "class -[dashed]-> class2: <<imports>>\n"
+                        + "class -[bold]-> class2\n"
+                        + "note on link: use\n"
+                        + "}\n"
+                        + "package useMapping2 <<Cloud>> {\n"
+                        + "class \"?class1\" as class1 {\n"
+                        + "	{field} ?attribute : ?class21\n"
+                        + "}\n"
+                        + "class \"?class21\" as class21 {\n"
+                        + "}\n"
+                        + "class1 -[bold]-> class21\n"
+                        + "note on link: use\n"
+                        + "}\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenCircularUseMapping_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException,
+                    RelationAlreadyExistsException {
+        // given
+        String useMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        String secondWhenString =
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:definesAttribute ?attribute)"
+                        + " (?attribute famix:hasDeclaredType ?class2)";
+        RelationMapping useMapping =
+                MappingParser.parseMapping(useMappingString, relationManager, conceptManager);
+        AndTriplets secondWhen =
+                MappingParser.parseWhenPart(secondWhenString, relationManager, conceptManager);
+        useMapping.addAndTriplets(secondWhen);
+        Set<ActualObjectType> relatableTypes =
+                Collections.singleton(new FamixConcept("FamixClass", ""));
+        CustomRelation useRelation = new CustomRelation("use", "", relatableTypes, relatableTypes);
+        useRelation.setMapping(useMapping, conceptManager);
+        relationManager.addRelation(useRelation);
+
+        String mappingString =
+                "circularUseMapping: (?class architecture:use ?class2)"
+                        + " (?class2 architecture:use ?class)"
+                        + " -> (?class architecture:circularUse ?class2)";
+        RelationMapping mapping =
+                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode = "";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
@@ -14,6 +15,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.connections.CatchesExceptionConnection;
 import org.archcnl.domain.input.visualization.connections.ContainmentConnection;
+import org.archcnl.domain.input.visualization.connections.CustomRelationConnection;
 import org.archcnl.domain.input.visualization.connections.DeclaresExceptionConnection;
 import org.archcnl.domain.input.visualization.connections.DefinesVariableConnection;
 import org.archcnl.domain.input.visualization.connections.ImportConnection;
@@ -79,10 +81,12 @@ public class TripletContainer {
 
     private List<Triplet> elementPropertyTriplets;
     private List<Triplet> elementConnectionTriplets;
+    private List<Triplet> customRelationConnectionTriplets;
 
     public TripletContainer(List<Triplet> triplets) {
         setElementPropertyTriplets(triplets);
         setElementRelationTriplets(triplets);
+        setCustomRelationConnectionTriplets(triplets);
     }
 
     public void applyElementProperties(Map<Variable, PlantUmlBlock> elementMap)
@@ -105,24 +109,19 @@ public class TripletContainer {
         }
     }
 
-    private void tryToSetProperty(PlantUmlBlock element, String property, Object object)
-            throws MappingToUmlTranslationFailedException {
-        try {
-            if (object instanceof CustomConceptVisualizer) {
-                object = ((CustomConceptVisualizer) object).getBaseElement();
-            }
-            element.setProperty(property, object);
-        } catch (PropertyNotFoundException | MultipleBaseElementsException e) {
-            throw new MappingToUmlTranslationFailedException(e.getMessage());
-        }
+    public List<PlantUmlConnection> createConnections(Map<Variable, PlantUmlBlock> elementMap) {
+        List<PlantUmlConnection> connections = createElementConnections(elementMap);
+        connections.addAll(createCustomRelationConnection(elementMap));
+        return connections;
     }
 
-    public List<PlantUmlConnection> createConnections(Map<Variable, PlantUmlBlock> elementMap)
-            throws MappingToUmlTranslationFailedException {
+    private List<PlantUmlConnection> createElementConnections(
+            Map<Variable, PlantUmlBlock> elementMap) {
         List<PlantUmlConnection> connections = new ArrayList<>();
         for (Triplet triplet : elementConnectionTriplets) {
             String key = triplet.getPredicate().getName();
             ElementConnection enumEntry = ElementConnection.valueOf(key);
+
             Variable subject = triplet.getSubject();
             List<String> subjectIds = elementMap.get(subject).getIdentifier();
             // TODO allow non-variables as objects
@@ -139,6 +138,41 @@ public class TripletContainer {
         return connections;
     }
 
+    private List<PlantUmlConnection> createCustomRelationConnection(
+            Map<Variable, PlantUmlBlock> elementMap) {
+        List<PlantUmlConnection> connections = new ArrayList<>();
+        for (Triplet triplet : customRelationConnectionTriplets) {
+            CustomRelation predicate = (CustomRelation) triplet.getPredicate();
+
+            Variable subject = triplet.getSubject();
+            List<String> subjectIds = elementMap.get(subject).getIdentifier();
+            // TODO allow non-variables as objects
+            Variable object = (Variable) triplet.getObject();
+            List<String> objectIds = elementMap.get(object).getIdentifier();
+
+            for (String subjectId : subjectIds) {
+                for (String objectId : objectIds) {
+                    CustomRelationConnection connection =
+                            new CustomRelationConnection(subjectId, objectId, predicate);
+                    connections.add(connection);
+                }
+            }
+        }
+        return connections;
+    }
+
+    private void tryToSetProperty(PlantUmlBlock element, String property, Object object)
+            throws MappingToUmlTranslationFailedException {
+        try {
+            if (object instanceof CustomConceptVisualizer) {
+                object = ((CustomConceptVisualizer) object).getBaseElement();
+            }
+            element.setProperty(property, object);
+        } catch (PropertyNotFoundException | MultipleBaseElementsException e) {
+            throw new MappingToUmlTranslationFailedException(e.getMessage());
+        }
+    }
+
     private void setElementPropertyTriplets(List<Triplet> triplets) {
         elementPropertyTriplets =
                 triplets.stream()
@@ -150,6 +184,13 @@ public class TripletContainer {
         elementConnectionTriplets =
                 triplets.stream()
                         .filter(t -> ElementConnection.isElementConnection(t.getPredicate()))
+                        .collect(Collectors.toList());
+    }
+
+    private void setCustomRelationConnectionTriplets(List<Triplet> triplets) {
+        customRelationConnectionTriplets =
+                triplets.stream()
+                        .filter(t -> t.getPredicate() instanceof CustomRelation)
                         .collect(Collectors.toList());
     }
 }
