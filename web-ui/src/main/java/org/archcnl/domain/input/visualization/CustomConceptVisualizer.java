@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.elements;
+package org.archcnl.domain.input.visualization;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +11,9 @@ import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import org.archcnl.domain.input.visualization.PlantUmlBlock;
-import org.archcnl.domain.input.visualization.UniqueNamePicker;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
+import org.archcnl.domain.input.visualization.elements.CustomConceptElement;
+import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
