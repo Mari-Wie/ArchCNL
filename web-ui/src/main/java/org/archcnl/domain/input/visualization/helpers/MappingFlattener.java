@@ -92,14 +92,18 @@ public class MappingFlattener {
 
             if (predicate instanceof CustomRelation) {
                 CustomRelation relation = (CustomRelation) predicate;
+                Variable subject = triplet.getSubject();
+                Variable object = (Variable) triplet.getObject();
+
                 List<AndTriplets> variants =
                         flattenRelationMappings(
                                 getWhenTriplets(relation),
                                 usedVariables,
-                                Optional.of(thenSubject),
-                                thenObjectOpt,
+                                Optional.of(subject),
+                                Optional.of(object),
                                 getThenSubject(relation),
                                 Optional.of(getThenObject(relation)));
+
                 usedVariables.addAll(getVariablesInUse(variants)); // maybe remove again
                 flattened = cartesianProduct(flattened, variants);
             } else {

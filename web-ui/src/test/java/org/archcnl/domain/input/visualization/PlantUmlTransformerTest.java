@@ -515,7 +515,50 @@ class PlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title circularUseMapping\n"
+                        + "package circularUseMapping1 <<Cloud>> {\n"
+                        + "class \"?class\" as class {\n"
+                        + "}\n"
+                        + "class \"?class2\" as class2 {\n"
+                        + "}\n"
+                        + "class -[dashed]-> class2: <<imports>>\n"
+                        + "class2 -[dashed]-> class: <<imports>>\n"
+                        + "class -[bold]-> class2\n"
+                        + "note on link: circularUse\n"
+                        + "}\n"
+                        + "package circularUseMapping2 <<Cloud>> {\n"
+                        + "class \"?class1\" as class1 {\n"
+                        + "}\n"
+                        + "class \"?class21\" as class21 {\n"
+                        + "	{field} ?attribute1 : ?class1\n"
+                        + "}\n"
+                        + "class1 -[dashed]-> class21: <<imports>>\n"
+                        + "class1 -[bold]-> class21\n"
+                        + "note on link: circularUse\n"
+                        + "}\n"
+                        + "package circularUseMapping3 <<Cloud>> {\n"
+                        + "class \"?class3\" as class3 {\n"
+                        + "	{field} ?attribute : ?class22\n"
+                        + "}\n"
+                        + "class \"?class22\" as class22 {\n"
+                        + "}\n"
+                        + "class22 -[dashed]-> class3: <<imports>>\n"
+                        + "class3 -[bold]-> class22\n"
+                        + "note on link: circularUse\n"
+                        + "}\n"
+                        + "package circularUseMapping4 <<Cloud>> {\n"
+                        + "class \"?class4\" as class4 {\n"
+                        + "	{field} ?attribute2 : ?class23\n"
+                        + "}\n"
+                        + "class \"?class23\" as class23 {\n"
+                        + "	{field} ?attribute11 : ?class4\n"
+                        + "}\n"
+                        + "class4 -[bold]-> class23\n"
+                        + "note on link: circularUse\n"
+                        + "}\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 }
