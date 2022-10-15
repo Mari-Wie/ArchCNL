@@ -1,6 +1,8 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
@@ -36,14 +38,14 @@ class PlantUmlTransformerTest {
 
     @Test
     void givenSuperSimpleMapping_whenTransform_thenCorrectPlantUml()
-            throws MappingToUmlTranslationFailedException, NoMappingException {
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException {
         // given
         String mappingString =
                 "isThenConcept: (?class rdf:type famix:FamixClass) -> (?class rdf:type architecture:ThenConcept)";
         CustomConcept thenConcept = new CustomConcept("ThenConcept", "");
         ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, thenConcept, relationManager, conceptManager);
+                createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -63,7 +65,8 @@ class PlantUmlTransformerTest {
 
     @Test
     void givenSimpleMapping_whenTransform_thenCorrectPlantUml()
-            throws MappingToUmlTranslationFailedException, NoMappingException {
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException {
         // given
         String mappingString =
                 "isThenConcept: (?class rdf:type famix:FamixClass) "
@@ -71,8 +74,7 @@ class PlantUmlTransformerTest {
                         + " -> (?class rdf:type architecture:ThenConcept)";
         CustomConcept thenConcept = new CustomConcept("ThenConcept", "");
         ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, thenConcept, relationManager, conceptManager);
+                createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -92,7 +94,8 @@ class PlantUmlTransformerTest {
 
     @Test
     void givenRelationMapping_whenTransform_thenCorrectPlantUml()
-            throws MappingToUmlTranslationFailedException, NoMappingException {
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException {
         // given
         String mappingString =
                 "weirdRelationMapping: (?namespace famix:namespaceContains ?class)"
@@ -110,8 +113,7 @@ class PlantUmlTransformerTest {
                         + " (?interface famix:isInterface 'true'^^xsd:boolean)"
                         + " (?interface famix:hasModifier 'public') "
                         + " -> (?class architecture:weirdRelation ?interface)";
-        RelationMapping mapping =
-                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+        RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -137,7 +139,8 @@ class PlantUmlTransformerTest {
 
     @Test
     void givenSimpleMappingWithConnections_whenTransform_thenCorrectPlantUml()
-            throws MappingToUmlTranslationFailedException, NoMappingException {
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException {
         // given
         String mappingString =
                 "isThenConcept: (?file rdf:type main:SoftwareArtifactFile)"
@@ -150,8 +153,7 @@ class PlantUmlTransformerTest {
                         + " -> (?class rdf:type architecture:ThenConcept)";
         CustomConcept thenConcept = new CustomConcept("ThenConcept", "");
         ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, thenConcept, relationManager, conceptManager);
+                createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -181,7 +183,8 @@ class PlantUmlTransformerTest {
 
     @Test
     void givenMappingWithConnectionWithinClass_whenTransform_thenCorrectPlantUml()
-            throws MappingToUmlTranslationFailedException, NoMappingException {
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException {
         // given
         String mappingString =
                 "weirdRelationMapping: (?class rdf:type famix:FamixClass)"
@@ -189,8 +192,7 @@ class PlantUmlTransformerTest {
                         + " (?method famix:definesParameter ?parameter)"
                         + " (?method famix:definesVariable ?localVariable)"
                         + " -> (?class architecture:paramRelation ?parameter)";
-        RelationMapping mapping =
-                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+        RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -217,7 +219,7 @@ class PlantUmlTransformerTest {
     @Test
     void givenRelationMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
             throws NoMappingException, MappingToUmlTranslationFailedException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException {
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {
         // given
         CustomConcept controller = new CustomConcept("Controller", "");
         String controllerMappingString =
@@ -236,8 +238,7 @@ class PlantUmlTransformerTest {
                         + " (?controller rdf:type architecture:Controller)"
                         + " (?controller famix:imports ?class)"
                         + " -> (?class architecture:usedByController ?controller)";
-        RelationMapping mapping =
-                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+        RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -263,7 +264,7 @@ class PlantUmlTransformerTest {
     @Test
     void givenConceptMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
             throws NoMappingException, MappingToUmlTranslationFailedException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException {
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {
         // given
         CustomConcept controller = new CustomConcept("Controller", "");
         String controllerMappingString =
@@ -284,8 +285,7 @@ class PlantUmlTransformerTest {
                         + " (?controller famix:imports ?class)"
                         + " -> (?controller rdf:type architechture:ImportingController)";
         ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, importingController, relationManager, conceptManager);
+                createConceptMapping(mappingString, Collections.emptyList(), importingController);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -334,8 +334,7 @@ class PlantUmlTransformerTest {
                         + " -> (?controller rdf:type architechture:ImportingController)";
 
         ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, importingController, relationManager, conceptManager);
+                createConceptMapping(mappingString, Collections.emptyList(), importingController);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -386,11 +385,8 @@ class PlantUmlTransformerTest {
                         + " (?controller rdf:type architecture:Controller)"
                         + " (?class famix:definesNestedType ?controller)";
         ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, importingController, relationManager, conceptManager);
-        AndTriplets secondWhen =
-                MappingParser.parseWhenPart(secondWhenString, relationManager, conceptManager);
-        mapping.addAndTriplets(secondWhen);
+                createConceptMapping(
+                        mappingString, Arrays.asList(secondWhenString), importingController);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -428,7 +424,8 @@ class PlantUmlTransformerTest {
     @Test
     void givenUseMapping_whenTransform_thenCorrectPlantUml()
             throws NoMappingException, MappingToUmlTranslationFailedException,
-                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException,
+                    RelationAlreadyExistsException {
         // given
         String mappingString =
                 "useMapping: (?class rdf:type famix:FamixClass)"
@@ -441,10 +438,10 @@ class PlantUmlTransformerTest {
                         + " (?class famix:definesAttribute ?attribute)"
                         + " (?attribute famix:hasDeclaredType ?class2)";
         RelationMapping mapping =
-                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
-        AndTriplets secondWhen =
-                MappingParser.parseWhenPart(secondWhenString, relationManager, conceptManager);
-        mapping.addAndTriplets(secondWhen);
+                createRelationMapping(mappingString, Arrays.asList(secondWhenString));
+
+        CustomRelation relation = (CustomRelation) mapping.getThenTriplet().getPredicate();
+        relation.setMapping(mapping, conceptManager);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -507,8 +504,7 @@ class PlantUmlTransformerTest {
                 "circularUseMapping: (?class architecture:use ?class2)"
                         + " (?class2 architecture:use ?class)"
                         + " -> (?class architecture:circularUse ?class2)";
-        RelationMapping mapping =
-                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+        RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
@@ -560,5 +556,42 @@ class PlantUmlTransformerTest {
                         + "}\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    private RelationMapping createRelationMapping(
+            String mappingString, List<String> additionalWhens)
+            throws NoTripletException, NoMappingException, UnrelatedMappingException {
+        RelationMapping mapping =
+                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
+        for (String additionalWhenString : additionalWhens) {
+            AndTriplets additionalWhen =
+                    MappingParser.parseWhenPart(
+                            additionalWhenString, relationManager, conceptManager);
+            mapping.addAndTriplets(additionalWhen);
+        }
+
+        // To enable wrapper trick in PlantUmlTransformer
+        CustomRelation relation = (CustomRelation) mapping.getThenTriplet().getPredicate();
+        relation.setMapping(mapping, conceptManager);
+        return mapping;
+    }
+
+    private ConceptMapping createConceptMapping(
+            String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
+            throws NoTripletException, NoMappingException, UnrelatedMappingException {
+        ConceptMapping mapping =
+                MappingParser.parseMapping(
+                        mappingString, thisConcept, relationManager, conceptManager);
+        for (String additionalWhenString : additionalWhens) {
+            AndTriplets additionalWhen =
+                    MappingParser.parseWhenPart(
+                            additionalWhenString, relationManager, conceptManager);
+            mapping.addAndTriplets(additionalWhen);
+        }
+
+        // To enable wrapper trick in PlantUmlTransformer
+        CustomConcept concept = (CustomConcept) mapping.getThenTriplet().getObject();
+        concept.setMapping(mapping);
+        return mapping;
     }
 }

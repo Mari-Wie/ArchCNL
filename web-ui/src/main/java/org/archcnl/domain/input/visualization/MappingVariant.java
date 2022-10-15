@@ -31,8 +31,7 @@ public abstract class MappingVariant {
             Triplet thenTriplet,
             ConceptManager conceptManager,
             Set<Variable> usedVariables,
-            String variantName)
-            throws MappingToUmlTranslationFailedException {
+            String variantName) {
         this.whenTriplets = whenVariant.getTriplets();
         this.thenTriplet = thenTriplet;
         this.conceptManager = conceptManager;

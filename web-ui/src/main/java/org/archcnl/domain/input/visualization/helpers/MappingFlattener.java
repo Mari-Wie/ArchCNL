@@ -15,6 +15,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
@@ -24,14 +25,24 @@ public class MappingFlattener {
     private Variable thenSubject;
     private ObjectType thenObject;
 
-    public MappingFlattener(
+    private MappingFlattener(
             List<AndTriplets> andTriplets, Variable thenSubject, ObjectType thenObject) {
         this.andTriplets = andTriplets;
         this.thenSubject = thenSubject;
         this.thenObject = thenObject;
     }
 
-    public List<AndTriplets> flatten() throws MappingToUmlTranslationFailedException {
+    public static List<AndTriplets> flattenCustomRelations(Mapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        MappingFlattener flattener =
+                new MappingFlattener(
+                        WrappingService.wrapMapping(mapping.getThenTriplet()),
+                        mapping.getThenTriplet().getSubject(),
+                        mapping.getThenTriplet().getObject());
+        return flattener.flatten();
+    }
+
+    private List<AndTriplets> flatten() throws MappingToUmlTranslationFailedException {
         Optional<Variable> thenObjectOpt = Optional.empty();
         if (thenObject instanceof Variable) {
             thenObjectOpt = Optional.of((Variable) thenObject);
@@ -45,7 +56,7 @@ public class MappingFlattener {
                 thenObjectOpt);
     }
 
-    private static List<AndTriplets> flattenRelationMappings(
+    private List<AndTriplets> flattenRelationMappings(
             List<AndTriplets> andTriplets,
             Set<Variable> parentVariables,
             Optional<Variable> parentSubject,
@@ -67,7 +78,7 @@ public class MappingFlattener {
         return flattenedAndTriplets;
     }
 
-    private static List<AndTriplets> flattenWhenTriplets(
+    private List<AndTriplets> flattenWhenTriplets(
             AndTriplets whenTriplets,
             Set<Variable> parentVariables,
             Optional<Variable> parentSubject,
@@ -115,7 +126,7 @@ public class MappingFlattener {
         return flattened.stream().map(AndTriplets::new).collect(Collectors.toList());
     }
 
-    private static Set<Variable> getVariablesInUse(List<AndTriplets> variants) {
+    private Set<Variable> getVariablesInUse(List<AndTriplets> variants) {
         Set<Variable> variables = new HashSet<>();
         for (AndTriplets andTriplets : variants) {
             variables.addAll(getVariablesInUse(andTriplets));
@@ -123,7 +134,7 @@ public class MappingFlattener {
         return variables;
     }
 
-    private static Set<Variable> getVariablesInUse(AndTriplets whenTriplets) {
+    private Set<Variable> getVariablesInUse(AndTriplets whenTriplets) {
         Set<Variable> usedVariables = new HashSet<>();
         for (Triplet triplet : whenTriplets.getTriplets()) {
             usedVariables.add(triplet.getSubject());
@@ -134,7 +145,7 @@ public class MappingFlattener {
         return usedVariables;
     }
 
-    private static AndTriplets useParentOrUniqueVariables(
+    private AndTriplets useParentOrUniqueVariables(
             AndTriplets whenTriplets,
             Set<Variable> usedVariables,
             Optional<Variable> parentSubject,
@@ -168,8 +179,7 @@ public class MappingFlattener {
         return new AndTriplets(modifiedTriplets);
     }
 
-    private static List<List<Triplet>> cartesianProduct(
-            List<List<Triplet>> a, List<AndTriplets> b) {
+    private List<List<Triplet>> cartesianProduct(List<List<Triplet>> a, List<AndTriplets> b) {
         List<List<Triplet>> product = new ArrayList<>();
         for (var listFromA : a) {
             for (var andTripletsFromB : b) {
@@ -181,7 +191,7 @@ public class MappingFlattener {
         return product;
     }
 
-    private static List<AndTriplets> getWhenTriplets(CustomRelation relation)
+    private List<AndTriplets> getWhenTriplets(CustomRelation relation)
             throws MappingToUmlTranslationFailedException {
         Optional<RelationMapping> mapping = relation.getMapping();
         if (mapping.isEmpty()) {
@@ -194,7 +204,7 @@ public class MappingFlattener {
         return mapping.get().getWhenTriplets();
     }
 
-    private static Variable getThenSubject(CustomRelation relation)
+    private Variable getThenSubject(CustomRelation relation)
             throws MappingToUmlTranslationFailedException {
         Optional<RelationMapping> mapping = relation.getMapping();
         if (mapping.isEmpty()) {
@@ -204,7 +214,7 @@ public class MappingFlattener {
         return mapping.get().getThenTriplet().getSubject();
     }
 
-    private static Variable getThenObject(CustomRelation relation)
+    private Variable getThenObject(CustomRelation relation)
             throws MappingToUmlTranslationFailedException {
         Optional<RelationMapping> mapping = relation.getMapping();
         if (mapping.isEmpty()) {

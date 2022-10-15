@@ -17,6 +17,7 @@ import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
+import org.archcnl.domain.input.visualization.helpers.WrappingService;
 
 public class PlantUmlTransformer {
 
@@ -39,7 +40,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        mapping = flattenCustomRelations(mapping);
+        mapping = flattenAndRecreate(mapping);
         CustomConceptVisualizer visualizer =
                 new CustomConceptVisualizer(
                         mapping, conceptManager, Optional.empty(), new HashSet<>());
@@ -48,35 +49,26 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        mapping = flattenCustomRelations(mapping);
+        mapping = flattenAndRecreate(mapping);
         CustomRelationVisualizer visualizer = new CustomRelationVisualizer(mapping, conceptManager);
         return buildPlantUmlCode(visualizer);
     }
 
-    private ConceptMapping flattenCustomRelations(ConceptMapping mapping)
+    private ConceptMapping flattenAndRecreate(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        MappingFlattener flattener =
-                new MappingFlattener(
-                        mapping.getWhenTriplets(),
-                        mapping.getThenTriplet().getSubject(),
-                        mapping.getThenTriplet().getObject());
-        List<AndTriplets> flattenedAndTriplets = flattener.flatten();
+        List<AndTriplets> wrappedAndflattened = MappingFlattener.flattenCustomRelations(mapping);
+        List<AndTriplets> unwrapped = WrappingService.unwrapConceptMapping(wrappedAndflattened);
         Variable thenSubject = mapping.getThenTriplet().getSubject();
         CustomConcept thisConcept = (CustomConcept) mapping.getThenTriplet().getObject();
-        mapping = new ConceptMapping(thenSubject, flattenedAndTriplets, thisConcept);
+        mapping = new ConceptMapping(thenSubject, unwrapped, thisConcept);
         return mapping;
     }
 
-    private RelationMapping flattenCustomRelations(RelationMapping mapping)
+    private RelationMapping flattenAndRecreate(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        MappingFlattener flattener =
-                new MappingFlattener(
-                        mapping.getWhenTriplets(),
-                        mapping.getThenTriplet().getSubject(),
-                        mapping.getThenTriplet().getObject());
-        List<AndTriplets> flattenedAndTriplets = flattener.flatten();
+        List<AndTriplets> flattened = MappingFlattener.flattenCustomRelations(mapping);
         Triplet thenTriplet = mapping.getThenTriplet();
-        mapping = new RelationMapping(thenTriplet, flattenedAndTriplets);
+        mapping = new RelationMapping(thenTriplet, flattened);
         return mapping;
     }
 
