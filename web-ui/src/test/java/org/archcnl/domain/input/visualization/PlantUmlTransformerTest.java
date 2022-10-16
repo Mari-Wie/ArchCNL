@@ -2,6 +2,7 @@ package org.archcnl.domain.input.visualization;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
@@ -555,6 +556,91 @@ class PlantUmlTransformerTest {
                         + "note on link: circularUse\n"
                         + "}\n"
                         + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenDeeplyNestedMapping_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException,
+                    RelationAlreadyExistsException {
+        // given
+        String definesContentString =
+                "definesContentMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?method)"
+                        + " -> (?class architecture:definesContent ?method)";
+        String definesContentSecondWhen =
+                "(?class rdf:type famix:FamixClass)" + " (?class famix:definesAttribute ?att)";
+        RelationMapping definesContentMapping =
+                MappingParser.parseMapping(definesContentString, relationManager, conceptManager);
+        AndTriplets secondWhen =
+                MappingParser.parseWhenPart(
+                        definesContentSecondWhen, relationManager, conceptManager);
+        definesContentMapping.addAndTriplets(secondWhen);
+        CustomRelation definesContentRelation =
+                new CustomRelation("definesContent", "", new HashSet<>(), new HashSet<>());
+        definesContentRelation.setMapping(definesContentMapping, conceptManager);
+        relationManager.addRelation(definesContentRelation);
+
+        CustomConcept doubleConcept = new CustomConcept("Double", "");
+        String doubleMappingString =
+                "isDouble: (?class rdf:type famix:FamixClass)"
+                        + " (?class architecure:definesContent ?content)"
+                        + " -> (?class rdf:type architecture:Double)";
+        String doubleSecondWhenString =
+                "(?class rdf:type famix:FamixClass)" + " (?class famix:imports ?class2)";
+        ConceptMapping doubleMapping =
+                createConceptMapping(
+                        doubleMappingString, Arrays.asList(doubleSecondWhenString), doubleConcept);
+        doubleConcept.setMapping(doubleMapping);
+        conceptManager.addConcept(doubleConcept);
+
+        CustomConcept triple = new CustomConcept("Triple", "");
+        String tripleMappingString =
+                "isTriple: (?class rdf:type famix:FamixClass)"
+                        + " -> (?class rdf:type architecture:Triple)";
+        String tripleSecondWhenString =
+                "(?interface rdf:type famix:FamixClass)"
+                        + " (?class famix:isInterface 'true'xsd:boolean)";
+        String tripleThirdWhenString =
+                "(?abstract rdf:type famix:FamixClass)"
+                        + " (?abstract famix:hasModifier 'abstract')";
+        ConceptMapping tripletMapping =
+                createConceptMapping(
+                        tripleMappingString,
+                        Arrays.asList(tripleSecondWhenString, tripleThirdWhenString),
+                        triple);
+        triple.setMapping(tripletMapping);
+        conceptManager.addConcept(triple);
+
+        String connectionMappingString =
+                "connectionMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?triple rdf:type architecture:Triple)"
+                        + " (?triple famix:imports ?middleClassx)"
+                        + " (?middleClass famix:imports ?class)"
+                        + " -> (?class architecture:connection ?triple)";
+        RelationMapping connectionMapping =
+                createRelationMapping(connectionMappingString, Collections.emptyList());
+        CustomRelation connectionRelation =
+                new CustomRelation("connection", "", new HashSet<>(), new HashSet<>());
+        connectionRelation.setMapping(connectionMapping, conceptManager);
+        relationManager.addRelation(connectionRelation);
+
+        String multipleMappingString =
+                "isMultiple: (?double rdf:type architecture:Double)"
+                        + " (?double architecture:connection ?triple)"
+                        + " -> (?double rdf:type architecture:Multiple)";
+        CustomConcept multipleConcept = new CustomConcept("Multiple", "");
+        ConceptMapping multipleMapping =
+                createConceptMapping(
+                        multipleMappingString, Collections.emptyList(), multipleConcept);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(multipleMapping);
+
+        // then
+        String expectedCode = "";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
