@@ -54,20 +54,23 @@ public class PlantUmlTransformer {
         return buildPlantUmlCode(visualizer);
     }
 
-    private ConceptMapping flattenAndRecreate(ConceptMapping mapping)
+    ConceptMapping flattenAndRecreate(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        List<AndTriplets> wrappedAndflattened = MappingFlattener.flattenCustomRelations(mapping);
-        List<AndTriplets> unwrapped = WrappingService.unwrapConceptMapping(wrappedAndflattened);
+        List<AndTriplets> wrappedAndflattened =
+                MappingFlattener.flattenCustomRelations(
+                        mapping.getWhenTriplets(), mapping.getThenTriplet());
         Variable thenSubject = mapping.getThenTriplet().getSubject();
         CustomConcept thisConcept = (CustomConcept) mapping.getThenTriplet().getObject();
-        mapping = new ConceptMapping(thenSubject, unwrapped, thisConcept);
+        mapping = new ConceptMapping(thenSubject, wrappedAndflattened, thisConcept);
         return mapping;
     }
 
     private RelationMapping flattenAndRecreate(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        List<AndTriplets> flattened = MappingFlattener.flattenCustomRelations(mapping);
+        List<AndTriplets> whenTriplets = WrappingService.wrapMapping(mapping.getThenTriplet());
         Triplet thenTriplet = mapping.getThenTriplet();
+        List<AndTriplets> flattened =
+                MappingFlattener.flattenCustomRelations(whenTriplets, thenTriplet);
         mapping = new RelationMapping(thenTriplet, flattened);
         return mapping;
     }
