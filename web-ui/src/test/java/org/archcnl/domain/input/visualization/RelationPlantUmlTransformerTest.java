@@ -315,23 +315,4 @@ class RelationPlantUmlTransformerTest {
         relation.setMapping(mapping, conceptManager);
         return mapping;
     }
-
-    private ConceptMapping createConceptMapping(
-            String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
-            throws NoTripletException, NoMappingException, UnrelatedMappingException {
-        ConceptMapping mapping =
-                MappingParser.parseMapping(
-                        mappingString, thisConcept, relationManager, conceptManager);
-        for (String additionalWhenString : additionalWhens) {
-            AndTriplets additionalWhen =
-                    MappingParser.parseWhenPart(
-                            additionalWhenString, relationManager, conceptManager);
-            mapping.addAndTriplets(additionalWhen);
-        }
-
-        // To enable wrapper trick in PlantUmlTransformer
-        CustomConcept concept = (CustomConcept) mapping.getThenTriplet().getObject();
-        concept.setMapping(mapping);
-        return mapping;
-    }
 }

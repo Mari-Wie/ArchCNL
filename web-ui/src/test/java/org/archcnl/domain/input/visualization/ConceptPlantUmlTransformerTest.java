@@ -355,7 +355,8 @@ class ConceptPlantUmlTransformerTest {
                         + " (?middleClass famix:imports ?class)"
                         + " -> (?class architecture:connection ?triple)";
         RelationMapping connectionMapping =
-                createRelationMapping(connectionMappingString, Collections.emptyList());
+                MappingParser.parseMapping(
+                        connectionMappingString, relationManager, conceptManager);
         CustomRelation connectionRelation =
                 new CustomRelation("connection", "", new HashSet<>(), new HashSet<>());
         connectionRelation.setMapping(connectionMapping, conceptManager);
@@ -377,24 +378,6 @@ class ConceptPlantUmlTransformerTest {
         // then
         String expectedCode = "";
         Assertions.assertEquals(expectedCode, plantUmlCode);
-    }
-
-    private RelationMapping createRelationMapping(
-            String mappingString, List<String> additionalWhens)
-            throws NoTripletException, NoMappingException, UnrelatedMappingException {
-        RelationMapping mapping =
-                MappingParser.parseMapping(mappingString, relationManager, conceptManager);
-        for (String additionalWhenString : additionalWhens) {
-            AndTriplets additionalWhen =
-                    MappingParser.parseWhenPart(
-                            additionalWhenString, relationManager, conceptManager);
-            mapping.addAndTriplets(additionalWhen);
-        }
-
-        // To enable wrapper trick in PlantUmlTransformer
-        CustomRelation relation = (CustomRelation) mapping.getThenTriplet().getPredicate();
-        relation.setMapping(mapping, conceptManager);
-        return mapping;
     }
 
     private ConceptMapping createConceptMapping(
