@@ -11,7 +11,7 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 public abstract class ClassOrEnum extends NamespaceContent implements DeclaredType, FamixType {
 
     private Optional<String> hasFullQualifiedName = Optional.empty();
-    private ModifierContainer modifierContainer = new ModifierContainer();
+    protected ModifierContainer modifierContainer = new ModifierContainer();
     private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
     private List<Field> definesAttribute = new ArrayList<>();
     private List<Method> definesMethod = new ArrayList<>();

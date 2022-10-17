@@ -17,7 +17,12 @@ public class FamixClass extends ClassOrEnum implements FamixType, DeclaredType {
 
     @Override
     protected String getElementIdentifier() {
-        return isInterface ? "interface" : "class";
+        if (isInterface) {
+            return "interface";
+        } else if (modifierContainer.isAbstract()) {
+            return "abstract";
+        }
+        return "class";
     }
 
     @Override
