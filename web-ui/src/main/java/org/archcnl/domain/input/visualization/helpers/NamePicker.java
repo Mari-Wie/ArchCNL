@@ -13,12 +13,12 @@ public class NamePicker {
             Map<Variable, Variable> renamedVariables,
             Variable oldVariable) {
         Variable newVariable = null;
-        if (!usedVariables.contains(oldVariable)) {
+        if (renamedVariables.containsKey(oldVariable)) {
+            newVariable = renamedVariables.get(oldVariable);
+        } else if (!usedVariables.contains(oldVariable)) {
             newVariable = oldVariable;
             usedVariables.add(newVariable);
             renamedVariables.put(oldVariable, newVariable);
-        } else if (renamedVariables.containsKey(oldVariable)) {
-            newVariable = renamedVariables.get(oldVariable);
         } else {
             int postfix = 0;
             newVariable = oldVariable;

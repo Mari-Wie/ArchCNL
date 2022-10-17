@@ -67,7 +67,7 @@ public class MappingFlattener {
             flattenedAndTriplets.addAll(
                     flattenWhenTriplets(
                             whenTriplets,
-                            parentVariables,
+                            new HashSet<>(parentVariables),
                             parentSubject,
                             parentObject,
                             thenSubject,
@@ -113,12 +113,11 @@ public class MappingFlattener {
                                 getThenSubject(relation),
                                 Optional.of(getThenObject(relation)));
 
-                usedVariables.addAll(getVariablesInUse(variants)); // maybe remove again
+                usedVariables.addAll(getVariablesInUse(variants));
                 flattened = cartesianProduct(flattened, variants);
-            } else {
-                for (List<Triplet> innerList : flattened) {
-                    innerList.add(triplet);
-                }
+            }
+            for (List<Triplet> innerList : flattened) {
+                innerList.add(triplet);
             }
         }
         return flattened.stream().map(AndTriplets::new).collect(Collectors.toList());
@@ -126,8 +125,8 @@ public class MappingFlattener {
 
     private Set<Variable> getVariablesInUse(List<AndTriplets> variants) {
         Set<Variable> variables = new HashSet<>();
-        for (AndTriplets andTriplets : variants) {
-            variables.addAll(getVariablesInUse(andTriplets));
+        for (AndTriplets whenTriplets : variants) {
+            variables.addAll(getVariablesInUse(whenTriplets));
         }
         return variables;
     }
