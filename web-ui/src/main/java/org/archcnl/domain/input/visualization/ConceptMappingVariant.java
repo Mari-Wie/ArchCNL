@@ -35,13 +35,6 @@ public class ConceptMappingVariant extends MappingVariant {
         buildContentParts();
     }
 
-    @Override
-    protected void buildContentParts() throws MappingToUmlTranslationFailedException {
-        MappingTranslator translator = new MappingTranslator(whenTriplets, conceptManager);
-        elementMap = translator.createElementMap(usedVariables);
-        umlElements = translator.translateToPlantUmlModel(elementMap);
-    }
-
     public List<String> getIdentifiers() {
         var element = getThenSubjectBlock();
         if (element instanceof CustomConceptVisualizer) {

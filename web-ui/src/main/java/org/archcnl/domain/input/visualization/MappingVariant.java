@@ -91,5 +91,9 @@ public abstract class MappingVariant {
         return builder.toString();
     }
 
-    protected abstract void buildContentParts() throws MappingToUmlTranslationFailedException;
+    protected void buildContentParts() throws MappingToUmlTranslationFailedException {
+        MappingTranslator translator = new MappingTranslator(whenTriplets, conceptManager);
+        elementMap = translator.createElementMap(usedVariables);
+        umlElements = translator.translateToPlantUmlModel(elementMap);
+    }
 }
