@@ -293,7 +293,7 @@ class ConceptPlantUmlTransformerTest {
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
-    
+
     @Test
     void givenNestedMapping_whenTransform_thenCorrectPlantUml()
             throws NoMappingException, MappingToUmlTranslationFailedException,
@@ -302,10 +302,11 @@ class ConceptPlantUmlTransformerTest {
         // given
         String definesContentString =
                 "definesContentMapping: (?class rdf:type famix:FamixClass)"
-                        + " (?class famix:definesMethod ?method)"
-                        + " -> (?class architecture:definesContent ?method)";
+                        + " (?class famix:definesMethod ?methodOrAttribute)"
+                        + " -> (?class architecture:definesContent ?methodOrAttribute)";
         String definesContentSecondWhen =
-                "(?class rdf:type famix:FamixClass)" + " (?class famix:definesAttribute ?att)";
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesAttribute ?methodOrAttribute)";
         RelationMapping definesContentMapping =
                 MappingParser.parseMapping(definesContentString, relationManager, conceptManager);
         AndTriplets secondWhen =
@@ -326,14 +327,42 @@ class ConceptPlantUmlTransformerTest {
                 "(?class rdf:type famix:FamixClass)" + " (?class famix:imports ?class2)";
         ConceptMapping doubleMapping =
                 createConceptMapping(
-                		doubleMappingString, Arrays.asList(doubleSecondWhenString), doubleConcept);
+                        doubleMappingString, Arrays.asList(doubleSecondWhenString), doubleConcept);
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
         String plantUmlCode = transformer.transformToPlantUml(doubleMapping);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title isDouble\n"
+                        + "package isDouble1 <<Cloud>> {\n"
+                        + "class \"?class\" as class {\n"
+                        + "	{method} ?content()\n"
+                        + "}\n"
+                        + "class -[bold]-> class::content\n"
+                        + "note on link: definesContent\n"
+                        + "}\n"
+                        + "package isDouble2 <<Cloud>> {\n"
+                        + "class \"?class1\" as class1 {\n"
+                        + "	{field} ?content1\n"
+                        + "}\n"
+                        + "class1 -[bold]-> class1::content1\n"
+                        + "note on link: definesContent\n"
+                        + "}\n"
+                        + "package isDouble3 <<Cloud>> {\n"
+                        + "class \"?class2\" as class2 {\n"
+                        + "}\n"
+                        + "class \"?class21\" as class21 {\n"
+                        + "}\n"
+                        + "class2 -[dashed]-> class21: <<imports>>\n"
+                        + "}\n"
+                        + "note \"Double\" as Double\n"
+                        + "Double .. class\n"
+                        + "Double .. class1\n"
+                        + "Double .. class2\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
@@ -345,10 +374,11 @@ class ConceptPlantUmlTransformerTest {
         // given
         String definesContentString =
                 "definesContentMapping: (?class rdf:type famix:FamixClass)"
-                        + " (?class famix:definesMethod ?method)"
-                        + " -> (?class architecture:definesContent ?method)";
+                        + " (?class famix:definesMethod ?methodOrAttribute)"
+                        + " -> (?class architecture:definesContent ?methodOrAttribute)";
         String definesContentSecondWhen =
-                "(?class rdf:type famix:FamixClass)" + " (?class famix:definesAttribute ?att)";
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesAttribute ?methodOrAttribute)";
         RelationMapping definesContentMapping =
                 MappingParser.parseMapping(definesContentString, relationManager, conceptManager);
         AndTriplets secondWhen =
@@ -378,11 +408,10 @@ class ConceptPlantUmlTransformerTest {
                 "isTriple: (?class rdf:type famix:FamixClass)"
                         + " -> (?class rdf:type architecture:Triple)";
         String tripleSecondWhenString =
-                "(?interface rdf:type famix:FamixClass)"
-                        + " (?class famix:isInterface 'true'xsd:boolean)";
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?class famix:isInterface 'true'^^xsd:boolean)";
         String tripleThirdWhenString =
-                "(?abstract rdf:type famix:FamixClass)"
-                        + " (?abstract famix:hasModifier 'abstract')";
+                "(?class rdf:type famix:FamixClass)" + " (?class famix:hasModifier 'abstract')";
         ConceptMapping tripletMapping =
                 createConceptMapping(
                         tripleMappingString,
@@ -394,7 +423,7 @@ class ConceptPlantUmlTransformerTest {
         String connectionMappingString =
                 "connectionMapping: (?class rdf:type famix:FamixClass)"
                         + " (?triple rdf:type architecture:Triple)"
-                        + " (?triple famix:imports ?middleClassx)"
+                        + " (?triple famix:imports ?middleClass)"
                         + " (?middleClass famix:imports ?class)"
                         + " -> (?class architecture:connection ?triple)";
         RelationMapping connectionMapping =
@@ -419,7 +448,81 @@ class ConceptPlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(multipleMapping);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title isMultiple\n"
+                        + "package isDouble1 <<Cloud>> {\n"
+                        + "class \"?double1\" as double1 {\n"
+                        + "	{method} ?content()\n"
+                        + "}\n"
+                        + "double1 -[bold]-> double1::content\n"
+                        + "note on link: definesContent\n"
+                        + "}\n"
+                        + "package isDouble2 <<Cloud>> {\n"
+                        + "class \"?double2\" as double2 {\n"
+                        + "	{field} ?content1\n"
+                        + "}\n"
+                        + "double2 -[bold]-> double2::content1\n"
+                        + "note on link: definesContent\n"
+                        + "}\n"
+                        + "package isDouble3 <<Cloud>> {\n"
+                        + "class \"?double3\" as double3 {\n"
+                        + "}\n"
+                        + "class \"?class2\" as class2 {\n"
+                        + "}\n"
+                        + "double3 -[dashed]-> class2: <<imports>>\n"
+                        + "}\n"
+                        + "note \"Double\" as Double\n"
+                        + "Double .. double1\n"
+                        + "Double .. double2\n"
+                        + "Double .. double3\n"
+                        + "package isTriple1 <<Cloud>> {\n"
+                        + "class \"?triple1\" as triple1 {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "package isTriple2 <<Cloud>> {\n"
+                        + "interface \"?triple2\" as triple2 {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "package isTriple3 <<Cloud>> {\n"
+                        + "abstract \"?triple3\" as triple3 {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "note \"Triple\" as Triple\n"
+                        + "Triple .. triple1\n"
+                        + "Triple .. triple2\n"
+                        + "Triple .. triple3\n"
+                        + "class \"?middleClass\" as middleClass {\n"
+                        + "}\n"
+                        + "triple1 -[dashed]-> middleClass: <<imports>>\n"
+                        + "triple2 -[dashed]-> middleClass: <<imports>>\n"
+                        + "triple3 -[dashed]-> middleClass: <<imports>>\n"
+                        + "middleClass -[dashed]-> double1: <<imports>>\n"
+                        + "middleClass -[dashed]-> double2: <<imports>>\n"
+                        + "middleClass -[dashed]-> double3: <<imports>>\n"
+                        + "double1 -[bold]-> triple1\n"
+                        + "note on link: connection\n"
+                        + "double1 -[bold]-> triple2\n"
+                        + "note on link: connection\n"
+                        + "double1 -[bold]-> triple3\n"
+                        + "note on link: connection\n"
+                        + "double2 -[bold]-> triple1\n"
+                        + "note on link: connection\n"
+                        + "double2 -[bold]-> triple2\n"
+                        + "note on link: connection\n"
+                        + "double2 -[bold]-> triple3\n"
+                        + "note on link: connection\n"
+                        + "double3 -[bold]-> triple1\n"
+                        + "note on link: connection\n"
+                        + "double3 -[bold]-> triple2\n"
+                        + "note on link: connection\n"
+                        + "double3 -[bold]-> triple3\n"
+                        + "note on link: connection\n"
+                        + "note \"Multiple\" as Multiple\n"
+                        + "Multiple .. double1\n"
+                        + "Multiple .. double2\n"
+                        + "Multiple .. double3\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 

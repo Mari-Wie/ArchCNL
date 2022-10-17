@@ -263,6 +263,10 @@ class RelationPlantUmlTransformerTest {
                         + "class -[dashed]-> class2: <<imports>>\n"
                         + "class2 -[dashed]-> class: <<imports>>\n"
                         + "class -[bold]-> class2\n"
+                        + "note on link: use\n"
+                        + "class2 -[bold]-> class\n"
+                        + "note on link: use\n"
+                        + "class -[bold]-> class2\n"
                         + "note on link: circularUse\n"
                         + "}\n"
                         + "package circularUseMapping2 <<Cloud>> {\n"
@@ -272,6 +276,10 @@ class RelationPlantUmlTransformerTest {
                         + "	{field} ?attribute1 : ?class1\n"
                         + "}\n"
                         + "class1 -[dashed]-> class21: <<imports>>\n"
+                        + "class1 -[bold]-> class21\n"
+                        + "note on link: use\n"
+                        + "class21 -[bold]-> class1\n"
+                        + "note on link: use\n"
                         + "class1 -[bold]-> class21\n"
                         + "note on link: circularUse\n"
                         + "}\n"
@@ -283,6 +291,10 @@ class RelationPlantUmlTransformerTest {
                         + "}\n"
                         + "class22 -[dashed]-> class3: <<imports>>\n"
                         + "class3 -[bold]-> class22\n"
+                        + "note on link: use\n"
+                        + "class22 -[bold]-> class3\n"
+                        + "note on link: use\n"
+                        + "class3 -[bold]-> class22\n"
                         + "note on link: circularUse\n"
                         + "}\n"
                         + "package circularUseMapping4 <<Cloud>> {\n"
@@ -292,6 +304,10 @@ class RelationPlantUmlTransformerTest {
                         + "class \"?class23\" as class23 {\n"
                         + "	{field} ?attribute11 : ?class4\n"
                         + "}\n"
+                        + "class4 -[bold]-> class23\n"
+                        + "note on link: use\n"
+                        + "class23 -[bold]-> class4\n"
+                        + "note on link: use\n"
                         + "class4 -[bold]-> class23\n"
                         + "note on link: circularUse\n"
                         + "}\n"
@@ -307,10 +323,10 @@ class RelationPlantUmlTransformerTest {
         // given
         String definesContentString =
                 "definesContentMapping: (?class rdf:type famix:FamixClass)"
-                        + " (?class famix:definesMethod ?method)"
-                        + " -> (?class architecture:definesContent ?method)";
+                        + " (?class famix:definesMethod ?methodOrAttribute)"
+                        + " -> (?class architecture:definesContent ?methodOrAttribute)";
         String definesContentSecondWhen =
-                "(?class rdf:type famix:FamixClass) (?class famix:definesAttribute ?att)";
+                "(?class rdf:type famix:FamixClass) (?class famix:definesAttribute ?methodOrAttribute)";
         RelationMapping definesContentMapping =
                 MappingParser.parseMapping(definesContentString, relationManager, conceptManager);
         AndTriplets secondWhen =
@@ -343,19 +359,23 @@ class RelationPlantUmlTransformerTest {
                         + "title withContentMapping\n"
                         + "package withContentMapping1 <<Cloud>> {\n"
                         + "class \"?class\" as class {\n"
-                        + "	{method} ?method()\n"
+                        + "	{method} ?content()\n"
                         + "}\n"
                         + "class \"?class2\" as class2 {\n"
                         + "}\n"
+                        + "class -[bold]-> class::content\n"
+                        + "note on link: definesContent\n"
                         + "class -[bold]-> class2\n"
                         + "note on link: withContent\n"
                         + "}\n"
                         + "package withContentMapping2 <<Cloud>> {\n"
                         + "class \"?class1\" as class1 {\n"
-                        + "	{field} ?att\n"
+                        + "	{field} ?content1\n"
                         + "}\n"
                         + "class \"?class21\" as class21 {\n"
                         + "}\n"
+                        + "class1 -[bold]-> class1::content1\n"
+                        + "note on link: definesContent\n"
                         + "class1 -[bold]-> class21\n"
                         + "note on link: withContent\n"
                         + "}\n"
