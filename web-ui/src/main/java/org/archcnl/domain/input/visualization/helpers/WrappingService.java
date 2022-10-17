@@ -2,7 +2,6 @@ package org.archcnl.domain.input.visualization.helpers;
 
 import java.util.Arrays;
 import java.util.List;
-import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 
@@ -20,10 +19,5 @@ public class WrappingService {
         // This workaround requires the CustomConept/CustomRelation in the thenTriplet
         // to have a reference to its mapping.
         return Arrays.asList(new AndTriplets(Arrays.asList(thenTriplet)));
-    }
-
-    public static List<AndTriplets> unwrapConceptMapping(List<AndTriplets> wrappedWhenTriplets) {
-        Triplet thenTriplet = wrappedWhenTriplets.get(0).getTriplets().get(0);
-        return ((CustomConcept) thenTriplet.getObject()).getMapping().get().getWhenTriplets();
     }
 }

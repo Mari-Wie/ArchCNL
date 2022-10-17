@@ -39,7 +39,6 @@ public class MappingTranslator {
 
     public List<PlantUmlPart> translateToPlantUmlModel(Map<Variable, PlantUmlBlock> elementMap)
             throws MappingToUmlTranslationFailedException {
-
         TripletContainer container = new TripletContainer(whenTriplets);
         container.applyElementProperties(elementMap);
         List<PlantUmlBlock> topLevelElements = getTopLevelElements(elementMap);
@@ -75,6 +74,7 @@ public class MappingTranslator {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
+                mapping = new PlantUmlTransformer(conceptManager).flattenAndRecreate(mapping);
                 CustomConceptVisualizer visualizer =
                         new CustomConceptVisualizer(
                                 mapping, conceptManager, Optional.of(variable), usedVariables);
