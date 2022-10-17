@@ -74,14 +74,20 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
             builder.append(variant.buildPlantUmlCode(printBorder));
             builder.append("\n");
         }
+        builder.append(buildConceptSection());
+        return builder.toString();
+    }
+
+    private String buildConceptSection() {
+        StringBuilder builder = new StringBuilder();
         builder.append(conceptElement.buildPlantUmlCode());
         for (ConceptMappingVariant variant : variants) {
-            builder.append("\n");
             List<String> conceptIds = conceptElement.getIdentifiers();
             List<String> objectIds = variant.getIdentifiers();
             for (String conceptId : conceptIds) {
                 for (String objectId : objectIds) {
                     BasicConnection connection = new BasicConnection(conceptId, objectId);
+                    builder.append("\n");
                     builder.append(connection.buildPlantUmlCode());
                 }
             }
