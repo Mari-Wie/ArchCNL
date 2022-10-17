@@ -293,6 +293,49 @@ class ConceptPlantUmlTransformerTest {
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
+    
+    @Test
+    void givenNestedMapping_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException,
+                    RelationAlreadyExistsException {
+        // given
+        String definesContentString =
+                "definesContentMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?method)"
+                        + " -> (?class architecture:definesContent ?method)";
+        String definesContentSecondWhen =
+                "(?class rdf:type famix:FamixClass)" + " (?class famix:definesAttribute ?att)";
+        RelationMapping definesContentMapping =
+                MappingParser.parseMapping(definesContentString, relationManager, conceptManager);
+        AndTriplets secondWhen =
+                MappingParser.parseWhenPart(
+                        definesContentSecondWhen, relationManager, conceptManager);
+        definesContentMapping.addAndTriplets(secondWhen);
+        CustomRelation definesContentRelation =
+                new CustomRelation("definesContent", "", new HashSet<>(), new HashSet<>());
+        definesContentRelation.setMapping(definesContentMapping, conceptManager);
+        relationManager.addRelation(definesContentRelation);
+
+        CustomConcept doubleConcept = new CustomConcept("Double", "");
+        String doubleMappingString =
+                "isDouble: (?class rdf:type famix:FamixClass)"
+                        + " (?class architecure:definesContent ?content)"
+                        + " -> (?class rdf:type architecture:Double)";
+        String doubleSecondWhenString =
+                "(?class rdf:type famix:FamixClass)" + " (?class famix:imports ?class2)";
+        ConceptMapping doubleMapping =
+                createConceptMapping(
+                		doubleMappingString, Arrays.asList(doubleSecondWhenString), doubleConcept);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(doubleMapping);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
 
     @Test
     void givenDeeplyNestedMapping_whenTransform_thenCorrectPlantUml()

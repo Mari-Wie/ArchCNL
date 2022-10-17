@@ -2,6 +2,7 @@ package org.archcnl.domain.input.visualization;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
@@ -295,6 +296,77 @@ class RelationPlantUmlTransformerTest {
                         + "note on link: circularUse\n"
                         + "}\n"
                         + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+    
+    @Test
+    void givenNestedMapping_whenTransform_thenCorrectPlantUml()
+            throws NoMappingException, MappingToUmlTranslationFailedException,
+                    ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException,
+                    RelationAlreadyExistsException {
+        // given
+        String definesContentString =
+                "definesContentMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?method)"
+                        + " -> (?class architecture:definesContent ?method)";
+        String definesContentSecondWhen =
+                "(?class rdf:type famix:FamixClass) (?class famix:definesAttribute ?att)";
+        RelationMapping definesContentMapping =
+                MappingParser.parseMapping(definesContentString, relationManager, conceptManager);
+        AndTriplets secondWhen =
+                MappingParser.parseWhenPart(
+                        definesContentSecondWhen, relationManager, conceptManager);
+        definesContentMapping.addAndTriplets(secondWhen);
+        CustomRelation definesContentRelation =
+                new CustomRelation("definesContent", "", new HashSet<>(), new HashSet<>());
+        definesContentRelation.setMapping(definesContentMapping, conceptManager);
+        relationManager.addRelation(definesContentRelation);
+
+        String withContentMappingString =
+                "withContentMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class architecure:definesContent ?content)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " -> (?class architecture:withContent ?class2)";
+        String withContentSecondWhenString =
+                "(?class rdf:type famix:FamixClass) (?class famix:imports ?class2)";
+        RelationMapping doubleMapping =
+                createRelationMapping(withContentMappingString, Arrays.asList(withContentSecondWhenString));
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(doubleMapping);
+
+        // then
+        String expectedCode = "@startuml\n"
+        		+ "title withContentMapping\n"
+        		+ "package withContentMapping1 <<Cloud>> {\n"
+        		+ "class \"?class\" as class {\n"
+        		+ "	{method} ?method()\n"
+        		+ "}\n"
+        		+ "class \"?class2\" as class2 {\n"
+        		+ "}\n"
+        		+ "class -[bold]-> class2\n"
+        		+ "note on link: withContent\n"
+        		+ "}\n"
+        		+ "package withContentMapping2 <<Cloud>> {\n"
+        		+ "class \"?class1\" as class1 {\n"
+        		+ "	{field} ?att\n"
+        		+ "}\n"
+        		+ "class \"?class21\" as class21 {\n"
+        		+ "}\n"
+        		+ "class1 -[bold]-> class21\n"
+        		+ "note on link: withContent\n"
+        		+ "}\n"
+        		+ "package withContentMapping3 <<Cloud>> {\n"
+        		+ "class \"?class3\" as class3 {\n"
+        		+ "}\n"
+        		+ "class \"?class22\" as class22 {\n"
+        		+ "}\n"
+        		+ "class3 -[dashed]-> class22: <<imports>>\n"
+        		+ "class3 -[bold]-> class22\n"
+        		+ "note on link: withContent\n"
+        		+ "}\n"
+        		+ "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
