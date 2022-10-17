@@ -122,10 +122,10 @@ public class TripletContainer {
             ElementConnection enumEntry = ElementConnection.valueOf(key);
 
             Variable subject = triplet.getSubject();
-            List<String> subjectIds = elementMap.get(subject).getIdentifier();
+            List<String> subjectIds = elementMap.get(subject).getIdentifiers();
             // TODO allow non-variables as objects
             Variable object = (Variable) triplet.getObject();
-            List<String> objectIds = elementMap.get(object).getIdentifier();
+            List<String> objectIds = elementMap.get(object).getIdentifiers();
 
             for (String subjectId : subjectIds) {
                 for (String objectId : objectIds) {
@@ -144,10 +144,10 @@ public class TripletContainer {
             CustomRelation predicate = (CustomRelation) triplet.getPredicate();
 
             Variable subject = triplet.getSubject();
-            List<String> subjectIds = elementMap.get(subject).getIdentifier();
+            List<String> subjectIds = elementMap.get(subject).getIdentifiers();
             // TODO allow non-variables as objects
             Variable object = (Variable) triplet.getObject();
-            List<String> objectIds = elementMap.get(object).getIdentifier();
+            List<String> objectIds = elementMap.get(object).getIdentifiers();
 
             for (String subjectId : subjectIds) {
                 for (String objectId : objectIds) {

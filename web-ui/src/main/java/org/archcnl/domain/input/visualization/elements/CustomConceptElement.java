@@ -29,7 +29,7 @@ public class CustomConceptElement extends PlantUmlElement {
         builder.append("note ");
         builder.append("\"" + concept.getName() + "\"");
         builder.append(" as ");
-        builder.append(getIdentifier().get(0));
+        builder.append(getIdentifiers().get(0));
         return builder.toString();
     }
 }

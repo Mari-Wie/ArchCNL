@@ -77,11 +77,13 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
         builder.append(conceptElement.buildPlantUmlCode());
         for (ConceptMappingVariant variant : variants) {
             builder.append("\n");
-            List<String> conceptIds = conceptElement.getIdentifier();
-            String objectId = variant.getIdentifier();
+            List<String> conceptIds = conceptElement.getIdentifiers();
+            List<String> objectIds = variant.getIdentifiers();
             for (String conceptId : conceptIds) {
-                BasicConnection connection = new BasicConnection(conceptId, objectId);
-                builder.append(connection.buildPlantUmlCode());
+                for (String objectId : objectIds) {
+                    BasicConnection connection = new BasicConnection(conceptId, objectId);
+                    builder.append(connection.buildPlantUmlCode());
+                }
             }
         }
         return builder.toString();
@@ -106,9 +108,10 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
     }
 
     @Override
-    public List<String> getIdentifier() {
+    public List<String> getIdentifiers() {
         return variants.stream()
-                .map(ConceptMappingVariant::getIdentifier)
+                .map(ConceptMappingVariant::getIdentifiers)
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 

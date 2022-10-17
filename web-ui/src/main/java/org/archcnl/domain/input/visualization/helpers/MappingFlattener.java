@@ -15,7 +15,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
@@ -32,13 +31,12 @@ public class MappingFlattener {
         this.thenObject = thenObject;
     }
 
-    public static List<AndTriplets> flattenCustomRelations(Mapping mapping)
+    public static List<AndTriplets> flattenCustomRelations(
+            List<AndTriplets> whenTriplets, Triplet thenTriplet)
             throws MappingToUmlTranslationFailedException {
         MappingFlattener flattener =
                 new MappingFlattener(
-                        WrappingService.wrapMapping(mapping.getThenTriplet()),
-                        mapping.getThenTriplet().getSubject(),
-                        mapping.getThenTriplet().getObject());
+                        whenTriplets, thenTriplet.getSubject(), thenTriplet.getObject());
         return flattener.flatten();
     }
 

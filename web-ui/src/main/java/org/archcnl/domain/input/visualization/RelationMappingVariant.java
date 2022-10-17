@@ -31,8 +31,8 @@ public class RelationMappingVariant extends MappingVariant {
         elementMap = translator.createElementMap(usedVariables);
         umlElements = translator.translateToPlantUmlModel(elementMap);
 
-        List<String> subjectIds = elementMap.get(thenTriplet.getSubject()).getIdentifier();
-        List<String> objectIds = elementMap.get(thenTriplet.getObject()).getIdentifier();
+        List<String> subjectIds = elementMap.get(thenTriplet.getSubject()).getIdentifiers();
+        List<String> objectIds = elementMap.get(thenTriplet.getObject()).getIdentifiers();
         for (String subjectId : subjectIds) {
             for (String objectId : objectIds) {
                 CustomRelation relation = (CustomRelation) thenTriplet.getPredicate();

@@ -22,7 +22,8 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
         return !requiresParent || parent.isPresent();
     }
 
-    public List<String> getIdentifier() {
+    @Override
+    public List<String> getIdentifiers() {
         if (!this.requiresParent) {
             return Arrays.asList(variable.getName());
         }
@@ -34,7 +35,7 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
             current = current.parent.get();
         }
         List<String> identifiers = new ArrayList<>();
-        for (String parentIdentifier : current.getIdentifier()) {
+        for (String parentIdentifier : current.getIdentifiers()) {
             identifiers.add(
                     parentIdentifier + "::" + removeNonAlphaNumericSymbols(buildNameSection()));
         }

@@ -1,6 +1,7 @@
 package org.archcnl.domain.input.visualization;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -41,12 +42,12 @@ public class ConceptMappingVariant extends MappingVariant {
         umlElements = translator.translateToPlantUmlModel(elementMap);
     }
 
-    public String getIdentifier() {
+    public List<String> getIdentifiers() {
         var element = getThenSubjectBlock();
         if (element instanceof CustomConceptVisualizer) {
-            return ((CustomConceptVisualizer) element).getIdentifier().get(0);
+            return ((CustomConceptVisualizer) element).getIdentifiers();
         }
-        return thenTriplet.getSubject().getName();
+        return Arrays.asList(thenTriplet.getSubject().getName());
     }
 
     public void setProperty(String property, Object object) throws PropertyNotFoundException {

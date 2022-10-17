@@ -11,5 +11,5 @@ public interface PlantUmlBlock extends PlantUmlPart {
 
     public boolean hasRequiredParent();
 
-    public List<String> getIdentifier();
+    public List<String> getIdentifiers();
 }
