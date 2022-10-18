@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.PlantUmlBlock;
+import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.helpers.NamePicker;
 
 public abstract class PlantUmlElement implements PlantUmlBlock {
 
-    private Optional<PlantUmlElement> parent = Optional.empty();
+    protected Optional<PlantUmlElement> parent = Optional.empty();
     private final boolean requiresParent;
     protected final Variable variable;
 
@@ -18,8 +20,22 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
         this.requiresParent = requiresParent;
     }
 
-    public boolean hasRequiredParent() {
+    private boolean hasParentIfRequired() {
         return !requiresParent || parent.isPresent();
+    }
+
+    public PlantUmlBlock createRequiredParentOrReturnSelf() {
+        if (hasParentIfRequired()) {
+            return this;
+        }
+        try {
+            String parentName = NamePicker.getNextGeneratedName();
+            PlantUmlElement createdParent = createParent(parentName);
+            setParent(createdParent);
+            return createdParent.createRequiredParentOrReturnSelf();
+        } catch (PropertyNotFoundException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -59,4 +75,7 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
     }
 
     protected abstract String buildNameSection();
+
+    protected abstract PlantUmlElement createParent(String parentName)
+            throws PropertyNotFoundException;
 }

@@ -9,7 +9,7 @@ public interface PlantUmlBlock extends PlantUmlPart {
 
     public boolean hasParentBeenFound();
 
-    public boolean hasRequiredParent();
-
     public List<String> getIdentifiers();
+
+    public PlantUmlBlock createRequiredParentOrReturnSelf();
 }

@@ -42,4 +42,9 @@ public class PrimitiveType extends PlantUmlElement implements DeclaredType {
         }
         return " \"" + hasName.get() + "\" as ";
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        throw new UnsupportedOperationException();
+    }
 }

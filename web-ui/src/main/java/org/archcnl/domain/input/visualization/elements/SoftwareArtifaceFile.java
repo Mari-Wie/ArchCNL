@@ -37,4 +37,9 @@ public class SoftwareArtifaceFile extends PlantUmlElement {
     protected String buildNameSection() {
         return variable.getName();
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        throw new UnsupportedOperationException();
+    }
 }

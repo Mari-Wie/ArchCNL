@@ -44,4 +44,11 @@ public class AnnotationInstanceAttribute extends PlantUmlElement {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        AnnotationInstance annotationInstance = new AnnotationInstance(new Variable(parentName));
+        annotationInstance.setProperty("hasAnnotationInstanceAttribute", this);
+        return annotationInstance;
+    }
 }

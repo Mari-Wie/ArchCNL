@@ -6,6 +6,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 
 public class NamePicker {
 
+    private static final String GENERATED_NAME_PREFIX = "GENERATED";
+    private static int generatedNamesCounter = 0;
+
     private NamePicker() {}
 
     public static Variable pickUniqueVariable(
@@ -30,5 +33,10 @@ public class NamePicker {
             usedVariables.add(newVariable);
         }
         return newVariable;
+    }
+
+    public static String getNextGeneratedName() {
+        generatedNamesCounter++;
+        return GENERATED_NAME_PREFIX + generatedNamesCounter;
     }
 }

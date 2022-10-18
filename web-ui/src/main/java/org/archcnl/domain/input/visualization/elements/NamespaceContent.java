@@ -3,6 +3,7 @@ package org.archcnl.domain.input.visualization.elements;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
 public abstract class NamespaceContent extends PlantUmlElement {
 
@@ -47,5 +48,10 @@ public abstract class NamespaceContent extends PlantUmlElement {
 
     protected void increaseIndentation() {
         indentationDepth++;
+    }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        throw new UnsupportedOperationException();
     }
 }

@@ -125,13 +125,8 @@ public class MappingTranslator {
     }
 
     private List<PlantUmlBlock> createRequiredParents(List<PlantUmlBlock> topLevelElements) {
-        // TODO implement creation
-        for (PlantUmlBlock element : topLevelElements) {
-            if (!element.hasRequiredParent()) {
-                throw new RuntimeException(
-                        element.buildPlantUmlCode() + " is missing a required parent");
-            }
-        }
-        return topLevelElements;
+        return topLevelElements.stream()
+                .map(PlantUmlBlock::createRequiredParentOrReturnSelf)
+                .collect(Collectors.toList());
     }
 }

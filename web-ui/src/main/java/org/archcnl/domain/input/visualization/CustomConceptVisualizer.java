@@ -16,7 +16,6 @@ import org.archcnl.domain.input.visualization.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.elements.CustomConceptElement;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 
@@ -104,13 +103,11 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
 
     @Override
     public boolean hasParentBeenFound() {
-        // TODO check how this works with below class level mappings
-        return false;
-    }
-
-    @Override
-    public boolean hasRequiredParent() {
-        return true;
+        boolean result = true;
+        for (PlantUmlElement element : getBaseElements()) {
+            result = result && element.hasParentBeenFound();
+        }
+        return result;
     }
 
     @Override
@@ -121,15 +118,23 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
                 .collect(Collectors.toList());
     }
 
-    public PlantUmlElement getBaseElement() throws MultipleBaseElementsException {
-        if (moreThanOneVariant()) {
-            throw new MultipleBaseElementsException(mappingName + " has multiple base elements");
-        }
-        return variants.get(0).getBaseElement();
+    public List<PlantUmlElement> getBaseElements() {
+        return variants.stream()
+                .map(ConceptMappingVariant::getBaseElements)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
     @Override
     protected boolean moreThanOneVariant() {
         return variants.size() > 1;
+    }
+
+    @Override
+    public PlantUmlBlock createRequiredParentOrReturnSelf() {
+        for (var variant : variants) {
+            variant.getBaseElements().forEach(PlantUmlBlock::createRequiredParentOrReturnSelf);
+        }
+        return this;
     }
 }

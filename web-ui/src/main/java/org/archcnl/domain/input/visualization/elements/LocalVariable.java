@@ -59,4 +59,9 @@ public class LocalVariable extends PlantUmlElement {
                 throw new PropertyNotFoundException(property + " couldn't be set");
         }
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        throw new UnsupportedOperationException();
+    }
 }

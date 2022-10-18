@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.elements;
 
+import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
@@ -47,5 +48,17 @@ public class Parameter extends PlantUmlElement {
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
         }
+    }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        Method parent = new Method(new Variable(parentName));
+        parent.setProperty("definesParameter", this);
+        return parent;
+    }
+
+    @Override
+    public List<String> getIdentifiers() {
+        return parent.get().getIdentifiers();
     }
 }

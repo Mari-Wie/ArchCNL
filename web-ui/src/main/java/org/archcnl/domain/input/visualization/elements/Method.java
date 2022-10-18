@@ -116,4 +116,11 @@ public class Method extends PlantUmlElement {
                 throw new PropertyNotFoundException(property + " couldn't be set");
         }
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        FamixClass parent = new FamixClass(new Variable(parentName));
+        parent.setProperty("definesMethod", this);
+        return parent;
+    }
 }

@@ -231,6 +231,53 @@ class ConceptPlantUmlTransformerTest {
     }
 
     @Test
+    void givenNestedMappingWithMissingParent_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, RelationAlreadyExistsException {
+        // given
+        String noParentString =
+                "noParentMapping: (?method rdf:type famix:Method)"
+                        + " (?method famix:definesParameter ?parameter)"
+                        + " (?parameter famix:hasName 'flag')"
+                        + " -> (?method architecture:noParent ?parameter)";
+        RelationMapping noParentMapping =
+                MappingParser.parseMapping(noParentString, relationManager, conceptManager);
+        CustomRelation noParentRelation =
+                new CustomRelation("noParent", "", new HashSet<>(), new HashSet<>());
+        noParentRelation.setMapping(noParentMapping, conceptManager);
+        relationManager.addRelation(noParentRelation);
+
+        CustomConcept thisConcept = new CustomConcept("MainWithoutParent", "");
+        String mappingString =
+                "isMainWithoutParent: (?method architecture:noParent ?parameter)"
+                        + " (?method famix:hasName 'main')"
+                        + " (?parameter famix:hasDeclaredType ?type)"
+                        + " -> (?method rdf:type architecture:MainWithoutParent)";
+        ConceptMapping mapping =
+                createConceptMapping(mappingString, Collections.emptyList(), thisConcept);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title isMainWithoutParent\n"
+                        + "class \"?GENERATED1\" as GENERATED1 {\n"
+                        + "	{method} main(flag:?type)\n"
+                        + "}\n"
+                        + "class \"?type\" as type {\n"
+                        + "}\n"
+                        + "GENERATED1::main -[bold]-> GENERATED1::main\n"
+                        + "note on link: noParent\n"
+                        + "note \"MainWithoutParent\" as MainWithoutParent\n"
+                        + "MainWithoutParent .. GENERATED1::main\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
     void givenDoubleConceptMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
             throws NoMappingException, MappingToUmlTranslationFailedException,
                     ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {

@@ -60,4 +60,11 @@ public class AnnotationInstance extends PlantUmlElement {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        FamixClass famixClass = new FamixClass(new Variable(parentName));
+        famixClass.setProperty("hasAnnotationInstance", this);
+        return famixClass;
+    }
 }

@@ -13,7 +13,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.exceptions.MultipleBaseElementsException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
 public class ConceptMappingVariant extends MappingVariant {
@@ -40,7 +39,7 @@ public class ConceptMappingVariant extends MappingVariant {
         if (element instanceof CustomConceptVisualizer) {
             return ((CustomConceptVisualizer) element).getIdentifiers();
         }
-        return Arrays.asList(thenTriplet.getSubject().getName());
+        return elementMap.get(thenTriplet.getSubject()).getIdentifiers();
     }
 
     public void setProperty(String property, Object object) throws PropertyNotFoundException {
@@ -68,12 +67,12 @@ public class ConceptMappingVariant extends MappingVariant {
         thenTriplet = new Triplet(thenSubject, thenPredicate, thenObject);
     }
 
-    public PlantUmlElement getBaseElement() throws MultipleBaseElementsException {
+    public List<PlantUmlElement> getBaseElements() {
         PlantUmlBlock thenElement = getThenSubjectBlock();
         if (thenElement instanceof CustomConceptVisualizer) {
-            return ((CustomConceptVisualizer) thenElement).getBaseElement();
+            return ((CustomConceptVisualizer) thenElement).getBaseElements();
         }
-        return (PlantUmlElement) thenElement;
+        return Arrays.asList((PlantUmlElement) thenElement);
     }
 
     private PlantUmlBlock getThenSubjectBlock() {

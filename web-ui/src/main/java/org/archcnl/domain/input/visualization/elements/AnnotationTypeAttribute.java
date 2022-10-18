@@ -46,4 +46,11 @@ public class AnnotationTypeAttribute extends PlantUmlElement {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        AnnotationType annotationType = new AnnotationType(new Variable(parentName));
+        annotationType.setProperty("hasAnnotationTypeAttribute", this);
+        return annotationType;
+    }
 }

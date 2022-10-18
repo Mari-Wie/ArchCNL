@@ -32,4 +32,9 @@ public class CustomConceptElement extends PlantUmlElement {
         builder.append(getIdentifiers().get(0));
         return builder.toString();
     }
+
+    @Override
+    protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
+        throw new UnsupportedOperationException();
+    }
 }
