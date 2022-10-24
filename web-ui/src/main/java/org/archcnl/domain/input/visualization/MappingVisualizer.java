@@ -8,7 +8,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public abstract class MappingVisualizer {
+public abstract class MappingVisualizer implements Visualizer {
 
     protected Mapping mapping;
     protected ConceptManager conceptManager;
@@ -31,11 +31,9 @@ public abstract class MappingVisualizer {
         }
     }
 
-    public String getMappingName() {
+    public String getName() {
         return mappingName;
     }
 
     protected abstract boolean moreThanOneVariant();
-
-    public abstract String buildPlantUmlCode();
 }

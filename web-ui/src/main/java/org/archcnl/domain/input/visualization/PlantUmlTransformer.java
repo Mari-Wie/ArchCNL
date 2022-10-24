@@ -75,9 +75,9 @@ public class PlantUmlTransformer {
         return mapping;
     }
 
-    private String buildPlantUmlCode(MappingVisualizer visualizer) {
+    private String buildPlantUmlCode(Visualizer visualizer) {
         StringBuilder builder = new StringBuilder();
-        builder.append(buildHeader(visualizer.getMappingName()));
+        builder.append(buildHeader(visualizer.getName()));
         builder.append(visualizer.buildPlantUmlCode());
         builder.append(buildFooter());
         return builder.toString();
