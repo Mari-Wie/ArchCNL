@@ -15,9 +15,9 @@ import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class ConceptMappingVariant extends MappingVariant {
+public class ConceptVariant extends MappingVariant {
 
-    public ConceptMappingVariant(
+    public ConceptVariant(
             AndTriplets whenVariant,
             Triplet thenTriplet,
             String variantName,
@@ -36,8 +36,8 @@ public class ConceptMappingVariant extends MappingVariant {
 
     public List<String> getIdentifiers() {
         var element = getThenSubjectBlock();
-        if (element instanceof CustomConceptVisualizer) {
-            return ((CustomConceptVisualizer) element).getIdentifiers();
+        if (element instanceof ConceptVisualizer) {
+            return ((ConceptVisualizer) element).getIdentifiers();
         }
         return elementMap.get(thenTriplet.getSubject()).getIdentifiers();
     }
@@ -69,8 +69,8 @@ public class ConceptMappingVariant extends MappingVariant {
 
     public List<PlantUmlElement> getBaseElements() {
         PlantUmlBlock thenElement = getThenSubjectBlock();
-        if (thenElement instanceof CustomConceptVisualizer) {
-            return ((CustomConceptVisualizer) thenElement).getBaseElements();
+        if (thenElement instanceof ConceptVisualizer) {
+            return ((ConceptVisualizer) thenElement).getBaseElements();
         }
         return Arrays.asList((PlantUmlElement) thenElement);
     }

@@ -7,9 +7,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class RelationMappingVariant extends MappingVariant {
+public class RelationVariant extends MappingVariant {
 
-    public RelationMappingVariant(
+    public RelationVariant(
             AndTriplets whenVariant,
             Triplet thenTriplet,
             String variantName,

@@ -9,11 +9,11 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class CustomRelationVisualizer extends MappingVisualizer {
+public class RelationVisualizer extends MappingVisualizer {
 
-    private List<RelationMappingVariant> variants = new ArrayList<>();
+    private List<RelationVariant> variants = new ArrayList<>();
 
-    public CustomRelationVisualizer(RelationMapping mapping, ConceptManager conceptManager)
+    public RelationVisualizer(RelationMapping mapping, ConceptManager conceptManager)
             throws MappingToUmlTranslationFailedException {
         super(mapping, conceptManager, new HashSet<>());
         createVariants();
@@ -26,7 +26,7 @@ public class CustomRelationVisualizer extends MappingVisualizer {
             AndTriplets whenVariant = whenTriplets.get(i);
             String variantName = mappingName + (i + 1);
             variants.add(
-                    new RelationMappingVariant(
+                    new RelationVariant(
                             whenVariant,
                             mapping.getThenTriplet(),
                             variantName,

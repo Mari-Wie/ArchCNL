@@ -75,8 +75,8 @@ public class MappingTranslator {
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
                 mapping = new PlantUmlTransformer(conceptManager).flattenAndRecreate(mapping);
-                CustomConceptVisualizer visualizer =
-                        new CustomConceptVisualizer(
+                ConceptVisualizer visualizer =
+                        new ConceptVisualizer(
                                 mapping, conceptManager, Optional.of(variable), usedVariables);
                 elementMap.put(variable, visualizer);
             } else {

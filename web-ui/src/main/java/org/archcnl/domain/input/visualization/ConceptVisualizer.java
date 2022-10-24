@@ -19,12 +19,12 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 
-public class CustomConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
+public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 
     private CustomConceptElement conceptElement;
-    private List<ConceptMappingVariant> variants = new ArrayList<>();
+    private List<ConceptVariant> variants = new ArrayList<>();
 
-    public CustomConceptVisualizer(
+    public ConceptVisualizer(
             ConceptMapping mapping,
             ConceptManager conceptManager,
             Optional<Variable> parentSubject,
@@ -55,7 +55,7 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
             AndTriplets whenVariant = whenTriplets.get(i);
             String variantName = mappingName + (i + 1);
             variants.add(
-                    new ConceptMappingVariant(
+                    new ConceptVariant(
                             whenVariant,
                             thenTriplet,
                             variantName,
@@ -69,7 +69,7 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
     public String buildPlantUmlCode() {
         boolean printBorder = moreThanOneVariant();
         StringBuilder builder = new StringBuilder();
-        for (ConceptMappingVariant variant : variants) {
+        for (ConceptVariant variant : variants) {
             builder.append(variant.buildPlantUmlCode(printBorder));
             builder.append("\n");
         }
@@ -80,7 +80,7 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
     private String buildConceptSection() {
         StringBuilder builder = new StringBuilder();
         builder.append(conceptElement.buildPlantUmlCode());
-        for (ConceptMappingVariant variant : variants) {
+        for (ConceptVariant variant : variants) {
             List<String> conceptIds = conceptElement.getIdentifiers();
             List<String> objectIds = variant.getIdentifiers();
             for (String conceptId : conceptIds) {
@@ -113,14 +113,14 @@ public class CustomConceptVisualizer extends MappingVisualizer implements PlantU
     @Override
     public List<String> getIdentifiers() {
         return variants.stream()
-                .map(ConceptMappingVariant::getIdentifiers)
+                .map(ConceptVariant::getIdentifiers)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 
     public List<PlantUmlElement> getBaseElements() {
         return variants.stream()
-                .map(ConceptMappingVariant::getBaseElements)
+                .map(ConceptVariant::getBaseElements)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }

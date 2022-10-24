@@ -163,8 +163,8 @@ public class TripletContainer {
     private void tryToSetProperty(PlantUmlBlock element, String property, Object object)
             throws MappingToUmlTranslationFailedException {
         try {
-            if (object instanceof CustomConceptVisualizer) {
-                CustomConceptVisualizer visualizer = (CustomConceptVisualizer) object;
+            if (object instanceof ConceptVisualizer) {
+                ConceptVisualizer visualizer = (ConceptVisualizer) object;
                 for (PlantUmlElement baseElement : visualizer.getBaseElements()) {
                     element.setProperty(property, baseElement);
                 }

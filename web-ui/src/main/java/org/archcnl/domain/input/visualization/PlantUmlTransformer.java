@@ -41,16 +41,15 @@ public class PlantUmlTransformer {
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
         mapping = flattenAndRecreate(mapping);
-        CustomConceptVisualizer visualizer =
-                new CustomConceptVisualizer(
-                        mapping, conceptManager, Optional.empty(), new HashSet<>());
+        ConceptVisualizer visualizer =
+                new ConceptVisualizer(mapping, conceptManager, Optional.empty(), new HashSet<>());
         return buildPlantUmlCode(visualizer);
     }
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
         mapping = flattenAndRecreate(mapping);
-        CustomRelationVisualizer visualizer = new CustomRelationVisualizer(mapping, conceptManager);
+        RelationVisualizer visualizer = new RelationVisualizer(mapping, conceptManager);
         return buildPlantUmlCode(visualizer);
     }
 
