@@ -9,24 +9,29 @@ import java.util.List;
 import java.util.Optional;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 import org.archcnl.domain.input.visualization.helpers.WrappingService;
+import org.archcnl.domain.input.visualization.rules.RuleVisualizer;
 
 public class PlantUmlTransformer {
 
     private static final String TEMP_FILE_PREFIX = "uml-";
     private static final String PNG_FILE_EXTENSION = ".png";
     private final ConceptManager conceptManager;
+    private RelationManager relationManager;
 
-    public PlantUmlTransformer(ConceptManager conceptManager) {
+    public PlantUmlTransformer(ConceptManager conceptManager, RelationManager relationManager) {
         this.conceptManager = conceptManager;
+        this.relationManager = relationManager;
     }
 
     /*
@@ -37,6 +42,13 @@ public class PlantUmlTransformer {
         return tempFile;
     }
     */
+
+    public String transformToPlantUml(ArchitectureRule rule)
+            throws MappingToUmlTranslationFailedException {
+        RuleVisualizer visualizer =
+                RuleVisualizer.createRuleVisualizer(rule, conceptManager, relationManager);
+        return buildPlantUmlCode(visualizer);
+    }
 
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
