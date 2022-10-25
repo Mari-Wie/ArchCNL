@@ -10,16 +10,14 @@ import java.util.Optional;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 import org.archcnl.domain.input.visualization.helpers.WrappingService;
+import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 import org.archcnl.domain.input.visualization.rules.RuleVisualizer;
 
 public class PlantUmlTransformer {
@@ -52,10 +50,10 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        mapping = flattenAndRecreate(mapping);
+        ColoredMapping coloredMapping = flattenAndRecreate(mapping);
         ConceptVisualizer visualizer =
                 new ConceptVisualizer(
-                        mapping,
+                        coloredMapping,
                         conceptManager,
                         relationManager,
                         Optional.empty(),
@@ -65,31 +63,32 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        mapping = flattenAndRecreate(mapping);
+        ColoredMapping coloredMapping = flattenAndRecreate(mapping);
         RelationVisualizer visualizer =
-                new RelationVisualizer(mapping, conceptManager, relationManager);
+                new RelationVisualizer(coloredMapping, conceptManager, relationManager);
         return buildPlantUmlCode(visualizer);
     }
 
-    ConceptMapping flattenAndRecreate(ConceptMapping mapping)
+    ColoredMapping flattenAndRecreate(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        List<AndTriplets> wrappedAndflattened =
-                MappingFlattener.flattenCustomRelations(
-                        mapping.getWhenTriplets(), mapping.getThenTriplet());
-        Variable thenSubject = mapping.getThenTriplet().getSubject();
-        CustomConcept thisConcept = (CustomConcept) mapping.getThenTriplet().getObject();
-        mapping = new ConceptMapping(thenSubject, wrappedAndflattened, thisConcept);
-        return mapping;
+        ColoredMapping coloredMapping = ColoredMapping.fromMapping(mapping);
+        MappingFlattener flattener = new MappingFlattener(coloredMapping);
+        List<ColoredVariant> flattened = flattener.flattenCustomRelations();
+        coloredMapping.setVariants(flattened);
+        return coloredMapping;
     }
 
-    private RelationMapping flattenAndRecreate(RelationMapping mapping)
+    private ColoredMapping flattenAndRecreate(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        List<AndTriplets> whenTriplets = WrappingService.wrapMapping(mapping.getThenTriplet());
-        Triplet thenTriplet = mapping.getThenTriplet();
-        List<AndTriplets> flattened =
-                MappingFlattener.flattenCustomRelations(whenTriplets, thenTriplet);
-        mapping = new RelationMapping(thenTriplet, flattened);
-        return mapping;
+        ColoredMapping coloredMapping = ColoredMapping.fromMapping(mapping);
+        List<ColoredVariant> wrappedVariants =
+                WrappingService.wrapMapping(coloredMapping.getThenTriplet());
+        coloredMapping.setVariants(wrappedVariants);
+
+        MappingFlattener flattener = new MappingFlattener(coloredMapping);
+        List<ColoredVariant> flattened = flattener.flattenCustomRelations();
+        coloredMapping.setVariants(flattened);
+        return coloredMapping;
     }
 
     private String buildPlantUmlCode(Visualizer visualizer) {

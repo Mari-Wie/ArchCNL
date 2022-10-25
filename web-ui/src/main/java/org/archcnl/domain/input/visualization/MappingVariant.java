@@ -1,6 +1,5 @@
 package org.archcnl.domain.input.visualization;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,17 +7,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public abstract class MappingVariant {
 
-    protected List<Triplet> whenTriplets;
+    protected List<ColoredTriplet> whenTriplets;
     protected Triplet thenTriplet;
     protected ConceptManager conceptManager;
     private RelationManager relationManager;
@@ -29,13 +27,13 @@ public abstract class MappingVariant {
     protected List<PlantUmlPart> umlElements;
 
     protected MappingVariant(
-            AndTriplets whenVariant,
+            List<ColoredTriplet> whenTriplets,
             Triplet thenTriplet,
             ConceptManager conceptManager,
             RelationManager relationManager,
             Set<Variable> usedVariables,
             String variantName) {
-        this.whenTriplets = whenVariant.getTriplets();
+        this.whenTriplets = whenTriplets;
         this.thenTriplet = thenTriplet;
         this.conceptManager = conceptManager;
         this.usedVariables = usedVariables;
@@ -48,14 +46,13 @@ public abstract class MappingVariant {
                 umlElements.stream()
                         .map(PlantUmlPart::buildPlantUmlCode)
                         .collect(Collectors.joining("\n"));
+
         return withBorder ? surroundWithBorder(content) : content;
     }
 
     protected void pickUniqueVariables() {
         Map<Variable, Variable> renamedVariables = new HashMap<>();
-        List<Triplet> modifiedTriplets = new ArrayList<>();
-
-        for (Triplet triplet : whenTriplets) {
+        for (ColoredTriplet triplet : whenTriplets) {
             Variable subject =
                     NamePicker.pickUniqueVariable(
                             usedVariables, renamedVariables, triplet.getSubject());
@@ -66,10 +63,9 @@ public abstract class MappingVariant {
                 object = NamePicker.pickUniqueVariable(usedVariables, renamedVariables, objectVar);
             }
 
-            Relation predicate = triplet.getPredicate();
-            modifiedTriplets.add(new Triplet(subject, predicate, object));
+            triplet.setSubject(subject);
+            triplet.setObject(object);
         }
-        whenTriplets = modifiedTriplets;
         updateVariablesInThenTriplet(renamedVariables);
     }
 

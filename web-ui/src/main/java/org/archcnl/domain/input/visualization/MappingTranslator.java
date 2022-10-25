@@ -21,15 +21,17 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class MappingTranslator {
 
-    private List<Triplet> whenTriplets;
+    private List<ColoredTriplet> whenTriplets;
     private ConceptManager conceptManager;
     private RelationManager relationManager;
 
     public MappingTranslator(
-            List<Triplet> whenTriplets,
+            List<ColoredTriplet> whenTriplets,
             ConceptManager conceptManager,
             RelationManager relationManager) {
         this.whenTriplets = whenTriplets;
@@ -64,7 +66,9 @@ public class MappingTranslator {
 
     private Set<Variable> inferVariableTypes() throws MappingToUmlTranslationFailedException {
         VariableManager variableManager = new VariableManager();
-        AndTriplets container = new AndTriplets(whenTriplets);
+        List<Triplet> triplets =
+                whenTriplets.stream().map(Triplet.class::cast).collect(Collectors.toList());
+        AndTriplets container = new AndTriplets(triplets);
         if (variableManager.hasConflictingDynamicTypes(container, conceptManager)) {
             throw new MappingToUmlTranslationFailedException(
                     "Variable with conflicting type usage in mapping.");
@@ -80,12 +84,12 @@ public class MappingTranslator {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
-                mapping =
+                ColoredMapping coloredMapping =
                         new PlantUmlTransformer(conceptManager, relationManager)
                                 .flattenAndRecreate(mapping);
                 ConceptVisualizer visualizer =
                         new ConceptVisualizer(
-                                mapping,
+                                coloredMapping,
                                 conceptManager,
                                 relationManager,
                                 Optional.of(variable),
@@ -101,9 +105,9 @@ public class MappingTranslator {
 
     private ConceptMapping tryToGetMapping(CustomConcept concept)
             throws MappingToUmlTranslationFailedException {
-        Optional<ConceptMapping> mapping = concept.getMapping();
-        if (mapping.isPresent()) {
-            return mapping.get();
+        Optional<ConceptMapping> mappingOpt = concept.getMapping();
+        if (mappingOpt.isPresent()) {
+            return mappingOpt.get();
         }
         throw new MappingToUmlTranslationFailedException(concept.getName() + " has no mapping");
     }

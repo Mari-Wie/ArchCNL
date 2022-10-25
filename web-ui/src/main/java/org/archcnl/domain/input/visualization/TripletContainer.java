@@ -24,6 +24,7 @@ import org.archcnl.domain.input.visualization.connections.ThrowsExceptionConnect
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class TripletContainer {
 
@@ -78,11 +79,11 @@ public class TripletContainer {
         }
     }
 
-    private List<Triplet> elementPropertyTriplets;
-    private List<Triplet> elementConnectionTriplets;
-    private List<Triplet> customRelationConnectionTriplets;
+    private List<ColoredTriplet> elementPropertyTriplets;
+    private List<ColoredTriplet> elementConnectionTriplets;
+    private List<ColoredTriplet> customRelationConnectionTriplets;
 
-    public TripletContainer(List<Triplet> triplets) {
+    public TripletContainer(List<ColoredTriplet> triplets) {
         setElementPropertyTriplets(triplets);
         setElementRelationTriplets(triplets);
         setCustomRelationConnectionTriplets(triplets);
@@ -176,21 +177,21 @@ public class TripletContainer {
         }
     }
 
-    private void setElementPropertyTriplets(List<Triplet> triplets) {
+    private void setElementPropertyTriplets(List<ColoredTriplet> triplets) {
         elementPropertyTriplets =
                 triplets.stream()
                         .filter(t -> ElementProperty.isElementProperty(t.getPredicate()))
                         .collect(Collectors.toList());
     }
 
-    private void setElementRelationTriplets(List<Triplet> triplets) {
+    private void setElementRelationTriplets(List<ColoredTriplet> triplets) {
         elementConnectionTriplets =
                 triplets.stream()
                         .filter(t -> ElementConnection.isElementConnection(t.getPredicate()))
                         .collect(Collectors.toList());
     }
 
-    private void setCustomRelationConnectionTriplets(List<Triplet> triplets) {
+    private void setCustomRelationConnectionTriplets(List<ColoredTriplet> triplets) {
         customRelationConnectionTriplets =
                 triplets.stream()
                         .filter(t -> t.getPredicate() instanceof CustomRelation)

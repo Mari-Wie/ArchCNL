@@ -4,21 +4,20 @@ import java.util.List;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public abstract class MappingVisualizer implements Visualizer {
 
-    protected Mapping mapping;
+    protected ColoredMapping mapping;
     protected ConceptManager conceptManager;
-    protected String mappingName;
     protected Set<Variable> usedVariables;
     protected RelationManager relationManager;
 
     protected MappingVisualizer(
-            Mapping mapping,
+            ColoredMapping mapping,
             ConceptManager conceptManager,
             RelationManager relationManager,
             Set<Variable> usedVariables) {
@@ -26,19 +25,18 @@ public abstract class MappingVisualizer implements Visualizer {
         this.conceptManager = conceptManager;
         this.relationManager = relationManager;
         this.usedVariables = usedVariables;
-        this.mappingName = mapping.getMappingNameRepresentation();
     }
 
-    protected void throwWhenNoVariants(List<AndTriplets> whenTriplets)
+    protected void throwWhenNoVariants(List<ColoredVariant> variants)
             throws MappingToUmlTranslationFailedException {
-        if (whenTriplets.isEmpty()) {
+        if (variants.isEmpty()) {
             throw new MappingToUmlTranslationFailedException(
-                    "Mapping " + mappingName + " has no whenTriplets.");
+                    "Mapping " + getName() + " has no whenTriplets.");
         }
     }
 
     public String getName() {
-        return mappingName;
+        return mapping.getName();
     }
 
     protected abstract boolean moreThanOneVariant();

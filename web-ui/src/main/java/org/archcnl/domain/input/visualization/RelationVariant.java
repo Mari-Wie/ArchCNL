@@ -3,15 +3,15 @@ package org.archcnl.domain.input.visualization;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class RelationVariant extends MappingVariant {
 
     public RelationVariant(
-            AndTriplets whenVariant,
+            ColoredVariant variant,
             Triplet thenTriplet,
             String variantName,
             ConceptManager conceptManager,
@@ -20,7 +20,7 @@ public class RelationVariant extends MappingVariant {
             throws MappingToUmlTranslationFailedException {
 
         super(
-                whenVariant,
+                variant.getTriplets(),
                 thenTriplet,
                 conceptManager,
                 relationManager,

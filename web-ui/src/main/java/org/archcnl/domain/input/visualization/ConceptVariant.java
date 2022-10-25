@@ -1,6 +1,5 @@
 package org.archcnl.domain.input.visualization;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -8,18 +7,19 @@ import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class ConceptVariant extends MappingVariant {
 
     public ConceptVariant(
-            AndTriplets whenVariant,
+            ColoredVariant variant,
             Triplet thenTriplet,
             String variantName,
             ConceptManager conceptManager,
@@ -29,7 +29,7 @@ public class ConceptVariant extends MappingVariant {
             throws MappingToUmlTranslationFailedException {
 
         super(
-                whenVariant,
+                variant.getTriplets(),
                 thenTriplet,
                 conceptManager,
                 relationManager,
@@ -55,19 +55,17 @@ public class ConceptVariant extends MappingVariant {
     }
 
     private void useParentSubject(Variable parentSubject) {
-        List<Triplet> tripletsWithParentSubject = new ArrayList<>();
         Variable thenSubject = thenTriplet.getSubject();
 
-        for (Triplet triplet : whenTriplets) {
+        for (ColoredTriplet triplet : whenTriplets) {
             Variable oldSubject = triplet.getSubject();
-            Relation predicate = triplet.getPredicate();
             ObjectType oldObject = triplet.getObject();
 
             Variable newSubject = oldSubject.equals(thenSubject) ? parentSubject : oldSubject;
             ObjectType newObject = oldObject.equals(thenSubject) ? parentSubject : oldObject;
-            tripletsWithParentSubject.add(new Triplet(newSubject, predicate, newObject));
+            triplet.setSubject(newSubject);
+            triplet.setObject(newObject);
         }
-        whenTriplets = tripletsWithParentSubject;
 
         thenSubject = new Variable(parentSubject.getName());
         Relation thenPredicate = thenTriplet.getPredicate();

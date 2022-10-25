@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.elements.CustomConceptElement;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
+import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 
@@ -26,7 +26,7 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
     private List<ConceptVariant> variants = new ArrayList<>();
 
     public ConceptVisualizer(
-            ConceptMapping mapping,
+            ColoredMapping mapping,
             ConceptManager conceptManager,
             RelationManager relationManager,
             Optional<Variable> parentSubject,
@@ -49,16 +49,16 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
 
     private void createVariants(Optional<Variable> parentSubject)
             throws MappingToUmlTranslationFailedException {
-        List<AndTriplets> whenTriplets = mapping.getWhenTriplets();
-        Triplet thenTriplet = mapping.getThenTriplet();
-        throwWhenNoVariants(whenTriplets);
+        List<ColoredVariant> coloredVariants = mapping.getVariants();
+        ColoredTriplet thenTriplet = mapping.getThenTriplet();
+        throwWhenNoVariants(coloredVariants);
 
-        for (int i = 0; i < whenTriplets.size(); i++) {
-            AndTriplets whenVariant = whenTriplets.get(i);
-            String variantName = mappingName + (i + 1);
+        for (int i = 0; i < coloredVariants.size(); i++) {
+            ColoredVariant variant = coloredVariants.get(i);
+            String variantName = getName() + (i + 1);
             variants.add(
                     new ConceptVariant(
-                            whenVariant,
+                            variant,
                             thenTriplet,
                             variantName,
                             conceptManager,

@@ -1,10 +1,10 @@
 package org.archcnl.domain.input.visualization;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.JenaBuiltinRelation;
@@ -14,19 +14,20 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.InheritanceRelation;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class TripletReducer {
 
     private static final Concept inheritance = new FamixConcept("Inheritance", "");
-    private List<Triplet> whenTriplets;
+    private List<ColoredTriplet> whenTriplets;
     private Set<Variable> variables;
 
-    public TripletReducer(List<Triplet> triplets, Set<Variable> variables) {
+    public TripletReducer(List<ColoredTriplet> triplets, Set<Variable> variables) {
         this.whenTriplets = triplets;
         this.variables = variables;
     }
 
-    public List<Triplet> reduce() throws MappingToUmlTranslationFailedException {
+    public List<ColoredTriplet> reduce() throws MappingToUmlTranslationFailedException {
         reduceSimpleRegexTriplets();
         reduceInheritanceTriplets();
         return whenTriplets;
@@ -34,7 +35,7 @@ public class TripletReducer {
 
     private void reduceSimpleRegexTriplets() throws MappingToUmlTranslationFailedException {
         Map<ObjectType, String> regexSubjectToString = buildRegexSubjectToStringMap();
-        whenTriplets = injectRegexStringsIntoCallingTriplets(regexSubjectToString);
+        injectRegexStringsIntoCallingTriplets(regexSubjectToString);
     }
 
     private Map<ObjectType, String> buildRegexSubjectToStringMap()
@@ -54,26 +55,22 @@ public class TripletReducer {
         return regexSubjectToString;
     }
 
-    private List<Triplet> injectRegexStringsIntoCallingTriplets(
+    private void injectRegexStringsIntoCallingTriplets(
             Map<ObjectType, String> regexSubjectToString) {
-        List<Triplet> tripletsWithoutRegex = new ArrayList<>();
-        for (Triplet triplet : whenTriplets) {
+        for (ColoredTriplet triplet : whenTriplets) {
             ObjectType object = triplet.getObject();
             if (regexSubjectToString.containsKey(object)) {
                 StringValue newObject = new StringValue(regexSubjectToString.get(object));
-                Triplet newTriplet =
-                        new Triplet(triplet.getSubject(), triplet.getPredicate(), newObject);
-                tripletsWithoutRegex.add(newTriplet);
-            } else if (!isRegexTriplet(triplet)) {
-                tripletsWithoutRegex.add(triplet);
+                triplet.setObject(newObject);
             }
         }
-        return tripletsWithoutRegex;
+        whenTriplets =
+                whenTriplets.stream().filter(t -> !isRegexTriplet(t)).collect(Collectors.toList());
     }
 
     private void reduceInheritanceTriplets() throws MappingToUmlTranslationFailedException {
         Map<Variable, InheritanceRelation> inheritanceMap = buildInheritanceMap();
-        whenTriplets = replaceInheritanceTriplets(inheritanceMap);
+        replaceInheritanceTriplets(inheritanceMap);
     }
 
     private Map<Variable, InheritanceRelation> buildInheritanceMap() {
@@ -87,27 +84,32 @@ public class TripletReducer {
         return inheritanceMap;
     }
 
-    private List<Triplet> replaceInheritanceTriplets(
-            Map<Variable, InheritanceRelation> inheritanceMap)
+    private void replaceInheritanceTriplets(Map<Variable, InheritanceRelation> inheritanceMap)
             throws MappingToUmlTranslationFailedException {
-        List<Triplet> newTriplets = new ArrayList<>();
-        for (Triplet triplet : whenTriplets) {
+        for (ColoredTriplet triplet : whenTriplets) {
             if (triplet.getPredicate().getName().equals("hasSubClass")) {
-                inheritanceMap
-                        .get(triplet.getSubject())
-                        .setHasSubClass((Variable) triplet.getObject());
+                InheritanceRelation relation = inheritanceMap.get(triplet.getSubject());
+                relation.setHasSubClass((Variable) triplet.getObject());
+                relation.setState(triplet.getState());
             } else if (triplet.getPredicate().getName().equals("hasSuperClass")) {
-                inheritanceMap
-                        .get(triplet.getSubject())
-                        .setHasSuperClass((Variable) triplet.getObject());
-            } else if (!triplet.getObject().equals(inheritance)) {
-                newTriplets.add(triplet);
+                InheritanceRelation relation = inheritanceMap.get(triplet.getSubject());
+                relation.setHasSuperClass((Variable) triplet.getObject());
+                relation.setState(triplet.getState());
             }
         }
+        whenTriplets =
+                whenTriplets.stream()
+                        .filter(
+                                t ->
+                                        !t.getObject().equals(inheritance)
+                                                && !t.getPredicate().getName().equals("hasSubClass")
+                                                && !t.getPredicate()
+                                                        .getName()
+                                                        .equals("hasSuperClass"))
+                        .collect(Collectors.toList());
         for (InheritanceRelation inheritanceRelation : inheritanceMap.values()) {
-            newTriplets.add(inheritanceRelation.buildInteritanceTriplet());
+            whenTriplets.add(inheritanceRelation.buildInteritanceTriplet());
         }
-        return newTriplets;
     }
 
     private boolean isRegexTriplet(Triplet triplet) {
