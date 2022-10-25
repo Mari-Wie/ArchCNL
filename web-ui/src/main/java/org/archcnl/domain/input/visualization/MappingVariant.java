@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -52,6 +54,7 @@ public abstract class MappingVariant {
 
     protected void pickUniqueVariables() {
         Map<Variable, Variable> renamedVariables = new HashMap<>();
+        List<ColoredTriplet> modifiedTriplets = new ArrayList<>();
         for (ColoredTriplet triplet : whenTriplets) {
             Variable subject =
                     NamePicker.pickUniqueVariable(
@@ -63,9 +66,12 @@ public abstract class MappingVariant {
                 object = NamePicker.pickUniqueVariable(usedVariables, renamedVariables, objectVar);
             }
 
-            triplet.setSubject(subject);
-            triplet.setObject(object);
+            Relation predicate = triplet.getPredicate();
+            ColoredTriplet newTriplet = new ColoredTriplet(subject, predicate, object);
+            newTriplet.setState(triplet.getState());
+            modifiedTriplets.add(newTriplet);
         }
+        whenTriplets = modifiedTriplets;
         updateVariablesInThenTriplet(renamedVariables);
     }
 

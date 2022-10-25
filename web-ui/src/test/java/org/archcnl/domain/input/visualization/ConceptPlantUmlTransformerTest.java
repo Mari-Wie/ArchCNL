@@ -46,7 +46,7 @@ class ConceptPlantUmlTransformerTest {
                 createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -75,7 +75,7 @@ class ConceptPlantUmlTransformerTest {
                 createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -109,7 +109,7 @@ class ConceptPlantUmlTransformerTest {
                 createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -161,7 +161,7 @@ class ConceptPlantUmlTransformerTest {
                 createConceptMapping(mappingString, Collections.emptyList(), importingController);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -210,7 +210,7 @@ class ConceptPlantUmlTransformerTest {
                 createConceptMapping(mappingString, Collections.emptyList(), importingController);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -257,7 +257,7 @@ class ConceptPlantUmlTransformerTest {
                 createConceptMapping(mappingString, Collections.emptyList(), thisConcept);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -309,7 +309,7 @@ class ConceptPlantUmlTransformerTest {
                         mappingString, Arrays.asList(secondWhenString), importingController);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -377,7 +377,7 @@ class ConceptPlantUmlTransformerTest {
                         doubleMappingString, Arrays.asList(doubleSecondWhenString), doubleConcept);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(doubleMapping);
 
         // then
@@ -491,7 +491,7 @@ class ConceptPlantUmlTransformerTest {
                         multipleMappingString, Collections.emptyList(), multipleConcept);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(multipleMapping);
 
         // then

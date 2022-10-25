@@ -61,7 +61,7 @@ class RelationPlantUmlTransformerTest {
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -96,7 +96,7 @@ class RelationPlantUmlTransformerTest {
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -130,7 +130,7 @@ class RelationPlantUmlTransformerTest {
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -171,7 +171,7 @@ class RelationPlantUmlTransformerTest {
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -216,7 +216,7 @@ class RelationPlantUmlTransformerTest {
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -259,7 +259,7 @@ class RelationPlantUmlTransformerTest {
         relation.setMapping(mapping, conceptManager);
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -322,7 +322,7 @@ class RelationPlantUmlTransformerTest {
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(mapping);
 
         // then
@@ -424,7 +424,7 @@ class RelationPlantUmlTransformerTest {
                         withContentMappingString, Arrays.asList(withContentSecondWhenString));
 
         // when
-        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager);
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
         String plantUmlCode = transformer.transformToPlantUml(doubleMapping);
 
         // then
