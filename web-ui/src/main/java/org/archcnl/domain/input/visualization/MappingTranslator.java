@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.VariableManager;
 import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
@@ -25,10 +26,15 @@ public class MappingTranslator {
 
     private List<Triplet> whenTriplets;
     private ConceptManager conceptManager;
+    private RelationManager relationManager;
 
-    public MappingTranslator(List<Triplet> whenTriplets, ConceptManager conceptManager) {
+    public MappingTranslator(
+            List<Triplet> whenTriplets,
+            ConceptManager conceptManager,
+            RelationManager relationManager) {
         this.whenTriplets = whenTriplets;
         this.conceptManager = conceptManager;
+        this.relationManager = relationManager;
     }
 
     public Map<Variable, PlantUmlBlock> createElementMap(Set<Variable> usedVariables)
@@ -74,10 +80,16 @@ public class MappingTranslator {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
-                mapping = new PlantUmlTransformer(conceptManager).flattenAndRecreate(mapping);
+                mapping =
+                        new PlantUmlTransformer(conceptManager, relationManager)
+                                .flattenAndRecreate(mapping);
                 ConceptVisualizer visualizer =
                         new ConceptVisualizer(
-                                mapping, conceptManager, Optional.of(variable), usedVariables);
+                                mapping,
+                                conceptManager,
+                                relationManager,
+                                Optional.of(variable),
+                                usedVariables);
                 elementMap.put(variable, visualizer);
             } else {
                 PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable);

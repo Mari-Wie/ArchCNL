@@ -54,14 +54,20 @@ public class PlantUmlTransformer {
             throws MappingToUmlTranslationFailedException {
         mapping = flattenAndRecreate(mapping);
         ConceptVisualizer visualizer =
-                new ConceptVisualizer(mapping, conceptManager, Optional.empty(), new HashSet<>());
+                new ConceptVisualizer(
+                        mapping,
+                        conceptManager,
+                        relationManager,
+                        Optional.empty(),
+                        new HashSet<>());
         return buildPlantUmlCode(visualizer);
     }
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
         mapping = flattenAndRecreate(mapping);
-        RelationVisualizer visualizer = new RelationVisualizer(mapping, conceptManager);
+        RelationVisualizer visualizer =
+                new RelationVisualizer(mapping, conceptManager, relationManager);
         return buildPlantUmlCode(visualizer);
     }
 

@@ -2,6 +2,7 @@ package org.archcnl.domain.input.visualization;
 
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -14,10 +15,17 @@ public class RelationVariant extends MappingVariant {
             Triplet thenTriplet,
             String variantName,
             ConceptManager conceptManager,
+            RelationManager relationManager,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
 
-        super(whenVariant, thenTriplet, conceptManager, usedVariables, variantName);
+        super(
+                whenVariant,
+                thenTriplet,
+                conceptManager,
+                relationManager,
+                usedVariables,
+                variantName);
         pickUniqueVariables();
         buildContentParts();
     }

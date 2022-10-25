@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
@@ -27,10 +28,11 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
     public ConceptVisualizer(
             ConceptMapping mapping,
             ConceptManager conceptManager,
+            RelationManager relationManager,
             Optional<Variable> parentSubject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        super(mapping, conceptManager, usedVariables);
+        super(mapping, conceptManager, relationManager, usedVariables);
         createConceptElement();
         createVariants(parentSubject);
     }
@@ -60,6 +62,7 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
                             thenTriplet,
                             variantName,
                             conceptManager,
+                            relationManager,
                             parentSubject,
                             usedVariables));
         }

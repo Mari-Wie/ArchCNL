@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
@@ -20,6 +21,7 @@ public abstract class MappingVariant {
     protected List<Triplet> whenTriplets;
     protected Triplet thenTriplet;
     protected ConceptManager conceptManager;
+    private RelationManager relationManager;
     protected Set<Variable> usedVariables;
     private String variantName;
 
@@ -30,6 +32,7 @@ public abstract class MappingVariant {
             AndTriplets whenVariant,
             Triplet thenTriplet,
             ConceptManager conceptManager,
+            RelationManager relationManager,
             Set<Variable> usedVariables,
             String variantName) {
         this.whenTriplets = whenVariant.getTriplets();
@@ -37,6 +40,7 @@ public abstract class MappingVariant {
         this.conceptManager = conceptManager;
         this.usedVariables = usedVariables;
         this.variantName = variantName;
+        this.relationManager = relationManager;
     }
 
     public String buildPlantUmlCode(boolean withBorder) {
@@ -92,7 +96,8 @@ public abstract class MappingVariant {
     }
 
     protected void buildContentParts() throws MappingToUmlTranslationFailedException {
-        MappingTranslator translator = new MappingTranslator(whenTriplets, conceptManager);
+        MappingTranslator translator =
+                new MappingTranslator(whenTriplets, conceptManager, relationManager);
         elementMap = translator.createElementMap(usedVariables);
         umlElements = translator.translateToPlantUmlModel(elementMap);
     }

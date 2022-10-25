@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
@@ -13,9 +14,10 @@ public class RelationVisualizer extends MappingVisualizer {
 
     private List<RelationVariant> variants = new ArrayList<>();
 
-    public RelationVisualizer(RelationMapping mapping, ConceptManager conceptManager)
+    public RelationVisualizer(
+            RelationMapping mapping, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
-        super(mapping, conceptManager, new HashSet<>());
+        super(mapping, conceptManager, relationManager, new HashSet<>());
         createVariants();
     }
 
@@ -31,6 +33,7 @@ public class RelationVisualizer extends MappingVisualizer {
                             mapping.getThenTriplet(),
                             variantName,
                             conceptManager,
+                            relationManager,
                             usedVariables));
         }
     }

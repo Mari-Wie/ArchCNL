@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
+import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
@@ -22,11 +23,18 @@ public class ConceptVariant extends MappingVariant {
             Triplet thenTriplet,
             String variantName,
             ConceptManager conceptManager,
+            RelationManager relationManager,
             Optional<Variable> parentSubject,
             Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
 
-        super(whenVariant, thenTriplet, conceptManager, usedVariables, variantName);
+        super(
+                whenVariant,
+                thenTriplet,
+                conceptManager,
+                relationManager,
+                usedVariables,
+                variantName);
         if (parentSubject.isPresent()) {
             useParentSubject(parentSubject.get());
         }
