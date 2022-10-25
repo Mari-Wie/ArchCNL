@@ -11,42 +11,35 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class MappingFlattener {
 
-    private List<AndTriplets> andTriplets;
+    private List<ColoredVariant> variants;
     private Variable thenSubject;
     private ObjectType thenObject;
 
-    private MappingFlattener(
-            List<AndTriplets> andTriplets, Variable thenSubject, ObjectType thenObject) {
-        this.andTriplets = andTriplets;
-        this.thenSubject = thenSubject;
-        this.thenObject = thenObject;
+    public MappingFlattener(ColoredMapping coloredMapping) {
+        this.variants = coloredMapping.getVariants();
+        this.thenSubject = coloredMapping.getThenTriplet().getSubject();
+        this.thenObject = coloredMapping.getThenTriplet().getObject();
     }
 
-    public static List<AndTriplets> flattenCustomRelations(
-            List<AndTriplets> whenTriplets, Triplet thenTriplet)
+    public List<ColoredVariant> flattenCustomRelations()
             throws MappingToUmlTranslationFailedException {
-        MappingFlattener flattener =
-                new MappingFlattener(
-                        whenTriplets, thenTriplet.getSubject(), thenTriplet.getObject());
-        return flattener.flatten();
-    }
-
-    private List<AndTriplets> flatten() throws MappingToUmlTranslationFailedException {
         Optional<Variable> thenObjectOpt = Optional.empty();
         if (thenObject instanceof Variable) {
             thenObjectOpt = Optional.of((Variable) thenObject);
         }
         return flattenRelationMappings(
-                andTriplets,
+                variants,
                 new HashSet<>(),
                 Optional.empty(),
                 Optional.empty(),
@@ -54,30 +47,30 @@ public class MappingFlattener {
                 thenObjectOpt);
     }
 
-    private List<AndTriplets> flattenRelationMappings(
-            List<AndTriplets> andTriplets,
+    private List<ColoredVariant> flattenRelationMappings(
+            List<ColoredVariant> variants,
             Set<Variable> parentVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject,
             Variable thenSubject,
             Optional<Variable> thenObjectOpt)
             throws MappingToUmlTranslationFailedException {
-        List<AndTriplets> flattenedAndTriplets = new ArrayList<>();
-        for (AndTriplets whenTriplets : andTriplets) {
-            flattenedAndTriplets.addAll(
+        List<ColoredVariant> flattenedVariants = new ArrayList<>();
+        for (ColoredVariant variant : variants) {
+            flattenedVariants.addAll(
                     flattenWhenTriplets(
-                            whenTriplets,
+                            variant,
                             new HashSet<>(parentVariables),
                             parentSubject,
                             parentObject,
                             thenSubject,
                             thenObjectOpt));
         }
-        return flattenedAndTriplets;
+        return flattenedVariants;
     }
 
-    private List<AndTriplets> flattenWhenTriplets(
-            AndTriplets whenTriplets,
+    private List<ColoredVariant> flattenWhenTriplets(
+            ColoredVariant variant,
             Set<Variable> parentVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject,
@@ -85,18 +78,12 @@ public class MappingFlattener {
             Optional<Variable> thenObjectOpt)
             throws MappingToUmlTranslationFailedException {
 
-        whenTriplets =
-                useParentOrUniqueVariables(
-                        whenTriplets,
-                        parentVariables,
-                        parentSubject,
-                        parentObject,
-                        thenSubject,
-                        thenObjectOpt);
-        List<List<Triplet>> flattened = Arrays.asList(new ArrayList<>());
-        Set<Variable> usedVariables = getVariablesInUse(whenTriplets);
+        useParentOrUniqueVariables(
+                variant, parentVariables, parentSubject, parentObject, thenSubject, thenObjectOpt);
+        List<List<ColoredTriplet>> flattened = Arrays.asList(new ArrayList<>());
+        Set<Variable> usedVariables = getVariablesInUse(variant);
 
-        for (Triplet triplet : whenTriplets.getTriplets()) {
+        for (ColoredTriplet triplet : variant.getTriplets()) {
             Relation predicate = triplet.getPredicate();
 
             if (predicate instanceof CustomRelation) {
@@ -104,7 +91,7 @@ public class MappingFlattener {
                 Variable subject = triplet.getSubject();
                 Variable object = (Variable) triplet.getObject();
 
-                List<AndTriplets> variants =
+                List<ColoredVariant> subVariants =
                         flattenRelationMappings(
                                 getWhenTriplets(relation),
                                 usedVariables,
@@ -113,27 +100,27 @@ public class MappingFlattener {
                                 getThenSubject(relation),
                                 Optional.of(getThenObject(relation)));
 
-                usedVariables.addAll(getVariablesInUse(variants));
-                flattened = cartesianProduct(flattened, variants);
+                usedVariables.addAll(getVariablesInUse(subVariants));
+                flattened = cartesianProduct(flattened, subVariants);
             }
-            for (List<Triplet> innerList : flattened) {
+            for (List<ColoredTriplet> innerList : flattened) {
                 innerList.add(triplet);
             }
         }
-        return flattened.stream().map(AndTriplets::new).collect(Collectors.toList());
+        return flattened.stream().map(ColoredVariant::new).collect(Collectors.toList());
     }
 
-    private Set<Variable> getVariablesInUse(List<AndTriplets> variants) {
+    private Set<Variable> getVariablesInUse(List<ColoredVariant> variants) {
         Set<Variable> variables = new HashSet<>();
-        for (AndTriplets whenTriplets : variants) {
-            variables.addAll(getVariablesInUse(whenTriplets));
+        for (ColoredVariant variant : variants) {
+            variables.addAll(getVariablesInUse(variant));
         }
         return variables;
     }
 
-    private Set<Variable> getVariablesInUse(AndTriplets whenTriplets) {
+    private Set<Variable> getVariablesInUse(ColoredVariant variant) {
         Set<Variable> usedVariables = new HashSet<>();
-        for (Triplet triplet : whenTriplets.getTriplets()) {
+        for (Triplet triplet : variant.getTriplets()) {
             usedVariables.add(triplet.getSubject());
             if (triplet.getObject() instanceof Variable) {
                 usedVariables.add((Variable) triplet.getObject());
@@ -142,15 +129,14 @@ public class MappingFlattener {
         return usedVariables;
     }
 
-    private AndTriplets useParentOrUniqueVariables(
-            AndTriplets whenTriplets,
+    private void useParentOrUniqueVariables(
+            ColoredVariant variant,
             Set<Variable> usedVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject,
             Variable thenSubject,
             Optional<Variable> thenObjectOpt) {
 
-        List<Triplet> modifiedTriplets = new ArrayList<>();
         Map<Variable, Variable> renamedVariables = new HashMap<>();
         if (parentSubject.isPresent()) {
             renamedVariables.put(thenSubject, parentSubject.get());
@@ -159,7 +145,7 @@ public class MappingFlattener {
             renamedVariables.put(thenObjectOpt.get(), parentObject.get());
         }
 
-        for (Triplet triplet : whenTriplets.getTriplets()) {
+        for (ColoredTriplet triplet : variant.getTriplets()) {
             Variable subject =
                     NamePicker.pickUniqueVariable(
                             usedVariables, renamedVariables, triplet.getSubject());
@@ -170,17 +156,17 @@ public class MappingFlattener {
                 object = NamePicker.pickUniqueVariable(usedVariables, renamedVariables, objectVar);
             }
 
-            Relation predicate = triplet.getPredicate();
-            modifiedTriplets.add(new Triplet(subject, predicate, object));
+            triplet.setSubject(subject);
+            triplet.setObject(object);
         }
-        return new AndTriplets(modifiedTriplets);
     }
 
-    private List<List<Triplet>> cartesianProduct(List<List<Triplet>> a, List<AndTriplets> b) {
-        List<List<Triplet>> product = new ArrayList<>();
+    private List<List<ColoredTriplet>> cartesianProduct(
+            List<List<ColoredTriplet>> a, List<ColoredVariant> b) {
+        List<List<ColoredTriplet>> product = new ArrayList<>();
         for (var listFromA : a) {
             for (var andTripletsFromB : b) {
-                List<Triplet> combined = new ArrayList<>(listFromA);
+                List<ColoredTriplet> combined = new ArrayList<>(listFromA);
                 combined.addAll(andTripletsFromB.getTriplets());
                 product.add(combined);
             }
@@ -188,7 +174,7 @@ public class MappingFlattener {
         return product;
     }
 
-    private List<AndTriplets> getWhenTriplets(CustomRelation relation)
+    private List<ColoredVariant> getWhenTriplets(CustomRelation relation)
             throws MappingToUmlTranslationFailedException {
         Optional<RelationMapping> mapping = relation.getMapping();
         if (mapping.isEmpty()) {
@@ -198,7 +184,7 @@ public class MappingFlattener {
             throw new MappingToUmlTranslationFailedException(
                     relation.getName() + " has no whenTriplets");
         }
-        return mapping.get().getWhenTriplets();
+        return ColoredMapping.fromMapping(mapping.get()).getVariants();
     }
 
     private Variable getThenSubject(CustomRelation relation)
