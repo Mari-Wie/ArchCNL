@@ -23,20 +23,26 @@ import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 public class MappingFlattener {
 
     private List<ColoredVariant> variants;
-    private Variable thenSubject;
-    private ObjectType thenObject;
+    private Optional<Variable> thenSubject;
+    private Optional<ObjectType> thenObject;
 
     public MappingFlattener(ColoredMapping coloredMapping) {
         this.variants = coloredMapping.getVariants();
-        this.thenSubject = coloredMapping.getThenTriplet().getSubject();
-        this.thenObject = coloredMapping.getThenTriplet().getObject();
+        this.thenSubject = Optional.of(coloredMapping.getThenTriplet().getSubject());
+        this.thenObject = Optional.of(coloredMapping.getThenTriplet().getObject());
+    }
+
+    public MappingFlattener(List<ColoredTriplet> ruleTriplets) {
+        this.variants = Arrays.asList(new ColoredVariant(ruleTriplets));
+        this.thenSubject = Optional.empty();
+        this.thenObject = Optional.empty();
     }
 
     public List<ColoredVariant> flattenCustomRelations()
             throws MappingToUmlTranslationFailedException {
         Optional<Variable> thenObjectOpt = Optional.empty();
-        if (thenObject instanceof Variable) {
-            thenObjectOpt = Optional.of((Variable) thenObject);
+        if (thenObject.isPresent() && thenObject.get() instanceof Variable) {
+            thenObjectOpt = Optional.of((Variable) thenObject.get());
         }
         return flattenRelationMappings(
                 variants,
@@ -52,7 +58,7 @@ public class MappingFlattener {
             Set<Variable> parentVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject,
-            Variable thenSubject,
+            Optional<Variable> thenSubject,
             Optional<Variable> thenObjectOpt)
             throws MappingToUmlTranslationFailedException {
         List<ColoredVariant> flattenedVariants = new ArrayList<>();
@@ -74,7 +80,7 @@ public class MappingFlattener {
             Set<Variable> parentVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject,
-            Variable thenSubject,
+            Optional<Variable> thenSubject,
             Optional<Variable> thenObjectOpt)
             throws MappingToUmlTranslationFailedException {
 
@@ -97,7 +103,7 @@ public class MappingFlattener {
                                 usedVariables,
                                 Optional.of(subject),
                                 Optional.of(object),
-                                getThenSubject(relation),
+                                Optional.of(getThenSubject(relation)),
                                 Optional.of(getThenObject(relation)));
 
                 usedVariables.addAll(getVariablesInUse(subVariants));
@@ -134,12 +140,12 @@ public class MappingFlattener {
             Set<Variable> usedVariables,
             Optional<Variable> parentSubject,
             Optional<Variable> parentObject,
-            Variable thenSubject,
+            Optional<Variable> thenSubject,
             Optional<Variable> thenObjectOpt) {
 
         Map<Variable, Variable> renamedVariables = new HashMap<>();
-        if (parentSubject.isPresent()) {
-            renamedVariables.put(thenSubject, parentSubject.get());
+        if (parentSubject.isPresent() && thenSubject.isPresent()) {
+            renamedVariables.put(thenSubject.get(), parentSubject.get());
         }
         if (parentObject.isPresent() && thenObjectOpt.isPresent()) {
             renamedVariables.put(thenObjectOpt.get(), parentObject.get());

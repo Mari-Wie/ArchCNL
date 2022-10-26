@@ -1,13 +1,22 @@
 package org.archcnl.domain.input.visualization.rules;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.visualization.MappingTranslator;
+import org.archcnl.domain.input.visualization.PlantUmlBlock;
+import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.Visualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
+import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public abstract class RuleVisualizer implements Visualizer {
 
@@ -22,9 +31,7 @@ public abstract class RuleVisualizer implements Visualizer {
     protected ConceptManager conceptManager;
     protected RelationManager relationManager;
     private String cnlString;
-    protected List<Triplet> subjectTriplets;
-    protected List<Triplet> predicateTriplets;
-    protected List<Triplet> objectTriplets;
+    private List<PlantUmlPart> umlElements;
 
     protected RuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager) {
@@ -40,8 +47,19 @@ public abstract class RuleVisualizer implements Visualizer {
 
     @Override
     public String buildPlantUmlCode() {
-        // TODO Auto-generated method stub
-        return null;
+        return umlElements.stream()
+                .map(PlantUmlPart::buildPlantUmlCode)
+                .collect(Collectors.joining("\n"));
+    }
+
+    protected void buildUmlElements(List<ColoredTriplet> ruleTriplets)
+            throws MappingToUmlTranslationFailedException {
+        MappingFlattener flattener = new MappingFlattener(ruleTriplets);
+        ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
+        MappingTranslator translator =
+                new MappingTranslator(flattened.getTriplets(), conceptManager, relationManager);
+        Map<Variable, PlantUmlBlock> elementMap = translator.createElementMap(new HashSet<>());
+        umlElements = translator.translateToPlantUmlModel(elementMap);
     }
 
     public static RuleVisualizer createRuleVisualizer(

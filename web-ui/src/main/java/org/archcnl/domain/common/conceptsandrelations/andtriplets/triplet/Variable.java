@@ -45,6 +45,7 @@ public class Variable extends ObjectType {
 
     private void addStillValidCustomConceptsToTypes(
             Set<ActualObjectType> types, ConceptManager conceptManager) {
+        types = new HashSet<>(types);
         for (ActualObjectType type : dynamicTypes) {
             if (type instanceof CustomConcept) {
                 CustomConcept concept = (CustomConcept) type;
