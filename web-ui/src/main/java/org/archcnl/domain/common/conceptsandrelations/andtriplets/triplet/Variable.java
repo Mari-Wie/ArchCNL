@@ -35,27 +35,27 @@ public class Variable extends ObjectType {
         if (dynamicTypes.isEmpty()) {
             setDynamicTypes(types);
         } else {
-            addStillValidCustomConceptsToTypes(types, conceptManager);
-            dynamicTypes.retainAll(types);
+            dynamicTypes.retainAll(addStillValidCustomConcepts(types, conceptManager));
             if (dynamicTypes.isEmpty()) {
                 conflictingDynamicTypes = true;
             }
         }
     }
 
-    private void addStillValidCustomConceptsToTypes(
+    private Set<ActualObjectType> addStillValidCustomConcepts(
             Set<ActualObjectType> types, ConceptManager conceptManager) {
-        types = new HashSet<>(types);
+        Set<ActualObjectType> typesWithStillValidOldTypes = new HashSet<>(types);
         for (ActualObjectType type : dynamicTypes) {
             if (type instanceof CustomConcept) {
                 CustomConcept concept = (CustomConcept) type;
                 Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
                 baseTypes.retainAll(types);
                 if (!baseTypes.isEmpty()) {
-                    types.add(concept);
+                    typesWithStillValidOldTypes.add(concept);
                 }
             }
         }
+        return typesWithStillValidOldTypes;
     }
 
     public boolean hasConflictingDynamicTypes() {
