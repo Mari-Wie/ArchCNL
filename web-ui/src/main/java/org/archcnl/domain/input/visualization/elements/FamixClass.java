@@ -62,7 +62,7 @@ public class FamixClass extends ClassOrEnum implements FamixType {
                             .map(c -> c.variable.getName())
                             .collect(Collectors.joining(", ")));
         }
-        if (!classParents.isEmpty()) {
+        if (!interfaceParents.isEmpty()) {
             builder.append(" implements ");
             builder.append(
                     interfaceParents.stream()
