@@ -111,6 +111,7 @@ public class VariableManager {
             Variable variable, Set<ActualObjectType> dynamicTypes, ConceptManager conceptManager) {
         Optional<Variable> variableFromManager = getVariableByName(variable.getName());
         if (variableFromManager.isEmpty()) {
+            variable.clearDynamicTypes();
             addVariable(variable);
             variable.refineDynamicTypes(dynamicTypes, conceptManager);
         } else {
