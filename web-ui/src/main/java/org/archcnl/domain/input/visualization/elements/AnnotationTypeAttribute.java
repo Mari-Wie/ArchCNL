@@ -3,6 +3,7 @@ package org.archcnl.domain.input.visualization.elements;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class AnnotationTypeAttribute extends PlantUmlElement {
 
@@ -18,6 +19,7 @@ public class AnnotationTypeAttribute extends PlantUmlElement {
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
+        builder.append(buildColorSection());
         builder.append(FIELD_MODIFIER + " ");
         builder.append(buildNameSection());
         builder.append(buildTypeSection());
@@ -53,5 +55,13 @@ public class AnnotationTypeAttribute extends PlantUmlElement {
         AnnotationType annotationType = new AnnotationType(new Variable(parentName));
         annotationType.setProperty("hasAnnotationTypeAttribute", this);
         return annotationType;
+    }
+
+    @Override
+    protected String buildColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return String.format("<color:%s> ", colorState.getColorName());
+        }
+        return "";
     }
 }

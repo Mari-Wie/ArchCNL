@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class Parameter extends PlantUmlElement {
 
@@ -17,8 +18,10 @@ public class Parameter extends PlantUmlElement {
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
+        builder.append(buildColorSection());
         builder.append(buildNameSection());
         builder.append(buildTypeSection());
+        builder.append(closeColorSection());
         return builder.toString();
     }
 
@@ -61,5 +64,20 @@ public class Parameter extends PlantUmlElement {
     @Override
     public List<String> getIdentifiers() {
         return parent.get().getIdentifiers();
+    }
+
+    @Override
+    protected String buildColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return String.format("<color:%s>", colorState.getColorName());
+        }
+        return "";
+    }
+
+    private String closeColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return "<color>";
+        }
+        return "";
     }
 }

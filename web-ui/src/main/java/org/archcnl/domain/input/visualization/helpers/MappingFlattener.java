@@ -11,11 +11,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
@@ -97,9 +99,12 @@ public class MappingFlattener {
                 Variable subject = triplet.getSubject();
                 Variable object = (Variable) triplet.getObject();
 
-                List<ColoredVariant> subVariants =
+                List<ColoredVariant> subVariants = getVariants(relation);
+                copyParentColorState(subVariants, triplet.getColorState(), subject, object);
+
+                subVariants =
                         flattenRelationMappings(
-                                getWhenTriplets(relation),
+                                subVariants,
                                 usedVariables,
                                 Optional.of(subject),
                                 Optional.of(object),
@@ -114,6 +119,25 @@ public class MappingFlattener {
             }
         }
         return flattened.stream().map(ColoredVariant::new).collect(Collectors.toList());
+    }
+
+    private void copyParentColorState(
+            List<ColoredVariant> variants, ColorState state, Variable subject, Variable object) {
+        for (ColoredVariant variant : variants) {
+            for (ColoredTriplet triplet : variant.getTriplets()) {
+                if (isNoTypeTripletOrDoesNotUseThenVariables(triplet, subject, object)) {
+                    triplet.setColorState(state);
+                }
+            }
+        }
+    }
+
+    private boolean isNoTypeTripletOrDoesNotUseThenVariables(
+            ColoredTriplet triplet, Variable subject, Variable object) {
+        Relation tripletPredicate = triplet.getPredicate();
+        Variable tripletSubject = triplet.getSubject();
+        return !tripletPredicate.equals(TypeRelation.getTyperelation())
+                || (!tripletSubject.equals(subject) && !tripletSubject.equals(object));
     }
 
     private Set<Variable> getVariablesInUse(List<ColoredVariant> variants) {
@@ -180,7 +204,7 @@ public class MappingFlattener {
         return product;
     }
 
-    private List<ColoredVariant> getWhenTriplets(CustomRelation relation)
+    private List<ColoredVariant> getVariants(CustomRelation relation)
             throws MappingToUmlTranslationFailedException {
         Optional<RelationMapping> mapping = relation.getMapping();
         if (mapping.isEmpty()) {

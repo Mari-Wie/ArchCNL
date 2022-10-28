@@ -91,7 +91,9 @@ class RelationPlantUmlTransformerTest {
                 "weirdRelationMapping: (?class rdf:type famix:FamixClass)"
                         + " (?class famix:definesMethod ?method)"
                         + " (?method famix:definesParameter ?parameter)"
-                        + " (?method famix:definesVariable ?localVariable)"
+                        + " (?parameter famix:hasDeclaredType ?type)"
+                        + " (?type rdf:type famix:PrimitiveType)"
+                        + " (?type famix:hasName 'int')"
                         + " -> (?class architecture:paramRelation ?parameter)";
         RelationMapping mapping = createRelationMapping(mappingString, Collections.emptyList());
 
@@ -104,13 +106,9 @@ class RelationPlantUmlTransformerTest {
                 "@startuml\n"
                         + "title paramRelationMapping\n"
                         + "class \"?class\" as class {\n"
-                        + "{method} ?method(?parameter)\n"
+                        + "{method} ?method(?parameter:int)\n"
                         + "}\n"
-                        + "note as localVariable\n"
-                        + "===LocalVariable\n"
-                        + "?localVariable\n"
-                        + "end note\n"
-                        + "class::method *-- localVariable: definesVariable\n"
+                        + "class \"int\" as type\n"
                         + "class -[bold]-> class::method\n"
                         + "note on link: paramRelation\n"
                         + "@enduml";

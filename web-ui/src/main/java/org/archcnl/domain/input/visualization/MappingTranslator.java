@@ -16,11 +16,13 @@ import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
@@ -42,7 +44,8 @@ public class MappingTranslator {
     public Map<Variable, PlantUmlBlock> createElementMap(Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
         Set<Variable> variables = prepareMappingForTranslation();
-        return createPlantUmlModels(variables, usedVariables);
+        Map<Variable, ColorState> elementColorState = createElementColorMap();
+        return createPlantUmlModels(variables, usedVariables, elementColorState);
     }
 
     public List<PlantUmlPart> translateToPlantUmlModel(Map<Variable, PlantUmlBlock> elementMap)
@@ -77,12 +80,28 @@ public class MappingTranslator {
         return variableManager.getVariables();
     }
 
+    private Map<Variable, ColorState> createElementColorMap() {
+        Map<Variable, ColorState> elementColorState = new HashMap<>();
+        for (ColoredTriplet triplet : whenTriplets) {
+            elementColorState.putIfAbsent(triplet.getSubject(), triplet.getColorState());
+            ObjectType object = triplet.getObject();
+            if (object instanceof Variable) {
+                elementColorState.putIfAbsent((Variable) object, triplet.getColorState());
+            }
+        }
+        return elementColorState;
+    }
+
     private Map<Variable, PlantUmlBlock> createPlantUmlModels(
-            Set<Variable> variables, Set<Variable> usedVariables)
+            Set<Variable> variables,
+            Set<Variable> usedVariables,
+            Map<Variable, ColorState> elementColorState)
             throws MappingToUmlTranslationFailedException {
         Map<Variable, PlantUmlBlock> elementMap = new HashMap<>();
         for (Variable variable : variables) {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
+            ColorState colorState = elementColorState.get(variable);
+
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
                 ColoredMapping coloredMapping =
@@ -94,10 +113,12 @@ public class MappingTranslator {
                                 conceptManager,
                                 relationManager,
                                 Optional.of(variable),
-                                usedVariables);
+                                usedVariables,
+                                colorState);
                 elementMap.put(variable, visualizer);
             } else {
                 PlantUmlElement element = PlantUmlMapper.createElement(elementType, variable);
+                element.setColorState(colorState);
                 elementMap.put(variable, element);
             }
         }

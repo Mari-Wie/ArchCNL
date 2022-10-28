@@ -96,10 +96,7 @@ class ConceptPlantUmlTransformerTest {
                     UnrelatedMappingException {
         // given
         String mappingString =
-                "isThenConcept: (?file rdf:type main:SoftwareArtifactFile)"
-                        + " (?file main:containsArtifact ?class)"
-                        + " (?class famix:imports ?class2)"
-                        + " (?file main:containsArtifact ?interface)"
+                "isThenConcept: (?class famix:imports ?class2)"
                         + " (?inheritance famix:hasSubClass ?class)"
                         + " (?inheritance famix:hasSuperClass ?interface)"
                         + " (?interface famix:isInterface 'true'^^xsd:boolean)"
@@ -116,18 +113,13 @@ class ConceptPlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title isThenConcept\n"
-                        + "class \"?class\" as class {\n"
+                        + "class \"?class\" as class implements interface {\n"
                         + "}\n"
-                        + "note as file\n"
-                        + "===File\n"
-                        + "end note\n"
                         + "class \"?class2\" as class2 {\n"
                         + "}\n"
                         + "interface \"?interface\" as interface {\n"
                         + "}\n"
-                        + "file +-- class\n"
                         + "class -[dashed]-> class2: <<imports>>\n"
-                        + "file +-- interface\n"
                         + "note \"ThenConcept\" as ThenConcept\n"
                         + "ThenConcept .. class\n"
                         + "@enduml";

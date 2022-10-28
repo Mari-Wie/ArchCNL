@@ -16,6 +16,7 @@ import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
@@ -31,11 +32,21 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
             ConceptManager conceptManager,
             RelationManager relationManager,
             Optional<Variable> parentSubject,
-            Set<Variable> usedVariables)
+            Set<Variable> usedVariables,
+            ColorState colorState)
             throws MappingToUmlTranslationFailedException {
         super(mapping, conceptManager, relationManager, usedVariables);
+        copyColorState(colorState);
         createConceptElement();
         createVariants(parentSubject);
+    }
+
+    private void copyColorState(ColorState colorState) {
+        for (ColoredVariant variant : mapping.getVariants()) {
+            for (ColoredTriplet triplet : variant.getTriplets()) {
+                triplet.setColorState(colorState);
+            }
+        }
     }
 
     private void createConceptElement() {
@@ -149,5 +160,10 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
 
     public void enableIsTopLevelConcept() {
         isTopLevelConcept = true;
+    }
+
+    @Override
+    public void setColorState(ColorState colorState) {
+        throw new UnsupportedOperationException();
     }
 }

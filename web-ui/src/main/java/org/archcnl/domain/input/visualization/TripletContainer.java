@@ -55,7 +55,7 @@ public class TripletContainer {
     }
 
     private enum ElementConnection {
-        containsArtifact(ContainmentConnection::new),
+        // containsArtifact(ContainmentConnection::new),
         // isExternal,
         // isLocatedAt,
         imports(ImportConnection::new),

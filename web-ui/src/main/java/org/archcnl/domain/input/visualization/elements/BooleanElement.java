@@ -33,6 +33,11 @@ public class BooleanElement extends PlantUmlElement {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    protected String buildColorSection() {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean getValue() {
         return value;
     }

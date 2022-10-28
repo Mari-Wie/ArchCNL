@@ -16,6 +16,7 @@ import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 import org.archcnl.domain.input.visualization.helpers.WrappingService;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 import org.archcnl.domain.input.visualization.rules.RuleVisualizer;
@@ -57,7 +58,8 @@ public class PlantUmlTransformer {
                         conceptManager,
                         relationManager,
                         Optional.empty(),
-                        new HashSet<>());
+                        new HashSet<>(),
+                        ColorState.NEUTRAL);
         visualizer.enableIsTopLevelConcept();
         return buildPlantUmlCode(visualizer);
     }

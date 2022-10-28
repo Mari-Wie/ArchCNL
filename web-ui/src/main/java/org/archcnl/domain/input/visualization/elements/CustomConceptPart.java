@@ -7,6 +7,7 @@ import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.input.visualization.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class CustomConceptPart implements PlantUmlBlock {
 
@@ -56,5 +57,10 @@ public class CustomConceptPart implements PlantUmlBlock {
     @Override
     public PlantUmlBlock createRequiredParentOrReturnSelf() {
         return this;
+    }
+
+    @Override
+    public void setColorState(ColorState colorState) {
+        throw new UnsupportedOperationException();
     }
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class Method extends PlantUmlElement {
 
@@ -28,6 +29,7 @@ public class Method extends PlantUmlElement {
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
+        builder.append(buildColorSection());
         builder.append(buildModifierSection());
         if (isConstructor) {
             builder.append("<<Create>> ");
@@ -121,5 +123,13 @@ public class Method extends PlantUmlElement {
         FamixClass parent = new FamixClass(new Variable(parentName));
         parent.setProperty("definesMethod", this);
         return parent;
+    }
+
+    @Override
+    protected String buildColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return String.format("<color:%s> ", colorState.getColorName());
+        }
+        return "";
     }
 }

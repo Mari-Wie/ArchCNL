@@ -83,7 +83,25 @@ class RulePlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(rule);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every Aggregate must resideIn a DomainRing.\n"
+                        + "\n"
+                        + "class \"(\\\\w||\\\\W)*Aggregate\" as subjectW #OrangeRed {\n"
+                        + "}\n"
+                        + "folder \"domain\" as object {\n"
+                        + "class \"(\\\\w||\\\\W)*Aggregate\" as subjectC #RoyalBlue {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "subjectC -[bold]-> object\n"
+                        + "note on link: resideIn\n"
+                        + "note \"Aggregate\" as Aggregate\n"
+                        + "Aggregate .. subjectC\n"
+                        + "note \"Aggregate\" as Aggregate1\n"
+                        + "Aggregate1 .. subjectW\n"
+                        + "note \"DomainRing\" as DomainRing\n"
+                        + "DomainRing .. object\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 

@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class AnnotationInstance extends PlantUmlElement {
 
@@ -19,12 +20,14 @@ public class AnnotationInstance extends PlantUmlElement {
     @Override
     public String buildPlantUmlCode() {
         StringBuilder builder = new StringBuilder();
+        builder.append(buildColorSection());
         builder.append("<<");
         builder.append(buildNameSection());
         if (!hasAnnotationInstanceAttribute.isEmpty()) {
             builder.append(buildAttributeSection());
         }
         builder.append(">>");
+        builder.append(closeColorSection());
         return builder.toString();
     }
 
@@ -66,5 +69,20 @@ public class AnnotationInstance extends PlantUmlElement {
         FamixClass famixClass = new FamixClass(new Variable(parentName));
         famixClass.setProperty("hasAnnotationInstance", this);
         return famixClass;
+    }
+
+    @Override
+    protected String buildColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return String.format("<color:%s>", colorState.getColorName());
+        }
+        return "";
+    }
+
+    private String closeColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return "<color>";
+        }
+        return "";
     }
 }

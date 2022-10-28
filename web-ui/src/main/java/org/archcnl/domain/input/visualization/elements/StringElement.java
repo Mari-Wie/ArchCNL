@@ -37,4 +37,9 @@ public class StringElement extends PlantUmlElement {
     public String toString() {
         return buildPlantUmlCode();
     }
+
+    @Override
+    protected String buildColorSection() {
+        throw new UnsupportedOperationException();
+    }
 }

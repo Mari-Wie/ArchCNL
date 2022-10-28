@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public abstract class NamespaceContent extends PlantUmlElement {
 
@@ -21,14 +22,9 @@ public abstract class NamespaceContent extends PlantUmlElement {
         return builder.toString();
     }
 
-    protected abstract String buildNameSection();
-
-    protected abstract String getHighestRankingName();
-
-    protected abstract String getElementIdentifier();
-
     private String buildBodySection() {
         StringBuilder builder = new StringBuilder();
+        builder.append(buildColorSection());
         builder.append(" {\n");
         for (String contentLine : buildBodySectionContentLines()) {
             builder.append(contentLine);
@@ -38,10 +34,24 @@ public abstract class NamespaceContent extends PlantUmlElement {
         return builder.toString();
     }
 
-    protected abstract List<String> buildBodySectionContentLines();
-
     @Override
     protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    protected String buildColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return " " + colorState.getColorName();
+        }
+        return "";
+    }
+
+    protected abstract List<String> buildBodySectionContentLines();
+
+    protected abstract String buildNameSection();
+
+    protected abstract String getHighestRankingName();
+
+    protected abstract String getElementIdentifier();
 }

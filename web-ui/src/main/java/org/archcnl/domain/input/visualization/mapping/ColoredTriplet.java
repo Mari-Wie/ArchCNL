@@ -7,13 +7,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 
 public class ColoredTriplet extends Triplet {
 
-    public enum State {
-        NEUTRAL,
-        CORRECT,
-        WRONG
-    }
-
-    private State state = State.NEUTRAL;
+    private ColorState colorState = ColorState.NEUTRAL;
 
     public ColoredTriplet(Variable subject, Relation predicate, ObjectType object) {
         super(subject, predicate, object);
@@ -23,12 +17,12 @@ public class ColoredTriplet extends Triplet {
         super(triplet.getSubject(), triplet.getPredicate(), triplet.getObject());
     }
 
-    public State getState() {
-        return state;
+    public ColorState getColorState() {
+        return colorState;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setColorState(ColorState colorState) {
+        this.colorState = colorState;
     }
 
     public void setSubject(Variable subject) {
@@ -45,6 +39,6 @@ public class ColoredTriplet extends Triplet {
 
     @Override
     public String toString() {
-        return "(" + state + " " + super.toString() + ")";
+        return "(" + colorState + " " + super.toString() + ")";
     }
 }

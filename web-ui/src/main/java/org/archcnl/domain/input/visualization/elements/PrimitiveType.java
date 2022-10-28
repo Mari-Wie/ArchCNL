@@ -3,6 +3,7 @@ package org.archcnl.domain.input.visualization.elements;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class PrimitiveType extends PlantUmlElement {
 
@@ -27,6 +28,7 @@ public class PrimitiveType extends PlantUmlElement {
         builder.append("class ");
         builder.append(buildNameSection());
         builder.append(variable.getName());
+        builder.append(buildColorSection());
         return builder.toString();
     }
 
@@ -45,11 +47,19 @@ public class PrimitiveType extends PlantUmlElement {
         if (hasName.isEmpty()) {
             return "";
         }
-        return " \"" + hasName.get() + "\" as ";
+        return "\"" + hasName.get() + "\" as ";
     }
 
     @Override
     protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected String buildColorSection() {
+        if (colorState != ColorState.NEUTRAL) {
+            return " " + colorState.getColorName();
+        }
+        return "";
     }
 }

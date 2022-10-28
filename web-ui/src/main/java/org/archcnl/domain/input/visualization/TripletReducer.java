@@ -90,11 +90,11 @@ public class TripletReducer {
             if (triplet.getPredicate().getName().equals("hasSubClass")) {
                 InheritanceRelation relation = inheritanceMap.get(triplet.getSubject());
                 relation.setHasSubClass((Variable) triplet.getObject());
-                relation.setState(triplet.getState());
+                relation.setColorState(triplet.getColorState());
             } else if (triplet.getPredicate().getName().equals("hasSuperClass")) {
                 InheritanceRelation relation = inheritanceMap.get(triplet.getSubject());
                 relation.setHasSuperClass((Variable) triplet.getObject());
-                relation.setState(triplet.getState());
+                relation.setColorState(triplet.getColorState());
             }
         }
         whenTriplets =

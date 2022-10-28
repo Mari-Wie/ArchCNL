@@ -8,12 +8,14 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public abstract class PlantUmlElement implements PlantUmlBlock {
 
     protected Optional<PlantUmlElement> parent = Optional.empty();
     private final boolean requiresParent;
     protected final Variable variable;
+    protected ColorState colorState = ColorState.NEUTRAL;
 
     protected PlantUmlElement(Variable variable, boolean requiresParent) {
         this.variable = variable;
@@ -58,6 +60,11 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
         return identifiers;
     }
 
+    @Override
+    public void setColorState(ColorState colorState) {
+        this.colorState = colorState;
+    }
+
     private String removeNonAlphaNumericSymbols(String string) {
         return string.replaceAll("[^A-Za-z0-9]", "");
     }
@@ -77,6 +84,8 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
     protected String getHighestRankingName() {
         return variable.transformToGui();
     }
+
+    protected abstract String buildColorSection();
 
     protected abstract String buildNameSection();
 
