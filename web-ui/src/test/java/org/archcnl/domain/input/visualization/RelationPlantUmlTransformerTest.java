@@ -227,11 +227,11 @@ class RelationPlantUmlTransformerTest {
                         + "}\n"
                         + "class \".*Controller\" as controller1 {\n"
                         + "}\n"
-                        + "note \"Controller\" as Controller\n"
-                        + "Controller .. controller1\n"
                         + "controller1 -[dashed]-> class: <<imports>>\n"
                         + "class -[bold]-> controller1\n"
                         + "note on link: usedByController\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller1\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }

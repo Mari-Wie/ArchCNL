@@ -11,7 +11,7 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
-import org.archcnl.domain.input.visualization.elements.CustomConceptElement;
+import org.archcnl.domain.input.visualization.elements.CustomConceptPart;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
@@ -22,8 +22,9 @@ import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 
-    private CustomConceptElement conceptElement;
+    private CustomConceptPart conceptElement;
     private List<ConceptVariant> variants = new ArrayList<>();
+    private boolean isTopLevelConcept = false;
 
     public ConceptVisualizer(
             ColoredMapping mapping,
@@ -44,7 +45,7 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
                 NamePicker.pickUniqueVariable(
                         usedVariables, new HashMap<>(), new Variable(concept.getName()));
 
-        this.conceptElement = new CustomConceptElement(concept, uniqueVar.getName());
+        this.conceptElement = new CustomConceptPart(concept, uniqueVar.getName());
     }
 
     private void createVariants(Optional<Variable> parentSubject)
@@ -72,27 +73,14 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
     public String buildPlantUmlCode() {
         boolean printBorder = moreThanOneVariant();
         StringBuilder builder = new StringBuilder();
-        for (ConceptVariant variant : variants) {
-            builder.append(variant.buildPlantUmlCode(printBorder));
+        builder.append(
+                variants.stream()
+                        .map(v -> v.buildPlantUmlCode(printBorder))
+                        .collect(Collectors.joining("\n")));
+        if (isTopLevelConcept) {
+            addConnectionsToConceptElement();
             builder.append("\n");
-        }
-        builder.append(buildConceptSection());
-        return builder.toString();
-    }
-
-    private String buildConceptSection() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(conceptElement.buildPlantUmlCode());
-        for (ConceptVariant variant : variants) {
-            List<String> conceptIds = conceptElement.getIdentifiers();
-            List<String> objectIds = variant.getIdentifiers();
-            for (String conceptId : conceptIds) {
-                for (String objectId : objectIds) {
-                    BasicConnection connection = new BasicConnection(conceptId, objectId);
-                    builder.append("\n");
-                    builder.append(connection.buildPlantUmlCode());
-                }
-            }
+            builder.append(conceptElement.buildPlantUmlCode());
         }
         return builder.toString();
     }
@@ -107,11 +95,10 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
 
     @Override
     public boolean hasParentBeenFound() {
-        boolean result = true;
-        for (PlantUmlElement element : getBaseElements()) {
-            result = result && element.hasParentBeenFound();
+        for (ConceptVariant variant : variants) {
+            variant.removeUmlElementsWithParents();
         }
-        return result;
+        return false;
     }
 
     @Override
@@ -140,5 +127,27 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
             variant.getBaseElements().forEach(PlantUmlBlock::createRequiredParentOrReturnSelf);
         }
         return this;
+    }
+
+    public PlantUmlPart getConceptElement() {
+        addConnectionsToConceptElement();
+        return conceptElement;
+    }
+
+    private void addConnectionsToConceptElement() {
+        for (ConceptVariant variant : variants) {
+            List<String> conceptIds = conceptElement.getIdentifiers();
+            List<String> objectIds = variant.getIdentifiers();
+            for (String conceptId : conceptIds) {
+                for (String objectId : objectIds) {
+                    BasicConnection connection = new BasicConnection(conceptId, objectId);
+                    conceptElement.addConnection(connection);
+                }
+            }
+        }
+    }
+
+    public void enableIsTopLevelConcept() {
+        isTopLevelConcept = true;
     }
 }

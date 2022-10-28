@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -84,5 +85,20 @@ public class ConceptVariant extends MappingVariant {
 
     private PlantUmlBlock getThenSubjectBlock() {
         return elementMap.get(thenTriplet.getSubject());
+    }
+
+    public void removeUmlElementsWithParents() {
+        List<PlantUmlPart> filteredElements = new ArrayList<>();
+        for (PlantUmlPart part : umlElements) {
+            if (part instanceof PlantUmlBlock) {
+                PlantUmlBlock block = (PlantUmlBlock) part;
+                if (!block.hasParentBeenFound()) {
+                    filteredElements.add(part);
+                }
+            } else {
+                filteredElements.add(part);
+            }
+        }
+        umlElements = filteredElements;
     }
 }

@@ -54,6 +54,7 @@ public class MappingTranslator {
         List<PlantUmlPart> parts = new ArrayList<>();
         parts.addAll(createRequiredParents(topLevelElements));
         parts.addAll(container.createConnections(elementMap));
+        parts.addAll(getConceptElements(elementMap));
         return parts;
     }
 
@@ -132,6 +133,17 @@ public class MappingTranslator {
         }
         throw new MappingToUmlTranslationFailedException(
                 "No representative type could be picked from: " + options);
+    }
+
+    private List<PlantUmlPart> getConceptElements(Map<Variable, PlantUmlBlock> elementMap) {
+        List<PlantUmlPart> conceptElements = new ArrayList<>();
+        for (PlantUmlBlock block : elementMap.values()) {
+            if (block instanceof ConceptVisualizer) {
+                ConceptVisualizer visualizer = (ConceptVisualizer) block;
+                conceptElements.add(visualizer.getConceptElement());
+            }
+        }
+        return conceptElements;
     }
 
     private List<PlantUmlBlock> getTopLevelElements(Map<Variable, PlantUmlBlock> elementMap) {

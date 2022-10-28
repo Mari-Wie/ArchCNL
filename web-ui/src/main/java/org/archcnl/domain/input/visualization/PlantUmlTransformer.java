@@ -58,6 +58,7 @@ public class PlantUmlTransformer {
                         relationManager,
                         Optional.empty(),
                         new HashSet<>());
+        visualizer.enableIsTopLevelConcept();
         return buildPlantUmlCode(visualizer);
     }
 
