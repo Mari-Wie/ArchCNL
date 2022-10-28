@@ -4,17 +4,21 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class PrimitiveType extends PlantUmlElement implements DeclaredType {
+public class PrimitiveType extends PlantUmlElement {
 
-    private Optional<String> hasName = Optional.empty();
+    private Optional<PlantUmlElement> hasName = Optional.empty();
 
     public PrimitiveType(Variable variable) {
         super(variable, false);
     }
 
     @Override
-    public String getTypeRepresentation() {
-        return hasName.isPresent() ? hasName.get() : variable.transformToGui();
+    protected String getHighestRankingName() {
+        String nameSection = variable.transformToGui();
+        if (hasName.isPresent()) {
+            nameSection = hasName.get().toString();
+        }
+        return nameSection;
     }
 
     @Override
@@ -27,9 +31,10 @@ public class PrimitiveType extends PlantUmlElement implements DeclaredType {
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         if ("hasName".equals(property)) {
-            this.hasName = Optional.of((String) object);
+            this.hasName = Optional.of(object);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }

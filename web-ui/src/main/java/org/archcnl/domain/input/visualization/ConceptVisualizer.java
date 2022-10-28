@@ -98,7 +98,8 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         for (var variant : variants) {
             variant.setProperty(property, object);
         }

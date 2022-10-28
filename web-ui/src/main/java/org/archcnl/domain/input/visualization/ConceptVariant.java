@@ -50,7 +50,8 @@ public class ConceptVariant extends MappingVariant {
         return elementMap.get(thenTriplet.getSubject()).getIdentifiers();
     }
 
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         getThenSubjectBlock().setProperty(property, object);
     }
 

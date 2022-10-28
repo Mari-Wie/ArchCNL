@@ -8,8 +8,8 @@ public class AnnotationTypeAttribute extends PlantUmlElement {
 
     private static final String FIELD_MODIFIER = "{field}";
 
-    private Optional<String> hasName = Optional.empty();
-    private Optional<DeclaredType> hasDeclaredType = Optional.empty();
+    private Optional<PlantUmlElement> hasName = Optional.empty();
+    private Optional<PlantUmlElement> hasDeclaredType = Optional.empty();
 
     public AnnotationTypeAttribute(Variable variable) {
         super(variable, true);
@@ -26,22 +26,23 @@ public class AnnotationTypeAttribute extends PlantUmlElement {
 
     @Override
     protected String buildNameSection() {
-        return hasName.isPresent() ? hasName.get() : variable.transformToGui();
+        return hasName.isPresent() ? hasName.get().toString() : variable.transformToGui();
     }
 
     private String buildTypeSection() {
         if (hasDeclaredType.isPresent()) {
-            return " : " + hasDeclaredType.get().getTypeRepresentation();
+            return " : " + hasDeclaredType.get().getHighestRankingName();
         }
         return "";
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         if ("hasName".equals(property)) {
-            this.hasName = Optional.of((String) object);
+            this.hasName = Optional.of(object);
         } else if ("hasDeclaredType".equals(property)) {
-            this.hasDeclaredType = Optional.of((DeclaredType) object);
+            this.hasDeclaredType = Optional.of(object);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }

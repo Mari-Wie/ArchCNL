@@ -74,6 +74,10 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
         return parent;
     }
 
+    protected String getHighestRankingName() {
+        return variable.transformToGui();
+    }
+
     protected abstract String buildNameSection();
 
     protected abstract PlantUmlElement createParent(String parentName)

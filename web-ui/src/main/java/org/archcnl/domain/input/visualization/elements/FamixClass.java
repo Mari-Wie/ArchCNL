@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class FamixClass extends ClassOrEnum implements FamixType, DeclaredType {
+public class FamixClass extends ClassOrEnum implements FamixType {
 
     private boolean isInterface = false;
-    private List<FamixClass> inheritsFrom = new ArrayList<>();
+    private List<PlantUmlElement> inheritsFrom = new ArrayList<>();
 
     public FamixClass(Variable variable) {
         super(variable);
@@ -26,11 +26,12 @@ public class FamixClass extends ClassOrEnum implements FamixType, DeclaredType {
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         if ("isInterface".equals(property)) {
-            this.isInterface = (boolean) object;
+            this.isInterface = ((BooleanElement) object).getValue();
         } else if ("inheritsFrom".equals(property)) {
-            inheritsFrom.add((FamixClass) object);
+            inheritsFrom.add(object);
         } else {
             super.setProperty(property, object);
         }
@@ -42,9 +43,17 @@ public class FamixClass extends ClassOrEnum implements FamixType, DeclaredType {
             return "";
         }
         List<FamixClass> classParents =
-                inheritsFrom.stream().filter(c -> !c.isInterface).collect(Collectors.toList());
+                inheritsFrom.stream()
+                        .filter(FamixClass.class::isInstance)
+                        .map(FamixClass.class::cast)
+                        .filter(c -> !c.isInterface)
+                        .collect(Collectors.toList());
         List<FamixClass> interfaceParents =
-                inheritsFrom.stream().filter(c -> c.isInterface).collect(Collectors.toList());
+                inheritsFrom.stream()
+                        .filter(FamixClass.class::isInstance)
+                        .map(FamixClass.class::cast)
+                        .filter(c -> c.isInterface)
+                        .collect(Collectors.toList());
         StringBuilder builder = new StringBuilder();
         if (!classParents.isEmpty()) {
             builder.append(" extends ");

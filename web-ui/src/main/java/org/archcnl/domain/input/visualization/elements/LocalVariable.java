@@ -7,8 +7,8 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class LocalVariable extends PlantUmlElement {
 
-    private Optional<String> hasName = Optional.empty();
-    private Optional<DeclaredType> hasDeclaredType = Optional.empty();
+    private Optional<PlantUmlElement> hasName = Optional.empty();
+    private Optional<PlantUmlElement> hasDeclaredType = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
 
     public LocalVariable(Variable variable) {
@@ -33,27 +33,28 @@ public class LocalVariable extends PlantUmlElement {
 
     @Override
     protected String buildNameSection() {
-        return hasName.isPresent() ? hasName.get() : variable.transformToGui();
+        return hasName.isPresent() ? hasName.get().toString() : variable.transformToGui();
     }
 
     private String buildTypeSection() {
         if (hasDeclaredType.isPresent()) {
-            return " : " + hasDeclaredType.get().getTypeRepresentation();
+            return " : " + hasDeclaredType.get().getHighestRankingName();
         }
         return "";
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
-                this.hasName = Optional.of((String) object);
+                this.hasName = Optional.of(object);
                 break;
             case "hasDeclaredType":
-                this.hasDeclaredType = Optional.of((DeclaredType) object);
+                this.hasDeclaredType = Optional.of(object);
                 break;
             case "hasModifier":
-                this.modifierContainer.setModifier((String) object);
+                this.modifierContainer.setModifier(object.toString());
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");

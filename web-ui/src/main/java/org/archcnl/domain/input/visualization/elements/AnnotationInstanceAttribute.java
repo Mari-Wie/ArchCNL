@@ -6,8 +6,8 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class AnnotationInstanceAttribute extends PlantUmlElement {
 
-    private Optional<String> hasValue = Optional.empty();
-    private Optional<AnnotationTypeAttribute> hasAnnotationTypeAttribute = Optional.empty();
+    private Optional<PlantUmlElement> hasValue = Optional.empty();
+    private Optional<PlantUmlElement> hasAnnotationTypeAttribute = Optional.empty();
 
     public AnnotationInstanceAttribute(Variable variable) {
         super(variable, true);
@@ -35,11 +35,12 @@ public class AnnotationInstanceAttribute extends PlantUmlElement {
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         if ("hasValue".equals(property)) {
-            this.hasValue = Optional.of((String) object);
+            this.hasValue = Optional.of(object);
         } else if ("hasDeclaredType".equals(property)) {
-            this.hasAnnotationTypeAttribute = Optional.of((AnnotationTypeAttribute) object);
+            this.hasAnnotationTypeAttribute = Optional.of(object);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }

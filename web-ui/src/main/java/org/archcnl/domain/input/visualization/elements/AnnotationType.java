@@ -10,11 +10,11 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class AnnotationType extends NamespaceContent implements FamixType {
 
-    private Optional<String> hasFullQualifiedName = Optional.empty();
+    private Optional<PlantUmlElement> hasFullQualifiedName = Optional.empty();
     private ModifierContainer modifierContainer = new ModifierContainer();
     // PlantUml does not allow for multiple stereotypes
-    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
-    private List<AnnotationTypeAttribute> hasAnnotationTypeAttribute = new ArrayList<>();
+    private List<PlantUmlElement> hasAnnotationInstance = new ArrayList<>();
+    private List<PlantUmlElement> hasAnnotationTypeAttribute = new ArrayList<>();
 
     public AnnotationType(Variable variable) {
         super(variable);
@@ -33,26 +33,25 @@ public class AnnotationType extends NamespaceContent implements FamixType {
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
-                this.hasName = Optional.of((String) object);
+                this.hasName = Optional.of(object);
                 break;
             case "hasFullQualifiedName":
-                this.hasFullQualifiedName = Optional.of((String) object);
+                this.hasFullQualifiedName = Optional.of(object);
                 break;
             case "hasModifier":
-                this.modifierContainer.setModifier((String) object);
+                this.modifierContainer.setModifier(object.toString());
                 break;
             case "hasAnnotationInstance":
-                AnnotationInstance instance = (AnnotationInstance) object;
-                instance.setParent(this);
-                this.hasAnnotationInstance.add(instance);
+                object.setParent(this);
+                this.hasAnnotationInstance.add(object);
                 break;
             case "hasAnnotationTypeAttribute":
-                AnnotationTypeAttribute attribute = (AnnotationTypeAttribute) object;
-                attribute.setParent(this);
-                this.hasAnnotationTypeAttribute.add(attribute);
+                object.setParent(this);
+                this.hasAnnotationTypeAttribute.add(object);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
@@ -63,10 +62,10 @@ public class AnnotationType extends NamespaceContent implements FamixType {
     protected String getHighestRankingName() {
         String nameSection = variable.transformToGui();
         if (hasFullQualifiedName.isPresent()) {
-            nameSection = hasFullQualifiedName.get();
+            nameSection = hasFullQualifiedName.get().buildPlantUmlCode();
         }
         if (hasName.isPresent()) {
-            nameSection = hasName.get();
+            nameSection = hasName.get().buildPlantUmlCode();
         }
         return nameSection;
     }
@@ -79,7 +78,7 @@ public class AnnotationType extends NamespaceContent implements FamixType {
     @Override
     protected List<String> buildBodySectionContentLines() {
         return hasAnnotationTypeAttribute.stream()
-                .map(AnnotationTypeAttribute::buildPlantUmlCode)
+                .map(PlantUmlElement::buildPlantUmlCode)
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +88,7 @@ public class AnnotationType extends NamespaceContent implements FamixType {
         }
         return " "
                 + hasAnnotationInstance.stream()
-                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .map(PlantUmlElement::buildPlantUmlCode)
                         .collect(Collectors.joining());
     }
 

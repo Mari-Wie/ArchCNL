@@ -21,7 +21,9 @@ import org.archcnl.domain.input.visualization.connections.DefinesVariableConnect
 import org.archcnl.domain.input.visualization.connections.ImportConnection;
 import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.connections.ThrowsExceptionConnection;
+import org.archcnl.domain.input.visualization.elements.BooleanElement;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
+import org.archcnl.domain.input.visualization.elements.StringElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
@@ -101,10 +103,12 @@ public class TripletContainer {
                 tryToSetProperty(subjectElement, predicate.getName(), objectElement);
             } else if (object instanceof StringValue) {
                 String objectString = ((StringValue) object).getValue();
-                tryToSetProperty(subjectElement, predicate.getName(), objectString);
+                StringElement stringElement = new StringElement(objectString);
+                tryToSetProperty(subjectElement, predicate.getName(), stringElement);
             } else {
                 boolean objectBool = ((BooleanValue) object).getValue();
-                tryToSetProperty(subjectElement, predicate.getName(), objectBool);
+                BooleanElement boolElement = new BooleanElement(objectBool);
+                tryToSetProperty(subjectElement, predicate.getName(), boolElement);
             }
         }
     }
@@ -161,7 +165,7 @@ public class TripletContainer {
         return connections;
     }
 
-    private void tryToSetProperty(PlantUmlBlock element, String property, Object object)
+    private void tryToSetProperty(PlantUmlBlock element, String property, PlantUmlBlock object)
             throws MappingToUmlTranslationFailedException {
         try {
             if (object instanceof ConceptVisualizer) {
@@ -170,7 +174,7 @@ public class TripletContainer {
                     element.setProperty(property, baseElement);
                 }
             } else {
-                element.setProperty(property, object);
+                element.setProperty(property, (PlantUmlElement) object);
             }
         } catch (PropertyNotFoundException e) {
             throw new MappingToUmlTranslationFailedException(e.getMessage());

@@ -14,11 +14,11 @@ public class Method extends PlantUmlElement {
     private static final String ABSTRACT_MODIFIER = "{abstract}";
     private static final String STATIC_MODIFIER = "{static}";
 
-    private Optional<String> hasName = Optional.empty();
-    private List<Parameter> definesParameter = new ArrayList<>();
+    private Optional<PlantUmlElement> hasName = Optional.empty();
+    private List<PlantUmlElement> definesParameter = new ArrayList<>();
     private ModifierContainer modifierContainer = new ModifierContainer();
-    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
-    private Optional<DeclaredType> hasDeclaredType = Optional.empty();
+    private List<PlantUmlElement> hasAnnotationInstance = new ArrayList<>();
+    private Optional<PlantUmlElement> hasDeclaredType = Optional.empty();
     private boolean isConstructor = false;
 
     public Method(Variable variable) {
@@ -54,7 +54,7 @@ public class Method extends PlantUmlElement {
 
     @Override
     protected String buildNameSection() {
-        return hasName.isPresent() ? hasName.get() : variable.transformToGui();
+        return hasName.isPresent() ? hasName.get().toString() : variable.transformToGui();
     }
 
     private String buildParameterSection() {
@@ -63,7 +63,7 @@ public class Method extends PlantUmlElement {
         // (a:String, b:String, c:String, d:int)
         String joinedParameters =
                 definesParameter.stream()
-                        .map(Parameter::buildPlantUmlCode)
+                        .map(PlantUmlElement::buildPlantUmlCode)
                         .collect(Collectors.joining(", "));
         builder.append(joinedParameters);
         builder.append(")");
@@ -72,7 +72,7 @@ public class Method extends PlantUmlElement {
 
     private String buildTypeSection() {
         if (hasDeclaredType.isPresent()) {
-            return " : " + hasDeclaredType.get().getTypeRepresentation();
+            return " : " + hasDeclaredType.get().getHighestRankingName();
         }
         return "";
     }
@@ -83,34 +83,33 @@ public class Method extends PlantUmlElement {
         }
         return " "
                 + hasAnnotationInstance.stream()
-                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .map(PlantUmlElement::buildPlantUmlCode)
                         .collect(Collectors.joining());
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
-                this.hasName = Optional.of((String) object);
+                this.hasName = Optional.of(object);
                 break;
             case "hasAnnotationInstance":
-                AnnotationInstance instance = (AnnotationInstance) object;
-                instance.setParent(this);
-                this.hasAnnotationInstance.add(instance);
+                object.setParent(this);
+                this.hasAnnotationInstance.add(object);
                 break;
             case "hasDeclaredType":
-                this.hasDeclaredType = Optional.of((DeclaredType) object);
+                this.hasDeclaredType = Optional.of(object);
                 break;
             case "hasModifier":
-                this.modifierContainer.setModifier((String) object);
+                this.modifierContainer.setModifier(object.toString());
                 break;
             case "definesParameter":
-                Parameter parameter = (Parameter) object;
-                parameter.setParent(this);
-                this.definesParameter.add(parameter);
+                object.setParent(this);
+                this.definesParameter.add(object);
                 break;
             case "isConstructor":
-                this.isConstructor = (boolean) object;
+                this.isConstructor = ((BooleanElement) object).getValue();
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");

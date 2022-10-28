@@ -8,44 +8,42 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.elements.containers.ModifierContainer;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public abstract class ClassOrEnum extends NamespaceContent implements DeclaredType, FamixType {
+public abstract class ClassOrEnum extends NamespaceContent implements FamixType {
 
-    private Optional<String> hasFullQualifiedName = Optional.empty();
+    private Optional<PlantUmlElement> hasFullQualifiedName = Optional.empty();
     protected ModifierContainer modifierContainer = new ModifierContainer();
-    private List<AnnotationInstance> hasAnnotationInstance = new ArrayList<>();
-    private List<Field> definesAttribute = new ArrayList<>();
-    private List<Method> definesMethod = new ArrayList<>();
+    private List<PlantUmlElement> hasAnnotationInstance = new ArrayList<>();
+    private List<PlantUmlElement> definesAttribute = new ArrayList<>();
+    private List<PlantUmlElement> definesMethod = new ArrayList<>();
 
     protected ClassOrEnum(Variable variable) {
         super(variable);
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
-                this.hasName = Optional.of((String) object);
+                this.hasName = Optional.of(object);
                 break;
             case "hasFullQualifiedName":
-                this.hasFullQualifiedName = Optional.of((String) object);
+                this.hasFullQualifiedName = Optional.of(object);
                 break;
             case "hasModifier":
-                this.modifierContainer.setModifier((String) object);
+                this.modifierContainer.setModifier(object.toString());
                 break;
             case "hasAnnotationInstance":
-                AnnotationInstance instance = (AnnotationInstance) object;
-                instance.setParent(this);
-                this.hasAnnotationInstance.add(instance);
+                object.setParent(this);
+                this.hasAnnotationInstance.add(object);
                 break;
             case "definesAttribute":
-                Field field = (Field) object;
-                field.setParent(this);
-                this.definesAttribute.add(field);
+                object.setParent(this);
+                this.definesAttribute.add(object);
                 break;
             case "definesMethod":
-                Method method = (Method) object;
-                method.setParent(this);
-                this.definesMethod.add(method);
+                object.setParent(this);
+                this.definesMethod.add(object);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
@@ -65,18 +63,13 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
         return builder.toString();
     }
 
-    @Override
-    public String getTypeRepresentation() {
-        return getHighestRankingName();
-    }
-
     protected String buildAnnotationSection() {
         if (hasAnnotationInstance.isEmpty()) {
             return "";
         }
         return " "
                 + hasAnnotationInstance.stream()
-                        .map(AnnotationInstance::buildPlantUmlCode)
+                        .map(PlantUmlElement::buildPlantUmlCode)
                         .collect(Collectors.joining());
     }
 
@@ -84,10 +77,10 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
     protected String getHighestRankingName() {
         String nameSection = variable.transformToGui();
         if (hasFullQualifiedName.isPresent()) {
-            nameSection = hasFullQualifiedName.get();
+            nameSection = hasFullQualifiedName.get().toString();
         }
         if (hasName.isPresent()) {
-            nameSection = hasName.get();
+            nameSection = hasName.get().toString();
         }
         return nameSection;
     }
@@ -101,11 +94,15 @@ public abstract class ClassOrEnum extends NamespaceContent implements DeclaredTy
     }
 
     private List<String> buildAttributeLines() {
-        return definesAttribute.stream().map(Field::buildPlantUmlCode).collect(Collectors.toList());
+        return definesAttribute.stream()
+                .map(PlantUmlElement::buildPlantUmlCode)
+                .collect(Collectors.toList());
     }
 
     private List<String> buildMethodLines() {
-        return definesMethod.stream().map(Method::buildPlantUmlCode).collect(Collectors.toList());
+        return definesMethod.stream()
+                .map(PlantUmlElement::buildPlantUmlCode)
+                .collect(Collectors.toList());
     }
 
     protected String buildVisibilityPrefixSection() {

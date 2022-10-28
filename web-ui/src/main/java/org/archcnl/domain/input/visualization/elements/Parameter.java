@@ -7,8 +7,8 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class Parameter extends PlantUmlElement {
 
-    private Optional<String> hasName = Optional.empty();
-    private Optional<DeclaredType> hasDeclaredType = Optional.empty();
+    private Optional<PlantUmlElement> hasName = Optional.empty();
+    private Optional<PlantUmlElement> hasDeclaredType = Optional.empty();
 
     public Parameter(Variable variable) {
         super(variable, true);
@@ -24,26 +24,27 @@ public class Parameter extends PlantUmlElement {
 
     @Override
     protected String buildNameSection() {
-        return hasName.isPresent() ? hasName.get() : variable.transformToGui();
+        return hasName.isPresent() ? hasName.get().toString() : variable.transformToGui();
     }
 
     private String buildTypeSection() {
         StringBuilder builder = new StringBuilder();
         if (hasDeclaredType.isPresent()) {
             builder.append(":");
-            builder.append(hasDeclaredType.get().getTypeRepresentation());
+            builder.append(hasDeclaredType.get().getHighestRankingName());
         }
         return builder.toString();
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
-                this.hasName = Optional.of((String) object);
+                this.hasName = Optional.of(object);
                 break;
             case "hasDeclaredType":
-                this.hasDeclaredType = Optional.of((DeclaredType) object);
+                this.hasDeclaredType = Optional.of(object);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");

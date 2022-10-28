@@ -9,8 +9,8 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class AnnotationInstance extends PlantUmlElement {
 
-    private Optional<AnnotationType> hasAnnotationType = Optional.empty();
-    private List<AnnotationInstanceAttribute> hasAnnotationInstanceAttribute = new ArrayList<>();
+    private Optional<PlantUmlElement> hasAnnotationType = Optional.empty();
+    private List<PlantUmlElement> hasAnnotationInstanceAttribute = new ArrayList<>();
 
     public AnnotationInstance(Variable variable) {
         super(variable, true);
@@ -41,7 +41,7 @@ public class AnnotationInstance extends PlantUmlElement {
         builder.append("(");
         String joinedAttributes =
                 hasAnnotationInstanceAttribute.stream()
-                        .map(AnnotationInstanceAttribute::buildPlantUmlCode)
+                        .map(PlantUmlElement::buildPlantUmlCode)
                         .collect(Collectors.joining(", "));
         builder.append(joinedAttributes);
         builder.append(")");
@@ -49,13 +49,13 @@ public class AnnotationInstance extends PlantUmlElement {
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         if ("hasAnnotationType".equals(property)) {
-            this.hasAnnotationType = Optional.of((AnnotationType) object);
+            this.hasAnnotationType = Optional.of(object);
         } else if ("hasAnnotationInstanceAttribute".equals(property)) {
-            AnnotationInstanceAttribute attribute = (AnnotationInstanceAttribute) object;
-            attribute.setParent(this);
-            this.hasAnnotationInstanceAttribute.add(attribute);
+            object.setParent(this);
+            this.hasAnnotationInstanceAttribute.add(object);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }

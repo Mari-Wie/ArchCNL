@@ -6,7 +6,7 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class SoftwareArtifaceFile extends PlantUmlElement {
 
-    private Optional<String> hasPath = Optional.empty();
+    private Optional<PlantUmlElement> hasPath = Optional.empty();
 
     public SoftwareArtifaceFile(Variable variable) {
         super(variable, false);
@@ -25,9 +25,10 @@ public class SoftwareArtifaceFile extends PlantUmlElement {
     }
 
     @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         if ("hasPath".equals(property)) {
-            this.hasPath = Optional.of((String) object);
+            this.hasPath = Optional.of(object);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
         }

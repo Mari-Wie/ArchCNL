@@ -1,21 +1,20 @@
 package org.archcnl.domain.input.visualization.elements;
 
-import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
-public class CustomConceptElement extends PlantUmlElement {
+public class StringElement extends PlantUmlElement {
 
-    private CustomConcept concept;
+    private String text;
 
-    public CustomConceptElement(CustomConcept concept, String uniqueName) {
-        super(new Variable(uniqueName), false);
-        this.concept = concept;
+    public StringElement(String text) {
+        super(new Variable(text), true);
+        this.text = text;
     }
 
     @Override
     public String buildPlantUmlCode() {
-        return buildNameSection();
+        return text;
     }
 
     @Override
@@ -26,16 +25,16 @@ public class CustomConceptElement extends PlantUmlElement {
 
     @Override
     protected String buildNameSection() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("note ");
-        builder.append("\"" + concept.getName() + "\"");
-        builder.append(" as ");
-        builder.append(getIdentifiers().get(0));
-        return builder.toString();
+        return text;
     }
 
     @Override
     protected PlantUmlElement createParent(String parentName) throws PropertyNotFoundException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String toString() {
+        return buildPlantUmlCode();
     }
 }

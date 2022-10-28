@@ -9,7 +9,7 @@ import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundExcepti
 
 public class Namespace extends NamespaceContent {
 
-    private List<NamespaceContent> namespaceContains = new ArrayList<>();
+    private List<PlantUmlElement> namespaceContains = new ArrayList<>();
 
     public Namespace(Variable variable) {
         super(variable);
@@ -28,13 +28,8 @@ public class Namespace extends NamespaceContent {
     @Override
     protected List<String> buildBodySectionContentLines() {
         return namespaceContains.stream()
-                .map(NamespaceContent::buildPlantUmlCode)
+                .map(PlantUmlElement::buildPlantUmlCode)
                 .collect(Collectors.toList());
-    }
-
-    public void addContainedElement(NamespaceContent element) {
-        element.increaseIndentation();
-        namespaceContains.add(element);
     }
 
     @Override
@@ -43,21 +38,15 @@ public class Namespace extends NamespaceContent {
     }
 
     @Override
-    protected void increaseIndentation() {
-        super.increaseIndentation();
-        namespaceContains.forEach(NamespaceContent::increaseIndentation);
-    }
-
-    @Override
-    public void setProperty(String property, Object object) throws PropertyNotFoundException {
+    public void setProperty(String property, PlantUmlElement object)
+            throws PropertyNotFoundException {
         switch (property) {
             case "hasName":
-                this.hasName = Optional.of((String) object);
+                this.hasName = Optional.of(object);
                 break;
             case "namespaceContains":
-                NamespaceContent content = (NamespaceContent) object;
-                content.setParent(this);
-                addContainedElement(content);
+                object.setParent(this);
+                namespaceContains.add(object);
                 break;
             default:
                 throw new PropertyNotFoundException(property + " couldn't be set");
@@ -67,7 +56,7 @@ public class Namespace extends NamespaceContent {
     @Override
     protected String getHighestRankingName() {
         if (hasName.isPresent()) {
-            return hasName.get();
+            return hasName.get().toString();
         }
         return variable.transformToGui();
     }
