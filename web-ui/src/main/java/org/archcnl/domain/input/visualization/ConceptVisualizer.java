@@ -163,7 +163,5 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
     }
 
     @Override
-    public void setColorState(ColorState colorState) {
-        throw new UnsupportedOperationException();
-    }
+    public void setColorState(ColorState colorState) {}
 }

@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.elements;
 
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
@@ -7,9 +8,9 @@ public class BooleanElement extends PlantUmlElement {
 
     private boolean value;
 
-    public BooleanElement(boolean value) {
-        super(new Variable(String.valueOf(value)), true);
-        this.value = value;
+    public BooleanElement(BooleanValue booleanValue) {
+        super(new Variable(String.valueOf(booleanValue.getValue())), true);
+        this.value = booleanValue.getValue();
     }
 
     @Override

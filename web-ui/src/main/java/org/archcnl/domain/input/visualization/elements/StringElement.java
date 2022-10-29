@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.elements;
 
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 
@@ -7,9 +8,9 @@ public class StringElement extends PlantUmlElement {
 
     private String text;
 
-    public StringElement(String text) {
-        super(new Variable(text), true);
-        this.text = text;
+    public StringElement(StringValue stringValue) {
+        super(new Variable(stringValue.getValue()), true);
+        this.text = stringValue.getValue();
     }
 
     @Override

@@ -93,21 +93,21 @@ public class TripletContainer {
 
     public void applyElementProperties(Map<Variable, PlantUmlBlock> elementMap)
             throws MappingToUmlTranslationFailedException {
-        for (Triplet triplet : elementPropertyTriplets) {
+        for (ColoredTriplet triplet : elementPropertyTriplets) {
             Variable subject = triplet.getSubject();
             Relation predicate = triplet.getPredicate();
             ObjectType object = triplet.getObject();
             PlantUmlBlock subjectElement = elementMap.get(subject);
+            subjectElement.setColorState(triplet.getColorState());
             if (object instanceof Variable) {
                 PlantUmlBlock objectElement = elementMap.get(object);
+                objectElement.setColorState(triplet.getColorState());
                 tryToSetProperty(subjectElement, predicate.getName(), objectElement);
             } else if (object instanceof StringValue) {
-                String objectString = ((StringValue) object).getValue();
-                StringElement stringElement = new StringElement(objectString);
+                StringElement stringElement = new StringElement((StringValue) object);
                 tryToSetProperty(subjectElement, predicate.getName(), stringElement);
             } else {
-                boolean objectBool = ((BooleanValue) object).getValue();
-                BooleanElement boolElement = new BooleanElement(objectBool);
+                BooleanElement boolElement = new BooleanElement((BooleanValue) object);
                 tryToSetProperty(subjectElement, predicate.getName(), boolElement);
             }
         }

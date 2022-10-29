@@ -72,7 +72,7 @@ public abstract class RuleVisualizer implements Visualizer {
         if (ExistentialRuleVisualizer.matches(rule)) {
             return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
         }
-        throw new MappingToUmlTranslationFailedException(rule + "couldn't be parsed.");
+        throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
     }
 
     private static boolean containsLogicWords(String rule) {
