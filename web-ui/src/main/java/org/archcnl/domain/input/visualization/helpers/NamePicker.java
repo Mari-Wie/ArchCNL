@@ -9,9 +9,6 @@ public class NamePicker {
     private static final String GENERATED_NAME_PREFIX = "GENERATED";
     private static int generatedNamesCounter = 0;
 
-    private static final String THAT_PREFIX = "THAT";
-    private static int thatCounter = 0;
-
     private NamePicker() {}
 
     public static Variable pickUniqueVariable(
@@ -43,8 +40,7 @@ public class NamePicker {
         return GENERATED_NAME_PREFIX + generatedNamesCounter;
     }
 
-    public static String getNextThatName() {
-        thatCounter++;
-        return THAT_PREFIX + thatCounter;
+    public static String getStringWithFirstLetterInLowerCase(String str) {
+        return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
 }

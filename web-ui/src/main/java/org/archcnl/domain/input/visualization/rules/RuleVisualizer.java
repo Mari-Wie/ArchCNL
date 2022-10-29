@@ -1,12 +1,23 @@
 package org.archcnl.domain.input.visualization.rules;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.Concept;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.MappingTranslator;
@@ -15,6 +26,7 @@ import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.Visualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
+import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
@@ -30,14 +42,23 @@ public abstract class RuleVisualizer implements Visualizer {
 
     protected ConceptManager conceptManager;
     protected RelationManager relationManager;
-    private String cnlString;
+    protected String cnlString;
+    protected List<Triplet> subjectTriplets;
+    protected List<Triplet> objectTriplets;
+    protected Relation relation;
+
     private List<PlantUmlPart> umlElements;
+    private Set<Variable> usedVariables = new HashSet<>();
 
     protected RuleVisualizer(
-            ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager) {
+            ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
+            throws MappingToUmlTranslationFailedException {
         this.cnlString = rule.toString();
         this.conceptManager = conceptManager;
         this.relationManager = relationManager;
+        parseRule(cnlString);
+        List<ColoredTriplet> ruleTriplets = buildRuleTriplets();
+        buildUmlElements(ruleTriplets);
     }
 
     @Override
@@ -62,6 +83,91 @@ public abstract class RuleVisualizer implements Visualizer {
         umlElements = translator.translateToPlantUmlModel(elementMap);
     }
 
+    protected Relation parsePredicate(String group) throws MappingToUmlTranslationFailedException {
+        String relationName = group.split(" ")[0];
+        // TODO handle cardinality modifiers
+        return getRelation(relationName);
+    }
+
+    protected List<Triplet> parseConceptExpression(
+            String expression,
+            Optional<Relation> previousRelation,
+            Optional<Variable> previousVariable)
+            throws MappingToUmlTranslationFailedException {
+        Matcher matcher = conceptExpression.matcher(expression);
+        tryToFindMatch(matcher);
+        List<Triplet> res = new ArrayList<>();
+
+        Concept concept = getConcept(matcher.group("concept"));
+        Variable nextVariable = pickUniqueVariableForConcept(concept);
+        Relation typeRelation = TypeRelation.getTyperelation();
+        res.add(new Triplet(nextVariable, typeRelation, concept));
+
+        if (previousRelation.isPresent() && previousVariable.isPresent()) {
+            res.add(new Triplet(previousVariable.get(), previousRelation.get(), nextVariable));
+        }
+
+        if (matcher.group("relation") != null) {
+            Relation nextRelation = getRelation(matcher.group("relation"));
+            String thatGroup = matcher.group("that");
+            res.addAll(
+                    parseConceptExpression(
+                            thatGroup, Optional.of(nextRelation), Optional.of(nextVariable)));
+        }
+        return res;
+    }
+
+    protected Variable pickUniqueVariableForConcept(Concept concept) {
+        String name = NamePicker.getStringWithFirstLetterInLowerCase(concept.getName());
+        Variable nameVariable = new Variable(name);
+        return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), nameVariable);
+    }
+
+    private Relation getRelation(String relationName)
+            throws MappingToUmlTranslationFailedException {
+        Optional<Relation> extractedRelation = relationManager.getRelationByName(relationName);
+        if (extractedRelation.isEmpty()) {
+            throw new MappingToUmlTranslationFailedException(relationName + " doesn't exist");
+        }
+        return extractedRelation.get();
+    }
+
+    protected Concept getConcept(String conceptName) throws MappingToUmlTranslationFailedException {
+        Optional<Concept> concept = conceptManager.getConceptByName(conceptName);
+        if (concept.isEmpty()) {
+            throw new MappingToUmlTranslationFailedException(conceptName + " doesn't exist");
+        }
+        return concept.get();
+    }
+
+    protected void tryToFindMatch(Matcher matcher) throws MappingToUmlTranslationFailedException {
+        boolean found = matcher.matches();
+        if (!found) {
+            throw new MappingToUmlTranslationFailedException("No match found");
+        }
+    }
+
+    protected ColoredTriplet getTripletWithBaseType(Triplet triplet)
+            throws MappingToUmlTranslationFailedException {
+        ActualObjectType subjectConcept = getConcept(triplet.getObject().getName());
+        if (subjectConcept instanceof CustomConcept) {
+            CustomConcept concept = (CustomConcept) subjectConcept;
+            Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
+            subjectConcept = baseTypes.iterator().next();
+        }
+        Relation typeRelation = TypeRelation.getTyperelation();
+        String name = NamePicker.getStringWithFirstLetterInLowerCase(subjectConcept.getName());
+        Variable nameVariable =
+                NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), new Variable(name));
+        return new ColoredTriplet(nameVariable, typeRelation, subjectConcept);
+    }
+
+    protected abstract void parseRule(String ruleString)
+            throws MappingToUmlTranslationFailedException;
+
+    protected abstract List<ColoredTriplet> buildRuleTriplets()
+            throws MappingToUmlTranslationFailedException;
+
     public static RuleVisualizer createRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
@@ -71,6 +177,8 @@ public abstract class RuleVisualizer implements Visualizer {
         // Important: First check for subconcept
         if (ExistentialRuleVisualizer.matches(rule)) {
             return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (DomainRangeRuleVisualizer.matches(rule)) {
+            return new DomainRangeRuleVisualizer(rule, conceptManager, relationManager);
         }
         throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
     }

@@ -35,7 +35,7 @@ class RulePlantUmlTransformerTest {
     }
 
     @Test
-    void givenSuperSimpleMapping_whenTransform_thenCorrectPlantUml()
+    void givenEveryAggregateRule_whenTransform_thenCorrectPlantUml()
             throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
                     UnrelatedMappingException, ConceptAlreadyExistsException,
                     RelationAlreadyExistsException {
@@ -86,21 +86,86 @@ class RulePlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title Every Aggregate must resideIn a DomainRing.\n"
+                        + "folder \"domain\" as domainRing {\n"
+                        + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregateC #RoyalBlue {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregateW #OrangeRed {\n"
+                        + "}\n"
                         + "\n"
-                        + "class \"(\\\\w||\\\\W)*Aggregate\" as subjectW #OrangeRed {\n"
-                        + "}\n"
-                        + "folder \"domain\" as object {\n"
-                        + "class \"(\\\\w||\\\\W)*Aggregate\" as subjectC #RoyalBlue {\n"
-                        + "}\n"
-                        + "}\n"
-                        + "subjectC -[bold]-> object\n"
+                        + "aggregateC -[bold]-> domainRing\n"
                         + "note on link: resideIn\n"
-                        + "note \"Aggregate\" as Aggregate\n"
-                        + "Aggregate .. subjectC\n"
-                        + "note \"Aggregate\" as Aggregate1\n"
-                        + "Aggregate1 .. subjectW\n"
                         + "note \"DomainRing\" as DomainRing\n"
-                        + "DomainRing .. object\n"
+                        + "DomainRing .. domainRing\n"
+                        + "note \"Aggregate\" as Aggregate1\n"
+                        + "Aggregate1 .. aggregateW\n"
+                        + "note \"Aggregate\" as Aggregate\n"
+                        + "Aggregate .. aggregateC\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenOnlyUserRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("ClientScript", "");
+        String subjectMappingString =
+                "isClientScript: (?class rdf:type famix:FamixClass)"
+                        + " (?package rdf:type famix:Namespace)"
+                        + " (?package famix:hasName ?name)"
+                        + " regex(?name, 'teammates\\\\.client(\\\\w|\\\\W)*')"
+                        + " (?package famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:ClientScript)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type architecture:ClientScript)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        var rule = new ArchitectureRule("Only a ClientScript can use a ClientScript.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Only a ClientScript can use a ClientScript.\n"
+                        + "class \"?famixClass\" as famixClass {\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package {\n"
+                        + "class \"?clientScript\" as clientScript {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package1 {\n"
+                        + "class \"?clientScript1\" as clientScript1 {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "clientScript -[dashed]-> clientScript1 #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "clientScript -[bold]-> clientScript1 #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "famixClass -[dashed]-> clientScript1 #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClass -[bold]-> clientScript1 #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"ClientScript\" as ClientScript\n"
+                        + "ClientScript .. clientScript\n"
+                        + "note \"ClientScript\" as ClientScript1\n"
+                        + "ClientScript1 .. clientScript1\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
