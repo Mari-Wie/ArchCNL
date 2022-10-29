@@ -170,6 +170,92 @@ class RulePlantUmlTransformerTest {
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
+    @Test
+    void givenEveryTestResultCanOnlyRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("TestResult", "");
+        String subjectMappingString =
+                "isTestResult: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '(\\\\w||\\\\W)*TestResultEntity')"
+                        + " -> (?class rdf:type architecture:TestResult)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        CustomConcept repositoryConcept = new CustomConcept("Repository", "");
+        String repositoryMappingString =
+                "isRepository: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '(\\\\w||\\\\W)*Repository')"
+                        + " -> (?class rdf:type architecture:Repository)";
+        ConceptMapping repositoryMapping =
+                createConceptMapping(
+                        repositoryMappingString, Collections.emptyList(), repositoryConcept);
+        repositoryConcept.setMapping(repositoryMapping);
+        conceptManager.addConcept(repositoryConcept);
+
+        String predicateMappingString =
+                "bestoredMapping: (?repositoryClass rdf:type architecture:Repository)"
+                        + " (?repositoryClass famix:imports ?entityClass)"
+                        + " (?entityClass famix:isExternal 'false'^^xsd:boolean)"
+                        + " -> (?entityClass architecture:bestored ?repositoryClass)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("bestored", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("TestResultServer", "");
+        String objectMappingString =
+                "isTestresultserver: (?class rdf:type famix:FamixClass)"
+                        + " (?testresultpackage rdf:type famix:Namespace)"
+                        + " (?testresultpackage famix:hasName ?testresultpackagename)"
+                        + " regex(?testresultpackagename, 'app\\\\.coronawarn\\\\.testresult\\\\.?(\\\\w||\\\\W)*')"
+                        + " (?testresultpackage famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:Testresultserver)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule = new ArchitectureRule("Every TestResult can-only bestored TestResultServer.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every TestResult can-only bestored TestResultServer.\n"
+                        + "class \"?famixClass\" as famixClass {\n"
+                        + "}\n"
+                        + "folder \"app\\\\.coronawarn\\\\.testresult\\\\.?(\\\\w||\\\\W)*\" as testresultpackage {\n"
+                        + "class \"?testResultServer\" as testResultServer {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"(\\\\w||\\\\W)*TestResultEntity\" as testResult {\n"
+                        + "}\n"
+                        + "testResultServer -[dashed]-> testResult #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "testResult -[bold]-> testResultServer #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: bestored\n"
+                        + "famixClass -[dashed]-> testResult #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "testResult -[bold]-> famixClass #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: bestored\n"
+                        + "note \"TestResultServer\" as TestResultServer\n"
+                        + "TestResultServer .. testResultServer\n"
+                        + "note \"TestResult\" as TestResult\n"
+                        + "TestResult .. testResult\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {

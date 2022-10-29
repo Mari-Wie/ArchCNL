@@ -61,6 +61,23 @@ public abstract class RuleVisualizer implements Visualizer {
         buildUmlElements(ruleTriplets);
     }
 
+    public static RuleVisualizer createRuleVisualizer(
+            ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
+            throws MappingToUmlTranslationFailedException {
+        if (containsLogicWords(rule.toString())) {
+            throw new MappingToUmlTranslationFailedException(rule + "contains logic words");
+        }
+        // Important: First check for subconcept
+        if (ExistentialRuleVisualizer.matches(rule)) {
+            return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (DomainRangeRuleVisualizer.matches(rule)) {
+            return new DomainRangeRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (UniversalRuleVisualizer.matches(rule)) {
+            return new UniversalRuleVisualizer(rule, conceptManager, relationManager);
+        }
+        throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
+    }
+
     @Override
     public String getName() {
         return cnlString;
@@ -167,21 +184,6 @@ public abstract class RuleVisualizer implements Visualizer {
 
     protected abstract List<ColoredTriplet> buildRuleTriplets()
             throws MappingToUmlTranslationFailedException;
-
-    public static RuleVisualizer createRuleVisualizer(
-            ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
-            throws MappingToUmlTranslationFailedException {
-        if (containsLogicWords(rule.toString())) {
-            throw new MappingToUmlTranslationFailedException(rule + "contains logic words");
-        }
-        // Important: First check for subconcept
-        if (ExistentialRuleVisualizer.matches(rule)) {
-            return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
-        } else if (DomainRangeRuleVisualizer.matches(rule)) {
-            return new DomainRangeRuleVisualizer(rule, conceptManager, relationManager);
-        }
-        throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
-    }
 
     private static boolean containsLogicWords(String rule) {
         return rule.contains(" and ") || rule.contains(" or ");
