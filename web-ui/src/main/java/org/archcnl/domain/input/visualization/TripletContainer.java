@@ -26,6 +26,7 @@ import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.elements.StringElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class TripletContainer {
@@ -82,13 +83,11 @@ public class TripletContainer {
     }
 
     private List<ColoredTriplet> elementPropertyTriplets;
-    private List<ColoredTriplet> elementConnectionTriplets;
-    private List<ColoredTriplet> customRelationConnectionTriplets;
+    private List<ColoredTriplet> connectionTriplets;
 
     public TripletContainer(List<ColoredTriplet> triplets) {
         setElementPropertyTriplets(triplets);
-        setElementRelationTriplets(triplets);
-        setCustomRelationConnectionTriplets(triplets);
+        setConnectionTriplets(triplets);
     }
 
     public void applyElementProperties(Map<Variable, PlantUmlBlock> elementMap)
@@ -98,10 +97,11 @@ public class TripletContainer {
             Relation predicate = triplet.getPredicate();
             ObjectType object = triplet.getObject();
             PlantUmlBlock subjectElement = elementMap.get(subject);
-            subjectElement.setColorState(triplet.getColorState());
+
+            updateColorStateWhenNotNeutral(subjectElement, triplet.getColorState());
             if (object instanceof Variable) {
                 PlantUmlBlock objectElement = elementMap.get(object);
-                objectElement.setColorState(triplet.getColorState());
+                updateColorStateWhenNotNeutral(objectElement, triplet.getColorState());
                 tryToSetProperty(subjectElement, predicate.getName(), objectElement);
             } else if (object instanceof StringValue) {
                 StringElement stringElement = new StringElement((StringValue) object);
@@ -114,50 +114,28 @@ public class TripletContainer {
     }
 
     public List<PlantUmlConnection> createConnections(Map<Variable, PlantUmlBlock> elementMap) {
-        List<PlantUmlConnection> connections = createElementConnections(elementMap);
-        connections.addAll(createCustomRelationConnection(elementMap));
-        return connections;
-    }
-
-    private List<PlantUmlConnection> createElementConnections(
-            Map<Variable, PlantUmlBlock> elementMap) {
         List<PlantUmlConnection> connections = new ArrayList<>();
-        for (Triplet triplet : elementConnectionTriplets) {
-            String key = triplet.getPredicate().getName();
-            ElementConnection enumEntry = ElementConnection.valueOf(key);
+        for (ColoredTriplet triplet : connectionTriplets) {
+            Relation predicate = triplet.getPredicate();
+            String key = predicate.getName();
 
             Variable subject = triplet.getSubject();
             List<String> subjectIds = elementMap.get(subject).getIdentifiers();
-            // TODO allow non-variables as objects
+
             Variable object = (Variable) triplet.getObject();
             List<String> objectIds = elementMap.get(object).getIdentifiers();
 
             for (String subjectId : subjectIds) {
                 for (String objectId : objectIds) {
-                    PlantUmlConnection connection = enumEntry.createConnection(subjectId, objectId);
-                    connections.add(connection);
-                }
-            }
-        }
-        return connections;
-    }
-
-    private List<PlantUmlConnection> createCustomRelationConnection(
-            Map<Variable, PlantUmlBlock> elementMap) {
-        List<PlantUmlConnection> connections = new ArrayList<>();
-        for (Triplet triplet : customRelationConnectionTriplets) {
-            CustomRelation predicate = (CustomRelation) triplet.getPredicate();
-
-            Variable subject = triplet.getSubject();
-            List<String> subjectIds = elementMap.get(subject).getIdentifiers();
-            // TODO allow non-variables as objects
-            Variable object = (Variable) triplet.getObject();
-            List<String> objectIds = elementMap.get(object).getIdentifiers();
-
-            for (String subjectId : subjectIds) {
-                for (String objectId : objectIds) {
-                    CustomRelationConnection connection =
-                            new CustomRelationConnection(subjectId, objectId, predicate);
+                    PlantUmlConnection connection;
+                    if (predicate instanceof CustomRelation) {
+                        CustomRelation relation = (CustomRelation) predicate;
+                        connection = new CustomRelationConnection(subjectId, objectId, relation);
+                    } else {
+                        ElementConnection enumEntry = ElementConnection.valueOf(key);
+                        connection = enumEntry.createConnection(subjectId, objectId);
+                    }
+                    updateColorStateWhenNotNeutral(connection, triplet.getColorState());
                     connections.add(connection);
                 }
             }
@@ -188,17 +166,22 @@ public class TripletContainer {
                         .collect(Collectors.toList());
     }
 
-    private void setElementRelationTriplets(List<ColoredTriplet> triplets) {
-        elementConnectionTriplets =
+    private void setConnectionTriplets(List<ColoredTriplet> triplets) {
+        connectionTriplets =
                 triplets.stream()
-                        .filter(t -> ElementConnection.isElementConnection(t.getPredicate()))
+                        .filter(this::isElementConnectionOrCustomConnectionTriplet)
                         .collect(Collectors.toList());
     }
 
-    private void setCustomRelationConnectionTriplets(List<ColoredTriplet> triplets) {
-        customRelationConnectionTriplets =
-                triplets.stream()
-                        .filter(t -> t.getPredicate() instanceof CustomRelation)
-                        .collect(Collectors.toList());
+    private void updateColorStateWhenNotNeutral(PlantUmlPart block, ColorState state) {
+        if (state != ColorState.NEUTRAL) {
+            block.setColorState(state);
+        }
+    }
+
+    private boolean isElementConnectionOrCustomConnectionTriplet(Triplet triplet) {
+        Relation predicate = triplet.getPredicate();
+        return ElementConnection.isElementConnection(predicate)
+                || predicate instanceof CustomRelation;
     }
 }

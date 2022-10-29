@@ -58,7 +58,7 @@ public class PrimitiveType extends PlantUmlElement {
     @Override
     protected String buildColorSection() {
         if (colorState != ColorState.NEUTRAL) {
-            return " " + colorState.getColorName();
+            return " " + colorState.getColorCode();
         }
         return "";
     }

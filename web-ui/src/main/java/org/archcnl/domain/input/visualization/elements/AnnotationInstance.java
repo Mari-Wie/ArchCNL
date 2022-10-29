@@ -74,7 +74,7 @@ public class AnnotationInstance extends PlantUmlElement {
     @Override
     protected String buildColorSection() {
         if (colorState != ColorState.NEUTRAL) {
-            return String.format("<color:%s>", colorState.getColorName());
+            return String.format("<color:%s>", colorState.getColorCode());
         }
         return "";
     }

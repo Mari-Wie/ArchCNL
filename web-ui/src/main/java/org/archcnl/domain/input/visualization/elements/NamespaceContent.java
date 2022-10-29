@@ -42,7 +42,7 @@ public abstract class NamespaceContent extends PlantUmlElement {
     @Override
     protected String buildColorSection() {
         if (colorState != ColorState.NEUTRAL) {
-            return " " + colorState.getColorName();
+            return " " + colorState.getColorCode();
         }
         return "";
     }
