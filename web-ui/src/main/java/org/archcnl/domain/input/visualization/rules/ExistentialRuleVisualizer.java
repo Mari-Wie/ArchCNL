@@ -21,6 +21,7 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
     private static final Pattern CNL_PATTERN =
             Pattern.compile(
                     "Every "
+                            + "(a |an )?"
                             + SUBJECT_REGEX
                             + " must "
                             + PREDICATE_REGEX
