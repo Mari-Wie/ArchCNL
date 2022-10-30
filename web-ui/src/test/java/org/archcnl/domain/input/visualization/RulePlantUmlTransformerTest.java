@@ -341,6 +341,62 @@ class RulePlantUmlTransformerTest {
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
+    @Test
+    void givenNothingRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("Controller", "");
+        String objectMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasAnnotationInstance ?instance)"
+                        + " (?instance famix:hasAnnotationType ?annoType)"
+                        + " (?annoType famix:hasName 'Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule = new ArchitectureRule("Nothing can use a Controller.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Nothing can use a Controller.\n"
+                        + "class \"?controller\" as controller <<Controller>> {\n"
+                        + "}\n"
+                        + "annotation \"Controller\" as annoType {\n"
+                        + "}\n"
+                        + "class \"?nothing\" as nothing #OrangeRed {\n"
+                        + "}\n"
+                        + "nothing -[dashed]-> controller #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "nothing -[bold]-> controller #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {
