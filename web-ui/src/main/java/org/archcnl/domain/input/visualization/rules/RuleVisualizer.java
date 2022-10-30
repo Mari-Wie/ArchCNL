@@ -48,7 +48,7 @@ public abstract class RuleVisualizer implements Visualizer {
     protected Relation relation;
 
     private List<PlantUmlPart> umlElements;
-    private Set<Variable> usedVariables = new HashSet<>();
+    protected Set<Variable> usedVariables = new HashSet<>();
 
     protected RuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
@@ -74,6 +74,8 @@ public abstract class RuleVisualizer implements Visualizer {
             return new DomainRangeRuleVisualizer(rule, conceptManager, relationManager);
         } else if (UniversalRuleVisualizer.matches(rule)) {
             return new UniversalRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (NegationRuleVisualizer.matches(rule)) {
+            return new NegationRuleVisualizer(rule, conceptManager, relationManager);
         }
         throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
     }

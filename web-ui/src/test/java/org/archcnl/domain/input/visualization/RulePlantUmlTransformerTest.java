@@ -256,6 +256,91 @@ class RulePlantUmlTransformerTest {
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
+    @Test
+    void givenNoTestResultServerRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("Testresultserver", "");
+        String subjectMappingString =
+                "isTestresultserver: (?class rdf:type famix:FamixClass)"
+                        + " (?testresultpackage rdf:type famix:Namespace)"
+                        + " (?testresultpackage famix:hasName ?testresultpackagename)"
+                        + " regex(?testresultpackagename, 'app\\\\.coronawarn\\\\.testresult\\\\.?(\\\\w||\\\\W)*')"
+                        + " (?testresultpackage famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:Testresultserver)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        CustomConcept repositoryConcept = new CustomConcept("Repository", "");
+        String repositoryMappingString =
+                "isRepository: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '(\\\\w||\\\\W)*Repository')"
+                        + " -> (?class rdf:type architecture:Repository)";
+        ConceptMapping repositoryMapping =
+                createConceptMapping(
+                        repositoryMappingString, Collections.emptyList(), repositoryConcept);
+        repositoryConcept.setMapping(repositoryMapping);
+        conceptManager.addConcept(repositoryConcept);
+
+        String predicateMappingString =
+                "storeMapping: (?repositoryClass rdf:type architecture:Repository)"
+                        + " (?repositoryClass famix:imports ?entityClass)"
+                        + " (?entityClass famix:isExternal 'false'^^xsd:boolean)"
+                        + " -> (?repositoryClass architecture:store ?entityClass)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("store", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("GUID", "");
+        String objectMappingString =
+                "isGUID: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class2 famix:hasFullQualifiedName 'java.util.UUID')"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class rdf:type architecture:GUID)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule = new ArchitectureRule("No Testresultserver can store GUID.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title No Testresultserver can store GUID.\n"
+                        + "class \"java.util.UUID\" as class2 {\n"
+                        + "}\n"
+                        + "class \"?gUID\" as gUID {\n"
+                        + "}\n"
+                        + "gUID -[dashed]-> class2: <<imports>>\n"
+                        + "folder \"app\\\\.coronawarn\\\\.testresult\\\\.?(\\\\w||\\\\W)*\" as testresultpackage {\n"
+                        + "class \"?testresultserver\" as testresultserver {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "testresultserver -[dashed]-> gUID #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "testresultserver -[bold]-> gUID #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: store\n"
+                        + "note \"GUID\" as GUID\n"
+                        + "GUID .. gUID\n"
+                        + "note \"Testresultserver\" as Testresultserver\n"
+                        + "Testresultserver .. testresultserver\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {
