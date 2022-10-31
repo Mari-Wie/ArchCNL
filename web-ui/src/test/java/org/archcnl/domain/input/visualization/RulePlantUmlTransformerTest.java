@@ -552,6 +552,79 @@ class RulePlantUmlTransformerTest {
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
+    @Test
+    void givenFactRelation_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("CWAApp", "");
+        String subjectMappingString =
+                "isCWAApp: (?class rdf:type famix:FamixClass)"
+                        + " (?cwaapppackage rdf:type famix:Namespace)"
+                        + " (?cwaapppackage famix:hasName ?cwaapppackagename)"
+                        + " regex(?cwaapppackagename, 'de\\\\.rki\\\\.coronawarnapp\\\\.?(\\\\w||\\\\W)*')"
+                        + " (?cwaapppackage famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:CWAApp)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("ExposureNotificationFramework", "");
+        String objectMappingString =
+                "isExposureNotificationFramework: (?class rdf:type famix:FamixClass)"
+                        + " (?enfpackage rdf:type famix:Namespace)"
+                        + " (?enfpackage famix:hasName ?enfpackagename)"
+                        + " regex(?enfpackagename, 'com\\\\.google\\\\.android\\\\.gms\\\\.nearby\\\\.exposurenotification\\\\.?(\\\\w||\\\\W)*')"
+                        + " (?enfpackage famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:ExposureNotificationFramework)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule = new ArchitectureRule("Fact: CWAApp use ExposureNotificationFramework.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Fact: CWAApp use ExposureNotificationFramework.\n"
+                        + "folder \"com\\\\.google\\\\.android\\\\.gms\\\\.nearby\\\\.exposurenotification\\\\.?(\\\\w||\\\\W)*\" as enfpackage {\n"
+                        + "class \"?exposureNotificationFramework\" as exposureNotificationFramework {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "folder \"de\\\\.rki\\\\.coronawarnapp\\\\.?(\\\\w||\\\\W)*\" as cwaapppackage {\n"
+                        + "class \"?cWAApp\" as cWAApp {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "cWAApp -[dashed]-> exposureNotificationFramework: <<imports>>\n"
+                        + "cWAApp -[bold]-> exposureNotificationFramework\n"
+                        + "note on link: use\n"
+                        + "note \"ExposureNotificationFramework\" as ExposureNotificationFramework\n"
+                        + "ExposureNotificationFramework .. exposureNotificationFramework\n"
+                        + "note \"CWAApp\" as CWAApp\n"
+                        + "CWAApp .. cWAApp\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {

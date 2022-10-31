@@ -66,7 +66,7 @@ public abstract class RuleVisualizer implements Visualizer {
         if (containsLogicWords(rule.toString())) {
             throw new MappingToUmlTranslationFailedException(rule + "contains logic words");
         }
-        // Important: First check for subconcept
+        // TODO Add support for Sub-concept rule type and is-a facts
         if (ExistentialRuleVisualizer.matches(rule)) {
             return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
         } else if (DomainRangeRuleVisualizer.matches(rule)) {
@@ -79,6 +79,8 @@ public abstract class RuleVisualizer implements Visualizer {
             return new ConditionalRuleVisualizer(rule, conceptManager, relationManager);
         } else if (CardinalityRuleVisualizer.matches(rule)) {
             return new CardinalityRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (FactRuleVisualizer.matches(rule)) {
+            return new FactRuleVisualizer(rule, conceptManager, relationManager);
         }
         throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
     }
@@ -99,7 +101,6 @@ public abstract class RuleVisualizer implements Visualizer {
             throws MappingToUmlTranslationFailedException {
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
         ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
-        System.out.println(flattened.getTriplets());
         MappingTranslator translator =
                 new MappingTranslator(flattened.getTriplets(), conceptManager, relationManager);
         Map<Variable, PlantUmlBlock> elementMap = translator.createElementMap(new HashSet<>());
