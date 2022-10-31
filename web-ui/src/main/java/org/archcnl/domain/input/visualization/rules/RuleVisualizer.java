@@ -76,6 +76,8 @@ public abstract class RuleVisualizer implements Visualizer {
             return new UniversalRuleVisualizer(rule, conceptManager, relationManager);
         } else if (NegationRuleVisualizer.matches(rule)) {
             return new NegationRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (ConditionalRuleVisualizer.matches(rule)) {
+            return new ConditionalRuleVisualizer(rule, conceptManager, relationManager);
         }
         throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
     }

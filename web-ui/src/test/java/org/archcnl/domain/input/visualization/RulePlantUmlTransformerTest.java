@@ -397,6 +397,121 @@ class RulePlantUmlTransformerTest {
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
+    @Test
+    void givenIfRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("LogicClass", "");
+        String subjectMappingString =
+                "isLogicClass: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasFullQualifiedName ?name)"
+                        + " regex(?name, '\\\\w*Logic')"
+                        + " -> (?class rdf:type architecture:LogicClass)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        CustomConcept objectConcept = new CustomConcept("DBType", "");
+        String objectMappingString =
+                "isDBType: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasFullQualifiedName ?className)"
+                        + " regex(?className, '(\\\\w)+DB')"
+                        + " (?package rdf:type famix:Namespace)"
+                        + " (?package famix:hasName ?name)"
+                        + " regex(?name, 'teammates\\\\.storage\\\\.api(\\\\w|\\\\W)*')"
+                        + " (?package famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:DBType)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type architecture:LogicClass)"
+                        + " (?class2 rdf:type architecture:DBType)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        String secondPredicateMappingString =
+                "manageMapping: (?class rdf:type architecture:LogicClass)"
+                        + " (?class2 rdf:type architecture:DBType)"
+                        + " (?class famix:definesAttribute ?att)"
+                        + " (?att famix:hasDeclaredType ?class2)"
+                        + " -> (?class architecture:manage ?class2)";
+        RelationMapping secondPredicateMapping =
+                createRelationMapping(secondPredicateMappingString, Collections.emptyList());
+        CustomRelation secondPredicateRelation =
+                new CustomRelation("manage", "", new HashSet<>(), new HashSet<>());
+        secondPredicateRelation.setMapping(secondPredicateMapping, conceptManager);
+        relationManager.addRelation(secondPredicateRelation);
+
+        var rule =
+                new ArchitectureRule(
+                        "If a LogicClass use a DBType, then it must manage this DBType.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title If a LogicClass use a DBType, then it must manage this DBType.\n"
+                        + "class \"\\\\w*Logic\" as logicClassW #OrangeRed {\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.storage\\\\.api(\\\\w|\\\\W)*\" as package {\n"
+                        + "class \"(\\\\w)+DB\" as dBType {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"\\\\w*Logic\" as logicClassC #RoyalBlue {\n"
+                        + "{field} ?att : (\\\\w)+DB\n"
+                        + "}\n"
+                        + "logicClassW -[dashed]-> dBType: <<imports>>\n"
+                        + "logicClassW -[bold]-> dBType\n"
+                        + "note on link: use\n"
+                        + "logicClassC -[dashed]-> dBType: <<imports>>\n"
+                        + "logicClassC -[bold]-> dBType\n"
+                        + "note on link: use\n"
+                        + "logicClassC -[bold]-> dBType\n"
+                        + "note on link: manage\n"
+                        + "note \"LogicClass\" as LogicClass1\n"
+                        + "LogicClass1 .. logicClassW\n"
+                        + "note \"DBType\" as DBType\n"
+                        + "DBType .. dBType\n"
+                        + "note \"LogicClass\" as LogicClass\n"
+                        + "LogicClass .. logicClassC\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenIfRuleWithDifferentObjects_whenTransform_thenThrowException()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+
+        var rule =
+                new ArchitectureRule("If a LogicClass use a DBType, then it must manage this ABC.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+
+        // then
+        Assertions.assertThrows(
+                MappingToUmlTranslationFailedException.class,
+                () -> transformer.transformToPlantUml(rule));
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {
