@@ -64,7 +64,7 @@ public abstract class RuleVisualizer implements Visualizer {
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
         if (containsLogicWords(rule.toString())) {
-            throw new MappingToUmlTranslationFailedException(rule + "contains logic words");
+            throw new MappingToUmlTranslationFailedException(rule + " contains logic words");
         }
         // TODO Add support for Sub-concept rule type and is-a facts
         if (ExistentialRuleVisualizer.matches(rule)) {

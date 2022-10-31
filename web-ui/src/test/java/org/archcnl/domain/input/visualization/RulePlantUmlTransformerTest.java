@@ -625,6 +625,217 @@ class RulePlantUmlTransformerTest {
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
+    @Test
+    void givenRuleWithThatVariable_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("SpyClass", "");
+        String subjectMappingString =
+                "isCWAApp: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Spy')"
+                        + " -> (?class rdf:type architecture:SpyClass)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String thatMappingString =
+                "isLocatedInMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?package rdf:type famix:Namespace)"
+                        + " (?package famix:namespaceContains ?class)"
+                        + " -> (?class architecture:isLocatedIn ?package)";
+        RelationMapping thatMapping =
+                createRelationMapping(thatMappingString, Collections.emptyList());
+        CustomRelation thatRelation =
+                new CustomRelation("isLocatedIn", "", new HashSet<>(), new HashSet<>());
+        thatRelation.setMapping(thatMapping, conceptManager);
+        relationManager.addRelation(thatRelation);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("SecretClass", "");
+        String objectMappingString =
+                "isSecretClass: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?constructor)"
+                        + " (?constructor famix:isConstructor 'true'^^xsd:boolean)"
+                        + " (?constructor famix:hasModifier 'private')"
+                        + " -> (?class rdf:type architecture:SecretClass)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Only a SpyClass that (isLocatedIn Namespace A) can use a SecretClass that (isLocatedIn Namespace A).");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenNothingAnythingRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        var rule = new ArchitectureRule("Nothing can use anything.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenOrRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("Controller", "");
+        String objectMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        CustomConcept object2Concept = new CustomConcept("MainClass", "");
+        String object2MappingString =
+                "isMainClass: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?method)"
+                        + " (?method famix:hasName 'main')"
+                        + " -> (?class rdf:type architecture:MainClass)";
+        ConceptMapping object2Mapping =
+                createConceptMapping(object2MappingString, Collections.emptyList(), object2Concept);
+        object2Concept.setMapping(object2Mapping);
+        conceptManager.addConcept(object2Concept);
+
+        var rule = new ArchitectureRule("Nothing can use a Controller or a MainClass.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenAndRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("DataClass", "");
+        String subjectMappingString =
+                "isCWAApp: (?class rdf:type famix:FamixClass)"
+                        + " (?namespace famix:namespaceContains ?class)"
+                        + " (?namespace famix:hasName ?name)"
+                        + " regex(?name, '.*/data/.*')"
+                        + " -> (?class rdf:type architecture:DataClass)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String predicateMappingString =
+                "overwriteMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?method rdf:type famix:Method)"
+                        + " (?method famix:hasAnnotationInstance ?instance)"
+                        + " (?instance famix:hasAnnotationType ?type)"
+                        + " (?type famix:hasName 'overwrite')"
+                        + " -> (?class architecture:overwrite ?method)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("overwrite", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("HashCodeMethod", "");
+        String objectMappingString =
+                "isHashCodeMethod: (?method rdf:type famix:Method)"
+                        + " (?method famix:hasName 'hashCode')"
+                        + " -> (?method rdf:type architecture:HashCodeMethod)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        CustomConcept object2Concept = new CustomConcept("EqualsMethod", "");
+        String object2MappingString =
+                "isEqualsMethod: (?method rdf:type famix:Method)"
+                        + " (?method famix:hasName 'equals')"
+                        + " -> (?method rdf:type architecture:EqualsMethod)";
+        ConceptMapping object2Mapping =
+                createConceptMapping(object2MappingString, Collections.emptyList(), object2Concept);
+        object2Concept.setMapping(object2Mapping);
+        conceptManager.addConcept(object2Concept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Every DataClass must overwrite HashCodeMethod and overwrite EqualsMethod.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode = "";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {
