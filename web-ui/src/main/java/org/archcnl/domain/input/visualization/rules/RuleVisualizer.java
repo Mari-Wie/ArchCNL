@@ -33,8 +33,7 @@ import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 public abstract class RuleVisualizer implements Visualizer {
 
     protected static final String SUBJECT_REGEX = "(?<subject>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
-    protected static final String PREDICATE_REGEX =
-            "(?<predicate>[a-z][a-zA-Z]*( (exactly|at-least|at-most) \\d+)?)";
+    protected static final String PREDICATE_REGEX = "(?<predicate>[a-z][a-zA-Z]*)";
     protected static final String OBJECT_REGEX = "(?<object>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
     protected static final Pattern conceptExpression =
             Pattern.compile(
@@ -78,6 +77,8 @@ public abstract class RuleVisualizer implements Visualizer {
             return new NegationRuleVisualizer(rule, conceptManager, relationManager);
         } else if (ConditionalRuleVisualizer.matches(rule)) {
             return new ConditionalRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (CardinalityRuleVisualizer.matches(rule)) {
+            return new CardinalityRuleVisualizer(rule, conceptManager, relationManager);
         }
         throw new MappingToUmlTranslationFailedException(rule + " couldn't be parsed.");
     }
@@ -98,16 +99,11 @@ public abstract class RuleVisualizer implements Visualizer {
             throws MappingToUmlTranslationFailedException {
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
         ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
+        System.out.println(flattened.getTriplets());
         MappingTranslator translator =
                 new MappingTranslator(flattened.getTriplets(), conceptManager, relationManager);
         Map<Variable, PlantUmlBlock> elementMap = translator.createElementMap(new HashSet<>());
         umlElements = translator.translateToPlantUmlModel(elementMap);
-    }
-
-    protected Relation parsePredicate(String group) throws MappingToUmlTranslationFailedException {
-        String relationName = group.split(" ")[0];
-        // TODO handle cardinality modifiers
-        return getRelation(relationName);
     }
 
     protected List<Triplet> parseConceptExpression(
@@ -144,7 +140,7 @@ public abstract class RuleVisualizer implements Visualizer {
         return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), nameVariable);
     }
 
-    private Relation getRelation(String relationName)
+    protected Relation getRelation(String relationName)
             throws MappingToUmlTranslationFailedException {
         Optional<Relation> extractedRelation = relationManager.getRelationByName(relationName);
         if (extractedRelation.isEmpty()) {

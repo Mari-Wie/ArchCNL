@@ -3,6 +3,7 @@ package org.archcnl.domain.input.visualization.connections;
 import java.util.Optional;
 import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
+import org.archcnl.domain.input.visualization.rules.Cardinality;
 
 public abstract class PlantUmlConnection implements PlantUmlPart {
 
@@ -12,6 +13,8 @@ public abstract class PlantUmlConnection implements PlantUmlPart {
     private Optional<String> noteText = Optional.empty();
     private ArrowType arrowType;
     private ColorState colorState = ColorState.NEUTRAL;
+    private Cardinality cardinality = Cardinality.UNLIMITED;
+    private int quantity;
 
     protected PlantUmlConnection(String subjectId, String objectId, ArrowType arrowType) {
         this.subjectId = subjectId;
@@ -24,7 +27,12 @@ public abstract class PlantUmlConnection implements PlantUmlPart {
         StringBuilder builder = new StringBuilder();
         builder.append(subjectId + " ");
         builder.append(arrowType.getPlantUmlCode());
-        builder.append(" " + objectId);
+        builder.append(" ");
+        if (cardinality != Cardinality.UNLIMITED) {
+            builder.append(cardinality.buildSection(quantity));
+            builder.append(" ");
+        }
+        builder.append(objectId);
         if (colorState != ColorState.NEUTRAL) {
             builder.append(buildColorSection());
         }
@@ -51,6 +59,14 @@ public abstract class PlantUmlConnection implements PlantUmlPart {
 
     public void setNodeText(String text) {
         this.noteText = Optional.of(text);
+    }
+
+    public void setCardinality(Cardinality cardinality) {
+        this.cardinality = cardinality;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     private String buildColorSection() {

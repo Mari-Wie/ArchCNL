@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -17,29 +16,29 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
-public class ConditionalRuleVisualizer extends RuleVisualizer {
+public class CardinalityRuleVisualizer extends RuleVisualizer {
 
-    private static final String SECOND_PREDICATE_REGEX =
-            "(?<predicate2>[a-z][a-zA-Z]*( (exactly|at-least|at-most) \\d+)?)";
-    private static final String SECOND_OBJECT_REGEX = "(?<object2>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
+    private static final String CARDINALITY_REGEX = "(?<cardinality>(exactly|at-least|at-most))";
+    private static final String QUANTITY_REGEX = "(?<quantity>\\d+)";
     private static final Pattern CNL_PATTERN =
             Pattern.compile(
-                    "If "
+                    "Every "
                             + "(a |an )?"
                             + SUBJECT_REGEX
-                            + " "
+                            + " can "
                             + PREDICATE_REGEX
+                            + " "
+                            + CARDINALITY_REGEX
+                            + " "
+                            + QUANTITY_REGEX
                             + " (a |an )?"
                             + OBJECT_REGEX
-                            + ", then it must "
-                            + SECOND_PREDICATE_REGEX
-                            + " this (a |an )?"
-                            + SECOND_OBJECT_REGEX
                             + "\\.");
 
-    private Relation secondRelation;
+    private Cardinality cardinality;
+    private int quantity;
 
-    public ConditionalRuleVisualizer(
+    public CardinalityRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
         super(rule, conceptManager, relationManager);
@@ -49,34 +48,37 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = CNL_PATTERN.matcher(ruleString);
         tryToFindMatch(matcher);
-        if (!matcher.group("object").equals(matcher.group("object2"))) {
-            throw new MappingToUmlTranslationFailedException(cnlString + " Has different objects.");
-        }
         subjectTriplets =
                 parseConceptExpression(
                         matcher.group("subject"), Optional.empty(), Optional.empty());
         objectTriplets =
                 parseConceptExpression(matcher.group("object"), Optional.empty(), Optional.empty());
         relation = getRelation(matcher.group("predicate"));
-        secondRelation = getRelation(matcher.group("predicate2"));
+        cardinality = Cardinality.getCardinality(matcher.group("cardinality"));
+        quantity = Integer.parseInt(matcher.group("quantity"));
     }
 
     @Override
     protected List<ColoredTriplet> buildRuleTriplets()
             throws MappingToUmlTranslationFailedException {
         List<ColoredTriplet> ruleTriplets = new ArrayList<>();
-        objectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
         List<ColoredTriplet> correctSubject = buildColoredSubjectTriplets(ColorState.CORRECT);
         List<ColoredTriplet> wrongSubject = buildColoredSubjectTriplets(ColorState.WRONG);
         ruleTriplets.addAll(correctSubject);
         ruleTriplets.addAll(wrongSubject);
+        objectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
 
         Variable correctSubjectVar = correctSubject.get(0).getSubject();
         Variable wrongSubjectVar = wrongSubject.get(0).getSubject();
         Variable objectVar = objectTriplets.get(0).getSubject();
-        ruleTriplets.add(new ColoredTriplet(wrongSubjectVar, relation, objectVar));
-        ruleTriplets.add(new ColoredTriplet(correctSubjectVar, relation, objectVar));
-        ruleTriplets.add(new ColoredTriplet(correctSubjectVar, secondRelation, objectVar));
+        ColoredTriplet correctRelation = new ColoredTriplet(correctSubjectVar, relation, objectVar);
+        correctRelation.setCardinality(cardinality);
+        correctRelation.setQuantity(quantity);
+        ColoredTriplet wrongRelation = new ColoredTriplet(wrongSubjectVar, relation, objectVar);
+        wrongRelation.setCardinality(cardinality.getInverse());
+        wrongRelation.setQuantity(quantity);
+        ruleTriplets.add(correctRelation);
+        ruleTriplets.add(wrongRelation);
         return ruleTriplets;
     }
 

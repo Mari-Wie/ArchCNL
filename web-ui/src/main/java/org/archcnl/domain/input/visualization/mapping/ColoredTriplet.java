@@ -4,10 +4,13 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.rules.Cardinality;
 
 public class ColoredTriplet extends Triplet {
 
     private ColorState colorState = ColorState.NEUTRAL;
+    private Cardinality cardinality = Cardinality.UNLIMITED;
+    private int quantity;
 
     public ColoredTriplet(Variable subject, Relation predicate, ObjectType object) {
         super(subject, predicate, object);
@@ -35,6 +38,22 @@ public class ColoredTriplet extends Triplet {
 
     public void setObject(ObjectType object) {
         this.object = object;
+    }
+
+    public void setCardinality(Cardinality cardinality) {
+        this.cardinality = cardinality;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Cardinality getCardinality() {
+        return cardinality;
     }
 
     @Override

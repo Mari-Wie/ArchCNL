@@ -512,6 +512,46 @@ class RulePlantUmlTransformerTest {
                 () -> transformer.transformToPlantUml(rule));
     }
 
+    @Test
+    void givenAtMostRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        String predicateMappingString =
+                "haveMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?method rdf:type famix:Method)"
+                        + " (?class famix:definesMethod ?method)"
+                        + " -> (?class architecture:have ?method)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("have", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        var rule = new ArchitectureRule("Every FamixClass can imports at-most 10 FamixClass.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every FamixClass can imports at-most 10 FamixClass.\n"
+                        + "class \"?famixClass1\" as famixClass1 {\n"
+                        + "}\n"
+                        + "class \"?famixClassC\" as famixClassC #RoyalBlue {\n"
+                        + "}\n"
+                        + "class \"?famixClassW\" as famixClassW #OrangeRed {\n"
+                        + "}\n"
+                        + "famixClassC -[dashed]-> \"..10\" famixClass1: <<imports>>\n"
+                        + "famixClassW -[dashed]-> \"11..\" famixClass1: <<imports>>\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
     private ConceptMapping createConceptMapping(
             String mappingString, List<String> additionalWhens, CustomConcept thisConcept)
             throws NoTripletException, NoMappingException, UnrelatedMappingException {

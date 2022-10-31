@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -125,19 +124,21 @@ public class MappingFlattener {
             List<ColoredVariant> variants, ColorState state, Variable subject, Variable object) {
         for (ColoredVariant variant : variants) {
             for (ColoredTriplet triplet : variant.getTriplets()) {
-                if (isNoTypeTripletOrDoesNotUseThenVariables(triplet, subject, object)) {
+                if (doesNotUseThenVariables(triplet, subject, object)) {
                     triplet.setColorState(state);
                 }
             }
         }
     }
 
-    private boolean isNoTypeTripletOrDoesNotUseThenVariables(
+    private boolean doesNotUseThenVariables(
             ColoredTriplet triplet, Variable subject, Variable object) {
-        Relation tripletPredicate = triplet.getPredicate();
+        ObjectType tripletObject = triplet.getObject();
         Variable tripletSubject = triplet.getSubject();
-        return !tripletPredicate.equals(TypeRelation.getTyperelation())
-                || (!tripletSubject.equals(subject) && !tripletSubject.equals(object));
+        return !tripletSubject.equals(subject)
+                && !tripletSubject.equals(object)
+                && !tripletObject.equals(subject)
+                && !tripletObject.equals(object);
     }
 
     private Set<Variable> getVariablesInUse(List<ColoredVariant> variants) {

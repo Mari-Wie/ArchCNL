@@ -87,7 +87,7 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
                         matcher.group("subject"), Optional.empty(), Optional.empty());
         objectTriplets =
                 parseConceptExpression(matcher.group("object"), Optional.empty(), Optional.empty());
-        relation = parsePredicate(matcher.group("predicate"));
+        relation = getRelation(matcher.group("predicate"));
     }
 
     public static boolean matches(ArchitectureRule rule) {

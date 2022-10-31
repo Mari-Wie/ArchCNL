@@ -136,6 +136,8 @@ public class TripletContainer {
                         connection = enumEntry.createConnection(subjectId, objectId);
                     }
                     updateColorStateWhenNotNeutral(connection, triplet.getColorState());
+                    connection.setCardinality(triplet.getCardinality());
+                    connection.setQuantity(triplet.getQuantity());
                     connections.add(connection);
                 }
             }

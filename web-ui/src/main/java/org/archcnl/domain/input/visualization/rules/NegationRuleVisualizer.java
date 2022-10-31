@@ -38,7 +38,7 @@ public class NegationRuleVisualizer extends RuleVisualizer {
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = CNL_PATTERN.matcher(ruleString);
         tryToFindMatch(matcher);
-        relation = parsePredicate(matcher.group("predicate"));
+        relation = getRelation(matcher.group("predicate"));
         if (!isNothingRule()) {
             subjectTriplets =
                     parseConceptExpression(

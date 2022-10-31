@@ -69,6 +69,8 @@ public abstract class MappingVariant {
             Relation predicate = triplet.getPredicate();
             ColoredTriplet newTriplet = new ColoredTriplet(subject, predicate, object);
             newTriplet.setColorState(triplet.getColorState());
+            newTriplet.setCardinality(triplet.getCardinality());
+            newTriplet.setQuantity(triplet.getQuantity());
             modifiedTriplets.add(newTriplet);
         }
         whenTriplets = modifiedTriplets;
