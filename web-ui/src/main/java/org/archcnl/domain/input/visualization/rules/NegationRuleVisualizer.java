@@ -1,7 +1,6 @@
 package org.archcnl.domain.input.visualization.rules;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -11,7 +10,6 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
@@ -55,7 +53,7 @@ public class NegationRuleVisualizer extends RuleVisualizer {
 
         Variable subjectVar;
         if (isNothingRule()) {
-            subjectVar = createNothingVariable();
+            subjectVar = pickUniqueVariable("nothing");
         } else {
             subjectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
             subjectVar = subjectTriplets.get(0).getSubject();
@@ -75,10 +73,5 @@ public class NegationRuleVisualizer extends RuleVisualizer {
 
     private boolean isNothingRule() {
         return cnlString.startsWith("Nothing");
-    }
-
-    private Variable createNothingVariable() {
-        Variable subject = new Variable("nothing");
-        return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), subject);
     }
 }

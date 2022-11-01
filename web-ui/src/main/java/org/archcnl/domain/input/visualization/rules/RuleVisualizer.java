@@ -37,7 +37,7 @@ public abstract class RuleVisualizer implements Visualizer {
     protected static final String OBJECT_REGEX = "(?<object>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
     protected static final Pattern conceptExpression =
             Pattern.compile(
-                    "(a |an )?(?<concept>[A-Z][a-zA-Z]*)( that \\((?<relation>[a-z][a-zA-Z]*) (?<that>.*)\\))?");
+                    "(a |an )?(?<concept>[A-Z][a-zA-Z]*)(?<variable> [A-Z])?( that \\((?<relation>[a-z][a-zA-Z]*) (?<that>.*)\\))?");
 
     protected ConceptManager conceptManager;
     protected RelationManager relationManager;
@@ -47,7 +47,8 @@ public abstract class RuleVisualizer implements Visualizer {
     protected Relation relation;
 
     private List<PlantUmlPart> umlElements;
-    protected Set<Variable> usedVariables = new HashSet<>();
+    private Set<Variable> usedVariables = new HashSet<>();
+    private Set<Variable> thatVariables = new HashSet<>();
 
     protected RuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
@@ -117,9 +118,20 @@ public abstract class RuleVisualizer implements Visualizer {
         List<Triplet> res = new ArrayList<>();
 
         Concept concept = getConcept(matcher.group("concept"));
-        Variable nextVariable = pickUniqueVariableForConcept(concept);
         Relation typeRelation = TypeRelation.getTyperelation();
-        res.add(new Triplet(nextVariable, typeRelation, concept));
+        String nextVariableName = matcher.group("variable");
+
+        Variable nextVariable;
+        if (nextVariableName != null) {
+            nextVariable = new Variable(nextVariableName);
+            if (!thatVariables.contains(nextVariable)) {
+                res.add(new Triplet(nextVariable, typeRelation, concept));
+                thatVariables.add(nextVariable);
+            }
+        } else {
+            nextVariable = pickUniqueVariable(concept.getName());
+            res.add(new Triplet(nextVariable, typeRelation, concept));
+        }
 
         if (previousRelation.isPresent() && previousVariable.isPresent()) {
             res.add(new Triplet(previousVariable.get(), previousRelation.get(), nextVariable));
@@ -135,8 +147,8 @@ public abstract class RuleVisualizer implements Visualizer {
         return res;
     }
 
-    protected Variable pickUniqueVariableForConcept(Concept concept) {
-        String name = NamePicker.getStringWithFirstLetterInLowerCase(concept.getName());
+    protected Variable pickUniqueVariable(String variableName) {
+        String name = NamePicker.getStringWithFirstLetterInLowerCase(variableName);
         Variable nameVariable = new Variable(name);
         return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), nameVariable);
     }

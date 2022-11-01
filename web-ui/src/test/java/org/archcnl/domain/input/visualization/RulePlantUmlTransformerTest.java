@@ -687,7 +687,35 @@ class RulePlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(rule);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title Only a SpyClass that (isLocatedIn Namespace A) can use a SecretClass that (isLocatedIn Namespace A).\n"
+                        + "folder \"? A\" as  A {\n"
+                        + "class \".*Spy\" as spyClass {\n"
+                        + "}\n"
+                        + "class \"?secretClass\" as secretClass {\n"
+                        + "{method} -<<Create>> ?constructor()\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"?famixClass\" as famixClass {\n"
+                        + "}\n"
+                        + "\n"
+                        + "\n"
+                        + "spyClass -[bold]->  A\n"
+                        + "note on link: isLocatedIn\n"
+                        + "secretClass -[bold]->  A\n"
+                        + "note on link: isLocatedIn\n"
+                        + "spyClass -[dashed]-> secretClass #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "spyClass -[bold]-> secretClass #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "famixClass -[dashed]-> secretClass #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClass -[bold]-> secretClass #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"SpyClass\" as SpyClass\n"
+                        + "SpyClass .. spyClass\n"
+                        + "note \"SecretClass\" as SecretClass\n"
+                        + "SecretClass .. secretClass\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
