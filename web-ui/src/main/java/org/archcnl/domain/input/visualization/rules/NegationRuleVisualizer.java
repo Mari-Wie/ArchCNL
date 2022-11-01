@@ -1,10 +1,11 @@
 package org.archcnl.domain.input.visualization.rules;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -34,37 +35,42 @@ public class NegationRuleVisualizer extends RuleVisualizer {
 
     @Override
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
-        Matcher matcher = CNL_PATTERN.matcher(ruleString);
+        Matcher matcher = getCnlPattern().matcher(ruleString);
         tryToFindMatch(matcher);
-        relation = getRelation(matcher.group("predicate"));
-        if (!isNothingRule()) {
+        predicate = parsePredicate(matcher);
+        if (isNothingRule()) {
+            subjectTriplets =
+                    Arrays.asList(
+                            getBaseSubjectTypeTriplet(
+                                    predicate.getRelation(), new Variable("nothing")));
+        } else {
             subjectTriplets =
                     parseConceptExpression(
                             matcher.group("subject"), Optional.empty(), Optional.empty());
         }
-        objectTriplets =
-                parseConceptExpression(matcher.group("object"), Optional.empty(), Optional.empty());
+        String objectGroup = matcher.group("object");
+        if ("anything".equals(objectGroup)) {
+            objectTriplets =
+                    Arrays.asList(
+                            getBaseObjectTypeTriplet(
+                                    predicate.getRelation(), new Variable("anything")));
+        } else {
+            objectTriplets =
+                    parseConceptExpression(objectGroup, Optional.empty(), Optional.empty());
+        }
     }
 
     @Override
-    protected List<ColoredTriplet> buildRuleTriplets()
-            throws MappingToUmlTranslationFailedException {
-        List<ColoredTriplet> ruleTriplets = new ArrayList<>();
+    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+        RuleVariant variant = new RuleVariant();
+        variant.setSubjectTriplets(
+                subjectTriplets.stream().map(ColoredTriplet::new).collect(Collectors.toList()));
+        variant.setObjectTriplets(
+                objectTriplets.stream().map(ColoredTriplet::new).collect(Collectors.toList()));
+        variant.copyPredicate(predicate);
 
-        Variable subjectVar;
-        if (isNothingRule()) {
-            subjectVar = pickUniqueVariable("nothing");
-        } else {
-            subjectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
-            subjectVar = subjectTriplets.get(0).getSubject();
-        }
-        objectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
-
-        Variable objectVar = objectTriplets.get(0).getSubject();
-        ColoredTriplet wrongTriplet = new ColoredTriplet(subjectVar, relation, objectVar);
-        wrongTriplet.setColorState(ColorState.WRONG);
-        ruleTriplets.add(wrongTriplet);
-        return ruleTriplets;
+        variant.setPredicateToColorState(ColorState.WRONG);
+        return Arrays.asList(variant);
     }
 
     public static boolean matches(ArchitectureRule rule) {
@@ -73,5 +79,10 @@ public class NegationRuleVisualizer extends RuleVisualizer {
 
     private boolean isNothingRule() {
         return cnlString.startsWith("Nothing");
+    }
+
+    @Override
+    protected Pattern getCnlPattern() {
+        return CNL_PATTERN;
     }
 }

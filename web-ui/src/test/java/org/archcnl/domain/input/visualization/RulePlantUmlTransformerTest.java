@@ -86,17 +86,17 @@ class RulePlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title Every Aggregate must resideIn a DomainRing.\n"
-                        + "folder \"domain\" as domainRing {\n"
+                        + "folder \"domain\" as domainRingC {\n"
                         + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregateC #RoyalBlue {\n"
                         + "}\n"
                         + "}\n"
                         + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregateW #OrangeRed {\n"
                         + "}\n"
                         + "\n"
-                        + "aggregateC -[bold]-> domainRing\n"
+                        + "aggregateC -[bold]-> domainRingC\n"
                         + "note on link: resideIn\n"
                         + "note \"DomainRing\" as DomainRing\n"
-                        + "DomainRing .. domainRing\n"
+                        + "DomainRing .. domainRingC\n"
                         + "note \"Aggregate\" as Aggregate1\n"
                         + "Aggregate1 .. aggregateW\n"
                         + "note \"Aggregate\" as Aggregate\n"
@@ -146,26 +146,32 @@ class RulePlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title Only a ClientScript can use a ClientScript.\n"
-                        + "class \"?famixClass\" as famixClass {\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package1 {\n"
+                        + "class \"?clientScript1C\" as clientScript1C {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package2 {\n"
+                        + "class \"?clientScript1W\" as clientScript1W {\n"
+                        + "}\n"
                         + "}\n"
                         + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package {\n"
-                        + "class \"?clientScript\" as clientScript {\n"
+                        + "class \"?clientScriptC\" as clientScriptC {\n"
                         + "}\n"
                         + "}\n"
-                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package1 {\n"
-                        + "class \"?clientScript1\" as clientScript1 {\n"
+                        + "class \"?famixClassW\" as famixClassW {\n"
                         + "}\n"
-                        + "}\n"
-                        + "clientScript -[dashed]-> clientScript1 #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
-                        + "clientScript -[bold]-> clientScript1 #line:RoyalBlue;text:RoyalBlue \n"
+                        + "clientScriptC -[dashed]-> clientScript1C #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "clientScriptC -[bold]-> clientScript1C #line:RoyalBlue;text:RoyalBlue \n"
                         + "note on link: use\n"
-                        + "famixClass -[dashed]-> clientScript1 #line:OrangeRed;text:OrangeRed : <<imports>>\n"
-                        + "famixClass -[bold]-> clientScript1 #line:OrangeRed;text:OrangeRed \n"
+                        + "famixClassW -[dashed]-> clientScript1W #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClassW -[bold]-> clientScript1W #line:OrangeRed;text:OrangeRed \n"
                         + "note on link: use\n"
-                        + "note \"ClientScript\" as ClientScript\n"
-                        + "ClientScript .. clientScript\n"
                         + "note \"ClientScript\" as ClientScript1\n"
-                        + "ClientScript1 .. clientScript1\n"
+                        + "ClientScript1 .. clientScript1C\n"
+                        + "note \"ClientScript\" as ClientScript2\n"
+                        + "ClientScript2 .. clientScript1W\n"
+                        + "note \"ClientScript\" as ClientScript\n"
+                        + "ClientScript .. clientScriptC\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -234,24 +240,28 @@ class RulePlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title Every TestResult can-only bestored TestResultServer.\n"
-                        + "class \"?famixClass\" as famixClass {\n"
+                        + "class \"(\\\\w||\\\\W)*TestResultEntity\" as testResultW {\n"
                         + "}\n"
                         + "folder \"app\\\\.coronawarn\\\\.testresult\\\\.?(\\\\w||\\\\W)*\" as testresultpackage {\n"
-                        + "class \"?testResultServer\" as testResultServer {\n"
+                        + "class \"?testResultServerC\" as testResultServerC {\n"
                         + "}\n"
                         + "}\n"
-                        + "class \"(\\\\w||\\\\W)*TestResultEntity\" as testResult {\n"
+                        + "class \"(\\\\w||\\\\W)*TestResultEntity\" as testResultC {\n"
                         + "}\n"
-                        + "testResultServer -[dashed]-> testResult #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
-                        + "testResult -[bold]-> testResultServer #line:RoyalBlue;text:RoyalBlue \n"
+                        + "class \"?famixClassW\" as famixClassW {\n"
+                        + "}\n"
+                        + "testResultServerC -[dashed]-> testResultC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "testResultC -[bold]-> testResultServerC #line:RoyalBlue;text:RoyalBlue \n"
                         + "note on link: bestored\n"
-                        + "famixClass -[dashed]-> testResult #line:OrangeRed;text:OrangeRed : <<imports>>\n"
-                        + "testResult -[bold]-> famixClass #line:OrangeRed;text:OrangeRed \n"
+                        + "famixClassW -[dashed]-> testResultW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "testResultW -[bold]-> famixClassW #line:OrangeRed;text:OrangeRed \n"
                         + "note on link: bestored\n"
+                        + "note \"TestResult\" as TestResult1\n"
+                        + "TestResult1 .. testResultW\n"
                         + "note \"TestResultServer\" as TestResultServer\n"
-                        + "TestResultServer .. testResultServer\n"
+                        + "TestResultServer .. testResultServerC\n"
                         + "note \"TestResult\" as TestResult\n"
-                        + "TestResult .. testResult\n"
+                        + "TestResult .. testResultC\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -386,7 +396,7 @@ class RulePlantUmlTransformerTest {
                         + "}\n"
                         + "annotation \"Controller\" as annoType {\n"
                         + "}\n"
-                        + "class \"?nothing\" as nothing #OrangeRed {\n"
+                        + "class \"?nothing\" as nothing {\n"
                         + "}\n"
                         + "nothing -[dashed]-> controller #line:OrangeRed;text:OrangeRed : <<imports>>\n"
                         + "nothing -[bold]-> controller #line:OrangeRed;text:OrangeRed \n"
@@ -468,27 +478,33 @@ class RulePlantUmlTransformerTest {
                         + "title If a LogicClass use a DBType, then it must manage this DBType.\n"
                         + "class \"\\\\w*Logic\" as logicClassW #OrangeRed {\n"
                         + "}\n"
-                        + "folder \"teammates\\\\.storage\\\\.api(\\\\w|\\\\W)*\" as package {\n"
-                        + "class \"(\\\\w)+DB\" as dBType {\n"
+                        + "folder \"teammates\\\\.storage\\\\.api(\\\\w|\\\\W)*\" as package1 {\n"
+                        + "class \"(\\\\w)+DB\" as dBTypeW {\n"
                         + "}\n"
                         + "}\n"
                         + "class \"\\\\w*Logic\" as logicClassC #RoyalBlue {\n"
                         + "{field} ?att : (\\\\w)+DB\n"
                         + "}\n"
-                        + "logicClassW -[dashed]-> dBType: <<imports>>\n"
-                        + "logicClassW -[bold]-> dBType\n"
+                        + "folder \"teammates\\\\.storage\\\\.api(\\\\w|\\\\W)*\" as package {\n"
+                        + "class \"(\\\\w)+DB\" as dBTypeC {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "logicClassC -[dashed]-> dBTypeC: <<imports>>\n"
+                        + "logicClassC -[bold]-> dBTypeC\n"
                         + "note on link: use\n"
-                        + "logicClassC -[dashed]-> dBType: <<imports>>\n"
-                        + "logicClassC -[bold]-> dBType\n"
-                        + "note on link: use\n"
-                        + "logicClassC -[bold]-> dBType\n"
+                        + "logicClassC -[bold]-> dBTypeC\n"
                         + "note on link: manage\n"
+                        + "logicClassW -[dashed]-> dBTypeW: <<imports>>\n"
+                        + "logicClassW -[bold]-> dBTypeW\n"
+                        + "note on link: use\n"
                         + "note \"LogicClass\" as LogicClass1\n"
                         + "LogicClass1 .. logicClassW\n"
-                        + "note \"DBType\" as DBType\n"
-                        + "DBType .. dBType\n"
+                        + "note \"DBType\" as DBType1\n"
+                        + "DBType1 .. dBTypeW\n"
                         + "note \"LogicClass\" as LogicClass\n"
                         + "LogicClass .. logicClassC\n"
+                        + "note \"DBType\" as DBType\n"
+                        + "DBType .. dBTypeC\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -518,6 +534,47 @@ class RulePlantUmlTransformerTest {
                     UnrelatedMappingException, ConceptAlreadyExistsException,
                     RelationAlreadyExistsException {
         // given
+        var rule = new ArchitectureRule("Every FamixClass can imports at-most 10 FamixClass.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every FamixClass can imports at-most 10 FamixClass.\n"
+                        + "class \"?famixClass1W\" as famixClass1W {\n"
+                        + "}\n"
+                        + "class \"?famixClass1C\" as famixClass1C {\n"
+                        + "}\n"
+                        + "class \"?famixClassC\" as famixClassC {\n"
+                        + "}\n"
+                        + "class \"?famixClassW\" as famixClassW {\n"
+                        + "}\n"
+                        + "famixClassC -[dashed]-> \"..10\" famixClass1C #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "famixClassW -[dashed]-> \"11..\" famixClass1W #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenAtLeastRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("Controller", "");
+        String subjectMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
         String predicateMappingString =
                 "haveMapping: (?class rdf:type famix:FamixClass)"
                         + " (?method rdf:type famix:Method)"
@@ -530,7 +587,7 @@ class RulePlantUmlTransformerTest {
         predicateRelation.setMapping(predicateMapping, conceptManager);
         relationManager.addRelation(predicateRelation);
 
-        var rule = new ArchitectureRule("Every FamixClass can imports at-most 10 FamixClass.");
+        var rule = new ArchitectureRule("Every Controller can have at-least 2 Method.");
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
@@ -539,15 +596,21 @@ class RulePlantUmlTransformerTest {
         // then
         String expectedCode =
                 "@startuml\n"
-                        + "title Every FamixClass can imports at-most 10 FamixClass.\n"
-                        + "class \"?famixClass1\" as famixClass1 {\n"
+                        + "title Every Controller can have at-least 2 Method.\n"
+                        + "class \".*Controller\" as controllerW {\n"
+                        + "<color:#OrangeRed> {method} ?methodW()\n"
                         + "}\n"
-                        + "class \"?famixClassC\" as famixClassC #RoyalBlue {\n"
+                        + "class \".*Controller\" as controllerC {\n"
+                        + "<color:#RoyalBlue> {method} ?methodC()\n"
                         + "}\n"
-                        + "class \"?famixClassW\" as famixClassW #OrangeRed {\n"
-                        + "}\n"
-                        + "famixClassC -[dashed]-> \"..10\" famixClass1: <<imports>>\n"
-                        + "famixClassW -[dashed]-> \"11..\" famixClass1: <<imports>>\n"
+                        + "controllerC -[bold]-> \"2..\" controllerC::methodC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: have\n"
+                        + "controllerW -[bold]-> \"..1\" controllerW::methodW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: have\n"
+                        + "note \"Controller\" as Controller1\n"
+                        + "Controller1 .. controllerW\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controllerC\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -690,31 +753,41 @@ class RulePlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title Only a SpyClass that (isLocatedIn Namespace A) can use a SecretClass that (isLocatedIn Namespace A).\n"
-                        + "folder \"? A\" as  A {\n"
-                        + "class \".*Spy\" as spyClass {\n"
+                        + "\n"
+                        + "folder \"? AC\" as  AC {\n"
+                        + "class \".*Spy\" as spyClassC {\n"
                         + "}\n"
-                        + "class \"?secretClass\" as secretClass {\n"
+                        + "class \"?secretClassC\" as secretClassC {\n"
                         + "{method} -<<Create>> ?constructor()\n"
                         + "}\n"
                         + "}\n"
-                        + "class \"?famixClass\" as famixClass {\n"
+                        + "folder \"? AW\" as  AW {\n"
+                        + "class \"?secretClassW\" as secretClassW {\n"
+                        + "{method} -<<Create>> ?constructor1()\n"
+                        + "}\n"
                         + "}\n"
                         + "\n"
+                        + "class \"?famixClassW\" as famixClassW {\n"
+                        + "}\n"
                         + "\n"
-                        + "spyClass -[bold]->  A\n"
+                        + "spyClassC -[bold]->  AC\n"
                         + "note on link: isLocatedIn\n"
-                        + "secretClass -[bold]->  A\n"
+                        + "secretClassC -[bold]->  AC\n"
                         + "note on link: isLocatedIn\n"
-                        + "spyClass -[dashed]-> secretClass #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
-                        + "spyClass -[bold]-> secretClass #line:RoyalBlue;text:RoyalBlue \n"
+                        + "spyClassC -[dashed]-> secretClassC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "spyClassC -[bold]-> secretClassC #line:RoyalBlue;text:RoyalBlue \n"
                         + "note on link: use\n"
-                        + "famixClass -[dashed]-> secretClass #line:OrangeRed;text:OrangeRed : <<imports>>\n"
-                        + "famixClass -[bold]-> secretClass #line:OrangeRed;text:OrangeRed \n"
+                        + "secretClassW -[bold]->  AW\n"
+                        + "note on link: isLocatedIn\n"
+                        + "famixClassW -[dashed]-> secretClassW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClassW -[bold]-> secretClassW #line:OrangeRed;text:OrangeRed \n"
                         + "note on link: use\n"
                         + "note \"SpyClass\" as SpyClass\n"
-                        + "SpyClass .. spyClass\n"
+                        + "SpyClass .. spyClassC\n"
+                        + "note \"SecretClass\" as SecretClass1\n"
+                        + "SecretClass1 .. secretClassW\n"
                         + "note \"SecretClass\" as SecretClass\n"
-                        + "SecretClass .. secretClass\n"
+                        + "SecretClass .. secretClassC\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -744,7 +817,17 @@ class RulePlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(rule);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title Nothing can use anything.\n"
+                        + "class \"?nothing\" as nothing {\n"
+                        + "}\n"
+                        + "class \"?anything\" as anything {\n"
+                        + "}\n"
+                        + "nothing -[dashed]-> anything #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "nothing -[bold]-> anything #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 

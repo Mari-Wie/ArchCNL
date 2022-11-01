@@ -1,13 +1,10 @@
 package org.archcnl.domain.input.visualization.rules;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
@@ -37,35 +34,25 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
     }
 
     @Override
-    protected List<ColoredTriplet> buildRuleTriplets()
-            throws MappingToUmlTranslationFailedException {
-        List<ColoredTriplet> ruleTriplets = new ArrayList<>();
-        subjectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
-        objectTriplets.forEach(t -> ruleTriplets.add(new ColoredTriplet(t)));
-        ColoredTriplet subjectBaseTriplet = getTripletWithBaseType(subjectTriplets.get(0));
-        ruleTriplets.add(subjectBaseTriplet);
+    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+        RuleVariant correct = new RuleVariant();
+        correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
+        correct.setObjectTriplets(addPostfixToAllVariables(objectTriplets, "C"));
+        correct.copyPredicate(predicate);
 
-        Variable realSubjectVar = subjectTriplets.get(0).getSubject();
-        Variable baseSubjectVar = subjectBaseTriplet.getSubject();
-        Variable objectVar = objectTriplets.get(0).getSubject();
-        ColoredTriplet correctTriplet = new ColoredTriplet(realSubjectVar, relation, objectVar);
-        correctTriplet.setColorState(ColorState.CORRECT);
-        ColoredTriplet wrongTriplet = new ColoredTriplet(baseSubjectVar, relation, objectVar);
-        wrongTriplet.setColorState(ColorState.WRONG);
-        ruleTriplets.add(correctTriplet);
-        ruleTriplets.add(wrongTriplet);
-        return ruleTriplets;
+        RuleVariant wrong = new RuleVariant();
+        ColoredTriplet triplet = getTripletWithBaseType(subjectTriplets.get(0));
+        wrong.setSubjectTriplets(addPostfixToAllVariables(Arrays.asList(triplet), "W"));
+        wrong.setObjectTriplets(addPostfixToAllVariables(objectTriplets, "W"));
+        wrong.copyPredicate(predicate);
+
+        correct.setPredicateToColorState(ColorState.CORRECT);
+        wrong.setPredicateToColorState(ColorState.WRONG);
+        return Arrays.asList(correct, wrong);
     }
 
     @Override
-    protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
-        Matcher matcher = CNL_PATTERN.matcher(ruleString);
-        tryToFindMatch(matcher);
-        subjectTriplets =
-                parseConceptExpression(
-                        matcher.group("subject"), Optional.empty(), Optional.empty());
-        objectTriplets =
-                parseConceptExpression(matcher.group("object"), Optional.empty(), Optional.empty());
-        relation = getRelation(matcher.group("predicate"));
+    protected Pattern getCnlPattern() {
+        return CNL_PATTERN;
     }
 }

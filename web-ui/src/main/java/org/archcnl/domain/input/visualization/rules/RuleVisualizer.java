@@ -1,6 +1,7 @@
 package org.archcnl.domain.input.visualization.rules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
@@ -33,8 +35,10 @@ import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 public abstract class RuleVisualizer implements Visualizer {
 
     protected static final String SUBJECT_REGEX = "(?<subject>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
-    protected static final String PREDICATE_REGEX = "(?<predicate>[a-z][a-zA-Z]*)";
-    protected static final String OBJECT_REGEX = "(?<object>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
+    protected static final String PREDICATE_REGEX =
+            "(?<predicate>[a-z][a-zA-Z]*)( (?<cardinality>(exactly|at-least|at-most)) (?<quantity>\\d+))?";
+    protected static final String OBJECT_REGEX =
+            "(?<object>(anything|[A-Z][a-zA-Z]*( that \\(.+\\))?))";
     protected static final Pattern conceptExpression =
             Pattern.compile(
                     "(a |an )?(?<concept>[A-Z][a-zA-Z]*)(?<variable> [A-Z])?( that \\((?<relation>[a-z][a-zA-Z]*) (?<that>.*)\\))?");
@@ -44,11 +48,11 @@ public abstract class RuleVisualizer implements Visualizer {
     protected String cnlString;
     protected List<Triplet> subjectTriplets;
     protected List<Triplet> objectTriplets;
-    protected Relation relation;
+    protected RulePredicate predicate;
 
-    private List<PlantUmlPart> umlElements;
-    private Set<Variable> usedVariables = new HashSet<>();
+    protected Set<Variable> usedVariables = new HashSet<>();
     private Set<Variable> thatVariables = new HashSet<>();
+    private List<PlantUmlPart> umlElements;
 
     protected RuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
@@ -57,7 +61,11 @@ public abstract class RuleVisualizer implements Visualizer {
         this.conceptManager = conceptManager;
         this.relationManager = relationManager;
         parseRule(cnlString);
-        List<ColoredTriplet> ruleTriplets = buildRuleTriplets();
+        List<RuleVariant> ruleVariants = buildRuleVariants();
+        List<ColoredTriplet> ruleTriplets = new ArrayList<>();
+        for (RuleVariant variant : ruleVariants) {
+            ruleTriplets.addAll(variant.buildRuleTriplets());
+        }
         buildUmlElements(ruleTriplets);
     }
 
@@ -98,16 +106,6 @@ public abstract class RuleVisualizer implements Visualizer {
                 .collect(Collectors.joining("\n"));
     }
 
-    protected void buildUmlElements(List<ColoredTriplet> ruleTriplets)
-            throws MappingToUmlTranslationFailedException {
-        MappingFlattener flattener = new MappingFlattener(ruleTriplets);
-        ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
-        MappingTranslator translator =
-                new MappingTranslator(flattened.getTriplets(), conceptManager, relationManager);
-        Map<Variable, PlantUmlBlock> elementMap = translator.createElementMap(new HashSet<>());
-        umlElements = translator.translateToPlantUmlModel(elementMap);
-    }
-
     protected List<Triplet> parseConceptExpression(
             String expression,
             Optional<Relation> previousRelation,
@@ -145,6 +143,16 @@ public abstract class RuleVisualizer implements Visualizer {
                             thatGroup, Optional.of(nextRelation), Optional.of(nextVariable)));
         }
         return res;
+    }
+
+    private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
+            throws MappingToUmlTranslationFailedException {
+        MappingFlattener flattener = new MappingFlattener(ruleTriplets);
+        ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
+        MappingTranslator translator =
+                new MappingTranslator(flattened.getTriplets(), conceptManager, relationManager);
+        Map<Variable, PlantUmlBlock> elementMap = translator.createElementMap(new HashSet<>());
+        umlElements = translator.translateToPlantUmlModel(elementMap);
     }
 
     protected Variable pickUniqueVariable(String variableName) {
@@ -192,11 +200,68 @@ public abstract class RuleVisualizer implements Visualizer {
         return new ColoredTriplet(nameVariable, typeRelation, subjectConcept);
     }
 
-    protected abstract void parseRule(String ruleString)
+    protected ColoredTriplet getBaseSubjectTypeTriplet(Relation relation, Variable subject) {
+        subject = NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), subject);
+        var objectType = relation.getRelatableSubjectTypes().iterator().next();
+        return new ColoredTriplet(subject, TypeRelation.getTyperelation(), objectType);
+    }
+
+    protected ColoredTriplet getBaseObjectTypeTriplet(Relation relation, Variable subject) {
+        subject = NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), subject);
+        var objectType = relation.getRelatableObjectTypes().iterator().next();
+        return new ColoredTriplet(subject, TypeRelation.getTyperelation(), objectType);
+    }
+
+    protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
+        Matcher matcher = getCnlPattern().matcher(ruleString);
+        tryToFindMatch(matcher);
+        predicate = parsePredicate(matcher);
+        subjectTriplets =
+                parseConceptExpression(
+                        matcher.group("subject"), Optional.empty(), Optional.empty());
+        String objectGroup = matcher.group("object");
+        if ("anything".equals(objectGroup)) {
+            objectTriplets =
+                    Arrays.asList(
+                            getBaseObjectTypeTriplet(
+                                    predicate.getRelation(), new Variable("anything")));
+        } else {
+            objectTriplets =
+                    parseConceptExpression(objectGroup, Optional.empty(), Optional.empty());
+        }
+    }
+
+    protected RulePredicate parsePredicate(Matcher matcher)
+            throws MappingToUmlTranslationFailedException {
+        RulePredicate rulePredicate = new RulePredicate(getRelation(matcher.group("predicate")));
+        if (matcher.group("cardinality") != null) {
+            Cardinality cardinality = Cardinality.getCardinality(matcher.group("cardinality"));
+            int quantity = Integer.parseInt(matcher.group("quantity"));
+            rulePredicate.setCardinalityLimitations(cardinality, quantity);
+        }
+        return rulePredicate;
+    }
+
+    protected List<ColoredTriplet> addPostfixToAllVariables(
+            List<Triplet> triplets, String postfix) {
+        List<ColoredTriplet> newTriplets = new ArrayList<>();
+        for (Triplet triplet : triplets) {
+            String oldSubjectName = triplet.getSubject().getName();
+            Variable subject = new Variable(oldSubjectName + postfix);
+            ObjectType object = triplet.getObject();
+            if (object instanceof Variable) {
+                String oldObjectName = object.getName();
+                object = new Variable(oldObjectName + postfix);
+            }
+            newTriplets.add(new ColoredTriplet(subject, triplet.getPredicate(), object));
+        }
+        return newTriplets;
+    }
+
+    protected abstract List<RuleVariant> buildRuleVariants()
             throws MappingToUmlTranslationFailedException;
 
-    protected abstract List<ColoredTriplet> buildRuleTriplets()
-            throws MappingToUmlTranslationFailedException;
+    protected abstract Pattern getCnlPattern();
 
     private static boolean containsLogicWords(String rule) {
         return rule.contains(" and ") || rule.contains(" or ");
