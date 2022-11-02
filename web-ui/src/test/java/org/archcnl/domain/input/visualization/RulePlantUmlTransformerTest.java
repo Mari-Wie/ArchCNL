@@ -208,7 +208,6 @@ class RulePlantUmlTransformerTest {
         String predicateMappingString =
                 "bestoredMapping: (?repositoryClass rdf:type architecture:Repository)"
                         + " (?repositoryClass famix:imports ?entityClass)"
-                        + " (?entityClass famix:isExternal 'false'^^xsd:boolean)"
                         + " -> (?entityClass architecture:bestored ?repositoryClass)";
         RelationMapping predicateMapping =
                 createRelationMapping(predicateMappingString, Collections.emptyList());
@@ -300,7 +299,6 @@ class RulePlantUmlTransformerTest {
         String predicateMappingString =
                 "storeMapping: (?repositoryClass rdf:type architecture:Repository)"
                         + " (?repositoryClass famix:imports ?entityClass)"
-                        + " (?entityClass famix:isExternal 'false'^^xsd:boolean)"
                         + " -> (?repositoryClass architecture:store ?entityClass)";
         RelationMapping predicateMapping =
                 createRelationMapping(predicateMappingString, Collections.emptyList());
@@ -689,6 +687,55 @@ class RulePlantUmlTransformerTest {
     }
 
     @Test
+    void givenIsAFactRelation_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("Exception", "");
+        String subjectMappingString =
+                "isException: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Exception')"
+                        + " -> (?class rdf:type architecture:Exception)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        CustomConcept objectConcept = new CustomConcept("Error", "");
+        String objectMappingString =
+                "isError: (?error rdf:type famix:FamixClass)"
+                        + " -> (?error rdf:type architecture:Error)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule = new ArchitectureRule("Fact: Exception is an Error.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Fact: Exception is an Error.\n"
+                        + "class \".*Exception\" as exception {\n"
+                        + "}\n"
+                        + "class \"?error\" as error {\n"
+                        + "}\n"
+                        + "exception --|> error: Is-a\n"
+                        + "note \"Exception\" as Exception\n"
+                        + "Exception .. exception\n"
+                        + "note \"Error\" as Error\n"
+                        + "Error .. error\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
     void givenRuleWithThatVariable_whenTransform_thenCorrectPlantUml()
             throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
                     UnrelatedMappingException, ConceptAlreadyExistsException,
@@ -976,6 +1023,100 @@ class RulePlantUmlTransformerTest {
                         + "EqualsMethod .. GENERATED2::equals\n"
                         + "note \"DataClass\" as DataClass1\n"
                         + "DataClass1 .. dataClassW\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenSubconceptRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("Exception", "");
+        String subjectMappingString =
+                "isException: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Exception')"
+                        + " -> (?class rdf:type architecture:Exception)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String thatPredicateMappingString =
+                "isThrownByMapping: (?method rdf:type famix:Method)"
+                        + " (?method famix:throwsException ?exception)"
+                        + " -> (?exception architecture:isThrownBy ?method)";
+        RelationMapping thatPredicateMapping =
+                createRelationMapping(thatPredicateMappingString, Collections.emptyList());
+        CustomRelation thatPredicateRelation =
+                new CustomRelation("isThrownBy", "", new HashSet<>(), new HashSet<>());
+        thatPredicateRelation.setMapping(thatPredicateMapping, conceptManager);
+        relationManager.addRelation(thatPredicateRelation);
+
+        CustomConcept thatConcept = new CustomConcept("Constructor", "");
+        String thatMappingString =
+                "isConstructor: (?method rdf:type famix:Method)"
+                        + " (?method famix:isConstructor 'true'^^xsd:boolean)"
+                        + " -> (?method rdf:type architecture:Constructor)";
+        ConceptMapping thatMapping =
+                createConceptMapping(thatMappingString, Collections.emptyList(), thatConcept);
+        thatConcept.setMapping(thatMapping);
+        conceptManager.addConcept(thatConcept);
+
+        CustomConcept objectConcept = new CustomConcept("ConstructorException", "");
+        String objectMappingString =
+                "isConstructorException: (?exception rdf:type famix:FamixClass)"
+                        + " (?exception famix:hasName ?name)"
+                        + " regex(?name, '.*ConstructorException')"
+                        + " -> (?exception rdf:type architecture:ConstructorException)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Every Exception that (isThrownBy a Constructor) must be a ConstructorException.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every Exception that (isThrownBy a Constructor) must be a ConstructorException.\n"
+                        + "class \"?GENERATED1\" as GENERATED1 {\n"
+                        + "{method} <<Create>> ?constructorC()\n"
+                        + "}\n"
+                        + "class \"?GENERATED2\" as GENERATED2 {\n"
+                        + "<color:#OrangeRed> {method} <<Create>> ?constructorW()\n"
+                        + "}\n"
+                        + "class \".*Exception\" as exceptionC {\n"
+                        + "}\n"
+                        + "class \".*ConstructorException\" as constructorExceptionC {\n"
+                        + "}\n"
+                        + "class \".*Exception\" as exceptionW #OrangeRed {\n"
+                        + "}\n"
+                        + "GENERATED1::constructorC -[dashed]-> exceptionC: <<throwsException>>\n"
+                        + "exceptionC -[bold]-> GENERATED1::constructorC\n"
+                        + "note on link: isThrownBy\n"
+                        + "exceptionC --|> constructorExceptionC #line:RoyalBlue;text:RoyalBlue : Is-a\n"
+                        + "GENERATED2::constructorW -[dashed]-> exceptionW #line:OrangeRed;text:OrangeRed : <<throwsException>>\n"
+                        + "exceptionW -[bold]-> GENERATED2::constructorW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: isThrownBy\n"
+                        + "note \"Constructor\" as Constructor\n"
+                        + "Constructor .. GENERATED1::constructorC\n"
+                        + "note \"Constructor\" as Constructor1\n"
+                        + "Constructor1 .. GENERATED2::constructorW\n"
+                        + "note \"Exception\" as Exception\n"
+                        + "Exception .. exceptionC\n"
+                        + "note \"ConstructorException\" as ConstructorException\n"
+                        + "ConstructorException .. constructorExceptionC\n"
+                        + "note \"Exception\" as Exception1\n"
+                        + "Exception1 .. exceptionW\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }

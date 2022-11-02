@@ -57,7 +57,7 @@ public abstract class PlantUmlConnection implements PlantUmlPart {
         this.name = Optional.of(name);
     }
 
-    public void setNodeText(String text) {
+    public void setNoteText(String text) {
         this.noteText = Optional.of(text);
     }
 

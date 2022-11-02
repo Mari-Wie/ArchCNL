@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
+import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.BooleanValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
@@ -19,6 +19,7 @@ import org.archcnl.domain.input.visualization.connections.CustomRelationConnecti
 import org.archcnl.domain.input.visualization.connections.DeclaresExceptionConnection;
 import org.archcnl.domain.input.visualization.connections.DefinesVariableConnection;
 import org.archcnl.domain.input.visualization.connections.ImportConnection;
+import org.archcnl.domain.input.visualization.connections.IsAConnection;
 import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.connections.ThrowsExceptionConnection;
 import org.archcnl.domain.input.visualization.elements.BooleanElement;
@@ -56,16 +57,14 @@ public class TripletContainer {
     }
 
     private enum ElementConnection {
-        // containsArtifact(ContainmentConnection::new),
-        // isExternal,
-        // isLocatedAt,
+        // isExternal, isLocatedAt, and hasSignature are not supported
         imports(ImportConnection::new),
         definesNestedType(ContainmentConnection::new),
-        // hasSignature,
         definesVariable(DefinesVariableConnection::new),
         throwsException(ThrowsExceptionConnection::new),
         hasCaughtException(CatchesExceptionConnection::new),
-        hasDeclaredException(DeclaresExceptionConnection::new);
+        hasDeclaredException(DeclaresExceptionConnection::new),
+        isA(IsAConnection::new);
 
         private BiFunction<String, String, PlantUmlConnection> creator;
 
@@ -82,12 +81,20 @@ public class TripletContainer {
         }
     }
 
-    private List<ColoredTriplet> elementPropertyTriplets;
-    private List<ColoredTriplet> connectionTriplets;
+    private List<ColoredTriplet> elementPropertyTriplets = new ArrayList<>();
+    private List<ColoredTriplet> connectionTriplets = new ArrayList<>();
 
-    public TripletContainer(List<ColoredTriplet> triplets) {
-        setElementPropertyTriplets(triplets);
-        setConnectionTriplets(triplets);
+    public TripletContainer(List<ColoredTriplet> triplets)
+            throws MappingToUmlTranslationFailedException {
+        for (ColoredTriplet triplet : triplets) {
+            if (ElementProperty.isElementProperty(triplet.getPredicate())) {
+                elementPropertyTriplets.add(triplet);
+            } else if (isElementConnectionOrCustomConnectionTriplet(triplet)) {
+                connectionTriplets.add(triplet);
+            } else if (isNotTypeTriplet(triplet)) {
+                throw new MappingToUmlTranslationFailedException(triplet + " couldn't be sorted");
+            }
+        }
     }
 
     public void applyElementProperties(Map<Variable, PlantUmlBlock> elementMap)
@@ -161,20 +168,6 @@ public class TripletContainer {
         }
     }
 
-    private void setElementPropertyTriplets(List<ColoredTriplet> triplets) {
-        elementPropertyTriplets =
-                triplets.stream()
-                        .filter(t -> ElementProperty.isElementProperty(t.getPredicate()))
-                        .collect(Collectors.toList());
-    }
-
-    private void setConnectionTriplets(List<ColoredTriplet> triplets) {
-        connectionTriplets =
-                triplets.stream()
-                        .filter(this::isElementConnectionOrCustomConnectionTriplet)
-                        .collect(Collectors.toList());
-    }
-
     private void updateColorStateWhenNotNeutral(PlantUmlPart block, ColorState state) {
         if (state != ColorState.NEUTRAL) {
             block.setColorState(state);
@@ -185,5 +178,9 @@ public class TripletContainer {
         Relation predicate = triplet.getPredicate();
         return ElementConnection.isElementConnection(predicate)
                 || predicate instanceof CustomRelation;
+    }
+
+    private boolean isNotTypeTriplet(Triplet triplet) {
+        return !triplet.getPredicate().equals(TypeRelation.getTyperelation());
     }
 }

@@ -73,8 +73,9 @@ public abstract class RuleVisualizer implements Visualizer {
     public static RuleVisualizer createRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
-        // TODO Add support for Sub-concept rule type and is-a facts
-        if (ExistentialRuleVisualizer.matches(rule)) {
+        if (SubconceptRuleVisualizer.matches(rule)) {
+            return new SubconceptRuleVisualizer(rule, conceptManager, relationManager);
+        } else if (ExistentialRuleVisualizer.matches(rule)) {
             return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
         } else if (DomainRangeRuleVisualizer.matches(rule)) {
             return new DomainRangeRuleVisualizer(rule, conceptManager, relationManager);
