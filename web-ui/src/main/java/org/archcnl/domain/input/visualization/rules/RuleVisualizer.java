@@ -31,6 +31,7 @@ import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
+import org.archcnl.domain.input.visualization.rules.VerbPhraseContainer.Connector;
 
 public abstract class RuleVisualizer implements Visualizer {
 
@@ -39,6 +40,9 @@ public abstract class RuleVisualizer implements Visualizer {
             "(?<predicate>[a-z][a-zA-Z]*)( (?<cardinality>(exactly|at-least|at-most)) (?<quantity>\\d+))?";
     protected static final String OBJECT_REGEX =
             "(?<object>(anything|[A-Z][a-zA-Z]*( that \\(.+\\))?))";
+    private static final String VERB_PHRASE_REGEX = PREDICATE_REGEX + " (a |an )?" + OBJECT_REGEX;
+    protected static final String PHRASES_REGEX =
+            "(?<phrases>" + VERB_PHRASE_REGEX + "( (and|or) (?<nextPhrase>.*))*)";
     protected static final Pattern conceptExpression =
             Pattern.compile(
                     "(a |an )?(?<concept>[A-Z][a-zA-Z]*)(?<variable> [A-Z])?( that \\((?<relation>[a-z][a-zA-Z]*) (?<that>.*)\\))?");
@@ -47,8 +51,7 @@ public abstract class RuleVisualizer implements Visualizer {
     protected RelationManager relationManager;
     protected String cnlString;
     protected List<Triplet> subjectTriplets;
-    protected List<Triplet> objectTriplets;
-    protected RulePredicate predicate;
+    protected VerbPhraseContainer verbPhrases;
 
     protected Set<Variable> usedVariables = new HashSet<>();
     private Set<Variable> thatVariables = new HashSet<>();
@@ -72,9 +75,6 @@ public abstract class RuleVisualizer implements Visualizer {
     public static RuleVisualizer createRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
-        if (containsLogicWords(rule.toString())) {
-            throw new MappingToUmlTranslationFailedException(rule + " contains logic words");
-        }
         // TODO Add support for Sub-concept rule type and is-a facts
         if (ExistentialRuleVisualizer.matches(rule)) {
             return new ExistentialRuleVisualizer(rule, conceptManager, relationManager);
@@ -215,20 +215,44 @@ public abstract class RuleVisualizer implements Visualizer {
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
         tryToFindMatch(matcher);
-        predicate = parsePredicate(matcher);
+        String phrasesGroup = matcher.group("phrases");
+        verbPhrases = parseVerbPhrases(phrasesGroup);
         subjectTriplets =
                 parseConceptExpression(
                         matcher.group("subject"), Optional.empty(), Optional.empty());
-        String objectGroup = matcher.group("object");
-        if ("anything".equals(objectGroup)) {
-            objectTriplets =
-                    Arrays.asList(
-                            getBaseObjectTypeTriplet(
-                                    predicate.getRelation(), new Variable("anything")));
-        } else {
-            objectTriplets =
-                    parseConceptExpression(objectGroup, Optional.empty(), Optional.empty());
+    }
+
+    protected VerbPhraseContainer parseVerbPhrases(String phrasesGroup)
+            throws MappingToUmlTranslationFailedException {
+        if (phrasesGroup.contains(" and ") && phrasesGroup.contains(" or ")) {
+            throw new MappingToUmlTranslationFailedException(
+                    cnlString + " Contains both AND and OR");
         }
+        VerbPhraseContainer container = new VerbPhraseContainer();
+        if (phrasesGroup.contains(" and ")) {
+            container.setConnector(Connector.AND);
+        } else {
+            container.setConnector(Connector.OR);
+        }
+
+        Pattern verbPhrase = Pattern.compile(VERB_PHRASE_REGEX);
+        Matcher matcher = verbPhrase.matcher(phrasesGroup);
+        while (matcher.find()) {
+            RulePredicate predicate = parsePredicate(matcher);
+            String objectGroup = matcher.group("object");
+            List<Triplet> objectTriplets;
+            if ("anything".equals(objectGroup)) {
+                objectTriplets =
+                        Arrays.asList(
+                                getBaseObjectTypeTriplet(
+                                        predicate.getRelation(), new Variable("anything")));
+            } else {
+                objectTriplets =
+                        parseConceptExpression(objectGroup, Optional.empty(), Optional.empty());
+            }
+            container.addVerbPhrase(new VerbPhrase(predicate, objectTriplets));
+        }
+        return container;
     }
 
     protected RulePredicate parsePredicate(Matcher matcher)
@@ -262,8 +286,4 @@ public abstract class RuleVisualizer implements Visualizer {
             throws MappingToUmlTranslationFailedException;
 
     protected abstract Pattern getCnlPattern();
-
-    private static boolean containsLogicWords(String rule) {
-        return rule.contains(" and ") || rule.contains(" or ");
-    }
 }

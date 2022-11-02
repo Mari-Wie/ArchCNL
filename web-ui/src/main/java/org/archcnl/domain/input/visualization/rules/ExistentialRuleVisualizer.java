@@ -13,14 +13,7 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
 
     private static final Pattern CNL_PATTERN =
             Pattern.compile(
-                    "Every "
-                            + "(a |an )?"
-                            + SUBJECT_REGEX
-                            + " must "
-                            + PREDICATE_REGEX
-                            + " (a |an )?"
-                            + OBJECT_REGEX
-                            + "\\.");
+                    "Every " + "(a |an )?" + SUBJECT_REGEX + " must " + PHRASES_REGEX + "\\.");
 
     public ExistentialRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
@@ -32,8 +25,10 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
     protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
         RuleVariant correct = new RuleVariant();
         correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
-        correct.setObjectTriplets(addPostfixToAllVariables(objectTriplets, "C"));
-        correct.copyPredicate(predicate);
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            correct.addObjectTriplets(addPostfixToAllVariables(phrase.getObjectTriplets(), "C"));
+            correct.addCopyOfPredicate(phrase.getPredicate());
+        }
 
         RuleVariant wrong = new RuleVariant();
         wrong.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "W"));

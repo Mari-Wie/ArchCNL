@@ -22,9 +22,7 @@ public class NegationRuleVisualizer extends RuleVisualizer {
                             + SUBJECT_REGEX
                             + ")"
                             + " can "
-                            + PREDICATE_REGEX
-                            + " (a |an )?"
-                            + OBJECT_REGEX
+                            + PHRASES_REGEX
                             + "\\.");
 
     public NegationRuleVisualizer(
@@ -37,26 +35,18 @@ public class NegationRuleVisualizer extends RuleVisualizer {
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
         tryToFindMatch(matcher);
-        predicate = parsePredicate(matcher);
+        String phrasesGroup = matcher.group("phrases");
+        verbPhrases = parseVerbPhrases(phrasesGroup);
         if (isNothingRule()) {
             subjectTriplets =
                     Arrays.asList(
                             getBaseSubjectTypeTriplet(
-                                    predicate.getRelation(), new Variable("nothing")));
+                                    verbPhrases.getPhrases().get(0).getPredicate().getRelation(),
+                                    new Variable("nothing")));
         } else {
             subjectTriplets =
                     parseConceptExpression(
                             matcher.group("subject"), Optional.empty(), Optional.empty());
-        }
-        String objectGroup = matcher.group("object");
-        if ("anything".equals(objectGroup)) {
-            objectTriplets =
-                    Arrays.asList(
-                            getBaseObjectTypeTriplet(
-                                    predicate.getRelation(), new Variable("anything")));
-        } else {
-            objectTriplets =
-                    parseConceptExpression(objectGroup, Optional.empty(), Optional.empty());
         }
     }
 
@@ -65,9 +55,13 @@ public class NegationRuleVisualizer extends RuleVisualizer {
         RuleVariant variant = new RuleVariant();
         variant.setSubjectTriplets(
                 subjectTriplets.stream().map(ColoredTriplet::new).collect(Collectors.toList()));
-        variant.setObjectTriplets(
-                objectTriplets.stream().map(ColoredTriplet::new).collect(Collectors.toList()));
-        variant.copyPredicate(predicate);
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            variant.addObjectTriplets(
+                    phrase.getObjectTriplets().stream()
+                            .map(ColoredTriplet::new)
+                            .collect(Collectors.toList()));
+            variant.addCopyOfPredicate(phrase.getPredicate());
+        }
 
         variant.setPredicateToColorState(ColorState.WRONG);
         return Arrays.asList(variant);

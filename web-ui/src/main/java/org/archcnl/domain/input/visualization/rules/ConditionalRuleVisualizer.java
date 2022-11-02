@@ -21,9 +21,7 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
                             + "(a |an )?"
                             + SUBJECT_REGEX
                             + " "
-                            + PREDICATE_REGEX
-                            + " (a |an )?"
-                            + OBJECT_REGEX
+                            + PHRASES_REGEX
                             + ", then it must "
                             + SECOND_PREDICATE_REGEX
                             + " this (a |an )?"
@@ -45,27 +43,30 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
         if (!matcher.group("object").equals(matcher.group("object2"))) {
             throw new MappingToUmlTranslationFailedException(cnlString + " Has different objects.");
         }
-        predicate = parsePredicate(matcher);
-        secondaryPredicate = new RulePredicate(getRelation(matcher.group("predicate2")));
+        String phrasesGroup = matcher.group("phrases");
+        verbPhrases = parseVerbPhrases(phrasesGroup);
         subjectTriplets =
                 parseConceptExpression(
                         matcher.group("subject"), Optional.empty(), Optional.empty());
-        objectTriplets =
-                parseConceptExpression(matcher.group("object"), Optional.empty(), Optional.empty());
+        secondaryPredicate = new RulePredicate(getRelation(matcher.group("predicate2")));
     }
 
     @Override
     protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
         RuleVariant correct = new RuleVariant();
         correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
-        correct.setObjectTriplets(addPostfixToAllVariables(objectTriplets, "C"));
-        correct.copyPredicate(predicate);
-        correct.setSecondaryPredicate(secondaryPredicate);
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            correct.addObjectTriplets(addPostfixToAllVariables(phrase.getObjectTriplets(), "C"));
+            correct.addCopyOfPredicate(phrase.getPredicate());
+            correct.setCopyOfSecondaryPredicate(secondaryPredicate);
+        }
 
         RuleVariant wrong = new RuleVariant();
         wrong.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "W"));
-        wrong.setObjectTriplets(addPostfixToAllVariables(objectTriplets, "W"));
-        wrong.copyPredicate(predicate);
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            wrong.addObjectTriplets(addPostfixToAllVariables(phrase.getObjectTriplets(), "W"));
+            wrong.addCopyOfPredicate(phrase.getPredicate());
+        }
 
         correct.setSubjectToColorState(ColorState.CORRECT);
         wrong.setSubjectToColorState(ColorState.WRONG);

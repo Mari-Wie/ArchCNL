@@ -10,24 +10,24 @@ import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 public class RuleVariant {
 
     private List<ColoredTriplet> subjectTriplets = new ArrayList<>();
-    private List<ColoredTriplet> objectTriplets = new ArrayList<>();
-    private Optional<RulePredicate> predicate = Optional.empty();
+    private List<List<ColoredTriplet>> objects = new ArrayList<>();
+    private List<RulePredicate> predicates = new ArrayList<>();
     private Optional<RulePredicate> secondaryPredicate = Optional.empty();
 
     public void setSubjectTriplets(List<ColoredTriplet> subjectTriplets) {
         this.subjectTriplets = subjectTriplets;
     }
 
-    public void setObjectTriplets(List<ColoredTriplet> objectTriplets) {
-        this.objectTriplets = objectTriplets;
+    public void addObjectTriplets(List<ColoredTriplet> objectTriplets) {
+        this.objects.add(objectTriplets);
     }
 
-    public void copyPredicate(RulePredicate predicate) {
-        this.predicate = Optional.of(predicate.copy());
+    public void addCopyOfPredicate(RulePredicate predicate) {
+        this.predicates.add(predicate.copy());
     }
 
-    public void setSecondaryPredicate(RulePredicate secondaryPredicate) {
-        this.secondaryPredicate = Optional.of(secondaryPredicate);
+    public void setCopyOfSecondaryPredicate(RulePredicate secondaryPredicate) {
+        this.secondaryPredicate = Optional.of(secondaryPredicate.copy());
     }
 
     public void setSubjectToColorState(ColorState state) {
@@ -35,23 +35,29 @@ public class RuleVariant {
     }
 
     public void setObjectToColorState(ColorState state) {
-        objectTriplets.forEach(t -> t.setColorState(state));
+
+        objects.forEach(o -> o.forEach(t -> t.setColorState(state)));
     }
 
     public void setPredicateToColorState(ColorState state) {
-        predicate.get().setColorState(state);
+        predicates.forEach(p -> p.setColorState(state));
     }
 
     public List<ColoredTriplet> buildRuleTriplets() {
         List<ColoredTriplet> ruleTriplets = new ArrayList<>();
         ruleTriplets.addAll(subjectTriplets);
-        ruleTriplets.addAll(objectTriplets);
-        if (predicate.isPresent()) {
-            ruleTriplets.add(predicate.get().getTriplet(getSubjectVariable(), getObjectVariable()));
-        }
-        if (secondaryPredicate.isPresent()) {
-            ruleTriplets.add(
-                    secondaryPredicate.get().getTriplet(getSubjectVariable(), getObjectVariable()));
+        for (int i = 0; i < objects.size(); i++) {
+            List<ColoredTriplet> objectTriplets = objects.get(i);
+            ruleTriplets.addAll(objectTriplets);
+            Variable subjectVar = getSubjectVariable();
+            Variable objectVar = getObjectVariable(objectTriplets);
+            if (i < predicates.size()) {
+                RulePredicate predicate = predicates.get(i);
+                ruleTriplets.add(predicate.getTriplet(subjectVar, objectVar));
+            }
+            if (secondaryPredicate.isPresent()) {
+                ruleTriplets.add(secondaryPredicate.get().getTriplet(subjectVar, objectVar));
+            }
         }
         return ruleTriplets;
     }
@@ -60,7 +66,7 @@ public class RuleVariant {
         return subjectTriplets.get(0).getSubject();
     }
 
-    private Variable getObjectVariable() {
+    private Variable getObjectVariable(List<ColoredTriplet> objectTriplets) {
         return objectTriplets.get(0).getSubject();
     }
 }

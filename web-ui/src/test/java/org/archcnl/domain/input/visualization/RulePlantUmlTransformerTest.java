@@ -146,32 +146,32 @@ class RulePlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title Only a ClientScript can use a ClientScript.\n"
-                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package1 {\n"
-                        + "class \"?clientScript1C\" as clientScript1C {\n"
-                        + "}\n"
-                        + "}\n"
                         + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package2 {\n"
-                        + "class \"?clientScript1W\" as clientScript1W {\n"
+                        + "class \"?clientScriptW\" as clientScriptW {\n"
                         + "}\n"
                         + "}\n"
                         + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package {\n"
+                        + "class \"?clientScript1C\" as clientScript1C {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package1 {\n"
                         + "class \"?clientScriptC\" as clientScriptC {\n"
                         + "}\n"
                         + "}\n"
                         + "class \"?famixClassW\" as famixClassW {\n"
                         + "}\n"
-                        + "clientScriptC -[dashed]-> clientScript1C #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
-                        + "clientScriptC -[bold]-> clientScript1C #line:RoyalBlue;text:RoyalBlue \n"
+                        + "clientScript1C -[dashed]-> clientScriptC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "clientScript1C -[bold]-> clientScriptC #line:RoyalBlue;text:RoyalBlue \n"
                         + "note on link: use\n"
-                        + "famixClassW -[dashed]-> clientScript1W #line:OrangeRed;text:OrangeRed : <<imports>>\n"
-                        + "famixClassW -[bold]-> clientScript1W #line:OrangeRed;text:OrangeRed \n"
+                        + "famixClassW -[dashed]-> clientScriptW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClassW -[bold]-> clientScriptW #line:OrangeRed;text:OrangeRed \n"
                         + "note on link: use\n"
-                        + "note \"ClientScript\" as ClientScript1\n"
-                        + "ClientScript1 .. clientScript1C\n"
                         + "note \"ClientScript\" as ClientScript2\n"
-                        + "ClientScript2 .. clientScript1W\n"
+                        + "ClientScript2 .. clientScriptW\n"
                         + "note \"ClientScript\" as ClientScript\n"
-                        + "ClientScript .. clientScriptC\n"
+                        + "ClientScript .. clientScript1C\n"
+                        + "note \"ClientScript\" as ClientScript1\n"
+                        + "ClientScript1 .. clientScriptC\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -552,8 +552,8 @@ class RulePlantUmlTransformerTest {
                         + "}\n"
                         + "class \"?famixClassW\" as famixClassW {\n"
                         + "}\n"
-                        + "famixClassC -[dashed]-> \"..10\" famixClass1C #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
-                        + "famixClassW -[dashed]-> \"11..\" famixClass1W #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClass1C -[dashed]-> \"..10\" famixClassC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "famixClass1W -[dashed]-> \"11..\" famixClassW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
@@ -871,7 +871,7 @@ class RulePlantUmlTransformerTest {
         object2Concept.setMapping(object2Mapping);
         conceptManager.addConcept(object2Concept);
 
-        var rule = new ArchitectureRule("Nothing can use a Controller or a MainClass.");
+        var rule = new ArchitectureRule("Nothing can use a Controller or use a MainClass.");
 
         // when
         PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
@@ -943,7 +943,40 @@ class RulePlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(rule);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every DataClass must overwrite HashCodeMethod and overwrite EqualsMethod.\n"
+                        + "folder \".*/data/.*\" as namespace #RoyalBlue {\n"
+                        + "class \"?dataClassC\" as dataClassC #RoyalBlue {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"?GENERATED1\" as GENERATED1 {\n"
+                        + "{method} hashCode() <<overwrite>>\n"
+                        + "}\n"
+                        + "class \"?GENERATED2\" as GENERATED2 {\n"
+                        + "{method} equals() <<overwrite>>\n"
+                        + "}\n"
+                        + "annotation \"overwrite\" as type1 {\n"
+                        + "}\n"
+                        + "annotation \"overwrite\" as type {\n"
+                        + "}\n"
+                        + "folder \".*/data/.*\" as namespace1 #OrangeRed {\n"
+                        + "class \"?dataClassW\" as dataClassW #OrangeRed {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "dataClassC -[bold]-> GENERATED1::hashCode\n"
+                        + "note on link: overwrite\n"
+                        + "dataClassC -[bold]-> GENERATED2::equals\n"
+                        + "note on link: overwrite\n"
+                        + "note \"DataClass\" as DataClass\n"
+                        + "DataClass .. dataClassC\n"
+                        + "note \"HashCodeMethod\" as HashCodeMethod\n"
+                        + "HashCodeMethod .. GENERATED1::hashCode\n"
+                        + "note \"EqualsMethod\" as EqualsMethod\n"
+                        + "EqualsMethod .. GENERATED2::equals\n"
+                        + "note \"DataClass\" as DataClass1\n"
+                        + "DataClass1 .. dataClassW\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
