@@ -40,6 +40,10 @@ public class NamePicker {
         return GENERATED_NAME_PREFIX + generatedNamesCounter;
     }
 
+    public static void resetGeneratedNameCounter() {
+        generatedNamesCounter = 0;
+    }
+
     public static String getStringWithFirstLetterInLowerCase(String str) {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }

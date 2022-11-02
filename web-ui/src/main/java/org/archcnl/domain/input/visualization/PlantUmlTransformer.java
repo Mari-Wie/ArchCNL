@@ -15,6 +15,7 @@ import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
+import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.helpers.WrappingService;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
@@ -44,6 +45,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ArchitectureRule rule)
             throws MappingToUmlTranslationFailedException {
+        NamePicker.resetGeneratedNameCounter();
         RuleVisualizer visualizer =
                 RuleVisualizer.createRuleVisualizer(rule, conceptManager, relationManager);
         return buildPlantUmlCode(visualizer);
@@ -51,6 +53,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
+        NamePicker.resetGeneratedNameCounter();
         ColoredMapping coloredMapping = flattenAndRecreate(mapping);
         ConceptVisualizer visualizer =
                 new ConceptVisualizer(
@@ -66,6 +69,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
+        NamePicker.resetGeneratedNameCounter();
         ColoredMapping coloredMapping = flattenAndRecreate(mapping);
         RelationVisualizer visualizer =
                 new RelationVisualizer(coloredMapping, conceptManager, relationManager);

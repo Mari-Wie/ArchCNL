@@ -135,10 +135,10 @@ class RelationPlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title noParentMapping\n"
-                        + "class \"?GENERATED2\" as GENERATED2 {\n"
+                        + "class \"?GENERATED1\" as GENERATED1 {\n"
                         + "{method} ?method(flag)\n"
                         + "}\n"
-                        + "GENERATED2::method -[bold]-> GENERATED2::method\n"
+                        + "GENERATED1::method -[bold]-> GENERATED1::method\n"
                         + "note on link: noParent\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
@@ -176,14 +176,14 @@ class RelationPlantUmlTransformerTest {
         String expectedCode =
                 "@startuml\n"
                         + "title noParentTypeMapping\n"
-                        + "class \"?GENERATED3\" as GENERATED3 {\n"
+                        + "class \"?GENERATED1\" as GENERATED1 {\n"
                         + "{method} main(flag:?type)\n"
                         + "}\n"
                         + "class \"?type\" as type {\n"
                         + "}\n"
-                        + "GENERATED3::main -[bold]-> GENERATED3::main\n"
+                        + "GENERATED1::main -[bold]-> GENERATED1::main\n"
                         + "note on link: noParent\n"
-                        + "GENERATED3::main -[bold]-> type\n"
+                        + "GENERATED1::main -[bold]-> type\n"
                         + "note on link: noParentType\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
