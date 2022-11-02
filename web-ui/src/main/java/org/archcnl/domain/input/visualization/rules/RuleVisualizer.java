@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,13 +36,13 @@ public abstract class RuleVisualizer implements Visualizer {
     protected static final String PREDICATE_REGEX =
             "(?<predicate>[a-z][a-zA-Z]*)( (?<cardinality>(exactly|at-least|at-most)) (?<quantity>\\d+))?";
     protected static final String OBJECT_REGEX =
-            "(?<object>(anything|[A-Z][a-zA-Z]*( that \\(.+\\))?))";
+            "(?<object>(anything|[A-Z][a-zA-Z]*( [A-Z])?( that \\(.+\\))?))";
     private static final String VERB_PHRASE_REGEX = PREDICATE_REGEX + " (a |an )?" + OBJECT_REGEX;
     protected static final String PHRASES_REGEX =
             "(?<phrases>" + VERB_PHRASE_REGEX + "( (and|or) (?<nextPhrase>.*))*)";
     protected static final Pattern conceptExpression =
             Pattern.compile(
-                    "(a |an )?(?<concept>[A-Z][a-zA-Z]*)(?<variable> [A-Z])?( that \\((?<relation>[a-z][a-zA-Z]*) (?<that>.*)\\))?");
+                    "(a |an )?(?<concept>[A-Z][a-zA-Z]*)(?<variable> [A-Z])?( that \\((?<that>.*)\\))?");
 
     protected ConceptManager conceptManager;
     protected RelationManager relationManager;
@@ -107,6 +106,7 @@ public abstract class RuleVisualizer implements Visualizer {
 
     private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
             throws MappingToUmlTranslationFailedException {
+        System.out.println(ruleTriplets);
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
         ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
         MappingTranslator translator =
@@ -120,9 +120,34 @@ public abstract class RuleVisualizer implements Visualizer {
         RuleHelper.tryToFindMatch(matcher);
         String phrasesGroup = matcher.group("phrases");
         verbPhrases = parseVerbPhrases(phrasesGroup);
-        subjectTriplets =
-                parseConceptExpression(
-                        matcher.group("subject"), Optional.empty(), Optional.empty());
+        subjectTriplets = parseConceptExpression(matcher.group("subject"));
+    }
+
+    protected List<Triplet> parseConceptExpression(String expression)
+            throws MappingToUmlTranslationFailedException {
+        Matcher matcher = conceptExpression.matcher(expression);
+        RuleHelper.tryToFindMatch(matcher);
+        List<Triplet> res = new ArrayList<>();
+
+        String conceptName = matcher.group("concept");
+        Concept concept = RuleHelper.getConcept(conceptName, conceptManager);
+        Relation typeRelation = TypeRelation.getTyperelation();
+        String nextVariableName = matcher.group("variable");
+
+        Variable name;
+        if (nextVariableName != null) {
+            name = new Variable(nextVariableName);
+            res.add(new Triplet(name, typeRelation, concept));
+            thatVariables.add(name);
+        } else {
+            name = NamePicker.pickUniqueVariable(concept.getName(), usedVariables);
+            res.add(new Triplet(name, typeRelation, concept));
+        }
+
+        if (matcher.group("that") != null) {
+            res.addAll(parseThatStatement(matcher.group("that"), name));
+        }
+        return res;
     }
 
     protected VerbPhraseContainer parseVerbPhrases(String phrasesGroup)
@@ -151,53 +176,22 @@ public abstract class RuleVisualizer implements Visualizer {
                                 predicate.getRelation(), anythingVar, usedVariables);
                 objectTriplets = Arrays.asList(triplet);
             } else {
-                objectTriplets =
-                        parseConceptExpression(objectGroup, Optional.empty(), Optional.empty());
+                objectTriplets = parseConceptExpression(objectGroup);
             }
             container.addVerbPhrase(new VerbPhrase(predicate, objectTriplets));
         }
         return container;
     }
 
-    protected List<Triplet> parseConceptExpression(
-            String expression,
-            Optional<Relation> previousRelation,
-            Optional<Variable> previousVariable)
+    private List<Triplet> parseThatStatement(String statement, Variable subject)
             throws MappingToUmlTranslationFailedException {
-        Matcher matcher = conceptExpression.matcher(expression);
-        RuleHelper.tryToFindMatch(matcher);
-        List<Triplet> res = new ArrayList<>();
-
-        String conceptName = matcher.group("concept");
-        Concept concept = RuleHelper.getConcept(conceptName, conceptManager);
-        Relation typeRelation = TypeRelation.getTyperelation();
-        String nextVariableName = matcher.group("variable");
-
-        Variable nextVariable;
-        if (nextVariableName != null) {
-            nextVariable = new Variable(nextVariableName);
-            if (!thatVariables.contains(nextVariable)) {
-                res.add(new Triplet(nextVariable, typeRelation, concept));
-                thatVariables.add(nextVariable);
-            }
-        } else {
-            nextVariable = NamePicker.pickUniqueVariable(concept.getName(), usedVariables);
-            res.add(new Triplet(nextVariable, typeRelation, concept));
+        VerbPhraseContainer container = parseVerbPhrases(statement);
+        List<Triplet> triplets = new ArrayList<>();
+        for (VerbPhrase phrase : container.getPhrases()) {
+            triplets.addAll(phrase.getObjectTriplets());
+            triplets.add(phrase.getTriplet(subject));
         }
-
-        if (previousRelation.isPresent() && previousVariable.isPresent()) {
-            res.add(new Triplet(previousVariable.get(), previousRelation.get(), nextVariable));
-        }
-
-        if (matcher.group("relation") != null) {
-            String name = matcher.group("relation");
-            Relation nextRelation = RuleHelper.getRelation(name, relationManager);
-            String thatGroup = matcher.group("that");
-            res.addAll(
-                    parseConceptExpression(
-                            thatGroup, Optional.of(nextRelation), Optional.of(nextVariable)));
-        }
-        return res;
+        return triplets;
     }
 
     protected RulePredicate parsePredicate(Matcher matcher)

@@ -2,7 +2,6 @@ package org.archcnl.domain.input.visualization.rules;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,9 +43,7 @@ public class NegationRuleVisualizer extends RuleVisualizer {
             var triplet = RuleHelper.getBaseSubjectTypeTriplet(relation, nothingVar, usedVariables);
             subjectTriplets = Arrays.asList(triplet);
         } else {
-            subjectTriplets =
-                    parseConceptExpression(
-                            matcher.group("subject"), Optional.empty(), Optional.empty());
+            subjectTriplets = parseConceptExpression(matcher.group("subject"));
         }
     }
 

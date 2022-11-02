@@ -840,6 +840,93 @@ class RulePlantUmlTransformerTest {
     }
 
     @Test
+    void givenRuleWithAndInThat_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("SpyClass", "");
+        String subjectMappingString =
+                "isCWAApp: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Spy')"
+                        + " -> (?class rdf:type architecture:SpyClass)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String thatMappingString =
+                "isLocatedInMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?package rdf:type famix:Namespace)"
+                        + " (?package famix:namespaceContains ?class)"
+                        + " -> (?class architecture:isLocatedIn ?package)";
+        RelationMapping thatMapping =
+                createRelationMapping(thatMappingString, Collections.emptyList());
+        CustomRelation thatRelation =
+                new CustomRelation("isLocatedIn", "", new HashSet<>(), new HashSet<>());
+        thatRelation.setMapping(thatMapping, conceptManager);
+        relationManager.addRelation(thatRelation);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("SecretClass", "");
+        String objectMappingString =
+                "isSecretClass: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?constructor)"
+                        + " (?constructor famix:isConstructor 'true'^^xsd:boolean)"
+                        + " (?constructor famix:hasModifier 'private')"
+                        + " -> (?class rdf:type architecture:SecretClass)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Only a FamixClass that (definesMethod Method and imports an Enum) can use FamixClass.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Only a FamixClass that (definesMethod Method and imports an Enum) can use FamixClass.\n"
+                        + "enum \"?enumC\" as enumC {\n"
+                        + "}\n"
+                        + "class \"?famixClass1C\" as famixClass1C {\n"
+                        + "{method} ?methodC()\n"
+                        + "}\n"
+                        + "class \"?famixClass2W\" as famixClass2W {\n"
+                        + "}\n"
+                        + "class \"?famixClassC\" as famixClassC {\n"
+                        + "}\n"
+                        + "class \"?famixClassW\" as famixClassW {\n"
+                        + "}\n"
+                        + "famixClass1C -[dashed]-> enumC: <<imports>>\n"
+                        + "famixClass1C -[dashed]-> famixClassC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "famixClass1C -[bold]-> famixClassC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "famixClass2W -[dashed]-> famixClassW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClass2W -[bold]-> famixClassW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
     void givenNothingAnythingRule_whenTransform_thenCorrectPlantUml()
             throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
                     UnrelatedMappingException, ConceptAlreadyExistsException,

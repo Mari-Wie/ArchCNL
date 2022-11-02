@@ -2,7 +2,6 @@ package org.archcnl.domain.input.visualization.rules;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.archcnl.domain.common.ConceptManager;
@@ -36,14 +35,11 @@ public class SubconceptRuleVisualizer extends RuleVisualizer {
         Matcher matcher = getCnlPattern().matcher(ruleString);
         RuleHelper.tryToFindMatch(matcher);
         var isAPredicate = new RulePredicate(new IsARelation());
-        var objectTriplets =
-                parseConceptExpression(matcher.group("object"), Optional.empty(), Optional.empty());
+        var objectTriplets = parseConceptExpression(matcher.group("object"));
         VerbPhrase phrase = new VerbPhrase(isAPredicate, objectTriplets);
         verbPhrases = new VerbPhraseContainer();
         verbPhrases.addVerbPhrase(phrase);
-        subjectTriplets =
-                parseConceptExpression(
-                        matcher.group("subject"), Optional.empty(), Optional.empty());
+        subjectTriplets = parseConceptExpression(matcher.group("subject"));
     }
 
     @Override

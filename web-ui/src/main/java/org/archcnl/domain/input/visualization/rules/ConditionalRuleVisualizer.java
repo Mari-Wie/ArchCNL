@@ -2,7 +2,6 @@ package org.archcnl.domain.input.visualization.rules;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.archcnl.domain.common.ConceptManager;
@@ -47,9 +46,7 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
         }
         String phrasesGroup = matcher.group("phrases");
         verbPhrases = parseVerbPhrases(phrasesGroup);
-        subjectTriplets =
-                parseConceptExpression(
-                        matcher.group("subject"), Optional.empty(), Optional.empty());
+        subjectTriplets = parseConceptExpression(matcher.group("subject"));
         String secondRelationName = matcher.group("predicate2");
         Relation secondRelation = RuleHelper.getRelation(secondRelationName, relationManager);
         secondaryPredicate = new RulePredicate(secondRelation);

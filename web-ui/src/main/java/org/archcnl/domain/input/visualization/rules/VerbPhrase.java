@@ -2,6 +2,8 @@ package org.archcnl.domain.input.visualization.rules;
 
 import java.util.List;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class VerbPhrase {
 
@@ -19,5 +21,13 @@ public class VerbPhrase {
 
     public RulePredicate getPredicate() {
         return predicate;
+    }
+
+    public ColoredTriplet getTriplet(Variable subject) {
+        return new ColoredTriplet(subject, predicate.getRelation(), getSubjectOfPhrase());
+    }
+
+    private Variable getSubjectOfPhrase() {
+        return objectTriplets.get(0).getSubject();
     }
 }
