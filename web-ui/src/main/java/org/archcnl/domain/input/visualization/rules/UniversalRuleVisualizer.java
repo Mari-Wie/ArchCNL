@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.rules;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,7 +24,8 @@ public class UniversalRuleVisualizer extends RuleVisualizer {
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsAnd()
+            throws MappingToUmlTranslationFailedException {
         RuleVariant correct = new RuleVariant();
         correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
@@ -44,6 +46,44 @@ public class UniversalRuleVisualizer extends RuleVisualizer {
         correct.setPredicateToColorState(ColorState.CORRECT);
         wrong.setPredicateToColorState(ColorState.WRONG);
         return Arrays.asList(correct, wrong);
+    }
+
+    @Override
+    protected List<RuleVariant> buildRuleVariantsOr()
+            throws MappingToUmlTranslationFailedException {
+        StringBuilder correctPostfix = new StringBuilder("C");
+        StringBuilder wrongPostfix = new StringBuilder("W");
+        List<RuleVariant> variants = new ArrayList<>();
+
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            RuleVariant correct = new RuleVariant();
+            correct.setSubjectTriplets(
+                    addPostfixToAllVariables(subjectTriplets, correctPostfix.toString()));
+            correct.addObjectTriplets(
+                    addPostfixToAllVariables(
+                            phrase.getObjectTriplets(), correctPostfix.toString()));
+            correct.addCopyOfPredicate(phrase.getPredicate());
+
+            RuleVariant wrong = new RuleVariant();
+            wrong.setSubjectTriplets(
+                    addPostfixToAllVariables(subjectTriplets, wrongPostfix.toString()));
+            var triplet = phrase.getObjectTriplets().get(0);
+            var coloredTriplet =
+                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
+            wrong.addObjectTriplets(
+                    addPostfixToAllVariables(
+                            Arrays.asList(coloredTriplet), wrongPostfix.toString()));
+            wrong.addCopyOfPredicate(phrase.getPredicate());
+
+            correct.setPredicateToColorState(ColorState.CORRECT);
+            wrong.setPredicateToColorState(ColorState.WRONG);
+
+            variants.add(correct);
+            variants.add(wrong);
+            correctPostfix.append("C");
+            wrongPostfix.append("W");
+        }
+        return variants;
     }
 
     public static boolean matches(ArchitectureRule rule) {

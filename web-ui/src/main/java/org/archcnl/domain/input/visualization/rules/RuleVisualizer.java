@@ -106,7 +106,6 @@ public abstract class RuleVisualizer implements Visualizer {
 
     private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
             throws MappingToUmlTranslationFailedException {
-        System.out.println(ruleTriplets);
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
         ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
         MappingTranslator translator =
@@ -157,10 +156,10 @@ public abstract class RuleVisualizer implements Visualizer {
                     cnlString + " Contains both AND and OR");
         }
         VerbPhraseContainer container = new VerbPhraseContainer();
-        if (phrasesGroup.contains(" and ")) {
-            container.setConnector(Connector.AND);
-        } else {
+        if (phrasesGroup.contains(" or ")) {
             container.setConnector(Connector.OR);
+        } else {
+            container.setConnector(Connector.AND);
         }
 
         Pattern verbPhrase = Pattern.compile(VERB_PHRASE_REGEX);
@@ -223,7 +222,14 @@ public abstract class RuleVisualizer implements Visualizer {
         return newTriplets;
     }
 
-    protected abstract List<RuleVariant> buildRuleVariants()
+    private List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+        return verbPhrases.usesAndConnector() ? buildRuleVariantsAnd() : buildRuleVariantsOr();
+    }
+
+    protected abstract List<RuleVariant> buildRuleVariantsOr()
+            throws MappingToUmlTranslationFailedException;
+
+    protected abstract List<RuleVariant> buildRuleVariantsAnd()
             throws MappingToUmlTranslationFailedException;
 
     protected abstract Pattern getCnlPattern();

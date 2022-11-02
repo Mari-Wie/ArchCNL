@@ -21,8 +21,8 @@ public class VerbPhraseContainer {
         this.connector = connector;
     }
 
-    public Connector getConnector() {
-        return connector;
+    public boolean usesAndConnector() {
+        return connector == Connector.AND;
     }
 
     public List<VerbPhrase> getPhrases() {

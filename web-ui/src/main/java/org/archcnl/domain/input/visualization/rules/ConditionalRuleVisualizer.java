@@ -53,7 +53,8 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsAnd()
+            throws MappingToUmlTranslationFailedException {
         RuleVariant correct = new RuleVariant();
         correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
@@ -72,6 +73,12 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
         correct.setSubjectToColorState(ColorState.CORRECT);
         wrong.setSubjectToColorState(ColorState.WRONG);
         return Arrays.asList(correct, wrong);
+    }
+
+    @Override
+    protected List<RuleVariant> buildRuleVariantsOr()
+            throws MappingToUmlTranslationFailedException {
+        throw new UnsupportedOperationException("The conditional rule type doesn't allow OR");
     }
 
     public static boolean matches(ArchitectureRule rule) {

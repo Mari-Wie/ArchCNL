@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.rules;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -48,7 +49,7 @@ public class NegationRuleVisualizer extends RuleVisualizer {
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsAnd() {
         RuleVariant variant = new RuleVariant();
         variant.setSubjectTriplets(
                 subjectTriplets.stream().map(ColoredTriplet::new).collect(Collectors.toList()));
@@ -62,6 +63,27 @@ public class NegationRuleVisualizer extends RuleVisualizer {
 
         variant.setPredicateToColorState(ColorState.WRONG);
         return Arrays.asList(variant);
+    }
+
+    @Override
+    protected List<RuleVariant> buildRuleVariantsOr() {
+        StringBuilder postfix = new StringBuilder();
+        List<RuleVariant> variants = new ArrayList<>();
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            RuleVariant variant = new RuleVariant();
+
+            variant.setSubjectTriplets(
+                    addPostfixToAllVariables(subjectTriplets, postfix.toString()));
+            variant.addObjectTriplets(
+                    addPostfixToAllVariables(phrase.getObjectTriplets(), postfix.toString()));
+            variant.addCopyOfPredicate(phrase.getPredicate());
+
+            variant.setPredicateToColorState(ColorState.WRONG);
+
+            variants.add(variant);
+            postfix.append("1");
+        }
+        return variants;
     }
 
     public static boolean matches(ArchitectureRule rule) {

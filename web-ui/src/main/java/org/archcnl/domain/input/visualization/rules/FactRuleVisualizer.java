@@ -44,7 +44,8 @@ public class FactRuleVisualizer extends RuleVisualizer {
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsAnd()
+            throws MappingToUmlTranslationFailedException {
         RuleVariant variant = new RuleVariant();
         variant.setSubjectTriplets(
                 subjectTriplets.stream().map(ColoredTriplet::new).collect(Collectors.toList()));
@@ -56,6 +57,12 @@ public class FactRuleVisualizer extends RuleVisualizer {
             variant.addCopyOfPredicate(phrase.getPredicate());
         }
         return Arrays.asList(variant);
+    }
+
+    @Override
+    protected List<RuleVariant> buildRuleVariantsOr()
+            throws MappingToUmlTranslationFailedException {
+        throw new UnsupportedOperationException("The fact rule type doesn't allow OR");
     }
 
     private boolean isAnIsAFact() {

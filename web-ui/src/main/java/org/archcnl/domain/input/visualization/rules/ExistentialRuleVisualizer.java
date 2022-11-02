@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.rules;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,7 +23,8 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariants() throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsAnd()
+            throws MappingToUmlTranslationFailedException {
         RuleVariant correct = new RuleVariant();
         correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
@@ -36,6 +38,35 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
         correct.setSubjectToColorState(ColorState.CORRECT);
         wrong.setSubjectToColorState(ColorState.WRONG);
         return Arrays.asList(correct, wrong);
+    }
+
+    @Override
+    protected List<RuleVariant> buildRuleVariantsOr()
+            throws MappingToUmlTranslationFailedException {
+        StringBuilder correctPostfix = new StringBuilder("C");
+        List<RuleVariant> variants = new ArrayList<>();
+
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            RuleVariant correct = new RuleVariant();
+            correct.setSubjectTriplets(
+                    addPostfixToAllVariables(subjectTriplets, correctPostfix.toString()));
+            correct.addObjectTriplets(
+                    addPostfixToAllVariables(
+                            phrase.getObjectTriplets(), correctPostfix.toString()));
+            correct.addCopyOfPredicate(phrase.getPredicate());
+
+            correct.setSubjectToColorState(ColorState.CORRECT);
+
+            variants.add(correct);
+            correctPostfix.append("C");
+        }
+
+        RuleVariant wrong = new RuleVariant();
+        wrong.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "W"));
+        wrong.setSubjectToColorState(ColorState.WRONG);
+        variants.add(wrong);
+
+        return variants;
     }
 
     public static boolean matches(ArchitectureRule rule) {

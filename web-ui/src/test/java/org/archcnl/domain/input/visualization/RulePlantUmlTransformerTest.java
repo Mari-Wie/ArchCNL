@@ -1012,7 +1012,184 @@ class RulePlantUmlTransformerTest {
         String plantUmlCode = transformer.transformToPlantUml(rule);
 
         // then
-        String expectedCode = "";
+        String expectedCode =
+                "@startuml\n"
+                        + "title Nothing can use a Controller or use a MainClass.\n"
+                        + "class \"?nothing1\" as nothing1 {\n"
+                        + "}\n"
+                        + "class \"?mainClass1\" as mainClass1 {\n"
+                        + "{method} main()\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller {\n"
+                        + "}\n"
+                        + "class \"?nothing\" as nothing {\n"
+                        + "}\n"
+                        + "nothing -[dashed]-> controller #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "nothing -[bold]-> controller #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "nothing1 -[dashed]-> mainClass1 #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "nothing1 -[bold]-> mainClass1 #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"MainClass\" as MainClass\n"
+                        + "MainClass .. mainClass1\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenDoubleOrRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept objectConcept = new CustomConcept("Controller", "");
+        String objectMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        String predicateMappingString =
+                "haveMethodMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?content)"
+                        + " -> (?class architecture:haveMethod ?content)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("haveMethod", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        String predicate2MappingString =
+                "haveFieldMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesAttribute ?content)"
+                        + " -> (?class architecture:haveField ?content)";
+        RelationMapping predicate2Mapping =
+                createRelationMapping(predicate2MappingString, Collections.emptyList());
+        CustomRelation predicate2Relation =
+                new CustomRelation("haveField", "", new HashSet<>(), new HashSet<>());
+        predicate2Relation.setMapping(predicate2Mapping, conceptManager);
+        relationManager.addRelation(predicate2Relation);
+
+        var rule =
+                new ArchitectureRule(
+                        "Every Controller can haveMethod exactly 5 Method or haveField at-least 2 Attribute or imports at-most 8 FamixClass.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every Controller can haveMethod exactly 5 Method or haveField at-least 2 Attribute or imports at-most 8 FamixClass.\n"
+                        + "class \".*Controller\" as controllerWWW {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerW {\n"
+                        + "<color:#OrangeRed> {method} ?methodW()\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerC {\n"
+                        + "<color:#RoyalBlue> {method} ?methodC()\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerCC {\n"
+                        + "<color:#RoyalBlue> {field} ?attributeCC\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerWW {\n"
+                        + "<color:#OrangeRed> {field} ?attributeWW\n"
+                        + "}\n"
+                        + "class \"?famixClassWWW\" as famixClassWWW {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerCCC {\n"
+                        + "}\n"
+                        + "class \"?famixClassCCC\" as famixClassCCC {\n"
+                        + "}\n"
+                        + "controllerC -[bold]-> \"5\" controllerC::methodC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: haveMethod\n"
+                        + "controllerW -[bold]-> \"<>5\" controllerW::methodW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: haveMethod\n"
+                        + "controllerCC -[bold]-> \"2..\" controllerCC::attributeCC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: haveField\n"
+                        + "controllerWW -[bold]-> \"..1\" controllerWW::attributeWW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: haveField\n"
+                        + "controllerCCC -[dashed]-> \"..8\" famixClassCCC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "controllerWWW -[dashed]-> \"9..\" famixClassWWW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "note \"Controller\" as Controller5\n"
+                        + "Controller5 .. controllerWWW\n"
+                        + "note \"Controller\" as Controller1\n"
+                        + "Controller1 .. controllerW\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controllerC\n"
+                        + "note \"Controller\" as Controller2\n"
+                        + "Controller2 .. controllerCC\n"
+                        + "note \"Controller\" as Controller3\n"
+                        + "Controller3 .. controllerWW\n"
+                        + "note \"Controller\" as Controller4\n"
+                        + "Controller4 .. controllerCCC\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenTripleOrRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept objectConcept = new CustomConcept("Controller", "");
+        String objectMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Every Controller must definesMethod Method or definesAttribute Attribute or imports FamixClass or hasAnnotationInstance AnnotationInstance.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every Controller must definesMethod Method or definesAttribute Attribute or imports FamixClass or hasAnnotationInstance AnnotationInstance.\n"
+                        + "class \".*Controller\" as controllerCCCC <<?annotationInstanceCCCC>> #RoyalBlue {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerW #OrangeRed {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerC #RoyalBlue {\n"
+                        + "{method} ?methodC()\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerCC #RoyalBlue {\n"
+                        + "{field} ?attributeCC\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerCCC #RoyalBlue {\n"
+                        + "}\n"
+                        + "class \"?famixClassCCC\" as famixClassCCC {\n"
+                        + "}\n"
+                        + "controllerCCC -[dashed]-> famixClassCCC: <<imports>>\n"
+                        + "note \"Controller\" as Controller3\n"
+                        + "Controller3 .. controllerCCCC\n"
+                        + "note \"Controller\" as Controller4\n"
+                        + "Controller4 .. controllerW\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controllerC\n"
+                        + "note \"Controller\" as Controller1\n"
+                        + "Controller1 .. controllerCC\n"
+                        + "note \"Controller\" as Controller2\n"
+                        + "Controller2 .. controllerCCC\n"
+                        + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
 
@@ -1110,6 +1287,97 @@ class RulePlantUmlTransformerTest {
                         + "EqualsMethod .. GENERATED2::equals\n"
                         + "note \"DataClass\" as DataClass1\n"
                         + "DataClass1 .. dataClassW\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenDoubleAndRule_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("Controller", "");
+        String objectMappingString =
+                "isController: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Controller')"
+                        + " -> (?class rdf:type architecture:Controller)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        CustomConcept object2Concept = new CustomConcept("MainClass", "");
+        String object2MappingString =
+                "isMainClass: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:definesMethod ?method)"
+                        + " (?method famix:hasName 'main')"
+                        + " -> (?class rdf:type architecture:MainClass)";
+        ConceptMapping object2Mapping =
+                createConceptMapping(object2MappingString, Collections.emptyList(), object2Concept);
+        object2Concept.setMapping(object2Mapping);
+        conceptManager.addConcept(object2Concept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Every Controller can-only use a Controller and use a MainClass and definesMethod Method.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml\n"
+                        + "title Every Controller can-only use a Controller and use a MainClass and definesMethod Method.\n"
+                        + "class \"?famixClass1W\" as famixClass1W {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller1W {\n"
+                        + "<color:#OrangeRed> {method} ?method1W()\n"
+                        + "}\n"
+                        + "class \"?mainClassC\" as mainClassC {\n"
+                        + "{method} main()\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controllerC {\n"
+                        + "}\n"
+                        + "class \".*Controller\" as controller1C {\n"
+                        + "<color:#RoyalBlue> {method} ?methodC()\n"
+                        + "}\n"
+                        + "class \"?famixClassW\" as famixClassW {\n"
+                        + "}\n"
+                        + "controller1C -[dashed]-> controllerC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "controller1C -[bold]-> controllerC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "controller1C -[dashed]-> mainClassC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "controller1C -[bold]-> mainClassC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "controller1W -[dashed]-> famixClassW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "controller1W -[bold]-> famixClassW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "controller1W -[dashed]-> famixClass1W #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "controller1W -[bold]-> famixClass1W #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"Controller\" as Controller2\n"
+                        + "Controller2 .. controller1W\n"
+                        + "note \"MainClass\" as MainClass\n"
+                        + "MainClass .. mainClassC\n"
+                        + "note \"Controller\" as Controller1\n"
+                        + "Controller1 .. controllerC\n"
+                        + "note \"Controller\" as Controller\n"
+                        + "Controller .. controller1C\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
