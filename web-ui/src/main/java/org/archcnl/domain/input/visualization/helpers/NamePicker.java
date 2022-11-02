@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization.helpers;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -33,6 +34,12 @@ public class NamePicker {
             usedVariables.add(newVariable);
         }
         return newVariable;
+    }
+
+    public static Variable pickUniqueVariable(String variableName, Set<Variable> usedVariables) {
+        String name = NamePicker.getStringWithFirstLetterInLowerCase(variableName);
+        Variable nameVariable = new Variable(name);
+        return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), nameVariable);
     }
 
     public static String getNextGeneratedName() {

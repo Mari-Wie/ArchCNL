@@ -7,8 +7,8 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.helpers.RuleHelper;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class DomainRangeRuleVisualizer extends RuleVisualizer {
 
@@ -36,7 +36,9 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
         }
 
         RuleVariant wrong = new RuleVariant();
-        ColoredTriplet triplet = getTripletWithBaseType(subjectTriplets.get(0));
+        var triplet =
+                RuleHelper.getTripletWithBaseType(
+                        subjectTriplets.get(0), conceptManager, usedVariables);
         wrong.setSubjectTriplets(addPostfixToAllVariables(Arrays.asList(triplet), "W"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
             wrong.addObjectTriplets(addPostfixToAllVariables(phrase.getObjectTriplets(), "W"));
