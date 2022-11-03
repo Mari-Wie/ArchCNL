@@ -51,7 +51,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isThenConcept\n"
                         + "title isThenConcept\n"
                         + "class \"?class\" as class {\n"
                         + "}\n"
@@ -80,7 +80,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isThenConcept\n"
                         + "title isThenConcept\n"
                         + "interface \"?class\" as class {\n"
                         + "}\n"
@@ -111,7 +111,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isThenConcept\n"
                         + "title isThenConcept\n"
                         + "class \"?class\" as class implements interface {\n"
                         + "}\n"
@@ -158,7 +158,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isImportingController\n"
                         + "title isImportingController\n"
                         + "class \"?class\" as class {\n"
                         + "}\n"
@@ -207,7 +207,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isImportingController\n"
                         + "title isImportingController\n"
                         + "class \"?class\" as class {\n"
                         + "{field} ?attribute : .*Controller\n"
@@ -254,7 +254,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isMainWithoutParent\n"
                         + "title isMainWithoutParent\n"
                         + "class \"?GENERATED1\" as GENERATED1 {\n"
                         + "{method} main(flag:?type)\n"
@@ -306,7 +306,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isImportingController\n"
                         + "title isImportingController\n"
                         + "package isImportingController1 <<Cloud>> {\n"
                         + "class \"?class\" as class {\n"
@@ -374,7 +374,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isDouble\n"
                         + "title isDouble\n"
                         + "package isDouble1 <<Cloud>> {\n"
                         + "class \"?class\" as class {\n"
@@ -488,7 +488,7 @@ class ConceptPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml isMultiple\n"
                         + "title isMultiple\n"
                         + "package isDouble1 <<Cloud>> {\n"
                         + "class \"?double1\" as double1 {\n"

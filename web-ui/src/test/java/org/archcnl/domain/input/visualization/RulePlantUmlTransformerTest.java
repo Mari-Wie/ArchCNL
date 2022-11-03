@@ -84,7 +84,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every Aggregate must resideIn a DomainRing.\n"
                         + "title Every Aggregate must resideIn a DomainRing.\n"
                         + "folder \"domain\" as domainRingC {\n"
                         + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregateC #RoyalBlue {\n"
@@ -144,7 +144,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Only a ClientScript can use a ClientScript.\n"
                         + "title Only a ClientScript can use a ClientScript.\n"
                         + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package2 {\n"
                         + "class \"?clientScriptW\" as clientScriptW {\n"
@@ -237,7 +237,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every TestResult can-only bestored TestResultServer.\n"
                         + "title Every TestResult can-only bestored TestResultServer.\n"
                         + "class \"(\\\\w||\\\\W)*TestResultEntity\" as testResultW {\n"
                         + "}\n"
@@ -327,7 +327,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml No Testresultserver can store GUID.\n"
                         + "title No Testresultserver can store GUID.\n"
                         + "class \"java.util.UUID\" as class2 {\n"
                         + "}\n"
@@ -388,7 +388,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Nothing can use a Controller.\n"
                         + "title Nothing can use a Controller.\n"
                         + "class \"?controller\" as controller <<Controller>> {\n"
                         + "}\n"
@@ -472,7 +472,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml If a LogicClass use a DBType, then it must manage this DBType.\n"
                         + "title If a LogicClass use a DBType, then it must manage this DBType.\n"
                         + "class \"\\\\w*Logic\" as logicClassW #OrangeRed {\n"
                         + "}\n"
@@ -540,7 +540,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every FamixClass can imports at-most 10 FamixClass.\n"
                         + "title Every FamixClass can imports at-most 10 FamixClass.\n"
                         + "class \"?famixClass1W\" as famixClass1W {\n"
                         + "}\n"
@@ -593,7 +593,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every Controller can have at-least 2 Method.\n"
                         + "title Every Controller can have at-least 2 Method.\n"
                         + "class \".*Controller\" as controllerW {\n"
                         + "<color:#OrangeRed> {method} ?methodW()\n"
@@ -665,7 +665,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Fact: CWAApp use ExposureNotificationFramework.\n"
                         + "title Fact: CWAApp use ExposureNotificationFramework.\n"
                         + "folder \"com\\\\.google\\\\.android\\\\.gms\\\\.nearby\\\\.exposurenotification\\\\.?(\\\\w||\\\\W)*\" as enfpackage {\n"
                         + "class \"?exposureNotificationFramework\" as exposureNotificationFramework {\n"
@@ -720,7 +720,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Fact: Exception is an Error.\n"
                         + "title Fact: Exception is an Error.\n"
                         + "class \".*Exception\" as exception {\n"
                         + "}\n"
@@ -798,7 +798,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Only a SpyClass that (isLocatedIn Namespace A) can use a SecretClass that (isLocatedIn Namespace A).\n"
                         + "title Only a SpyClass that (isLocatedIn Namespace A) can use a SecretClass that (isLocatedIn Namespace A).\n"
                         + "\n"
                         + "folder \"? AC\" as  AC {\n"
@@ -902,7 +902,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Only a FamixClass that (definesMethod Method and imports an Enum) can use FamixClass.\n"
                         + "title Only a FamixClass that (definesMethod Method and imports an Enum) can use FamixClass.\n"
                         + "enum \"?enumC\" as enumC {\n"
                         + "}\n"
@@ -952,7 +952,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Nothing can use anything.\n"
                         + "title Nothing can use anything.\n"
                         + "class \"?nothing\" as nothing {\n"
                         + "}\n"
@@ -1013,7 +1013,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Nothing can use a Controller or use a MainClass.\n"
                         + "title Nothing can use a Controller or use a MainClass.\n"
                         + "class \"?nothing1\" as nothing1 {\n"
                         + "}\n"
@@ -1087,7 +1087,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every Controller can haveMethod exactly 5 Method or haveField at-least 2 Attribute or imports at-most 8 FamixClass.\n"
                         + "title Every Controller can haveMethod exactly 5 Method or haveField at-least 2 Attribute or imports at-most 8 FamixClass.\n"
                         + "class \".*Controller\" as controllerWWW {\n"
                         + "}\n"
@@ -1162,7 +1162,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every Controller must definesMethod Method or definesAttribute Attribute or imports FamixClass or hasAnnotationInstance AnnotationInstance.\n"
                         + "title Every Controller must definesMethod Method or definesAttribute Attribute or imports FamixClass or hasAnnotationInstance AnnotationInstance.\n"
                         + "class \".*Controller\" as controllerCCCC <<?annotationInstanceCCCC>> #RoyalBlue {\n"
                         + "}\n"
@@ -1255,7 +1255,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every DataClass must overwrite HashCodeMethod and overwrite EqualsMethod.\n"
                         + "title Every DataClass must overwrite HashCodeMethod and overwrite EqualsMethod.\n"
                         + "folder \".*/data/.*\" as namespace #RoyalBlue {\n"
                         + "class \"?dataClassC\" as dataClassC #RoyalBlue {\n"
@@ -1341,7 +1341,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every Controller can-only use a Controller and use a MainClass and definesMethod Method.\n"
                         + "title Every Controller can-only use a Controller and use a MainClass and definesMethod Method.\n"
                         + "class \"?famixClass1W\" as famixClass1W {\n"
                         + "}\n"
@@ -1441,7 +1441,7 @@ class RulePlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml Every Exception that (isThrownBy a Constructor) must be a ConstructorException.\n"
                         + "title Every Exception that (isThrownBy a Constructor) must be a ConstructorException.\n"
                         + "class \"?GENERATED1\" as GENERATED1 {\n"
                         + "{method} <<Create>> ?constructorC()\n"

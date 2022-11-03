@@ -66,7 +66,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml weirdRelationMapping\n"
                         + "title weirdRelationMapping\n"
                         + "folder \"?namespace\" as namespace {\n"
                         + "class \"ClassName\" as class {\n"
@@ -103,7 +103,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml paramRelationMapping\n"
                         + "title paramRelationMapping\n"
                         + "class \"?class\" as class {\n"
                         + "{method} ?method(?parameter:int)\n"
@@ -133,7 +133,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml noParentMapping\n"
                         + "title noParentMapping\n"
                         + "class \"?GENERATED1\" as GENERATED1 {\n"
                         + "{method} ?method(flag)\n"
@@ -174,7 +174,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml noParentTypeMapping\n"
                         + "title noParentTypeMapping\n"
                         + "class \"?GENERATED1\" as GENERATED1 {\n"
                         + "{method} main(flag:?type)\n"
@@ -219,7 +219,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml usedByControllerMapping\n"
                         + "title usedByControllerMapping\n"
                         + "class \"?class\" as class {\n"
                         + "}\n"
@@ -262,7 +262,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml useMapping\n"
                         + "title useMapping\n"
                         + "package useMapping1 <<Cloud>> {\n"
                         + "class \"?class\" as class {\n"
@@ -325,7 +325,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml circularUseMapping\n"
                         + "title circularUseMapping\n"
                         + "package circularUseMapping1 <<Cloud>> {\n"
                         + "class \"?class\" as class {\n"
@@ -427,7 +427,7 @@ class RelationPlantUmlTransformerTest {
 
         // then
         String expectedCode =
-                "@startuml\n"
+                "@startuml withContentMapping\n"
                         + "title withContentMapping\n"
                         + "package withContentMapping1 <<Cloud>> {\n"
                         + "class \"?class\" as class {\n"

@@ -108,7 +108,7 @@ public class PlantUmlTransformer {
 
     private String buildHeader(String title) {
         StringBuilder builder = new StringBuilder();
-        builder.append("@startuml\n");
+        builder.append("@startuml " + title + "\n");
         builder.append("title " + title + "\n");
         return builder.toString();
     }
