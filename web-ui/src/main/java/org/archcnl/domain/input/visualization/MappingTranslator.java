@@ -20,6 +20,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
@@ -52,12 +53,16 @@ public class MappingTranslator {
             throws MappingToUmlTranslationFailedException {
         TripletContainer container = new TripletContainer(whenTriplets);
         container.applyElementProperties(elementMap);
+
         List<PlantUmlBlock> topLevelElements = getTopLevelElements(elementMap);
+        topLevelElements = createRequiredParents(topLevelElements);
+        List<PlantUmlConnection> connections = container.createConnections(elementMap);
+        List<PlantUmlPart> conceptElements = getConceptElements(elementMap);
 
         List<PlantUmlPart> parts = new ArrayList<>();
-        parts.addAll(createRequiredParents(topLevelElements));
-        parts.addAll(container.createConnections(elementMap));
-        parts.addAll(getConceptElements(elementMap));
+        parts.addAll(topLevelElements);
+        parts.addAll(connections);
+        parts.addAll(conceptElements);
         return parts;
     }
 
