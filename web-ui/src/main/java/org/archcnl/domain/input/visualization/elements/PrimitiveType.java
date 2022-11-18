@@ -28,6 +28,7 @@ public class PrimitiveType extends PlantUmlElement {
         builder.append("class ");
         builder.append(buildNameSection());
         builder.append(variable.getName());
+        builder.append(" <<primitive>>");
         builder.append(buildColorSection());
         return builder.toString();
     }

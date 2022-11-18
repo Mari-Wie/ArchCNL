@@ -108,7 +108,7 @@ class RelationPlantUmlTransformerTest {
                         + "class \"?class\" as class {\n"
                         + "{method} ?method(?parameter:int)\n"
                         + "}\n"
-                        + "class \"int\" as type\n"
+                        + "class \"int\" as type <<primitive>>\n"
                         + "class -[bold]-> class::method\n"
                         + "note on link: paramRelation\n"
                         + "@enduml";
