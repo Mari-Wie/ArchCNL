@@ -37,15 +37,15 @@ public enum Cardinality {
             case NOT_EXACTLY:
                 return String.format("\"<>%d\"", quantity);
             case NOT_AT_MOST:
-                return String.format("\"%d..\"", quantity + 1);
+                return String.format("\"%d..*\"", quantity + 1);
             case NOT_AT_LEAST:
-                return String.format("\"..%d\"", quantity - 1);
+                return String.format("\"0..%d\"", quantity - 1);
             case EXACTLY:
                 return String.format("\"%d\"", quantity);
             case AT_MOST:
-                return String.format("\"..%d\"", quantity);
+                return String.format("\"0..%d\"", quantity);
             case AT_LEAST:
-                return String.format("\"%d..\"", quantity);
+                return String.format("\"%d..*\"", quantity);
             default:
                 return "\"\"";
         }

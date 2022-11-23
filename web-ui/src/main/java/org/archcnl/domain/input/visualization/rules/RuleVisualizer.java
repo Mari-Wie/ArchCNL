@@ -51,7 +51,6 @@ public abstract class RuleVisualizer implements Visualizer {
     protected VerbPhraseContainer verbPhrases;
 
     protected Set<Variable> usedVariables = new HashSet<>();
-    private Set<Variable> thatVariables = new HashSet<>();
     private List<PlantUmlPart> umlElements;
 
     protected RuleVisualizer(
@@ -137,7 +136,6 @@ public abstract class RuleVisualizer implements Visualizer {
         if (nextVariableName != null) {
             name = new Variable(nextVariableName);
             res.add(new Triplet(name, typeRelation, concept));
-            thatVariables.add(name);
         } else {
             name = NamePicker.pickUniqueVariable(concept.getName(), usedVariables);
             res.add(new Triplet(name, typeRelation, concept));
