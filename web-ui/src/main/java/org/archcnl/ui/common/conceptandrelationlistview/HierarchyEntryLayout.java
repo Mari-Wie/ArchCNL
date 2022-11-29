@@ -53,6 +53,6 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
     }
 
     public void handleVisualizeEvent() {
-        fireEvent(new VisualizationRequestedEvent<T>(this, true, get()));
+        fireEvent(new VisualizationRequestedEvent(this, true));
     }
 }

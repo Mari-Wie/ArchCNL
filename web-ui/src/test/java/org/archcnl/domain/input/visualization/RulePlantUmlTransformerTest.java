@@ -1,5 +1,6 @@
 package org.archcnl.domain.input.visualization;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -101,6 +102,97 @@ class RulePlantUmlTransformerTest {
                         + "Aggregate1 .. aggregateW\n"
                         + "note \"Aggregate\" as Aggregate\n"
                         + "Aggregate .. aggregateC\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenNoAggregate_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept aggregateConcept = new CustomConcept("Aggregate", "");
+        String aggregateMappingString =
+                "isAggregate: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '(\\\\w||\\\\W)*Aggregate')"
+                        + " -> (?class rdf:type architecture:Aggregate)";
+        ConceptMapping aggregateMapping =
+                createConceptMapping(
+                        aggregateMappingString, Collections.emptyList(), aggregateConcept);
+        aggregateConcept.setMapping(aggregateMapping);
+        conceptManager.addConcept(aggregateConcept);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?f rdf:type famix:Attribute)"
+                        + " (?class famix:definesAttribute ?f)"
+                        + " (?f famix:hasDeclaredType ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        String secondaryPredicateString =
+                "(?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type famix:FamixClass)"
+                        + " (?class famix:imports ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(
+                        predicateMappingString, Arrays.asList(secondaryPredicateString));
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept domainRingConcept = new CustomConcept("ApplicationService", "");
+        String domainRingMappingString =
+                "isApplicationService: (?class rdf:type famix:FamixClass)"
+                        + " (?package rdf:type famix:Namespace)"
+                        + " (?package famix:hasName ?name)"
+                        + " regex(?name, 'api')"
+                        + " (?package famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:ApplicationService)";
+        ConceptMapping domainRingMapping =
+                createConceptMapping(
+                        domainRingMappingString, Collections.emptyList(), domainRingConcept);
+        domainRingConcept.setMapping(domainRingMapping);
+        conceptManager.addConcept(domainRingConcept);
+
+        var rule = new ArchitectureRule("No Aggregate can use an ApplicationService.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml No Aggregate can use an ApplicationService.\n"
+                        + "title No Aggregate can use an ApplicationService.\n"
+                        + "folder \"api\" as package {\n"
+                        + "class \"?applicationService\" as applicationService {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregate {\n"
+                        + "<color:#OrangeRed> {field} ?f : ?applicationService\n"
+                        + "}\n"
+                        + "aggregate -[bold]-> applicationService #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"ApplicationService\" as ApplicationService\n"
+                        + "ApplicationService .. applicationService\n"
+                        + "note \"Aggregate\" as Aggregate\n"
+                        + "Aggregate .. aggregate\n"
+                        + "folder \"api\" as package1 {\n"
+                        + "class \"?applicationService1\" as applicationService1 {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"(\\\\w||\\\\W)*Aggregate\" as aggregate1 {\n"
+                        + "}\n"
+                        + "aggregate1 -[dashed]-> applicationService1 #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "aggregate1 -[bold]-> applicationService1 #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"ApplicationService\" as ApplicationService1\n"
+                        + "ApplicationService1 .. applicationService1\n"
+                        + "note \"Aggregate\" as Aggregate1\n"
+                        + "Aggregate1 .. aggregate1\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }

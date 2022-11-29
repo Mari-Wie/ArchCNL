@@ -262,8 +262,15 @@ public class MainPresenter extends Component {
         inputPresenter.addListener(DeleteRuleButtonPressedEvent.class, this::handleEvent);
         inputPresenter.addListener(DeleteConceptRequestedEvent.class, this::handleEvent);
         inputPresenter.addListener(DeleteRelationRequestedEvent.class, this::handleEvent);
-        inputPresenter.addListener(ConceptVisualizationRequestedEvent.class, e -> e.handleEvent());
-        inputPresenter.addListener(RelationVisualizationRequestedEvent.class, e -> e.handleEvent());
+        inputPresenter.addListener(
+                ConceptVisualizationRequestedEvent.class,
+                e -> e.handleEvent(conceptManager, relationManager));
+        inputPresenter.addListener(
+                RelationVisualizationRequestedEvent.class,
+                e -> e.handleEvent(conceptManager, relationManager));
+        inputPresenter.addListener(
+                RuleVisualizationRequestedEvent.class,
+                e -> e.handleEvent(conceptManager, relationManager));
         inputPresenter.addListener(
                 ChangeConceptNameRequestedEvent.class, e -> e.handleEvent(conceptManager));
         inputPresenter.addListener(
@@ -284,8 +291,6 @@ public class MainPresenter extends Component {
                 event -> event.handleEvent(conceptManager.getInputConcepts()));
         inputPresenter.addListener(
                 ConceptSelectedEvent.class, event -> event.handleEvent(conceptManager));
-        inputPresenter.addListener(
-                RuleVisualizationRequestedEvent.class, event -> event.handleEvent());
     }
 
     private void addOutputListeners() {
@@ -295,9 +300,12 @@ public class MainPresenter extends Component {
         outputPresenter.addListener(RelationGridUpdateRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(ConceptHierarchySwapRequestedEvent.class, this::handleEvent);
         outputPresenter.addListener(RelationHierarchySwapRequestedEvent.class, this::handleEvent);
-        outputPresenter.addListener(ConceptVisualizationRequestedEvent.class, e -> e.handleEvent());
         outputPresenter.addListener(
-                RelationVisualizationRequestedEvent.class, e -> e.handleEvent());
+                ConceptVisualizationRequestedEvent.class,
+                e -> e.handleEvent(conceptManager, relationManager));
+        outputPresenter.addListener(
+                RelationVisualizationRequestedEvent.class,
+                e -> e.handleEvent(conceptManager, relationManager));
         outputPresenter.addListener(
                 InputViewRequestedEvent.class,
                 e -> {

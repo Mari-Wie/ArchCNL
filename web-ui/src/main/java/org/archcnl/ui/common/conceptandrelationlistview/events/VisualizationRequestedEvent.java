@@ -1,21 +1,16 @@
 package org.archcnl.ui.common.conceptandrelationlistview.events;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
+import org.archcnl.ui.common.conceptandrelationlistview.HierarchyEntryLayout;
 
-public class VisualizationRequestedEvent<T extends HierarchyObject>
-        extends ComponentEvent<Component> {
+public class VisualizationRequestedEvent
+        extends ComponentEvent<HierarchyEntryLayout<? extends HierarchyObject>> {
 
     private static final long serialVersionUID = 176626025305616188L;
-    private final T entry;
 
-    public VisualizationRequestedEvent(Component source, boolean fromClient, T t) {
+    public VisualizationRequestedEvent(
+            HierarchyEntryLayout<? extends HierarchyObject> source, boolean fromClient) {
         super(source, fromClient);
-        this.entry = t;
-    }
-
-    public T getEntry() {
-        return entry;
     }
 }

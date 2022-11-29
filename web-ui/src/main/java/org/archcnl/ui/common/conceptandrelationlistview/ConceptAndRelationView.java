@@ -84,7 +84,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                                 new ConceptVisualizationRequestedEvent(
                                         e.getSource(),
                                         e.isFromClient(),
-                                        (CustomConcept) e.getEntry())));
+                                        (CustomConcept) e.getSource().get())));
         conceptHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
@@ -126,7 +126,7 @@ public class ConceptAndRelationView extends VerticalLayout {
                                 new RelationVisualizationRequestedEvent(
                                         e.getSource(),
                                         e.isFromClient(),
-                                        (CustomRelation) e.getEntry())));
+                                        (CustomRelation) e.getSource().get())));
         relationHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
