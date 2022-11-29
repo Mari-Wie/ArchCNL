@@ -3,6 +3,7 @@ package org.archcnl.domain.input.visualization.mapping;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.input.model.mappings.Mapping;
+import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
 public class ColoredMapping {
 
@@ -32,7 +33,12 @@ public class ColoredMapping {
         return name;
     }
 
-    public static ColoredMapping fromMapping(Mapping mapping) {
+    public static ColoredMapping fromMapping(Mapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        if (mapping.getWhenTriplets().isEmpty()
+                || mapping.getWhenTriplets().get(0).getTriplets().isEmpty()) {
+            throw new MappingToUmlTranslationFailedException("Body of mapping is empty");
+        }
         String name = mapping.getMappingNameRepresentation();
         ColoredTriplet thenTriplet = new ColoredTriplet(mapping.getThenTriplet());
         List<ColoredVariant> variants =
