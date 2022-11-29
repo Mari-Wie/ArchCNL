@@ -105,12 +105,16 @@ public abstract class RuleVisualizer implements Visualizer {
 
     private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
             throws MappingToUmlTranslationFailedException {
+        umlElements = new ArrayList<>();
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
-        ColoredVariant flattened = flattener.flattenCustomRelations().get(0);
-        MappingTranslator translator =
-                new MappingTranslator(flattened.getTriplets(), conceptManager, relationManager);
-        Map<Variable, PlantUmlBlock> elementMap = translator.createElementMap(new HashSet<>());
-        umlElements = translator.translateToPlantUmlModel(elementMap);
+        Set<Variable> usedInVisualiztation = new HashSet<>();
+        for (ColoredVariant variant : flattener.flattenCustomRelations()) {
+            MappingTranslator translator =
+                    new MappingTranslator(variant.getTriplets(), conceptManager, relationManager);
+            Map<Variable, PlantUmlBlock> elementMap =
+                    translator.createElementMap(usedInVisualiztation);
+            umlElements.addAll(translator.translateToPlantUmlModel(elementMap));
+        }
     }
 
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
