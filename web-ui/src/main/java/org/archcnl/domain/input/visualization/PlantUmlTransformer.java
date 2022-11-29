@@ -1,15 +1,12 @@
 package org.archcnl.domain.input.visualization;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import net.sourceforge.plantuml.SourceStringReader;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
@@ -24,8 +21,6 @@ import org.archcnl.domain.input.visualization.rules.RuleVisualizer;
 
 public class PlantUmlTransformer {
 
-    private static final String TEMP_FILE_PREFIX = "uml-";
-    private static final String PNG_FILE_EXTENSION = ".png";
     private final ConceptManager conceptManager;
     private RelationManager relationManager;
 
@@ -33,15 +28,6 @@ public class PlantUmlTransformer {
         this.conceptManager = conceptManager;
         this.relationManager = relationManager;
     }
-
-    /*
-    public File transformToDiagramPng() throws IOException, MappingToUmlTranslationFailedException {
-        String source = transformToPlantUml();
-        File tempFile = prepareTempFile();
-        writeAsTemporaryPng(tempFile, source);
-        return tempFile;
-    }
-    */
 
     public String transformToPlantUml(ArchitectureRule rule)
             throws MappingToUmlTranslationFailedException {
@@ -87,6 +73,7 @@ public class PlantUmlTransformer {
 
     private ColoredMapping flattenAndRecreate(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
+        makeSureThenPredicateKnowsMapping(mapping);
         ColoredMapping coloredMapping = ColoredMapping.fromMapping(mapping);
         List<ColoredVariant> wrappedVariants =
                 WrappingService.wrapMapping(coloredMapping.getThenTriplet());
@@ -119,15 +106,13 @@ public class PlantUmlTransformer {
         return builder.toString();
     }
 
-    private File prepareTempFile() throws IOException {
-        File tempFile = File.createTempFile(TEMP_FILE_PREFIX, PNG_FILE_EXTENSION);
-        tempFile.deleteOnExit();
-        return tempFile;
-    }
-
-    private void writeAsTemporaryPng(File tempFile, String source) throws IOException {
-        OutputStream pngStream = new FileOutputStream(tempFile);
-        SourceStringReader reader = new SourceStringReader(source);
-        reader.outputImage(pngStream);
+    private void makeSureThenPredicateKnowsMapping(RelationMapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        CustomRelation predicate = (CustomRelation) mapping.getThenTriplet().getPredicate();
+        try {
+            predicate.setMapping(mapping, conceptManager);
+        } catch (UnrelatedMappingException e) {
+            throw new MappingToUmlTranslationFailedException(e.getMessage());
+        }
     }
 }
