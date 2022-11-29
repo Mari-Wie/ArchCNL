@@ -17,6 +17,7 @@ import java.time.format.FormatStyle;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RuleVisualizationRequestedEvent;
 
 public class RuleComponent extends HorizontalLayout {
 
@@ -32,7 +33,11 @@ public class RuleComponent extends HorizontalLayout {
                 new Button(
                         new Icon(VaadinIcon.TRASH),
                         click -> fireEvent(new DeleteRuleButtonPressedEvent(this, true, rule)));
-        HorizontalLayout buttons = new HorizontalLayout(editButton, deleteButton);
+        Button visualizeButton =
+                new Button(
+                        new Icon(VaadinIcon.PICTURE),
+                        click -> fireEvent(new RuleVisualizationRequestedEvent(this, true, rule)));
+        HorizontalLayout buttons = new HorizontalLayout(editButton, deleteButton, visualizeButton);
 
         Text number = new Text(String.valueOf(ruleIndex) + ".");
         VerticalLayout vDivider = new VerticalLayout();

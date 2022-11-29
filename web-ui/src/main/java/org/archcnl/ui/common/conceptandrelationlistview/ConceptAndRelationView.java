@@ -12,6 +12,7 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptVisualizationRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
@@ -22,6 +23,8 @@ import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedE
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationVisualizationRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.VisualizationRequestedEvent;
 
 public class ConceptAndRelationView extends VerticalLayout {
 
@@ -75,6 +78,14 @@ public class ConceptAndRelationView extends VerticalLayout {
                                 new ConceptEditorRequestedEvent(
                                         this, true, (CustomConcept) e.getSource().get())));
         conceptHierarchyView.addListener(
+                VisualizationRequestedEvent.class,
+                e ->
+                        fireEvent(
+                                new ConceptVisualizationRequestedEvent(
+                                        e.getSource(),
+                                        e.isFromClient(),
+                                        (CustomConcept) e.getEntry())));
+        conceptHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->
                         fireEvent(
@@ -108,6 +119,14 @@ public class ConceptAndRelationView extends VerticalLayout {
                         fireEvent(
                                 new RelationEditorRequestedEvent(
                                         this, true, (CustomRelation) e.getSource().get())));
+        relationHierarchyView.addListener(
+                VisualizationRequestedEvent.class,
+                e ->
+                        fireEvent(
+                                new RelationVisualizationRequestedEvent(
+                                        e.getSource(),
+                                        e.isFromClient(),
+                                        (CustomRelation) e.getEntry())));
         relationHierarchyView.addListener(
                 DeleteHierarchyObjectRequestedEvent.class,
                 event ->

@@ -12,12 +12,14 @@ import org.archcnl.ui.common.conceptandrelationlistview.EditableConceptAndRelati
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptVisualizationRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteConceptRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteRelationRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationEditorRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationVisualizationRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.OutputViewRequestedEvent;
 
@@ -78,6 +80,10 @@ public class InputView extends HorizontalLayout {
                 RelationHierarchySwapRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(DeleteConceptRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(DeleteRelationRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                ConceptVisualizationRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                RelationVisualizationRequestedEvent.class, this::fireEvent);
     }
 
     public void updateConceptAndRelations() {

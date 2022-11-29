@@ -43,6 +43,10 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
             }
 
             VariableManager variableManager = new VariableManager();
+            variableManager.addVariable(subject);
+            if (object instanceof Variable) {
+                variableManager.addVariable((Variable) object);
+            }
             for (AndTriplets andTriplets : mapping.getWhenTriplets()) {
                 variableManager.parseVariableTypes(andTriplets, conceptManager);
 

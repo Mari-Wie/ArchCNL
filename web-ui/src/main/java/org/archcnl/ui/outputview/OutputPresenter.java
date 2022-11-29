@@ -22,9 +22,11 @@ import org.archcnl.ui.common.andtriplets.triplet.events.RelationListUpdateReques
 import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptVisualizationRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationVisualizationRequestedEvent;
 import org.archcnl.ui.outputview.queryviews.CustomQueryPresenter;
 import org.archcnl.ui.outputview.queryviews.FreeTextQueryComponent;
 import org.archcnl.ui.outputview.queryviews.PredefinedQueryComponent;
@@ -145,6 +147,10 @@ public class OutputPresenter extends Component {
         newCustomQueryPresenter.addListener(ConceptListUpdateRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(ConceptSelectedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(QueryNameUpdateRequestedEvent.class, this::handleEvent);
+        newCustomQueryPresenter.addListener(
+                ConceptVisualizationRequestedEvent.class, this::fireEvent);
+        newCustomQueryPresenter.addListener(
+                RelationVisualizationRequestedEvent.class, this::fireEvent);
         newCustomQueryPresenter.addListener(
                 DeleteButtonPressedEvent.class,
                 event -> {

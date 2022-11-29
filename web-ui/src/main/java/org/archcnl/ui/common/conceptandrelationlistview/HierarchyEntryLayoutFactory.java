@@ -34,6 +34,9 @@ public class HierarchyEntryLayoutFactory<T extends HierarchyObject> {
                         new Icon(VaadinIcon.EDIT), click -> newLayout.handleEditorRequestEvent()));
         newLayout.add(
                 new Button(new Icon(VaadinIcon.TRASH), click -> newLayout.handleDeleteEvent()));
+        newLayout.add(
+                new Button(
+                        new Icon(VaadinIcon.PICTURE), click -> newLayout.handleVisualizeEvent()));
         return newLayout;
     }
 }
