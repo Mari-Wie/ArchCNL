@@ -127,6 +127,53 @@ class ConceptPlantUmlTransformerTest {
     }
 
     @Test
+    void givenMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException {
+        // given
+        String subMappingString =
+                "isContract: (?class rdf:type famix:FamixClass)"
+                        + " (?class famix:hasName ?name)"
+                        + " regex(?name, '.*Contract')"
+                        + " -> (?class rdf:type architecture:Contract)";
+        CustomConcept subConcept = new CustomConcept("Contract", "");
+        ConceptMapping subMapping =
+                createConceptMapping(subMappingString, Collections.emptyList(), subConcept);
+        subConcept.setMapping(subMapping);
+        conceptManager.addConcept(subConcept);
+
+        String mappingString =
+                "isContractView: (?contract rdf:type architecture:Contract)"
+                        + " (?contract famix:definesNestedType ?nestedType)"
+                        + " (?nestedType famix:hasName ?name)"
+                        + " regex(?name, 'View')"
+                        + " -> (?nestedType rdf:type architecture:ContractView)";
+        CustomConcept thenConcept = new CustomConcept("ContractView", "");
+        ConceptMapping mapping =
+                createConceptMapping(mappingString, Collections.emptyList(), thenConcept);
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(mapping);
+
+        // then
+        String expectedCode =
+                "@startuml isContractView\n"
+                        + "title isContractView\n"
+                        + "class \".*Contract\" as contract1 {\n"
+                        + "}\n"
+                        + "class \"View\" as nestedType {\n"
+                        + "}\n"
+                        + "contract1 +-- nestedType\n"
+                        + "note \"Contract\" as Contract\n"
+                        + "Contract .. contract1\n"
+                        + "note \"ContractView\" as ContractView\n"
+                        + "ContractView .. nestedType\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
     void givenConceptMappingWithCustomConcept_whenTransform_thenCorrectPlantUml()
             throws NoMappingException, MappingToUmlTranslationFailedException,
                     ConceptAlreadyExistsException, UnrelatedMappingException, NoTripletException {

@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
+import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
@@ -64,6 +68,8 @@ public class PlantUmlTransformer {
 
     ColoredMapping flattenAndRecreate(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
+        setMappingsInWhenPart(mapping);
+        setMappingInThenTriplet(mapping);
         ColoredMapping coloredMapping = ColoredMapping.fromMapping(mapping);
         MappingFlattener flattener = new MappingFlattener(coloredMapping);
         List<ColoredVariant> flattened = flattener.flattenCustomRelations();
@@ -73,7 +79,8 @@ public class PlantUmlTransformer {
 
     private ColoredMapping flattenAndRecreate(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        makeSureThenPredicateKnowsMapping(mapping);
+        setMappingsInWhenPart(mapping);
+        setMappingInThenTriplet(mapping);
         ColoredMapping coloredMapping = ColoredMapping.fromMapping(mapping);
         List<ColoredVariant> wrappedVariants =
                 WrappingService.wrapMapping(coloredMapping.getThenTriplet());
@@ -106,13 +113,56 @@ public class PlantUmlTransformer {
         return builder.toString();
     }
 
-    private void makeSureThenPredicateKnowsMapping(RelationMapping mapping)
+    private void setMappingInThenTriplet(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
         CustomRelation predicate = (CustomRelation) mapping.getThenTriplet().getPredicate();
         try {
             predicate.setMapping(mapping, conceptManager);
         } catch (UnrelatedMappingException e) {
             throw new MappingToUmlTranslationFailedException(e.getMessage());
+        }
+    }
+
+    private void setMappingInThenTriplet(ConceptMapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        CustomConcept concept = (CustomConcept) mapping.getThenTriplet().getObject();
+        try {
+            concept.setMapping(mapping);
+        } catch (UnrelatedMappingException e) {
+            throw new MappingToUmlTranslationFailedException(e.getMessage());
+        }
+    }
+
+    private void setMappingsInWhenPart(Mapping mapping)
+            throws MappingToUmlTranslationFailedException {
+        for (AndTriplets variant : mapping.getWhenTriplets()) {
+            for (Triplet triplet : variant.getTriplets()) {
+                try {
+                    if (triplet.getPredicate() instanceof CustomRelation) {
+                        CustomRelation predicate = (CustomRelation) triplet.getPredicate();
+                        var predicateFromManager =
+                                (CustomRelation)
+                                        relationManager
+                                                .getRelationByName(predicate.getName())
+                                                .get();
+                        if (predicateFromManager.getMapping().isPresent()) {
+                            predicate.setMapping(
+                                    predicateFromManager.getMapping().get(), conceptManager);
+                        }
+                    }
+                    if (triplet.getObject() instanceof CustomConcept) {
+                        CustomConcept object = (CustomConcept) triplet.getObject();
+                        var conceptFromManager =
+                                (CustomConcept)
+                                        conceptManager.getConceptByName(object.getName()).get();
+                        if (conceptFromManager.getMapping().isPresent()) {
+                            object.setMapping(conceptFromManager.getMapping().get());
+                        }
+                    }
+                } catch (UnrelatedMappingException e) {
+                    throw new MappingToUmlTranslationFailedException(e.getMessage());
+                }
+            }
         }
     }
 }
