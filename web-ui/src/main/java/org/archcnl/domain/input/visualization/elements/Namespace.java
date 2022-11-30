@@ -60,4 +60,9 @@ public class Namespace extends NamespaceContent {
         }
         return variable.transformToGui();
     }
+
+    @Override
+    protected String buildParentSection() {
+        return "";
+    }
 }

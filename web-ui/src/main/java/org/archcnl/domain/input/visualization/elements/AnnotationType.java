@@ -95,4 +95,9 @@ public class AnnotationType extends NamespaceContent implements FamixType {
     protected String buildVisibilityPrefixSection() {
         return modifierContainer.getVisibilityPrefix();
     }
+
+    @Override
+    protected String buildParentSection() {
+        return "";
+    }
 }

@@ -59,7 +59,6 @@ public abstract class ClassOrEnum extends NamespaceContent implements FamixType 
         builder.append(" as ");
         builder.append(variable.getName());
         builder.append(buildAnnotationSection());
-        builder.append(buildParentSection());
         return builder.toString();
     }
 
@@ -108,6 +107,4 @@ public abstract class ClassOrEnum extends NamespaceContent implements FamixType 
     protected String buildVisibilityPrefixSection() {
         return modifierContainer.getVisibilityPrefix();
     }
-
-    protected abstract String buildParentSection();
 }

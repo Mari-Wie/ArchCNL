@@ -25,6 +25,7 @@ public abstract class NamespaceContent extends PlantUmlElement {
     private String buildBodySection() {
         StringBuilder builder = new StringBuilder();
         builder.append(buildColorSection());
+        builder.append(buildParentSection());
         builder.append(" {\n");
         for (String contentLine : buildBodySectionContentLines()) {
             builder.append(contentLine);
@@ -51,7 +52,7 @@ public abstract class NamespaceContent extends PlantUmlElement {
 
     protected abstract String buildNameSection();
 
-    protected abstract String getHighestRankingName();
+    protected abstract String buildParentSection();
 
     protected abstract String getElementIdentifier();
 }
