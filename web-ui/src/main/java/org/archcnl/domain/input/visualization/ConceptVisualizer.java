@@ -64,10 +64,11 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
         List<ColoredVariant> coloredVariants = mapping.getVariants();
         ColoredTriplet thenTriplet = mapping.getThenTriplet();
         throwWhenNoVariants(coloredVariants);
+        String suffix = NamePicker.getUniqueConceptVariantSuffix(getName());
 
         for (int i = 0; i < coloredVariants.size(); i++) {
             ColoredVariant variant = coloredVariants.get(i);
-            String variantName = getName() + (i + 1);
+            String variantName = getName() + (i + 1) + suffix;
             variants.add(
                     new ConceptVariant(
                             variant,

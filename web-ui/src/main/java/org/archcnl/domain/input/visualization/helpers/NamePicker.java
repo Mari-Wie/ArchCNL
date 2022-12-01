@@ -9,6 +9,7 @@ public class NamePicker {
 
     private static final String GENERATED_NAME_PREFIX = "GENERATED";
     private static int generatedNamesCounter = 0;
+    private static Map<String, Integer> conceptAppearences = new HashMap<>();
 
     private NamePicker() {}
 
@@ -42,13 +43,25 @@ public class NamePicker {
         return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), nameVariable);
     }
 
+    public static String getUniqueConceptVariantSuffix(String conceptName) {
+        if (!conceptAppearences.containsKey(conceptName)) {
+            conceptAppearences.put(conceptName, 1);
+            return "";
+        } else {
+            Integer count = conceptAppearences.get(conceptName);
+            conceptAppearences.put(conceptName, count + 1);
+            return "_" + count;
+        }
+    }
+
     public static String getNextGeneratedName() {
         generatedNamesCounter++;
         return GENERATED_NAME_PREFIX + generatedNamesCounter;
     }
 
-    public static void resetGeneratedNameCounter() {
+    public static void reset() {
         generatedNamesCounter = 0;
+        conceptAppearences = new HashMap<>();
     }
 
     public static String getStringWithFirstLetterInLowerCase(String str) {

@@ -35,7 +35,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ArchitectureRule rule)
             throws MappingToUmlTranslationFailedException {
-        NamePicker.resetGeneratedNameCounter();
+        NamePicker.reset();
         RuleVisualizer visualizer =
                 RuleVisualizer.createRuleVisualizer(rule, conceptManager, relationManager);
         return buildPlantUmlCode(visualizer);
@@ -43,7 +43,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(ConceptMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        NamePicker.resetGeneratedNameCounter();
+        NamePicker.reset();
         ColoredMapping coloredMapping = flattenAndRecreate(mapping);
         ConceptVisualizer visualizer =
                 new ConceptVisualizer(
@@ -59,7 +59,7 @@ public class PlantUmlTransformer {
 
     public String transformToPlantUml(RelationMapping mapping)
             throws MappingToUmlTranslationFailedException {
-        NamePicker.resetGeneratedNameCounter();
+        NamePicker.reset();
         ColoredMapping coloredMapping = flattenAndRecreate(mapping);
         RelationVisualizer visualizer =
                 new RelationVisualizer(coloredMapping, conceptManager, relationManager);
