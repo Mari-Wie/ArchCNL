@@ -20,6 +20,7 @@ public class RulesWidget extends RulesOrMappingEditorView {
 
     public RulesWidget() {
         setWidthFull();
+        rulesLayout.getStyle().set("overflow", "auto");
         createCreateNewLayout(
                 "Architecture Rules",
                 "Create new Arch Rule",
