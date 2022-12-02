@@ -37,7 +37,7 @@ public abstract class RuleVisualizer implements Visualizer {
     protected static final String PREDICATE_REGEX =
             "(?<predicate>[a-z][a-zA-Z]*)( (?<cardinality>(exactly|at-least|at-most)) (?<quantity>\\d+))?";
     protected static final String OBJECT_REGEX =
-            "(?<object>(anything|[A-Z][a-zA-Z]*( [A-Z])?( that \\(.+\\))?))";
+            "(?<object>(anything|[A-Z][a-zA-Z]*( [A-Z])?( that \\([^\\(\\)]+\\))?))";
     private static final String VERB_PHRASE_REGEX = PREDICATE_REGEX + " (a |an )?" + OBJECT_REGEX;
     protected static final String PHRASES_REGEX =
             "(?<phrases>" + VERB_PHRASE_REGEX + "( (and|or) (?<nextPhrase>.*))*)";
