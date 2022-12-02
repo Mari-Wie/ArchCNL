@@ -2,6 +2,7 @@ package org.archcnl.domain.input.visualization;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -145,13 +146,14 @@ public class MappingTranslator {
             return (Concept) options.iterator().next();
         }
         Concept famixClass = new FamixConcept("FamixClass", "");
-        Set<ActualObjectType> customOptions =
+        Set<CustomConcept> customOptions =
                 options.stream()
                         .filter(CustomConcept.class::isInstance)
+                        .map(CustomConcept.class::cast)
                         .collect(Collectors.toSet());
-        if (customOptions.size() == 1) {
-            return (Concept) customOptions.iterator().next();
-        } else if (customOptions.isEmpty() && options.contains(famixClass)) {
+        if (!customOptions.isEmpty()) {
+            return pickFromCustomOptions(customOptions);
+        } else if (options.contains(famixClass)) {
             // This should mostly occur with objects of the following relations:
             // imports, namespaceContains, definesNestedType, hasDeclaredType
             // FamixClass is a good default for all of them
@@ -159,6 +161,25 @@ public class MappingTranslator {
         }
         throw new MappingToUmlTranslationFailedException(
                 "No representative type could be picked from: " + options);
+    }
+
+    private CustomConcept pickFromCustomOptions(Set<CustomConcept> customOptions)
+            throws MappingToUmlTranslationFailedException {
+        if (customOptions.size() == 1) {
+            return customOptions.iterator().next();
+        }
+        for (CustomConcept concept : customOptions) {
+            Set<CustomConcept> otherOptions = new HashSet<>(customOptions);
+            otherOptions.remove(concept);
+            Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
+            int otherOptionsCount = otherOptions.size();
+            otherOptions.retainAll(baseTypes);
+            if (otherOptionsCount == otherOptions.size()) {
+                return concept;
+            }
+        }
+        throw new MappingToUmlTranslationFailedException(
+                "No representative type could be picked from: " + customOptions);
     }
 
     private List<PlantUmlPart> getConceptElements(Map<Variable, PlantUmlBlock> elementMap) {
