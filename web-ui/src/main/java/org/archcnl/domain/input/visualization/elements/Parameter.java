@@ -76,7 +76,7 @@ public class Parameter extends PlantUmlElement {
 
     private String closeColorSection() {
         if (colorState != ColorState.NEUTRAL) {
-            return "<color>";
+            return "</color>";
         }
         return "";
     }
