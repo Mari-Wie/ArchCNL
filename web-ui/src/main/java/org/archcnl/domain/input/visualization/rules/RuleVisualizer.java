@@ -24,6 +24,7 @@ import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.Visualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
+import org.archcnl.domain.input.visualization.helpers.MappingSetter;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.helpers.RuleHelper;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
@@ -106,6 +107,7 @@ public abstract class RuleVisualizer implements Visualizer {
     private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
             throws MappingToUmlTranslationFailedException {
         umlElements = new ArrayList<>();
+        MappingSetter.setMappingsInTriplets(ruleTriplets, relationManager, conceptManager);
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
         Set<Variable> usedInVisualiztation = new HashSet<>();
         for (ColoredVariant variant : flattener.flattenCustomRelations()) {
