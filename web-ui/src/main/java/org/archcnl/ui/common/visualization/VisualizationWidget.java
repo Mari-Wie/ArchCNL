@@ -37,7 +37,9 @@ public class VisualizationWidget extends Dialog {
         VerticalLayout layout = new VerticalLayout();
         layout.setAlignItems(Alignment.CENTER);
         layout.add(createTitleBar());
-        layout.add(new Image(diagramResource, "Error"));
+        Image diagram = new Image(diagramResource, "Error");
+        diagram.setMaxWidth(40, Unit.CM);
+        layout.add(diagram);
         DownloadLink link = createDownloadLink();
         layout.add(link);
         layout.setAlignSelf(Alignment.END, link);
@@ -62,8 +64,8 @@ public class VisualizationWidget extends Dialog {
 
     private TextArea createSourceTextArea() {
         TextArea textArea = new TextArea("PlantUML Source Code");
-        textArea.setMinWidth(20, Unit.CM);
         textArea.setWidth(100, Unit.PERCENTAGE);
+        textArea.setMinWidth(20, Unit.CM);
         textArea.setValue(plantUmlSource);
         textArea.setReadOnly(true);
         return textArea;
