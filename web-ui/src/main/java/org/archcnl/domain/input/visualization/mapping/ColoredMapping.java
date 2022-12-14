@@ -2,6 +2,7 @@ package org.archcnl.domain.input.visualization.mapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.input.model.mappings.Mapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
@@ -35,8 +36,7 @@ public class ColoredMapping {
 
     public static ColoredMapping fromMapping(Mapping mapping)
             throws MappingToUmlTranslationFailedException {
-        if (mapping.getWhenTriplets().isEmpty()
-                || mapping.getWhenTriplets().get(0).getTriplets().isEmpty()) {
+        if (isWhenPartEmpty(mapping.getWhenTriplets())) {
             throw new MappingToUmlTranslationFailedException("Body of mapping is empty");
         }
         String name = mapping.getMappingNameRepresentation();
@@ -46,5 +46,9 @@ public class ColoredMapping {
                         .map(ColoredVariant::fromAndTriplets)
                         .collect(Collectors.toList());
         return new ColoredMapping(variants, thenTriplet, name);
+    }
+
+    private static boolean isWhenPartEmpty(List<AndTriplets> variants) {
+        return variants == null || variants.isEmpty() || variants.get(0).getTriplets().isEmpty();
     }
 }
