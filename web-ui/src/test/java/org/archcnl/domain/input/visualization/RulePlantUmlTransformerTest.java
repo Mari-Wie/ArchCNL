@@ -269,6 +269,97 @@ class RulePlantUmlTransformerTest {
     }
 
     @Test
+    void givenOnlyOr_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("ClientScript", "");
+        String subjectMappingString =
+                "isClientScript: (?class rdf:type famix:FamixClass)"
+                        + " (?package rdf:type famix:Namespace)"
+                        + " (?package famix:hasName ?name)"
+                        + " regex(?name, 'teammates\\\\.client(\\\\w|\\\\W)*')"
+                        + " (?package famix:namespaceContains ?class)"
+                        + " -> (?class rdf:type architecture:ClientScript)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String predicateMappingString =
+                "useMapping: (?class rdf:type famix:FamixClass)"
+                        + " (?class2 rdf:type architecture:ClientScript)"
+                        + " (?class famix:imports ?class2)"
+                        + " -> (?class architecture:use ?class2)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("use", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        var rule =
+                new ArchitectureRule(
+                        "Only a ClientScript can use a ClientScript or use a FamixClass.");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml Only a ClientScript can use a ClientScript or use a FamixClass.\n"
+                        + "title Only a ClientScript can use a ClientScript or use a FamixClass.\n"
+                        + "class \"?famixClass1W\" as famixClass1W {\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package2 {\n"
+                        + "class \"?clientScriptW\" as clientScriptW {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package {\n"
+                        + "class \"?clientScript1C\" as clientScript1C {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package3 {\n"
+                        + "class \"?clientScript1CC\" as clientScript1CC {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"?famixClassCC\" as famixClassCC {\n"
+                        + "}\n"
+                        + "class \"?famixClassWW\" as famixClassWW {\n"
+                        + "}\n"
+                        + "folder \"teammates\\\\.client(\\\\w|\\\\W)*\" as package1 {\n"
+                        + "class \"?clientScriptC\" as clientScriptC {\n"
+                        + "}\n"
+                        + "}\n"
+                        + "class \"?famixClass2WW\" as famixClass2WW {\n"
+                        + "}\n"
+                        + "clientScript1C -[dashed]-> clientScriptC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "clientScript1C -[bold]-> clientScriptC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "famixClass1W -[dashed]-> clientScriptW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClass1W -[bold]-> clientScriptW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "clientScript1CC -[dashed]-> famixClassCC #line:RoyalBlue;text:RoyalBlue : <<imports>>\n"
+                        + "clientScript1CC -[bold]-> famixClassCC #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: use\n"
+                        + "famixClass2WW -[dashed]-> famixClassWW #line:OrangeRed;text:OrangeRed : <<imports>>\n"
+                        + "famixClass2WW -[bold]-> famixClassWW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: use\n"
+                        + "note \"ClientScript\" as ClientScript2\n"
+                        + "ClientScript2 .. clientScriptW\n"
+                        + "note \"ClientScript\" as ClientScript\n"
+                        + "ClientScript .. clientScript1C\n"
+                        + "note \"ClientScript\" as ClientScript3\n"
+                        + "ClientScript3 .. clientScript1CC\n"
+                        + "note \"ClientScript\" as ClientScript1\n"
+                        + "ClientScript1 .. clientScriptC\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
     void givenEveryTestResultCanOnlyRule_whenTransform_thenCorrectPlantUml()
             throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
                     UnrelatedMappingException, ConceptAlreadyExistsException,
@@ -1126,6 +1217,106 @@ class RulePlantUmlTransformerTest {
                         + "MainClass .. mainClass1\n"
                         + "note \"Controller\" as Controller\n"
                         + "Controller .. controller\n"
+                        + "@enduml";
+        Assertions.assertEquals(expectedCode, plantUmlCode);
+    }
+
+    @Test
+    void givenCanOnlyOr_whenTransform_thenCorrectPlantUml()
+            throws MappingToUmlTranslationFailedException, NoMappingException, NoTripletException,
+                    UnrelatedMappingException, ConceptAlreadyExistsException,
+                    RelationAlreadyExistsException {
+        // given
+        CustomConcept subjectConcept = new CustomConcept("TimedAnnotation", "");
+        String subjectMappingString =
+                "isTimedAnnotation: (?anno rdf:type famix:AnnotationInstance)"
+                        + " (?anno famix:hasAnnotationType ?type)"
+                        + " (?type famix:hasName 'Timed')"
+                        + " -> (?anno rdf:type architecture:TimedAnnotation)";
+        ConceptMapping subjectMapping =
+                createConceptMapping(subjectMappingString, Collections.emptyList(), subjectConcept);
+        subjectConcept.setMapping(subjectMapping);
+        conceptManager.addConcept(subjectConcept);
+
+        String predicateMappingString =
+                "haveMapping: (?anno rdf:type famix:AnnotationInstance)"
+                        + " (?att rdf:type famix:AnnotationTypeAttribute)"
+                        + " (?anno famix:hasAnnotationType ?type)"
+                        + " (?type famix:hasAnnotationTypeAttribute ?att)"
+                        + " -> (?anno architecture:have ?att)";
+        RelationMapping predicateMapping =
+                createRelationMapping(predicateMappingString, Collections.emptyList());
+        CustomRelation predicateRelation =
+                new CustomRelation("have", "", new HashSet<>(), new HashSet<>());
+        predicateRelation.setMapping(predicateMapping, conceptManager);
+        relationManager.addRelation(predicateRelation);
+
+        CustomConcept objectConcept = new CustomConcept("MillisAttribute", "");
+        String objectMappingString =
+                "isMillisAttribute: (?att rdf:type famix:AnnotationTypeAttribute)"
+                        + " (?att famix:hasName 'millis')"
+                        + " -> (?att rdf:type architecture:MillisAttribute)";
+        ConceptMapping objectMapping =
+                createConceptMapping(objectMappingString, Collections.emptyList(), objectConcept);
+        objectConcept.setMapping(objectMapping);
+        conceptManager.addConcept(objectConcept);
+
+        var rule =
+                new ArchitectureRule(
+                        "Every TimedAnnotation can-only have MillisAttribute or hasAnnotationInstanceAttribute AnnotationInstanceAttribute that (hasAnnotationTypeAttribute MillisAttribute).");
+
+        // when
+        PlantUmlTransformer transformer = new PlantUmlTransformer(conceptManager, relationManager);
+        String plantUmlCode = transformer.transformToPlantUml(rule);
+
+        // then
+        String expectedCode =
+                "@startuml Every TimedAnnotation can-only have MillisAttribute or hasAnnotationInstanceAttribute AnnotationInstanceAttribute that (hasAnnotationTypeAttribute MillisAttribute).\n"
+                        + "title Every TimedAnnotation can-only have MillisAttribute or hasAnnotationInstanceAttribute AnnotationInstanceAttribute that (hasAnnotationTypeAttribute MillisAttribute).\n"
+                        + "class \"?GENERATED4\" as GENERATED4 <<Timed(<color:#RoyalBlue>millis</color>)>> {\n"
+                        + "}\n"
+                        + "annotation \"Timed\" as type2 {\n"
+                        + "}\n"
+                        + "annotation \"?GENERATED5\" as GENERATED5 {\n"
+                        + "{field} millis\n"
+                        + "}\n"
+                        + "class \"?GENERATED6\" as GENERATED6 <<Timed(<color:#OrangeRed>annotationInstanceAttribute1WW</color>)>> {\n"
+                        + "}\n"
+                        + "annotation \"Timed\" as type3 {\n"
+                        + "}\n"
+                        + "class \"?GENERATED3\" as GENERATED3 <<?type1>> {\n"
+                        + "}\n"
+                        + "annotation \"Timed\" as type1 {\n"
+                        + "}\n"
+                        + "annotation \"?GENERATED2\" as GENERATED2 {\n"
+                        + "{field} millis\n"
+                        + "}\n"
+                        + "annotation \"?type1\" as type1 #OrangeRed {\n"
+                        + "<color:#OrangeRed> {field} ?annotationTypeAttributeW\n"
+                        + "}\n"
+                        + "class \"?GENERATED1\" as GENERATED1 <<?type>> {\n"
+                        + "}\n"
+                        + "annotation \"Timed\" as type {\n"
+                        + "}\n"
+                        + "annotation \"?type\" as type #RoyalBlue {\n"
+                        + "{field} millis\n"
+                        + "}\n"
+                        + "GENERATED1::type -[bold]-> type::millis #line:RoyalBlue;text:RoyalBlue \n"
+                        + "note on link: have\n"
+                        + "GENERATED3::type1 -[bold]-> type1::annotationTypeAttributeW #line:OrangeRed;text:OrangeRed \n"
+                        + "note on link: have\n"
+                        + "note \"TimedAnnotation\" as TimedAnnotation2\n"
+                        + "TimedAnnotation2 .. GENERATED4::Timed\n"
+                        + "note \"MillisAttribute\" as MillisAttribute1\n"
+                        + "MillisAttribute1 .. GENERATED5::millis\n"
+                        + "note \"TimedAnnotation\" as TimedAnnotation3\n"
+                        + "TimedAnnotation3 .. GENERATED6::Timed\n"
+                        + "note \"TimedAnnotation\" as TimedAnnotation1\n"
+                        + "TimedAnnotation1 .. GENERATED3::type1\n"
+                        + "note \"MillisAttribute\" as MillisAttribute\n"
+                        + "MillisAttribute .. type::millis\n"
+                        + "note \"TimedAnnotation\" as TimedAnnotation\n"
+                        + "TimedAnnotation .. GENERATED1::type\n"
                         + "@enduml";
         Assertions.assertEquals(expectedCode, plantUmlCode);
     }
