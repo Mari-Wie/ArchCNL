@@ -24,11 +24,11 @@ import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.Visualizer;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
-import org.archcnl.domain.input.visualization.helpers.MappingSetter;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.helpers.RuleHelper;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
+import org.archcnl.domain.input.visualization.mapping.MappingSetter;
 import org.archcnl.domain.input.visualization.rules.VerbPhraseContainer.Connector;
 
 public abstract class RuleVisualizer implements Visualizer {

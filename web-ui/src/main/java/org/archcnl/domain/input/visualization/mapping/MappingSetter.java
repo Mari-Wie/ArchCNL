@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.helpers;
+package org.archcnl.domain.input.visualization.mapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,6 @@ import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class MappingSetter {
 
