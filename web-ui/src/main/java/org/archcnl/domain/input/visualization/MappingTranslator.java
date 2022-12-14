@@ -25,7 +25,6 @@ import org.archcnl.domain.input.visualization.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
-import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class MappingTranslator {
@@ -110,12 +109,9 @@ public class MappingTranslator {
 
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
-                ColoredMapping coloredMapping =
-                        new PlantUmlTransformer(conceptManager, relationManager)
-                                .flattenAndRecreate(mapping);
                 ConceptVisualizer visualizer =
                         new ConceptVisualizer(
-                                coloredMapping,
+                                mapping,
                                 conceptManager,
                                 relationManager,
                                 Optional.of(variable),

@@ -6,18 +6,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
+import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
+import org.archcnl.domain.input.visualization.mapping.MappingPreprocessor;
 
 public class RelationVisualizer extends MappingVisualizer {
 
     private List<RelationVariant> variants = new ArrayList<>();
 
     public RelationVisualizer(
-            ColoredMapping mapping, ConceptManager conceptManager, RelationManager relationManager)
+            RelationMapping mapping, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
-        super(mapping, conceptManager, relationManager, new HashSet<>());
+        super(
+                MappingPreprocessor.preprocess(mapping, relationManager, conceptManager),
+                conceptManager,
+                relationManager,
+                new HashSet<>());
         createVariants();
     }
 

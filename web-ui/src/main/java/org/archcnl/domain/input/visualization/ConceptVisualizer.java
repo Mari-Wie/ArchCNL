@@ -10,6 +10,7 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.elements.CustomConceptPart;
 import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
@@ -17,9 +18,9 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.mapping.ColorState;
-import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
+import org.archcnl.domain.input.visualization.mapping.MappingPreprocessor;
 
 public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 
@@ -28,14 +29,18 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
     private boolean isTopLevelConcept = false;
 
     public ConceptVisualizer(
-            ColoredMapping mapping,
+            ConceptMapping mapping,
             ConceptManager conceptManager,
             RelationManager relationManager,
             Optional<Variable> parentSubject,
             Set<Variable> usedVariables,
             ColorState colorState)
             throws MappingToUmlTranslationFailedException {
-        super(mapping, conceptManager, relationManager, usedVariables);
+        super(
+                MappingPreprocessor.preprocess(mapping, relationManager, conceptManager),
+                conceptManager,
+                relationManager,
+                usedVariables);
         copyColorState(colorState);
         createConceptElement();
         createVariants(parentSubject);
