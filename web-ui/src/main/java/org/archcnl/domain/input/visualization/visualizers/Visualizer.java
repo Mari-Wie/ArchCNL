@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization;
+package org.archcnl.domain.input.visualization.visualizers;
 
 public interface Visualizer {
 

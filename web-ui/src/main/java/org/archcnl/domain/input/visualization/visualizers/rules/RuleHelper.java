@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.rules;
+package org.archcnl.domain.input.visualization.visualizers.rules;
 
 import java.util.HashMap;
 import java.util.Optional;

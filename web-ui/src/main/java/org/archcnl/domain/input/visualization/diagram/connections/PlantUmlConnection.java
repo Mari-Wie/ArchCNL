@@ -1,10 +1,9 @@
 package org.archcnl.domain.input.visualization.diagram.connections;
 
 import java.util.Optional;
-
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
-import org.archcnl.domain.input.visualization.rules.Cardinality;
+import org.archcnl.domain.input.visualization.visualizers.rules.Cardinality;
 
 public abstract class PlantUmlConnection implements PlantUmlPart {
 

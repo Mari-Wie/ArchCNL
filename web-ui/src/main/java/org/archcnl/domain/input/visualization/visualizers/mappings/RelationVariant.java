@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization;
+package org.archcnl.domain.input.visualization.visualizers.mappings;
 
 import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;

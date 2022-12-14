@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.rules;
+package org.archcnl.domain.input.visualization.visualizers.rules;
 
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.Relation;

@@ -2,7 +2,6 @@ package org.archcnl.domain.input.visualization.helpers;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 

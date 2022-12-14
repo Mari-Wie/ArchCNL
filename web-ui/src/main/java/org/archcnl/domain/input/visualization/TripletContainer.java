@@ -24,6 +24,7 @@ import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.diagram.elements.StringElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
+import org.archcnl.domain.input.visualization.visualizers.mappings.ConceptVisualizer;
 
 public class TripletContainer {
 

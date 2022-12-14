@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.rules;
+package org.archcnl.domain.input.visualization.visualizers.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,20 +10,16 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class DomainRangeRuleVisualizer extends RuleVisualizer {
+public class UniversalRuleVisualizer extends RuleVisualizer {
 
     private static final Pattern CNL_PATTERN =
             Pattern.compile(
-                    "Only " + "(a |an )?" + SUBJECT_REGEX + " can " + PHRASES_REGEX + "\\.");
+                    "Every " + "(a |an )?" + SUBJECT_REGEX + " can-only " + PHRASES_REGEX + "\\.");
 
-    public DomainRangeRuleVisualizer(
+    public UniversalRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
         super(rule, conceptManager, relationManager);
-    }
-
-    public static boolean matches(ArchitectureRule rule) {
-        return CNL_PATTERN.matcher(rule.toString()).matches();
     }
 
     @Override
@@ -37,12 +33,12 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
         }
 
         RuleVariant wrong = new RuleVariant();
-        var triplet =
-                RuleHelper.getTripletWithBaseType(
-                        subjectTriplets.get(0), conceptManager, usedVariables);
-        wrong.setSubjectTriplets(addPostfixToAllVariables(Arrays.asList(triplet), "W"));
+        wrong.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "W"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
-            wrong.addObjectTriplets(addPostfixToAllVariables(phrase.getObjectTriplets(), "W"));
+            var triplet = phrase.getObjectTriplets().get(0);
+            var coloredTriplet =
+                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
+            wrong.addObjectTriplets(addPostfixToAllVariables(Arrays.asList(coloredTriplet), "W"));
             wrong.addCopyOfPredicate(phrase.getPredicate());
         }
 
@@ -68,13 +64,14 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
             correct.addCopyOfPredicate(phrase.getPredicate());
 
             RuleVariant wrong = new RuleVariant();
-            var triplet =
-                    RuleHelper.getTripletWithBaseType(
-                            subjectTriplets.get(0), conceptManager, usedVariables);
             wrong.setSubjectTriplets(
-                    addPostfixToAllVariables(Arrays.asList(triplet), wrongPostfix.toString()));
+                    addPostfixToAllVariables(subjectTriplets, wrongPostfix.toString()));
+            var triplet = phrase.getObjectTriplets().get(0);
+            var coloredTriplet =
+                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
             wrong.addObjectTriplets(
-                    addPostfixToAllVariables(phrase.getObjectTriplets(), wrongPostfix.toString()));
+                    addPostfixToAllVariables(
+                            Arrays.asList(coloredTriplet), wrongPostfix.toString()));
             wrong.addCopyOfPredicate(phrase.getPredicate());
 
             correct.setPredicateToColorState(ColorState.CORRECT);
@@ -86,6 +83,10 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
             wrongPostfix.append("W");
         }
         return variants;
+    }
+
+    public static boolean matches(ArchitectureRule rule) {
+        return CNL_PATTERN.matcher(rule.toString()).matches();
     }
 
     @Override

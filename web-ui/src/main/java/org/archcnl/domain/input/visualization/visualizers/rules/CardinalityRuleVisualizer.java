@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.rules;
+package org.archcnl.domain.input.visualization.visualizers.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,21 +10,20 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class ExistentialRuleVisualizer extends RuleVisualizer {
+public class CardinalityRuleVisualizer extends RuleVisualizer {
 
     private static final Pattern CNL_PATTERN =
             Pattern.compile(
-                    "Every " + "(a |an )?" + SUBJECT_REGEX + " must " + PHRASES_REGEX + "\\.");
+                    "Every " + "(a |an )?" + SUBJECT_REGEX + " can " + PHRASES_REGEX + "\\.");
 
-    public ExistentialRuleVisualizer(
+    public CardinalityRuleVisualizer(
             ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {
         super(rule, conceptManager, relationManager);
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariantsAnd()
-            throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsAnd() {
         RuleVariant correct = new RuleVariant();
         correct.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "C"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
@@ -34,16 +33,21 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
 
         RuleVariant wrong = new RuleVariant();
         wrong.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "W"));
+        for (VerbPhrase phrase : verbPhrases.getPhrases()) {
+            wrong.addObjectTriplets(addPostfixToAllVariables(phrase.getObjectTriplets(), "W"));
+            phrase.getPredicate().invertLimitations();
+            wrong.addCopyOfPredicate(phrase.getPredicate());
+        }
 
-        correct.setSubjectToColorState(ColorState.CORRECT);
-        wrong.setSubjectToColorState(ColorState.WRONG);
+        correct.setPredicateToColorState(ColorState.CORRECT);
+        wrong.setPredicateToColorState(ColorState.WRONG);
         return Arrays.asList(correct, wrong);
     }
 
     @Override
-    protected List<RuleVariant> buildRuleVariantsOr()
-            throws MappingToUmlTranslationFailedException {
+    protected List<RuleVariant> buildRuleVariantsOr() {
         StringBuilder correctPostfix = new StringBuilder("C");
+        StringBuilder wrongPostfix = new StringBuilder("W");
         List<RuleVariant> variants = new ArrayList<>();
 
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
@@ -55,17 +59,22 @@ public class ExistentialRuleVisualizer extends RuleVisualizer {
                             phrase.getObjectTriplets(), correctPostfix.toString()));
             correct.addCopyOfPredicate(phrase.getPredicate());
 
-            correct.setSubjectToColorState(ColorState.CORRECT);
+            RuleVariant wrong = new RuleVariant();
+            wrong.setSubjectTriplets(
+                    addPostfixToAllVariables(subjectTriplets, wrongPostfix.toString()));
+            wrong.addObjectTriplets(
+                    addPostfixToAllVariables(phrase.getObjectTriplets(), wrongPostfix.toString()));
+            phrase.getPredicate().invertLimitations();
+            wrong.addCopyOfPredicate(phrase.getPredicate());
+
+            correct.setPredicateToColorState(ColorState.CORRECT);
+            wrong.setPredicateToColorState(ColorState.WRONG);
 
             variants.add(correct);
+            variants.add(wrong);
             correctPostfix.append("C");
+            wrongPostfix.append("W");
         }
-
-        RuleVariant wrong = new RuleVariant();
-        wrong.setSubjectTriplets(addPostfixToAllVariables(subjectTriplets, "W"));
-        wrong.setSubjectToColorState(ColorState.WRONG);
-        variants.add(wrong);
-
         return variants;
     }
 

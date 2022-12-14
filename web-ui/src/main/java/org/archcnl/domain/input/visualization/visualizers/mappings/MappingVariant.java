@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization;
+package org.archcnl.domain.input.visualization.visualizers.mappings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +12,7 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.MappingTranslator;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;

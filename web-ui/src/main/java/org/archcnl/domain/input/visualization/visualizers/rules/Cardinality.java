@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.rules;
+package org.archcnl.domain.input.visualization.visualizers.rules;
 
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 

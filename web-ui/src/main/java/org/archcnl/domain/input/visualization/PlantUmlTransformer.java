@@ -10,7 +10,10 @@ import org.archcnl.domain.input.model.mappings.RelationMapping;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
-import org.archcnl.domain.input.visualization.rules.RuleVisualizer;
+import org.archcnl.domain.input.visualization.visualizers.Visualizer;
+import org.archcnl.domain.input.visualization.visualizers.mappings.ConceptVisualizer;
+import org.archcnl.domain.input.visualization.visualizers.mappings.RelationVisualizer;
+import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
 
 public class PlantUmlTransformer {
 
