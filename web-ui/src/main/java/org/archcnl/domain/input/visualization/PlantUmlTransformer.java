@@ -14,6 +14,7 @@ import org.archcnl.domain.input.visualization.visualizers.Visualizer;
 import org.archcnl.domain.input.visualization.visualizers.mappings.ConceptVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.mappings.RelationVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
+import org.archcnl.domain.input.visualization.visualizers.rules.parser.RuleParser;
 
 public class PlantUmlTransformer {
 
@@ -29,7 +30,7 @@ public class PlantUmlTransformer {
             throws MappingToUmlTranslationFailedException {
         NamePicker.reset();
         RuleVisualizer visualizer =
-                RuleVisualizer.createRuleVisualizer(rule, conceptManager, relationManager);
+                RuleParser.createRuleVisualizer(rule, conceptManager, relationManager);
         return buildPlantUmlCode(visualizer);
     }
 

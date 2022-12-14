@@ -2,55 +2,40 @@ package org.archcnl.domain.input.visualization.visualizers.rules;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.common.conceptsandrelations.Relation;
-import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RuleVariant;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhraseContainer;
 
 public class ConditionalRuleVisualizer extends RuleVisualizer {
-
-    private static final String SECOND_PREDICATE_REGEX = "(?<predicate2>[a-z][a-zA-Z]*)";
-    private static final String SECOND_OBJECT_REGEX = "(?<object2>[A-Z][a-zA-Z]*( that \\(.+\\))?)";
-    private static final Pattern CNL_PATTERN =
-            Pattern.compile(
-                    "If "
-                            + "(a |an )?"
-                            + SUBJECT_REGEX
-                            + " "
-                            + PHRASES_REGEX
-                            + ", then it must "
-                            + SECOND_PREDICATE_REGEX
-                            + " this (a |an )?"
-                            + SECOND_OBJECT_REGEX
-                            + "\\.");
 
     private RulePredicate secondaryPredicate;
 
     public ConditionalRuleVisualizer(
-            ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
+            String cnlString,
+            List<Triplet> subjectTriplets,
+            VerbPhraseContainer verbPhrases,
+            RulePredicate secondaryPredicate,
+            ConceptManager conceptManager,
+            RelationManager relationManager,
+            Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        super(rule, conceptManager, relationManager);
-    }
-
-    @Override
-    protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
-        Matcher matcher = CNL_PATTERN.matcher(ruleString);
-        Helper.tryToFindMatch(matcher);
-        if (!matcher.group("object").equals(matcher.group("object2"))) {
-            throw new MappingToUmlTranslationFailedException(cnlString + " Has different objects.");
-        }
-        String phrasesGroup = matcher.group("phrases");
-        verbPhrases = parseVerbPhrases(phrasesGroup);
-        subjectTriplets = parseConceptExpression(matcher.group("subject"));
-        String secondRelationName = matcher.group("predicate2");
-        Relation secondRelation = Helper.getRelation(secondRelationName, relationManager);
-        secondaryPredicate = new RulePredicate(secondRelation);
+        super(
+                cnlString,
+                subjectTriplets,
+                verbPhrases,
+                conceptManager,
+                relationManager,
+                usedVariables);
+        this.secondaryPredicate = secondaryPredicate;
+        transformToDiagram();
     }
 
     @Override
@@ -80,14 +65,5 @@ public class ConditionalRuleVisualizer extends RuleVisualizer {
     protected List<RuleVariant> buildRuleVariantsOr()
             throws MappingToUmlTranslationFailedException {
         throw new UnsupportedOperationException("The conditional rule type doesn't allow OR");
-    }
-
-    public static boolean matches(ArchitectureRule rule) {
-        return CNL_PATTERN.matcher(rule.toString()).matches();
-    }
-
-    @Override
-    protected Pattern getCnlPattern() {
-        return CNL_PATTERN;
     }
 }

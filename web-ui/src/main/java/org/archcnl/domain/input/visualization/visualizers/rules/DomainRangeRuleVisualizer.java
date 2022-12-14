@@ -3,28 +3,35 @@ package org.archcnl.domain.input.visualization.visualizers.rules;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
-import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RuleVariant;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhraseContainer;
 
 public class DomainRangeRuleVisualizer extends RuleVisualizer {
 
-    private static final Pattern CNL_PATTERN =
-            Pattern.compile(
-                    "Only " + "(a |an )?" + SUBJECT_REGEX + " can " + PHRASES_REGEX + "\\.");
-
     public DomainRangeRuleVisualizer(
-            ArchitectureRule rule, ConceptManager conceptManager, RelationManager relationManager)
+            String cnlString,
+            List<Triplet> subjectTriplets,
+            VerbPhraseContainer verbPhrases,
+            ConceptManager conceptManager,
+            RelationManager relationManager,
+            Set<Variable> usedVariables)
             throws MappingToUmlTranslationFailedException {
-        super(rule, conceptManager, relationManager);
-    }
-
-    public static boolean matches(ArchitectureRule rule) {
-        return CNL_PATTERN.matcher(rule.toString()).matches();
+        super(
+                cnlString,
+                subjectTriplets,
+                verbPhrases,
+                conceptManager,
+                relationManager,
+                usedVariables);
+        transformToDiagram();
     }
 
     @Override
@@ -87,10 +94,5 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
             wrongPostfix.append("W");
         }
         return variants;
-    }
-
-    @Override
-    protected Pattern getCnlPattern() {
-        return CNL_PATTERN;
     }
 }

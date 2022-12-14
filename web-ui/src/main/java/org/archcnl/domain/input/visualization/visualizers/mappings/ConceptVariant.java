@@ -46,7 +46,7 @@ public class ConceptVariant extends MappingVariant {
     }
 
     public List<String> getIdentifiers() {
-        var element = getThenSubjectBlock();
+        PlantUmlBlock element = getThenSubjectBlock();
         if (element instanceof ConceptVisualizer) {
             return ((ConceptVisualizer) element).getIdentifiers();
         }
@@ -56,6 +56,29 @@ public class ConceptVariant extends MappingVariant {
     public void setProperty(String property, PlantUmlElement object)
             throws PropertyNotFoundException {
         getThenSubjectBlock().setProperty(property, object);
+    }
+
+    public void removeUmlElementsWithParents() {
+        List<PlantUmlPart> filteredElements = new ArrayList<>();
+        for (PlantUmlPart part : umlElements) {
+            if (part instanceof PlantUmlBlock) {
+                PlantUmlBlock block = (PlantUmlBlock) part;
+                if (!block.hasParentBeenFound()) {
+                    filteredElements.add(part);
+                }
+            } else {
+                filteredElements.add(part);
+            }
+        }
+        umlElements = filteredElements;
+    }
+
+    public List<PlantUmlElement> getBaseElements() {
+        PlantUmlBlock thenElement = getThenSubjectBlock();
+        if (thenElement instanceof ConceptVisualizer) {
+            return ((ConceptVisualizer) thenElement).getBaseElements();
+        }
+        return Arrays.asList((PlantUmlElement) thenElement);
     }
 
     private void useParentSubject(Variable parentSubject) {
@@ -77,30 +100,7 @@ public class ConceptVariant extends MappingVariant {
         thenTriplet = new Triplet(thenSubject, thenPredicate, thenObject);
     }
 
-    public List<PlantUmlElement> getBaseElements() {
-        PlantUmlBlock thenElement = getThenSubjectBlock();
-        if (thenElement instanceof ConceptVisualizer) {
-            return ((ConceptVisualizer) thenElement).getBaseElements();
-        }
-        return Arrays.asList((PlantUmlElement) thenElement);
-    }
-
     private PlantUmlBlock getThenSubjectBlock() {
         return elementMap.get(thenTriplet.getSubject());
-    }
-
-    public void removeUmlElementsWithParents() {
-        List<PlantUmlPart> filteredElements = new ArrayList<>();
-        for (PlantUmlPart part : umlElements) {
-            if (part instanceof PlantUmlBlock) {
-                PlantUmlBlock block = (PlantUmlBlock) part;
-                if (!block.hasParentBeenFound()) {
-                    filteredElements.add(part);
-                }
-            } else {
-                filteredElements.add(part);
-            }
-        }
-        umlElements = filteredElements;
     }
 }

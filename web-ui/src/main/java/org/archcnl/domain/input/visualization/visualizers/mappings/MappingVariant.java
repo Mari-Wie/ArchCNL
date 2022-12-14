@@ -68,16 +68,27 @@ public abstract class MappingVariant {
                 Variable objectVar = (Variable) object;
                 object = NamePicker.pickUniqueVariable(usedVariables, renamedVariables, objectVar);
             }
-
-            Relation predicate = triplet.getPredicate();
-            ColoredTriplet newTriplet = new ColoredTriplet(subject, predicate, object);
-            newTriplet.setColorState(triplet.getColorState());
-            newTriplet.setCardinality(triplet.getCardinality());
-            newTriplet.setQuantity(triplet.getQuantity());
-            modifiedTriplets.add(newTriplet);
+            modifiedTriplets.add(rebuildTriplet(triplet, subject, object));
         }
         whenTriplets = modifiedTriplets;
         updateVariablesInThenTriplet(renamedVariables);
+    }
+
+    protected void buildContentParts() throws MappingToUmlTranslationFailedException {
+        MappingTranslator translator =
+                new MappingTranslator(whenTriplets, conceptManager, relationManager);
+        elementMap = translator.createElementMap(usedVariables);
+        umlElements = translator.translateToPlantUmlModel(elementMap);
+    }
+
+    private ColoredTriplet rebuildTriplet(
+            ColoredTriplet triplet, Variable subject, ObjectType object) {
+        Relation predicate = triplet.getPredicate();
+        ColoredTriplet newTriplet = new ColoredTriplet(subject, predicate, object);
+        newTriplet.setColorState(triplet.getColorState());
+        newTriplet.setCardinality(triplet.getCardinality());
+        newTriplet.setQuantity(triplet.getQuantity());
+        return newTriplet;
     }
 
     private void updateVariablesInThenTriplet(Map<Variable, Variable> renamedVariables) {
@@ -100,12 +111,5 @@ public abstract class MappingVariant {
         builder.append(content);
         builder.append("\n}");
         return builder.toString();
-    }
-
-    protected void buildContentParts() throws MappingToUmlTranslationFailedException {
-        MappingTranslator translator =
-                new MappingTranslator(whenTriplets, conceptManager, relationManager);
-        elementMap = translator.createElementMap(usedVariables);
-        umlElements = translator.translateToPlantUmlModel(elementMap);
     }
 }

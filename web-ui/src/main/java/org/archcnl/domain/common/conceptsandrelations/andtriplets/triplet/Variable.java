@@ -42,6 +42,7 @@ public class Variable extends ObjectType {
         }
     }
 
+    /** Returns the input set plus any dynamicTypes with base types present in the input set */
     private Set<ActualObjectType> addStillValidCustomConcepts(
             Set<ActualObjectType> types, ConceptManager conceptManager) {
         Set<ActualObjectType> typesWithStillValidOldTypes = new HashSet<>(types);
