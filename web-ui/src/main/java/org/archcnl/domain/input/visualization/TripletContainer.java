@@ -3,8 +3,6 @@ package org.archcnl.domain.input.visualization;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import org.apache.commons.lang3.EnumUtils;
 import org.archcnl.domain.common.conceptsandrelations.CustomRelation;
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
@@ -13,17 +11,12 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.StringValue;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.diagram.ElementConnection;
+import org.archcnl.domain.input.visualization.diagram.ElementProperty;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
-import org.archcnl.domain.input.visualization.diagram.connections.CatchesExceptionConnection;
-import org.archcnl.domain.input.visualization.diagram.connections.ContainmentConnection;
 import org.archcnl.domain.input.visualization.diagram.connections.CustomRelationConnection;
-import org.archcnl.domain.input.visualization.diagram.connections.DeclaresExceptionConnection;
-import org.archcnl.domain.input.visualization.diagram.connections.DefinesVariableConnection;
-import org.archcnl.domain.input.visualization.diagram.connections.ImportConnection;
-import org.archcnl.domain.input.visualization.diagram.connections.IsAConnection;
 import org.archcnl.domain.input.visualization.diagram.connections.PlantUmlConnection;
-import org.archcnl.domain.input.visualization.diagram.connections.ThrowsExceptionConnection;
 import org.archcnl.domain.input.visualization.diagram.elements.BooleanElement;
 import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.diagram.elements.StringElement;
@@ -33,55 +26,6 @@ import org.archcnl.domain.input.visualization.mapping.ColorState;
 import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class TripletContainer {
-
-    private enum ElementProperty {
-        hasName,
-        hasPath,
-        namespaceContains,
-        hasFullQualifiedName,
-        hasModifier,
-        hasAnnotationInstance,
-        definesAttribute,
-        definesMethod,
-        isInterface,
-        isConstructor,
-        hasDeclaredType,
-        definesParameter,
-        hasAnnotationTypeAttribute,
-        hasAnnotationType,
-        hasAnnotationInstanceAttribute,
-        hasValue,
-        inheritsFrom;
-
-        public static boolean isElementProperty(Relation relation) {
-            return EnumUtils.isValidEnum(ElementProperty.class, relation.getName());
-        }
-    }
-
-    private enum ElementConnection {
-        // isExternal, isLocatedAt, and hasSignature are not supported
-        imports(ImportConnection::new),
-        definesNestedType(ContainmentConnection::new),
-        definesVariable(DefinesVariableConnection::new),
-        throwsException(ThrowsExceptionConnection::new),
-        hasCaughtException(CatchesExceptionConnection::new),
-        hasDeclaredException(DeclaresExceptionConnection::new),
-        isA(IsAConnection::new);
-
-        private BiFunction<String, String, PlantUmlConnection> creator;
-
-        private ElementConnection(BiFunction<String, String, PlantUmlConnection> creator) {
-            this.creator = creator;
-        }
-
-        public PlantUmlConnection createConnection(String subjectId, String objectId) {
-            return creator.apply(subjectId, objectId);
-        }
-
-        public static boolean isElementConnection(Relation relation) {
-            return EnumUtils.isValidEnum(ElementConnection.class, relation.getName());
-        }
-    }
 
     private List<ColoredTriplet> elementPropertyTriplets = new ArrayList<>();
     private List<ColoredTriplet> connectionTriplets = new ArrayList<>();

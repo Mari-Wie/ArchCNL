@@ -22,6 +22,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
+import org.archcnl.domain.input.visualization.diagram.PlantUmlMapper;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.diagram.connections.PlantUmlConnection;
 import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;

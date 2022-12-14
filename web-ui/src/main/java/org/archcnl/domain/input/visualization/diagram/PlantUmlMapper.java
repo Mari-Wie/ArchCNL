@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization;
+package org.archcnl.domain.input.visualization.diagram;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -41,7 +41,6 @@ public class PlantUmlMapper {
 
     public static PlantUmlElement createElement(Concept concept, Variable variable)
             throws MappingToUmlTranslationFailedException {
-        // TODO add support for BooleanValue and StringValue
         String key = concept.getName();
         if (conceptMap.containsKey(key)) {
             return conceptMap.get(concept.getName()).apply(variable);
