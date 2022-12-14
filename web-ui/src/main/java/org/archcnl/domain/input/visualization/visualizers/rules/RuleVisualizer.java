@@ -18,10 +18,10 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.visualization.MappingSetter;
 import org.archcnl.domain.input.visualization.MappingTranslator;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
-import org.archcnl.domain.input.visualization.coloredmodel.MappingSetter;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
@@ -110,7 +110,7 @@ public abstract class RuleVisualizer implements Visualizer {
     private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
             throws MappingToUmlTranslationFailedException {
         umlElements = new ArrayList<>();
-        MappingSetter.setMappingsInTriplets(ruleTriplets, relationManager, conceptManager);
+        new MappingSetter(relationManager, conceptManager).setMappingsInTriplets(ruleTriplets);
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
         Set<Variable> usedInVisualiztation = new HashSet<>();
         for (ColoredVariant variant : flattener.flattenCustomRelations()) {
