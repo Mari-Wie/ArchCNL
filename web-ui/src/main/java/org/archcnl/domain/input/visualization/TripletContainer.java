@@ -48,22 +48,22 @@ public class TripletContainer {
             throws MappingToUmlTranslationFailedException {
         for (ColoredTriplet triplet : elementPropertyTriplets) {
             Variable subject = triplet.getSubject();
-            Relation predicate = triplet.getPredicate();
+            String property = triplet.getPredicate().getName();
             ObjectType object = triplet.getObject();
-            PlantUmlBlock subjectElement = elementMap.get(subject);
+            PlantUmlBlock subjectBlock = elementMap.get(subject);
 
-            updateColorStateWhenNotNeutral(subjectElement, triplet.getColorState());
+            PlantUmlBlock objectBlock;
             if (object instanceof Variable) {
-                PlantUmlBlock objectElement = elementMap.get(object);
-                updateColorStateWhenNotNeutral(objectElement, triplet.getColorState());
-                tryToSetProperty(subjectElement, predicate.getName(), objectElement);
+                objectBlock = elementMap.get(object);
             } else if (object instanceof StringValue) {
-                StringElement stringElement = new StringElement((StringValue) object);
-                tryToSetProperty(subjectElement, predicate.getName(), stringElement);
+                objectBlock = new StringElement((StringValue) object);
             } else {
-                BooleanElement boolElement = new BooleanElement((BooleanValue) object);
-                tryToSetProperty(subjectElement, predicate.getName(), boolElement);
+                objectBlock = new BooleanElement((BooleanValue) object);
             }
+
+            updateColorStateWhenNotNeutral(subjectBlock, triplet.getColorState());
+            updateColorStateWhenNotNeutral(objectBlock, triplet.getColorState());
+            tryToSetProperty(subjectBlock, property, objectBlock);
         }
     }
 
@@ -71,24 +71,18 @@ public class TripletContainer {
         List<PlantUmlConnection> connections = new ArrayList<>();
         for (ColoredTriplet triplet : connectionTriplets) {
             Relation predicate = triplet.getPredicate();
-            String key = predicate.getName();
-
             Variable subject = triplet.getSubject();
             List<String> subjectIds = elementMap.get(subject).getIdentifiers();
 
+            // TODO connections can only be build between concept elements
+            // strings or boolean are not supported as they lack
+            // a native representation in the UML
             Variable object = (Variable) triplet.getObject();
             List<String> objectIds = elementMap.get(object).getIdentifiers();
 
             for (String subjectId : subjectIds) {
                 for (String objectId : objectIds) {
-                    PlantUmlConnection connection;
-                    if (predicate instanceof CustomRelation) {
-                        CustomRelation relation = (CustomRelation) predicate;
-                        connection = new CustomRelationConnection(subjectId, objectId, relation);
-                    } else {
-                        ElementConnection enumEntry = ElementConnection.valueOf(key);
-                        connection = enumEntry.createConnection(subjectId, objectId);
-                    }
+                    var connection = createConnection(predicate, subjectId, objectId);
                     updateColorStateWhenNotNeutral(connection, triplet.getColorState());
                     connection.setCardinality(triplet.getCardinality());
                     connection.setQuantity(triplet.getQuantity());
@@ -99,19 +93,37 @@ public class TripletContainer {
         return connections;
     }
 
+    private PlantUmlConnection createConnection(
+            Relation predicate, String subjectId, String objectId) {
+        PlantUmlConnection connection;
+        if (predicate instanceof CustomRelation) {
+            CustomRelation relation = (CustomRelation) predicate;
+            connection = new CustomRelationConnection(subjectId, objectId, relation);
+        } else {
+            var connectionType = ElementConnection.valueOf(predicate.getName());
+            connection = connectionType.createConnection(subjectId, objectId);
+        }
+        return connection;
+    }
+
     private void tryToSetProperty(PlantUmlBlock element, String property, PlantUmlBlock object)
             throws MappingToUmlTranslationFailedException {
         try {
-            if (object instanceof ConceptVisualizer) {
-                ConceptVisualizer visualizer = (ConceptVisualizer) object;
-                for (PlantUmlElement baseElement : visualizer.getBaseElements()) {
-                    element.setProperty(property, baseElement);
-                }
-            } else {
-                element.setProperty(property, (PlantUmlElement) object);
-            }
+            setProperty(element, property, object);
         } catch (PropertyNotFoundException e) {
             throw new MappingToUmlTranslationFailedException(e.getMessage());
+        }
+    }
+
+    private void setProperty(PlantUmlBlock element, String property, PlantUmlBlock object)
+            throws PropertyNotFoundException {
+        if (object instanceof ConceptVisualizer) {
+            ConceptVisualizer visualizer = (ConceptVisualizer) object;
+            for (PlantUmlElement baseElement : visualizer.getBaseElements()) {
+                element.setProperty(property, baseElement);
+            }
+        } else {
+            element.setProperty(property, (PlantUmlElement) object);
         }
     }
 
