@@ -46,7 +46,7 @@ public class Variable extends ObjectType {
     private Set<ActualObjectType> addStillValidCustomConcepts(
             Set<ActualObjectType> types, ConceptManager conceptManager) {
         Set<ActualObjectType> typesWithStillValidOldTypes = new HashSet<>(types);
-        for (ActualObjectType type : dynamicTypes) {
+        for (ActualObjectType type : new HashSet<>(dynamicTypes)) {
             if (type instanceof CustomConcept) {
                 CustomConcept concept = (CustomConcept) type;
                 Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
