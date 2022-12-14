@@ -5,9 +5,9 @@ import java.util.List;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 
-public class WrappingService {
+public class MappingWrapper {
 
-    private WrappingService() {}
+    private MappingWrapper() {}
 
     public static List<ColoredVariant> wrapMapping(ColoredTriplet thenTriplet) {
         // This is a little trick that enables the visualization of mappings

@@ -39,6 +39,13 @@ public class MappingFlattener {
         this.thenObject = Optional.empty();
     }
 
+    /**
+     * Dissolves all mappings from present custom relations into the given variants. Will create new
+     * copies of variants when a relation mapping with multiple variants is encountered.
+     *
+     * @return The given variants including dissolved relation mappings
+     * @throws MappingToUmlTranslationFailedException
+     */
     public List<ColoredVariant> flattenCustomRelations()
             throws MappingToUmlTranslationFailedException {
         Optional<Variable> thenObjectOpt = Optional.empty();
@@ -76,6 +83,18 @@ public class MappingFlattener {
         return flattenedVariants;
     }
 
+    /**
+     * Dissolves all mappings behind custom relations into the given variant.
+     *
+     * @param variant The variant to be flattened
+     * @param parentVariables Variables that can't be used again
+     * @param parentSubject Every occurrence of the thenSubject will be changed to this variable
+     * @param parentObject Every occurrence of the thenObject will be changed to this variable
+     * @param thenSubject This variable will be replaced by parentSubject
+     * @param thenObjectOpt This variable will be replaced by parentObject
+     * @return Given variants after flattening of relation mappings
+     * @throws MappingToUmlTranslationFailedException
+     */
     private List<ColoredVariant> flattenWhenTriplets(
             ColoredVariant variant,
             Set<Variable> parentVariables,
@@ -193,6 +212,7 @@ public class MappingFlattener {
         }
     }
 
+    /** Append all lists of triplets from b to all lists from a in all combinations */
     private List<List<ColoredTriplet>> cartesianProduct(
             List<List<ColoredTriplet>> a, List<ColoredVariant> b) {
         List<List<ColoredTriplet>> product = new ArrayList<>();

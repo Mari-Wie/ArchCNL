@@ -19,25 +19,25 @@ public class NamePicker {
             Variable oldVariable) {
         Variable newVariable = null;
         if (renamedVariables.containsKey(oldVariable)) {
+            // when variable has already been used at this level
             newVariable = renamedVariables.get(oldVariable);
-        } else if (!usedVariables.contains(oldVariable)) {
-            newVariable = oldVariable;
-            usedVariables.add(newVariable);
-            renamedVariables.put(oldVariable, newVariable);
-        } else {
-            int postfix = 0;
-            newVariable = oldVariable;
-            while (usedVariables.contains(newVariable)) {
-                postfix++;
-                newVariable = new Variable(oldVariable.getName() + postfix);
-            }
-            renamedVariables.put(oldVariable, newVariable);
-            usedVariables.add(newVariable);
+            return newVariable;
         }
+        if (!usedVariables.contains(oldVariable)) {
+            // when this variable is unused
+            usedVariables.add(oldVariable);
+            renamedVariables.put(oldVariable, oldVariable);
+            return oldVariable;
+        }
+        // if variable has already been used elsewhere
+        newVariable = findUnusedVariable(usedVariables, oldVariable);
+        renamedVariables.put(oldVariable, newVariable);
+        usedVariables.add(newVariable);
         return newVariable;
     }
 
-    public static Variable pickUniqueVariable(String variableName, Set<Variable> usedVariables) {
+    public static Variable pickUniqueVariableName(
+            String variableName, Set<Variable> usedVariables) {
         String name = NamePicker.getStringWithFirstLetterInLowerCase(variableName);
         Variable nameVariable = new Variable(name);
         return NamePicker.pickUniqueVariable(usedVariables, new HashMap<>(), nameVariable);
@@ -66,5 +66,15 @@ public class NamePicker {
 
     public static String getStringWithFirstLetterInLowerCase(String str) {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
+    }
+
+    private static Variable findUnusedVariable(Set<Variable> usedVariables, Variable oldVariable) {
+        Variable newVariable = oldVariable;
+        int postfix = 0;
+        while (usedVariables.contains(newVariable)) {
+            postfix++;
+            newVariable = new Variable(oldVariable.getName() + postfix);
+        }
+        return newVariable;
     }
 }

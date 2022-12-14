@@ -18,7 +18,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
-import org.archcnl.domain.input.visualization.MappingSetter;
 import org.archcnl.domain.input.visualization.MappingTranslator;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
@@ -26,6 +25,7 @@ import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
+import org.archcnl.domain.input.visualization.helpers.MappingSetter;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.visualizers.Visualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.Cardinality;
@@ -146,7 +146,7 @@ public abstract class RuleVisualizer implements Visualizer {
             name = new Variable(nextVariableName);
             res.add(new Triplet(name, typeRelation, concept));
         } else {
-            name = NamePicker.pickUniqueVariable(concept.getName(), usedVariables);
+            name = NamePicker.pickUniqueVariableName(concept.getName(), usedVariables);
             res.add(new Triplet(name, typeRelation, concept));
         }
 

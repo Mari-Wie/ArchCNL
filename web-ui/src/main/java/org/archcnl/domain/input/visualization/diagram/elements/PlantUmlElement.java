@@ -48,7 +48,7 @@ public abstract class PlantUmlElement implements PlantUmlBlock {
         PlantUmlElement current = this;
         while (current.requiresParent) {
             if (current.parent.isEmpty()) {
-                return null;
+                throw new RuntimeException(current.variable + " is missing a required parent");
             }
             current = current.parent.get();
         }
