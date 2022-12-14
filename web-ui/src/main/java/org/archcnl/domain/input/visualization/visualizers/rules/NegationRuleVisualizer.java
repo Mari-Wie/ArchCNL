@@ -13,6 +13,7 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
 
 public class NegationRuleVisualizer extends RuleVisualizer {
 
@@ -34,13 +35,13 @@ public class NegationRuleVisualizer extends RuleVisualizer {
     @Override
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
-        RuleHelper.tryToFindMatch(matcher);
+        Helper.tryToFindMatch(matcher);
         String phrasesGroup = matcher.group("phrases");
         verbPhrases = parseVerbPhrases(phrasesGroup);
         if (isNothingRule()) {
             var nothingVar = new Variable("nothing");
             var relation = verbPhrases.getPhrases().get(0).getPredicate().getRelation();
-            var triplet = RuleHelper.getBaseSubjectTypeTriplet(relation, nothingVar, usedVariables);
+            var triplet = Helper.getBaseSubjectTypeTriplet(relation, nothingVar, usedVariables);
             subjectTriplets = Arrays.asList(triplet);
         } else {
             subjectTriplets = parseConceptExpression(matcher.group("subject"));

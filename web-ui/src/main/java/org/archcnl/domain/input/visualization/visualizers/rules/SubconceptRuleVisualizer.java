@@ -10,6 +10,9 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.IsARelation;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhraseContainer;
 
 public class SubconceptRuleVisualizer extends RuleVisualizer {
 
@@ -32,7 +35,7 @@ public class SubconceptRuleVisualizer extends RuleVisualizer {
     @Override
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
-        RuleHelper.tryToFindMatch(matcher);
+        Helper.tryToFindMatch(matcher);
         var isAPredicate = new RulePredicate(new IsARelation());
         var objectTriplets = parseConceptExpression(matcher.group("object"));
         VerbPhrase phrase = new VerbPhrase(isAPredicate, objectTriplets);

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
 
 public class RuleVariant {
 

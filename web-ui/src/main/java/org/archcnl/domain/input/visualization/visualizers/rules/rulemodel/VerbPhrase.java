@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.visualizers.rules;
+package org.archcnl.domain.input.visualization.visualizers.rules.rulemodel;
 
 import java.util.List;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;

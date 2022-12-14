@@ -4,7 +4,7 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.visualization.visualizers.rules.Cardinality;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.Cardinality;
 
 public class ColoredTriplet extends Triplet {
 

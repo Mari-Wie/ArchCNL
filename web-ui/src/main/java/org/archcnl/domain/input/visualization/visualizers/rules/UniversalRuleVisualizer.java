@@ -9,6 +9,7 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
 
 public class UniversalRuleVisualizer extends RuleVisualizer {
 
@@ -37,7 +38,7 @@ public class UniversalRuleVisualizer extends RuleVisualizer {
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
             var triplet = phrase.getObjectTriplets().get(0);
             var coloredTriplet =
-                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
+                    Helper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
             wrong.addObjectTriplets(addPostfixToAllVariables(Arrays.asList(coloredTriplet), "W"));
             wrong.addCopyOfPredicate(phrase.getPredicate());
         }
@@ -68,7 +69,7 @@ public class UniversalRuleVisualizer extends RuleVisualizer {
                     addPostfixToAllVariables(subjectTriplets, wrongPostfix.toString()));
             var triplet = phrase.getObjectTriplets().get(0);
             var coloredTriplet =
-                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
+                    Helper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
             wrong.addObjectTriplets(
                     addPostfixToAllVariables(
                             Arrays.asList(coloredTriplet), wrongPostfix.toString()));

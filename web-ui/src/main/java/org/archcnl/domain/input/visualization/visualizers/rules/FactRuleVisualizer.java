@@ -11,6 +11,9 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.IsARelation;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhraseContainer;
 
 public class FactRuleVisualizer extends RuleVisualizer {
 
@@ -31,7 +34,7 @@ public class FactRuleVisualizer extends RuleVisualizer {
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         if (isAnIsAFact()) {
             Matcher matcher = IS_A_REGEX.matcher(ruleString);
-            RuleHelper.tryToFindMatch(matcher);
+            Helper.tryToFindMatch(matcher);
             subjectTriplets = parseConceptExpression(matcher.group("isaSubject"));
             var objectTriplets = parseConceptExpression(matcher.group("isaObject"));
             var predicate = new RulePredicate(new IsARelation());

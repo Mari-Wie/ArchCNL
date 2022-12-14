@@ -28,7 +28,11 @@ import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslation
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 import org.archcnl.domain.input.visualization.visualizers.Visualizer;
-import org.archcnl.domain.input.visualization.visualizers.rules.VerbPhraseContainer.Connector;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.Cardinality;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhraseContainer;
+import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhraseContainer.Connector;
 
 public abstract class RuleVisualizer implements Visualizer {
 
@@ -120,7 +124,7 @@ public abstract class RuleVisualizer implements Visualizer {
 
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
-        RuleHelper.tryToFindMatch(matcher);
+        Helper.tryToFindMatch(matcher);
         String phrasesGroup = matcher.group("phrases");
         verbPhrases = parseVerbPhrases(phrasesGroup);
         subjectTriplets = parseConceptExpression(matcher.group("subject"));
@@ -129,11 +133,11 @@ public abstract class RuleVisualizer implements Visualizer {
     protected List<Triplet> parseConceptExpression(String expression)
             throws MappingToUmlTranslationFailedException {
         Matcher matcher = conceptExpression.matcher(expression);
-        RuleHelper.tryToFindMatch(matcher);
+        Helper.tryToFindMatch(matcher);
         List<Triplet> res = new ArrayList<>();
 
         String conceptName = matcher.group("concept");
-        Concept concept = RuleHelper.getConcept(conceptName, conceptManager);
+        Concept concept = Helper.getConcept(conceptName, conceptManager);
         Relation typeRelation = TypeRelation.getTyperelation();
         String nextVariableName = matcher.group("variable");
 
@@ -174,7 +178,7 @@ public abstract class RuleVisualizer implements Visualizer {
             if ("anything".equals(objectGroup)) {
                 var anythingVar = new Variable("anything");
                 var triplet =
-                        RuleHelper.getBaseObjectTypeTriplet(
+                        Helper.getBaseObjectTypeTriplet(
                                 predicate.getRelation(), anythingVar, usedVariables);
                 objectTriplets = Arrays.asList(triplet);
             } else {
@@ -199,7 +203,7 @@ public abstract class RuleVisualizer implements Visualizer {
     protected RulePredicate parsePredicate(Matcher matcher)
             throws MappingToUmlTranslationFailedException {
         String name = matcher.group("predicate");
-        Relation relation = RuleHelper.getRelation(name, relationManager);
+        Relation relation = Helper.getRelation(name, relationManager);
         RulePredicate rulePredicate = new RulePredicate(relation);
         if (matcher.group("cardinality") != null) {
             Cardinality cardinality = Cardinality.getCardinality(matcher.group("cardinality"));
