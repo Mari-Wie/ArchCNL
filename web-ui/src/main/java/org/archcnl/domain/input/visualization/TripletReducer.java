@@ -99,17 +99,17 @@ public class TripletReducer {
         }
         whenTriplets =
                 whenTriplets.stream()
-                        .filter(
-                                t ->
-                                        !t.getObject().equals(inheritance)
-                                                && !t.getPredicate().getName().equals("hasSubClass")
-                                                && !t.getPredicate()
-                                                        .getName()
-                                                        .equals("hasSuperClass"))
+                        .filter(this::isNoInheritanceTriplet)
                         .collect(Collectors.toList());
         for (InheritanceRelation inheritanceRelation : inheritanceMap.values()) {
             whenTriplets.add(inheritanceRelation.buildInteritanceTriplet());
         }
+    }
+
+    private boolean isNoInheritanceTriplet(ColoredTriplet triplet) {
+        return !triplet.getObject().equals(inheritance)
+                && !triplet.getPredicate().getName().equals("hasSubClass")
+                && !triplet.getPredicate().getName().equals("hasSuperClass");
     }
 
     private boolean isRegexTriplet(Triplet triplet) {
