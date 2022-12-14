@@ -11,9 +11,11 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
-import org.archcnl.domain.input.visualization.connections.BasicConnection;
-import org.archcnl.domain.input.visualization.elements.CustomConceptPart;
-import org.archcnl.domain.input.visualization.elements.PlantUmlElement;
+import org.archcnl.domain.input.visualization.diagram.ConceptBlock;
+import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
+import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
+import org.archcnl.domain.input.visualization.diagram.connections.BasicConnection;
+import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
@@ -24,7 +26,7 @@ import org.archcnl.domain.input.visualization.mapping.MappingPreprocessor;
 
 public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBlock {
 
-    private CustomConceptPart conceptElement;
+    private ConceptBlock conceptBlock;
     private List<ConceptVariant> variants = new ArrayList<>();
     private boolean isTopLevelConcept = false;
 
@@ -61,7 +63,7 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
                 NamePicker.pickUniqueVariable(
                         usedVariables, new HashMap<>(), new Variable(concept.getName()));
 
-        this.conceptElement = new CustomConceptPart(concept, uniqueVar.getName());
+        this.conceptBlock = new ConceptBlock(concept, uniqueVar.getName());
     }
 
     private void createVariants(Optional<Variable> parentSubject)
@@ -97,7 +99,7 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
         if (isTopLevelConcept) {
             addConnectionsToConceptElement();
             builder.append("\n");
-            builder.append(conceptElement.buildPlantUmlCode());
+            builder.append(conceptBlock.buildPlantUmlCode());
         }
         return builder.toString();
     }
@@ -148,17 +150,17 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
 
     public PlantUmlPart getConceptElement() {
         addConnectionsToConceptElement();
-        return conceptElement;
+        return conceptBlock;
     }
 
     private void addConnectionsToConceptElement() {
         for (ConceptVariant variant : variants) {
-            List<String> conceptIds = conceptElement.getIdentifiers();
+            List<String> conceptIds = conceptBlock.getIdentifiers();
             List<String> objectIds = variant.getIdentifiers();
             for (String conceptId : conceptIds) {
                 for (String objectId : objectIds) {
                     BasicConnection connection = new BasicConnection(conceptId, objectId);
-                    conceptElement.addConnection(connection);
+                    conceptBlock.addConnection(connection);
                 }
             }
         }

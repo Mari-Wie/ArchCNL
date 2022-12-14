@@ -19,9 +19,9 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triple
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.MappingTranslator;
-import org.archcnl.domain.input.visualization.PlantUmlBlock;
-import org.archcnl.domain.input.visualization.PlantUmlPart;
 import org.archcnl.domain.input.visualization.Visualizer;
+import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
+import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;

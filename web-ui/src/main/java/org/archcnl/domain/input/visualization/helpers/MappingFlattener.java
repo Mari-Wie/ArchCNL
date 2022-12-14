@@ -87,6 +87,7 @@ public class MappingFlattener {
 
         useParentOrUniqueVariables(
                 variant, parentVariables, parentSubject, parentObject, thenSubject, thenObjectOpt);
+
         List<List<ColoredTriplet>> flattened = Arrays.asList(new ArrayList<>());
         Set<Variable> usedVariables = getVariablesInUse(variant);
 
