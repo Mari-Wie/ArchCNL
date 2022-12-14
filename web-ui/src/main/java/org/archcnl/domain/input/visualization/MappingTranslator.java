@@ -1,6 +1,7 @@
 package org.archcnl.domain.input.visualization;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,16 +19,14 @@ import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
-import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
 import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 import org.archcnl.domain.input.visualization.diagram.ConceptMapper;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
-import org.archcnl.domain.input.visualization.diagram.connections.PlantUmlConnection;
-import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.visualizers.mappings.ConceptVisualizer;
 
@@ -55,18 +54,13 @@ public class MappingTranslator {
 
     public List<PlantUmlPart> translateToPlantUmlModel(Map<Variable, PlantUmlBlock> elementMap)
             throws MappingToUmlTranslationFailedException {
+        List<PlantUmlPart> parts = new ArrayList<>();
         TripletContainer container = new TripletContainer(whenTriplets);
         container.applyElementProperties(elementMap);
 
-        List<PlantUmlBlock> topLevelElements = getTopLevelElements(elementMap);
-        topLevelElements = createRequiredParents(topLevelElements);
-        List<PlantUmlConnection> connections = container.createConnections(elementMap);
-        List<PlantUmlPart> conceptElements = getConceptElements(elementMap);
-
-        List<PlantUmlPart> parts = new ArrayList<>();
-        parts.addAll(topLevelElements);
-        parts.addAll(connections);
-        parts.addAll(conceptElements);
+        parts.addAll(replaceWithRequiredParents(getTopLevelElements(elementMap.values())));
+        parts.addAll(container.createConnections(elementMap));
+        parts.addAll(getConceptBlocks(elementMap));
         return parts;
     }
 
@@ -79,9 +73,8 @@ public class MappingTranslator {
 
     private Set<Variable> inferVariableTypes() throws MappingToUmlTranslationFailedException {
         VariableManager variableManager = new VariableManager();
-        List<Triplet> triplets =
-                whenTriplets.stream().map(Triplet.class::cast).collect(Collectors.toList());
-        AndTriplets container = new AndTriplets(triplets);
+        AndTriplets container = new ColoredVariant(whenTriplets).toAndTriplets();
+
         if (variableManager.hasConflictingDynamicTypes(container, conceptManager)) {
             throw new MappingToUmlTranslationFailedException(
                     "Variable with conflicting type usage in mapping.");
@@ -111,9 +104,10 @@ public class MappingTranslator {
             Concept elementType = selectRepresentativeElementType(variable.getDynamicTypes());
             ColorState colorState = elementColorState.get(variable);
 
+            PlantUmlBlock block;
             if (elementType instanceof CustomConcept) {
                 ConceptMapping mapping = tryToGetMapping((CustomConcept) elementType);
-                ConceptVisualizer visualizer =
+                block =
                         new ConceptVisualizer(
                                 mapping,
                                 conceptManager,
@@ -121,12 +115,11 @@ public class MappingTranslator {
                                 Optional.of(variable),
                                 usedVariables,
                                 colorState);
-                elementMap.put(variable, visualizer);
             } else {
-                PlantUmlElement element = ConceptMapper.createElement(elementType, variable);
-                element.setColorState(colorState);
-                elementMap.put(variable, element);
+                block = ConceptMapper.createElement(elementType, variable);
+                block.setColorState(colorState);
             }
+            elementMap.put(variable, block);
         }
         return elementMap;
     }
@@ -142,25 +135,28 @@ public class MappingTranslator {
 
     private Concept selectRepresentativeElementType(Set<ActualObjectType> options)
             throws MappingToUmlTranslationFailedException {
+        // TODO add support for other element types aside from Concept
         if (options.size() == 1) {
             return (Concept) options.iterator().next();
         }
         Concept famixClass = new FamixConcept("FamixClass", "");
-        Set<CustomConcept> customOptions =
-                options.stream()
-                        .filter(CustomConcept.class::isInstance)
-                        .map(CustomConcept.class::cast)
-                        .collect(Collectors.toSet());
+        Set<CustomConcept> customOptions = getCustomConceptOptions(options);
+
         if (!customOptions.isEmpty()) {
             return pickFromCustomOptions(customOptions);
         } else if (options.contains(famixClass)) {
-            // This should mostly occur with objects of the following relations:
-            // imports, namespaceContains, definesNestedType, hasDeclaredType
-            // FamixClass is a good default for all of them
+            // FamixClass is generally a good default
             return famixClass;
         }
         throw new MappingToUmlTranslationFailedException(
                 "No representative type could be picked from: " + options);
+    }
+
+    private Set<CustomConcept> getCustomConceptOptions(Set<ActualObjectType> options) {
+        return options.stream()
+                .filter(CustomConcept.class::isInstance)
+                .map(CustomConcept.class::cast)
+                .collect(Collectors.toSet());
     }
 
     private CustomConcept pickFromCustomOptions(Set<CustomConcept> customOptions)
@@ -169,12 +165,7 @@ public class MappingTranslator {
             return customOptions.iterator().next();
         }
         for (CustomConcept concept : customOptions) {
-            Set<CustomConcept> otherOptions = new HashSet<>(customOptions);
-            otherOptions.remove(concept);
-            Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
-            int otherOptionsCount = otherOptions.size();
-            otherOptions.retainAll(baseTypes);
-            if (otherOptionsCount == otherOptions.size()) {
+            if (isPredecessorToAllOtherOptions(concept, customOptions)) {
                 return concept;
             }
         }
@@ -182,24 +173,34 @@ public class MappingTranslator {
                 "No representative type could be picked from: " + customOptions);
     }
 
-    private List<PlantUmlPart> getConceptElements(Map<Variable, PlantUmlBlock> elementMap) {
-        List<PlantUmlPart> conceptElements = new ArrayList<>();
-        for (PlantUmlBlock block : elementMap.values()) {
-            if (block instanceof ConceptVisualizer) {
-                ConceptVisualizer visualizer = (ConceptVisualizer) block;
-                conceptElements.add(visualizer.getConceptElement());
-            }
-        }
-        return conceptElements;
+    private boolean isPredecessorToAllOtherOptions(
+            CustomConcept concept, Set<CustomConcept> options) {
+        Set<CustomConcept> otherOptions = new HashSet<>(options);
+        otherOptions.remove(concept);
+        Set<ActualObjectType> baseTypes = concept.getBaseTypesFromMapping(conceptManager);
+        int otherOptionsCount = otherOptions.size();
+        otherOptions.retainAll(baseTypes);
+        return otherOptionsCount == otherOptions.size();
     }
 
-    private List<PlantUmlBlock> getTopLevelElements(Map<Variable, PlantUmlBlock> elementMap) {
-        return elementMap.values().stream()
+    private List<PlantUmlBlock> getConceptBlocks(Map<Variable, PlantUmlBlock> elementMap) {
+        List<PlantUmlBlock> conceptBlocks = new ArrayList<>();
+        for (PlantUmlBlock element : elementMap.values()) {
+            if (element instanceof ConceptVisualizer) {
+                ConceptVisualizer visualizer = (ConceptVisualizer) element;
+                conceptBlocks.add(visualizer.getConceptBlock());
+            }
+        }
+        return conceptBlocks;
+    }
+
+    private List<PlantUmlBlock> getTopLevelElements(Collection<PlantUmlBlock> elements) {
+        return elements.stream()
                 .filter(Predicate.not(PlantUmlBlock::hasParentBeenFound))
                 .collect(Collectors.toList());
     }
 
-    private List<PlantUmlBlock> createRequiredParents(List<PlantUmlBlock> topLevelElements) {
+    private List<PlantUmlBlock> replaceWithRequiredParents(List<PlantUmlBlock> topLevelElements) {
         return topLevelElements.stream()
                 .map(PlantUmlBlock::createRequiredParentOrReturnSelf)
                 .collect(Collectors.toList());

@@ -3,6 +3,7 @@ package org.archcnl.domain.input.visualization.coloredmodel;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 
 public class ColoredVariant {
 
@@ -22,5 +23,10 @@ public class ColoredVariant {
                         .map(ColoredTriplet::new)
                         .collect(Collectors.toList());
         return new ColoredVariant(triplets);
+    }
+
+    public AndTriplets toAndTriplets() {
+        return new AndTriplets(
+                triplets.stream().map(Triplet.class::cast).collect(Collectors.toList()));
     }
 }

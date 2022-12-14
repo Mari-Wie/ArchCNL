@@ -16,7 +16,6 @@ import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 import org.archcnl.domain.input.visualization.diagram.ConceptBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
-import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.diagram.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
@@ -97,7 +96,7 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
                         .map(v -> v.buildPlantUmlCode(printBorder))
                         .collect(Collectors.joining("\n")));
         if (isTopLevelConcept) {
-            addConnectionsToConceptElement();
+            addConnectionsToConceptBlock();
             builder.append("\n");
             builder.append(conceptBlock.buildPlantUmlCode());
         }
@@ -148,12 +147,12 @@ public class ConceptVisualizer extends MappingVisualizer implements PlantUmlBloc
         return this;
     }
 
-    public PlantUmlPart getConceptElement() {
-        addConnectionsToConceptElement();
+    public ConceptBlock getConceptBlock() {
+        addConnectionsToConceptBlock();
         return conceptBlock;
     }
 
-    private void addConnectionsToConceptElement() {
+    private void addConnectionsToConceptBlock() {
         for (ConceptVariant variant : variants) {
             List<String> conceptIds = conceptBlock.getIdentifiers();
             List<String> objectIds = variant.getIdentifiers();
