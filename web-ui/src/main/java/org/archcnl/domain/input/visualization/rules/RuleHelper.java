@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.helpers;
+package org.archcnl.domain.input.visualization.rules;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -13,8 +13,9 @@ import org.archcnl.domain.common.conceptsandrelations.TypeRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
+import org.archcnl.domain.input.visualization.helpers.NamePicker;
 
 public class RuleHelper {
 

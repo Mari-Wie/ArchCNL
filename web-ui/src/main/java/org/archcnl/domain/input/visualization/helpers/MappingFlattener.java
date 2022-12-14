@@ -15,11 +15,11 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
+import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredMapping;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColorState;
-import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
-import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class MappingFlattener {
 

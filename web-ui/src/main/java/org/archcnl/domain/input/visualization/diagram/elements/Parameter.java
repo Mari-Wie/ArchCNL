@@ -3,8 +3,8 @@ package org.archcnl.domain.input.visualization.diagram.elements;
 import java.util.List;
 import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
-import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class Parameter extends PlantUmlElement {
 

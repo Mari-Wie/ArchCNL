@@ -10,10 +10,9 @@ import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.helpers.RuleHelper;
-import org.archcnl.domain.input.visualization.mapping.ColorState;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class NegationRuleVisualizer extends RuleVisualizer {
 

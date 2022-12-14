@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.mapping;
+package org.archcnl.domain.input.visualization.coloredmodel;
 
 import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;

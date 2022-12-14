@@ -1,6 +1,6 @@
 package org.archcnl.domain.input.visualization.diagram;
 
-import org.archcnl.domain.input.visualization.mapping.ColorState;
+import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 
 public interface PlantUmlPart {
 

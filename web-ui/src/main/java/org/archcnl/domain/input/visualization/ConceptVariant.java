@@ -11,13 +11,13 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
-import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public class ConceptVariant extends MappingVariant {
 

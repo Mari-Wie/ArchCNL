@@ -2,8 +2,9 @@ package org.archcnl.domain.input.visualization.helpers;
 
 import java.util.Arrays;
 import java.util.List;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
-import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
+
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 
 public class WrappingService {
 

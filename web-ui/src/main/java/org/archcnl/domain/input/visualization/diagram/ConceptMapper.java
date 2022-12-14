@@ -19,7 +19,7 @@ import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.diagram.elements.PrimitiveType;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 
-public class PlantUmlMapper {
+public class ConceptMapper {
 
     private static final Map<String, Function<Variable, PlantUmlElement>> conceptMap =
             Map.ofEntries(
@@ -37,7 +37,7 @@ public class PlantUmlMapper {
                     entry("AnnotationInstance", AnnotationInstance::new),
                     entry("AnnotationInstanceAttribute", AnnotationInstanceAttribute::new));
 
-    private PlantUmlMapper() {}
+    private ConceptMapper() {}
 
     public static PlantUmlElement createElement(Concept concept, Variable variable)
             throws MappingToUmlTranslationFailedException {

@@ -5,9 +5,9 @@ import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredMapping;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColoredMapping;
-import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
 
 public abstract class MappingVisualizer implements Visualizer {
 

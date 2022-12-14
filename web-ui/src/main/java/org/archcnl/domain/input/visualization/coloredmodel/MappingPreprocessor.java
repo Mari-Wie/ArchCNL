@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.mapping;
+package org.archcnl.domain.input.visualization.coloredmodel;
 
 import java.util.List;
 import org.archcnl.domain.common.ConceptManager;

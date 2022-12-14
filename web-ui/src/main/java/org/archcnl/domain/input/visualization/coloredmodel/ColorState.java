@@ -1,4 +1,4 @@
-package org.archcnl.domain.input.visualization.mapping;
+package org.archcnl.domain.input.visualization.coloredmodel;
 
 public enum ColorState {
     NEUTRAL("Black"),

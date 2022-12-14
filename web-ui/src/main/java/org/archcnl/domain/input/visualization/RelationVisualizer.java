@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.model.mappings.RelationMapping;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
+import org.archcnl.domain.input.visualization.coloredmodel.MappingPreprocessor;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColoredVariant;
-import org.archcnl.domain.input.visualization.mapping.MappingPreprocessor;
 
 public class RelationVisualizer extends MappingVisualizer {
 

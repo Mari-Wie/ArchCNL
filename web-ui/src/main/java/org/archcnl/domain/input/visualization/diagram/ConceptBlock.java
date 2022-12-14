@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
+import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
 import org.archcnl.domain.input.visualization.diagram.connections.BasicConnection;
 import org.archcnl.domain.input.visualization.diagram.elements.PlantUmlElement;
 import org.archcnl.domain.input.visualization.exceptions.PropertyNotFoundException;
-import org.archcnl.domain.input.visualization.mapping.ColorState;
 
 public class ConceptBlock implements PlantUmlBlock {
 

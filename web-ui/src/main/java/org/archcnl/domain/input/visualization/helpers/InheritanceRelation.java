@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
 import org.archcnl.domain.common.conceptsandrelations.FamixRelation;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
+import org.archcnl.domain.input.visualization.coloredmodel.ColorState;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.mapping.ColorState;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class InheritanceRelation extends FamixRelation {
 

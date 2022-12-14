@@ -3,7 +3,7 @@ package org.archcnl.domain.input.visualization.rules;
 import java.util.List;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Triplet;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 
 public class VerbPhrase {
 

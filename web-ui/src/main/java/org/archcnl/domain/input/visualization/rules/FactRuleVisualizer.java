@@ -8,10 +8,9 @@ import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
+import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.IsARelation;
-import org.archcnl.domain.input.visualization.helpers.RuleHelper;
-import org.archcnl.domain.input.visualization.mapping.ColoredTriplet;
 
 public class FactRuleVisualizer extends RuleVisualizer {
 
