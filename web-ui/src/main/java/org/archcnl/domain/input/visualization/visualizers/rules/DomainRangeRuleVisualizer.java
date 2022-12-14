@@ -46,7 +46,7 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
 
         RuleVariant wrong = new RuleVariant();
         var triplet =
-                Helper.getTripletWithBaseType(
+                RuleHelper.getTripletWithBaseType(
                         subjectTriplets.get(0), conceptManager, usedVariables);
         wrong.setSubjectTriplets(addPostfixToAllVariables(Arrays.asList(triplet), "W"));
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
@@ -77,7 +77,7 @@ public class DomainRangeRuleVisualizer extends RuleVisualizer {
 
             RuleVariant wrong = new RuleVariant();
             var triplet =
-                    Helper.getTripletWithBaseType(
+                    RuleHelper.getTripletWithBaseType(
                             subjectTriplets.get(0), conceptManager, usedVariables);
             wrong.setSubjectTriplets(
                     addPostfixToAllVariables(Arrays.asList(triplet), wrongPostfix.toString()));

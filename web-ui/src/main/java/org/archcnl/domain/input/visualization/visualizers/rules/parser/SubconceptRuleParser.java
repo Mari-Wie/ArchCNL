@@ -7,7 +7,7 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.IsARelation;
-import org.archcnl.domain.input.visualization.visualizers.rules.Helper;
+import org.archcnl.domain.input.visualization.visualizers.rules.RuleHelper;
 import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.SubconceptRuleVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
@@ -35,7 +35,7 @@ public class SubconceptRuleParser extends RuleParser {
     @Override
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
-        Helper.tryToFindMatch(matcher);
+        RuleHelper.tryToFindMatch(matcher);
         var isAPredicate = new RulePredicate(new IsARelation());
         var objectTriplets = parseConceptExpression(matcher.group("object"));
         VerbPhrase phrase = new VerbPhrase(isAPredicate, objectTriplets);

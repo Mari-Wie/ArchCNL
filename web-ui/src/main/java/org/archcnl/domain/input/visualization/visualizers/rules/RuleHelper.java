@@ -17,9 +17,9 @@ import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
 
-public class Helper {
+public class RuleHelper {
 
-    private Helper() {}
+    private RuleHelper() {}
 
     public static Relation getRelation(String relationName, RelationManager relationManager)
             throws MappingToUmlTranslationFailedException {

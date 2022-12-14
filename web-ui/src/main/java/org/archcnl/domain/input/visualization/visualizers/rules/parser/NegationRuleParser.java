@@ -8,8 +8,8 @@ import org.archcnl.domain.common.RelationManager;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
-import org.archcnl.domain.input.visualization.visualizers.rules.Helper;
 import org.archcnl.domain.input.visualization.visualizers.rules.NegationRuleVisualizer;
+import org.archcnl.domain.input.visualization.visualizers.rules.RuleHelper;
 import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
 
 public class NegationRuleParser extends RuleParser {
@@ -32,13 +32,13 @@ public class NegationRuleParser extends RuleParser {
     @Override
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
-        Helper.tryToFindMatch(matcher);
+        RuleHelper.tryToFindMatch(matcher);
         String phrasesGroup = matcher.group("phrases");
         verbPhrases = parseVerbPhrases(phrasesGroup);
         if (isNothingRule()) {
             var nothingVar = new Variable("nothing");
             var relation = verbPhrases.getPhrases().get(0).getPredicate().getRelation();
-            var triplet = Helper.getBaseSubjectTypeTriplet(relation, nothingVar, usedVariables);
+            var triplet = RuleHelper.getBaseSubjectTypeTriplet(relation, nothingVar, usedVariables);
             subjectTriplets = Arrays.asList(triplet);
         } else {
             subjectTriplets = parseConceptExpression(matcher.group("subject"));

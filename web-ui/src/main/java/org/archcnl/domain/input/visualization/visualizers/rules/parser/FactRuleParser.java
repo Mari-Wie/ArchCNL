@@ -8,7 +8,7 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.IsARelation;
 import org.archcnl.domain.input.visualization.visualizers.rules.FactRuleVisualizer;
-import org.archcnl.domain.input.visualization.visualizers.rules.Helper;
+import org.archcnl.domain.input.visualization.visualizers.rules.RuleHelper;
 import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.VerbPhrase;
@@ -33,7 +33,7 @@ public class FactRuleParser extends RuleParser {
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         if (isAnIsAFact()) {
             Matcher matcher = IS_A_REGEX.matcher(ruleString);
-            Helper.tryToFindMatch(matcher);
+            RuleHelper.tryToFindMatch(matcher);
             subjectTriplets = parseConceptExpression(matcher.group("isaSubject"));
             var objectTriplets = parseConceptExpression(matcher.group("isaObject"));
             var predicate = new RulePredicate(new IsARelation());

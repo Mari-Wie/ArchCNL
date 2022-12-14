@@ -8,7 +8,7 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.visualizers.rules.ConditionalRuleVisualizer;
-import org.archcnl.domain.input.visualization.visualizers.rules.Helper;
+import org.archcnl.domain.input.visualization.visualizers.rules.RuleHelper;
 import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
 
@@ -40,7 +40,7 @@ public class ConditionalRuleParser extends RuleParser {
     @Override
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = CNL_PATTERN.matcher(ruleString);
-        Helper.tryToFindMatch(matcher);
+        RuleHelper.tryToFindMatch(matcher);
         if (!matcher.group("object").equals(matcher.group("object2"))) {
             throw new MappingToUmlTranslationFailedException(cnlString + " Has different objects.");
         }
@@ -48,7 +48,7 @@ public class ConditionalRuleParser extends RuleParser {
         verbPhrases = parseVerbPhrases(phrasesGroup);
         subjectTriplets = parseConceptExpression(matcher.group("subject"));
         String secondRelationName = matcher.group("predicate2");
-        Relation secondRelation = Helper.getRelation(secondRelationName, relationManager);
+        Relation secondRelation = RuleHelper.getRelation(secondRelationName, relationManager);
         secondaryPredicate = new RulePredicate(secondRelation);
     }
 

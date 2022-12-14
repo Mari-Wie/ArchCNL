@@ -17,7 +17,7 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.NamePicker;
-import org.archcnl.domain.input.visualization.visualizers.rules.Helper;
+import org.archcnl.domain.input.visualization.visualizers.rules.RuleHelper;
 import org.archcnl.domain.input.visualization.visualizers.rules.RuleVisualizer;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.Cardinality;
 import org.archcnl.domain.input.visualization.visualizers.rules.rulemodel.RulePredicate;
@@ -88,7 +88,7 @@ public abstract class RuleParser {
 
     protected void parseRule(String ruleString) throws MappingToUmlTranslationFailedException {
         Matcher matcher = getCnlPattern().matcher(ruleString);
-        Helper.tryToFindMatch(matcher);
+        RuleHelper.tryToFindMatch(matcher);
         String phrasesGroup = matcher.group("phrases");
         verbPhrases = parseVerbPhrases(phrasesGroup);
         subjectTriplets = parseConceptExpression(matcher.group("subject"));
@@ -97,11 +97,11 @@ public abstract class RuleParser {
     protected List<Triplet> parseConceptExpression(String expression)
             throws MappingToUmlTranslationFailedException {
         Matcher matcher = conceptExpression.matcher(expression);
-        Helper.tryToFindMatch(matcher);
+        RuleHelper.tryToFindMatch(matcher);
         List<Triplet> res = new ArrayList<>();
 
         String conceptName = matcher.group("concept");
-        Concept concept = Helper.getConcept(conceptName, conceptManager);
+        Concept concept = RuleHelper.getConcept(conceptName, conceptManager);
         Relation typeRelation = TypeRelation.getTyperelation();
         String nextVariableName = matcher.group("variable");
 
@@ -142,7 +142,7 @@ public abstract class RuleParser {
             if ("anything".equals(objectGroup)) {
                 var anythingVar = new Variable("anything");
                 var triplet =
-                        Helper.getBaseObjectTypeTriplet(
+                        RuleHelper.getBaseObjectTypeTriplet(
                                 predicate.getRelation(), anythingVar, usedVariables);
                 objectTriplets = Arrays.asList(triplet);
             } else {
@@ -167,7 +167,7 @@ public abstract class RuleParser {
     protected RulePredicate parsePredicate(Matcher matcher)
             throws MappingToUmlTranslationFailedException {
         String name = matcher.group("predicate");
-        Relation relation = Helper.getRelation(name, relationManager);
+        Relation relation = RuleHelper.getRelation(name, relationManager);
         RulePredicate rulePredicate = new RulePredicate(relation);
         if (matcher.group("cardinality") != null) {
             Cardinality cardinality = Cardinality.getCardinality(matcher.group("cardinality"));

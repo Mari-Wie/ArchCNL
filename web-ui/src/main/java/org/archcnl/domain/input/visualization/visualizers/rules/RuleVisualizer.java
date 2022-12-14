@@ -3,7 +3,6 @@ package org.archcnl.domain.input.visualization.visualizers.rules;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.archcnl.domain.common.ConceptManager;
@@ -14,7 +13,6 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variab
 import org.archcnl.domain.input.visualization.MappingTranslator;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredTriplet;
 import org.archcnl.domain.input.visualization.coloredmodel.ColoredVariant;
-import org.archcnl.domain.input.visualization.diagram.PlantUmlBlock;
 import org.archcnl.domain.input.visualization.diagram.PlantUmlPart;
 import org.archcnl.domain.input.visualization.exceptions.MappingToUmlTranslationFailedException;
 import org.archcnl.domain.input.visualization.helpers.MappingFlattener;
@@ -40,8 +38,7 @@ public abstract class RuleVisualizer implements Visualizer {
             VerbPhraseContainer verbPhrases,
             ConceptManager conceptManager,
             RelationManager relationManager,
-            Set<Variable> usedVariables)
-            throws MappingToUmlTranslationFailedException {
+            Set<Variable> usedVariables) {
         this.cnlString = cnlString;
         this.subjectTriplets = subjectTriplets;
         this.verbPhrases = verbPhrases;
@@ -74,14 +71,14 @@ public abstract class RuleVisualizer implements Visualizer {
     private void buildUmlElements(List<ColoredTriplet> ruleTriplets)
             throws MappingToUmlTranslationFailedException {
         umlElements = new ArrayList<>();
+        Set<Variable> usedInVisualiztation = new HashSet<>();
         new MappingSetter(relationManager, conceptManager).setMappingsInTriplets(ruleTriplets);
         MappingFlattener flattener = new MappingFlattener(ruleTriplets);
-        Set<Variable> usedInVisualiztation = new HashSet<>();
+
         for (ColoredVariant variant : flattener.flattenCustomRelations()) {
-            MappingTranslator translator =
-                    new MappingTranslator(variant.getTriplets(), conceptManager, relationManager);
-            Map<Variable, PlantUmlBlock> elementMap =
-                    translator.createElementMap(usedInVisualiztation);
+            List<ColoredTriplet> triplets = variant.getTriplets();
+            var translator = new MappingTranslator(triplets, conceptManager, relationManager);
+            var elementMap = translator.createElementMap(usedInVisualiztation);
             umlElements.addAll(translator.translateToPlantUmlModel(elementMap));
         }
     }
@@ -93,6 +90,7 @@ public abstract class RuleVisualizer implements Visualizer {
             String oldSubjectName = triplet.getSubject().getName();
             Variable subject = new Variable(oldSubjectName + postfix);
             ObjectType object = triplet.getObject();
+
             if (object instanceof Variable) {
                 String oldObjectName = object.getName();
                 object = new Variable(oldObjectName + postfix);

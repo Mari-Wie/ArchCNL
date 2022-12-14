@@ -49,7 +49,7 @@ public class UniversalRuleVisualizer extends RuleVisualizer {
         for (VerbPhrase phrase : verbPhrases.getPhrases()) {
             var triplet = phrase.getObjectTriplets().get(0);
             var coloredTriplet =
-                    Helper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
+                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
             wrong.addObjectTriplets(addPostfixToAllVariables(Arrays.asList(coloredTriplet), "W"));
             wrong.addCopyOfPredicate(phrase.getPredicate());
         }
@@ -80,7 +80,7 @@ public class UniversalRuleVisualizer extends RuleVisualizer {
                     addPostfixToAllVariables(subjectTriplets, wrongPostfix.toString()));
             var triplet = phrase.getObjectTriplets().get(0);
             var coloredTriplet =
-                    Helper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
+                    RuleHelper.getTripletWithBaseType(triplet, conceptManager, usedVariables);
             wrong.addObjectTriplets(
                     addPostfixToAllVariables(
                             Arrays.asList(coloredTriplet), wrongPostfix.toString()));
