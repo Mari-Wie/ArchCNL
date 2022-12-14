@@ -42,7 +42,7 @@ public class AnnotationInstanceAttribute extends PlantUmlElement {
             throws PropertyNotFoundException {
         if ("hasValue".equals(property)) {
             this.hasValue = Optional.of(object);
-        } else if ("hasDeclaredType".equals(property)) {
+        } else if ("hasAnnotationTypeAttribute".equals(property)) {
             this.hasAnnotationTypeAttribute = Optional.of(object);
         } else {
             throw new PropertyNotFoundException(property + " couldn't be set");
