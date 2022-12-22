@@ -65,4 +65,9 @@ public class ArchitectureRule implements FormattedAdocDomainObject, FormattedVie
     public int hashCode() {
         return Objects.hash(transformToAdoc());
     }
+
+    @Override
+    public String toString() {
+        return ruleString;
+    }
 }

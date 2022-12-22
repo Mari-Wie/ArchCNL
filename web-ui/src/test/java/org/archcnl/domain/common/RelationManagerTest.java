@@ -34,8 +34,8 @@ class RelationManagerTest {
     private void setup() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
-        inputRelationsCount = 29;
-        outputRelationsCount = 40;
+        inputRelationsCount = 30;
+        outputRelationsCount = 41;
     }
 
     @Test
@@ -78,7 +78,6 @@ class RelationManagerTest {
         Assertions.assertTrue(relationManager.doesRelationExist("isConstructor"));
         Assertions.assertTrue(relationManager.doesRelationExist("isExternal"));
         Assertions.assertTrue(relationManager.doesRelationExist("isInterface"));
-        Assertions.assertTrue(relationManager.doesRelationExist("hasDefiningClass"));
         Assertions.assertTrue(relationManager.doesRelationExist("hasDeclaredException"));
         Assertions.assertTrue(relationManager.doesRelationExist("hasCaughtException"));
         Assertions.assertTrue(relationManager.doesRelationExist("throwsException"));
@@ -110,6 +109,10 @@ class RelationManagerTest {
         Assertions.assertTrue(relationManager.doesRelationExist("hasViolation"));
         Assertions.assertTrue(relationManager.doesRelationExist("violates"));
         Assertions.assertTrue(relationManager.doesRelationExist("validates"));
+
+        // Main
+        Assertions.assertTrue(relationManager.doesRelationExist("hasPath"));
+        Assertions.assertTrue(relationManager.doesRelationExist("containsArtifact"));
     }
 
     @Test

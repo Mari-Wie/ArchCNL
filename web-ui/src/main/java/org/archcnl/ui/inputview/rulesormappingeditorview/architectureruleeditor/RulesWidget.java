@@ -9,6 +9,7 @@ import org.archcnl.domain.input.model.architecturerules.ArchitectureRule;
 import org.archcnl.ui.inputview.rulesormappingeditorview.RulesOrMappingEditorView;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.DeleteRuleButtonPressedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.EditRuleButtonPressedEvent;
+import org.archcnl.ui.inputview.rulesormappingeditorview.architectureruleeditor.events.RuleVisualizationRequestedEvent;
 import org.archcnl.ui.inputview.rulesormappingeditorview.events.RuleCreatorRequestedEvent;
 
 public class RulesWidget extends RulesOrMappingEditorView {
@@ -19,6 +20,7 @@ public class RulesWidget extends RulesOrMappingEditorView {
 
     public RulesWidget() {
         setWidthFull();
+        rulesLayout.getStyle().set("overflow", "auto");
         createCreateNewLayout(
                 "Architecture Rules",
                 "Create new Arch Rule",
@@ -33,6 +35,7 @@ public class RulesWidget extends RulesOrMappingEditorView {
             RuleComponent ruleView = new RuleComponent(rules.get(i), i + 1);
             ruleView.addListener(EditRuleButtonPressedEvent.class, this::fireEvent);
             ruleView.addListener(DeleteRuleButtonPressedEvent.class, this::fireEvent);
+            ruleView.addListener(RuleVisualizationRequestedEvent.class, this::fireEvent);
             rulesLayout.add(ruleView);
         }
     }

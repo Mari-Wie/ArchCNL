@@ -9,7 +9,11 @@ import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Object
 public class TypeRelation extends Relation implements FormattedQueryDomainObject {
 
     private static final String RELATION_TYPE = "rdf";
-    private static final TypeRelation typeRelation = new TypeRelation("is-of-type", "type", "");
+    private static final TypeRelation typeRelation =
+            new TypeRelation(
+                    "is-of-type",
+                    "type",
+                    "This relation is used to state that the subject is an instance of the class stated in the object.");
 
     private String realName;
 

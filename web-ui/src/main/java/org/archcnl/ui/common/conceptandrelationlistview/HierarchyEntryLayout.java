@@ -10,6 +10,7 @@ import org.archcnl.domain.common.HierarchyNode;
 import org.archcnl.domain.common.conceptsandrelations.HierarchyObject;
 import org.archcnl.ui.common.conceptandrelationlistview.events.DeleteHierarchyObjectRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.EditorRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.VisualizationRequestedEvent;
 
 public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalLayout {
 
@@ -49,5 +50,9 @@ public class HierarchyEntryLayout<T extends HierarchyObject> extends HorizontalL
     public <E extends ComponentEvent<?>> Registration addListener(
             final Class<E> eventType, final ComponentEventListener<E> listener) {
         return getEventBus().addListener(eventType, listener);
+    }
+
+    public void handleVisualizeEvent() {
+        fireEvent(new VisualizationRequestedEvent(this, true));
     }
 }

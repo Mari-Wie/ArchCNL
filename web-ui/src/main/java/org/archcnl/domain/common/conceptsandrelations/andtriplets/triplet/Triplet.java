@@ -8,9 +8,9 @@ import org.archcnl.domain.common.conceptsandrelations.Relation;
 
 public class Triplet implements FormattedDomainObject {
 
-    private Variable subject;
-    private Relation predicate;
-    private ObjectType object;
+    protected Variable subject;
+    protected Relation predicate;
+    protected ObjectType object;
 
     public Triplet(Variable subject, Relation predicate, ObjectType object) {
         this.subject = subject;
@@ -88,5 +88,10 @@ public class Triplet implements FormattedDomainObject {
                     && Objects.equals(this.object, that.object);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return transformToAdoc();
     }
 }

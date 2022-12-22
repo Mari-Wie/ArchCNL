@@ -43,14 +43,14 @@ class AdocEndToEndTest {
         final File ruleFile = new File("src/test/resources/architecture-documentation.adoc");
 
         // when
-        AdocImporter adocImporter = new AdocImporter();
-        adocImporter.readFromAdoc(
-                ruleFile,
-                ruleManager,
-                conceptManager,
-                relationManager,
-                freeTextQueryQueue,
-                customQueryQueue);
+        AdocImporter adocImporter =
+                new AdocImporter(
+                        ruleManager,
+                        conceptManager,
+                        relationManager,
+                        freeTextQueryQueue,
+                        customQueryQueue);
+        adocImporter.readFromAdoc(ruleFile);
 
         final File writtenFile = new File("src/test/resources/EndToEndTest.adoc");
         AdocExporter adocExporter = new AdocExporter();

@@ -6,6 +6,7 @@ import java.util.Set;
 import org.archcnl.domain.common.ConceptManager;
 import org.archcnl.domain.common.FormattedQueryDomainObject;
 import org.archcnl.domain.common.VariableManager;
+import org.archcnl.domain.common.conceptsandrelations.andtriplets.AndTriplets;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ActualObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.ObjectType;
 import org.archcnl.domain.common.conceptsandrelations.andtriplets.triplet.Variable;
@@ -42,16 +43,23 @@ public class CustomRelation extends Relation implements FormattedQueryDomainObje
             }
 
             VariableManager variableManager = new VariableManager();
-            mapping.getWhenTriplets()
-                    .forEach(
-                            andTriplets -> {
-                                variableManager.parseVariableTypes(andTriplets, conceptManager);
-                                subjectRelatableTypes.addAll(subject.getDynamicTypes());
-                                if (object instanceof Variable) {
-                                    objectRelatableTypes.addAll(
-                                            ((Variable) object).getDynamicTypes());
-                                }
-                            });
+            variableManager.addVariable(subject);
+            if (object instanceof Variable) {
+                variableManager.addVariable((Variable) object);
+            }
+            for (AndTriplets andTriplets : mapping.getWhenTriplets()) {
+                variableManager.parseVariableTypes(andTriplets, conceptManager);
+
+                Variable subjectFromManager =
+                        variableManager.getVariableByName(subject.getName()).get();
+                subjectRelatableTypes.addAll(subjectFromManager.getDynamicTypes());
+
+                if (object instanceof Variable) {
+                    Variable objectFromManager =
+                            variableManager.getVariableByName(object.getName()).get();
+                    objectRelatableTypes.addAll(objectFromManager.getDynamicTypes());
+                }
+            }
             this.relatableSubjectTypes = subjectRelatableTypes;
             this.relatableObjectTypes = objectRelatableTypes;
         } else {

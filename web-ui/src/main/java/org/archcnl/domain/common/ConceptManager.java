@@ -10,6 +10,7 @@ import org.archcnl.domain.common.conceptsandrelations.Concept;
 import org.archcnl.domain.common.conceptsandrelations.ConformanceConcept;
 import org.archcnl.domain.common.conceptsandrelations.CustomConcept;
 import org.archcnl.domain.common.conceptsandrelations.FamixConcept;
+import org.archcnl.domain.common.conceptsandrelations.MainOntologyConcept;
 import org.archcnl.domain.common.exceptions.ConceptAlreadyExistsException;
 import org.archcnl.domain.common.exceptions.UnrelatedMappingException;
 import org.archcnl.domain.input.model.mappings.ConceptMapping;
@@ -131,6 +132,15 @@ public class ConceptManager extends HierarchyManager<Concept> {
         }
     }
 
+    private void initMainOntologyConcept(String name, String description) {
+        try {
+            addToParent(new MainOntologyConcept(name, description), "Default Concepts");
+        } catch (ConceptAlreadyExistsException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Concept already exists");
+        }
+    }
+
     private void initializeConcepts() {
         // Famix
         initFamixConcept(
@@ -168,7 +178,8 @@ public class ConceptManager extends HierarchyManager<Concept> {
         initFamixConcept(
                 "LocalVariable",
                 "Models a local variable defined in a method, or a constructor from the object-oriented programming style.");
-        initFamixConcept("Exception", "Exceptions are often used for error handling.");
+        initFamixConcept(
+                "PrimitiveType", "Models language specific primitives like int or String.");
 
         // Conformance
         initConformanceConcept(
@@ -190,6 +201,11 @@ public class ConceptManager extends HierarchyManager<Concept> {
         initConformanceConcept(
                 "NotInferredStatement",
                 "Models a statement about the architecture that can not be deducted from it, which in combination with other statements about the architecture is used to prove ArchitectureViolations.");
+
+        // Main
+        initMainOntologyConcept(
+                "SoftwareArtifactFile",
+                "Models a file that can contain multiple source code entities.");
     }
 
     public List<Concept> getInputConcepts() {

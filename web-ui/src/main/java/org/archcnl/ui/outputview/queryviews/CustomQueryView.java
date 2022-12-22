@@ -22,9 +22,11 @@ import org.archcnl.ui.common.andtriplets.triplet.events.VariableSelectedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.ConceptAndRelationView;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.ConceptVisualizationRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.NodeAddRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationGridUpdateRequestedEvent;
 import org.archcnl.ui.common.conceptandrelationlistview.events.RelationHierarchySwapRequestedEvent;
+import org.archcnl.ui.common.conceptandrelationlistview.events.RelationVisualizationRequestedEvent;
 import org.archcnl.ui.common.variablelistview.VariableListView;
 import org.archcnl.ui.outputview.queryviews.components.GridView;
 import org.archcnl.ui.outputview.queryviews.events.DeleteButtonPressedEvent;
@@ -49,7 +51,6 @@ public class CustomQueryView extends HorizontalLayout {
     private HorizontalLayout topRow;
 
     public CustomQueryView(AndTripletsEditorView andTripletsEditorView) {
-        super();
         initConceptAndRelationView();
         content = new VerticalLayout();
         select = new HorizontalLayout();
@@ -131,6 +132,10 @@ public class CustomQueryView extends HorizontalLayout {
                 ConceptHierarchySwapRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.addListener(
                 RelationHierarchySwapRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                ConceptVisualizationRequestedEvent.class, this::fireEvent);
+        conceptAndRelationView.addListener(
+                RelationVisualizationRequestedEvent.class, this::fireEvent);
         conceptAndRelationView.update();
     }
 

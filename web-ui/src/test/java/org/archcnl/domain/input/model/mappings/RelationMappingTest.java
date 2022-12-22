@@ -48,7 +48,7 @@ class RelationMappingTest {
                         + " -> (?class architecture:use ?class2)";
 
         String expectedEmptyStringMapping =
-                "emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'test string')";
+                "emptyWhenRelationStringMapping: -> (?var architecture:emptyWhenRelationString 'testString')";
 
         String expectedEmptyBooleanMapping =
                 "emptyWhenRelationBooleanMapping: -> (?var architecture:emptyWhenRelationBoolean 'false'^^xsd:boolean)";

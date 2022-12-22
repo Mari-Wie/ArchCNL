@@ -28,7 +28,7 @@ public class ObjectParser {
             } else if (potentialObject.matches("'.+'\\^\\^xsd:boolean")) {
                 String boolString =
                         RegexUtils.getFirstMatch(Pattern.compile("(?<=').+(?=')"), potentialObject);
-                return new BooleanValue(Boolean.getBoolean(boolString));
+                return new BooleanValue(Boolean.parseBoolean(boolString));
             } else if (potentialObject.matches(ObjectParser.CONCEPT_RELATION_PATTERN.toString())) {
                 String objectName =
                         RegexUtils.getFirstMatch(ObjectParser.NAME_PATTERN, potentialObject);

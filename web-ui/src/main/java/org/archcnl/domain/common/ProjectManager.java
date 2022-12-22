@@ -33,14 +33,14 @@ public class ProjectManager {
             ConceptManager conceptManager,
             RelationManager relationManager)
             throws IOException {
-        AdocImporter importer = new AdocImporter();
-        importer.readFromAdoc(
-                file,
-                ruleManager,
-                conceptManager,
-                relationManager,
-                freeTextQueryQueue,
-                customQueryQueue);
+        AdocImporter importer =
+                new AdocImporter(
+                        ruleManager,
+                        conceptManager,
+                        relationManager,
+                        freeTextQueryQueue,
+                        customQueryQueue);
+        importer.readFromAdoc(file);
         this.projectFile = Optional.of(file);
     }
 

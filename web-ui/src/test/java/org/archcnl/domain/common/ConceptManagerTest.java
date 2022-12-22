@@ -31,8 +31,8 @@ class ConceptManagerTest {
     private void setup() throws ConceptDoesNotExistException {
         conceptManager = new ConceptManager();
         relationManager = new RelationManager(conceptManager);
-        inputConceptsCount = 13;
-        outputConceptsCount = 19;
+        inputConceptsCount = 14;
+        outputConceptsCount = 20;
     }
 
     @Test
@@ -74,7 +74,7 @@ class ConceptManagerTest {
         Assertions.assertTrue(conceptManager.doesConceptExist("AnnotationInstanceAttribute"));
         Assertions.assertTrue(conceptManager.doesConceptExist("Parameter"));
         Assertions.assertTrue(conceptManager.doesConceptExist("LocalVariable"));
-        Assertions.assertTrue(conceptManager.doesConceptExist("Exception"));
+        Assertions.assertTrue(conceptManager.doesConceptExist("PrimitiveType"));
 
         // Conformance
         Assertions.assertTrue(conceptManager.doesConceptExist("ConformanceCheck"));
@@ -83,6 +83,9 @@ class ConceptManagerTest {
         Assertions.assertTrue(conceptManager.doesConceptExist("Proof"));
         Assertions.assertTrue(conceptManager.doesConceptExist("AssertedStatement"));
         Assertions.assertTrue(conceptManager.doesConceptExist("NotInferredStatement"));
+
+        // Main
+        Assertions.assertTrue(conceptManager.doesConceptExist("SoftwareArtifactFile"));
     }
 
     @Test
